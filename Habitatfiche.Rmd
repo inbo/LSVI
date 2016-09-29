@@ -26,8 +26,7 @@ query_tekstfiches <-
     Indicator_habitat.Maatregelen, Indicator_habitat.Opmerkingen AS Opmerkingen_H, Indicator_habitat.Referenties AS Referenties_H,
     Indicator_habitat.NiveauSoortlijstFiche, Indicator_habitat.IndicatorId,
     Indicator_beoordeling.Opmerkingen AS Opmerkingen_B, Indicator_beoordeling.Referenties AS Referenties_B,
-    Beoordeling.Kwaliteitsniveau, Beoordeling.Beoordeling_letterlijk,
-    IndicatortabellenKoppeling.Indicator_beoordelingID
+    Beoordeling.Kwaliteitsniveau, Beoordeling.Beoordeling_letterlijk
   FROM ((Indicator_habitat INNER JOIN Habitatsubtype ON Indicator_habitat.HabitatsubtypeID = Habitatsubtype.Id)
           INNER JOIN IndicatortabellenKoppeling ON Indicator_habitat.Id = IndicatortabellenKoppeling.Indicator_habitatID)
           INNER JOIN 
