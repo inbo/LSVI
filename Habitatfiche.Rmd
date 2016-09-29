@@ -53,7 +53,7 @@ query_soortengroep <- "SELECT Soortengroep.Id as SoortengroepID, Soortengroep.Na
 query_soort <- "SELECT Soort.Id AS SoortID, Soort.WetNaam, Soort.NedNaam FROM Soort"
 
 
-LSVIdb <- odbcConnectAccess2007("../Output/LSVIdb_v4.accdb")
+LSVIdb <- odbcConnectAccess2007("C://Users/els.lommelen@inbo.be/els.lommelen@inbo.be/10194_Controlelijsten/Output/LSVIdb_v4.accdb")
 
 Indicator <- sqlQuery(LSVIdb, query_indicator, stringsAsFactors = FALSE)
 
