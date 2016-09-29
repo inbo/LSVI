@@ -22,12 +22,15 @@ query_indicator <- "SELECT Indicator.Id AS IndicatorID, Indicator.Naam AS Indica
 
 query_tekstfiches <- 
   "SELECT Habitatsubtype.Habitatcode_subtype, Habitatsubtype.Habitatnaam_subtype,
-    Indicator_habitat.Beschrijving, Indicator_habitat.Beschrijving_naSoorten, Indicator_habitat.SoortgroepID,
+    Criterium.Naam AS Criterium_H, Indicator.Naam As Indicator_H, 
+    Indicator_habitat.Beschrijving, Indicator_habitat.Beschrijving_naSoorten, 
     Indicator_habitat.Maatregelen, Indicator_habitat.Opmerkingen AS Opmerkingen_H, Indicator_habitat.Referenties AS Referenties_H,
-    Indicator_habitat.NiveauSoortlijstFiche, Indicator_habitat.IndicatorId,
+    Indicator_habitat.NiveauSoortlijstFiche, Indicator_habitat.SoortgroepID,
     Indicator_beoordeling.Opmerkingen AS Opmerkingen_B, Indicator_beoordeling.Referenties AS Referenties_B,
     Beoordeling.Kwaliteitsniveau, Beoordeling.Beoordeling_letterlijk
-  FROM ((Indicator_habitat INNER JOIN Habitatsubtype ON Indicator_habitat.HabitatsubtypeID = Habitatsubtype.Id)
+  FROM (((Indicator_habitat INNER JOIN Habitatsubtype ON Indicator_habitat.HabitatsubtypeID = Habitatsubtype.Id)
+          INNER JOIN (Indicator INNER JOIN Criterium on Indicator.CriteriumID = Criterium.Id)
+                        ON Indicator_habitat.IndicatorID = Indicator.Id)
           INNER JOIN IndicatortabellenKoppeling ON Indicator_habitat.Id = IndicatortabellenKoppeling.Indicator_habitatID)
           INNER JOIN 
               (Indicator_beoordeling INNER JOIN Beoordeling ON Indicator_beoordeling.Id = Beoordeling.Indicator_beoordelingID)
@@ -54,4 +57,5 @@ Soort <- sqlQuery(LSVIdb, query_soort, stringsAsFactors = FALSE)
 odbcClose(LSVIdb)
 
 ```
+
 
