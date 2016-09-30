@@ -9,10 +9,10 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ```{r libraries, include=FALSE}
-library("RODBC")
-library("dplyr")
-library("xtable")
-library("tidyr")
+library(RODBC)
+library(dplyr)
+library(xtable)
+library(tidyr)
 
 ```
 
@@ -87,7 +87,7 @@ for(Criterium in unique(Habitatfiche$Criterium)){
 
 ###Beoordelingsmatrix
 
-```{r results='asis'}
+```{r results='asis', message=FALSE, warning=FALSE}
 Beoordelingsfiche <- Beoordelingsfiche %>%
   inner_join(data.frame(Kwaliteitsniveau=c(1,2), Referentieniveau = c(Versie$Kwaliteitsniveau1,Versie$Kwaliteitsniveau2), stringsAsFactors = FALSE)) %>%
   select(-Kwaliteitsniveau)%>%
