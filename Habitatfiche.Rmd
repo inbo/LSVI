@@ -20,21 +20,29 @@ library("dplyr")
 query_indicator <- "SELECT Indicator.Id AS IndicatorID, Indicator.Naam AS Indicator, Criterium.Naam AS Criterium
                     FROM Indicator INNER JOIN Criterium on Indicator.CriteriumID = Criterium.Id"
 
-query_tekstfiches <- 
+query_habitatfiche <- 
   "SELECT Habitatsubtype.Habitatcode_subtype, Habitatsubtype.Habitatnaam_subtype,
-    Criterium.Naam AS Criterium_H, Indicator.Naam As Indicator_H, 
+    Criterium.Naam AS Criterium, Indicator.Naam As Indicator, 
     Indicator_habitat.Beschrijving, Indicator_habitat.Beschrijving_naSoorten, 
-    Indicator_habitat.Maatregelen, Indicator_habitat.Opmerkingen AS Opmerkingen_H, Indicator_habitat.Referenties AS Referenties_H,
-    Indicator_habitat.NiveauSoortlijstFiche, Indicator_habitat.SoortgroepID,
-    Indicator_beoordeling.Opmerkingen AS Opmerkingen_B, Indicator_beoordeling.Referenties AS Referenties_B,
-    Beoordeling.Kwaliteitsniveau, Beoordeling.Beoordeling_letterlijk
-  FROM (((Indicator_habitat INNER JOIN Habitatsubtype ON Indicator_habitat.HabitatsubtypeID = Habitatsubtype.Id)
+    Indicator_habitat.Maatregelen, Indicator_habitat.Opmerkingen, Indicator_habitat.Referenties AS Referenties_H,
+    Indicator_habitat.NiveauSoortlijstFiche, Indicator_habitat.SoortgroepID
+  FROM (Indicator_habitat INNER JOIN Habitatsubtype ON Indicator_habitat.HabitatsubtypeID = Habitatsubtype.Id)
           INNER JOIN (Indicator INNER JOIN Criterium on Indicator.CriteriumID = Criterium.Id)
-                        ON Indicator_habitat.IndicatorID = Indicator.Id)
+                        ON Indicator_habitat.IndicatorID = Indicator.Id
+  WHERE (Indicator_habitat.VersieID=3) AND (Habitatsubtype.Habitatcode_subtype='4010')"
+
+query_beoordelingsfiche <- 
+  "SELECT Habitatsubtype.Habitatcode_subtype, Habitatsubtype.Habitatnaam_subtype,
+    Criterium.Naam AS Criterium, Indicator.Naam As Indicator, 
+    Indicator_beoordeling.Opmerkingen, Indicator_beoordeling.Referenties,
+    Beoordeling.Kwaliteitsniveau, Beoordeling.Beoordeling_letterlijk
+  FROM ((Indicator_habitat INNER JOIN Habitatsubtype ON Indicator_habitat.HabitatsubtypeID = Habitatsubtype.Id)
           INNER JOIN IndicatortabellenKoppeling ON Indicator_habitat.Id = IndicatortabellenKoppeling.Indicator_habitatID)
-          INNER JOIN 
-              (Indicator_beoordeling INNER JOIN Beoordeling ON Indicator_beoordeling.Id = Beoordeling.Indicator_beoordelingID)
-                  ON IndicatortabellenKoppeling.Indicator_beoordelingID = Indicator_beoordeling.Id
+        INNER JOIN 
+              ((Indicator_beoordeling INNER JOIN Beoordeling ON Indicator_beoordeling.Id = Beoordeling.Indicator_beoordelingID)
+            INNER JOIN (Indicator INNER JOIN Criterium on Indicator.CriteriumID = Criterium.Id)
+                        ON Indicator_beoordeling.IndicatorID = Indicator.Id)
+          ON IndicatortabellenKoppeling.Indicator_beoordelingID = Indicator_beoordeling.Id
   WHERE (Indicator_habitat.VersieID=3) AND (Habitatsubtype.Habitatcode_subtype='4010')"
 
 query_soortengroep <- "SELECT Soortengroep.Id as SoortengroepID, Soortengroep.Naam, Soortengroep.Omschrijving, 
@@ -46,9 +54,9 @@ query_soort <- "SELECT Soort.Id AS SoortID, Soort.WetNaam, Soort.NedNaam FROM So
 
 LSVIdb <- odbcConnectAccess2007("C://Users/els.lommelen@inbo.be/els.lommelen@inbo.be/10194_Controlelijsten/Output/LSVIdb_v4.accdb")
 
-Indicator <- sqlQuery(LSVIdb, query_indicator, stringsAsFactors = FALSE)
+Habitatfiche <- sqlQuery(LSVIdb, query_habitatfiche, stringsAsFactors = FALSE)
 
-Tekstfiches <- sqlQuery(LSVIdb, query_tekstfiches, stringsAsFactors = FALSE)
+Beoordelingsfiche <- sqlQuery(LSVIdb, query_beoordelingsfiche, stringsAsFactors = FALSE)
 
 Soortengroep <- sqlQuery(LSVIdb, query_soortengroep, stringsAsFactors = FALSE)
 
