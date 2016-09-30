@@ -1,8 +1,7 @@
 ---
-title: "Habitatfiches"
-author: "Els Lommelen"
-date: "29 september 2016"
-output: pdf_document
+title: "Habitatfiche"
+date: "`r Sys.Date()`"
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -12,19 +11,18 @@ knitr::opts_chunk$set(echo = FALSE)
 ```{r libraries, include=FALSE}
 library("RODBC")
 library("dplyr")
+library("xtable")
+library("tidyr")
 
 ```
 
 ```{r inladen_gegevens}
 
-query_indicator <- "SELECT Indicator.Id AS IndicatorID, Indicator.Naam AS Indicator, Criterium.Naam AS Criterium
-                    FROM Indicator INNER JOIN Criterium on Indicator.CriteriumID = Criterium.Id"
-
 query_habitatfiche <- 
   "SELECT Habitatsubtype.Habitatcode_subtype, Habitatsubtype.Habitatnaam_subtype,
     Criterium.Naam AS Criterium, Indicator.Naam As Indicator, 
     Indicator_habitat.Beschrijving, Indicator_habitat.Beschrijving_naSoorten, 
-    Indicator_habitat.Maatregelen, Indicator_habitat.Opmerkingen, Indicator_habitat.Referenties AS Referenties_H,
+    Indicator_habitat.Maatregelen, Indicator_habitat.Opmerkingen, Indicator_habitat.Referenties,
     Indicator_habitat.NiveauSoortlijstFiche, Indicator_habitat.SoortgroepID
   FROM (Indicator_habitat INNER JOIN Habitatsubtype ON Indicator_habitat.HabitatsubtypeID = Habitatsubtype.Id)
           INNER JOIN (Indicator INNER JOIN Criterium on Indicator.CriteriumID = Criterium.Id)
@@ -51,6 +49,8 @@ query_soortengroep <- "SELECT Soortengroep.Id as SoortengroepID, Soortengroep.Na
 
 query_soort <- "SELECT Soort.Id AS SoortID, Soort.WetNaam, Soort.NedNaam FROM Soort"
 
+query_versie <- "SELECT * FROM Versie WHERE Versie.ID=3"
+
 
 LSVIdb <- odbcConnectAccess2007("C://Users/els.lommelen@inbo.be/els.lommelen@inbo.be/10194_Controlelijsten/Output/LSVIdb_v4.accdb")
 
@@ -62,8 +62,44 @@ Soortengroep <- sqlQuery(LSVIdb, query_soortengroep, stringsAsFactors = FALSE)
 
 Soort <- sqlQuery(LSVIdb, query_soort, stringsAsFactors = FALSE)
 
+Versie <- sqlQuery(LSVIdb, query_versie, stringsAsFactors = FALSE)
+
 odbcClose(LSVIdb)
 
 ```
 
+
+##Habitattype `r Habitatfiche[1,"Habitatcode_subtype"]`: `r Habitatfiche[1,"Habitatnaam_subtype"]`
+
+###Habitatkarakteristieken
+
+```{r results='asis'}
+for(Criterium in unique(Habitatfiche$Criterium)){
+  print(Criterium)
+  Habitatkarakteristieken <- 
+    xtable(Habitatfiche[Habitatfiche$Criterium==Criterium,
+                        c("Indicator","Beschrijving","Maatregelen","Opmerkingen","Referenties")])
+  print(Habitatkarakteristieken, type = "html")
+}
+
+```
+
+
+###Beoordelingsmatrix
+
+```{r results='asis'}
+Beoordelingsfiche <- Beoordelingsfiche %>%
+  inner_join(data.frame(Kwaliteitsniveau=c(1,2), Referentieniveau = c(Versie$Kwaliteitsniveau1,Versie$Kwaliteitsniveau2), stringsAsFactors = FALSE)) %>%
+  select(-Kwaliteitsniveau)%>%
+  spread(key = Referentieniveau, value = Beoordeling_letterlijk)
+
+for(Criterium in unique(Beoordelingsfiche$Criterium)){
+  print(Criterium)
+  Beoordelingsmatrix <- 
+    xtable(Beoordelingsfiche[Beoordelingsfiche$Criterium==Criterium,
+                        c("Indicator","Gunstige staat","Streefwaarde","Opmerkingen","Referenties")])
+  print(Beoordelingsmatrix, type = "html")
+}
+
+```
 
