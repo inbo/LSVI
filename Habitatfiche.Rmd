@@ -23,7 +23,7 @@ query_habitatfiche <-
     Criterium.Naam AS Criterium, Indicator.Naam As Indicator, 
     Indicator_habitat.Beschrijving, Indicator_habitat.Beschrijving_naSoorten, 
     Indicator_habitat.Maatregelen, Indicator_habitat.Opmerkingen, Indicator_habitat.Referenties,
-    Indicator_habitat.NiveauSoortlijstFiche, Indicator_habitat.SoortgroepID
+    Indicator_habitat.NiveauSoortenlijstFiche, Indicator_habitat.SoortengroepID
   FROM (Indicator_habitat INNER JOIN Habitatsubtype ON Indicator_habitat.HabitatsubtypeID = Habitatsubtype.Id)
           INNER JOIN (Indicator INNER JOIN Criterium on Indicator.CriteriumID = Criterium.Id)
                         ON Indicator_habitat.IndicatorID = Indicator.Id
@@ -74,10 +74,76 @@ odbcClose(LSVIdb)
 ###Habitatkarakteristieken
 
 ```{r results='asis'}
+Soortengroepselectie <- Soortengroep %>%
+  filter(SoortengroepID %in% Habitatfiche$SoortengroepID) %>%
+  left_join(Soortengroep, by = c("SoortensubgroepID" = "SoortengroepID"), suffix = c(".1", ".2"))
+
+#bij het veralgemenen van deze functie moet deze left_join herhaald worden volgens het maximale aantal niveaus vermeld in Indicator_habitat$NiveauSoortenlijstFiche (of tot SoortensubgroepID NA is?)
+
+Soortengroepselectie$SoortID <- 
+  ifelse(!is.na(Soortengroepselectie$SoortID.1),Soortengroepselectie$SoortID.1, Soortengroepselectie$SoortID.2)
+
+#ook dit moet verder uitgebreid worden bij het veralgemenen van de functie, evt. door alle SoortID's te selecteren en de niet-NA eruit te kiezen?
+#ook voor hetgeen volgt zou nog een algemene werkwijze toegevoegd moeten worden, meer specifiek onder 'group_by'
+
+SoortenKoppeling <- Soortengroepselectie %>%
+  left_join(Soort, by = c("SoortID" = "SoortID")) %>%
+  mutate_(
+    WetNaamKort = ~
+      gsub(
+        pattern = "^([[:alpha:]]*) ([[:alpha:]]*) (.*)",
+        replacement = "\\1 \\2",
+        x = WetNaam
+      ),
+    TotNaam = ~ sprintf("%s (_%s_)", NedNaam, WetNaamKort)
+  ) %>%
+  arrange_(~ TotNaam) %>%
+  group_by_(
+    ~ SoortengroepID,
+    ~ Naam.1,
+    ~ Omschrijving.1,
+    ~ SoortensubgroepID,
+    ~ Naam.2,
+    ~ Omschrijving.2,
+    ~ SoortensubgroepID.2
+  ) %>%
+  summarise_(
+    Soortenlijst = ~ paste(as.vector(TotNaam), collapse = ", ")
+  ) %>%
+  ungroup() %>%
+  mutate_(
+    Soortenlijst = ~ ifelse(is.na(Omschrijving.2), Soortenlijst, 
+                          paste("**",Omschrijving.2,":** ",Soortenlijst, sep=""))
+  ) %>%
+  group_by_(
+    ~ SoortengroepID,
+    ~ Naam.1,
+    ~ Omschrijving.1
+  ) %>%
+  summarise_(
+    Soortenlijst = ~ paste(as.vector(Soortenlijst), collapse = ",  ")
+  ) %>%
+  ungroup()
+
+paste2 <- function(...,sep=", ") {
+    L <- list(...)
+    L <- lapply(L,function(x) {x[is.na(x)] <- ""; x})
+    gsub(paste0("(^",sep,"|",sep,"$)"),"",
+                gsub(paste0(sep,sep),sep,
+                     do.call(paste,c(L,list(sep=sep)))))
+}
+
+Habitatfiche2 <- Habitatfiche %>%
+  left_join(SoortenKoppeling, by = c("SoortengroepID" = "SoortengroepID")) %>%
+  mutate_(
+    Beschrijving = ~ paste2(Beschrijving, Soortenlijst, Beschrijving_naSoorten, sep = " ")
+  )
+
+
 for(Criterium in unique(Habitatfiche$Criterium)){
   print(Criterium)
   Habitatkarakteristieken <- 
-    xtable(Habitatfiche[Habitatfiche$Criterium==Criterium,
+    xtable(Habitatfiche2[Habitatfiche2$Criterium==Criterium,
                         c("Indicator","Beschrijving","Maatregelen","Opmerkingen","Referenties")])
   print(Habitatkarakteristieken, type = "html")
 }
@@ -93,7 +159,7 @@ Beoordelingsfiche <- Beoordelingsfiche %>%
   select(-Kwaliteitsniveau)%>%
   spread(key = Referentieniveau, value = Beoordeling_letterlijk)
 
-for(Criterium in unique(Beoordelingsfiche$Criterium)){
+for(Criterium in unique(Habitatfiche$Criterium)){
   print(Criterium)
   Beoordelingsmatrix <- 
     xtable(Beoordelingsfiche[Beoordelingsfiche$Criterium==Criterium,
