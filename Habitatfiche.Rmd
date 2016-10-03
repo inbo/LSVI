@@ -78,12 +78,12 @@ Soortengroepselectie <- Soortengroep %>%
   filter(SoortengroepID %in% Habitatfiche$SoortengroepID) %>%
   left_join(Soortengroep, by = c("SoortensubgroepID" = "SoortengroepID"), suffix = c(".1", ".2"))
 
-#bij het veralgemenen van deze functie moet deze left_join herhaald worden volgens het maximale aantal niveaus vermeld in Indicator_habitat$NiveauSoortenlijstFiche (of tot SoortensubgroepID NA is?)
+#bij het veralgemenen van deze functie moet deze left_join herhaald worden volgens het maximale aantal niveaus vermeld in Indicator_habitat$NiveauSoortenlijstFiche
 
 Soortengroepselectie$SoortID <- 
   ifelse(!is.na(Soortengroepselectie$SoortID.1),Soortengroepselectie$SoortID.1, Soortengroepselectie$SoortID.2)
 
-#ook dit moet verder uitgebreid worden bij het veralgemenen van de functie, evt. door alle SoortID's te selecteren en de niet-NA eruit te kiezen?
+#ook dit moet verder uitgebreid worden bij het veralgemenen van de functie, evt. door alle SoortID's te selecteren en de niet-NA eruit te kiezen? NEE, hier moet rekening gehouden worden met het niveau vermeld in tabel Indicator_habitat! (soms moet ook het genus of de groepsnaam vermeld worden en niet de soortnaam)
 #ook voor hetgeen volgt zou nog een algemene werkwijze toegevoegd moeten worden, meer specifiek onder 'group_by'
 
 SoortenKoppeling <- Soortengroepselectie %>%
