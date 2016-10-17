@@ -29,6 +29,8 @@ geefSoortenlijst <-
     match.arg(Habitatsubtype)
     match.arg(Criterium)
     match.arg(Indicator)
+    
+    #eerst de selectiegegevens ophalen en de nodige gegevens uit tabel Indicator_habitat
     Parametervoorwaarde <- FALSE
     query <- "SELECT Versie.VersieLSVI, Habitattype.Habitatcode AS Habitattype, Habitatsubtype.Habitatcode_subtype AS Habitatsubtype,
                 Criterium.Naam AS Criterium, Indicator.Naam AS Indicator, 
@@ -90,5 +92,24 @@ geefSoortenlijst <-
       query <- sprintf("%s %s Indicator.Naam = '%s'", query, Voegwoord, Indicator)
     }
     Selectiegegevens <- connecteerMetLSVIdb(query)
+    
+    #nu de soortgegevens ophalen
+    SoortengroepIDperNiveau <- Selectiegegevens %>%
+      select_(~SoortengroepID, ~NiveauSoortenlijstFiche) %>%
+      distinct_() %>%
+      filter(!is.na(SoortengroepID)) %>%
+      group_by_(~NiveauSoortenlijstFiche) %>%
+      summarise_(SoortengroepIDs = ~ paste(SoortengroepID, collapse=",")) %>%
+      ungroup()
+    query_soortenlijst1 <- sprintf("SELECT Soortengroep.Id as SoortengroepID, Soortengroep.Naam, Soortengroep.Omschrijving, 
+                                      SoortengroepSoort.SoortID, SoortengroepSoort.SoortensubgroepID, Soort.WetNaam, Soort.NedNaam,
+                                      Soortensubgroep.Naam AS NedNaam_groep, Soortensubgroep.WetNaam AS WetNaam_groep
+                                    FROM ((Soortengroep INNER JOIN SoortengroepSoort ON Soortengroep.Id = SoortengroepSoort.SoortengroepID)
+                                            LEFT JOIN Soort ON SoortengroepSoort.SoortID = Soort.Id)
+                                            LEFT JOIN Soortengroep as Soortensubgroep ON SoortengroepSoort.SoortensubgroepID = Soortensubgroep.Id
+                                    WHERE Soortengroep.Id in (%s)", 
+                                   SoortengroepIDperNiveau[SoortengroepIDperNiveau$NiveauSoortenlijstFiche==1,"SoortengroepIDs"])
+    
+    Soortenlijst1 <- connecteerMetLSVIdb(query_soortenlijst1)
   }
 
