@@ -14,6 +14,8 @@
 #'
 #'@return tabel met velden Versie, Habitattype, Habitatsubtype, Criterium, Indicator, evt. Beschrijving, WetNaam en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van soorten)
 #'
+#'@importFrom dplyr %>% select_ distinct_ filter group_by_ summarise_ ungroup bind_rows
+#'
 #'
 #'
 geefSoortenlijst <- 
@@ -101,15 +103,67 @@ geefSoortenlijst <-
       group_by_(~NiveauSoortenlijstFiche) %>%
       summarise_(SoortengroepIDs = ~ paste(SoortengroepID, collapse=",")) %>%
       ungroup()
-    query_soortenlijst1 <- sprintf("SELECT Soortengroep.Id as SoortengroepID, Soortengroep.Naam, Soortengroep.Omschrijving, 
-                                      SoortengroepSoort.SoortID, SoortengroepSoort.SoortensubgroepID, Soort.WetNaam, Soort.NedNaam,
-                                      Soortensubgroep.Naam AS NedNaam_groep, Soortensubgroep.WetNaam AS WetNaam_groep
-                                    FROM ((Soortengroep INNER JOIN SoortengroepSoort ON Soortengroep.Id = SoortengroepSoort.SoortengroepID)
-                                            LEFT JOIN Soort ON SoortengroepSoort.SoortID = Soort.Id)
-                                            LEFT JOIN Soortengroep as Soortensubgroep ON SoortengroepSoort.SoortensubgroepID = Soortensubgroep.Id
-                                    WHERE Soortengroep.Id in (%s)", 
-                                   SoortengroepIDperNiveau[SoortengroepIDperNiveau$NiveauSoortenlijstFiche==1,"SoortengroepIDs"])
+    # query_soortenlijst1 <- sprintf("SELECT Soortengroep.Id as SoortengroepID, Soortengroep.Omschrijving, 
+    #                                   Soort.WetNaam, Soort.NedNaam,
+    #                                   Soortensubgroep.Naam AS NedNaam_groep, Soortensubgroep.WetNaam AS WetNaam_groep
+    #                                 FROM (((Soortengroep INNER JOIN SoortengroepSoort ON Soortengroep.Id = SoortengroepSoort.SoortengroepID))
+    #                                         LEFT JOIN Soort ON SoortengroepSoort.SoortID = Soort.Id)
+    #                                         LEFT JOIN Soortengroep as Soortensubgroep ON SoortengroepSoort.SoortensubgroepID = Soortensubgroep.Id
+    #                                 WHERE Soortengroep.Id in (%s)", 
+    #                                SoortengroepIDperNiveau[SoortengroepIDperNiveau$NiveauSoortenlijstFiche==1,"SoortengroepIDs"])
+    # 
+    # Soortenlijst1 <- connecteerMetLSVIdb(query_soortenlijst1)
+    # 
+    # query_soortenlijst2 <- sprintf("SELECT Soortengroep.Id as SoortengroepID, Soortengroep.Omschrijving,
+    #                                   Soortengroep2.Omschrijving AS Omschrijving2,
+    #                                   Soort.WetNaam, Soort.NedNaam,
+    #                                   Soortensubgroep.Naam AS NedNaam_groep, Soortensubgroep.WetNaam AS WetNaam_groep
+    #                                FROM (((Soortengroep INNER JOIN SoortengroepSoort ON Soortengroep.Id = SoortengroepSoort.SoortengroepID)
+    #                                     INNER JOIN (Soortengroep as Soortengroep2 INNER JOIN SoortengroepSoort as SoortengroepSoort2
+    #                                                     ON Soortengroep2.Id = SoortengroepSoort2.SoortengroepID)
+    #                                     ON SoortengroepSoort.SoortensubgroepID = Soortengroep2.Id)
+    #                                     LEFT JOIN Soort ON SoortengroepSoort2.SoortID = Soort.Id)
+    #                                         LEFT JOIN Soortengroep as Soortensubgroep ON SoortengroepSoort2.SoortensubgroepID = Soortensubgroep.Id
+    #                                WHERE Soortengroep.Id in (%s)",
+    #                                SoortengroepIDperNiveau[SoortengroepIDperNiveau$NiveauSoortenlijstFiche==2,"SoortengroepIDs"])
+    # 
+    # Soortenlijst2 <- connecteerMetLSVIdb(query_soortenlijst2)
     
-    Soortenlijst1 <- connecteerMetLSVIdb(query_soortenlijst1)
+    Soortenlijst <- NULL
+    for(n in SoortengroepIDperNiveau$NiveauSoortenlijstFiche){
+      ExtraOmschrijving <- ""
+      ExtraJointabellen_begin <- ""
+      ExtraJointabellen_eind <- ""
+      if(n > 1){
+        for(i in 2:n){
+          ExtraOmschrijving <- sprintf("%s Soortengroep%s.Omschrijving AS Omschrijving%s,", ExtraOmschrijving, i, i)
+          ExtraJointabellen_begin <- ifelse(nchar(ExtraJointabellen_begin)>20,
+                                            paste(substr(ExtraJointabellen_begin, 1, 12),"(",
+                                                  substr(ExtraJointabellen_begin, 13, nchar(ExtraJointabellen_begin)), collapse = ""),
+                                            ExtraJointabellen_begin)
+          ExtraJointabellen_begin <- sprintf("%s INNER JOIN (Soortengroep as Soortengroep%s INNER JOIN SoortengroepSoort as SoortengroepSoort%s ON Soortengroep%s.Id = SoortengroepSoort%s.SoortengroepID)", 
+                                             ExtraJointabellen_begin, i, i, i, i)
+          ExtraJointabellen_eind <- sprintf(" ON SoortengroepSoort%s.SoortensubgroepID = Soortengroep%s.Id)%s", 
+                                            ifelse(i-1==1,"",i-1), i, ExtraJointabellen_eind)
+        }
+        ExtraJointabellen <- paste(ExtraJointabellen_begin, ExtraJointabellen_eind, collapse = "")
+      } else {
+        ExtraJointabellen <- ")"
+      }
+  
+      query_soortenlijst <- sprintf("SELECT Soortengroep.Id as SoortengroepID, Soortengroep.Omschrijving,%s Soort.WetNaam, Soort.NedNaam,
+                                            Soortensubgroep.Naam AS NedNaam_groep, Soortensubgroep.WetNaam AS WetNaam_groep
+                                       FROM (((Soortengroep INNER JOIN SoortengroepSoort ON Soortengroep.Id = SoortengroepSoort.SoortengroepID)%s
+                                              LEFT JOIN Soort ON SoortengroepSoort%s.SoortID = Soort.Id)
+                                              LEFT JOIN Soortengroep as Soortensubgroep ON SoortengroepSoort%s.SoortensubgroepID = Soortensubgroep.Id
+                                       WHERE Soortengroep.Id in (%s)",
+                                       ExtraOmschrijving, ExtraJointabellen, ifelse(n==1,"",n), ifelse(n==1,"",n),
+                                       SoortengroepIDperNiveau[SoortengroepIDperNiveau$NiveauSoortenlijstFiche==n,"SoortengroepIDs"])
+      Soortenlijst_n <- connecteerMetLSVIdb(query_soortenlijst)
+      Soortenlijst <- Soortenlijst %>%
+        bind_rows(Soortenlijst_n)
+    }
+    
+    return(Soortenlijst)  
   }
 
