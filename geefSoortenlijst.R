@@ -14,7 +14,7 @@
 #'
 #'@return tabel met velden Versie, Habitattype, Habitatsubtype, Criterium, Indicator, evt. Beschrijving, WetNaam en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van soorten)
 #'
-#'@importFrom dplyr %>% select_ distinct_ filter group_by_ summarise_ ungroup bind_rows
+#'@importFrom dplyr %>% select_ distinct_ filter group_by_ summarise_ ungroup bind_rows mutate_ right_join
 #'
 #'
 #'
@@ -164,6 +164,24 @@ geefSoortenlijst <-
         bind_rows(Soortenlijst_n)
     }
     
-    return(Soortenlijst)  
+    Soortenlijst <- Soortenlijst %>%
+      mutate_(
+        WetNaam = ~ifelse(is.na(WetNaam), WetNaam_groep, WetNaam),
+        NedNaam = ~ifelse(is.na(NedNaam), NedNaam_groep, NedNaam),
+        WetNaam_groep = ~NULL,
+        NedNaam_groep = ~NULL
+      ) 
+    
+    #eventueel zouden de kolommen met 'OmschrijvingX' die enkel NA's bevatten, gewist kunnen worden.
+    
+    
+    SoortenlijstSelectie <- Selectiegegevens %>%
+      left_join(Soortenlijst, by = ("SoortengroepID" = "SoortengroepID")) %>%
+      mutate_(
+        NiveauSoortenlijstFiche = ~NULL,
+        SoortengroepID = ~NULL
+      )
+    
+    return(SoortenlijstSelectie)  
   }
 
