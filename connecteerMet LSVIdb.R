@@ -1,7 +1,7 @@
 #'
-#'Voert de opgegeven query uit op de databank met LSVI-indicatoren
+#'@title Voert de opgegeven query uit op de databank met LSVI-indicatoren
 #'
-#'Deze functie voert opgegeven queries uit op de databank met LSVI-indicatoren en geeft de gegenereerde tabel terug.  Bedoeling van deze aparte functie is om de link naar deze databank maar op 1 plaats te bewaren, zodat deze bij het verplaatsen van de databank ook maar op een plaats aangepast moet worden.
+#'@description Deze functie voert opgegeven queries uit op de databank met LSVI-indicatoren en geeft de gegenereerde tabel terug.  Bedoeling van deze aparte functie is om de link naar deze databank maar op 1 plaats te bewaren, zodat deze bij het verplaatsen van de databank ook maar op een plaats aangepast moet worden.
 #'
 #'@param query De query die uitgevoerd moet worden op de t
 #'
