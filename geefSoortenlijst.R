@@ -32,7 +32,7 @@ geefSoortenlijst <-
     match.arg(Criterium)
     match.arg(Indicator)
     
-    #eerst de selectiegegevens ophalen en de nodige gegevens uit tabel Indicator_habitat
+    #eerst de selectiegegevens ophalen en de nodige gegevens uit tabel Indicator_habitat, query samenstellen op basis van parameters
     Parametervoorwaarde <- FALSE
     query <- "SELECT Versie.VersieLSVI, Habitattype.Habitatcode AS Habitattype, Habitatsubtype.Habitatcode_subtype AS Habitatsubtype,
                 Criterium.Naam AS Criterium, Indicator.Naam AS Indicator, 
@@ -95,7 +95,8 @@ geefSoortenlijst <-
     }
     Selectiegegevens <- connecteerMetLSVIdb(query)
     
-    #nu de soortgegevens ophalen
+    #nu de soortgegevens ophalen:
+    #eerst oplijsten welke gegevens moeten opgehaald worden per niveau van Soortengroep en SoortengroepSoort
     SoortengroepIDperNiveau <- Selectiegegevens %>%
       select_(~SoortengroepID, ~NiveauSoortenlijstFiche) %>%
       distinct_() %>%
@@ -103,32 +104,8 @@ geefSoortenlijst <-
       group_by_(~NiveauSoortenlijstFiche) %>%
       summarise_(SoortengroepIDs = ~ paste(SoortengroepID, collapse=",")) %>%
       ungroup()
-    # query_soortenlijst1 <- sprintf("SELECT Soortengroep.Id as SoortengroepID, Soortengroep.Omschrijving, 
-    #                                   Soort.WetNaam, Soort.NedNaam,
-    #                                   Soortensubgroep.Naam AS NedNaam_groep, Soortensubgroep.WetNaam AS WetNaam_groep
-    #                                 FROM (((Soortengroep INNER JOIN SoortengroepSoort ON Soortengroep.Id = SoortengroepSoort.SoortengroepID))
-    #                                         LEFT JOIN Soort ON SoortengroepSoort.SoortID = Soort.Id)
-    #                                         LEFT JOIN Soortengroep as Soortensubgroep ON SoortengroepSoort.SoortensubgroepID = Soortensubgroep.Id
-    #                                 WHERE Soortengroep.Id in (%s)", 
-    #                                SoortengroepIDperNiveau[SoortengroepIDperNiveau$NiveauSoortenlijstFiche==1,"SoortengroepIDs"])
-    # 
-    # Soortenlijst1 <- connecteerMetLSVIdb(query_soortenlijst1)
-    # 
-    # query_soortenlijst2 <- sprintf("SELECT Soortengroep.Id as SoortengroepID, Soortengroep.Omschrijving,
-    #                                   Soortengroep2.Omschrijving AS Omschrijving2,
-    #                                   Soort.WetNaam, Soort.NedNaam,
-    #                                   Soortensubgroep.Naam AS NedNaam_groep, Soortensubgroep.WetNaam AS WetNaam_groep
-    #                                FROM (((Soortengroep INNER JOIN SoortengroepSoort ON Soortengroep.Id = SoortengroepSoort.SoortengroepID)
-    #                                     INNER JOIN (Soortengroep as Soortengroep2 INNER JOIN SoortengroepSoort as SoortengroepSoort2
-    #                                                     ON Soortengroep2.Id = SoortengroepSoort2.SoortengroepID)
-    #                                     ON SoortengroepSoort.SoortensubgroepID = Soortengroep2.Id)
-    #                                     LEFT JOIN Soort ON SoortengroepSoort2.SoortID = Soort.Id)
-    #                                         LEFT JOIN Soortengroep as Soortensubgroep ON SoortengroepSoort2.SoortensubgroepID = Soortensubgroep.Id
-    #                                WHERE Soortengroep.Id in (%s)",
-    #                                SoortengroepIDperNiveau[SoortengroepIDperNiveau$NiveauSoortenlijstFiche==2,"SoortengroepIDs"])
-    # 
-    # Soortenlijst2 <- connecteerMetLSVIdb(query_soortenlijst2)
     
+    #dan voor elk niveau de gegevens ophalen op basis van een query samengesteld op basis van het niveau, en deze gegevens aan elkaar plakken
     Soortenlijst <- NULL
     for(n in SoortengroepIDperNiveau$NiveauSoortenlijstFiche){
       ExtraOmschrijving <- ""
@@ -164,6 +141,7 @@ geefSoortenlijst <-
         bind_rows(Soortenlijst_n)
     }
     
+    #Kolommen met WetNaam (uit tabellen Soortengroep en Soort) samenvoegen, id voor NedNaam, en een kolom WetNaamKort toevoegen
     Soortenlijst <- Soortenlijst %>%
       mutate_(
         WetNaam = ~ifelse(is.na(WetNaam), WetNaam_groep, WetNaam),
@@ -178,14 +156,14 @@ geefSoortenlijst <-
         NedNaam_groep = ~NULL
       ) 
     
-    #eventueel zouden de kolommen met 'OmschrijvingX' die enkel NA's bevatten, gewist kunnen worden.
+    #kolommen wissen die enkel NA's bevatten
+    Soortenlijst <- Filter(function(x)!all(is.na(x)),Soortenlijst)
     
-    
+    #soortgegevens aan selectiegegevens plakken
     SoortenlijstSelectie <- Selectiegegevens %>%
       left_join(Soortenlijst, by = ("SoortengroepID" = "SoortengroepID")) %>%
       mutate_(
-        NiveauSoortenlijstFiche = ~NULL,
-        SoortengroepID = ~NULL
+        NiveauSoortenlijstFiche = ~NULL
       )
     
     return(SoortenlijstSelectie)  
