@@ -15,7 +15,7 @@
 #'@return tabel met velden Versie, Habitattype, Habitatsubtype, Criterium, Indicator, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van soorten).  WetNaam is de volledige Latijnse naam met auteursnaam, WetNaamKort enkel genusnaam en soortnaam (zonder auteursnaam).
 #'
 #'@importFrom dplyr %>% select_ distinct_ filter group_by_ summarise_ ungroup bind_rows mutate_ right_join
-#'
+#'@importFrom RODBC sqlQuery odbcClose
 #'
 #'
 geefSoortenlijst <- 
@@ -93,7 +93,10 @@ geefSoortenlijst <-
       }
       query <- sprintf("%s %s Indicator.Naam = '%s'", query, Voegwoord, Indicator)
     }
-    Selectiegegevens <- connecteerMetLSVIdb(query)
+
+    connectie <- connecteerMetLSVIdb()
+    Selectiegegevens <- sqlQuery(connectie, query, stringsAsFactors = FALSE)
+    odbcClose(connectie)
     
     #nu de soortgegevens ophalen:
     #eerst oplijsten welke gegevens moeten opgehaald worden per niveau van Soortengroep en SoortengroepSoort
@@ -136,7 +139,11 @@ geefSoortenlijst <-
                                        WHERE Soortengroep.Id in (%s)",
                                        ExtraOmschrijving, ExtraJointabellen, ifelse(n==1,"",n), ifelse(n==1,"",n),
                                        SoortengroepIDperNiveau[SoortengroepIDperNiveau$NiveauSoortenlijstFiche==n,"SoortengroepIDs"])
-      Soortenlijst_n <- connecteerMetLSVIdb(query_soortenlijst)
+
+      connectie <- connecteerMetLSVIdb()
+      Soortenlijst_n <- sqlQuery(connectie, query_soortenlijst, stringsAsFactors = FALSE)
+      odbcClose(connectie)
+      
       Soortenlijst <- Soortenlijst %>%
         bind_rows(Soortenlijst_n)
     }

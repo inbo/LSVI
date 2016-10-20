@@ -11,10 +11,14 @@
 #'
 #'@export
 #'
+#'@importFrom RODBC sqlQuery odbcClose
+#'
 
 geefUniekeWaarden <- function(Tabelnaam, Veldnaam){
   query <- sprintf("SELECT %s FROM %s",Veldnaam, Tabelnaam)
-  Waarden <- connecteerMetLSVIdb(query)
+  connectie <- connecteerMetLSVIdb()
+  Waarden <- sqlQuery(connectie, query, stringsAsFactors = FALSE)
+  odbcClose(connectie)
   UniekeWaarden <- c("alle", Waarden[,Veldnaam])
   return(UniekeWaarden)
 }

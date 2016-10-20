@@ -9,15 +9,14 @@
 #'
 #'@export
 #'
-#'@importFrom RODBC odbcConnectAccess2007 sqlQuery odbcClose
+#'@importFrom RODBC odbcConnectAccess2007
+#'@importFrom assertthat assert_that
 #'
 
-connecteerMetLSVIdb <- function(query){
-  connectie <- odbcConnectAccess2007("C://Users/els.lommelen@inbo.be/els.lommelen@inbo.be/10194_Controlelijsten/Output/LSVIdb_v4.accdb")
-  
-  Tabel <- sqlQuery(connectie, query, stringsAsFactors = FALSE)
-  
-  odbcClose(connectie)
-  
-  return(Tabel)
+connecteerMetLSVIdb <- function(path = "C://Users/els.lommelen@inbo.be/els.lommelen@inbo.be/10194_Controlelijsten/Output/LSVIdb_v4.accdb"){
+  assert_that(is.string(path))
+  if (!file_test("-f", path)) {
+    stop("File does not exists")
+  }
+  odbcConnectAccess2007(path)
 }

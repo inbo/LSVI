@@ -5,6 +5,7 @@
 #'
 #'De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten als string opgegeven worden.  Voor eenzelfde parameter twee of meer waarden opgeven kan door de waarden te scheiden door 'or' en het geheel tussen haakjes te zetten.  Default is telkens 'alle', waarbij de soortenlijsten voor alle mogelijke waarden van die parameter weergegeven worden (m.a.w. er is geen selectie voor deze parameter).
 #'
+#' @inheritParams geefSoortenlijst
 #'@param Versie De versie van het LSVI-rapport, bv. 'Versie 2' of 'Versie 3'.  Bij de default 'alle' worden de soortenlijsten voor de verschillende versies gegeven.
 #'@param Habitatgroep Parameter waarmee alle habitats van een bepaalde habitatgroep kunnen geselecteerd worden, bv. Bossen, Heiden, (Half-)natuurlijke graslanden, Zoete wateren,...   en 'alle' (=default).  Deze waarde moet niet gespecifieerd worden als een bepaald habitat(sub)type geselecteerd wordt.
 #'@param Habitattype Parameter waarmee een habitattype kan geselecteerd worden.  Als dit habitattype meerdere subtypes heeft, zullen de soortenlijsten van alle subtypes van dit habitattype weergegeven worden.
@@ -13,7 +14,7 @@
 #'@return Habitatfiches in de vorm van html-files die in de workspace opgeslagen worden.
 #'
 #'@importFrom rmarkdown render
-#'
+#'@importFrom RODBC sqlQuery odbcClose
 #'
 #'
 maakHabitatfiches <- 
@@ -66,11 +67,13 @@ maakHabitatfiches <-
       }
     }
 
-    Habitattypes <- connecteerMetLSVIdb(query)
+    connectie <- connecteerMetLSVIdb()
+    Habitattypes <- sqlQuery(connectie, query, stringsAsFactors = FALSE)
+    odbcClose(connectie)
     
     for(versie in unique(Habitattypes$VersieLSVI)){
       for(habitatsubtype in unique(as.character(Habitattypes$Habitatsubtype))){
-        render("Habitatfiche.Rmd", params = list(Versie = versie, Habitatsubtype = habitatsubtype))
+        render(system.file("Habitatfiche.Rmd", package = "LSVI"), params = list(Versie = versie, Habitatsubtype = habitatsubtype))
       }
     }
       

@@ -15,6 +15,7 @@ knitr::opts_chunk$set(echo = FALSE)
 library(RODBC)
 library(dplyr)
 library(lazyeval)
+library(LSVI)
 library(xtable)
 library(tidyr)
 
@@ -60,7 +61,7 @@ query_beoordelingsfiche <- sprintf(
 query_versie <- sprintf("SELECT * FROM Versie WHERE Versie.VersieLSVI='%s'", params$Versie)
 
 
-LSVIdb <- odbcConnectAccess2007("C://Users/els.lommelen@inbo.be/els.lommelen@inbo.be/10194_Controlelijsten/Output/LSVIdb_v4.accdb")
+LSVIdb <- connecteerMetLSVIdb()
 
 Habitatfiche <- sqlQuery(LSVIdb, query_habitatfiche, stringsAsFactors = FALSE)
 
