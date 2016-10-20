@@ -1,0 +1,17 @@
+Package: LSVI
+Title: Rekenmodule Lokale Staat Van Instandhouding
+Version: 0.0.0.9000
+Authors@R: c(person("Els", "Lommelen", email = "els.lommelen@inbo.be", role = c("aut", "cre")), person(family = "Research Institute for Nature and Forest (INBO)", email = "info@inbo.be", role = "cph"))
+Description: Het package LSVI bundelt een aantal functies in verband met het ophalen van informatie over en het berekenen van de Lokale Staat Van Instandhouding (LSVI).
+Depends:
+    R (>= 3.3.0)
+License: GPL-3
+LazyData: true
+Imports:
+    RODBC,
+    assertthat,
+    dplyr,
+    rmarkdown
+Suggests:
+    lazyeval
+RoxygenNote: 5.0.1
