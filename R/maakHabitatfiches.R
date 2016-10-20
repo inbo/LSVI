@@ -5,6 +5,8 @@
 #'
 #'De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten als string opgegeven worden.  Voor eenzelfde parameter twee of meer waarden opgeven kan door de waarden te scheiden door 'or' en het geheel tussen haakjes te zetten.  Default is telkens 'alle', waarbij de soortenlijsten voor alle mogelijke waarden van die parameter weergegeven worden (m.a.w. er is geen selectie voor deze parameter).
 #'
+#'De gegenereerde habitatfiches worden opgeslagen in de folder die als working directory gespecifieerd is.
+#'
 #' @inheritParams geefSoortenlijst
 #'
 #'@return Habitatfiches in de vorm van html-files die in de workspace opgeslagen worden.
@@ -72,7 +74,13 @@ maakHabitatfiches <-
     for(versie in unique(Habitattypes$VersieLSVI)){
       for(habitatsubtype in unique(as.character(Habitattypes$Habitatsubtype))){
         render(system.file("Habitatfiche.Rmd", package = "LSVI"), 
-               params = list(Versie = versie, Habitatsubtype = habitatsubtype))
+               params = list(Versie = versie, Habitatsubtype = habitatsubtype),
+               output_file = sprintf("Habitatfiche_%s_%s.html",
+                                     habitatsubtype,
+                                     sub(versie, 
+                                         pattern = " ", 
+                                         replacement = "")),
+               output_dir = getwd())
       }
     }
       
