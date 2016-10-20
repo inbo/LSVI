@@ -69,7 +69,7 @@ maakHabitatfiches <-
     Habitattypes <- connecteerMetLSVIdb(query)
     
     for(versie in unique(Habitattypes$VersieLSVI)){
-      for(habitatsubtype in unique(Habitattypes$Habitatsubtype)){
+      for(habitatsubtype in unique(as.character(Habitattypes$Habitatsubtype))){
         render("Habitatfiche.Rmd", params = list(Versie = versie, Habitatsubtype = habitatsubtype))
       }
     }

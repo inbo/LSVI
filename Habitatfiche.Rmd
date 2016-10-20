@@ -14,10 +14,13 @@ knitr::opts_chunk$set(echo = FALSE)
 ```{r libraries, include=FALSE}
 library(RODBC)
 library(dplyr)
+library(lazyeval)
 library(xtable)
 library(tidyr)
 
 ```
+
+
 
 ```{r inladen_gegevens}
 
@@ -54,12 +57,6 @@ query_beoordelingsfiche <- sprintf(
 )
   
 
-query_soortengroep <- "SELECT Soortengroep.Id as SoortengroepID, Soortengroep.Naam, Soortengroep.Omschrijving, 
-                        SoortengroepSoort.SoortID, SoortengroepSoort.SoortensubgroepID
-                       FROM Soortengroep INNER JOIN SoortengroepSoort ON Soortengroep.Id = SoortengroepSoort.SoortengroepID"
-
-query_soort <- "SELECT Soort.Id AS SoortID, Soort.WetNaam, Soort.NedNaam FROM Soort"
-
 query_versie <- sprintf("SELECT * FROM Versie WHERE Versie.VersieLSVI='%s'", params$Versie)
 
 
@@ -69,72 +66,83 @@ Habitatfiche <- sqlQuery(LSVIdb, query_habitatfiche, stringsAsFactors = FALSE)
 
 Beoordelingsfiche <- sqlQuery(LSVIdb, query_beoordelingsfiche, stringsAsFactors = FALSE)
 
-Soortengroep <- sqlQuery(LSVIdb, query_soortengroep, stringsAsFactors = FALSE)
-
-Soort <- sqlQuery(LSVIdb, query_soort, stringsAsFactors = FALSE)
-
 Versie <- sqlQuery(LSVIdb, query_versie, stringsAsFactors = FALSE)
 
 odbcClose(LSVIdb)
 
-```
-
-
-##Habitattype `r Habitatfiche[1,"Habitatcode_subtype"]`: `r Habitatfiche[1,"Habitatnaam_subtype"]`
-
-###Habitatkarakteristieken
-
-```{r results='asis'}
-Soortengroepselectie <- Soortengroep %>%
-  filter(SoortengroepID %in% Habitatfiche$SoortengroepID) %>%
-  left_join(Soortengroep, by = c("SoortensubgroepID" = "SoortengroepID"), suffix = c(".1", ".2"))
-
-#bij het veralgemenen van deze functie moet deze left_join herhaald worden volgens het maximale aantal niveaus vermeld in Indicator_habitat$NiveauSoortenlijstFiche
-
-Soortengroepselectie$SoortID <- 
-  ifelse(!is.na(Soortengroepselectie$SoortID.1),Soortengroepselectie$SoortID.1, Soortengroepselectie$SoortID.2)
-
-#ook dit moet verder uitgebreid worden bij het veralgemenen van de functie, evt. door alle SoortID's te selecteren en de niet-NA eruit te kiezen? NEE, hier moet rekening gehouden worden met het niveau vermeld in tabel Indicator_habitat! (soms moet ook het genus of de groepsnaam vermeld worden en niet de soortnaam)
-#ook voor hetgeen volgt zou nog een algemene werkwijze toegevoegd moeten worden, meer specifiek onder 'group_by'
-
-SoortenKoppeling <- Soortengroepselectie %>%
-  left_join(Soort, by = c("SoortID" = "SoortID")) %>%
+Soortenlijst <- geefSoortenlijst(Versie = params$Versie, Habitatsubtype = params$Habitatsubtype) %>%
   mutate_(
-    WetNaamKort = ~
-      gsub(
-        pattern = "^([[:alpha:]]*) ([[:alpha:]]*) (.*)",
-        replacement = "\\1 \\2",
-        x = WetNaam
-      ),
+    VersieLSVI = ~NULL,
+    Habitattype = ~NULL,
+    Habitatsubtype = ~NULL,
     TotNaam = ~ sprintf("%s (_%s_)", NedNaam, WetNaamKort)
   ) %>%
-  arrange_(~ TotNaam) %>%
+  arrange_(~ TotNaam)
+
+OmschrijvingKolommen <- NULL
+for(i in colnames(Soortenlijst)){
+  if(grepl("Omschrijving",i)){
+    OmschrijvingKolommen <- c(OmschrijvingKolommen, i)
+  }
+}
+OmschrijvingKolommen <- 
+  OmschrijvingKolommen[order(as.integer(substr(OmschrijvingKolommen, 13, nchar(OmschrijvingKolommen))), 
+                             decreasing = TRUE)]
+  
+Soortenlijst <- Soortenlijst %>%
   group_by_(
     ~ SoortengroepID,
-    ~ Naam.1,
-    ~ Omschrijving.1,
-    ~ SoortensubgroepID,
-    ~ Naam.2,
-    ~ Omschrijving.2,
-    ~ SoortensubgroepID.2
+    ~ Criterium,
+    ~ Indicator,
+    .dots = OmschrijvingKolommen
   ) %>%
   summarise_(
     Soortenlijst = ~ paste(as.vector(TotNaam), collapse = ", ")
   ) %>%
-  ungroup() %>%
-  mutate_(
-    Soortenlijst = ~ ifelse(is.na(Omschrijving.2), Soortenlijst, 
-                          paste("**",Omschrijving.2,":** ",Soortenlijst, sep=""))
-  ) %>%
-  group_by_(
-    ~ SoortengroepID,
-    ~ Naam.1,
-    ~ Omschrijving.1
-  ) %>%
-  summarise_(
-    Soortenlijst = ~ paste(as.vector(Soortenlijst), collapse = ",  ")
-  ) %>%
   ungroup()
+
+laatste_i <- 0
+for(i in 1:length(OmschrijvingKolommen)){
+  laatste_i <- max(laatste_i, length(OmschrijvingKolommen))
+  Soortenlijst <- Soortenlijst %>%
+    mutate_(
+      Soortenlijst = interp(~ ifelse(is.na(var), Soortenlijst, 
+                                     paste("**",var,":** ",Soortenlijst, sep="")), 
+                            var = as.name(OmschrijvingKolommen[1]))
+    ) %>%
+    select(
+      - matches(OmschrijvingKolommen[1])
+    )
+  
+  OmschrijvingKolommen <- OmschrijvingKolommen[-1]
+  
+  if(i < laatste_i){
+    Soortenlijst <- Soortenlijst %>%
+      group_by_(
+        ~ SoortengroepID,
+        ~ Criterium,
+        ~ Indicator,
+        .dots = OmschrijvingKolommen
+      ) %>%
+      summarise_(
+        Soortenlijst = ~ paste(as.vector(Soortenlijst), collapse = ",  ")
+      ) %>%
+      ungroup()
+  } else {
+    Soortenlijst <- Soortenlijst %>%
+      group_by_(
+        ~ SoortengroepID,
+        ~ Criterium,
+        ~ Indicator
+      ) %>%
+      summarise_(
+        Soortenlijst = ~ paste(as.vector(Soortenlijst), collapse = ",  ")
+      ) %>%
+      ungroup()
+  }
+    
+}
+      
 
 paste2 <- function(...,sep=", ") {
     L <- list(...)
@@ -145,10 +153,25 @@ paste2 <- function(...,sep=", ") {
 }
 
 Habitatfiche2 <- Habitatfiche %>%
-  left_join(SoortenKoppeling, by = c("SoortengroepID" = "SoortengroepID")) %>%
+  left_join(Soortenlijst %>% 
+              select_(
+                ~ SoortengroepID,
+                ~Soortenlijst
+              ), 
+            by = c("SoortengroepID" = "SoortengroepID")) %>%
   mutate_(
     Beschrijving = ~ paste2(Beschrijving, Soortenlijst, Beschrijving_naSoorten, sep = " ")
   )
+
+```
+
+
+##Habitattype `r Habitatfiche[1,"Habitatcode_subtype"]`: `r Habitatfiche[1,"Habitatnaam_subtype"]`
+
+###Habitatkarakteristieken
+
+```{r results='asis'}
+
 
 
 for(Criterium in unique(Habitatfiche$Criterium)){
