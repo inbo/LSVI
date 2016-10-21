@@ -1,20 +1,22 @@
+#' @title Genereert habitatfiche(s) van LSVI op basis van de opgegeven parameters
 #'
-#'Genereert habitatfiche(s) van LSVI op basis van de opgegeven parameters
+#' @description Deze functie genereert habitatfiches die gebruikt worden voor de bepaling van de Lokale Staat van Instandhouding van de habitatsubtypes die voldoen aan de opgegeven parameters.  
 #'
-#'Deze functie genereert habitatfiches die gebruikt worden voor de bepaling van de Lokale Staat van Instandhouding van de habitatsubtypes die voldoen aan de opgegeven parameters.  
-#'
-#'De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten als string opgegeven worden.  Voor eenzelfde parameter twee of meer waarden opgeven kan door de waarden te scheiden door 'or' en het geheel tussen haakjes te zetten.  Default is telkens 'alle', waarbij de soortenlijsten voor alle mogelijke waarden van die parameter weergegeven worden (m.a.w. er is geen selectie voor deze parameter).
+#'De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten als string opgegeven worden.  Default is telkens "alle", waarbij de soortenlijsten voor alle mogelijke waarden van die parameter weergegeven worden (m.a.w. er is geen selectie voor deze parameter).
 #'
 #'De gegenereerde habitatfiches worden opgeslagen in de folder die als working directory gespecifieerd is.
 #'
 #' @inheritParams geefSoortenlijst
 #'
-#'@return Habitatfiches in de vorm van html-files die in de workspace opgeslagen worden.
+#' @return Deze functie genereert habitatfiches in de vorm van html-files die in de workspace opgeslagen worden.
+#' 
+#' @examples 
+#' maakHabitatfiches(Versie = "Versie 3", Habitatsubtype = "4010")
 #'
-#'@export
+#' @export
 #'
-#'@importFrom rmarkdown render
-#'@importFrom RODBC sqlQuery odbcClose
+#' @importFrom rmarkdown render
+#' @importFrom RODBC sqlQuery odbcClose
 #'
 #'
 maakHabitatfiches <- 

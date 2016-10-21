@@ -11,7 +11,9 @@ Imports:
     RODBC,
     assertthat,
     dplyr,
-    rmarkdown
-Suggests:
+    rmarkdown,
     lazyeval
+Suggests:
+    xtable,
+    tidyr
 RoxygenNote: 5.0.1
