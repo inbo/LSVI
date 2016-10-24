@@ -2,6 +2,7 @@
 
 export(connecteerMetLSVIdb)
 export(geefSoortenlijst)
+export(geefSoortenlijstLSVIfiche)
 export(geefUniekeWaarden)
 export(maakHabitatfiches)
 importFrom(RODBC,odbcClose)
