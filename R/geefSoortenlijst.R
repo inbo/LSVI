@@ -2,7 +2,7 @@
 #'
 #' @description Deze functie genereert soortenlijsten (met wetenschappelijke en Nederlandse namen) die gebruikt worden voor de bepaling van de Lokale Staat van Instandhouding van de opgegeven parameters.  In feite genereert ze een tabel met velden Versie, Habitattype, Habitatsubtype, Criterium, Indicator, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam waarin de gespecificeerde parameters uitgeselecteerd zijn en waar voor andere parameters alle waarden uit de databank weergegeven zijn.  
 #' 
-#' Er zijn 2 opties: de soorten weergeven zoals in de habitatfiches (op soortniveau, genusniveau of hoger niveau, zoals het in de habitatfiches vermeld is) of alle soorten op soortniveau weergeven en dus bij soortengroepen alle mogelijke soorten van deze groep weergeven.  Deze opties kunnen
+#' Er zijn 2 opties: de soorten weergeven zoals in de habitatfiches (op soortniveau, genusniveau of hoger niveau, zoals het in de habitatfiches vermeld is) of alle soorten op soortniveau weergeven en dus bij soortengroepen alle mogelijke soorten van deze groep weergeven.  Deze opties kunnen opgegeven worden in de parameter Soortenlijsttype.
 #'
 #'De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten als string opgegeven worden.  Default is telkens 'alle', waarbij de soortenlijsten voor alle mogelijke waarden van die parameter weergegeven worden (m.a.w. er is geen selectie voor deze parameter).
 #'
@@ -21,6 +21,8 @@
 #'
 #' @export
 #'
+#' @importFrom dplyr %>% select_ distinct_ filter group_by_ summarise_ ungroup mutate_ left_join
+#' @importFrom RODBC sqlQuery odbcClose
 #'
 #'
 geefSoortenlijst <- 
@@ -40,21 +42,108 @@ geefSoortenlijst <-
     match.arg(Soortenlijsttype)
     
     
-    Soortenlijst <- 
-      switch(Soortenlijsttype[1],
-             LSVIfiche = geefSoortenlijstLSVIfiche(Versie,
-                                                    Habitatgroep,
-                                                    Habitattype,
-                                                    Habitatsubtype,
-                                                    Criterium,
-                                                    Indicator),
-             Soortniveau = geefSoortenlijstSoortniveau(Versie,
-                                                       Habitatgroep,
-                                                       Habitattype,
-                                                       Habitatsubtype,
-                                                       Criterium,
-                                                       Indicator))
+    #eerst de selectiegegevens ophalen en de nodige gegevens uit tabel Indicator_habitat, query samenstellen op basis van parameters
+    Parametervoorwaarde <- FALSE
+    query <- "SELECT Versie.VersieLSVI, Habitattype.Habitatcode AS Habitattype, Habitatsubtype.Habitatcode_subtype AS Habitatsubtype,
+    Criterium.Naam AS Criterium, Indicator.Naam AS Indicator, 
+    Indicator_habitat.SoortengroepID, Indicator_habitat.NiveauSoortenlijstFiche
+    FROM ((Indicator_habitat 
+    INNER JOIN ((Habitatsubtype INNER JOIN Habitattype ON Habitatsubtype.HabitattypeID = Habitattype.Id)
+    INNER JOIN Habitatgroep ON Habitattype.HabitatgroepID = Habitatgroep.Id)
+    ON Indicator_habitat.HabitatsubtypeID = Habitatsubtype.Id)
+    INNER JOIN (Indicator INNER JOIN Criterium ON Indicator.CriteriumID = Criterium.Id)
+    ON Indicator_habitat.IndicatorID = Indicator.Id)
+    INNER JOIN Versie ON Indicator_habitat.VersieID = Versie.Id"
+    if(Versie[1] != "alle"){
+      query <- sprintf("%s WHERE Versie.VersieLSVI = '%s'", query, Versie)
+      Parametervoorwaarde <- TRUE
+    }
+    if(Habitatgroep[1] != "alle"){
+      if(Parametervoorwaarde){
+        Voegwoord <- "AND"
+      } else {
+        Voegwoord <- "WHERE"
+        Parametervoorwaarde <- TRUE
+      }
+      query <- sprintf("%s %s Habitatgroep.Habitatgroepnaam = '%s'", query, Voegwoord, Habitatgroep)
+    }
+    if(Habitattype[1] != "alle"){
+      if(Parametervoorwaarde){
+        Voegwoord <- "AND"
+      } else {
+        Voegwoord <- "WHERE"
+        Parametervoorwaarde <- TRUE
+      }
+      query <- sprintf("%s %s Habitattype.Habitatcode = '%s'", query, Voegwoord, Habitattype)
+    }
+    if(Habitatsubtype[1] != "alle"){
+      if(Parametervoorwaarde){
+        Voegwoord <- "AND"
+      } else {
+        Voegwoord <- "WHERE"
+        Parametervoorwaarde <- TRUE
+      }
+      query <- sprintf("%s %s Habitatsubtype.Habitatcode_subtype = '%s'", query, Voegwoord, Habitatsubtype)
+    }
+    if(Criterium[1] != "alle"){
+      if(Parametervoorwaarde){
+        Voegwoord <- "AND"
+      } else {
+        Voegwoord <- "WHERE"
+        Parametervoorwaarde <- TRUE
+      }
+      query <- sprintf("%s %s Criterium.Naam = '%s'", query, Voegwoord, Criterium)
+    }
+    if(Indicator[1] != "alle"){
+      if(Parametervoorwaarde){
+        Voegwoord <- "AND"
+      } else {
+        Voegwoord <- "WHERE"
+        Parametervoorwaarde <- TRUE
+      }
+      query <- sprintf("%s %s Indicator.Naam = '%s'", query, Voegwoord, Indicator)
+    }
     
-    return(Soortenlijst)  
+    connectie <- connecteerMetLSVIdb()
+    Selectiegegevens <- sqlQuery(connectie, query, stringsAsFactors = FALSE)
+    odbcClose(connectie)
+    
+    #nu de soortgegevens ophalen:
+    if(Soortenlijsttype[1] == "LSVIfiche"){
+      #eerst oplijsten welke gegevens moeten opgehaald worden per niveau van Soortengroep en SoortengroepSoort
+      SoortengroepIDperNiveau <- Selectiegegevens %>%
+        select_(~SoortengroepID, ~NiveauSoortenlijstFiche) %>%
+        distinct_() %>%
+        filter(!is.na(SoortengroepID)) %>%
+        group_by_(~NiveauSoortenlijstFiche) %>%
+        summarise_(SoortengroepIDs = ~ paste(SoortengroepID, collapse=",")) %>%
+        ungroup() %>%
+        rename_(Niveau = ~NiveauSoortenlijstFiche)
+      
+      #dan voor elk niveau de gegevens ophalen
+      Soortenlijst <- geefSoortenlijstInvoerniveau(SoortengroepIDperNiveau)
+      
+    } else if(Soortenlijsttype == "Soortniveau"){
+      #de andere optie: gegevens van het diepste niveau ophalen
+      SoortengroepIDs <- Selectiegegevens %>%
+        select_(~SoortengroepID) %>%
+        distinct_() %>%
+        filter(!is.na(SoortengroepID)) %>%
+        summarise_(SoortengroepIDs = ~ paste(SoortengroepID, collapse=","))
+      
+      Soortenlijst <- geefSoortenlijstSoortniveau(SoortengroepIDs$SoortengroepIDs)
+      
+    }
+    
+    
+    #soortgegevens aan selectiegegevens plakken
+    SoortenlijstSelectie <- Selectiegegevens %>%
+      left_join(Soortenlijst, by = ("SoortengroepID" = "SoortengroepID")) %>%
+      mutate_(
+        NiveauSoortenlijstFiche = ~NULL
+      )
+    
+    return(SoortenlijstSelectie)  
+    
   }
 
