@@ -2,7 +2,7 @@
 % Please edit documentation in R/geefSoortenlijstLSVIfiche.R
 \name{geefSoortenlijstLSVIfiche}
 \alias{geefSoortenlijstLSVIfiche}
-\title{Genereert soortenlijst(en) LSVI op basis van de opgegeven parameters}
+\title{Genereert soortenlijst(en) LSVI op basis van SoortengroepID en NiveauSoortenlijstFiche}
 \usage{
 geefSoortenlijstLSVIfiche(Versie = geefUniekeWaarden("Versie", "VersieLSVI"),
   Habitatgroep = geefUniekeWaarden("Habitatgroep", "Habitatgroepnaam"),
@@ -28,7 +28,7 @@ geefSoortenlijstLSVIfiche(Versie = geefUniekeWaarden("Versie", "VersieLSVI"),
 Deze functie geeft een tabel met velden Versie, Habitattype, Habitatsubtype, Criterium, Indicator, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van soorten binnen eenzelfde indicator).  WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort bevat enkel genusnaam en soortnaam (zonder auteursnaam).
 }
 \description{
-Deze functie genereert soortenlijsten (met wetenschappelijke en Nederlandse namen) die gebruikt worden voor de bepaling van de Lokale Staat van Instandhouding van de opgegeven parameters, zoals ze vermeld zijn in de habitatfiches (dus soms tot op soortniveau, soms tot op genusniveau of hoger).  In feite genereert ze een tabel met velden Versie, Habitattype, Habitatsubtype, Criterium, Indicator, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam waarin de gespecificeerde parameters uitgeselecteerd zijn en waar voor andere parameters alle waarden uit de databank weergegeven zijn.  
+Deze functie genereert soortenlijsten (met wetenschappelijke en Nederlandse namen) die gebruikt worden voor de bepaling van de Lokale Staat van Instandhouding van de opgegeven parameters, zoals ze vermeld zijn in de habitatfiches (dus soms tot op soortniveau, soms tot op genusniveau of hoger).  Het is in feite een hulpfunctie die voor verschillende andere functies gebruikt wordt en die de complexe zoekfunctie in de tabellen met soorten uitvoert.  Ze werkt op basis van een invoertabel met velden NiveauSoortenlijstFiche en SoortengroepID.  
 
 De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten als string opgegeven worden.  Default is telkens 'alle', waarbij de soortenlijsten voor alle mogelijke waarden van die parameter weergegeven worden (m.a.w. er is geen selectie voor deze parameter).
 }

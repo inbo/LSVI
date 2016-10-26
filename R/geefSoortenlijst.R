@@ -21,7 +21,7 @@
 #'
 #' @export
 #'
-#' @importFrom dplyr %>% select_ distinct_ filter group_by_ summarise_ ungroup mutate_ left_join
+#' @importFrom dplyr %>% select_ distinct_ filter group_by_ summarise_ ungroup mutate_ left_join rename_
 #' @importFrom RODBC sqlQuery odbcClose
 #'
 #'
