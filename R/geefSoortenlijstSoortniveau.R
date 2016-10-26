@@ -21,18 +21,17 @@ geefSoortenlijstSoortniveau <-
   function(Soortengroeplijst){
     #nog controle doen op de invoer!!!
     
-    #Deze functie is gebaseerd op geefSoortenlijstInvoerniveau en moet nog aangepast worden!
     query <- 
       sprintf("WITH Soortengroepniveau
               AS
               (
                 SELECT Soortengroep.Id as SoortengroepID, 
-                     SoortengroepSoort.SoortensubgroepID, SoortengroepSoort.SoortID, 0 AS Depth
+                     SoortengroepSoort.SoortensubgroepID, SoortengroepSoort.SoortID, 0 AS Niveau
                 FROM Soortengroep INNER JOIN SoortengroepSoort ON Soortengroep.Id = SoortengroepSoort.SoortengroepID
                 WHERE Soortengroep.Id in (%s)
                 UNION ALL
                 SELECT Soortengroepniveau.SoortengroepID,
-                     ss2.SoortensubgroepID, ss2.SoortID, Depth + 1
+                     ss2.SoortensubgroepID, ss2.SoortID, Niveau + 1
                 FROM (Soortengroep AS s2 INNER JOIN SoortengroepSoort AS ss2 ON s2.Id = ss2.SoortengroepID)
                 INNER JOIN Soortengroepniveau ON s2.Id = Soortengroepniveau.SoortensubgroepID
               )
