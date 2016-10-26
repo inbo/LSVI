@@ -25,39 +25,36 @@ geefSoortenlijstInvoerniveau <-
     
     
     #voor elk niveau de gegevens ophalen op basis van een query samengesteld op basis van het niveau, en deze gegevens aan elkaar plakken
+    #met 1 query lukt het niet om Omschrijving op de verschillende niveaus binnen te halen, dus we beperken ons tot een omschrijving op het niveau net boven het niveau van de vermelde soort(engroep)
     Soortenlijst <- NULL
     for(n in Soortengroeplijst$Niveau){
-      ExtraOmschrijving <- ""
-      ExtraJointabellen_begin <- ""
-      ExtraJointabellen_eind <- ""
-      if(n > 1){
-        for(i in 2:n){
-          ExtraOmschrijving <- sprintf("%s Soortengroep%s.Omschrijving AS Omschrijving%s,", ExtraOmschrijving, i, i)
-          ExtraJointabellen_begin <- ifelse(nchar(ExtraJointabellen_begin)>20,
-                                            paste(substr(ExtraJointabellen_begin, 1, 12),"(",
-                                                  substr(ExtraJointabellen_begin, 13, nchar(ExtraJointabellen_begin)), collapse = ""),
-                                            ExtraJointabellen_begin)
-          ExtraJointabellen_begin <- sprintf("%s INNER JOIN (Soortengroep as Soortengroep%s INNER JOIN SoortengroepSoort as SoortengroepSoort%s ON Soortengroep%s.Id = SoortengroepSoort%s.SoortengroepID)", 
-                                             ExtraJointabellen_begin, i, i, i, i)
-          ExtraJointabellen_eind <- sprintf(" ON SoortengroepSoort%s.SoortensubgroepID = Soortengroep%s.Id)%s", 
-                                            ifelse(i-1==1,"",i-1), i, ExtraJointabellen_eind)
-        }
-        ExtraJointabellen <- paste(ExtraJointabellen_begin, ExtraJointabellen_eind, collapse = "")
-      } else {
-        ExtraJointabellen <- ")"
-      }
-  
-      query_soortenlijst <- sprintf("SELECT Soortengroep.Id as SoortengroepID, Soortengroep.Omschrijving,%s Soort.WetNaam, Soort.NedNaam,
-                                            Soortensubgroep.Naam AS NedNaam_groep, Soortensubgroep.WetNaam AS WetNaam_groep
-                                       FROM (((Soortengroep INNER JOIN SoortengroepSoort ON Soortengroep.Id = SoortengroepSoort.SoortengroepID)%s
-                                              LEFT JOIN Soort ON SoortengroepSoort%s.SoortID = Soort.Id)
-                                              LEFT JOIN Soortengroep as Soortensubgroep ON SoortengroepSoort%s.SoortensubgroepID = Soortensubgroep.Id
-                                       WHERE Soortengroep.Id in (%s)",
-                                       ExtraOmschrijving, ExtraJointabellen, ifelse(n==1,"",n), ifelse(n==1,"",n),
-                                       Soortengroeplijst[Soortengroeplijst$Niveau==n,"SoortengroepIDs"])
+      query <- 
+        sprintf("WITH Soortengroepniveau
+                AS
+                (
+                  SELECT Soortengroep.Id as SoortengroepID, Soortengroep.Omschrijving, 
+                       SoortengroepSoort.SoortensubgroepID, SoortengroepSoort.SoortID, 0 AS Niveau
+                  FROM Soortengroep INNER JOIN SoortengroepSoort ON Soortengroep.Id = SoortengroepSoort.SoortengroepID
+                  WHERE Soortengroep.Id in (%s)
+                  UNION ALL
+                  SELECT Soortengroepniveau.SoortengroepID, s2.Omschrijving,
+                       ss2.SoortensubgroepID, ss2.SoortID, Niveau + 1
+                  FROM (Soortengroep AS s2 INNER JOIN SoortengroepSoort AS ss2 ON s2.Id = ss2.SoortengroepID)
+                  INNER JOIN Soortengroepniveau ON s2.Id = Soortengroepniveau.SoortensubgroepID
+                  WHERE Niveau < %s
+                )
+                SELECT Soortengroepniveau.SoortengroepID,  Soortengroepniveau.Omschrijving,
+                       Soortengroep.WetNaam AS WetNaam_groep, Soortengroep.Naam AS NedNaam_groep, 
+                       Soort.WetNaam, Soort.NedNaam, Soortengroepniveau.Niveau
+                FROM Soortengroepniveau 
+                LEFT JOIN Soortengroep ON Soortengroepniveau.SoortensubgroepID = Soortengroep.Id
+                LEFT JOIN Soort ON Soortengroepniveau.SoortID = Soort.Id
+                WHERE Soortengroepniveau.Niveau = %s", 
+                Soortengroeplijst[Soortengroeplijst$Niveau==n,"SoortengroepIDs"], n, n - 1)
+
 
       connectie <- connecteerMetLSVIdb()
-      Soortenlijst_n <- sqlQuery(connectie, query_soortenlijst, stringsAsFactors = FALSE)
+      Soortenlijst_n <- sqlQuery(connectie, query, stringsAsFactors = FALSE)
       odbcClose(connectie)
       
       Soortenlijst <- Soortenlijst %>%
@@ -76,7 +73,8 @@ geefSoortenlijstInvoerniveau <-
           ),
         NedNaam = ~ifelse(is.na(NedNaam), NedNaam_groep, NedNaam),
         WetNaam_groep = ~NULL,
-        NedNaam_groep = ~NULL
+        NedNaam_groep = ~NULL,
+        Niveau = ~NULL
       ) 
     
     #kolommen wissen die enkel NA's bevatten
