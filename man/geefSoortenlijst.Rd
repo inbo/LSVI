@@ -39,6 +39,7 @@ De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten
 }
 \examples{
 geefSoortenlijst(Habitattype = "4010", Soortenlijsttype = "LSVIfiche")
+geefSoortenlijst(Habitattype = "4010", Soortenlijsttype = "Soortniveau")
 
 }
 

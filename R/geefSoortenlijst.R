@@ -18,6 +18,7 @@
 #' 
 #' @examples
 #' geefSoortenlijst(Habitattype = "4010", Soortenlijsttype = "LSVIfiche")
+#' geefSoortenlijst(Habitattype = "4010", Soortenlijsttype = "Soortniveau")
 #'
 #' @export
 #'
