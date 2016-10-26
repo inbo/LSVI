@@ -10,7 +10,7 @@ geefSoortenlijst(Versie = geefUniekeWaarden("Versie", "VersieLSVI"),
   Habitatsubtype = geefUniekeWaarden("Habitatsubtype", "Habitatcode_subtype"),
   Criterium = geefUniekeWaarden("Criterium", "Naam"),
   Indicator = geefUniekeWaarden("Indicator", "Naam"),
-  Soortenlijsttype = c("LSVIfiche", "Soortniveau"))
+  Soortenlijsttype = c("LSVIfiche", "Soortniveau", "alle"))
 }
 \arguments{
 \item{Versie}{De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".  Bij de default "alle" worden de soortenlijsten voor de verschillende versies gegeven.}
@@ -25,7 +25,7 @@ geefSoortenlijst(Versie = geefUniekeWaarden("Versie", "VersieLSVI"),
 
 \item{Indicator}{De indicator waarvoor de soortenlijst gegeven wordt.}
 
-\item{Soortenlijsttype}{"LSVIfiche" betekent dat de soortenlijst van de habitatfiche wordt overgenomen, "Soortniveau" betekent dat alle soorten van de opgegeven habitatgroep weergegeven worden (bv. alle soorten bomen en struiken als dit in LSVI-fiche vermeld is)}
+\item{Soortenlijsttype}{"LSVIfiche" betekent dat de soortenlijst van de habitatfiche wordt overgenomen, "Soortniveau" betekent dat alle soorten worden weergegeven die in de groepen vallen die aan de parameters voldoen (bv. alle soorten bomen en struiken als dit in LSVI-fiche vermeld is), "alle" betekent dat alle soorten en alle taxonomische en morfologische groepen worden weergegeven die volledig in de groepen vallen die aan de parameters voldoen (dus gelijkaardig als Soortniveau, maar dan uitgebreid naar hogere taxonomische en morfologische groepen).}
 }
 \value{
 Deze functie geeft een tabel met velden Versie, Habitattype, Habitatsubtype, Criterium, Indicator, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van soorten binnen eenzelfde indicator).  WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort bevat enkel genusnaam en soortnaam (zonder auteursnaam).
@@ -40,6 +40,7 @@ De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten
 \examples{
 geefSoortenlijst(Habitattype = "4010", Soortenlijsttype = "LSVIfiche")
 geefSoortenlijst(Habitattype = "4010", Soortenlijsttype = "Soortniveau")
+geefSoortenlijst(Habitattype = "4010", Soortenlijsttype = "alle")
 
 }
 

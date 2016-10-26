@@ -4,10 +4,12 @@
 \alias{geefSoortenlijstSoortniveau}
 \title{Genereert soortenlijst(en) LSVI op basis van SoortengroepID}
 \usage{
-geefSoortenlijstSoortniveau(Soortengroeplijst)
+geefSoortenlijstSoortniveau(Soortengroeplijst, Soortenlijsttype = "alle")
 }
 \arguments{
 \item{Soortengroeplijst}{string waarin de SoortengroepID's na elkaar weergegeven worden, gescheiden door een komma}
+
+\item{Soortenlijsttype}{"Soortniveau" betekent dat alle soorten worden weergegeven van de opgegeven soortgroepen, "alle" betekent dat alle soorten en alle taxonomische en morfologische groepen worden weergegeven die volledig in de opgegeven soortgroepen vallen (die aan de parameters voldoen (dus hier wordt de lijst uitgebreid met hogere taxonomische en morfologische groepen).}
 }
 \value{
 Deze functie geeft een tabel met velden SoortengroepID, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van soorten binnen eenzelfde indicator).  WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort bevat enkel genusnaam en soortnaam (zonder auteursnaam).
@@ -18,7 +20,7 @@ Deze functie genereert soortenlijsten (met wetenschappelijke en Nederlandse name
 Deze functie geeft voor de gespecifieerde soortengroepen per soortengroep een lijst van alle soorten die hieronder vallen.  Dit betekent dat voor de in de LSVI vermelde genera en soortengroepen als helofieten alle soorten vermeld worden die tot deze groepen behoren.  Voor een lijst van soort(groep)en op het niveau vermeld in de LSVI, wordt beter de functie geefSoortenlijstInvoerniveau() gebruikt.
 }
 \examples{
-geefSoortenlijstSoortniveau("139,142,372,370")
+geefSoortenlijstSoortniveau("139,142,370,371")
 
 }
 
