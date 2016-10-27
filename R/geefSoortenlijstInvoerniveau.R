@@ -10,19 +10,38 @@
 #' @return Deze functie geeft een tabel met velden SoortengroepID, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van soorten binnen eenzelfde indicator).  WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort bevat enkel genusnaam en soortnaam (zonder auteursnaam).
 #' 
 #' @examples
-#' Soortengroeplijst <- data.frame(Niveau = c(1, 2), SoortengroepIDs = c("139,142,372", "370"))
+#' Soortengroeplijst <- 
+#'      data.frame(Niveau = c(1, 2), 
+#'                 SoortengroepIDs = c("139,142,372", "370"), 
+#'                 stringsAsFactors = FALSE)
 #' geefSoortenlijstInvoerniveau(Soortengroeplijst)
 #'
 #' @export
 #'
 #' @importFrom dplyr %>% bind_rows mutate_
 #' @importFrom RODBC sqlQuery odbcClose
+#' @importFrom assertthat assert_that noNA is.count
+#' @importFrom tibble has_name 
 #'
 #'
 geefSoortenlijstInvoerniveau <- 
   function(Soortengroeplijst){
-    #nog controle doen op de invoer!!!
+    assert_that(inherits(Soortengroeplijst, "data.frame"))
+    assert_that(has_name(Soortengroeplijst, "Niveau"))
+    assert_that(has_name(Soortengroeplijst, "SoortengroepIDs"))
+    assert_that(is.character(Soortengroeplijst$SoortengroepIDs))
+    assert_that(noNA(Soortengroeplijst$SoortengroepIDs))
+    if(!all(grepl("^([[:digit:]]+,)*[[:digit:]]+$", Soortengroeplijst$SoortengroepIDs))){
+      stop("Niet alle SoortengroepIDs bestaan uit een reeks getallen gescheiden door een komma")
+    }
     
+    for(i in 1:nrow(Soortengroeplijst)){
+      Soortengroeplijst$Niveau[i] <- 
+        ifelse(is.string(Soortengroeplijst$Niveau[i]),
+               as.numeric(Soortengroeplijst$Niveau[i]),
+               Soortengroeplijst$Niveau[i])
+      assert_that(is.count(Soortengroeplijst$Niveau[i]))
+    }
     
     #voor elk niveau de gegevens ophalen op basis van een query samengesteld op basis van het niveau, en deze gegevens aan elkaar plakken
     #met 1 query lukt het niet om Omschrijving op de verschillende niveaus binnen te halen, dus we beperken ons tot een omschrijving op het niveau net boven het niveau van de vermelde soort(engroep)

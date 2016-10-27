@@ -16,11 +16,17 @@
 #'
 #' @importFrom dplyr %>% bind_rows mutate_ filter distinct_
 #' @importFrom RODBC sqlQuery odbcClose
+#' @importFrom assertthat assert_that noNA is.string
 #'
 #'
 geefSoortenlijstSoortniveau <- 
-  function(Soortengroeplijst, Soortenlijsttype = "alle"){
-    #nog controle doen op de invoer!!!
+  function(Soortengroeplijst, Soortenlijsttype = c("alle", "Soortniveau")){
+    assert_that(is.string(Soortengroeplijst))
+    assert_that(noNA(Soortengroeplijst))
+    if(!grepl("^([[:digit:]]+,)*[[:digit:]]+$", Soortengroeplijst)){
+      stop("Soortengroeplijst bestaat niet uit een reeks getallen gescheiden door een komma")
+    }
+    match.arg(Soortenlijsttype)
     
     if(Soortenlijsttype == "Soortniveau"){
       query <- 

@@ -4,7 +4,8 @@
 \alias{geefSoortenlijstSoortniveau}
 \title{Genereert soortenlijst(en) LSVI op basis van SoortengroepID}
 \usage{
-geefSoortenlijstSoortniveau(Soortengroeplijst, Soortenlijsttype = "alle")
+geefSoortenlijstSoortniveau(Soortengroeplijst, Soortenlijsttype = c("alle",
+  "Soortniveau"))
 }
 \arguments{
 \item{Soortengroeplijst}{string waarin de SoortengroepID's na elkaar weergegeven worden, gescheiden door een komma}

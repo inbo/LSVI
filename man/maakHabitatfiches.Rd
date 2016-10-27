@@ -7,7 +7,8 @@
 maakHabitatfiches(Versie = geefUniekeWaarden("Versie", "VersieLSVI"),
   Habitatgroep = geefUniekeWaarden("Habitatgroep", "Habitatgroepnaam"),
   Habitattype = geefUniekeWaarden("Habitattype", "Habitatcode"),
-  Habitatsubtype = geefUniekeWaarden("Habitatsubtype", "Habitatcode_subtype"))
+  Habitatsubtype = geefUniekeWaarden("Habitatsubtype", "Habitatcode_subtype"),
+  verbose = TRUE)
 }
 \arguments{
 \item{Versie}{De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".  Bij de default "alle" worden de soortenlijsten voor de verschillende versies gegeven.}
@@ -17,6 +18,8 @@ maakHabitatfiches(Versie = geefUniekeWaarden("Versie", "VersieLSVI"),
 \item{Habitattype}{Parameter waarmee een habitattype kan geselecteerd worden.  Als dit habitattype meerdere subtypes heeft, zullen de soortenlijsten van alle subtypes van dit habitattype weergegeven worden.}
 
 \item{Habitatsubtype}{Parameter waarmee een habitatsubtype geselecteerd kan worden.  Als deze waarde ingevuld is, is het niet nodig om de parameters Habitatgroep en Habitattype te specifieren.}
+
+\item{verbose}{geeft de toestand van het systeem aan, om te zorgen dat boodschappen niet onnodig gegeven worden}
 }
 \value{
 Deze functie genereert habitatfiches in de vorm van html-files die in de workspace opgeslagen worden.
