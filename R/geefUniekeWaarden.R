@@ -14,9 +14,15 @@
 #' @export
 #'
 #' @importFrom RODBC sqlQuery odbcClose
+#' @importFrom assertthat assert_that is.string noNA
 #'
 
 geefUniekeWaarden <- function(Tabelnaam, Veldnaam){
+  assert_that(is.string(Tabelnaam))
+  assert_that(noNA(Tabelnaam))
+  assert_that(is.string(Veldnaam))
+  assert_that(noNA(Veldnaam))
+  
   query <- sprintf("SELECT %s FROM %s",Veldnaam, Tabelnaam)
   connectie <- connecteerMetLSVIdb()
   Waarden <- sqlQuery(connectie, query, stringsAsFactors = FALSE)

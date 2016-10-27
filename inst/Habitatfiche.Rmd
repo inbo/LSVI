@@ -76,7 +76,12 @@ Soortenlijst <- geefSoortenlijst(Versie = params$Versie, Habitatsubtype = params
     VersieLSVI = ~NULL,
     Habitattype = ~NULL,
     Habitatsubtype = ~NULL,
-    TotNaam = ~ sprintf("%s (_%s_)", NedNaam, WetNaamKort)
+    TotNaam = ~ ifelse(is.na(WetNaamKort),
+                       NedNaam,
+                       ifelse(is.na(NedNaam),
+                              sprintf("_%s_",WetNaamKort),
+                              sprintf("%s (_%s_)", NedNaam, WetNaamKort)))
+                       
   ) %>%
   arrange_(~ TotNaam)
 
@@ -171,16 +176,21 @@ Habitatfiche2 <- Habitatfiche %>%
 
 ###Habitatkarakteristieken
 
-```{r results='asis'}
+```{r habitatkarakteristieken, results='asis'}
 
-
-
-for(Criterium in unique(Habitatfiche$Criterium)){
-  print(Criterium)
-  Habitatkarakteristieken <- 
-    xtable(Habitatfiche2[Habitatfiche2$Criterium==Criterium,
-                        c("Indicator","Beschrijving","Maatregelen","Opmerkingen","Referenties")])
-  print(Habitatkarakteristieken, type = "html")
+for(criterium in unique(Habitatfiche$Criterium)){
+  cat(criterium)
+  Habitatkarakteristieken <- Habitatfiche2 %>%
+    filter_(~Criterium == criterium) %>%
+    select_(
+      ~ Indicator, 
+      ~ Beschrijving, 
+      ~ Maatregelen, 
+      ~ Opmerkingen, 
+      ~ Referenties
+    ) %>%
+    xtable(digits = ncol(.))
+  print(Habitatkarakteristieken, type = "html", include.rownames = FALSE)
 }
 
 ```
@@ -188,18 +198,19 @@ for(Criterium in unique(Habitatfiche$Criterium)){
 
 ###Beoordelingsmatrix
 
-```{r results='asis', message=FALSE, warning=FALSE}
+```{r beoordelingsmatrix, results='asis', message=FALSE, warning=FALSE}
+
 Beoordelingsfiche <- Beoordelingsfiche %>%
   inner_join(data.frame(Kwaliteitsniveau=c(1,2), Referentieniveau = c(Versie$Kwaliteitsniveau1,Versie$Kwaliteitsniveau2), stringsAsFactors = FALSE)) %>%
   select(-Kwaliteitsniveau)%>%
   spread(key = Referentieniveau, value = Beoordeling_letterlijk)
 
 for(Criterium in unique(Habitatfiche$Criterium)){
-  print(Criterium)
+  cat(Criterium)
   Beoordelingsmatrix <- 
     xtable(Beoordelingsfiche[Beoordelingsfiche$Criterium==Criterium,
                         c("Indicator","Gunstige staat","Streefwaarde","Opmerkingen","Referenties")])
-  print(Beoordelingsmatrix, type = "html")
+  print(Beoordelingsmatrix, type = "html", include.rownames = FALSE)
 }
 
 ```

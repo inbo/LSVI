@@ -28,10 +28,10 @@ connecteerMetLSVIdb <-
            Gebruiker = "D0122_AppR",
            Wachtwoord = "19D939F1-BCCE-439F-9ED4-6A886E038A6D"){
     
-  # assert_that(is.string(dns))
-  # if (!file_test("-f", dns)) {
-  #   stop("File does not exist")
-  # }
+  assert_that(is.string(Server))
+  assert_that(is.string(Databank))
+  assert_that(is.string(Gebruiker))
+  assert_that(is.string(Wachtwoord))
   
   if(Gebruiker == "pc-eigenaar"){
     Connectiestring <- 
