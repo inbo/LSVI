@@ -12,7 +12,8 @@ Imports:
     assertthat,
     dplyr,
     rmarkdown,
-    lazyeval
+    lazyeval,
+    tibble
 Suggests:
     xtable,
     tidyr

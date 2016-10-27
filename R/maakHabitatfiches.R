@@ -7,6 +7,7 @@
 #'De gegenereerde habitatfiches worden opgeslagen in de folder die als working directory gespecifieerd is.
 #'
 #' @inheritParams geefSoortenlijst
+#' @param verbose geeft de toestand van het systeem aan, om te zorgen dat boodschappen niet onnodig gegeven worden
 #'
 #' @return Deze functie genereert habitatfiches in de vorm van html-files die in de workspace opgeslagen worden.
 #' 
@@ -17,17 +18,21 @@
 #'
 #' @importFrom rmarkdown render
 #' @importFrom RODBC sqlQuery odbcClose
+#' @importFrom assertthat assert_that noNA is.flag
 #'
 #'
 maakHabitatfiches <- 
   function(Versie = geefUniekeWaarden("Versie","VersieLSVI"), 
            Habitatgroep = geefUniekeWaarden("Habitatgroep","Habitatgroepnaam"),  
            Habitattype = geefUniekeWaarden("Habitattype","Habitatcode"), 
-           Habitatsubtype = geefUniekeWaarden("Habitatsubtype","Habitatcode_subtype")){
+           Habitatsubtype = geefUniekeWaarden("Habitatsubtype","Habitatcode_subtype"),
+           verbose = TRUE){
     match.arg(Versie)
     match.arg(Habitatgroep)
     match.arg(Habitattype)
     match.arg(Habitatsubtype)
+    assert_that(is.flag(verbose))
+    assert_that(noNA(verbose))
     
     #eerst de selectiegegevens ophalen en de nodige gegevens uit tabel Indicator_habitat
     Parametervoorwaarde <- FALSE
@@ -75,17 +80,21 @@ maakHabitatfiches <-
     
     for(versie in unique(Habitattypes$VersieLSVI)){
       for(habitatsubtype in unique(as.character(Habitattypes$Habitatsubtype))){
+        Bestandnaam <- sprintf("Habitatfiche_%s_%s.html",
+                               habitatsubtype,
+                               sub(versie, 
+                                   pattern = " ", 
+                                   replacement = ""))
         render(system.file("Habitatfiche.Rmd", package = "LSVI"), 
                params = list(Versie = versie, Habitatsubtype = habitatsubtype),
-               output_file = sprintf("Habitatfiche_%s_%s.html",
-                                     habitatsubtype,
-                                     sub(versie, 
-                                         pattern = " ", 
-                                         replacement = "")),
+               output_file = Bestandnaam,
                output_dir = getwd())
       }
     }
-      
+    if(verbose){
+      message(sprintf("De fiche(s) is/zijn opgeslagen in de working directory: %s", getwd()))
+    }
+    
     
   }
 
