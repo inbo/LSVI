@@ -6,6 +6,8 @@
 #'
 #'
 #' @param Soortengroeplijst dataframe waarin per niveau aangegeven wordt (tabel Niveau met een int die het niveau aangeeft) welke soortengroepen geselecteerd moeten worden (tabel SoortengroepIDs met een string waarin de ID's na mekaar weergegeven worden, gescheiden door een komma)
+#' 
+#' @inheritParams connecteerMetLSVIdb
 #'
 #' @return Deze functie geeft een tabel met velden SoortengroepID, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van soorten binnen eenzelfde indicator).  WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort bevat enkel genusnaam en soortnaam (zonder auteursnaam).
 #' 
@@ -25,7 +27,11 @@
 #'
 #'
 geefSoortenlijstInvoerniveau <- 
-  function(Soortengroeplijst){
+  function(Soortengroeplijst,
+           Server = "inbosql03\\prd",
+           Databank = "D0122_00_LSVIHabitatTypes",
+           Gebruiker = "D0122_AppR",
+           Wachtwoord = "19D939F1-BCCE-439F-9ED4-6A886E038A6D"){
     assert_that(inherits(Soortengroeplijst, "data.frame"))
     assert_that(has_name(Soortengroeplijst, "Niveau"))
     assert_that(has_name(Soortengroeplijst, "SoortengroepIDs"))
@@ -72,7 +78,7 @@ geefSoortenlijstInvoerniveau <-
                 Soortengroeplijst[Soortengroeplijst$Niveau==n,"SoortengroepIDs"], n, n - 1)
 
 
-      connectie <- connecteerMetLSVIdb()
+      connectie <- connecteerMetLSVIdb(Server, Databank, Gebruiker, Wachtwoord)
       Soortenlijst_n <- sqlQuery(connectie, query, stringsAsFactors = FALSE)
       odbcClose(connectie)
       

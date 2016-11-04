@@ -2,10 +2,10 @@
 #'
 #' @description Deze functie maakt een connectie met de databank met LSVI-indicatoren.  Bedoeling van deze aparte functie is om de link naar deze databank maar op 1 plaats te bewaren, zodat deze bij het verplaatsen van de databank ook maar op een plaats aangepast moet worden.  Deze link wordt als argument meegegeven om gebruikers toe te laten om deze aan te passen.  (Deze link zou eigenlijk ook aanpasbaar moeten zijn in de functies die deze aanroepen!)
 #'
-#' @param Server de server waarop de databank staat (standaard "inbosql03\\prd")
-#' @param Databank de naam van de databank (standaard "D0122_00_LSVIHabitatTypes")
-#' @param Gebruiker standaard een gebruiker met leesrechten, andere opties zijn "pc-eigenaar" waarbij de login en wachtwoord gebruikt wordt waarmee ingelogd is op de pc of een eigen gebruikersnaam en wachtwoord ingeven
-#' @param Wachtwoord standaard een gebruiker met leesrechten, moet niet ingevuld worden als Gebruiker "pc-eigenaar" is
+#' @param Server de server waarop de databank staat die aangeroepen wordt (standaard "inbosql03\\prd")
+#' @param Databank de naam van de databank die aangeroepen wordt (standaard "D0122_00_LSVIHabitatTypes")
+#' @param Gebruiker gebruiker van de databank, standaard een gebruiker met leesrechten, andere opties zijn "pc-eigenaar" waarbij de login en wachtwoord gebruikt wordt waarmee ingelogd is op de pc of een eigen gebruikersnaam en wachtwoord ingeven
+#' @param Wachtwoord wachtwoord van de gebruiker van de databank, standaard een gebruiker met leesrechten, moet niet ingevuld worden als Gebruiker "pc-eigenaar" is
 #'
 #' @return Deze functie geeft een open odbc-connectie naar de gespecifieerde databank.
 #' 

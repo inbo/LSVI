@@ -5,12 +5,22 @@
 \title{Genereert soortenlijst(en) LSVI op basis van SoortengroepID}
 \usage{
 geefSoortenlijstSoortniveau(Soortengroeplijst, Soortenlijsttype = c("alle",
-  "Soortniveau"))
+  "Soortniveau"), Server = "inbosql03\\\\prd",
+  Databank = "D0122_00_LSVIHabitatTypes", Gebruiker = "D0122_AppR",
+  Wachtwoord = "19D939F1-BCCE-439F-9ED4-6A886E038A6D")
 }
 \arguments{
 \item{Soortengroeplijst}{string waarin de SoortengroepID's na elkaar weergegeven worden, gescheiden door een komma}
 
 \item{Soortenlijsttype}{"Soortniveau" betekent dat alle soorten worden weergegeven van de opgegeven soortgroepen, "alle" betekent dat alle soorten en alle taxonomische en morfologische groepen worden weergegeven die volledig in de opgegeven soortgroepen vallen (die aan de parameters voldoen (dus hier wordt de lijst uitgebreid met hogere taxonomische en morfologische groepen).}
+
+\item{Server}{de server waarop de databank staat die aangeroepen wordt (standaard "inbosql03\\prd")}
+
+\item{Databank}{de naam van de databank die aangeroepen wordt (standaard "D0122_00_LSVIHabitatTypes")}
+
+\item{Gebruiker}{gebruiker van de databank, standaard een gebruiker met leesrechten, andere opties zijn "pc-eigenaar" waarbij de login en wachtwoord gebruikt wordt waarmee ingelogd is op de pc of een eigen gebruikersnaam en wachtwoord ingeven}
+
+\item{Wachtwoord}{wachtwoord van de gebruiker van de databank, standaard een gebruiker met leesrechten, moet niet ingevuld worden als Gebruiker "pc-eigenaar" is}
 }
 \value{
 Deze functie geeft een tabel met velden SoortengroepID, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van soorten binnen eenzelfde indicator).  WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort bevat enkel genusnaam en soortnaam (zonder auteursnaam).

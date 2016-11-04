@@ -9,13 +9,13 @@ connecteerMetLSVIdb(Server = "inbosql03\\\\prd",
   Wachtwoord = "19D939F1-BCCE-439F-9ED4-6A886E038A6D")
 }
 \arguments{
-\item{Server}{de server waarop de databank staat (standaard "inbosql03\\prd")}
+\item{Server}{de server waarop de databank staat die aangeroepen wordt (standaard "inbosql03\\prd")}
 
-\item{Databank}{de naam van de databank (standaard "D0122_00_LSVIHabitatTypes")}
+\item{Databank}{de naam van de databank die aangeroepen wordt (standaard "D0122_00_LSVIHabitatTypes")}
 
-\item{Gebruiker}{standaard een gebruiker met leesrechten, andere opties zijn "pc-eigenaar" waarbij de login en wachtwoord gebruikt wordt waarmee ingelogd is op de pc of een eigen gebruikersnaam en wachtwoord ingeven}
+\item{Gebruiker}{gebruiker van de databank, standaard een gebruiker met leesrechten, andere opties zijn "pc-eigenaar" waarbij de login en wachtwoord gebruikt wordt waarmee ingelogd is op de pc of een eigen gebruikersnaam en wachtwoord ingeven}
 
-\item{Wachtwoord}{standaard een gebruiker met leesrechten, moet niet ingevuld worden als Gebruiker "pc-eigenaar" is}
+\item{Wachtwoord}{wachtwoord van de gebruiker van de databank, standaard een gebruiker met leesrechten, moet niet ingevuld worden als Gebruiker "pc-eigenaar" is}
 }
 \value{
 Deze functie geeft een open odbc-connectie naar de gespecifieerde databank.
