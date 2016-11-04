@@ -13,7 +13,8 @@ Imports:
     dplyr,
     rmarkdown,
     lazyeval,
-    tibble
+    tibble,
+    utils
 Suggests:
     xtable,
     tidyr

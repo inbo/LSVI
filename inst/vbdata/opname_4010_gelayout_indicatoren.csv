@@ -1,0 +1,13 @@
+ID;Habitatsubtype;Criterium;Indicator;Waarde
+Jo1380;4010;structuur;dwergstruiken;Ab
+WT0174;4010;structuur;dwergstruiken;Ab
+WT0173;4010;structuur;dwergstruiken;Freq
+Jo1380;4010;structuur;veenmoslaag;Freq
+WT0174;4010;structuur;veenmoslaag;Freq
+WT0173;4010;structuur;veenmoslaag;Rare
+Jo1380;4010;verstoring;vergrassing;30-40%
+WT0174;4010;verstoring;vergrassing;60-70%
+WT0173;4010;verstoring;vergrassing;70-80%
+Jo1380;4010;verstoring;verbossing;Freq,<5%
+WT0174;4010;verstoring;verbossing;10-20%
+WT0173;4010;verstoring;verbossing;5-10%
