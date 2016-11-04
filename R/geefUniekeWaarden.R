@@ -5,6 +5,8 @@
 #' @param Tabelnaam De naam van de tabel waarin het veld zich bevindt (String)
 #'
 #' @param Veldnaam De naam van het veld (in de bij Tabelnaam opgegeven tabel) waarvan de waarden moeten opgezocht worden (String)
+#' 
+#' @inheritParams connecteerMetLSVIdb
 #'
 #' @return Deze functie geeft een vector bestaande uit "alle" en de verschillende waarden uit de gespecifieerde tabel.
 #' 
@@ -17,14 +19,18 @@
 #' @importFrom assertthat assert_that is.string noNA
 #'
 
-geefUniekeWaarden <- function(Tabelnaam, Veldnaam){
+geefUniekeWaarden <- function(Tabelnaam, Veldnaam,
+                              Server = "inbosql03\\prd",
+                              Databank = "D0122_00_LSVIHabitatTypes",
+                              Gebruiker = "D0122_AppR",
+                              Wachtwoord = "***REMOVED***"){
   assert_that(is.string(Tabelnaam))
   assert_that(noNA(Tabelnaam))
   assert_that(is.string(Veldnaam))
   assert_that(noNA(Veldnaam))
   
   query <- sprintf("SELECT %s FROM %s",Veldnaam, Tabelnaam)
-  connectie <- connecteerMetLSVIdb()
+  connectie <- connecteerMetLSVIdb(Server, Databank, Gebruiker, Wachtwoord)
   Waarden <- sqlQuery(connectie, query, stringsAsFactors = FALSE)
   odbcClose(connectie)
   UniekeWaarden <- c("alle", Waarden[,Veldnaam])

@@ -8,7 +8,9 @@ maakHabitatfiches(Versie = geefUniekeWaarden("Versie", "VersieLSVI"),
   Habitatgroep = geefUniekeWaarden("Habitatgroep", "Habitatgroepnaam"),
   Habitattype = geefUniekeWaarden("Habitattype", "Habitatcode"),
   Habitatsubtype = geefUniekeWaarden("Habitatsubtype", "Habitatcode_subtype"),
-  verbose = TRUE)
+  verbose = TRUE, Server = "inbosql03\\\\prd",
+  Databank = "D0122_00_LSVIHabitatTypes", Gebruiker = "D0122_AppR",
+  Wachtwoord = "***REMOVED***")
 }
 \arguments{
 \item{Versie}{De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".  Bij de default "alle" worden de soortenlijsten voor de verschillende versies gegeven.}
@@ -20,6 +22,14 @@ maakHabitatfiches(Versie = geefUniekeWaarden("Versie", "VersieLSVI"),
 \item{Habitatsubtype}{Parameter waarmee een habitatsubtype geselecteerd kan worden.  Als deze waarde ingevuld is, is het niet nodig om de parameters Habitatgroep en Habitattype te specifieren.}
 
 \item{verbose}{geeft de toestand van het systeem aan, om te zorgen dat boodschappen niet onnodig gegeven worden}
+
+\item{Server}{de server waarop de databank staat die aangeroepen wordt (standaard "inbosql03\\prd")}
+
+\item{Databank}{de naam van de databank die aangeroepen wordt (standaard "D0122_00_LSVIHabitatTypes")}
+
+\item{Gebruiker}{gebruiker van de databank, standaard een gebruiker met leesrechten, andere opties zijn "pc-eigenaar" waarbij de login en wachtwoord gebruikt wordt waarmee ingelogd is op de pc of een eigen gebruikersnaam en wachtwoord ingeven}
+
+\item{Wachtwoord}{wachtwoord van de gebruiker van de databank, standaard een gebruiker met leesrechten, moet niet ingevuld worden als Gebruiker "pc-eigenaar" is}
 }
 \value{
 Deze functie genereert habitatfiches in de vorm van html-files die in de workspace opgeslagen worden.

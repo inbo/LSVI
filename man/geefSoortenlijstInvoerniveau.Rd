@@ -4,10 +4,20 @@
 \alias{geefSoortenlijstInvoerniveau}
 \title{Genereert soorten(groep)lijst(en) LSVI op basis van SoortengroepID en Niveau}
 \usage{
-geefSoortenlijstInvoerniveau(Soortengroeplijst)
+geefSoortenlijstInvoerniveau(Soortengroeplijst, Server = "inbosql03\\\\prd",
+  Databank = "D0122_00_LSVIHabitatTypes", Gebruiker = "D0122_AppR",
+  Wachtwoord = "***REMOVED***")
 }
 \arguments{
 \item{Soortengroeplijst}{dataframe waarin per niveau aangegeven wordt (tabel Niveau met een int die het niveau aangeeft) welke soortengroepen geselecteerd moeten worden (tabel SoortengroepIDs met een string waarin de ID's na mekaar weergegeven worden, gescheiden door een komma)}
+
+\item{Server}{de server waarop de databank staat die aangeroepen wordt (standaard "inbosql03\\prd")}
+
+\item{Databank}{de naam van de databank die aangeroepen wordt (standaard "D0122_00_LSVIHabitatTypes")}
+
+\item{Gebruiker}{gebruiker van de databank, standaard een gebruiker met leesrechten, andere opties zijn "pc-eigenaar" waarbij de login en wachtwoord gebruikt wordt waarmee ingelogd is op de pc of een eigen gebruikersnaam en wachtwoord ingeven}
+
+\item{Wachtwoord}{wachtwoord van de gebruiker van de databank, standaard een gebruiker met leesrechten, moet niet ingevuld worden als Gebruiker "pc-eigenaar" is}
 }
 \value{
 Deze functie geeft een tabel met velden SoortengroepID, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van soorten binnen eenzelfde indicator).  WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort bevat enkel genusnaam en soortnaam (zonder auteursnaam).
