@@ -6,8 +6,6 @@
 #'
 #' @param Soortengroeplijst string waarin de SoortengroepID's na elkaar weergegeven worden, gescheiden door een komma
 #' @param Soortenlijsttype "Soortniveau" betekent dat alle soorten worden weergegeven van de opgegeven soortgroepen, "alle" betekent dat alle soorten en alle taxonomische en morfologische groepen worden weergegeven die volledig in de opgegeven soortgroepen vallen (die aan de parameters voldoen (dus hier wordt de lijst uitgebreid met hogere taxonomische en morfologische groepen).
-#' 
-#' @inheritParams connecteerMetLSVIdb
 #'
 #' @return Deze functie geeft een tabel met velden SoortengroepID, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van soorten binnen eenzelfde indicator).  WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort bevat enkel genusnaam en soortnaam (zonder auteursnaam).
 #' 
@@ -22,11 +20,7 @@
 #'
 #'
 geefSoortenlijstSoortniveau <- 
-  function(Soortengroeplijst, Soortenlijsttype = c("alle", "Soortniveau"),
-           Server = "inbosql03\\prd",
-           Databank = "D0122_00_LSVIHabitatTypes",
-           Gebruiker = "D0122_AppR",
-           Wachtwoord = "***REMOVED***"){
+  function(Soortengroeplijst, Soortenlijsttype = c("alle", "Soortniveau")){
     assert_that(is.string(Soortengroeplijst))
     assert_that(noNA(Soortengroeplijst))
     if(!grepl("^([[:digit:]]+,)*[[:digit:]]+$", Soortengroeplijst)){
@@ -55,7 +49,7 @@ geefSoortenlijstSoortniveau <-
                 INNER JOIN Soort ON Soortengroepniveau.SoortID = Soort.Id", 
                 Soortengroeplijst)
       
-      connectie <- connecteerMetLSVIdb(Server, Databank, Gebruiker, Wachtwoord)
+      connectie <- connecteerMetLSVIdb()
       Soortenlijst <- sqlQuery(connectie, query, stringsAsFactors = FALSE)
       odbcClose(connectie)
       
@@ -85,7 +79,7 @@ geefSoortenlijstSoortniveau <-
                 Soortengroeplijst)
       
       
-      connectie <- connecteerMetLSVIdb(Server, Databank, Gebruiker, Wachtwoord)
+      connectie <- connecteerMetLSVIdb()
       Soortenlijst <- sqlQuery(connectie, query, stringsAsFactors = FALSE)
       odbcClose(connectie)
       
