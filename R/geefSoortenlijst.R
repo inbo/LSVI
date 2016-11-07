@@ -13,8 +13,6 @@
 #' @param Criterium Het LSVI-criterium waarvoor de soortenlijst gegeven wordt: "Vegetatie", "Structuur", "Verstoring" of "alle".
 #' @param Indicator De indicator waarvoor de soortenlijst gegeven wordt.
 #' @param Soortenlijsttype "LSVIfiche" betekent dat de soortenlijst van de habitatfiche wordt overgenomen, "Soortniveau" betekent dat alle soorten worden weergegeven die in de groepen vallen die aan de parameters voldoen (bv. alle soorten bomen en struiken als dit in LSVI-fiche vermeld is), "alle" betekent dat alle soorten en alle taxonomische en morfologische groepen worden weergegeven die volledig in de groepen vallen die aan de parameters voldoen (dus gelijkaardig als Soortniveau, maar dan uitgebreid naar hogere taxonomische en morfologische groepen).
-#' 
-#' @inheritParams connecteerMetLSVIdb
 #'
 #' @return Deze functie geeft een tabel met velden Versie, Habitattype, Habitatsubtype, Criterium, Indicator, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van soorten binnen eenzelfde indicator).  WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort bevat enkel genusnaam en soortnaam (zonder auteursnaam).
 #' 
@@ -36,11 +34,7 @@ geefSoortenlijst <-
            Habitatsubtype = geefUniekeWaarden("Habitatsubtype","Habitatcode_subtype"), 
            Criterium = geefUniekeWaarden("Criterium","Naam"), 
            Indicator = geefUniekeWaarden("Indicator","Naam"),
-           Soortenlijsttype = c("LSVIfiche", "Soortniveau", "alle"),
-           Server = "inbosql03\\prd",
-           Databank = "D0122_00_LSVIHabitatTypes",
-           Gebruiker = "D0122_AppR",
-           Wachtwoord = "19D939F1-BCCE-439F-9ED4-6A886E038A6D"){
+           Soortenlijsttype = c("LSVIfiche", "Soortniveau", "alle")){
     match.arg(Versie)
     match.arg(Habitatgroep)
     match.arg(Habitattype)
@@ -112,7 +106,7 @@ geefSoortenlijst <-
       query <- sprintf("%s %s Indicator.Naam = '%s'", query, Voegwoord, Indicator)
     }
     
-    connectie <- connecteerMetLSVIdb(Server, Databank, Gebruiker, Wachtwoord)
+    connectie <- connecteerMetLSVIdb()
     Selectiegegevens <- sqlQuery(connectie, query, stringsAsFactors = FALSE)
     odbcClose(connectie)
     
@@ -129,8 +123,7 @@ geefSoortenlijst <-
         rename_(Niveau = ~NiveauSoortenlijstFiche)
       
       #dan voor elk niveau de gegevens ophalen
-      Soortenlijst <- geefSoortenlijstInvoerniveau(SoortengroepIDperNiveau,
-                                                   Server, Databank, Gebruiker, Wachtwoord)
+      Soortenlijst <- geefSoortenlijstInvoerniveau(SoortengroepIDperNiveau)
       
     } else if(Soortenlijsttype == "Soortniveau" | Soortenlijsttype == "alle"){
       #de andere optie: gegevens van het diepste niveau ophalen
@@ -142,8 +135,7 @@ geefSoortenlijst <-
       
       Soortenlijst <- 
         geefSoortenlijstSoortniveau(Soortengroeplijst = SoortengroepIDs$SoortengroepIDs,
-                                    Soortenlijsttype = Soortenlijsttype,
-                                    Server, Databank, Gebruiker, Wachtwoord)
+                                    Soortenlijsttype = Soortenlijsttype)
       
     } 
     
