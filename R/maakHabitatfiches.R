@@ -7,7 +7,6 @@
 #'De gegenereerde habitatfiches worden opgeslagen in de folder die als working directory gespecifieerd is.
 #'
 #' @inheritParams geefSoortenlijst
-#' @inheritParams connecteerMetLSVIdb
 #' @param verbose geeft de toestand van het systeem aan, om te zorgen dat boodschappen niet onnodig gegeven worden
 #'
 #' @return Deze functie genereert habitatfiches in de vorm van html-files die in de workspace opgeslagen worden.
@@ -27,11 +26,7 @@ maakHabitatfiches <-
            Habitatgroep = geefUniekeWaarden("Habitatgroep","Habitatgroepnaam"),  
            Habitattype = geefUniekeWaarden("Habitattype","Habitatcode"), 
            Habitatsubtype = geefUniekeWaarden("Habitatsubtype","Habitatcode_subtype"),
-           verbose = TRUE,
-           Server = "inbosql03\\prd",
-           Databank = "D0122_00_LSVIHabitatTypes",
-           Gebruiker = "D0122_AppR",
-           Wachtwoord = "19D939F1-BCCE-439F-9ED4-6A886E038A6D"){
+           verbose = TRUE){
     match.arg(Versie)
     match.arg(Habitatgroep)
     match.arg(Habitattype)
@@ -79,7 +74,7 @@ maakHabitatfiches <-
       }
     }
 
-    connectie <- connecteerMetLSVIdb(Server, Databank, Gebruiker, Wachtwoord)
+    connectie <- connecteerMetLSVIdb()
     Habitattypes <- sqlQuery(connectie, query, stringsAsFactors = FALSE)
     odbcClose(connectie)
     

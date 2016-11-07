@@ -5,7 +5,6 @@
 #' @param Versie De versie van het LSVI-rapport op basis waarvan de berekening gemaakt wordt, bv. "Versie 2" of "Versie 3".  Bij de default "alle" wordt de LSVI volgens de verschillende versies berekend.
 #' @param Kwaliteitsniveau Voor elke versie van de LSVI zijn er een of meerdere kwaliteitsniveaus gedefinieerd in de databank.  Zo is er bij Versie 2.0 een onderscheid gemaakt tussen goede staat (A), voldoende staat (B) en gedegradeerde staat (C).  Hier duidt kwaliteitsniveau 1 de grens tussen voldoende (B) en gedegradeerd (C) aan en kwaliteitsniveau 2 het onderscheid tussen goed (A) en voldoende (B).  Bij Versie 3 duidt kwaliteitsniveau 1 op het onderscheid tussen ongunstig en gunstig en kwaliteitsniveau 2 op de streefwaarde.  De betekenissen van de 2 kwaliteitsniveaus voor de verschillende versies is weergegeven in de tabel Versie in de databank en kan opgevraagd met de functie geefVersieInfo().  Geef als parameter Kwaliteitsniveau op op basis van welk kwaliteitsniveau de berekening gemaakt moet worden (strikt genomen is de berekening van de LSVI de berekening volgens kwaliteitsniveau 1).
 #' 
-#' @inheritParams connecteerMetLSVIdb
 #'
 #' @return Deze functie genereert de resultaten in de vorm van een tabel met de meetresultaten en scores per indicator.
 #' 
@@ -19,11 +18,7 @@
 #'
 berekenLSVI <- 
   function(Versie = geefUniekeWaarden("Versie","VersieLSVI"),
-           Kwaliteitsniveau = c("alle", "1", "2"),
-           Server = "inbosql03\\prd",
-           Databank = "D0122_00_LSVIHabitatTypes",
-           Gebruiker = "D0122_AppR",
-           Wachtwoord = "19D939F1-BCCE-439F-9ED4-6A886E038A6D"){
+           Kwaliteitsniveau = c("alle", "1", "2")){
     match.arg(Versie)
     match.arg(Kwaliteitsniveau)
     
