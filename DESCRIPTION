@@ -14,7 +14,9 @@ Imports:
     rmarkdown,
     lazyeval,
     tibble,
-    utils
+    utils,
+    Hmisc,
+    testthat
 Suggests:
     xtable,
     tidyr
