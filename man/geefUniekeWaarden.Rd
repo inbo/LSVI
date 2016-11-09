@@ -4,22 +4,12 @@
 \alias{geefUniekeWaarden}
 \title{Geef alle unieke waarden van een veld uit de databank met de LSVI-indicatoren voorafgegaan door "alle"}
 \usage{
-geefUniekeWaarden(Tabelnaam, Veldnaam, Server = "inbosql03\\\\prd",
-  Databank = "D0122_00_LSVIHabitatTypes", Gebruiker = "D0122_AppR",
-  Wachtwoord = "19D939F1-BCCE-439F-9ED4-6A886E038A6D")
+geefUniekeWaarden(Tabelnaam, Veldnaam)
 }
 \arguments{
 \item{Tabelnaam}{De naam van de tabel waarin het veld zich bevindt (String)}
 
 \item{Veldnaam}{De naam van het veld (in de bij Tabelnaam opgegeven tabel) waarvan de waarden moeten opgezocht worden (String)}
-
-\item{Server}{de server waarop de databank staat die aangeroepen wordt (standaard "inbosql03\\prd")}
-
-\item{Databank}{de naam van de databank die aangeroepen wordt (standaard "D0122_00_LSVIHabitatTypes")}
-
-\item{Gebruiker}{gebruiker van de databank, standaard een gebruiker met leesrechten, andere opties zijn "pc-eigenaar" waarbij de login en wachtwoord gebruikt wordt waarmee ingelogd is op de pc of een eigen gebruikersnaam en wachtwoord ingeven}
-
-\item{Wachtwoord}{wachtwoord van de gebruiker van de databank, standaard een gebruiker met leesrechten, moet niet ingevuld worden als Gebruiker "pc-eigenaar" is}
 }
 \value{
 Deze functie geeft een vector bestaande uit "alle" en de verschillende waarden uit de gespecifieerde tabel.
