@@ -27,6 +27,6 @@ geefUniekeWaarden <- function(Tabelnaam, Veldnaam){
   connectie <- connecteerMetLSVIdb()
   Waarden <- sqlQuery(connectie, query, stringsAsFactors = FALSE)
   odbcClose(connectie)
-  UniekeWaarden <- c("alle", Waarden[,Veldnaam])
+  UniekeWaarden <- c("alle", unique(Waarden[,Veldnaam]))
   return(UniekeWaarden)
 }

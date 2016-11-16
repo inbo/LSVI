@@ -15,10 +15,10 @@ berekenAantalSoorten(Data_soorten, Soortengroeplijst,
 \item{Minimumniveau}{Minimum bedekking voor een soort om meegeteld te worden.  Standaard worden alle aanwezige soorten meegeteld, maar er kan bv. ook gekozen worden om enkel soorten te tellen die ze minstens frequent of abundant aanwezig zijn.  De waarde 'afwezig' telt enkel de afwezige soorten.}
 }
 \value{
-Deze functie genereert de resultaten in de vorm van een tabel met voor elk ID het aantal soorten.
+Deze functie genereert de resultaten in de vorm van een tabel met voor elk ID en elke SoortenlijstID het aantal soorten.
 }
 \description{
-Deze hulpfunctie bepaalt het aantal soorten van een bepaalde soortengroep dat aanwezig is in een bepaalde opname.  Alternatief kunnen ook het aantal soorten bepaald worden dat minstens frequent of abundant aanwezig is, of elke andere mogelijke categorie uit de Tansley-schaal (aan te geven in parameter Minimumniveau).  Omdat het een technische hulpfunctie is, wordt hier gebruik gemaakt van ID's uit de databank.  Beter is om gebruik te maken van de generieke functie XXX die meer mogelijkheden heeft en ook overweg kan met een invoer van tekst (soortnamen enz.).
+Deze hulpfunctie bepaalt het aantal soorten van een bepaalde soortengroep dat aanwezig is in een bepaalde opname.  Alternatief kunnen ook het aantal soorten bepaald worden dat minstens frequent of abundant aanwezig is, of elke andere mogelijke categorie uit de Tansley-schaal (aan te geven in parameter Minimumniveau).  Omdat het een technische hulpfunctie is, wordt hier gebruik gemaakt van ID's uit de databank.  Beter is om gebruik te maken van de generieke functie berekenAnalyseVariabele die meer mogelijkheden heeft en ook overweg kan met een invoer van tekst (soortnamen enz.).
 }
 \examples{
 Data_soorten <- 
