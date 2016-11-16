@@ -3,7 +3,7 @@
 #' @description Deze hulpfunctie bepaalt de bedekking van de soorten van een bepaalde soortengroep dat aanwezig is in een bepaalde opname.  Omdat het een technische hulpfunctie is, wordt hier gebruik gemaakt van ID's uit de databank.  Beter is om gebruik te maken van de generieke functie berekenAnalyseVariabele die meer mogelijkheden heeft voor het selecteren van de soortengroep.
 #'
 #' 
-#' @param  Data_soorten Bedekkingen van de sleutelsoorten in de vorm van een data.frame met velden ID, Soort_NL of Soort_Latijn en Percentage (integer die de bedekking in % aangeeft). (Eventueel zou hier ook de NBNTaxonVersionKey kunnen gebruikt worden.)
+#' @param  Data_soorten Bedekkingen van de sleutelsoorten in de vorm van een data.frame met velden ID, Soort_NL of Soort_Latijn en Percentage (integer die de bedekking in procent aangeeft). (Eventueel zou hier ook de NBNTaxonVersionKey kunnen gebruikt worden.)
 #' @inheritParams geefSoortenlijstInvoerniveau
 #' 
 #' 

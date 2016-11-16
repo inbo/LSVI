@@ -25,7 +25,7 @@
 #'
 #' @export   
 #'
-#' @importFrom utils read.csv2
+#' @importFrom utils read.csv2 read.csv
 #' @importFrom assertthat assert_that has_name
 #' @importFrom dplyr %>% inner_join filter_ group_by_ ungroup summarise_ distinct_
 #'
@@ -39,7 +39,8 @@ berekenAantalSoorten <-
     
     assert_that(has_name(Data_soorten, "Tansley"))
     Tansley <- read.csv(system.file("schaaltabellen/Tansley.csv", package = "LSVI"),
-                                       stringsAsFactors = FALSE)
+                                       stringsAsFactors = FALSE) %>%
+      select_(~Voluit, ~Afgekort)
     Data_soorten$Tansley <- tolower(Data_soorten$Tansley)
     if(!all(Data_soorten$Tansley %in% c(Tansley$Voluit, Tansley$Afgekort))){
       stop(sprintf("Niet alle bedekkingen vermeld onder Data_soorten$Tansley komen overeen met de Tansley-schaal (%s)",
