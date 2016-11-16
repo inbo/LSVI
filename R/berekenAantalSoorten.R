@@ -26,7 +26,7 @@
 #' @export   
 #'
 #' @importFrom utils read.csv2
-#' @importFrom assertthat assert_that
+#' @importFrom assertthat assert_that has_name
 #' @importFrom dplyr %>% inner_join filter_ group_by_ ungroup summarise_ distinct_
 #'
 #'
@@ -106,4 +106,5 @@ berekenAantalSoorten <-
       ungroup()
     
     return(as.data.frame(Alle_waarnemingen))
+
   } 

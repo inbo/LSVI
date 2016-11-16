@@ -13,7 +13,6 @@ Imports:
     dplyr,
     rmarkdown,
     lazyeval,
-    tibble,
     utils,
     Hmisc,
     testthat

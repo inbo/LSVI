@@ -35,7 +35,7 @@ test_that("Parameter Data_soorten heeft correct formaat", {
                Resultaat)
   expect_error(selecteerSoortenInOpname(Data_soorten %>% rename_(Veldnaam = ~ID), 
                                     Soortengroeplijst),
-               'Error : has_name\\(x = Data_soorten, name = "ID"\\) is not TRUE\n')
+               'Error : Data_soorten does not have name ID\n')
   expect_error(selecteerSoortenInOpname(Data_soorten %>% select_(~ID, ~Bedekking), 
                                     Soortengroeplijst),
                'Error : has_name\\(Data_soorten, "Soort_NL"\\) | has_name\\(Data_soorten, "Soort_Latijn"\\) is not TRUE\n')

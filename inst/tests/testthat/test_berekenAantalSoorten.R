@@ -32,7 +32,7 @@ test_that("Parameter Data_soorten heeft correct formaat", {
                resultaat_aanwezig)
   expect_error(berekenAantalSoorten(Data_soorten %>% rename_(Veldnaam = ~ID), 
                                     Soortengroeplijst),
-               'Error : has_name\\(x = Data_soorten, name = "ID"\\) is not TRUE\n')
+               'Error : Data_soorten does not have name ID\n')
   expect_error(berekenAantalSoorten(Data_soorten %>% select_(~ID, ~Tansley), 
                                     Soortengroeplijst),
                'Error : has_name\\(Data_soorten, "Soort_NL"\\) | has_name\\(Data_soorten, "Soort_Latijn"\\) is not TRUE\n')
@@ -43,7 +43,7 @@ test_that("Parameter Data_soorten heeft correct formaat", {
                                                                Soort_Latijn)
                                         ), 
                                     Soortengroeplijst),
-               "* Niet alle waarden vermeld onder Data_soorten\\$Soort_Latijn komen overeen met wetenschappelijke namen van soorten in de databank.")
+               "Niet alle waarden vermeld onder Data_soorten\\$Soort_Latijn komen overeen met wetenschappelijke namen van soorten in de databank.")
   expect_error(berekenAantalSoorten(Data_soorten %>% 
                                       mutate_(
                                         Soort_Latijn = ~NULL,
@@ -52,7 +52,7 @@ test_that("Parameter Data_soorten heeft correct formaat", {
                                                                Soort_NL)
                                       ), 
                                     Soortengroeplijst),
-               "* Niet alle waarden vermeld onder Data_soorten\\$Soort_NL komen overeen met Nederlandse namen van soorten in de databank.")
+               "Niet alle waarden vermeld onder Data_soorten\\$Soort_NL komen overeen met Nederlandse namen van soorten in de databank.")
   expect_warning(berekenAantalSoorten(Data_soorten %>%
                                         mutate_(
                                           Soort_Latijn = ~ifelse(Soort_Latijn=="Drosera rotundifolia",
@@ -72,7 +72,7 @@ test_that("Parameter Data_soorten heeft correct formaat", {
                  "Niet alle te evalueren soorten zijn opgenomen onder Data_soorten\\$Soort_NL, er wordt van uitgegaan dat de niet opgenomen soorten niet waargenomen zijn")
   expect_error(berekenAantalSoorten(Data_soorten %>% select_(~ID,~Soort_NL), 
                                     Soortengroeplijst),
-               'Error : has_name\\(x = Data_soorten, name = "Tansley"\\) is not TRUE\n')
+               'Error : Data_soorten does not have name Tansley\n')
   expect_equal(berekenAantalSoorten(Data_soorten %>% 
                                       mutate_(
                                         Tansley = ~ifelse(Tansley=="abundant",
