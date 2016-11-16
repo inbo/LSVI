@@ -1,9 +1,9 @@
 #' @title Berekent het aantal soorten van een bepaalde soortengroep die in een opname aanwezig is
 #'
-#' @description Deze hulpfunctie bepaalt het aantal soorten van een bepaalde soortengroep dat aanwezig is in een bepaalde opname.  Alternatief kunnen ook het aantal soorten bepaald worden dat minstens frequent of abundant aanwezig is, of elke andere mogelijke categorie uit de Tansley-schaal (aan te geven in parameter Minimumniveau).  Omdat het een technische hulpfunctie is, wordt hier gebruik gemaakt van ID's uit de databank.  Beter is om gebruik te maken van de generieke functie berekenAnalyseVariabele die meer mogelijkheden heeft en ook overweg kan met een invoer van tekst (soortnamen enz.).
+#' @description Deze hulpfunctie bepaalt het aantal soorten van een bepaalde soortengroep dat aanwezig is in een bepaalde opname.  Alternatief kunnen ook het aantal soorten bepaald worden dat minstens frequent of abundant aanwezig is, of elke andere mogelijke categorie uit de Tansley-schaal (aan te geven in parameter Minimumniveau).  Omdat het een technische hulpfunctie is, wordt hier gebruik gemaakt van ID's uit de databank.  Beter is om gebruik te maken van de generieke functie berekenAnalyseVariabele die meer mogelijkheden heeft  voor het selecteren van de soortengroep.
 #'
 #' 
-#' @param  Data_soorten Bedekkingen van de sleutelsoorten in de vorm van een data.frame met velden ID, Soort_NL of Soort_Latijn (voorlopig inclusief auteursnaam) en Tansley (bedekking in Tansley-schaal). (Eventueel zou hier ook de NBNTaxonVersionKey kunnen gebruikt worden.)
+#' @param  Data_soorten Bedekkingen van de sleutelsoorten in de vorm van een data.frame met velden ID, Soort_NL of Soort_Latijn en Tansley (bedekking in Tansley-schaal). (Eventueel zou hier ook de NBNTaxonVersionKey kunnen gebruikt worden.)
 #' @inheritParams geefSoortenlijstInvoerniveau
 #' @param Minimumniveau Minimum bedekking voor een soort om meegeteld te worden.  Standaard worden alle aanwezige soorten meegeteld, maar er kan bv. ook gekozen worden om enkel soorten te tellen die ze minstens frequent of abundant aanwezig zijn.  De waarde 'afwezig' telt enkel de afwezige soorten.
 #' 

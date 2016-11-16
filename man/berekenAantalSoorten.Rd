@@ -8,7 +8,7 @@ berekenAantalSoorten(Data_soorten, Soortengroeplijst,
   Minimumniveau = "aanwezig")
 }
 \arguments{
-\item{Data_soorten}{Bedekkingen van de sleutelsoorten in de vorm van een data.frame met velden ID, Soort_NL of Soort_Latijn (voorlopig inclusief auteursnaam) en Tansley (bedekking in Tansley-schaal). (Eventueel zou hier ook de NBNTaxonVersionKey kunnen gebruikt worden.)}
+\item{Data_soorten}{Bedekkingen van de sleutelsoorten in de vorm van een data.frame met velden ID, Soort_NL of Soort_Latijn en Tansley (bedekking in Tansley-schaal). (Eventueel zou hier ook de NBNTaxonVersionKey kunnen gebruikt worden.)}
 
 \item{Soortengroeplijst}{dataframe waarin per niveau aangegeven wordt (tabel Niveau met een int die het niveau aangeeft) welke soortengroepen geselecteerd moeten worden (tabel SoortengroepIDs met een string waarin de ID's na mekaar weergegeven worden, gescheiden door een komma)}
 
@@ -18,7 +18,7 @@ berekenAantalSoorten(Data_soorten, Soortengroeplijst,
 Deze functie genereert de resultaten in de vorm van een tabel met voor elk ID en elke SoortenlijstID het aantal soorten.
 }
 \description{
-Deze hulpfunctie bepaalt het aantal soorten van een bepaalde soortengroep dat aanwezig is in een bepaalde opname.  Alternatief kunnen ook het aantal soorten bepaald worden dat minstens frequent of abundant aanwezig is, of elke andere mogelijke categorie uit de Tansley-schaal (aan te geven in parameter Minimumniveau).  Omdat het een technische hulpfunctie is, wordt hier gebruik gemaakt van ID's uit de databank.  Beter is om gebruik te maken van de generieke functie berekenAnalyseVariabele die meer mogelijkheden heeft en ook overweg kan met een invoer van tekst (soortnamen enz.).
+Deze hulpfunctie bepaalt het aantal soorten van een bepaalde soortengroep dat aanwezig is in een bepaalde opname.  Alternatief kunnen ook het aantal soorten bepaald worden dat minstens frequent of abundant aanwezig is, of elke andere mogelijke categorie uit de Tansley-schaal (aan te geven in parameter Minimumniveau).  Omdat het een technische hulpfunctie is, wordt hier gebruik gemaakt van ID's uit de databank.  Beter is om gebruik te maken van de generieke functie berekenAnalyseVariabele die meer mogelijkheden heeft  voor het selecteren van de soortengroep.
 }
 \examples{
 Data_soorten <- 
