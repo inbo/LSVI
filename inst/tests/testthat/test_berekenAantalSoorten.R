@@ -10,17 +10,16 @@ Schaalomzetting <-
             stringsAsFactors = FALSE)
 Data_soorten <- merge(Data_soorten, Schaalomzetting, 
                       by.x = "Bedekking", by.y = "Schaal_opname")
-Soortengroeplijst <- data.frame(Niveau = 1, SoortengroepIDs = "369,143",
-                                stringsAsFactors = FALSE)
+Soortengroeplijst <- "369,143"
 berekenAantalSoorten(Data_soorten, Soortengroeplijst)
-resultaat_aanwezig <- data.frame(ID = c("Jo1380", "Jo1380", "WT0173", "WT0174"),
-                                 SoortengroepID = c(143, 369, 143, 143),
-                                 Aantal = c(4,1,1,1),
+resultaat_aanwezig <- data.frame(ID = c("Jo1380", "Jo1380", "WT0173", "WT0173", "WT0174", "WT0174"),
+                                 SoortengroepID = c(143, 369, 143, 369, 143, 369),
+                                 Aantal = c(4,1,1,0,1,0),
                                  stringsAsFactors = FALSE)
 berekenAantalSoorten(Data_soorten, Soortengroeplijst, Minimumniveau = "Frequent")
-resultaat_frequent <- data.frame(ID = c("Jo1380", "Jo1380", "WT0174"),
-                                 SoortengroepID = c(143, 369, 143),
-                                 Aantal = c(3,1,1),
+resultaat_frequent <- data.frame(ID = c("Jo1380", "Jo1380", "WT0173", "WT0173", "WT0174", "WT0174"),
+                                 SoortengroepID = c(143, 369, 143, 369, 143, 369),
+                                 Aantal = c(3,1,0,0,1,0),
                                  stringsAsFactors = FALSE)
 resultaat_afwezig <- data.frame(ID = c("Jo1380", "Jo1380", "WT0173", "WT0173", "WT0174", "WT0174"),
                                  SoortengroepID = c(143, 369, 143, 369, 143, 369),
@@ -112,23 +111,10 @@ test_that("Parameter Data_soorten heeft correct formaat", {
 
 test_that("Parameter Soortengroeplijst heeft correct formaat", {
   expect_error(berekenAantalSoorten(Data_soorten, 
-                                    Soortengroeplijst = 
-                                      data.frame(Niveau = 1, 
-                                                 SoortengroepIDs = 143)),
+                                    Soortengroeplijst = 143),
                "Error : Soortengroeplijst\\$SoortengroepIDs is not a character vector\n")
-  expect_equal(berekenAantalSoorten(Data_soorten, 
-                                    data.frame(Niveau = 1, 
-                                               SoortengroepIDs = "143",
-                                               stringsAsFactors = FALSE)),
+  expect_equal(berekenAantalSoorten(Data_soorten, "143"),
                resultaat_aanwezig %>% filter_(~SoortengroepID == 143))
-  expect_error(berekenAantalSoorten(Data_soorten, 
-                                    data.frame(Niveau = "1", 
-                                               SoortengroepIDs = "143",
-                                               stringsAsFactors = FALSE)),
-               "Error : Soortengroeplijst\\$Niveau\\[i\\] is not a count \\(a single positive integer\\)\n")
-  expect_error(berekenAantalSoorten(Data_soorten, 
-                                    c(1,"369,143")),
-               "Error : Soortengroeplijst does not inherit from class data.frame\n")
 })
 
 
@@ -149,3 +135,40 @@ test_that("Parameter Minimumniveau heeft correct formaat", {
                "* Foute invoer voor Minimumniveau. *")
 })
 
+
+Resultaat_370 <- data.frame(ID = c("Jo1380", "WT0173", "WT0174"),
+                            SoortengroepID = c(370, 370, 370),
+                            Aantal = c(2,1,1),
+                            stringsAsFactors = FALSE)
+
+Resultaat_370_frequent <- data.frame(ID = c("Jo1380", "WT0173", "WT0174"),
+                            SoortengroepID = c(370, 370, 370),
+                            Aantal = c(2,0,1),
+                            stringsAsFactors = FALSE)
+
+
+test_that("Gegevens in subniveau worden correct behandeld", {
+  expect_equal(berekenAantalSoorten(Data_soorten, "370"),
+               Resultaat_370)
+  expect_equal(berekenAantalSoorten(Data_soorten %>% 
+                                          mutate_(Soort_Latijn = ~NULL), 
+                                        "370"),
+               Resultaat_370)
+  expect_warning(berekenAantalSoorten(Data_soorten %>%
+                                      filter_(~grepl("Sphagnum", Soort_Latijn)),
+                                    "370"),
+                 "Niet alle te evalueren soorten zijn opgenomen onder Data_soorten\\$Soort_Latijn, er wordt van uitgegaan dat de niet opgenomen soorten niet waargenomen zijn")
+  expect_warning(berekenAantalSoorten(Data_soorten %>%
+                                        filter_(~grepl("Sphagnum", Soort_Latijn)) %>%
+                                        mutate_(Soort_Latijn = ~NULL),
+                                      "370"),
+                 "Niet alle te evalueren soorten zijn opgenomen onder Data_soorten\\$Soort_NL, er wordt van uitgegaan dat de niet opgenomen soorten niet waargenomen zijn")
+  expect_warning(berekenAantalSoorten(Data_soorten,"371"),
+                 "Niet alle te evalueren soorten zijn opgenomen onder Data_soorten\\$Soort_Latijn, er wordt van uitgegaan dat de niet opgenomen soorten niet waargenomen zijn")
+  expect_warning(berekenAantalSoorten(Data_soorten %>%
+                                            mutate_(Soort_Latijn = ~NULL),
+                                          "371"),
+                 "Niet alle te evalueren soorten zijn opgenomen onder Data_soorten\\$Soort_NL, er wordt van uitgegaan dat de niet opgenomen soorten niet waargenomen zijn")
+  expect_equal(berekenAantalSoorten(Data_soorten, "370", "frequent"),
+               Resultaat_370_frequent)
+})
