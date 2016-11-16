@@ -20,8 +20,7 @@
 #'
 #' @importFrom dplyr %>% bind_rows mutate_
 #' @importFrom RODBC sqlQuery odbcClose
-#' @importFrom assertthat assert_that noNA is.count
-#' @importFrom tibble has_name 
+#' @importFrom assertthat assert_that noNA is.count has_name 
 #'
 #'
 geefSoortenlijstInvoerniveau <- 

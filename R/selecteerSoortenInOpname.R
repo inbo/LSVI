@@ -12,7 +12,7 @@
 #'
 #' @export   
 #'
-#' @importFrom assertthat assert_that
+#' @importFrom assertthat assert_that has_name
 #' @importFrom dplyr %>% inner_join anti_join summarise_ select_
 #'
 #'
