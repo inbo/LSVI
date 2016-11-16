@@ -2,6 +2,7 @@
 
 export(berekenAantalSoorten)
 export(berekenAnalyseVariabele)
+export(berekenBedekkingSoorten)
 export(berekenLSVI)
 export(berekenLSVIgooglesheet)
 export(connecteerMetLSVIdb)
