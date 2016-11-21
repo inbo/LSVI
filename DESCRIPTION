@@ -15,7 +15,8 @@ Imports:
     lazyeval,
     utils,
     Hmisc,
-    testthat
+    testthat,
+    pander
 Suggests:
     xtable,
     tidyr
