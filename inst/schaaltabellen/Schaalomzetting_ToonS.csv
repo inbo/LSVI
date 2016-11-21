@@ -14,3 +14,11 @@ Freq,<5%;frequent;4
 70-80%;dominant;75
 80-90%;dominant;85
 90-100%;dominant;95
+Afw;afwezig;
+Spo;sporadisch;
+Rare;zeldzaam;
+Occ;occasioneel;
+Freq;frequent;
+Ab;abundant;
+CoDom;codominant;
+Dom;dominant;
