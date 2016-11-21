@@ -117,7 +117,7 @@ for(i in 1:length(OmschrijvingKolommen)){
                             var = as.name(OmschrijvingKolommen[1]))
     ) %>%
     select(
-      - matches(OmschrijvingKolommen[1])
+      - dplyr::matches(OmschrijvingKolommen[1])
     )
   
   OmschrijvingKolommen <- OmschrijvingKolommen[-1]
