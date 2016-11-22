@@ -13,7 +13,7 @@
 #' @export
 #'
 #' @importFrom RODBC sqlQuery odbcClose
-#' @importFrom dplyr %>% left_join summarise_ select_ mutate_ group_by_ ungroup
+#' @importFrom dplyr %>% left_join summarise_ select_ mutate_ group_by_ ungroup filter_
 #' @importFrom assertthat assert_that has_name
 #' @importFrom pander evals
 #'
@@ -80,34 +80,37 @@ berekenLSVIbasis <-
               WITH voorwaardencombinatie
               AS
               (
-              SELECT CombinerenVoorwaarden.BeoordelingID,
+              SELECT CombinerenVoorwaarden.Id,
+              CombinerenVoorwaarden.BeoordelingID,
               CombinerenVoorwaarden.VoorwaardeID1,
               CombinerenVoorwaarden.VoorwaardeID2,
-              CombinerenVoorwaarden.childID1,
-              CombinerenVoorwaarden.childID2,
+              CombinerenVoorwaarden.ChildID1,
+              CombinerenVoorwaarden.ChildID2,
               CombinerenVoorwaarden.BewerkingAND
               FROM CombinerenVoorwaarden
               WHERE CombinerenVoorwaarden.BeoordelingID in (%s)
               UNION ALL
-              SELECT CombinerenVoorwaarden2.BeoordelingID,
+              SELECT CombinerenVoorwaarden2.Id,
+              CombinerenVoorwaarden2.BeoordelingID,
               CombinerenVoorwaarden2.VoorwaardeID1,
               CombinerenVoorwaarden2.VoorwaardeID2,
-              CombinerenVoorwaarden2.childID1,
-              CombinerenVoorwaarden2.childID2,
+              CombinerenVoorwaarden2.ChildID1,
+              CombinerenVoorwaarden2.ChildID2,
               CombinerenVoorwaarden2.BewerkingAND
               FROM CombinerenVoorwaarden AS CombinerenVoorwaarden2
               INNER JOIN CombinerenVoorwaarden
-              ON CombinerenVoorwaarden2.Id = CombinerenVoorwaarden.childID1
+              ON CombinerenVoorwaarden2.Id = CombinerenVoorwaarden.ChildID1
               UNION ALL
-              SELECT CombinerenVoorwaarden3.BeoordelingID,
+              SELECT CombinerenVoorwaarden3.Id,
+              CombinerenVoorwaarden3.BeoordelingID,
               CombinerenVoorwaarden3.VoorwaardeID1,
               CombinerenVoorwaarden3.VoorwaardeID2,
-              CombinerenVoorwaarden3.childID1,
-              CombinerenVoorwaarden3.childID2,
+              CombinerenVoorwaarden3.ChildID1,
+              CombinerenVoorwaarden3.ChildID2,
               CombinerenVoorwaarden3.BewerkingAND
               FROM CombinerenVoorwaarden AS CombinerenVoorwaarden3
               INNER JOIN CombinerenVoorwaarden
-              ON CombinerenVoorwaarden3.Id = CombinerenVoorwaarden.childID2
+              ON CombinerenVoorwaarden3.Id = CombinerenVoorwaarden.ChildID2
               )
               Select * FROM voorwaardencombinatie",
               BeoordelingIDs)
@@ -132,18 +135,20 @@ berekenLSVIbasis <-
               AnalyseVariabele.VariabeleNaam,
               AnalyseVariabele.Eenheid,
               TypeVariabele.Naam AS TypeVariabele,
-              AnalyseVariabele.Invoermasker,
+              Invoermasker.Waarde AS Invoermasker,
+              Invoermasker.Volgnummer,
               Vegetatielaag.Omschrijving AS Vegetatielaag
               FROM (Voorwaarde
               LEFT JOIN VoorwaardeNaam ON Voorwaarde.VoorwaardeNaamID = VoorwaardeNaam.Id)
-              INNER JOIN ((AnalyseVariabele LEFT JOIN TypeVariabele ON AnalyseVariabele.TypeVariabeleID = TypeVariabele.Id)
+              INNER JOIN (((AnalyseVariabele LEFT JOIN TypeVariabele ON AnalyseVariabele.TypeVariabeleID = TypeVariabele.Id)
               LEFT JOIN Vegetatielaag ON AnalyseVariabele.VegetatielaagID = Vegetatielaag.Id)
-              ON Voorwaarde.AnalysevariabeleID = AnalyseVariabele.Id
+              LEFT JOIN Invoermasker ON AnalyseVariabele.Id = Invoermasker.AnalyseVariabeleID)
+              ON Voorwaarde.AnalyseVariabeleID = AnalyseVariabele.Id
               WHERE Voorwaarde.Id in (%s)",
               VoorwaardeIDs)
     
     
-    connectie <- connecteerMetLSVIdb()
+    connectie <- connecteerMetLSVIdb(Gebruiker = "pc-eigenaar")    #gebruiker moet de default worden, maar nu kan ik enkel zo aan die tabel
     Voorwaarden <- sqlQuery(connectie, query, stringsAsFactors = FALSE)
     odbcClose(connectie)
     
@@ -166,32 +171,24 @@ berekenLSVIbasis <-
     Resultaat_categorie <- Data_voorwaarden %>%
       filter_(~TypeVariabele == "Categorie") %>%
       mutate_(
-        WaardeF = ~factor(Waarde, 
-                          levels = c("afwezig","sporadisch", "zeldzaam", "occasioneel", "frequent", "abundant", "codominant", "dominant"),
-                          ordered = is.ordered(levels)),
-        RefWaardeF = ~factor(Referentiewaarde, 
-                          levels = c("afwezig","sporadisch", "zeldzaam", "occasioneel", "frequent", "abundant", "codominant", "dominant"),
-                          ordered = is.ordered(levels)),
-        WaardeN = ~as.numeric(WaardeF),
-        RefWaardeN = ~as.numeric(RefWaardeF),
-        Vergelijking = ~paste(WaardeN, Operator, RefWaardeN, sep = " "),
-        Status = ~sapply(evals(Vergelijking), function(x){as.logical(x[2])})
+        WaardeN = ~ifelse(Waarde == Invoermasker, Volgnummer, -1),
+        RefWaardeN = ~ifelse(Referentiewaarde == Invoermasker, Volgnummer, -1)
       ) %>%
-      select_(
-        ~ID, ~VoorwaardeID, ~Waarde, ~Habitatsubtype, ~VoorwaardeNaam,
-        ~Referentiewaarde, ~Operator, ~SoortengroepID, ~VariabeleNaam,
-        ~Eenheid, ~Invoermasker, ~Vegetatielaag, ~Status
-      )
-    # Levels <- Resultaat_categorie %>%
-    #   select_(~VariabeleNaam, ~Invoermasker) %>%
-    #   distinct_()
-    # for(i in 1:nrow(Levels)){
-    #   levels$VariabeleName[i] <- unlist(strsplit(Levels$Invoermasker[i], ","))
-    # }
-    #Dit werkt niet, beste is om de databankstructuur aan te passen en hier met een subtabel Invoermasker te werken
-    #die verwijst naar AnalyseVariabeleID en de velden Volgorde en Level heeft
-    #voorlopig even opgelost door manueel de boel toe te voegen
-    
+      group_by_(~ID, ~VoorwaardeID, ~Waarde, ~Habitatsubtype, ~VoorwaardeNaam,
+                ~Referentiewaarde, ~Operator, ~SoortengroepID, ~VariabeleNaam,
+                ~Eenheid, ~TypeVariabele, ~Vegetatielaag) %>%
+      summarise_(
+        WaardeN = ~max(WaardeN),
+        RefWaardeN = ~max(RefWaardeN)
+      ) %>%
+      ungroup() %>%
+      mutate_(
+        Vergelijking = ~paste(WaardeN, Operator, RefWaardeN, sep = " "),
+        Status = ~sapply(evals(Vergelijking), function(x){as.logical(x[2])}),
+        Vergelijking = ~NULL,
+        WaardeN = ~NULL,
+        RefWaardeN = ~NULL
+      ) 
       
     Resultaat_janee <- Data_voorwaarden %>%
       filter_(~TypeVariabele == "Ja/nee") %>%
@@ -199,32 +196,88 @@ berekenLSVIbasis <-
     
     Resultaat <- Resultaat_getal %>%
       bind_rows(Resultaat_categorie) %>%
-      bind_rows(Resultaat_janee)
-    
-    #in onderstaande moet ook nog rekening gehouden worden met childID1 en childID2
-    Resultaat_beoordeling <- CombinatieVoorwaarden %>%
-      left_join(Resultaat, 
-                by = c("VoorwaardeID1" = "VoorwaardeID"),
-                suffix = c(".0",".1")) %>%
-      left_join(Resultaat, 
-                by = c("VoorwaardeID2" = "VoorwaardeID", "ID" = "ID", "Habitatsubtype" = "Habitatsubtype"),
-                suffix = c(".1",".2")) %>%
+      bind_rows(Resultaat_janee) %>%
       mutate_(
-        Beoordeling_indicator = ~ifelse(BewerkingAND,
-                                        Status.1 & Status.2,
-                                        ifelse(!is.na(Status.2),
-                                               Status.1 | Status.2,
-                                               Status.1))
-      ) %>%
-      left_join(GroeperendeInfo, by = c("BeoordelingID" = "BeoordelingID", "Habitatsubtype" = "Habitatcode_subtype"))
+        Invoermasker = ~NULL,
+        Volgnummer = ~NULL
+      )
+    
+    #nu een recursieve functie om de voorwaarden te combineren tot een beoordeling
+    groepeerVoorwaarden <- function(CombinerenVoorwaardenID, Data){
+      Record <- CombinatieVoorwaarden %>%
+        filter_(~Id == CombinerenVoorwaardenID)
+      # if(!is.na(Record$ChildID1)){
+      #   Data <- Data %>%
+      #     bind_rows(groepeerVoorwaarden(Record$ChildID1, Data))
+      # }
+      # if(!is.na(Record$ChildID2)){
+      #   Data <- Data %>%
+      #     bind_rows(groepeerVoorwaarden(Record$ChildID2, Data))
+      # }
+      if(!is.na(Record$VoorwaardeID1)){
+        if(!is.na(Record$VoorwaardeID2)){
+          Data <- Resultaat %>%
+            filter_(~VoorwaardeID %in% c(Record$VoorwaardeID1, Record$VoorwaardeID2)) %>%
+            select_(~ID, ~VoorwaardeID, ~Status)
+          Beoordelingberekening <- Data %>%
+            group_by_(~ID) %>%
+            summarise_(
+              Beoordeling_indicator = ~ifelse(Record$BewerkingAND,
+                                              as.logical(min(Status)),
+                                              as.logical(max(Status)))
+            ) %>%
+            ungroup()
+          Data <- Data %>%
+            left_join(Beoordelingberekening, by = c("ID" = "ID"))
+        } else {
+          Data <- Resultaat %>%
+            filter_(~VoorwaardeID %in% Record$VoorwaardeID1) %>%
+            select_(~ID, ~VoorwaardeID, ~Status) %>%
+            mutate_(
+              Beoordeling_indicator = ~Status
+            )
+        }
+      }
+      Data <- Data %>%
+        mutate_(
+          BeoordelingID = ~Record$BeoordelingID,
+          Status = ~NULL
+        )
+      return(Data)
+    }
+    
+    Data <- data.frame(ID = NULL, VoorwaardeID = NULL, 
+                       Beoordeling_indicator = NULL, BeoordelingID = NULL)
+    for(i in unique(GroeperendeInfo$BeoordelingID)){
+      Data <- Data %>%
+        bind_rows(groepeerVoorwaarden((CombinatieVoorwaarden %>%
+                                        filter_(~BeoordelingID == i))$Id, 
+                                      Data = data.frame(ID = NULL, 
+                                                        VoorwaardeID = NULL, 
+                                                        Beoordeling_indicator = NULL,
+                                                        BeoordelingID = NULL)))
+    }
+    
+    Resultaat_beoordeling <- Data %>%
+      left_join(Resultaat,
+                by = c("ID" = "ID", "VoorwaardeID" = "VoorwaardeID")) %>%
+      left_join(GroeperendeInfo, 
+                by = c("BeoordelingID" = "BeoordelingID", 
+                       "Habitatsubtype" = "Habitatcode_subtype"))
+    
+    Resultaat_indicator <- Resultaat_beoordeling %>%
+      select_(~ID, ~Habitatsubtype, ~VersieLSVI, ~Criterium, ~Kwaliteitsniveau, 
+              ~Indicator, ~Beoordeling_letterlijk, ~Beoordeling_indicator,
+              ~BeoordelingID) %>%
+      distinct_()
     
     Resultaat_criterium <- Resultaat_beoordeling %>%
       group_by_(~ID, ~Habitatsubtype, ~VersieLSVI, ~Criterium, ~Kwaliteitsniveau) %>%
       summarise_(
-        Beoordeling_criterium = ~(!FALSE %in% Beoordeling_indicator)
+        Beoordeling_criterium = ~as.logical(min(Beoordeling_indicator))
       ) %>%
       ungroup()
       
     
-    return(list(Resultaat_beoordeling, Resultaat_criterium))
+    return(list(Resultaat_criterium, Resultaat_indicator, Resultaat_beoordeling))
   }

@@ -32,36 +32,32 @@ berekenLSVIbasis(Versie = "alle", Kwaliteitsniveau = "1", Data_voorwaarden)
 #                "Invoer OK")
 #   expect_equal(berekenLSVI(Versie = "Versie 3", 
 #                            Kwaliteitsniveau = "alle", 
-#                            Data_indicatoren),
+#                            Data_voorwaarden),
 #                "Invoer OK")
-#   expect_error(berekenLSVI(Versie = 2,
-#                            Kwaliteitsniveau = "alle",
-#                            Data_indicatoren),
-#                "Error in match.arg\\(Versie\\) : 'arg' must be NULL or a character vector\n")
-#   expect_that(berekenLSVI(Versie = 2, 
-#                           Kwaliteitsniveau = "alle", 
-#                           Data_indicatoren),
-#               throws_error())
+  expect_error(berekenLSVI(Versie = 2,
+                           Kwaliteitsniveau = "alle",
+                           Data_voorwaarden),
+               "Error in match.arg\\(Versie\\) : 'arg' must be NULL or a character vector\n")
 # })
 # 
 # test_that("parameter kwaliteitsniveau heeft correct formaat", {
 #   expect_equal(berekenLSVI(Versie = "alle", 
 #                            Kwaliteitsniveau = "1", 
-#                            Data_indicatoren),
+#                            Data_voorwaarden),
 #                "Invoer OK")
 #   expect_equal(berekenLSVI(Versie = "alle", 
 #                            Kwaliteitsniveau = 1, 
-#                            Data_indicatoren),
+#                            Data_voorwaarden),
 #                "Invoer OK")
-#   expect_error(berekenLSVI(Versie = "alle",
-#                            Kwaliteitsniveau = "streefwaarde",
-#                            Data_indicatoren),
-#                "Error in match.arg\\(Kwaliteitsniveau\\) : \n  'arg' should be one of *")
+  expect_error(berekenLSVI(Versie = "alle",
+                           Kwaliteitsniveau = "streefwaarde",
+                           Data_voorwaarden),
+               "Error in match.arg\\(Kwaliteitsniveau\\) : \n  'arg' should be one of *")
 # })
 # 
 # test_that("dataframe Data_indicatoren heeft correct formaat", {
 #   expect_equal(berekenLSVI(Versie = "alle", 
 #                            Kwaliteitsniveau = "alle", 
-#                            Data_indicatoren),
+#                            Data_voorwaarden),
 #                "Invoer OK")
 # })
