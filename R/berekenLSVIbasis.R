@@ -13,7 +13,7 @@
 #' @export
 #'
 #' @importFrom RODBC sqlQuery odbcClose
-#' @importFrom dplyr %>% left_join summarise_ select_ mutate_ group_by_ ungroup filter_
+#' @importFrom dplyr %>% left_join summarise_ select_ mutate_ group_by_ ungroup filter_ bind_rows distinct_ full_join
 #' @importFrom assertthat assert_that has_name
 #' @importFrom pander evals
 #'
@@ -203,65 +203,72 @@ berekenLSVIbasis <-
       )
     
     #nu een recursieve functie om de voorwaarden te combineren tot een beoordeling
-    groepeerVoorwaarden <- function(CombinerenVoorwaardenID, Data){
+    groepeerVoorwaarden <- function(CombinerenVoorwaardenID){
       Record <- CombinatieVoorwaarden %>%
         filter_(~Id == CombinerenVoorwaardenID)
-      # if(!is.na(Record$ChildID1)){
-      #   Data <- Data %>%
-      #     bind_rows(groepeerVoorwaarden(Record$ChildID1, Data))
-      # }
-      # if(!is.na(Record$ChildID2)){
-      #   Data <- Data %>%
-      #     bind_rows(groepeerVoorwaarden(Record$ChildID2, Data))
-      # }
-      if(!is.na(Record$VoorwaardeID1)){
-        if(!is.na(Record$VoorwaardeID2)){
-          Data <- Resultaat %>%
-            filter_(~VoorwaardeID %in% c(Record$VoorwaardeID1, Record$VoorwaardeID2)) %>%
-            select_(~ID, ~VoorwaardeID, ~Status)
-          Beoordelingberekening <- Data %>%
-            group_by_(~ID) %>%
-            summarise_(
-              Beoordeling_indicator = ~ifelse(Record$BewerkingAND,
-                                              as.logical(min(Status)),
-                                              as.logical(max(Status)))
-            ) %>%
-            ungroup()
-          Data <- Data %>%
-            left_join(Beoordelingberekening, by = c("ID" = "ID"))
-        } else {
-          Data <- Resultaat %>%
-            filter_(~VoorwaardeID %in% Record$VoorwaardeID1) %>%
-            select_(~ID, ~VoorwaardeID, ~Status) %>%
-            mutate_(
-              Beoordeling_indicator = ~Status
-            )
-        }
+      Data <- data.frame(ID = NULL, VoorwaardeID = NULL, 
+                         Beoordeling_indicator = NULL, BeoordelingID = NULL)
+      if(!is.na(Record$ChildID1)){
+        Data <- Data %>%
+          bind_rows(groepeerVoorwaarden(Record$ChildID1))
       }
+      if(!is.na(Record$ChildID2)){
+        Data <- Data %>%
+          bind_rows(groepeerVoorwaarden(Record$ChildID2))
+      }
+      if(!is.na(Record$VoorwaardeID1)){
+        Data_resultaat <- Resultaat %>%
+          filter_(~VoorwaardeID %in% Record$VoorwaardeID1) %>%
+          select_(~ID, ~VoorwaardeID, ~Status) %>%
+          mutate_(
+            Beoordeling_indicator = ~Status,
+            Status = ~NULL
+          )
+        Data <- Data %>%
+          bind_rows(Data_resultaat)
+      }
+      if(!is.na(Record$VoorwaardeID2)){
+        Data_resultaat <- Resultaat %>%
+          filter_(~VoorwaardeID %in% Record$VoorwaardeID2) %>%
+          select_(~ID, ~VoorwaardeID, ~Status) %>%
+          mutate_(
+            Beoordeling_indicator = ~Status,
+            Status = ~NULL
+          )
+        Data <- Data %>%
+          bind_rows(Data_resultaat)
+      }
+      
+      Beoordelingberekening <- Data %>%
+          group_by_(~ID) %>%
+          summarise_(
+            Beoordeling_indicator = ~ifelse(Record$BewerkingAND,
+                                            as.logical(min(Beoordeling_indicator)),
+                                            as.logical(max(Beoordeling_indicator)))
+          ) %>%
+          ungroup()
       Data <- Data %>%
         mutate_(
-          BeoordelingID = ~Record$BeoordelingID,
-          Status = ~NULL
-        )
+          Beoordeling_indicator = ~NULL
+        ) %>% 
+        left_join(Beoordelingberekening, by = c("ID" = "ID"))
+      
       return(Data)
     }
-    
+
     Data <- data.frame(ID = NULL, VoorwaardeID = NULL, 
                        Beoordeling_indicator = NULL, BeoordelingID = NULL)
-    for(i in unique(GroeperendeInfo$BeoordelingID)){
+    for(i in unique(CombinatieVoorwaarden$BeoordelingID)){
       Data <- Data %>%
         bind_rows(groepeerVoorwaarden((CombinatieVoorwaarden %>%
-                                        filter_(~BeoordelingID == i))$Id, 
-                                      Data = data.frame(ID = NULL, 
-                                                        VoorwaardeID = NULL, 
-                                                        Beoordeling_indicator = NULL,
-                                                        BeoordelingID = NULL)))
+                                        filter_(~BeoordelingID == i))$Id) %>%
+                    mutate_(BeoordelingID = ~i))
     }
     
     Resultaat_beoordeling <- Data %>%
       left_join(Resultaat,
                 by = c("ID" = "ID", "VoorwaardeID" = "VoorwaardeID")) %>%
-      left_join(GroeperendeInfo, 
+      full_join(GroeperendeInfo, 
                 by = c("BeoordelingID" = "BeoordelingID", 
                        "Habitatsubtype" = "Habitatcode_subtype"))
     
@@ -279,5 +286,5 @@ berekenLSVIbasis <-
       ungroup()
       
     
-    return(list(Resultaat_criterium, Resultaat_indicator, Resultaat_beoordeling))
+    return(list(as.data.frame(Resultaat_criterium), Resultaat_indicator, Resultaat_beoordeling))
   }
