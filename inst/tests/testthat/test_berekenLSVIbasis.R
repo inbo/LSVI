@@ -21,43 +21,83 @@ Data_voorwaarden <- read.csv2(system.file("vbdata/opname_4010_gelayout_indicator
             by = c("Indicator" = "Indicator")) %>%
   select_(~ID, ~VoorwaardeID, ~Waarde, ~Habitatsubtype) %>%
   bind_rows(Aantal_soorten_frequent)
-berekenLSVIbasis(Versie = "alle", Kwaliteitsniveau = "1", Data_voorwaarden)
 
-#onderstaande is gekopieerd en moet nog aangepast worden aan de te testen funtie!!!
+# Resultaat <- berekenLSVIbasis(Versie = "alle", Kwaliteitsniveau = "alle", Data_voorwaarden)
+# save(Resultaat, file = "inst/vbdata/Resultaat_test.Rdata")
+# load("inst/vbdata/Resultaat_test.Rdata")
+load(system.file("vbdata/Resultaat_test.Rdata", package = "LSVI"))
+Resultaat_versie3 <- list(Resultaat[[1]] %>% filter_(~VersieLSVI == "Versie 3"),
+                          Resultaat[[2]] %>% filter_(~VersieLSVI == "Versie 3"),
+                          Resultaat[[3]] %>% filter_(~VersieLSVI == "Versie 3"))
+Resultaat_kwal1 <- list(Resultaat[[1]] %>% filter_(~Kwaliteitsniveau == 1),
+                          Resultaat[[2]] %>% filter_(~Kwaliteitsniveau == 1),
+                          Resultaat[[3]] %>% filter_(~Kwaliteitsniveau == 1))
 
-# test_that("parameter versie heeft correct formaat", {
-#   expect_equal(berekenLSVIbasis(Versie = "alle", 
-#                            Kwaliteitsniveau = "alle", 
-#                            Data_voorwaarden),
-#                "Invoer OK")
-#   expect_equal(berekenLSVI(Versie = "Versie 3", 
-#                            Kwaliteitsniveau = "alle", 
-#                            Data_voorwaarden),
-#                "Invoer OK")
-  expect_error(berekenLSVI(Versie = 2,
+
+#onderstaande is gekopieerd en moet nog aangepast worden aan de te testen functie!!!
+
+test_that("parameter versie heeft correct formaat", {
+  expect_equal(berekenLSVIbasis(Versie = "alle",
+                           Kwaliteitsniveau = "alle",
+                           Data_voorwaarden),
+               Resultaat)
+  expect_equal(berekenLSVIbasis(Versie = "Versie 3",
+                           Kwaliteitsniveau = "alle",
+                           Data_voorwaarden),
+               Resultaat_versie3)
+  expect_error(berekenLSVIbasis(Versie = 2,
                            Kwaliteitsniveau = "alle",
                            Data_voorwaarden),
                "Error in match.arg\\(Versie\\) : 'arg' must be NULL or a character vector\n")
-# })
-# 
-# test_that("parameter kwaliteitsniveau heeft correct formaat", {
-#   expect_equal(berekenLSVI(Versie = "alle", 
-#                            Kwaliteitsniveau = "1", 
-#                            Data_voorwaarden),
-#                "Invoer OK")
-#   expect_equal(berekenLSVI(Versie = "alle", 
-#                            Kwaliteitsniveau = 1, 
-#                            Data_voorwaarden),
-#                "Invoer OK")
-  expect_error(berekenLSVI(Versie = "alle",
+})
+ 
+test_that("parameter kwaliteitsniveau heeft correct formaat", {
+  expect_equal(berekenLSVIbasis(Versie = "alle",
+                           Kwaliteitsniveau = "1",
+                           Data_voorwaarden),
+               Resultaat_kwal1)
+  expect_equal(berekenLSVIbasis(Versie = "alle",
+                           Kwaliteitsniveau = 1,
+                           Data_voorwaarden),
+               Resultaat_kwal1)
+  expect_error(berekenLSVIbasis(Versie = "alle",
                            Kwaliteitsniveau = "streefwaarde",
                            Data_voorwaarden),
                "Error in match.arg\\(Kwaliteitsniveau\\) : \n  'arg' should be one of *")
-# })
-# 
-# test_that("dataframe Data_indicatoren heeft correct formaat", {
-#   expect_equal(berekenLSVI(Versie = "alle", 
-#                            Kwaliteitsniveau = "alle", 
-#                            Data_voorwaarden),
-#                "Invoer OK")
-# })
+})
+
+test_that("dataframe Data_voorwaarden heeft correct formaat", {
+  expect_equal(berekenLSVIbasis(Versie = "alle",
+                           Kwaliteitsniveau = "alle",
+                           Data_voorwaarden),
+               Resultaat)
+  # expect_equal(berekenLSVIbasis(Versie = "alle",
+  #                               Kwaliteitsniveau = "alle",
+  #                               Data_voorwaarden %>% 
+  #                                 mutate_(
+  #                                   Waarde = ~ifelse(Waarde == 1, -1, Waarde)  #zou foutmelding moeten geven
+  #                                 )),
+  #              Resultaat)
+  # expect_equal(berekenLSVIbasis(Versie = "alle",
+  #                               Kwaliteitsniveau = "alle",
+  #                               Data_voorwaarden %>% 
+  #                                 mutate_(
+  #                                   Waarde = ~ifelse(Waarde == 1, 11.1, Waarde)  #zou foutmelding moeten geven
+  #                                 )),
+  #              Resultaat)
+  # expect_equal(berekenLSVIbasis(Versie = "alle",
+  #                               Kwaliteitsniveau = "alle",
+  #                               Data_voorwaarden %>% 
+  #                                 mutate_(
+  #                                   Waarde = ~ifelse(Waarde == 75, -75, Waarde)  #zou foutmelding moeten geven
+  #                                 )),
+  #              Resultaat)
+  # expect_equal(berekenLSVIbasis(Versie = "alle",
+  #                               Kwaliteitsniveau = "alle",
+  #                               Data_voorwaarden %>%
+  #                                 mutate_(
+  #                                   Waarde = ~ifelse(Waarde == "zeldzaam", 
+  #                                                    "foute invoer", Waarde)  #zou foutmelding moeten geven
+  #                                 )),
+  #              Resultaat)
+})
