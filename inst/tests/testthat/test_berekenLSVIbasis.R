@@ -71,33 +71,75 @@ test_that("dataframe Data_voorwaarden heeft correct formaat", {
                            Kwaliteitsniveau = "alle",
                            Data_voorwaarden),
                Resultaat)
-  # expect_equal(berekenLSVIbasis(Versie = "alle",
-  #                               Kwaliteitsniveau = "alle",
-  #                               Data_voorwaarden %>% 
-  #                                 mutate_(
-  #                                   Waarde = ~ifelse(Waarde == 1, -1, Waarde)  #zou foutmelding moeten geven
-  #                                 )),
-  #              Resultaat)
-  # expect_equal(berekenLSVIbasis(Versie = "alle",
-  #                               Kwaliteitsniveau = "alle",
-  #                               Data_voorwaarden %>% 
-  #                                 mutate_(
-  #                                   Waarde = ~ifelse(Waarde == 1, 11.1, Waarde)  #zou foutmelding moeten geven
-  #                                 )),
-  #              Resultaat)
-  # expect_equal(berekenLSVIbasis(Versie = "alle",
-  #                               Kwaliteitsniveau = "alle",
-  #                               Data_voorwaarden %>% 
-  #                                 mutate_(
-  #                                   Waarde = ~ifelse(Waarde == 75, -75, Waarde)  #zou foutmelding moeten geven
-  #                                 )),
-  #              Resultaat)
-  # expect_equal(berekenLSVIbasis(Versie = "alle",
-  #                               Kwaliteitsniveau = "alle",
-  #                               Data_voorwaarden %>%
-  #                                 mutate_(
-  #                                   Waarde = ~ifelse(Waarde == "zeldzaam", 
-  #                                                    "foute invoer", Waarde)  #zou foutmelding moeten geven
-  #                                 )),
-  #              Resultaat)
+  expect_error(berekenLSVIbasis(Versie = "alle",
+                                Kwaliteitsniveau = "alle",
+                                Data_voorwaarden %>%
+                                  mutate_(
+                                    Waarde = ~ifelse(Waarde == 1, "één", Waarde)
+                                  )),
+               "Foute invoer in Data_voorwaarden\\$Waarde: geen getal ingevoerd waar een getal verwacht wordt")
+  expect_error(berekenLSVIbasis(Versie = "alle",
+                                Kwaliteitsniveau = "alle",
+                                Data_voorwaarden %>%
+                                  mutate_(
+                                    Waarde = ~ifelse(Waarde == "1", "-1", Waarde)
+                                  )),
+               "Foute invoer in Data_voorwaarden\\$Waarde: een negatief getal ingevoerd")
+  expect_error(berekenLSVIbasis(Versie = "alle",
+                                Kwaliteitsniveau = "alle",
+                                Data_voorwaarden %>%
+                                  mutate_(
+                                    Waarde = ~ifelse(Waarde == "1", "11.2", Waarde)  
+                                  )),
+               "Foute invoer in Data_voorwaarden\\$Waarde: een kommagetal ingevoerd waar een geheel getal verwacht wordt")
+  expect_error(berekenLSVIbasis(Versie = "alle",
+                                Kwaliteitsniveau = "alle",
+                                Data_voorwaarden %>%
+                                  mutate_(
+                                    Waarde = ~ifelse(Waarde == 75, "zeven", Waarde)
+                                  )),
+               "Foute invoer in Data_voorwaarden\\$Waarde: geen getal ingevoerd waar een getal verwacht wordt")
+  expect_error(berekenLSVIbasis(Versie = "alle",
+                                Kwaliteitsniveau = "alle",
+                                Data_voorwaarden %>%
+                                  mutate_(
+                                    Waarde = ~ifelse(Waarde == 75, -75, Waarde)  
+                                  )),
+               "Foute invoer in Data_voorwaarden\\$Waarde: een negatief getal ingevoerd")
+  expect_error(berekenLSVIbasis(Versie = "alle",
+                                Kwaliteitsniveau = "alle",
+                                Data_voorwaarden %>%
+                                  mutate_(
+                                    Waarde = ~ifelse(Waarde == 75, 175, Waarde) 
+                                  )),
+               "Foute invoer in Data_voorwaarden\\$Waarde: een getal > 100 ingevoerd waar een percentage verwacht wordt")
+  expect_error(berekenLSVIbasis(Versie = "alle",
+                                Kwaliteitsniveau = "alle",
+                                Data_voorwaarden %>%
+                                  mutate_(
+                                    Waarde = ~ifelse(Waarde == "zeldzaam",
+                                                     "foute invoer", Waarde) 
+                                  )),
+               "Foute invoer in Data_voorwaarden\\$Waarde: niet alle categorische waarden komen overeen met het invoermasker uit de databank")
+  expect_error(berekenLSVIbasis(Versie = "alle",
+                                Kwaliteitsniveau = "alle",
+                                Data_voorwaarden %>%
+                                  mutate_(
+                                    Waarde = ~ifelse(Waarde == "zeldzaam", 2, Waarde)  
+                                  )),
+               "Foute invoer in Data_voorwaarden\\$Waarde: niet alle categorische waarden komen overeen met het invoermasker uit de databank")
+  expect_equal(berekenLSVIbasis(Versie = "alle",
+                                Kwaliteitsniveau = "alle",
+                                Data_voorwaarden %>%
+                                  mutate_(
+                                    Waarde = ~ifelse(Waarde == "zeldzaam", "ZELDZAAM", Waarde)  
+                                  )),
+               list(Resultaat[[1]], Resultaat[[2]], 
+                    Resultaat[[3]] %>%
+                      mutate_(
+                        Waarde = ~ifelse(Waarde == "zeldzaam", "ZELDZAAM", Waarde)  
+                      )))
 })
+
+#werking childID nog testen!
+
