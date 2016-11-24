@@ -92,6 +92,32 @@ test_that("dataframe Data_voorwaarden heeft correct formaat", {
                                     Waarde = ~ifelse(Waarde == "1", "11.2", Waarde)  
                                   )),
                "Foute invoer in Data_voorwaarden\\$Waarde: een kommagetal ingevoerd waar een geheel getal verwacht wordt")
+  expect_equal(berekenLSVIbasis(Versie = "alle",
+                                Kwaliteitsniveau = "alle",
+                                Data_voorwaarden %>%
+                                  mutate_(
+                                    Waarde = ~ifelse(Waarde == "1", NA, Waarde)  
+                                  )),
+               list(Resultaat[[1]] %>%
+                      mutate_(
+                        Beoordeling_criterium = 
+                          ~ifelse(Criterium == "Vegetatie" & (ID %in% c("Jo1380", "WT0174")), 
+                                  NA, Beoordeling_criterium)
+                      ), 
+                    Resultaat[[2]] %>%
+                      mutate_(
+                        Beoordeling_indicator = 
+                          ~ifelse(Criterium == "Vegetatie" & (ID %in% c("Jo1380", "WT0174")), 
+                                  NA, Beoordeling_indicator)
+                      ), 
+                    Resultaat[[3]] %>%
+                      mutate_(
+                        Waarde = ~ifelse(Waarde == "1", NA, Waarde),
+                        Status = ~ifelse(Waarde == "1", NA, Status),
+                        Beoordeling_indicator = 
+                          ~ifelse(Criterium == "Vegetatie" & (ID %in% c("Jo1380", "WT0174")), 
+                                  NA, Beoordeling_indicator)
+                      )))
   expect_error(berekenLSVIbasis(Versie = "alle",
                                 Kwaliteitsniveau = "alle",
                                 Data_voorwaarden %>%
@@ -113,6 +139,32 @@ test_that("dataframe Data_voorwaarden heeft correct formaat", {
                                     Waarde = ~ifelse(Waarde == 75, 175, Waarde) 
                                   )),
                "Foute invoer in Data_voorwaarden\\$Waarde: een getal > 100 ingevoerd waar een percentage verwacht wordt")
+  expect_equal(berekenLSVIbasis(Versie = "alle",
+                                Kwaliteitsniveau = "alle",
+                                Data_voorwaarden %>%
+                                  mutate_(
+                                    Waarde = ~ifelse(Waarde == 75, NA, Waarde)  
+                                  )),
+               list(Resultaat[[1]] %>%
+                      mutate_(
+                        Beoordeling_criterium = 
+                          ~ifelse(Criterium == "Verstoring" & (ID %in% c("WT0173")), 
+                                  NA, Beoordeling_criterium)
+                      ), 
+                    Resultaat[[2]] %>%
+                      mutate_(
+                        Beoordeling_indicator = 
+                          ~ifelse(Indicator == "vergrassing" & (ID %in% c("WT0173")), 
+                                  NA, Beoordeling_indicator)
+                      ), 
+                    Resultaat[[3]] %>%
+                      mutate_(
+                        Waarde = ~ifelse(Waarde == 75, NA, Waarde),
+                        Status = ~ifelse(Waarde == 75, NA, Status),
+                        Beoordeling_indicator = 
+                          ~ifelse(Indicator == "vergrassing" & (ID %in% c("WT0173")), 
+                                  NA, Beoordeling_indicator)
+                      )))
   expect_error(berekenLSVIbasis(Versie = "alle",
                                 Kwaliteitsniveau = "alle",
                                 Data_voorwaarden %>%
@@ -138,6 +190,32 @@ test_that("dataframe Data_voorwaarden heeft correct formaat", {
                     Resultaat[[3]] %>%
                       mutate_(
                         Waarde = ~ifelse(Waarde == "zeldzaam", "ZELDZAAM", Waarde)  
+                      )))
+  expect_equal(berekenLSVIbasis(Versie = "alle",
+                                Kwaliteitsniveau = "alle",
+                                Data_voorwaarden %>%
+                                  mutate_(
+                                    Waarde = ~ifelse(Waarde == "zeldzaam", NA, Waarde)  
+                                  )),
+               list(Resultaat[[1]] %>%
+                      mutate_(
+                        Beoordeling_criterium = 
+                          ~ifelse(Criterium == "Structuur" & (ID %in% c("WT0173")), 
+                                  NA, Beoordeling_criterium)
+                      ), 
+                    Resultaat[[2]] %>%
+                      mutate_(
+                        Beoordeling_indicator = 
+                          ~ifelse(Indicator == "veenmoslaag" & (ID %in% c("WT0173")), 
+                                  NA, Beoordeling_indicator)
+                      ), 
+                    Resultaat[[3]] %>%
+                      mutate_(
+                        Waarde = ~ifelse(Waarde == "zeldzaam", NA, Waarde),
+                        Status = ~ifelse(Waarde == "zeldzaam", NA, Status),
+                        Beoordeling_indicator = 
+                          ~ifelse(Indicator == "veenmoslaag" & (ID %in% c("WT0173")), 
+                                  NA, Beoordeling_indicator)
                       )))
 })
 

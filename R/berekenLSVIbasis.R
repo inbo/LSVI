@@ -172,13 +172,13 @@ berekenLSVIbasis <-
     if(max(is.na(Foutcontrole$WaardeGetal) & !is.na(Foutcontrole$Waarde))){
       stop("Foute invoer in Data_voorwaarden$Waarde: geen getal ingevoerd waar een getal verwacht wordt")
     }
-    if(max(Foutcontrole$WaardeGetal < 0)){
+    if(max(!is.na(Foutcontrole$WaardeGetal) & Foutcontrole$WaardeGetal < 0)){
       stop("Foute invoer in Data_voorwaarden$Waarde: een negatief getal ingevoerd")  #nog checken in oude db of er refwaarden zijn die negatief mogen zijn
     }
-    if(max(Foutcontrole$TypeVariabele == "Geheel getal" & Foutcontrole$WaardeInt != Foutcontrole$WaardeGetal)){
+    if(max(Foutcontrole$TypeVariabele == "Geheel getal" & !is.na(Foutcontrole$WaardeGetal) & Foutcontrole$WaardeInt != Foutcontrole$WaardeGetal)){
       stop("Foute invoer in Data_voorwaarden$Waarde: een kommagetal ingevoerd waar een geheel getal verwacht wordt")
     }
-    if(max(Foutcontrole$TypeVariabele == "Percentage" & Foutcontrole$WaardeGetal > 100)){
+    if(max(Foutcontrole$TypeVariabele == "Percentage" & !is.na(Foutcontrole$WaardeGetal) & Foutcontrole$WaardeGetal > 100)){
       stop("Foute invoer in Data_voorwaarden$Waarde: een getal > 100 ingevoerd waar een percentage verwacht wordt")
     }
     
@@ -186,7 +186,9 @@ berekenLSVIbasis <-
     Resultaat_getal <- Resultaat_getal %>%
       mutate_(
         Vergelijking = ~paste(Waarde, Operator, Referentiewaarde, sep = " "),
-        Status = ~sapply(evals(Vergelijking), function(x){as.logical(x[2])}),
+        Status = ~ifelse(!is.na(Waarde),
+                         sapply(evals(Vergelijking), function(x){as.logical(x[2])}),
+                         NA),
         Vergelijking = ~NULL
       )
     
@@ -208,7 +210,7 @@ berekenLSVIbasis <-
       ungroup()
     
     #pipe even onderbreken voor de foutcontrole
-    if(min(Resultaat_categorie$WaardeN) < 0){
+    if(all(!is.na(Resultaat_categorie$Waarde)) & min(Resultaat_categorie$WaardeN) < 0){
       stop("Foute invoer in Data_voorwaarden$Waarde: niet alle categorische waarden komen overeen met het invoermasker uit de databank")
     }
     
@@ -216,7 +218,9 @@ berekenLSVIbasis <-
     Resultaat_categorie <- Resultaat_categorie %>%
       mutate_(
         Vergelijking = ~paste(WaardeN, Operator, RefWaardeN, sep = " "),
-        Status = ~sapply(evals(Vergelijking), function(x){as.logical(x[2])}),
+        Status = ~ifelse(!is.na(Waarde),
+                         sapply(evals(Vergelijking), function(x){as.logical(x[2])}),
+                         NA),
         Vergelijking = ~NULL,
         WaardeN = ~NULL,
         RefWaardeN = ~NULL
@@ -278,9 +282,12 @@ berekenLSVIbasis <-
       Beoordelingberekening <- Data %>%
           group_by_(~ID) %>%
           summarise_(
-            Beoordeling_indicator = ~ifelse(Record$BewerkingAND,
-                                            as.logical(min(Beoordeling_indicator)),
-                                            as.logical(max(Beoordeling_indicator)))
+            Beoordeling_indicator = 
+              ~ifelse(all(!is.na(Beoordeling_indicator)),
+                      ifelse(Record$BewerkingAND,
+                             as.logical(min(Beoordeling_indicator)),
+                             as.logical(max(Beoordeling_indicator))),
+                      NA)
           ) %>%
           ungroup()
       Data <- Data %>%
