@@ -33,7 +33,7 @@ Deze functie genereert een tabel met alle gegevens die nodig zijn om de tabellen
 \description{
 Deze functie geeft de inhoud van de tabellen habitatkarakteristieken en beoordelingsmatrix uit de rapporten van de Lokale Staat van Instandhouding voor de habitatsubtypes die voldoen aan de opgegeven parameters.  Volledigheidshalve geeft ze ook de uitgebreide namen van de habitattypes en habitatsubtypes.  De uitvoer van deze functie kan gebruikt worden om rapportages op te maken (bv. rapport samenstellen met LSVI-criteria,...).  Een 'afgewerkt rapport' kan gegenereerd worden met de functie maakHabitatfiches().
 
-De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten als string opgegeven worden.  Default is telkens "alle", waarbij de soortenlijsten voor alle mogelijke waarden van die parameter weergegeven worden (m.a.w. er is geen selectie voor deze parameter).
+De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten als string opgegeven worden.  Default is telkens 'alle', waarbij de soortenlijsten voor alle mogelijke waarden van die parameter weergegeven worden (m.a.w. er is geen selectie voor deze parameter).
 }
 \examples{
 geefInfoHabitatfiche(Versie = "Versie 3", Habitatsubtype = "4010")
