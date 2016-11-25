@@ -6,7 +6,7 @@
 #'
 #'De gegenereerde habitatfiches worden opgeslagen in de folder die als working directory gespecifieerd is.
 #'
-#' @inheritParams geefSoortenlijst
+#' @inheritParams selecteerIndicatoren
 #' @param verbose geeft de toestand van het systeem aan, om te zorgen dat boodschappen niet onnodig gegeven worden
 #'
 #' @return Deze functie genereert habitatfiches in de vorm van html-files die in de workspace opgeslagen worden.
@@ -27,59 +27,14 @@ maakHabitatfiches <-
            Habitattype = geefUniekeWaarden("Habitattype","Habitatcode"), 
            Habitatsubtype = geefUniekeWaarden("Habitatsubtype","Habitatcode_subtype"),
            verbose = TRUE){
-    match.arg(Versie)
-    match.arg(Habitatgroep)
-    match.arg(Habitattype)
-    match.arg(Habitatsubtype)
+    
     assert_that(is.flag(verbose))
     assert_that(noNA(verbose))
     
-    #eerst de selectiegegevens ophalen en de nodige gegevens uit tabel Indicator_habitat
-    Parametervoorwaarde <- FALSE
-    query <- "SELECT Habitattype.Habitatcode AS Habitattype, Habitatsubtype.Habitatcode_subtype AS Habitatsubtype, Versie.VersieLSVI
-    FROM (((Habitatsubtype INNER JOIN Habitattype ON Habitatsubtype.HabitattypeID = Habitattype.Id)
-              INNER JOIN Habitatgroep ON Habitattype.HabitatgroepID = Habitatgroep.Id)
-              INNER JOIN Indicator_habitat ON Habitatsubtype.Id = Indicator_habitat.HabitatsubtypeID)
-              INNER JOIN Versie ON Indicator_habitat.VersieID = Versie.ID"
+    Indicatoren <- selecteerIndicatoren(Versie, Habitatgroep, Habitattype, Habitatsubtype)
     
-    if(Versie[1] != "alle"){
-      query <- sprintf("%s WHERE Versie.VersieLSVI = '%s'", query, Versie)
-      Parametervoorwaarde <- TRUE
-    }
-    
-    if(Habitatsubtype[1] != "alle"){
-      if(Parametervoorwaarde){
-        Voegwoord <- "AND"
-      } else {
-        Voegwoord <- "WHERE"
-      }
-      query <- sprintf("%s %s Habitatsubtype.Habitatcode_subtype = '%s'", query, Voegwoord, Habitatsubtype)
-    } else {
-      if(Habitattype[1] != "alle"){
-        if(Parametervoorwaarde){
-          Voegwoord <- "AND"
-        } else {
-          Voegwoord <- "WHERE"
-        }
-        query <- sprintf("%s %s Habitattype.Habitatcode = '%s'", query, Voegwoord, Habitattype)
-      } else {
-        if(Habitatgroep[1] != "alle"){
-          if(Parametervoorwaarde){
-            Voegwoord <- "AND"
-          } else {
-            Voegwoord <- "WHERE"
-          }
-          query <- sprintf("%s %s Habitatgroep.Habitatgroepnaam = '%s'", query, Voegwoord, Habitatgroep)
-        }
-      }
-    }
-
-    connectie <- connecteerMetLSVIdb()
-    Habitattypes <- sqlQuery(connectie, query, stringsAsFactors = FALSE)
-    odbcClose(connectie)
-    
-    for(versie in unique(Habitattypes$VersieLSVI)){
-      for(habitatsubtype in unique(as.character(Habitattypes$Habitatsubtype))){
+    for(versie in unique(Indicatoren$Versie)){
+      for(habitatsubtype in unique(as.character(Indicatoren$Habitatsubtype))){
         Bestandnaam <- sprintf("Habitatfiche_%s_%s.html",
                                habitatsubtype,
                                sub(versie, 
