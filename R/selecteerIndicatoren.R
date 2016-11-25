@@ -10,6 +10,7 @@
 #' @param Habitatsubtype Parameter waarmee een habitatsubtype geselecteerd kan worden.  Als deze waarde ingevuld is, is het niet nodig om de parameters Habitatgroep en Habitattype te specifieren.
 #' @param Criterium Het LSVI-criterium waarvoor de gegevens geselecteerd worden: "Vegetatie", "Structuur", "Verstoring" of "alle".
 #' @param Indicator De indicator waarvoor de gegevens uit de databank gehaald worden.
+#' @param HabitatnamenToevoegen Moeten de namen van de habitattypen en habitatsubtypen toegevoegd worden als extra kolommen?
 #'
 #' @return Deze functie geeft een tabel met velden Versie, Habitattype, Habitatsubtype, Criterium, Indicator, Indicator_habitatID, SoortengroepID en NiveauSoortenlijstFiche.
 #' 
@@ -19,6 +20,7 @@
 #' @export
 #'
 #' @importFrom RODBC sqlQuery odbcClose
+#' @importFrom assertthat assert_that
 #'
 #'
 selecteerIndicatoren <- 
@@ -27,29 +29,42 @@ selecteerIndicatoren <-
            Habitattype = geefUniekeWaarden("Habitattype","Habitatcode"), 
            Habitatsubtype = geefUniekeWaarden("Habitatsubtype","Habitatcode_subtype"), 
            Criterium = geefUniekeWaarden("Criterium","Naam"), 
-           Indicator = geefUniekeWaarden("Indicator","Naam")){
+           Indicator = geefUniekeWaarden("Indicator","Naam"),
+           HabitatnamenToevoegen = FALSE){
     match.arg(Versie)
     match.arg(Habitatgroep)
     match.arg(Habitattype)
     match.arg(Habitatsubtype)
     match.arg(Criterium)
     match.arg(Indicator)
+    assert_that(is.logical(HabitatnamenToevoegen))
     
+    
+    query_uitbreiding <- ifelse(HabitatnamenToevoegen,
+                                "Habitattype.Habitatnaam, 
+    Habitatsubtype.Habitatnaam_subtype AS Habitatsubtypenaam,
+    Habitattype.Omschrijving AS HabitatsubtypeOmschrijving,",
+                                "")
     
     #eerst de selectiegegevens ophalen en de nodige gegevens uit tabel Indicator_habitat, query samenstellen op basis van parameters
     Parametervoorwaarde <- FALSE
-    query <- "SELECT Versie.VersieLSVI AS Versie, Habitattype.Habitatcode AS Habitattype, 
+    query <- sprintf("SELECT Versie.VersieLSVI AS Versie, Habitattype.Habitatcode AS Habitattype, 
     Habitatsubtype.Habitatcode_subtype AS Habitatsubtype,
+    %s
     Criterium.Naam AS Criterium, Indicator.Naam AS Indicator, 
     Indicator_habitat.Id AS Indicator_habitatID,
-    Indicator_habitat.SoortengroepID, Indicator_habitat.NiveauSoortenlijstFiche
-    FROM ((Indicator_habitat 
+    Indicator_habitat.SoortengroepID, Indicator_habitat.NiveauSoortenlijstFiche,
+    IndicatortabellenKoppeling.Indicator_beoordelingID
+    FROM (((Indicator_habitat 
     INNER JOIN ((Habitatsubtype INNER JOIN Habitattype ON Habitatsubtype.HabitattypeID = Habitattype.Id)
     INNER JOIN Habitatgroep ON Habitattype.HabitatgroepID = Habitatgroep.Id)
     ON Indicator_habitat.HabitatsubtypeID = Habitatsubtype.Id)
     INNER JOIN (Indicator INNER JOIN Criterium ON Indicator.CriteriumID = Criterium.Id)
     ON Indicator_habitat.IndicatorID = Indicator.Id)
-    INNER JOIN Versie ON Indicator_habitat.VersieID = Versie.Id"
+    INNER JOIN Versie ON Indicator_habitat.VersieID = Versie.Id)
+    LEFT JOIN IndicatortabellenKoppeling
+    ON Indicator_habitat.Id = Indicator_habitatID",
+                     query_uitbreiding)
     if(Versie[1] != "alle"){
       query <- sprintf("%s WHERE Versie.VersieLSVI = '%s'", query, Versie)
       Parametervoorwaarde <- TRUE
