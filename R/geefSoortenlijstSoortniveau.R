@@ -14,7 +14,7 @@
 #'
 #' @export
 #'
-#' @importFrom dplyr %>% bind_rows mutate_ filter distinct_
+#' @importFrom dplyr %>% bind_rows mutate_ filter_ distinct_
 #' @importFrom RODBC sqlQuery odbcClose
 #' @importFrom assertthat assert_that noNA is.string
 #'
@@ -102,8 +102,8 @@ geefSoortenlijstSoortniveau <-
     #Kolommen met WetNaam (uit tabellen Soortengroep en Soort) samenvoegen, id voor NedNaam, en een kolom WetNaamKort toevoegen
     Soortenlijst <- Soortenlijst %>%
       distinct_() %>%
-      filter(
-        !is.na(WetNaam) | !is.na(NedNaam)
+      filter_(
+        ~!is.na(WetNaam) | !is.na(NedNaam)
       ) %>%
       mutate_(
         WetNaamKort = ~

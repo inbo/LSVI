@@ -16,8 +16,8 @@ Imports:
     utils,
     Hmisc,
     testthat,
-    pander
-Suggests:
-    xtable,
+    pander,
     tidyr
+Suggests:
+    xtable
 RoxygenNote: 5.0.1
