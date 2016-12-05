@@ -78,8 +78,8 @@ berekenAnalyseVariabele <-
         Resultaat$Tansley <- NA
         for(i in 1:nrow(Tansley)){
           Resultaat$Tansley <- 
-            ifelse(Resultaat$Bedekking >= Tansley[i,"Ondergrens"] & 
-                     Resultaat$Bedekking < Tansley[i,"Bovengrens"],
+            ifelse(Resultaat$Waarde >= Tansley[i,"Ondergrens"] & 
+                     Resultaat$Waarde < Tansley[i,"Bovengrens"],
                    Tansley[i,"Voluit"],
                    Resultaat$Tansley)
         }

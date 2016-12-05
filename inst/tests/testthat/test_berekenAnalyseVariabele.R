@@ -14,24 +14,24 @@ Soortengroeplijst <- "369,143"
 
 resultaat_aanwezig <- data.frame(ID = c("Jo1380", "Jo1380", "WT0173", "WT0173", "WT0174", "WT0174"),
                                  SoortengroepID = c(143, 369, 143, 369, 143, 369),
-                                 Aantal = c(4,1,1,0,1,0),
+                                 Waarde = c(4,1,1,0,1,0),
                                  stringsAsFactors = FALSE)
 resultaat_frequent <- data.frame(ID = c("Jo1380", "Jo1380", "WT0173", "WT0173", "WT0174", "WT0174"),
                                  SoortengroepID = c(143, 369, 143, 369, 143, 369),
-                                 Aantal = c(3,1,0,0,1,0),
+                                 Waarde = c(3,1,0,0,1,0),
                                  stringsAsFactors = FALSE)
 resultaat_afwezig <- data.frame(ID = c("Jo1380", "Jo1380", "WT0173", "WT0173", "WT0174", "WT0174"),
                                 SoortengroepID = c(143, 369, 143, 369, 143, 369),
-                                Aantal = c(8,4,11,5,11,5),
+                                Waarde = c(8,4,11,5,11,5),
                                 stringsAsFactors = FALSE)
 resultaat_bedekking <- data.frame(ID = c("Jo1380", "Jo1380", "WT0173", "WT0173", "WT0174", "WT0174"),
                                   SoortengroepID = c(143, 369, 143, 369, 143, 369),
-                                  Bedekking = c(61.454626,4,0.5,0,7.5,0),
+                                  Waarde = c(61.454626,4,0.5,0,7.5,0),
                                   stringsAsFactors = FALSE)
 resultaat_bedekking_tansley <-
   data.frame(ID = c("Jo1380", "Jo1380", "WT0173", "WT0173", "WT0174", "WT0174"),
              SoortengroepID = c(143, 369, 143, 369, 143, 369),
-             Bedekking = c(61.454626,4,0.5,0,7.5,0),
+             Waarde = c(61.454626,4,0.5,0,7.5,0),
              Tansley = c("dominant", "frequent", "occasioneel", "afwezig", "abundant", "afwezig"),
              stringsAsFactors = FALSE)
 
@@ -147,12 +147,12 @@ test_that("Parameter AnalyseVariabele heeft correct formaat", {
 
 Resultaat_370 <- data.frame(ID = c("Jo1380", "WT0173", "WT0174"),
                             SoortengroepID = c(370, 370, 370),
-                            Aantal = c(2,1,1),
+                            Waarde = c(2,1,1),
                             stringsAsFactors = FALSE)
 
 Resultaat_370_frequent <- data.frame(ID = c("Jo1380", "WT0173", "WT0174"),
                                      SoortengroepID = c(370, 370, 370),
-                                     Aantal = c(2,0,1),
+                                     Waarde = c(2,0,1),
                                      stringsAsFactors = FALSE)
 
 
