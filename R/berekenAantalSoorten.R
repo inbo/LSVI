@@ -102,7 +102,7 @@ berekenAantalSoorten <-
       bind_rows(Aantal_soorten) %>%
       group_by_(~ID, ~SoortengroepID) %>%
       summarise_(
-        Aantal = ~sum(Aantal)
+        Waarde = ~sum(Aantal)
       ) %>%
       ungroup()
     

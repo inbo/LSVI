@@ -33,7 +33,13 @@ selecteerIndicatoren <-
            HabitatnamenToevoegen = FALSE){
     match.arg(Versie)
     match.arg(Habitatgroep)
+    Habitattype <- ifelse(is.numeric(Habitattype),
+                          as.character(Habitattype),
+                          Habitattype)
     match.arg(Habitattype)
+    Habitatsubtype <- ifelse(is.numeric(Habitatsubtype),
+                          as.character(Habitatsubtype),
+                          Habitattype)
     match.arg(Habitatsubtype)
     match.arg(Criterium)
     match.arg(Indicator)

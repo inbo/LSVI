@@ -40,7 +40,7 @@ berekenBedekkingSoorten <-
     
     Bedekking_soorten <- selecteerSoortenInOpname(Data_soorten, Soortengroeplijst) %>%
       group_by_(~ID, ~SoortengroepID) %>%
-      summarise_(Bedekking = ~ (1 - prod((100 - Percentage) /100, na.rm=TRUE)) * 100) %>%
+      summarise_(Waarde = ~ (1 - prod((100 - Percentage) /100, na.rm=TRUE)) * 100) %>%
       ungroup()
     
     

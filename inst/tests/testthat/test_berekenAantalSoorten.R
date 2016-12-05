@@ -14,16 +14,16 @@ Soortengroeplijst <- "369,143"
 berekenAantalSoorten(Data_soorten, Soortengroeplijst)
 resultaat_aanwezig <- data.frame(ID = c("Jo1380", "Jo1380", "WT0173", "WT0173", "WT0174", "WT0174"),
                                  SoortengroepID = c(143, 369, 143, 369, 143, 369),
-                                 Aantal = c(4,1,1,0,1,0),
+                                 Waarde = c(4,1,1,0,1,0),
                                  stringsAsFactors = FALSE)
 berekenAantalSoorten(Data_soorten, Soortengroeplijst, Minimumniveau = "Frequent")
 resultaat_frequent <- data.frame(ID = c("Jo1380", "Jo1380", "WT0173", "WT0173", "WT0174", "WT0174"),
                                  SoortengroepID = c(143, 369, 143, 369, 143, 369),
-                                 Aantal = c(3,1,0,0,1,0),
+                                 Waarde = c(3,1,0,0,1,0),
                                  stringsAsFactors = FALSE)
 resultaat_afwezig <- data.frame(ID = c("Jo1380", "Jo1380", "WT0173", "WT0173", "WT0174", "WT0174"),
                                  SoortengroepID = c(143, 369, 143, 369, 143, 369),
-                                 Aantal = c(8,4,11,5,11,5),
+                                 Waarde = c(8,4,11,5,11,5),
                                  stringsAsFactors = FALSE)
 
 
@@ -138,12 +138,12 @@ test_that("Parameter Minimumniveau heeft correct formaat", {
 
 Resultaat_370 <- data.frame(ID = c("Jo1380", "WT0173", "WT0174"),
                             SoortengroepID = c(370, 370, 370),
-                            Aantal = c(2,1,1),
+                            Waarde = c(2,1,1),
                             stringsAsFactors = FALSE)
 
 Resultaat_370_frequent <- data.frame(ID = c("Jo1380", "WT0173", "WT0174"),
                             SoortengroepID = c(370, 370, 370),
-                            Aantal = c(2,0,1),
+                            Waarde = c(2,0,1),
                             stringsAsFactors = FALSE)
 
 
