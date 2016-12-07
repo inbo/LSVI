@@ -134,14 +134,16 @@ berekenLSVIbasis <-
               Voorwaarde.Referentiewaarde,
               Voorwaarde.Operator,
               Voorwaarde.SoortengroepID,
+              Soortengroep.Omschrijving AS SoortengroepNaam,
               AnalyseVariabele.VariabeleNaam,
               AnalyseVariabele.Eenheid,
               TypeVariabele.Naam AS TypeVariabele,
               Invoermasker.Waarde AS Invoermasker,
               Invoermasker.Volgnummer,
               Vegetatielaag.Omschrijving AS Vegetatielaag
-              FROM (Voorwaarde
+              FROM ((Voorwaarde
               LEFT JOIN VoorwaardeNaam ON Voorwaarde.VoorwaardeNaamID = VoorwaardeNaam.Id)
+              LEFT JOIN Soortengroep ON Voorwaarde.SoortengroepID = Soortengroep.Id)
               INNER JOIN (((AnalyseVariabele LEFT JOIN TypeVariabele ON AnalyseVariabele.TypeVariabeleID = TypeVariabele.Id)
               LEFT JOIN Vegetatielaag ON AnalyseVariabele.VegetatielaagID = Vegetatielaag.Id)
               LEFT JOIN Invoermasker ON AnalyseVariabele.Id = Invoermasker.AnalyseVariabeleID)

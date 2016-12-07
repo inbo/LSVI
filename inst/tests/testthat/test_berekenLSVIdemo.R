@@ -18,9 +18,9 @@ Resultaat <- list(Resultaat[[1]] %>% filter_(~!is.na(ID)),
                   Resultaat[[3]] %>% filter_(~!is.na(ID)) %>%
                     select_(~ID, ~VoorwaardeID, ~Beoordeling_indicator, ~BeoordelingID,
                             ~Habitatsubtype, ~Waarde, ~VoorwaardeNaam, ~Referentiewaarde,
-                            ~Operator, ~SoortengroepID, ~VariabeleNaam, ~Eenheid,
-                            ~TypeVariabele, ~Vegetatielaag, ~Status, ~VersieLSVI,
-                            ~Criterium, ~Indicator, ~Kwaliteitsniveau,
+                            ~Operator, ~SoortengroepID, ~SoortengroepNaam, ~VariabeleNaam, 
+                            ~Eenheid, ~TypeVariabele, ~Vegetatielaag, ~Status, 
+                            ~VersieLSVI, ~Criterium, ~Indicator, ~Kwaliteitsniveau,
                             ~Beoordeling_letterlijk))
 Resultaat_versie3 <- list(Resultaat[[1]] %>% filter_(~VersieLSVI == "Versie 3"),
                           Resultaat[[2]] %>% filter_(~VersieLSVI == "Versie 3"),
@@ -29,8 +29,6 @@ Resultaat_kwal1 <- list(Resultaat[[1]] %>% filter_(~Kwaliteitsniveau == 1),
                           Resultaat[[2]] %>% filter_(~Kwaliteitsniveau == 1),
                           Resultaat[[3]] %>% filter_(~Kwaliteitsniveau == 1))
 
-
-#onderstaande is gekopieerd en moet nog aangepast worden aan de te testen functie!!!
 
 test_that("parameter versie heeft correct formaat", {
   expect_equal(berekenLSVIdemo(Versie = "alle",                     #eigenlijk moet kwaliteitsniveau alle nog getest worden, maar daarvoor functie eerst deftig uitwerken!
