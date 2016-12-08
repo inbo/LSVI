@@ -172,3 +172,17 @@ test_that("Gegevens in subniveau worden correct behandeld", {
   expect_equal(berekenAantalSoorten(Data_soorten, "370", "frequent"),
                Resultaat_370_frequent)
 })
+
+
+test_that("aggregatie van bedekkingen gebeurt correct", {
+  expect_equal(berekenAantalSoorten(Data_soorten %>%
+                                    bind_rows(data.frame(Bedekking = "Occ,<5%",
+                                                         ID = "Jo1380",
+                                                         Habitatsubtype = 4010,
+                                                         Soort_NL = "Beenbreek ondersoort",
+                                                         Soort_Latijn = "Narthecium ossifragum subsp",
+                                                         Tansley = "occasioneel",
+                                                         Percentage = 0.99)), 
+                                  Soortengroeplijst, "frequent"),
+             resultaat_frequent %>% mutate_(Waarde = ~ifelse(Waarde==3,4,Waarde)))
+})

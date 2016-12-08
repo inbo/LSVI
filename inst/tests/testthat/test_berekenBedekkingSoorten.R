@@ -14,7 +14,7 @@ Soortengroeplijst <- "369,143"
 berekenBedekkingSoorten(Data_soorten, Soortengroeplijst)
 Resultaat <- data.frame(ID = c("Jo1380", "Jo1380", "WT0173", "WT0173", "WT0174", "WT0174"),
                                  SoortengroepID = c(143, 369, 143, 369, 143, 369),
-                                 Waarde = c(61.454626,4,0.5,0,7.5,0),
+                                 Waarde = c(60.51086,3,0.06,0,7.5,0),
                                  stringsAsFactors = FALSE)
 
 test_that("Parameter Data_soorten heeft correct formaat", {
@@ -65,8 +65,8 @@ test_that("Parameter Data_soorten heeft correct formaat", {
                'Error : Data_soorten does not have name Percentage\n')
   expect_error(berekenBedekkingSoorten(Data_soorten %>% 
                                       mutate_(
-                                        Percentage = ~ifelse(Percentage==4,
-                                                          "4",
+                                        Percentage = ~ifelse(Percentage==3,
+                                                          "3",
                                                           Percentage)
                                       ), 
                                     Soortengroeplijst),
@@ -86,7 +86,7 @@ test_that("Parameter Soortengroeplijst heeft correct formaat", {
 
 Resultaat_370 <- data.frame(ID = c("Jo1380", "WT0173", "WT0174"),
                             SoortengroepID = c(370, 370, 370),
-                            Waarde = c(62.99644,0.5,7.5),
+                            Waarde = c(61.695533,0.06,7.5),
                             stringsAsFactors = FALSE)
 
 

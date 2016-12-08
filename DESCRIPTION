@@ -16,7 +16,8 @@ Imports:
     utils,
     testthat,
     pander,
-    tidyr
+    tidyr,
+    readr
 Suggests:
     xtable
 RoxygenNote: 5.0.1

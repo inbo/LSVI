@@ -11,7 +11,7 @@
 #'
 #' 
 #' @param AnalyseVariabele Zie description voor voorbeelden.  
-#' @param  Data_soorten Bedekkingen van de sleutelsoorten in de vorm van een data.frame met velden ID, Soort_NL of Soort_Latijn en Percentage (bedekking in procent) of Tansley (bedekking in Tansley-schaal), afhankelijk van het type AnalyseVariabele.  Voor een analysevariabele startend met 'aantal' moet Data_soorten het veld Tansley bevatten, voor een analysevariabele startend met 'bedekking' het veld Bedekking. (Eventueel zou hier ook de NBNTaxonVersionKey kunnen gebruikt worden.)
+#' @param  Data_soorten Bedekkingen van de sleutelsoorten in de vorm van een data.frame met velden ID, Soort_NL of Soort_Latijn en Percentage (bedekking in procent) of Tansley (bedekking in Tansley-schaal), afhankelijk van het type AnalyseVariabele.  Voor een analysevariabele startend met 'aantal' moet Data_soorten het veld Tansley bevatten (en bij voorkeur ook Percentage als een soortenlijst gegeven wordt die voor de LSVI-berekening gegroepeerd moet worden tot een hoger niveau, bv. Genusniveau), voor een analysevariabele startend met 'bedekking' het veld Bedekking.
 #' @inheritParams geefSoortenlijstSoortniveau
 #' 
 #' 
@@ -75,14 +75,15 @@ berekenAnalyseVariabele <-
     } else {
       Resultaat <- berekenBedekkingSoorten(Data_soorten, Soortengroeplijst)
       if(grepl("tansley",AnalyseVariabele)){
-        Resultaat$Tansley <- NA
-        for(i in 1:nrow(Tansley)){
-          Resultaat$Tansley <- 
-            ifelse(Resultaat$Waarde >= Tansley[i,"Ondergrens"] & 
-                     Resultaat$Waarde < Tansley[i,"Bovengrens"],
-                   Tansley[i,"Voluit"],
-                   Resultaat$Tansley)
-        }
+        Resultaat$Tansley <- vertaalBedekkingTansley(Resultaat$Waarde)
+        # Resultaat$Tansley <- NA
+        # for(i in 1:nrow(Tansley)){
+        #   Resultaat$Tansley <- 
+        #     ifelse(Resultaat$Waarde >= Tansley[i,"Ondergrens"] & 
+        #              Resultaat$Waarde < Tansley[i,"Bovengrens"],
+        #            Tansley[i,"Voluit"],
+        #            Resultaat$Tansley)
+        # }
       }
     }
     
