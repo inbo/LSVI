@@ -8,7 +8,7 @@ berekenAantalSoorten(Data_soorten, Soortengroeplijst,
   Minimumniveau = "aanwezig")
 }
 \arguments{
-\item{Data_soorten}{Bedekkingen van de sleutelsoorten in de vorm van een data.frame met velden ID, Soort_NL of Soort_Latijn en Tansley (bedekking in Tansley-schaal). (Eventueel zou hier ook de NBNTaxonVersionKey kunnen gebruikt worden.)}
+\item{Data_soorten}{Bedekkingen van de sleutelsoorten in de vorm van een data.frame met velden ID, Soort_NL of Soort_Latijn en Tansley (bedekking in Tansley-schaal).  Als een soortenlijst gegeven wordt die mogelijk voor de berekening van de LSVI gegroepeerd moet worden tot een hoger taxonomisch of morfologisch niveau, wordt best ook Percentage (bedekking in procent) gegeven.  Als dit niet gegeven wordt, zal deze groepering gebeuren op basis van de klassemiddens van de Tansley-schaal.}
 
 \item{Soortengroeplijst}{dataframe waarin per niveau aangegeven wordt (tabel Niveau met een int die het niveau aangeeft) welke soortengroepen geselecteerd moeten worden (tabel SoortengroepIDs met een string waarin de ID's na mekaar weergegeven worden, gescheiden door een komma)}
 

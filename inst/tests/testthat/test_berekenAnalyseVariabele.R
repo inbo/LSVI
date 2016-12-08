@@ -26,13 +26,13 @@ resultaat_afwezig <- data.frame(ID = c("Jo1380", "Jo1380", "WT0173", "WT0173", "
                                 stringsAsFactors = FALSE)
 resultaat_bedekking <- data.frame(ID = c("Jo1380", "Jo1380", "WT0173", "WT0173", "WT0174", "WT0174"),
                                   SoortengroepID = c(143, 369, 143, 369, 143, 369),
-                                  Waarde = c(61.454626,4,0.5,0,7.5,0),
+                                  Waarde = c(60.51086,3,0.06,0,7.5,0),
                                   stringsAsFactors = FALSE)
 resultaat_bedekking_tansley <-
   data.frame(ID = c("Jo1380", "Jo1380", "WT0173", "WT0173", "WT0174", "WT0174"),
              SoortengroepID = c(143, 369, 143, 369, 143, 369),
-             Waarde = c(61.454626,4,0.5,0,7.5,0),
-             Tansley = c("dominant", "frequent", "occasioneel", "afwezig", "abundant", "afwezig"),
+             Waarde = c(60.51086,3,0.06,0,7.5,0),
+             Tansley = c("dominant", "frequent", "sporadisch", "afwezig", "abundant", "afwezig"),
              stringsAsFactors = FALSE)
 
 

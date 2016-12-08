@@ -3,7 +3,7 @@
 #' @description Deze hulpfunctie bepaalt het aantal soorten van een bepaalde soortengroep dat aanwezig is in een bepaalde opname.  Alternatief kunnen ook het aantal soorten bepaald worden dat minstens frequent of abundant aanwezig is, of elke andere mogelijke categorie uit de Tansley-schaal (aan te geven in parameter Minimumniveau).  Omdat het een technische hulpfunctie is, wordt hier gebruik gemaakt van ID's uit de databank.  Beter is om gebruik te maken van de generieke functie berekenAnalyseVariabele die meer mogelijkheden heeft  voor het selecteren van de soortengroep.
 #'
 #' 
-#' @param  Data_soorten Bedekkingen van de sleutelsoorten in de vorm van een data.frame met velden ID, Soort_NL of Soort_Latijn en Tansley (bedekking in Tansley-schaal). (Eventueel zou hier ook de NBNTaxonVersionKey kunnen gebruikt worden.)
+#' @param  Data_soorten Bedekkingen van de sleutelsoorten in de vorm van een data.frame met velden ID, Soort_NL of Soort_Latijn en Tansley (bedekking in Tansley-schaal).  Als een soortenlijst gegeven wordt die mogelijk voor de berekening van de LSVI gegroepeerd moet worden tot een hoger taxonomisch of morfologisch niveau, wordt best ook Percentage (bedekking in procent) gegeven.  Als dit niet gegeven wordt, zal deze groepering gebeuren op basis van de klassemiddens van de Tansley-schaal.
 #' @inheritParams geefSoortenlijstInvoerniveau
 #' @param Minimumniveau Minimum bedekking voor een soort om meegeteld te worden.  Standaard worden alle aanwezige soorten meegeteld, maar er kan bv. ook gekozen worden om enkel soorten te tellen die ze minstens frequent of abundant aanwezig zijn.  De waarde 'afwezig' telt enkel de afwezige soorten.
 #' 
@@ -29,18 +29,18 @@
 #' @importFrom assertthat assert_that has_name
 #' @importFrom dplyr %>% inner_join filter_ group_by_ ungroup summarise_ distinct_
 #'
-#'
+
 berekenAantalSoorten <- 
   function(Data_soorten, 
            Soortengroeplijst, 
            Minimumniveau = "aanwezig"){
+    
     assert_that(inherits(Data_soorten, "data.frame"))
     assert_that(has_name(Data_soorten, "ID"))
     
     assert_that(has_name(Data_soorten, "Tansley"))
     Tansley <- read.csv(system.file("schaaltabellen/Tansley.csv", package = "LSVI"),
-                                       stringsAsFactors = FALSE) %>%
-      select_(~Voluit, ~Afgekort)
+                                       stringsAsFactors = FALSE)
     Data_soorten$Tansley <- tolower(Data_soorten$Tansley)
     if(!all(Data_soorten$Tansley %in% c(Tansley$Voluit, Tansley$Afgekort))){
       stop(sprintf("Niet alle bedekkingen vermeld onder Data_soorten$Tansley komen overeen met de Tansley-schaal (%s)",
@@ -48,7 +48,8 @@ berekenAantalSoorten <-
     }
     if(!all(Data_soorten$Tansley %in% Tansley$Voluit)){
       Data_soorten <- Data_soorten %>%
-        left_join(Tansley, by = c("Tansley" = "Afgekort")) %>%
+        left_join(Tansley %>% select_(~Afgekort, ~Voluit), 
+                  by = c("Tansley" = "Afgekort")) %>%
         mutate_(
           Tansley = ~ifelse(Tansley %in% Tansley$Voluit,
                             Tansley,
@@ -56,6 +57,19 @@ berekenAantalSoorten <-
         )
     }
     Data_soorten$TansleyF <- factor(Data_soorten$Tansley, levels = Tansley$Voluit)
+    
+    if(!has_name(Data_soorten, "Percentage") || max(is.na(Data_soorten$Percentage))){
+      Data_soorten <- Data_soorten %>%
+        left_join(Tansley %>% select_(~Voluit, ~GemBedekking), 
+                  by = c("Tansley" = "Voluit")) 
+      if(!has_name(Data_soorten, "Percentage")){
+        Data_soorten$Percentage <- Data_soorten$GemBedekking
+      } else {
+        Data_soorten$Percentage <- ifelse(is.na(Data_Soorten$Percentage),
+                                          Data_soorten$GemBedekking,
+                                          Data_soorten$Percentage)
+      }
+    }
     
     Minimumniveau <- tolower(Minimumniveau)
     if(!Minimumniveau %in% c("aanwezig", Tansley$Voluit, Tansley$Afgekort)){
@@ -72,12 +86,18 @@ berekenAantalSoorten <-
     
     Data_soorten <- selecteerSoortenInOpname(Data_soorten, Soortengroeplijst) %>%
       mutate_(
-        SoortensubgroepID = ~ ifelse(is.na(SoortensubgroepID),
+        SoortensubgroepID = ~ ifelse(is.na(SoortensubgroepID),  
                                      WetNaamKort,
                                      SoortensubgroepID)
       ) %>%
       group_by_(~ID, ~SoortengroepID, ~SoortensubgroepID) %>%
-      summarise_(TansleyF = ~max(as.numeric(TansleyF))) %>%
+      summarise_(
+        Percentage = ~ (1 - prod((100 - Percentage) /100, na.rm=TRUE)) * 100,
+        Tansley = ~ ifelse(n() > 1,
+                           vertaalBedekkingTansley(Percentage),
+                           Tansley),
+        TansleyF = ~factor(Tansley, levels = Tansley$Voluit)
+      ) %>%   
       ungroup()
 
     

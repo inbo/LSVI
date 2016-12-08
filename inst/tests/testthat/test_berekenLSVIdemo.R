@@ -9,9 +9,6 @@ Data_soorten <-
   read.csv2(system.file("vbdata/opname_4010_gelayout_soorten.csv", package = "LSVI"), 
             stringsAsFactors = FALSE)
 
-# Resultaat <- berekenLSVIbasis(Versie = "alle", Kwaliteitsniveau = "alle", Data_voorwaarden)
-# save(Resultaat, file = "inst/vbdata/Resultaat_test.Rdata")
-# load("inst/vbdata/Resultaat_test.Rdata")
 load(system.file("vbdata/Resultaat_test.Rdata", package = "LSVI"))
 Resultaat <- list(Resultaat[[1]] %>% filter_(~!is.na(ID)),
                   Resultaat[[2]] %>% filter_(~!is.na(ID)),

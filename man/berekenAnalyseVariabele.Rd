@@ -9,7 +9,7 @@ berekenAnalyseVariabele(AnalyseVariabele, Data_soorten, Soortengroeplijst)
 \arguments{
 \item{AnalyseVariabele}{Zie description voor voorbeelden.}
 
-\item{Data_soorten}{Bedekkingen van de sleutelsoorten in de vorm van een data.frame met velden ID, Soort_NL of Soort_Latijn en Percentage (bedekking in procent) of Tansley (bedekking in Tansley-schaal), afhankelijk van het type AnalyseVariabele.  Voor een analysevariabele startend met 'aantal' moet Data_soorten het veld Tansley bevatten, voor een analysevariabele startend met 'bedekking' het veld Bedekking. (Eventueel zou hier ook de NBNTaxonVersionKey kunnen gebruikt worden.)}
+\item{Data_soorten}{Bedekkingen van de sleutelsoorten in de vorm van een data.frame met velden ID, Soort_NL of Soort_Latijn en Percentage (bedekking in procent) of Tansley (bedekking in Tansley-schaal), afhankelijk van het type AnalyseVariabele.  Voor een analysevariabele startend met 'aantal' moet Data_soorten het veld Tansley bevatten (en bij voorkeur ook Percentage als een soortenlijst gegeven wordt die voor de LSVI-berekening gegroepeerd moet worden tot een hoger niveau, bv. Genusniveau), voor een analysevariabele startend met 'bedekking' het veld Bedekking.}
 
 \item{Soortengroeplijst}{string waarin de SoortengroepID's na elkaar weergegeven worden, gescheiden door een komma}
 }
