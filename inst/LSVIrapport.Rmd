@@ -1,0 +1,73 @@
+---
+title: "Rapportage LSVI-indicatoren"
+date: "`r Sys.Date()`"
+output: html_document
+params: 
+  Versie: "Versie 3"
+  Habitatgroep: "Heiden"
+  Habitattype: "alle"
+  Habitatsubtype: "alle"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r libraries, include=FALSE}
+library(dplyr)
+library(LSVI)
+library(rmarkdown)
+library(knitr)
+
+```
+
+```{r gegevens_inladen}
+
+Indicatoren <- selecteerIndicatoren(params$Versie, params$Habitatgroep, 
+                                    params$Habitattype, params$Habitatsubtype,
+                                    HabitatnamenToevoegen = TRUE) %>%
+  select_(~Versie, ~Habitatgroepnaam, ~Habitattype, ~Habitatnaam,
+          ~Habitatsubtype, ~Habitatsubtypenaam) %>%
+  distinct_()
+
+```
+
+
+
+```{r habitatfiches, include=FALSE, message=FALSE, warning=FALSE, results='asis'}
+
+Uitvoer <- NULL
+
+for(versie in unique(Indicatoren$Versie)){
+  Uitvoer <- c(Uitvoer, paste("#", versie, sep = ""))
+  VersieIndicatoren <- Indicatoren %>%
+    filter_(~Versie == versie)
+  for(habitatgroep in unique(VersieIndicatoren$Habitatgroepnaam)){
+    Uitvoer <- c(Uitvoer, paste("##",habitatgroep, sep = ""))
+    Subset <- VersieIndicatoren %>%
+      filter_(~Habitatgroepnaam == habitatgroep)
+    for(habitattype in unique(as.character(Subset$Habitattype))){
+      Subsubset <- Subset %>%
+        filter_(~habitattype == habitattype)
+      habitatnaam <- ifelse(is.na(Subsubset$Habitatnaam),
+                            "",
+                            paste(": ", unique(Subsubset$Habitatnaam), sep = ""))
+      Uitvoer <- c(Uitvoer, paste("###Habitattype ", habitattype, habitatnaam, "\n", sep = ""))
+      for(habitatsubtype in unique(as.character(Indicatoren$Habitatsubtype))){
+        Uitvoer <- c(Uitvoer, knit_child("Habitatfiche.Rmd"))
+        
+      }
+    }
+
+  }
+}
+
+
+
+```
+
+
+```{r output, results='asis'}
+cat(Uitvoer, sep="\n")
+```
+

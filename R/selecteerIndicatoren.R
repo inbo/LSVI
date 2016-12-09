@@ -49,7 +49,8 @@ selecteerIndicatoren <-
     query_uitbreiding <- ifelse(HabitatnamenToevoegen,
                                 "Habitattype.Habitatnaam, 
     Habitatsubtype.Habitatnaam_subtype AS Habitatsubtypenaam,
-    Habitattype.Omschrijving AS HabitatsubtypeOmschrijving,",
+    Habitatsubtype.Omschrijving AS HabitatsubtypeOmschrijving,
+                                Habitatgroep.Habitatgroepnaam,",
                                 "")
     
     #eerst de selectiegegevens ophalen en de nodige gegevens uit tabel Indicator_habitat, query samenstellen op basis van parameters
