@@ -9,6 +9,15 @@
 #'
 #' @return Deze functie genereert de resultaten in de vorm van een list met 3 tabellen: een eerste met de beoordelingen per criterium en kwaliteitsniveau, een tweede met de beoordelingen per indicator en kwaliteitsniveau, en een derde met de detailgegevens inclusief meetwaarden.
 #' 
+#' @examples 
+#' Data_voorwaarden <- 
+#'    data.frame(ID = "Jo1380",
+#'               VoorwaardeID = c(3,4,5,7,2,1),
+#'               Waarde = c("abundant","frequent",35,3,3,1),
+#'               Habitatsubtype = 4010,
+#'               stringsAsFactors = FALSE)
+#' berekenLSVIbasis(Versie = "Versie 3", Kwaliteitsniveau = "1", Data_voorwaarden)
+#' 
 #'
 #' @export
 #'
