@@ -74,14 +74,6 @@ berekenAnalyseVariabele <-
       Resultaat <- berekenBedekkingSoorten(Data_soorten, Soortengroeplijst)
       if(grepl("tansley",AnalyseVariabele)){
         Resultaat$Tansley <- vertaalBedekkingTansley(Resultaat$Waarde)
-        # Resultaat$Tansley <- NA
-        # for(i in 1:nrow(Tansley)){
-        #   Resultaat$Tansley <- 
-        #     ifelse(Resultaat$Waarde >= Tansley[i,"Ondergrens"] & 
-        #              Resultaat$Waarde < Tansley[i,"Bovengrens"],
-        #            Tansley[i,"Voluit"],
-        #            Resultaat$Tansley)
-        # }
       }
     }
     
