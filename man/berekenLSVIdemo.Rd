@@ -27,12 +27,11 @@ Het zou mooi zijn om op termijn via dit package gelijkaardige rekenmodules aan t
 Dus voor elk type opname-gegevens (elke databank) moet een gelijkaardig script als dit geschreven worden om de gegevens naar de juiste vorm om te zetten.  Dit om te ondervangen dat voor sommige gegevens de bedekkingen per indicator ingeschat zijn, voor andere per soort.  Dit biedt ook de mogelijkheid om de bedekkingsschalen te vertalen enz.
 }
 \examples{
+library(readr)
 Data_indicatoren <- 
-    read.csv2(system.file("vbdata/opname_4010_gelayout_indicatoren.csv", package = "LSVI"), 
-              stringsAsFactors = FALSE)
+    read_csv2(system.file("vbdata/opname_4010_gelayout_indicatoren.csv", package = "LSVI"))
 Data_soorten <- 
-    read.csv2(system.file("vbdata/opname_4010_gelayout_soorten.csv", package = "LSVI"), 
-              stringsAsFactors = FALSE)
+    read_csv2(system.file("vbdata/opname_4010_gelayout_soorten.csv", package = "LSVI"))
 berekenLSVIdemo(Versie = "Versie 3", Kwaliteitsniveau = "1", Data_indicatoren, Data_soorten)
 plot(1)
 

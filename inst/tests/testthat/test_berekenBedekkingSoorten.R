@@ -1,13 +1,12 @@
 context("test berekenBedekkingSoorten")
 
+library(readr)
 library(dplyr)
 
 Data_soorten <- 
-  read.csv2(system.file("vbdata/opname_4010_gelayout_soorten.csv", package = "LSVI"), 
-            stringsAsFactors = FALSE)
+  read_csv2(system.file("vbdata/opname_4010_gelayout_soorten.csv", package = "LSVI"))
 Schaalomzetting <- 
-  read.csv2(system.file("schaaltabellen/Schaalomzetting_ToonS.csv", package = "LSVI"),
-            stringsAsFactors = FALSE)
+  read_csv2(system.file("schaaltabellen/Schaalomzetting_ToonS.csv", package = "LSVI"))
 Data_soorten <- merge(Data_soorten, Schaalomzetting, 
                       by.x = "Bedekking", by.y = "Schaal_opname")
 Soortengroeplijst <- "369,143"

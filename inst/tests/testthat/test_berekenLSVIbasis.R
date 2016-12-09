@@ -1,15 +1,16 @@
 context("test berekenLSVIbasis")
 
+library(readr)
 library(dplyr)
 
-Schaalomzetting <- read.csv2(system.file("schaaltabellen/Schaalomzetting_ToonS.csv", package = "LSVI"), stringsAsFactors = FALSE)
+Schaalomzetting <- read_csv2(system.file("schaaltabellen/Schaalomzetting_ToonS.csv", package = "LSVI"))
 Aantal_soorten_frequent <- 
       data.frame(ID = c("Jo1380", "Jo1380", "WT0173", "WT0173", "WT0174", "WT0174"),
        VoorwaardeID = c(2, 1, 2, 1, 2, 1),
        Waarde = c("3","1","0","0","1","0"),
        Habitatsubtype = 4010,
        stringsAsFactors = FALSE)
-Data_voorwaarden <- read.csv2(system.file("vbdata/opname_4010_gelayout_indicatoren.csv", package = "LSVI"), stringsAsFactors = FALSE) %>%
+Data_voorwaarden <- read_csv2(system.file("vbdata/opname_4010_gelayout_indicatoren.csv", package = "LSVI")) %>%
   left_join(Schaalomzetting, by = c("Waarde" = "Schaal_opname")) %>%
   mutate_(
     Waarde = ~ifelse(!is.na(Percentage), Percentage,

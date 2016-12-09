@@ -27,12 +27,11 @@ Deze functie bepaalt/berekent de opgegeven analysevariabele op basis van een opg
 De berekening van andere analysevariabelen uit de databank ('grootte_grootste_vegetatievlek', 'aantal_aanwezig_kruidlaag' en 'bedekking_grondvlak') is sterk afhankelijk van de verzamelde gegevens en wordt daarom niet in een generieke functie gestoken.  Ze gebeurt voor elk van de verzamelde gegevens in de specifieke functie die op maat van de gegevens geschreven is.
 }
 \examples{
+library(readr)
 Data_soorten <- 
-    read.csv2(system.file("vbdata/opname_4010_gelayout_soorten.csv", package = "LSVI"), 
-              stringsAsFactors = FALSE)
+    read_csv2(system.file("vbdata/opname_4010_gelayout_soorten.csv", package = "LSVI"))
 Schaalomzetting <-
-    read.csv2(system.file("schaaltabellen/Schaalomzetting_ToonS.csv", package = "LSVI"),
-             stringsAsFactors = FALSE)
+    read_csv2(system.file("schaaltabellen/Schaalomzetting_ToonS.csv", package = "LSVI"))
 Data_soorten <- merge(Data_soorten, Schaalomzetting, 
                       by.x = "Bedekking", by.y = "Schaal_opname")
                       

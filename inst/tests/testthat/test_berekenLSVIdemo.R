@@ -1,13 +1,12 @@
 context("test berekenLSVIdemo")
 
+library(readr)
 library(dplyr)
 
 Data_indicatoren <- 
-  read.csv2(system.file("vbdata/opname_4010_gelayout_indicatoren.csv", package = "LSVI"), 
-            stringsAsFactors = FALSE)
+  read_csv2(system.file("vbdata/opname_4010_gelayout_indicatoren.csv", package = "LSVI"))
 Data_soorten <- 
-  read.csv2(system.file("vbdata/opname_4010_gelayout_soorten.csv", package = "LSVI"), 
-            stringsAsFactors = FALSE)
+  read_csv2(system.file("vbdata/opname_4010_gelayout_soorten.csv", package = "LSVI"))
 
 load(system.file("vbdata/Resultaat_test.Rdata", package = "LSVI"))
 Resultaat <- list(Resultaat[[1]] %>% filter_(~!is.na(ID)),

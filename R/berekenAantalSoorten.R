@@ -11,12 +11,11 @@
 #' @return Deze functie genereert de resultaten in de vorm van een tabel met voor elk ID en elke SoortenlijstID het aantal soorten.
 #' 
 #' @examples 
+#' library(readr)
 #' Data_soorten <- 
-#'     read.csv2(system.file("vbdata/opname_4010_gelayout_soorten.csv", package = "LSVI"), 
-#'               stringsAsFactors = FALSE)
+#'     read_csv2(system.file("vbdata/opname_4010_gelayout_soorten.csv", package = "LSVI"))
 #' Schaalomzetting <-
-#'     read.csv2(system.file("schaaltabellen/Schaalomzetting_ToonS.csv", package = "LSVI"),
-#'              stringsAsFactors = FALSE)
+#'     read_csv2(system.file("schaaltabellen/Schaalomzetting_ToonS.csv", package = "LSVI"))
 #' Data_soorten <- merge(Data_soorten, Schaalomzetting, 
 #'                       by.x = "Bedekking", by.y = "Schaal_opname")
 #' Soortengroeplijst <- "369,143"
@@ -25,7 +24,7 @@
 #'
 #' @export   
 #'
-#' @importFrom utils read.csv2 read.csv
+#' @importFrom readr read_csv2 read_csv
 #' @importFrom assertthat assert_that has_name
 #' @importFrom dplyr %>% inner_join filter_ group_by_ ungroup summarise_ distinct_
 #'
@@ -39,8 +38,7 @@ berekenAantalSoorten <-
     assert_that(has_name(Data_soorten, "ID"))
     
     assert_that(has_name(Data_soorten, "Tansley"))
-    Tansley <- read.csv(system.file("schaaltabellen/Tansley.csv", package = "LSVI"),
-                                       stringsAsFactors = FALSE)
+    Tansley <- read_csv(system.file("schaaltabellen/Tansley.csv", package = "LSVI"))
     Data_soorten$Tansley <- tolower(Data_soorten$Tansley)
     if(!all(Data_soorten$Tansley %in% c(Tansley$Voluit, Tansley$Afgekort))){
       stop(sprintf("Niet alle bedekkingen vermeld onder Data_soorten$Tansley komen overeen met de Tansley-schaal (%s)",
