@@ -17,7 +17,9 @@ Imports:
     testthat,
     pander,
     tidyr,
-    readr
+    readr,
+    cwhmisc
 Suggests:
-    xtable
+    xtable,
+    knitr
 RoxygenNote: 5.0.1

@@ -10,9 +10,10 @@
 #' @return Deze functie genereert habitatfiches in de vorm van html-files die in de working directory opgeslagen worden.
 #' 
 #' @examples 
+#' \dontrun{
 #' maakHabitatfiches(Versie = "Versie 3", Habitatsubtype = "4010")
-#'
-#' @export
+#' }
+
 #'
 #' @importFrom rmarkdown render
 #' @importFrom RODBC sqlQuery odbcClose

@@ -2,18 +2,16 @@
 title: "Habitatfiche"
 date: "`r Sys.Date()`"
 output: html_document
-params: 
-  Versie: "Versie 3"
-  Habitatsubtype: "4010"
 ---
 
-```{r setup, include=FALSE}
+
+```{r setupChild, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-```{r libraries, include=FALSE}
-library(dplyr)
-library(LSVI)
+
+```{r librariesChild, include=FALSE}
+
 library(xtable)
 library(tidyr)
 
@@ -23,18 +21,21 @@ library(tidyr)
 
 ```{r inladen_gegevens}
 
+# versie <- "Versie 3"
+# habitatsubtype <- "4010"
 
-Habitatfiche <- geefInfoHabitatfiche(Versie = params$Versie, Habitatsubtype = params$Habitatsubtype)
+
+Habitatfiche <- geefInfoHabitatfiche(Versie = versie, Habitatsubtype = habitatsubtype)
 
 Versie <- geefVersieInfo() %>%
-  filter_(~VersieLSVI == params$Versie)
+  filter_(~VersieLSVI == versie)
 
 ```
 
 
-##Habitattype `r Habitatfiche[1,"Habitatcode_subtype"]`: `r Habitatfiche[1,"Habitatnaam_subtype"]`
+####Habitatsubtype `r Habitatfiche[1,"Habitatsubtype"]`: `r Habitatfiche[1,"Habitatsubtypenaam"]`
 
-###Habitatkarakteristieken
+#####Habitatkarakteristieken
 
 ```{r habitatkarakteristieken, results='asis'}
 
@@ -62,7 +63,7 @@ for(criterium in unique(Habitatkarakteristieken$Criterium)){
 ```
 
 
-###Beoordelingsmatrix
+#####Beoordelingsmatrix
 
 ```{r beoordelingsmatrix, results='asis', message=FALSE, warning=FALSE}
 
