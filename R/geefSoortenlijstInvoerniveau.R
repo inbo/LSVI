@@ -34,7 +34,7 @@ geefSoortenlijstInvoerniveau <-
       stop("Niet alle SoortengroepIDs bestaan uit een reeks getallen gescheiden door een komma")
     }
     
-    for(i in 1:nrow(Soortengroeplijst)){
+    for(i in seq(nrow(Soortengroeplijst))){
       Soortengroeplijst$Niveau[i] <- 
         ifelse(is.string(Soortengroeplijst$Niveau[i]),
                as.numeric(Soortengroeplijst$Niveau[i]),
