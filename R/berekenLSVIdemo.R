@@ -15,18 +15,17 @@
 #' @return Deze functie genereert de resultaten in de vorm van een list met 3 tabellen: een eerste met de beoordelingen per criterium en kwaliteitsniveau, een tweede met de beoordelingen per indicator en kwaliteitsniveau, en een derde met de detailgegevens inclusief meetwaarden.
 #' 
 #' @examples 
+#' library(readr)
 #' Data_indicatoren <- 
-#'     read.csv2(system.file("vbdata/opname_4010_gelayout_indicatoren.csv", package = "LSVI"), 
-#'               stringsAsFactors = FALSE)
+#'     read_csv2(system.file("vbdata/opname_4010_gelayout_indicatoren.csv", package = "LSVI"))
 #' Data_soorten <- 
-#'     read.csv2(system.file("vbdata/opname_4010_gelayout_soorten.csv", package = "LSVI"), 
-#'               stringsAsFactors = FALSE)
+#'     read_csv2(system.file("vbdata/opname_4010_gelayout_soorten.csv", package = "LSVI"))
 #' berekenLSVIdemo(Versie = "Versie 3", Kwaliteitsniveau = "1", Data_indicatoren, Data_soorten)
 #' plot(1)
 #'
 #' @export
 #'
-#' @importFrom utils read.csv2
+#' @importFrom readr read_csv2
 #' @importFrom assertthat assert_that has_name
 #' @importFrom dplyr %>% mutate_ left_join group_by_ summarise_ ungroup
 #'
@@ -39,8 +38,7 @@ berekenLSVIdemo <-
     
     #omdat we voor de opnames een bedekkingsschaal hebben gebruikt die afwijkt van de gebruikte schalen in het package (% en Tansley), halen we eerst even de tabel op waarin we een vertaling gemaakt hebben tussen de gebruikte schaal en hetgeen voor de functies nodig is (% en Tansley)
     Schaalomzetting <- 
-      read.csv2(system.file("schaaltabellen/Schaalomzetting_ToonS.csv", package = "LSVI"), 
-                stringsAsFactors = FALSE)
+      read_csv2(system.file("schaaltabellen/Schaalomzetting_ToonS.csv", package = "LSVI"))
     
     
     #we testen even of de ingevoerde gegevens wel het juiste formaat hebben, om te vermijden dat de functie zich onvoorspelbaar gedraagt (foute uitvoer, vastlopen, cryptische foutmelding,...) als een gebruiker van de functie een verkeerde parameter invoert (gebruiksvriendelijkheid)

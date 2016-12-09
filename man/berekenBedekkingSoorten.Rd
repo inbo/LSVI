@@ -18,12 +18,11 @@ Deze functie genereert de resultaten in de vorm van een tabel met voor elk ID en
 Deze hulpfunctie bepaalt de bedekking van de soorten van een bepaalde soortengroep dat aanwezig is in een bepaalde opname.  Omdat het een technische hulpfunctie is, wordt hier gebruik gemaakt van ID's uit de databank.  Beter is om gebruik te maken van de generieke functie berekenAnalyseVariabele die meer mogelijkheden heeft voor het selecteren van de soortengroep.
 }
 \examples{
+library(readr)
 Data_soorten <- 
-    read.csv2(system.file("vbdata/opname_4010_gelayout_soorten.csv", package = "LSVI"), 
-              stringsAsFactors = FALSE)
+    read_csv2(system.file("vbdata/opname_4010_gelayout_soorten.csv", package = "LSVI"))
 Schaalomzetting <-
-    read.csv2(system.file("schaaltabellen/Schaalomzetting_ToonS.csv", package = "LSVI"),
-             stringsAsFactors = FALSE)
+    read_csv2(system.file("schaaltabellen/Schaalomzetting_ToonS.csv", package = "LSVI"))
 Data_soorten <- merge(Data_soorten, Schaalomzetting, 
                       by.x = "Bedekking", by.y = "Schaal_opname")
 Soortengroeplijst <- "369,143"

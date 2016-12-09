@@ -10,12 +10,11 @@
 #' @return Deze functie genereert de resultaten in de vorm van een tabel met voor elk ID en elke SoortenlijstID de totale bedekking van de soorten.
 #' 
 #' @examples 
+#' library(readr)
 #' Data_soorten <- 
-#'     read.csv2(system.file("vbdata/opname_4010_gelayout_soorten.csv", package = "LSVI"), 
-#'               stringsAsFactors = FALSE)
+#'     read_csv2(system.file("vbdata/opname_4010_gelayout_soorten.csv", package = "LSVI"))
 #' Schaalomzetting <-
-#'     read.csv2(system.file("schaaltabellen/Schaalomzetting_ToonS.csv", package = "LSVI"),
-#'              stringsAsFactors = FALSE)
+#'     read_csv2(system.file("schaaltabellen/Schaalomzetting_ToonS.csv", package = "LSVI"))
 #' Data_soorten <- merge(Data_soorten, Schaalomzetting, 
 #'                       by.x = "Bedekking", by.y = "Schaal_opname")
 #' Soortengroeplijst <- "369,143"
@@ -23,7 +22,7 @@
 #'
 #' @export   
 #'
-#' @importFrom utils read.csv2
+#' @importFrom readr read_csv2
 #' @importFrom assertthat assert_that has_name
 #' @importFrom dplyr %>% inner_join filter_ group_by_ ungroup summarise_ distinct_
 #'

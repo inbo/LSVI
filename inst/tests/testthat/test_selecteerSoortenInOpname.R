@@ -1,10 +1,10 @@
 context("test selecteerSoortenInOpname")
 
+library(readr)
 library(dplyr)
 
 Data_soorten <- 
-  read.csv2(system.file("vbdata/opname_4010_gelayout_soorten.csv", package = "LSVI"), 
-            stringsAsFactors = FALSE)
+  read_csv2(system.file("vbdata/opname_4010_gelayout_soorten.csv", package = "LSVI"))
 Soortengroeplijst <- "369,143"
 
 Soortengroep <- 
@@ -92,7 +92,7 @@ test_that("Soorten in subniveau worden correct opgehaald", {
                Resultaat %>%
                  mutate_(
                    SoortensubgroepID = ~ SoortengroepID,
-                   SoortengroepID = "370"
+                   SoortengroepID = as.integer(370)
                  ))
   expect_equal(selecteerSoortenInOpname(Data_soorten %>% 
                                           mutate_(Soort_Latijn = ~NULL), 
@@ -100,7 +100,7 @@ test_that("Soorten in subniveau worden correct opgehaald", {
                Resultaat %>%
                  mutate_(
                    SoortensubgroepID = ~ SoortengroepID,
-                   SoortengroepID = "370",
+                   SoortengroepID = as.integer(370),
                    Soort_Latijn = ~ NULL,
                    NedNaam = ~NULL
                  ) %>%
@@ -121,3 +121,4 @@ test_that("Soorten in subniveau worden correct opgehaald", {
                                           "371"),
                  "Niet alle te evalueren soorten zijn opgenomen onder Data_soorten\\$Soort_NL, er wordt van uitgegaan dat de niet opgenomen soorten niet waargenomen zijn")
 })
+
