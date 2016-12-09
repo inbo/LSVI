@@ -21,4 +21,15 @@ Deze functie genereert de resultaten in de vorm van een list met 3 tabellen: een
 \description{
 Deze functie bepaalt de Lokale Staat van Instandhouding op basis van een opgegeven tabel met VoorwaardeID en een opgegeven waarde, die in het juiste formaat moet zijn.  Zie voor meer informatie hierover onder Data_voorwaarden.
 }
+\examples{
+Data_voorwaarden <- 
+   data.frame(ID = "Jo1380",
+              VoorwaardeID = c(3,4,5,7,2,1),
+              Waarde = c("abundant","frequent",35,3,3,1),
+              Habitatsubtype = 4010,
+              stringsAsFactors = FALSE)
+berekenLSVIbasis(Versie = "Versie 3", Kwaliteitsniveau = "1", Data_voorwaarden)
+
+
+}
 
