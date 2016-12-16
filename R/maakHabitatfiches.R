@@ -1,19 +1,22 @@
 #' @title Genereert habitatfiche(s) van LSVI op basis van de opgegeven parameters
 #'
-#' @description Deze functie genereert habitatfiches die gebruikt worden voor de bepaling van de Lokale Staat van Instandhouding van de habitatsubtypes die voldoen aan de opgegeven parameters.  (Om een tabel te genereren met deze informatie om zelf een fiche te kunnen samenstellen, wordt verwezen naar de functie geefInfoHabitatfiche().)
+#' @description Deze functie genereert habitatfiches die gebruikt worden voor de bepaling van de Lokale Staat van Instandhouding van de habitatsubtypes die voldoen aan de opgegeven parameters.  (Om een tabel te genereren met deze informatie om zelf een fiche te kunnen samenstellen, wordt verwezen naar de functie geefInfoHabitatfiche().  Om een rapport samen te stellen met alle fiches na elkaar in 1 document, wordt verwezen naar de functie maakLSVIrapport())
 #'
 #' @template Zoekparameters
 #'
 #' @inheritParams selecteerIndicatoren
 #' @param verbose geeft de toestand van het systeem aan, om te zorgen dat boodschappen niet onnodig gegeven worden
 #'
-#' @return Deze functie genereert habitatfiches in de vorm van html-files die in de working directory opgeslagen worden.
+#' @return Deze functie genereert een rapport met habitatfiches in de vorm van een html-file die in de working directory opgeslagen wordt.
 #' 
 #' @examples 
-#' \dontrun{
-#' maakHabitatfiches(Versie = "Versie 3", Habitatsubtype = "4010")
-#' }
-
+#' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+#' maakHabitatfiches(ConnectieLSVIhabitats, Versie = "Versie 3", Habitatsubtype = "4010")
+#' library(RODBC)
+#' odbcClose(ConnectieLSVIhabitats)
+#' 
+#'
+#' @export
 #'
 #' @importFrom rmarkdown render
 #' @importFrom RODBC sqlQuery odbcClose
@@ -21,16 +24,19 @@
 #'
 #'
 maakHabitatfiches <- 
-  function(Versie = geefUniekeWaarden("Versie","VersieLSVI"), 
-           Habitatgroep = geefUniekeWaarden("Habitatgroep","Habitatgroepnaam"),  
-           Habitattype = geefUniekeWaarden("Habitattype","Habitatcode"), 
-           Habitatsubtype = geefUniekeWaarden("Habitatsubtype","Habitatcode_subtype"),
+  function(ConnectieLSVIhabitats,
+           Versie = "alle", 
+           Habitatgroep = "alle",  
+           Habitattype = "alle", 
+           Habitatsubtype = "alle",
            verbose = TRUE){
     
+    assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
     assert_that(is.flag(verbose))
     assert_that(noNA(verbose))
     
-    Indicatoren <- selecteerIndicatoren(Versie, Habitatgroep, Habitattype, Habitatsubtype)
+    Indicatoren <- selecteerIndicatoren(ConnectieLSVIhabitats, Versie, Habitatgroep, 
+                                        Habitattype, Habitatsubtype)
     
     for(versie in unique(Indicatoren$Versie)){
       for(habitatsubtype in unique(as.character(Indicatoren$Habitatsubtype))){
@@ -39,8 +45,10 @@ maakHabitatfiches <-
                                sub(versie, 
                                    pattern = " ", 
                                    replacement = ""))
-        render(system.file("Habitatfiche.Rmd", package = "LSVI"), 
-               params = list(Versie = versie, Habitatsubtype = habitatsubtype),
+        render(system.file("HabitatficheParent.Rmd", package = "LSVI"), 
+               params = list(ConnectieLSVIhabitats = ConnectieLSVIhabitats, 
+                             Versie = versie, 
+                             Habitatsubtype = habitatsubtype),
                output_file = Bestandnaam,
                output_dir = getwd())
       }

@@ -4,6 +4,7 @@
 #'
 #' @template Zoekparameters
 #'
+#' @param ConnectieLSVIhabitats Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.
 #' @param Versie De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".  Bij de default "alle" worden de gegevens voor de verschillende versies gegeven.
 #' @param Habitatgroep Parameter waarmee alle habitats van een bepaalde habitatgroep kunnen geselecteerd worden, bv. "Bossen", "Heiden", "(Half-)natuurlijke graslanden", "Zoete wateren",...   en "alle" (=default).  Deze waarde moet niet gespecifieerd worden als een bepaald habitat(sub)type geselecteerd wordt.
 #' @param Habitattype Parameter waarmee een habitattype kan geselecteerd worden.  Als dit habitattype meerdere subtypes heeft, zullen de gegevens van alle subtypes van dit habitattype weergegeven worden.
@@ -15,7 +16,10 @@
 #' @return Deze functie geeft een tabel met velden Versie, Habitattype, Habitatsubtype, Criterium, Indicator, Indicator_habitatID, SoortengroepID en NiveauSoortenlijstFiche.
 #' 
 #' @examples
-#' selecteerIndicatoren(Versie = "Versie 3", Habitattype = "4010")
+#' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+#' selecteerIndicatoren(ConnectieLSVIhabitats, Versie = "Versie 3", Habitattype = "4010")
+#' library(RODBC)
+#' odbcClose(ConnectieLSVIhabitats)
 #'
 #' @export
 #'
@@ -24,25 +28,59 @@
 #'
 #'
 selecteerIndicatoren <- 
-  function(Versie = geefUniekeWaarden("Versie","VersieLSVI"), 
-           Habitatgroep = geefUniekeWaarden("Habitatgroep","Habitatgroepnaam"),  
-           Habitattype = geefUniekeWaarden("Habitattype","Habitatcode"), 
-           Habitatsubtype = geefUniekeWaarden("Habitatsubtype","Habitatcode_subtype"), 
-           Criterium = geefUniekeWaarden("Criterium","Naam"), 
-           Indicator = geefUniekeWaarden("Indicator","Naam"),
+  function(ConnectieLSVIhabitats,
+           Versie = "alle", 
+           Habitatgroep = "alle",  
+           Habitattype = "alle", 
+           Habitatsubtype = "alle", 
+           Criterium = "alle", 
+           Indicator = "alle",
            HabitatnamenToevoegen = FALSE){
-    match.arg(Versie)
-    match.arg(Habitatgroep)
+    
+    assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
+    
+    assert_that(is.string(Versie))
+    if(!(Versie %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Versie","VersieLSVI"))){
+      stop(sprintf("Versie moet een van de volgende waarden zijn: %s", 
+                   geefUniekeWaarden(ConnectieLSVIhabitats,"Versie","VersieLSVI")))
+    }
+    
+    assert_that(is.string(Habitatgroep))
+    if(!(Habitatgroep %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Habitatgroep","Habitatgroepnaam"))){
+      stop(sprintf("Habitatgroep moet een van de volgende waarden zijn: %s", 
+                   geefUniekeWaarden(ConnectieLSVIhabitats,"Habitatgroep","Habitatgroepnaam")))
+    }
+    
     Habitattype <- ifelse(is.numeric(Habitattype),
                           as.character(Habitattype),
                           Habitattype)
-    match.arg(Habitattype)
+    assert_that(is.string(Habitattype))
+    if(!(Habitattype %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Habitattype","Habitatcode"))){
+      stop(sprintf("Habitattype moet een van de volgende waarden zijn: %s", 
+                   geefUniekeWaarden(ConnectieLSVIhabitats,"Habitattype","Habitatcode")))
+    }
+    
     Habitatsubtype <- ifelse(is.numeric(Habitatsubtype),
                           as.character(Habitatsubtype),
-                          Habitattype)
-    match.arg(Habitatsubtype)
-    match.arg(Criterium)
-    match.arg(Indicator)
+                          Habitatsubtype)
+    assert_that(is.string(Habitattype))
+    if(!(Habitatsubtype %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Habitatsubtype","Habitatcode_subtype"))){
+      stop(sprintf("Habitatsubtype moet een van de volgende waarden zijn: %s", 
+                   geefUniekeWaarden(ConnectieLSVIhabitats,"Habitatsubtype","Habitatcode_subtype")))
+    }
+    
+    assert_that(is.string(Criterium))
+    if(!(Criterium %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Criterium","Naam"))){
+      stop(sprintf("Criterium moet een van de volgende waarden zijn: %s", 
+                   geefUniekeWaarden(ConnectieLSVIhabitats,"Criterium","Naam")))
+    }
+    
+    assert_that(is.string(Indicator))
+    if(!(Indicator %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Indicator","Naam"))){
+      stop(sprintf("Indicator moet een van de volgende waarden zijn: %s", 
+                   geefUniekeWaarden(ConnectieLSVIhabitats,"Indicator","Naam")))
+    }
+    
     assert_that(is.logical(HabitatnamenToevoegen))
     
     
@@ -122,9 +160,7 @@ selecteerIndicatoren <-
       query <- sprintf("%s %s Indicator.Naam = '%s'", query, Voegwoord, Indicator)
     }
     
-    connectie <- connecteerMetLSVIdb()
-    Selectiegegevens <- sqlQuery(connectie, query, stringsAsFactors = FALSE)
-    odbcClose(connectie)
+    Selectiegegevens <- sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
     
     return(Selectiegegevens)  
     

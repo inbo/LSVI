@@ -3,10 +3,11 @@ title: "Rapportage LSVI-indicatoren"
 date: "`r Sys.Date()`"
 output: html_document
 params: 
+  ConnectieLSVIhabitats: "dummy"
   Versie: "Versie 3"
   Habitatgroep: "Heiden"
-  Habitattype: "alle"
-  Habitatsubtype: "alle"
+  Habitattype: "4010"
+  Habitatsubtype: "4010"
 ---
 
 ```{r setup, include=FALSE}
@@ -23,7 +24,15 @@ library(knitr)
 
 ```{r gegevens_inladen}
 
-Indicatoren <- selecteerIndicatoren(params$Versie, params$Habitatgroep, 
+if(inherits(params$ConnectieLSVIhabitats, "RODBC")){
+  ConnectieLSVIhabitats <- params$ConnectieLSVIhabitats
+} else {
+  #print("Connectiefout!")
+  ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+}
+
+Indicatoren <- selecteerIndicatoren(ConnectieLSVIhabitats,
+                                    params$Versie, params$Habitatgroep, 
                                     params$Habitattype, params$Habitatsubtype,
                                     HabitatnamenToevoegen = TRUE) %>%
   select_(~Versie, ~Habitatgroepnaam, ~Habitattype, ~Habitatnaam,

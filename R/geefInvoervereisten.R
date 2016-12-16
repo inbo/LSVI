@@ -12,7 +12,11 @@
 #' @return Deze functie geeft een tabel met de hierboven beschreven informatie uit de databank.
 #' 
 #' @examples 
-#' geefInvoervereisten(Versie = "Versie 3", Habitatsubtype = "4010", Kwaliteitsniveau = "1")
+#' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+#' geefInvoervereisten(ConnectieLSVIhabitats, Versie = "Versie 3", 
+#'                     Habitatsubtype = "4010", Kwaliteitsniveau = "1")
+#' library(RODBC)
+#' odbcClose(ConnectieLSVIhabitats)
 #'
 #' @export
 #'
@@ -21,22 +25,31 @@
 #' @importFrom tidyr gather_
 #'
 #'
-geefInvoervereisten <- function(Versie = geefUniekeWaarden("Versie","VersieLSVI"), 
-                                Habitatgroep = geefUniekeWaarden("Habitatgroep","Habitatgroepnaam"),  
-                                Habitattype = geefUniekeWaarden("Habitattype","Habitatcode"), 
-                                Habitatsubtype = geefUniekeWaarden("Habitatsubtype","Habitatcode_subtype"), 
-                                Criterium = geefUniekeWaarden("Criterium","Naam"), 
-                                Indicator = geefUniekeWaarden("Indicator","Naam"),
-                                Kwaliteitsniveau = geefUniekeWaarden("Beoordeling", "Kwaliteitsniveau")){
+geefInvoervereisten <- function(ConnectieLSVIhabitats,
+                                Versie = "alle", 
+                                Habitatgroep = "alle",  
+                                Habitattype = "alle", 
+                                Habitatsubtype = "alle", 
+                                Criterium = "alle", 
+                                Indicator = "alle",
+                                Kwaliteitsniveau = "alle"){
+  
+  assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
   
   Kwaliteitsniveau <- ifelse(Kwaliteitsniveau==1, "1", 
                              ifelse(Kwaliteitsniveau==2, "2", 
                                     Kwaliteitsniveau))
-  match.arg(Kwaliteitsniveau)
+  assert_that(is.string(Kwaliteitsniveau))
+  if(!(Kwaliteitsniveau %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Beoordeling", 
+                                               "Kwaliteitsniveau"))){
+    stop(sprintf("Kwaliteitsniveau moet een van de volgende waarden zijn: %s", 
+                 geefUniekeWaarden(ConnectieLSVIhabitats,"Beoordeling","Kwaliteitsniveau")))
+  }
+  
   
   
   Selectiewaarden <- 
-    selecteerIndicatoren(Versie, Habitatgroep, Habitattype, Habitatsubtype,
+    selecteerIndicatoren(ConnectieLSVIhabitats, Versie, Habitatgroep, Habitattype, Habitatsubtype,
                          Criterium, Indicator) %>%
     select_(~Versie, ~Habitattype, ~Habitatsubtype, ~Indicator_beoordelingID)
   
@@ -46,8 +59,6 @@ geefInvoervereisten <- function(Versie = geefUniekeWaarden("Versie","VersieLSVI"
     ifelse(Kwaliteitsniveau[1] == "alle","",
            sprintf("AND Beoordeling.Kwaliteitsniveau = %s",
                    Kwaliteitsniveau))
-  
-  connectie <- connecteerMetLSVIdb()
   
   query_LSVIinfo <- 
     sprintf("SELECT Indicator_beoordeling.Id AS Indicator_beoordelingID,
@@ -61,7 +72,7 @@ geefInvoervereisten <- function(Versie = geefUniekeWaarden("Versie","VersieLSVI"
             WHERE Indicator_beoordeling.Id in (%s) %s",
             Indicator_beoordelingIDs, query_selecteerKwaliteitsniveau)
   
-  LSVIinfo <- sqlQuery(connectie, query_LSVIinfo, stringsAsFactors = FALSE)  
+  LSVIinfo <- sqlQuery(ConnectieLSVIhabitats, query_LSVIinfo, stringsAsFactors = FALSE)  
   
   BeoordelingIDs <- paste(unique(LSVIinfo$BeoordelingID), collapse = ",")
   
@@ -102,7 +113,7 @@ geefInvoervereisten <- function(Versie = geefUniekeWaarden("Versie","VersieLSVI"
             Select * FROM voorwaardencombinatie",
               BeoordelingIDs)
     
-  Voorwaarden <- sqlQuery(connectie, query_combinerenVoorwaarden, 
+  Voorwaarden <- sqlQuery(ConnectieLSVIhabitats, query_combinerenVoorwaarden, 
                           stringsAsFactors = FALSE) %>%
     select_(~BeoordelingID, ~VoorwaardeID1, ~VoorwaardeID2) %>%
     gather_("MagWeg", "VoorwaardeID", c("VoorwaardeID1", "VoorwaardeID2")) %>%
@@ -127,7 +138,7 @@ geefInvoervereisten <- function(Versie = geefUniekeWaarden("Versie","VersieLSVI"
             ON Voorwaarde.AnalyseVariabeleID = AnalyseVariabele.Id
             WHERE Voorwaarde.Id in (%s)",VoorwaardenIDs)
 
-  Voorwaardeinfo <- sqlQuery(connectie, query_voorwaardeinfo, stringsAsFactors = FALSE) %>%
+  Voorwaardeinfo <- sqlQuery(ConnectieLSVIhabitats, query_voorwaardeinfo, stringsAsFactors = FALSE) %>%
     group_by_(~VoorwaardeID, ~VoorwaardeNaam, ~SoortengroepID, ~SoortengroepNaam,
               ~AnalyseVariabele, ~Vegetatielaag, ~Eenheid, ~TypeVariabele) %>%
     summarise_(
@@ -135,7 +146,6 @@ geefInvoervereisten <- function(Versie = geefUniekeWaarden("Versie","VersieLSVI"
     ) %>%
     ungroup()
   
-  odbcClose(connectie)
   
   Invoervereisten <- Selectiewaarden %>%
     left_join(LSVIinfo, by = c("Indicator_beoordelingID" = "Indicator_beoordelingID")) %>%

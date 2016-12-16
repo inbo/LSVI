@@ -4,11 +4,12 @@
 \alias{berekenLSVIbasis}
 \title{Berekent de LSVI op basis van VoorwaardeID en opgegeven waarden}
 \usage{
-berekenLSVIbasis(Versie = geefUniekeWaarden("Versie", "VersieLSVI"),
-  Kwaliteitsniveau = geefUniekeWaarden("Beoordeling", "Kwaliteitsniveau"),
-  Data_voorwaarden)
+berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "alle",
+  Kwaliteitsniveau = "alle", Data_voorwaarden)
 }
 \arguments{
+\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
+
 \item{Versie}{De versie van het LSVI-rapport op basis waarvan de berekening gemaakt wordt, bv. "Versie 2" of "Versie 3".  Bij de default "alle" wordt de LSVI volgens de verschillende versies berekend.}
 
 \item{Kwaliteitsniveau}{Voor elke versie van de LSVI zijn er een of meerdere kwaliteitsniveaus gedefinieerd in de databank.  Zo is er bij Versie 2.0 een onderscheid gemaakt tussen goede staat (A), voldoende staat (B) en gedegradeerde staat (C).  Hier duidt kwaliteitsniveau 1 de grens tussen voldoende (B) en gedegradeerd (C) aan en kwaliteitsniveau 2 het onderscheid tussen goed (A) en voldoende (B).  Bij Versie 3 duidt kwaliteitsniveau 1 op het onderscheid tussen ongunstig en gunstig en kwaliteitsniveau 2 op de streefwaarde.  De betekenissen van de 2 kwaliteitsniveaus voor de verschillende versies is weergegeven in de tabel Versie in de databank en kan opgevraagd met de functie geefVersieInfo().  Geef als parameter Kwaliteitsniveau op op basis van welk kwaliteitsniveau de berekening gemaakt moet worden (strikt genomen is de berekening van de LSVI de berekening volgens kwaliteitsniveau 1).}
@@ -28,7 +29,11 @@ Data_voorwaarden <-
               Waarde = c("abundant","frequent",35,3,3,1),
               Habitatsubtype = 4010,
               stringsAsFactors = FALSE)
-berekenLSVIbasis(Versie = "Versie 3", Kwaliteitsniveau = "1", Data_voorwaarden)
+ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "Versie 3", 
+                 Kwaliteitsniveau = "1", Data_voorwaarden)
+library(RODBC)
+odbcClose(ConnectieLSVIhabitats)
 
 
 }

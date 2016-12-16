@@ -4,9 +4,11 @@
 \alias{berekenBedekkingSoorten}
 \title{Berekent de totale bedekking van de soorten van een bepaalde soortengroep die in een opname aanwezig is}
 \usage{
-berekenBedekkingSoorten(Data_soorten, Soortengroeplijst)
+berekenBedekkingSoorten(ConnectieLSVIhabitats, Data_soorten, Soortengroeplijst)
 }
 \arguments{
+\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
+
 \item{Data_soorten}{Bedekkingen van de sleutelsoorten in de vorm van een data.frame met velden ID, Soort_NL of Soort_Latijn en Percentage (integer die de bedekking in procent aangeeft). (Eventueel zou hier ook de NBNTaxonVersionKey kunnen gebruikt worden.)}
 
 \item{Soortengroeplijst}{dataframe waarin per niveau aangegeven wordt (tabel Niveau met een int die het niveau aangeeft) welke soortengroepen geselecteerd moeten worden (tabel SoortengroepIDs met een string waarin de ID's na mekaar weergegeven worden, gescheiden door een komma)}
@@ -26,7 +28,10 @@ Schaalomzetting <-
 Data_soorten <- merge(Data_soorten, Schaalomzetting, 
                       by.x = "Bedekking", by.y = "Schaal_opname")
 Soortengroeplijst <- "369,143"
-berekenBedekkingSoorten(Data_soorten, Soortengroeplijst)
+ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+berekenBedekkingSoorten(ConnectieLSVIhabitats, Data_soorten, Soortengroeplijst)
+library(RODBC)
+odbcClose(ConnectieLSVIhabitats)
 
 }
 

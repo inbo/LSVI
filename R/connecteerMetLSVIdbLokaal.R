@@ -8,9 +8,9 @@
 #' 
 #' @examples 
 #' library(RODBC)
-#' connectie <- connecteerMetLSVIdb()
-#' sqlQuery(connectie, "SELECT VersieLSVI, Referentie FROM Versie")
-#' odbcClose(connectie)
+#' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+#' sqlQuery(ConnectieLSVIhabitats, "SELECT VersieLSVI, Referentie FROM Versie")
+#' odbcClose(ConnectieLSVIhabitats)
 #'
 #' @export
 #'

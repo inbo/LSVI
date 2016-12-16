@@ -2,6 +2,7 @@
 #'
 #' @description Deze functie bepaalt de Lokale Staat van Instandhouding op basis van een opgegeven tabel met VoorwaardeID en een opgegeven waarde, die in het juiste formaat moet zijn.  Zie voor meer informatie hierover onder Data_voorwaarden.
 #'
+#' @inheritParams selecteerIndicatoren
 #' @param Versie De versie van het LSVI-rapport op basis waarvan de berekening gemaakt wordt, bv. "Versie 2" of "Versie 3".  Bij de default "alle" wordt de LSVI volgens de verschillende versies berekend.
 #' @param Kwaliteitsniveau Voor elke versie van de LSVI zijn er een of meerdere kwaliteitsniveaus gedefinieerd in de databank.  Zo is er bij Versie 2.0 een onderscheid gemaakt tussen goede staat (A), voldoende staat (B) en gedegradeerde staat (C).  Hier duidt kwaliteitsniveau 1 de grens tussen voldoende (B) en gedegradeerd (C) aan en kwaliteitsniveau 2 het onderscheid tussen goed (A) en voldoende (B).  Bij Versie 3 duidt kwaliteitsniveau 1 op het onderscheid tussen ongunstig en gunstig en kwaliteitsniveau 2 op de streefwaarde.  De betekenissen van de 2 kwaliteitsniveaus voor de verschillende versies is weergegeven in de tabel Versie in de databank en kan opgevraagd met de functie geefVersieInfo().  Geef als parameter Kwaliteitsniveau op op basis van welk kwaliteitsniveau de berekening gemaakt moet worden (strikt genomen is de berekening van de LSVI de berekening volgens kwaliteitsniveau 1).
 #' @param Data_voorwaarden Gegevens over de opgemeten indicatoren in de vorm van een data.frame met velden ID, Habitatsubtype, VoorwaardeID en Waarde, waarbij ID een groeperende variabele is voor een opname (plaats en tijdstip).  Habitatsubtype moet overeenkomen met de naamgeving in de LSVI-databank (op te zoeken door geefUniekeWaarden("Habitatsubtype", "Habitatcode_subtype")).  VoorwaardeID komt overeen met de ID in de databank die gekoppeld is aan de voorwaarde (= deelitem binnen beoordeling) en Waarde is de waarde die voor die voorwaarde geobserveerd of gemeten is.  Het type van deze waarde moet overeenkomen met het type dat verwacht wordt volgens de LSVI (geheel getal als een aantal (soorten) verwacht wordt, decimaal getal tussen 0 en 100 als een percentage verwacht wordt, een van de mogelijke categorieen bij een categorische variabele,...).  Ook is het belangrijk dat de opgegeven VoorwaardeID's uit de databank voorwaarden zijn die voor de opgegeven versie, het opgegeven habitatsubtype en kwaliteitsniveau.  De informatie die nodig is om observaties te koppelen aan de VoorwaardeID's en de noodzakelijke info samen te brengen, kan opgevraagd worden met de functie geefInvoervereisten().
@@ -16,7 +17,11 @@
 #'               Waarde = c("abundant","frequent",35,3,3,1),
 #'               Habitatsubtype = 4010,
 #'               stringsAsFactors = FALSE)
-#' berekenLSVIbasis(Versie = "Versie 3", Kwaliteitsniveau = "1", Data_voorwaarden)
+#' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+#' berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "Versie 3", 
+#'                  Kwaliteitsniveau = "1", Data_voorwaarden)
+#' library(RODBC)
+#' odbcClose(ConnectieLSVIhabitats)
 #' 
 #'
 #' @export
@@ -28,20 +33,35 @@
 #'
 #'
 berekenLSVIbasis <- 
-  function(Versie = geefUniekeWaarden("Versie","VersieLSVI"),
-           Kwaliteitsniveau = geefUniekeWaarden("Beoordeling", "Kwaliteitsniveau"),
+  function(ConnectieLSVIhabitats,
+           Versie = "alle",
+           Kwaliteitsniveau = "alle",
            Data_voorwaarden){
     
-    #controle invoer
-    match.arg(Versie)
+    #controle invoer    
+    assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
+    
+    assert_that(is.string(Versie))
+    if(!(Versie %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Versie","VersieLSVI"))){
+      stop(sprintf("Versie moet een van de volgende waarden zijn: %s", 
+                   geefUniekeWaarden(ConnectieLSVIhabitats,"Versie","VersieLSVI")))
+    }
+    
     Kwaliteitsniveau <- ifelse(Kwaliteitsniveau==1, "1", 
                                ifelse(Kwaliteitsniveau==2, "2", 
                                       Kwaliteitsniveau))
-    match.arg(Kwaliteitsniveau)
+    assert_that(is.string(Kwaliteitsniveau))
+    if(!(Kwaliteitsniveau %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Beoordeling", 
+                                                        "Kwaliteitsniveau"))){
+      stop(sprintf("Kwaliteitsniveau moet een van de volgende waarden zijn: %s", 
+                   geefUniekeWaarden(ConnectieLSVIhabitats,"Beoordeling","Kwaliteitsniveau")))
+    }
+    
     assert_that(inherits(Data_voorwaarden, "data.frame"))
     assert_that(has_name(Data_voorwaarden, "ID"))
     assert_that(has_name(Data_voorwaarden, "VoorwaardeID"))
-    if(!all(Data_voorwaarden$VoorwaardeID %in% geefUniekeWaarden("Voorwaarde", "Id"))){
+    if(!all(Data_voorwaarden$VoorwaardeID %in% 
+            geefUniekeWaarden(ConnectieLSVIhabitats,"Voorwaarde", "Id"))){
       stop("Niet alle waarden vermeld onder Data_voorwaarden$VoorwaardeID komen overeen met waarden vermeld in de databank.")
     }
     assert_that(has_name(Data_voorwaarden, "Waarde"))
@@ -80,9 +100,7 @@ berekenLSVIbasis <-
       INNER JOIN Versie ON Indicator_habitat.VersieID = Versie.Id %s",
       Voorwaarden)
     
-    connectie <- connecteerMetLSVIdb()
-    GroeperendeInfo <- sqlQuery(connectie, query, stringsAsFactors = FALSE)
-    odbcClose(connectie)
+    GroeperendeInfo <- sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
     
     BeoordelingIDs <- paste(unique(GroeperendeInfo$BeoordelingID), collapse = ",")
     
@@ -126,9 +144,7 @@ berekenLSVIbasis <-
               Select * FROM voorwaardencombinatie",
               BeoordelingIDs)
     
-    connectie <- connecteerMetLSVIdb()
-    CombinatieVoorwaarden <- sqlQuery(connectie, query, stringsAsFactors = FALSE)
-    odbcClose(connectie)
+    CombinatieVoorwaarden <- sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
     
     
     VoorwaardeIDs <- 
@@ -161,9 +177,7 @@ berekenLSVIbasis <-
               VoorwaardeIDs)
     
     
-    connectie <- connecteerMetLSVIdb()
-    Voorwaarden <- sqlQuery(connectie, query, stringsAsFactors = FALSE)
-    odbcClose(connectie)
+    Voorwaarden <- sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
     
     #data koppelen aan voorwaarden uit de databank en dan 'berekeningen' (vgl met referentiewaarde) doen
     Data_voorwaarden <- Data_voorwaarden %>%

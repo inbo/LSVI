@@ -3,6 +3,7 @@
 #' @description Deze hulpfunctie controleert of de ingevoerde opname geen fouten bevat en koppelt ze meteen aan de opgegeven soortenlijst.  Ze controleert of veld ID en een veld met een soortenlijst (soort_Latijn of soort_NL) aanwezig is, en controleert voor de soortenlijst of de namen wel bestaan (conform zijn met de LSVI-databank).  Problemen hiermee geven een error.  Verder controleert ze of alle soorten uit de opgegeven soortengroep(en) in de opname aanwezig zijn en ze geeft een warning als dit niet zo is.
 #'
 #' 
+#' @inheritParams selecteerIndicatoren
 #' @param  Data_soorten Bedekkingen van de sleutelsoorten in de vorm van een data.frame met velden ID en Soort_NL of Soort_Latijn.  Eventueel andere velden worden gewoon teruggegeven bij de uitvoer. (Eventueel zou hier ook de NBNTaxonVersionKey kunnen gebruikt worden.)
 #' @inheritParams geefSoortenlijstSoortniveau
 #' 
@@ -14,11 +15,15 @@
 #'
 #' @importFrom assertthat assert_that has_name
 #' @importFrom dplyr %>% inner_join anti_join summarise_ select_
+#' @importFrom RODBC sqlQuery
 #'
 #'
 selecteerSoortenInOpname <- 
-  function(Data_soorten, 
+  function(ConnectieLSVIhabitats,
+           Data_soorten, 
            Soortengroeplijst){
+    
+    assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
     assert_that(inherits(Data_soorten, "data.frame"))
     assert_that(has_name(Data_soorten, "ID"))
     assert_that(has_name(Data_soorten, "Soort_NL") | has_name(Data_soorten, "Soort_Latijn"))
@@ -28,26 +33,27 @@ selecteerSoortenInOpname <-
           FROM Soortengroep INNER JOIN Soortengroeptype 
           ON Soortengroep.SoortengroeptypeID = Soortengroeptype.Id
           WHERE Soortengroeptype.Omschrijving <> 'Conceptueel'"
-    connectie <- connecteerMetLSVIdb()
-    Soortengroepenlijst <- sqlQuery(connectie, query, stringsAsFactors = FALSE)
-    odbcClose(connectie)
+
+    Soortengroepenlijst <- sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
+
     Soortenlijst_Latijn <- 
       c(
         gsub(
           pattern = "^([[:alpha:]]*) ([[:alpha:]]*) (.*)",
           replacement = "\\1 \\2",
-          x = geefUniekeWaarden("Soort", "WetNaam")
+          x = geefUniekeWaarden(ConnectieLSVIhabitats, "Soort", "WetNaam")
         ),
         Soortengroepenlijst$WetNaam
       )
     Soortenlijst_NL <-
-      c(geefUniekeWaarden("Soort", "NedNaam"),
+      c(geefUniekeWaarden(ConnectieLSVIhabitats, "Soort", "NedNaam"),
         Soortengroepenlijst$WetNaam)
       
     
     #de soorten van het eerste niveau uit de soortengroep ophalen
     Soortengroep <- 
-      geefSoortenlijstInvoerniveau(data.frame(Niveau = 1,
+      geefSoortenlijstInvoerniveau(ConnectieLSVIhabitats,
+                                   data.frame(Niveau = 1,
                                               SoortengroepIDs = Soortengroeplijst,
                                               stringsAsFactors = FALSE)) %>%
       select_(
@@ -77,7 +83,8 @@ selecteerSoortenInOpname <-
             Subsoorten <- OntbrekendeSoorten %>%
               filter_(~!is.na(SoortensubgroepID))%>%
               summarise_(SoortensubgroepIDs = ~ paste(SoortensubgroepID, collapse=","))
-            Subsoortengroep <- geefSoortenlijstSoortniveau(Subsoorten$SoortensubgroepIDs) %>%
+            Subsoortengroep <- geefSoortenlijstSoortniveau(ConnectieLSVIhabitats,
+                                                           Subsoorten$SoortensubgroepIDs) %>%
               mutate_(
                 WetNaam = ~ NULL,
                 SoortensubgroepID = ~ SoortengroepID,
@@ -118,7 +125,8 @@ selecteerSoortenInOpname <-
             Subsoorten <- OntbrekendeSoorten %>%
               filter_(~!is.na(SoortensubgroepID))%>%
               summarise_(SoortensubgroepIDs = ~ paste(SoortensubgroepID, collapse=","))
-            Subsoortengroep <- geefSoortenlijstSoortniveau(Subsoorten$SoortensubgroepIDs) %>%
+            Subsoortengroep <- geefSoortenlijstSoortniveau(ConnectieLSVIhabitats,
+                                                           Subsoorten$SoortensubgroepIDs) %>%
               mutate_(
                 WetNaam = ~ NULL,
                 SoortensubgroepID = ~ SoortengroepID,

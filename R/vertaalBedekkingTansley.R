@@ -9,7 +9,10 @@
 #' @return Vector met de Tansley-waarden van de ingevoerde percentages
 #' 
 #' @examples 
+#' \dontrun{
 #' vertaalBedekkingTansley(c(2.5, 10, 30))
+#' }
+#' 
 #' 
 #' @export
 #' 

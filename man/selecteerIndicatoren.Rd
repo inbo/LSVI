@@ -4,15 +4,13 @@
 \alias{selecteerIndicatoren}
 \title{Selecteert indicatoren LSVI op basis van de opgegeven parameters}
 \usage{
-selecteerIndicatoren(Versie = geefUniekeWaarden("Versie", "VersieLSVI"),
-  Habitatgroep = geefUniekeWaarden("Habitatgroep", "Habitatgroepnaam"),
-  Habitattype = geefUniekeWaarden("Habitattype", "Habitatcode"),
-  Habitatsubtype = geefUniekeWaarden("Habitatsubtype", "Habitatcode_subtype"),
-  Criterium = geefUniekeWaarden("Criterium", "Naam"),
-  Indicator = geefUniekeWaarden("Indicator", "Naam"),
-  HabitatnamenToevoegen = FALSE)
+selecteerIndicatoren(ConnectieLSVIhabitats, Versie = "alle",
+  Habitatgroep = "alle", Habitattype = "alle", Habitatsubtype = "alle",
+  Criterium = "alle", Indicator = "alle", HabitatnamenToevoegen = FALSE)
 }
 \arguments{
+\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
+
 \item{Versie}{De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".  Bij de default "alle" worden de gegevens voor de verschillende versies gegeven.}
 
 \item{Habitatgroep}{Parameter waarmee alle habitats van een bepaalde habitatgroep kunnen geselecteerd worden, bv. "Bossen", "Heiden", "(Half-)natuurlijke graslanden", "Zoete wateren",...   en "alle" (=default).  Deze waarde moet niet gespecifieerd worden als een bepaald habitat(sub)type geselecteerd wordt.}
@@ -36,7 +34,10 @@ Deze hulpfunctie selecteert de indicatoren die gebruikt worden voor de bepaling 
 De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten als string opgegeven worden.  Default is telkens 'alle', waarbij de soortenlijsten voor alle mogelijke waarden van die parameter weergegeven worden (m.a.w. er is geen selectie voor deze parameter).
 }
 \examples{
-selecteerIndicatoren(Versie = "Versie 3", Habitattype = "4010")
+ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+selecteerIndicatoren(ConnectieLSVIhabitats, Versie = "Versie 3", Habitattype = "4010")
+library(RODBC)
+odbcClose(ConnectieLSVIhabitats)
 
 }
 

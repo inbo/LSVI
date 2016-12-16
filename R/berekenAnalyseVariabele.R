@@ -9,7 +9,7 @@
 #' 
 #' De berekening van andere analysevariabelen uit de databank ('grootte_grootste_vegetatievlek', 'aantal_aanwezig_kruidlaag' en 'bedekking_grondvlak') is sterk afhankelijk van de verzamelde gegevens en wordt daarom niet in een generieke functie gestoken.  Ze gebeurt voor elk van de verzamelde gegevens in de specifieke functie die op maat van de gegevens geschreven is.
 #'
-#' 
+#' @inheritParams selecteerIndicatoren
 #' @param AnalyseVariabele Zie description voor voorbeelden.  
 #' @param  Data_soorten Bedekkingen van de sleutelsoorten in de vorm van een data.frame met velden ID, Soort_NL of Soort_Latijn en Percentage (bedekking in procent) of Tansley (bedekking in Tansley-schaal), afhankelijk van het type AnalyseVariabele.  Voor een analysevariabele startend met 'aantal' moet Data_soorten het veld Tansley bevatten (en bij voorkeur ook Percentage als een soortenlijst gegeven wordt die voor de LSVI-berekening gegroepeerd moet worden tot een hoger niveau, bv. Genusniveau), voor een analysevariabele startend met 'bedekking' het veld Bedekking.
 #' @inheritParams geefSoortenlijstSoortniveau
@@ -20,28 +20,41 @@
 #' @examples 
 #' library(readr)
 #' Data_soorten <- 
-#'     read_csv2(system.file("vbdata/opname_4010_gelayout_soorten.csv", package = "LSVI"))
+#'     read_csv2(system.file("vbdata/opname_4010_gelayout_soorten.csv", 
+#'               package = "LSVI"))
 #' Schaalomzetting <-
-#'     read_csv2(system.file("schaaltabellen/Schaalomzetting_ToonS.csv", package = "LSVI"))
+#'     read_csv2(system.file("schaaltabellen/Schaalomzetting_ToonS.csv", 
+#'               package = "LSVI"))
 #' Data_soorten <- merge(Data_soorten, Schaalomzetting, 
 #'                       by.x = "Bedekking", by.y = "Schaal_opname")
 #'                       
-#' berekenAnalyseVariabele("aantal_aanwezig", Data_soorten, "369,143")
-#' berekenAnalyseVariabele("aantal_frequent_aanwezig", Data_soorten, "369,143")
-#' berekenAnalyseVariabele("bedekking_vegetatie", Data_soorten, "369,143")
-#' berekenAnalyseVariabele("bedekking_vegetatie_Tansley", Data_soorten, "369,143")
+#' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+#' berekenAnalyseVariabele(ConnectieLSVIhabitats, "aantal_aanwezig", 
+#'                         Data_soorten, "369,143")
+#' berekenAnalyseVariabele(ConnectieLSVIhabitats, "aantal_frequent_aanwezig", 
+#'                         Data_soorten, "369,143")
+#' berekenAnalyseVariabele(ConnectieLSVIhabitats, "bedekking_vegetatie", 
+#'                         Data_soorten, "369,143")
+#' berekenAnalyseVariabele(ConnectieLSVIhabitats, "bedekking_vegetatie_Tansley", 
+#'                         Data_soorten, "369,143")
+#' library(RODBC)
+#' odbcClose(ConnectieLSVIhabitats)
 #'
 #' @export   
 #'
 #' @importFrom readr read_csv2 read_csv
 #' @importFrom assertthat assert_that
 #' @importFrom dplyr %>% filter_
+#' @importFrom RODBC odbcClose
 #'
 #'
 berekenAnalyseVariabele <- 
-  function(AnalyseVariabele,
+  function(ConnectieLSVIhabitats,
+           AnalyseVariabele,
            Data_soorten, 
            Soortengroeplijst){
+    
+    assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
     assert_that(is.string(AnalyseVariabele))
     AnalyseVariabele <- tolower(AnalyseVariabele)
     Tansley <- read_csv(system.file("schaaltabellen/Tansley.csv", package = "LSVI")) 
@@ -69,9 +82,12 @@ berekenAnalyseVariabele <-
           x = AnalyseVariabele
         )
       }
-      Resultaat <- berekenAantalSoorten(Data_soorten, Soortengroeplijst, Minimumniveau)
+      Resultaat <- 
+        berekenAantalSoorten(ConnectieLSVIhabitats, Data_soorten, Soortengroeplijst, 
+                             Minimumniveau)
     } else {
-      Resultaat <- berekenBedekkingSoorten(Data_soorten, Soortengroeplijst)
+      Resultaat <- 
+        berekenBedekkingSoorten(ConnectieLSVIhabitats, Data_soorten, Soortengroeplijst)
       if(grepl("tansley",AnalyseVariabele)){
         Resultaat$Tansley <- vertaalBedekkingTansley(Resultaat$Waarde)
       }

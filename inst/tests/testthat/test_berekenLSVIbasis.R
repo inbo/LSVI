@@ -3,8 +3,9 @@ context("test berekenLSVIbasis")
 library(readr)
 library(dplyr)
 
+
 Schaalomzetting <- read_csv2(system.file("schaaltabellen/Schaalomzetting_ToonS.csv", package = "LSVI"))
-Aantal_soorten_frequent <- 
+Aantal_soorten_frequent <-
       data.frame(ID = c("Jo1380", "Jo1380", "WT0173", "WT0173", "WT0174", "WT0174"),
        VoorwaardeID = c(2, 1, 2, 1, 2, 1),
        Waarde = c("3","1","0","0","1","0"),
@@ -34,191 +35,214 @@ Resultaat_kwal1 <- list(Resultaat[[1]] %>% filter_(~Kwaliteitsniveau == 1),
                           Resultaat[[2]] %>% filter_(~Kwaliteitsniveau == 1),
                           Resultaat[[3]] %>% filter_(~Kwaliteitsniveau == 1))
 
+test_that("ConnectieLSVIhabitats is een open RODBC-connectie", {
+  expect_error(berekenLSVIbasis(ConnectieLSVIhabitats = "geenConnectie", Versie = "alle",
+                                Kwaliteitsniveau = "alle",
+                                Data_voorwaarden),
+               "ConnectieLSVIhabitats does not inherit from class RODBC")
+  ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+  expect_equal(berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "alle",
+                                Kwaliteitsniveau = "alle",
+                                Data_voorwaarden), 
+               Resultaat)
+  library(RODBC)
+  odbcClose(ConnectieLSVIhabitats)
+})
 
-#onderstaande is gekopieerd en moet nog aangepast worden aan de te testen functie!!!
 
 test_that("parameter versie heeft correct formaat", {
-  expect_equal(berekenLSVIbasis(Versie = "alle",
-                           Kwaliteitsniveau = "alle",
-                           Data_voorwaarden),
+  ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+  expect_equal(berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "alle",
+                                Kwaliteitsniveau = "alle",
+                                Data_voorwaarden), 
                Resultaat)
-  expect_equal(berekenLSVIbasis(Versie = "Versie 3",
+  expect_equal(berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "Versie 3",
                            Kwaliteitsniveau = "alle",
                            Data_voorwaarden),
                Resultaat_versie3)
-  expect_error(berekenLSVIbasis(Versie = 2,
+  expect_error(berekenLSVIbasis(ConnectieLSVIhabitats, Versie = 2,
                            Kwaliteitsniveau = "alle",
                            Data_voorwaarden),
-               "Error in match.arg\\(Versie\\) : 'arg' must be NULL or a character vector\n")
+               "Versie is not a string")
+  library(RODBC)
+  odbcClose(ConnectieLSVIhabitats)
 })
- 
+
 test_that("parameter kwaliteitsniveau heeft correct formaat", {
-  expect_equal(berekenLSVIbasis(Versie = "alle",
+  ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+  expect_equal(berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "alle",
                            Kwaliteitsniveau = "1",
                            Data_voorwaarden),
                Resultaat_kwal1)
-  expect_equal(berekenLSVIbasis(Versie = "alle",
+  expect_equal(berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "alle",
                            Kwaliteitsniveau = 1,
                            Data_voorwaarden),
                Resultaat_kwal1)
-  expect_error(berekenLSVIbasis(Versie = "alle",
+  expect_error(berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "alle",
                            Kwaliteitsniveau = "streefwaarde",
                            Data_voorwaarden),
-               "Error in match.arg\\(Kwaliteitsniveau\\) : \n  'arg' should be one of *")
+               "Kwaliteitsniveau moet een van de volgende waarden zijn")
+  library(RODBC)
+  odbcClose(ConnectieLSVIhabitats)
 })
 
 test_that("dataframe Data_voorwaarden heeft correct formaat", {
-  expect_equal(berekenLSVIbasis(Versie = "alle",
+  ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+  expect_equal(berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "alle",
                            Kwaliteitsniveau = "alle",
                            Data_voorwaarden),
                Resultaat)
-  expect_error(berekenLSVIbasis(Versie = "alle",
+  expect_error(berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "alle",
                                 Kwaliteitsniveau = "alle",
                                 Data_voorwaarden %>%
                                   mutate_(
                                     Waarde = ~ifelse(Waarde == 1, "één", Waarde)
                                   )),
                "Foute invoer in Data_voorwaarden\\$Waarde: geen getal ingevoerd waar een getal verwacht wordt")
-  expect_error(berekenLSVIbasis(Versie = "alle",
+  expect_error(berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "alle",
                                 Kwaliteitsniveau = "alle",
                                 Data_voorwaarden %>%
                                   mutate_(
                                     Waarde = ~ifelse(Waarde == "1", "-1", Waarde)
                                   )),
                "Foute invoer in Data_voorwaarden\\$Waarde: een negatief getal ingevoerd")
-  expect_error(berekenLSVIbasis(Versie = "alle",
+  expect_error(berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "alle",
                                 Kwaliteitsniveau = "alle",
                                 Data_voorwaarden %>%
                                   mutate_(
-                                    Waarde = ~ifelse(Waarde == "1", "11.2", Waarde)  
+                                    Waarde = ~ifelse(Waarde == "1", "11.2", Waarde)
                                   )),
                "Foute invoer in Data_voorwaarden\\$Waarde: een kommagetal ingevoerd waar een geheel getal verwacht wordt")
-  expect_equal(berekenLSVIbasis(Versie = "alle",
+  expect_equal(berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "alle",
                                 Kwaliteitsniveau = "alle",
                                 Data_voorwaarden %>%
                                   mutate_(
-                                    Waarde = ~ifelse(Waarde == "1", NA, Waarde)  
+                                    Waarde = ~ifelse(Waarde == "1", NA, Waarde)
                                   )),
                list(Resultaat[[1]] %>%
                       mutate_(
-                        Beoordeling_criterium = 
-                          ~ifelse(Criterium == "Vegetatie" & (ID %in% c("Jo1380", "WT0174")), 
+                        Beoordeling_criterium =
+                          ~ifelse(Criterium == "Vegetatie" & (ID %in% c("Jo1380", "WT0174")),
                                   NA, Beoordeling_criterium)
-                      ), 
+                      ),
                     Resultaat[[2]] %>%
                       mutate_(
-                        Beoordeling_indicator = 
-                          ~ifelse(Criterium == "Vegetatie" & (ID %in% c("Jo1380", "WT0174")), 
+                        Beoordeling_indicator =
+                          ~ifelse(Criterium == "Vegetatie" & (ID %in% c("Jo1380", "WT0174")),
                                   NA, Beoordeling_indicator)
-                      ), 
+                      ),
                     Resultaat[[3]] %>%
                       mutate_(
                         Waarde = ~ifelse(Waarde == "1", NA, Waarde),
                         Status = ~ifelse(Waarde == "1", NA, Status),
-                        Beoordeling_indicator = 
-                          ~ifelse(Criterium == "Vegetatie" & (ID %in% c("Jo1380", "WT0174")), 
+                        Beoordeling_indicator =
+                          ~ifelse(Criterium == "Vegetatie" & (ID %in% c("Jo1380", "WT0174")),
                                   NA, Beoordeling_indicator)
                       )))
-  expect_error(berekenLSVIbasis(Versie = "alle",
+  expect_error(berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "alle",
                                 Kwaliteitsniveau = "alle",
                                 Data_voorwaarden %>%
                                   mutate_(
                                     Waarde = ~ifelse(Waarde == 75, "zeven", Waarde)
                                   )),
                "Foute invoer in Data_voorwaarden\\$Waarde: geen getal ingevoerd waar een getal verwacht wordt")
-  expect_error(berekenLSVIbasis(Versie = "alle",
+  expect_error(berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "alle",
                                 Kwaliteitsniveau = "alle",
                                 Data_voorwaarden %>%
                                   mutate_(
-                                    Waarde = ~ifelse(Waarde == 75, -75, Waarde)  
+                                    Waarde = ~ifelse(Waarde == 75, -75, Waarde)
                                   )),
                "Foute invoer in Data_voorwaarden\\$Waarde: een negatief getal ingevoerd")
-  expect_error(berekenLSVIbasis(Versie = "alle",
+  expect_error(berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "alle",
                                 Kwaliteitsniveau = "alle",
                                 Data_voorwaarden %>%
                                   mutate_(
-                                    Waarde = ~ifelse(Waarde == 75, 175, Waarde) 
+                                    Waarde = ~ifelse(Waarde == 75, 175, Waarde)
                                   )),
                "Foute invoer in Data_voorwaarden\\$Waarde: een getal > 100 ingevoerd waar een percentage verwacht wordt")
-  expect_equal(berekenLSVIbasis(Versie = "alle",
+  expect_equal(berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "alle",
                                 Kwaliteitsniveau = "alle",
                                 Data_voorwaarden %>%
                                   mutate_(
-                                    Waarde = ~ifelse(Waarde == 75, NA, Waarde)  
+                                    Waarde = ~ifelse(Waarde == 75, NA, Waarde)
                                   )),
                list(Resultaat[[1]] %>%
                       mutate_(
-                        Beoordeling_criterium = 
-                          ~ifelse(Criterium == "Verstoring" & (ID %in% c("WT0173")), 
+                        Beoordeling_criterium =
+                          ~ifelse(Criterium == "Verstoring" & (ID %in% c("WT0173")),
                                   NA, Beoordeling_criterium)
-                      ), 
+                      ),
                     Resultaat[[2]] %>%
                       mutate_(
-                        Beoordeling_indicator = 
-                          ~ifelse(Indicator == "vergrassing" & (ID %in% c("WT0173")), 
+                        Beoordeling_indicator =
+                          ~ifelse(Indicator == "vergrassing" & (ID %in% c("WT0173")),
                                   NA, Beoordeling_indicator)
-                      ), 
+                      ),
                     Resultaat[[3]] %>%
                       mutate_(
                         Waarde = ~ifelse(Waarde == 75, NA, Waarde),
                         Status = ~ifelse(Waarde == 75, NA, Status),
-                        Beoordeling_indicator = 
-                          ~ifelse(Indicator == "vergrassing" & (ID %in% c("WT0173")), 
+                        Beoordeling_indicator =
+                          ~ifelse(Indicator == "vergrassing" & (ID %in% c("WT0173")),
                                   NA, Beoordeling_indicator)
                       )))
-  expect_error(berekenLSVIbasis(Versie = "alle",
+  expect_error(berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "alle",
                                 Kwaliteitsniveau = "alle",
                                 Data_voorwaarden %>%
                                   mutate_(
                                     Waarde = ~ifelse(Waarde == "zeldzaam",
-                                                     "foute invoer", Waarde) 
+                                                     "foute invoer", Waarde)
                                   )),
                "Foute invoer in Data_voorwaarden\\$Waarde: niet alle categorische waarden komen overeen met het invoermasker uit de databank")
-  expect_error(berekenLSVIbasis(Versie = "alle",
+  expect_error(berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "alle",
                                 Kwaliteitsniveau = "alle",
                                 Data_voorwaarden %>%
                                   mutate_(
-                                    Waarde = ~ifelse(Waarde == "zeldzaam", 2, Waarde)  
+                                    Waarde = ~ifelse(Waarde == "zeldzaam", 2, Waarde)
                                   )),
                "Foute invoer in Data_voorwaarden\\$Waarde: niet alle categorische waarden komen overeen met het invoermasker uit de databank")
-  expect_equal(berekenLSVIbasis(Versie = "alle",
+  expect_equal(berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "alle",
                                 Kwaliteitsniveau = "alle",
                                 Data_voorwaarden %>%
                                   mutate_(
-                                    Waarde = ~ifelse(Waarde == "zeldzaam", "ZELDZAAM", Waarde)  
+                                    Waarde = ~ifelse(Waarde == "zeldzaam", "ZELDZAAM", Waarde)
                                   )),
-               list(Resultaat[[1]], Resultaat[[2]], 
+               list(Resultaat[[1]], Resultaat[[2]],
                     Resultaat[[3]] %>%
                       mutate_(
-                        Waarde = ~ifelse(Waarde == "zeldzaam", "ZELDZAAM", Waarde)  
+                        Waarde = ~ifelse(Waarde == "zeldzaam", "ZELDZAAM", Waarde)
                       )))
-  expect_equal(berekenLSVIbasis(Versie = "alle",
+  expect_equal(berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "alle",
                                 Kwaliteitsniveau = "alle",
                                 Data_voorwaarden %>%
                                   mutate_(
-                                    Waarde = ~ifelse(Waarde == "zeldzaam", NA, Waarde)  
+                                    Waarde = ~ifelse(Waarde == "zeldzaam", NA, Waarde)
                                   )),
                list(Resultaat[[1]] %>%
                       mutate_(
-                        Beoordeling_criterium = 
-                          ~ifelse(Criterium == "Structuur" & (ID %in% c("WT0173")), 
+                        Beoordeling_criterium =
+                          ~ifelse(Criterium == "Structuur" & (ID %in% c("WT0173")),
                                   NA, Beoordeling_criterium)
-                      ), 
+                      ),
                     Resultaat[[2]] %>%
                       mutate_(
-                        Beoordeling_indicator = 
-                          ~ifelse(Indicator == "veenmoslaag" & (ID %in% c("WT0173")), 
+                        Beoordeling_indicator =
+                          ~ifelse(Indicator == "veenmoslaag" & (ID %in% c("WT0173")),
                                   NA, Beoordeling_indicator)
-                      ), 
+                      ),
                     Resultaat[[3]] %>%
                       mutate_(
                         Waarde = ~ifelse(Waarde == "zeldzaam", NA, Waarde),
                         Status = ~ifelse(Waarde == "zeldzaam", NA, Status),
-                        Beoordeling_indicator = 
-                          ~ifelse(Indicator == "veenmoslaag" & (ID %in% c("WT0173")), 
+                        Beoordeling_indicator =
+                          ~ifelse(Indicator == "veenmoslaag" & (ID %in% c("WT0173")),
                                   NA, Beoordeling_indicator)
                       )))
+  library(RODBC)
+  odbcClose(ConnectieLSVIhabitats)
 })
 
 #werking childID nog testen!
+
+
 

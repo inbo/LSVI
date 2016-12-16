@@ -2,7 +2,7 @@
 #'
 #' @description Deze hulpfunctie bepaalt het aantal soorten van een bepaalde soortengroep dat aanwezig is in een bepaalde opname.  Alternatief kunnen ook het aantal soorten bepaald worden dat minstens frequent of abundant aanwezig is, of elke andere mogelijke categorie uit de Tansley-schaal (aan te geven in parameter Minimumniveau).  Omdat het een technische hulpfunctie is, wordt hier gebruik gemaakt van ID's uit de databank.  Beter is om gebruik te maken van de generieke functie berekenAnalyseVariabele die meer mogelijkheden heeft  voor het selecteren van de soortengroep.
 #'
-#' 
+#' @inheritParams selecteerIndicatoren
 #' @param  Data_soorten Bedekkingen van de sleutelsoorten in de vorm van een data.frame met velden ID, Soort_NL of Soort_Latijn en Tansley (bedekking in Tansley-schaal).  Als een soortenlijst gegeven wordt die mogelijk voor de berekening van de LSVI gegroepeerd moet worden tot een hoger taxonomisch of morfologisch niveau, wordt best ook Percentage (bedekking in procent) gegeven.  Als dit niet gegeven wordt, zal deze groepering gebeuren op basis van de klassemiddens van de Tansley-schaal.
 #' @inheritParams geefSoortenlijstInvoerniveau
 #' @param Minimumniveau Minimum bedekking voor een soort om meegeteld te worden.  Standaard worden alle aanwezige soorten meegeteld, maar er kan bv. ook gekozen worden om enkel soorten te tellen die ze minstens frequent of abundant aanwezig zijn.  De waarde 'afwezig' telt enkel de afwezige soorten.
@@ -19,21 +19,28 @@
 #' Data_soorten <- merge(Data_soorten, Schaalomzetting, 
 #'                       by.x = "Bedekking", by.y = "Schaal_opname")
 #' Soortengroeplijst <- "369,143"
-#' berekenAantalSoorten(Data_soorten, Soortengroeplijst)
-#' berekenAantalSoorten(Data_soorten, Soortengroeplijst, Minimumniveau = "Frequent")
+#' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+#' berekenAantalSoorten(ConnectieLSVIhabitats, Data_soorten, Soortengroeplijst)
+#' berekenAantalSoorten(ConnectieLSVIhabitats, Data_soorten, Soortengroeplijst, 
+#'                      Minimumniveau = "Frequent")
+#' library(RODBC)
+#' odbcClose(ConnectieLSVIhabitats)
 #'
 #' @export   
 #'
 #' @importFrom readr read_csv2 read_csv
 #' @importFrom assertthat assert_that has_name
 #' @importFrom dplyr %>% inner_join filter_ group_by_ ungroup summarise_ distinct_
+#' @importFrom RODBC odbcClose
 #'
 
 berekenAantalSoorten <- 
-  function(Data_soorten, 
+  function(ConnectieLSVIhabitats,
+           Data_soorten, 
            Soortengroeplijst, 
            Minimumniveau = "aanwezig"){
     
+    assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
     assert_that(inherits(Data_soorten, "data.frame"))
     assert_that(has_name(Data_soorten, "ID"))
     
@@ -82,7 +89,7 @@ berekenAantalSoorten <-
     MinimumniveauF <- factor(Minimumniveau, levels = Tansley$Voluit)      
     
     
-    Data_soorten <- selecteerSoortenInOpname(Data_soorten, Soortengroeplijst) %>%
+    Data_soorten <- selecteerSoortenInOpname(ConnectieLSVIhabitats, Data_soorten, Soortengroeplijst) %>%
       mutate_(
         SoortensubgroepID = ~ ifelse(is.na(SoortensubgroepID),  
                                      WetNaamKort,

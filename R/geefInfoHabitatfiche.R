@@ -10,7 +10,10 @@
 #' @return Deze functie genereert een tabel met alle gegevens die nodig zijn om de tabellen habitatkarakteristieken en beoordelingsmatrix uit de LSVI-rapporten te genereren.
 #' 
 #' @examples 
-#' geefInfoHabitatfiche(Versie = "Versie 3", Habitatsubtype = "4010")
+#' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+#' geefInfoHabitatfiche(ConnectieLSVIhabitats, Versie = "Versie 3", Habitatsubtype = "4010")
+#' library(RODBC)
+#' odbcClose(ConnectieLSVIhabitats)
 #'
 #' @export
 #'
@@ -20,18 +23,20 @@
 #'
 
 geefInfoHabitatfiche <- 
-  function(Versie = geefUniekeWaarden("Versie","VersieLSVI"), 
-           Habitatgroep = geefUniekeWaarden("Habitatgroep","Habitatgroepnaam"),  
-           Habitattype = geefUniekeWaarden("Habitattype","Habitatcode"), 
-           Habitatsubtype = geefUniekeWaarden("Habitatsubtype","Habitatcode_subtype"), 
-           Criterium = geefUniekeWaarden("Criterium","Naam"), 
-           Indicator = geefUniekeWaarden("Indicator","Naam"),
+  function(ConnectieLSVIhabitats,
+           Versie = "alle", 
+           Habitatgroep = "alle",  
+           Habitattype = "alle", 
+           Habitatsubtype = "alle", 
+           Criterium = "alle", 
+           Indicator = "alle",
            Stijl = c("Rmd", "tekst")){
     
     match.arg(Stijl)
+    assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
     
     Selectiegegevens <- 
-      selecteerIndicatoren(Versie, Habitatgroep, Habitattype, Habitatsubtype,
+      selecteerIndicatoren(ConnectieLSVIhabitats, Versie, Habitatgroep, Habitattype, Habitatsubtype,
                            Criterium, Indicator, HabitatnamenToevoegen = TRUE)
     
     Indicator_hIDs <- paste(unique(Selectiegegevens$Indicator_habitatID), collapse = ",")
@@ -60,17 +65,12 @@ geefInfoHabitatfiche <-
       Indicator_bIDs
     )
     
+    Habitatkarakteristieken <- sqlQuery(ConnectieLSVIhabitats, query_habitatfiche, stringsAsFactors = FALSE)
     
-    LSVIdb <- connecteerMetLSVIdb()
-    
-    Habitatkarakteristieken <- sqlQuery(LSVIdb, query_habitatfiche, stringsAsFactors = FALSE)
-    
-    Beoordelingsmatrix <- sqlQuery(LSVIdb, query_beoordelingsfiche, stringsAsFactors = FALSE)
-    
-    odbcClose(LSVIdb)
+    Beoordelingsmatrix <- sqlQuery(ConnectieLSVIhabitats, query_beoordelingsfiche, stringsAsFactors = FALSE)
     
     Soortenlijst <- 
-      geefSoortenlijst(Versie, Habitatgroep, Habitattype, Habitatsubtype,
+      geefSoortenlijst(ConnectieLSVIhabitats, Versie, Habitatgroep, Habitattype, Habitatsubtype,
                        Criterium, Indicator, "LSVIfiche") %>%
       mutate_(
         Versie = ~NULL,
