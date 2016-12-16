@@ -20,7 +20,10 @@ Vector met de Tansley-waarden van de ingevoerde percentages
 Deze functie vertaalt een ingevoerde vector van getallen (bedekkingen in procent) naar de categorieen uit de Tansley-schaal op basis van een tabel waarin onder- en bovengrenzen voor de schaalverdeling gegeven zijn.
 }
 \examples{
+\dontrun{
 vertaalBedekkingTansley(c(2.5, 10, 30))
+}
+
 
 }
 

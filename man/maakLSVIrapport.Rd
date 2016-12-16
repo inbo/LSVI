@@ -4,14 +4,13 @@
 \alias{maakLSVIrapport}
 \title{Genereert LSVI-rapport op basis van de opgegeven parameters}
 \usage{
-maakLSVIrapport(Bestandsnaam = "LSVIrapport.html",
-  Versie = geefUniekeWaarden("Versie", "VersieLSVI"),
-  Habitatgroep = geefUniekeWaarden("Habitatgroep", "Habitatgroepnaam"),
-  Habitattype = geefUniekeWaarden("Habitattype", "Habitatcode"),
-  Habitatsubtype = geefUniekeWaarden("Habitatsubtype", "Habitatcode_subtype"),
-  verbose = TRUE)
+maakLSVIrapport(ConnectieLSVIhabitats, Bestandsnaam = "LSVIrapport.html",
+  Versie = "alle", Habitatgroep = "alle", Habitattype = "alle",
+  Habitatsubtype = "alle", verbose = TRUE)
 }
 \arguments{
+\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
+
 \item{Bestandsnaam}{Een naam voor het html-bestand dat gegenereerd wordt, bestaande uit een string die eindigt op '.html'}
 
 \item{Versie}{De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".  Bij de default "alle" worden de gegevens voor de verschillende versies gegeven.}
@@ -33,8 +32,12 @@ Deze functie genereert een rapport met habitatfiches die gebruikt worden voor de
 De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten als string opgegeven worden.  Default is telkens 'alle', waarbij de soortenlijsten voor alle mogelijke waarden van die parameter weergegeven worden (m.a.w. er is geen selectie voor deze parameter).
 }
 \examples{
-maakLSVIrapport(Bestandsnaam = "Habitatfiche_4030_versie3.html", 
-                Versie = "Versie 3", Habitatsubtype = "4010")
+ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+maakLSVIrapport(ConnectieLSVIhabitats, Bestandsnaam = "LSVIrapport_heiden_versie3.html", 
+                Versie = "Versie 3", Habitatgroep = "Heiden")
+library(RODBC)
+odbcClose(ConnectieLSVIhabitats)
+
 
 }
 

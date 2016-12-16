@@ -6,6 +6,7 @@
 #' 
 #' Dus voor elk type opname-gegevens (elke databank) moet een gelijkaardig script als dit geschreven worden om de gegevens naar de juiste vorm om te zetten.  Dit om te ondervangen dat voor sommige gegevens de bedekkingen per indicator ingeschat zijn, voor andere per soort.  Dit biedt ook de mogelijkheid om de bedekkingsschalen te vertalen enz.
 #'
+#' @inheritParams selecteerIndicatoren
 #' @inheritParams berekenLSVIbasis
 #' 
 #' @param Data_indicatoren Gegevens over de indicatoren in de vorm van een data.frame met velden ID, Habitatsubtype, Criterium, Indicator en Waarde, waarbij ID een groeperende variabele is voor een opname (plaats en tijdstip) en Waarde de waarde die voor die indicator geobserveerd of gemeten is.  Habitatsutbype, Criterium en Indicator moeten overeenkomen met de naamgeving in de LSVI-databank (op te zoeken door resp. geefUniekeWaarden("Habitatsubtype", "Habitatcode_subtype"), geefUniekeWaarden("Criterium", "Naam") en geefUniekeWaarden("Indicator", "Naam")).  Waarde moet voldoen aan de beschrijving die opgevraagd kan worden met geefInvoervereisten().
@@ -20,7 +21,11 @@
 #'     read_csv2(system.file("vbdata/opname_4010_gelayout_indicatoren.csv", package = "LSVI"))
 #' Data_soorten <- 
 #'     read_csv2(system.file("vbdata/opname_4010_gelayout_soorten.csv", package = "LSVI"))
-#' berekenLSVIdemo(Versie = "Versie 3", Kwaliteitsniveau = "1", Data_indicatoren, Data_soorten)
+#' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+#' berekenLSVIdemo(ConnectieLSVIhabitats, Versie = "Versie 3", Kwaliteitsniveau = "1", 
+#'                 Data_indicatoren, Data_soorten)
+#' library(RODBC)
+#' odbcClose(ConnectieLSVIhabitats)
 #' plot(1)
 #'
 #' @export
@@ -28,11 +33,13 @@
 #' @importFrom readr read_csv2
 #' @importFrom assertthat assert_that has_name
 #' @importFrom dplyr %>% mutate_ left_join group_by_ summarise_ ungroup
+#' @importFrom RODBC odbcClose
 #'
 #'
 berekenLSVIdemo <- 
-  function(Versie = geefUniekeWaarden("Versie","VersieLSVI"),
-           Kwaliteitsniveau = c("alle", "1", "2"),
+  function(ConnectieLSVIhabitats,
+           Versie = "alle",
+           Kwaliteitsniveau = "alle",
            Data_indicatoren,
            Data_soorten){
     
@@ -42,23 +49,37 @@ berekenLSVIdemo <-
     
     
     #we testen even of de ingevoerde gegevens wel het juiste formaat hebben, om te vermijden dat de functie zich onvoorspelbaar gedraagt (foute uitvoer, vastlopen, cryptische foutmelding,...) als een gebruiker van de functie een verkeerde parameter invoert (gebruiksvriendelijkheid)
-    match.arg(Versie)
+    assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
+    
+    assert_that(is.string(Versie))
+    if(!(Versie %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Versie","VersieLSVI"))){
+      stop(sprintf("Versie moet een van de volgende waarden zijn: %s", 
+                   geefUniekeWaarden(ConnectieLSVIhabitats,"Versie","VersieLSVI")))
+    }
+    
     Kwaliteitsniveau <- ifelse(Kwaliteitsniveau==1, "1", 
                                ifelse(Kwaliteitsniveau==2, "2", 
                                       Kwaliteitsniveau))
-    match.arg(Kwaliteitsniveau)
+    assert_that(is.string(Kwaliteitsniveau))
+    if(!(Kwaliteitsniveau %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Beoordeling", 
+                                                 "Kwaliteitsniveau"))){
+      stop(sprintf("Kwaliteitsniveau moet een van de volgende waarden zijn: %s", 
+                   geefUniekeWaarden(ConnectieLSVIhabitats,"Beoordeling","Kwaliteitsniveau")))
+    }
+    
     assert_that(inherits(Data_indicatoren, "data.frame"))
     assert_that(has_name(Data_indicatoren, "ID"))
     assert_that(has_name(Data_indicatoren, "Habitatsubtype"))
-    if(!all(Data_indicatoren$Habitatsubtype %in% geefUniekeWaarden("Habitatsubtype", "Habitatcode_subtype"))){
+    if(!all(Data_indicatoren$Habitatsubtype %in% 
+            geefUniekeWaarden(ConnectieLSVIhabitats, "Habitatsubtype", "Habitatcode_subtype"))){
       stop("Niet alle waarden vermeld onder Data_indicatoren$Habitatsubtype zijn habitatsubtypes.")
     }
     assert_that(has_name(Data_indicatoren, "Criterium"))
-    if(!all((tolower(Data_indicatoren$Criterium)) %in% tolower(geefUniekeWaarden("Criterium", "Naam")))){
+    if(!all((tolower(Data_indicatoren$Criterium)) %in% tolower(geefUniekeWaarden(ConnectieLSVIhabitats, "Criterium", "Naam")))){
       stop("Niet alle waarden vermeld onder Data_indicatoren$Criterium komen overeen met waarden vermeld in de databank.")
     }
     assert_that(has_name(Data_indicatoren, "Indicator"))
-    if(!all((tolower(Data_indicatoren$Indicator)) %in% tolower(geefUniekeWaarden("Indicator", "Naam")))){
+    if(!all((tolower(Data_indicatoren$Indicator)) %in% tolower(geefUniekeWaarden(ConnectieLSVIhabitats, "Indicator", "Naam")))){
       stop("Niet alle waarden vermeld onder Data_indicatoren$Indicator komen overeen met waarden vermeld in de databank.")
     }
     assert_that(has_name(Data_indicatoren, "Waarde"))
@@ -67,7 +88,7 @@ berekenLSVIdemo <-
     assert_that(inherits(Data_soorten, "data.frame"))
     assert_that(has_name(Data_soorten, "ID"))
     assert_that(has_name(Data_soorten, "Habitatsubtype"))
-    if(!all(Data_soorten$Habitatsubtype %in% geefUniekeWaarden("Habitatsubtype", "Habitatcode_subtype"))){
+    if(!all(Data_soorten$Habitatsubtype %in% geefUniekeWaarden(ConnectieLSVIhabitats, "Habitatsubtype", "Habitatcode_subtype"))){
       stop("Niet alle waarden vermeld onder Data_soorten$Habitatsubtype zijn habitatsubtypes.")
     }
     assert_that(has_name(Data_soorten, "Soort_NL") | has_name(Data_soorten, "Soort_Latijn"))
@@ -82,8 +103,10 @@ berekenLSVIdemo <-
     #In de helpfunctie van de functie berekenLSVIbasis() lezen we dat we onze gegevens in een welbepaald formaat moeten zijn en dat we ze moeten koppelen aan VoorwaardeID aan de hand van de info die met geefInvoervereisten() gegeven wordt.  Eens kijken wat we nodig hebben voor onze dataset:
     
     Invoervereisten <- 
-      geefInvoervereisten(Versie = Versie, 
-                          Habitatsubtype = unique(c(Data_indicatoren$Habitatsubtype, Data_soorten$Habitatsubtype)),
+      geefInvoervereisten(ConnectieLSVIhabitats,
+                          Versie = Versie, 
+                          Habitatsubtype = unique(c(Data_indicatoren$Habitatsubtype, 
+                                                    Data_soorten$Habitatsubtype)),
                           Kwaliteitsniveau = Kwaliteitsniveau)
     
     
@@ -136,7 +159,8 @@ berekenLSVIdemo <-
       left_join(Schaalomzetting, by = c("Bedekking" = "Schaal_opname"))
     
     for(i in seq_len(nrow(Ontbrekend))){
-      Data <- berekenAnalyseVariabele(Ontbrekend$AnalyseVariabele[i],
+      Data <- berekenAnalyseVariabele(ConnectieLSVIhabitats,
+                                      Ontbrekend$AnalyseVariabele[i],
                                       Data_soorten,
                                       Ontbrekend$Soortengroeplijst[i]) %>%
         mutate_(
@@ -158,7 +182,7 @@ berekenLSVIdemo <-
     }
     
     Resultaat <- 
-      berekenLSVIbasis(Versie, Kwaliteitsniveau,
+      berekenLSVIbasis(ConnectieLSVIhabitats, Versie, Kwaliteitsniveau,
                        Invoerdata %>%
                          select_(~ID, ~Habitatsubtype, ~VoorwaardeID, ~Waarde) %>%
                          filter_(~!is.na(ID)))

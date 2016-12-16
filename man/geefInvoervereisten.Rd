@@ -4,15 +4,13 @@
 \alias{geefInvoervereisten}
 \title{Geeft de invoervereisten voor de waarde van een opname}
 \usage{
-geefInvoervereisten(Versie = geefUniekeWaarden("Versie", "VersieLSVI"),
-  Habitatgroep = geefUniekeWaarden("Habitatgroep", "Habitatgroepnaam"),
-  Habitattype = geefUniekeWaarden("Habitattype", "Habitatcode"),
-  Habitatsubtype = geefUniekeWaarden("Habitatsubtype", "Habitatcode_subtype"),
-  Criterium = geefUniekeWaarden("Criterium", "Naam"),
-  Indicator = geefUniekeWaarden("Indicator", "Naam"),
-  Kwaliteitsniveau = geefUniekeWaarden("Beoordeling", "Kwaliteitsniveau"))
+geefInvoervereisten(ConnectieLSVIhabitats, Versie = "alle",
+  Habitatgroep = "alle", Habitattype = "alle", Habitatsubtype = "alle",
+  Criterium = "alle", Indicator = "alle", Kwaliteitsniveau = "alle")
 }
 \arguments{
+\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
+
 \item{Versie}{De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".  Bij de default "alle" worden de gegevens voor de verschillende versies gegeven.}
 
 \item{Habitatgroep}{Parameter waarmee alle habitats van een bepaalde habitatgroep kunnen geselecteerd worden, bv. "Bossen", "Heiden", "(Half-)natuurlijke graslanden", "Zoete wateren",...   en "alle" (=default).  Deze waarde moet niet gespecifieerd worden als een bepaald habitat(sub)type geselecteerd wordt.}
@@ -38,7 +36,11 @@ Verder geeft ze informatie over de Waarde die verwacht wordt in de functie berek
 Voor elke AnalyseVariabele is informatie over het formaat dat verwacht wordt voor Waarde: de Eenheid (die niet opgenomen moet worden in Waarde maar wel de grootte-orde van het verwachte getal aangeeft), het formaat van de variabele (TypeVariabele), bij categorische variabelen het 'Invoermasker' (mogelijke waarden) en de Vegetatielaag die bekeken moet worden.
 }
 \examples{
-geefInvoervereisten(Versie = "Versie 3", Habitatsubtype = "4010", Kwaliteitsniveau = "1")
+ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+geefInvoervereisten(ConnectieLSVIhabitats, Versie = "Versie 3", 
+                    Habitatsubtype = "4010", Kwaliteitsniveau = "1")
+library(RODBC)
+odbcClose(ConnectieLSVIhabitats)
 
 }
 

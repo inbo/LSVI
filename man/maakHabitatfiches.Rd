@@ -4,13 +4,13 @@
 \alias{maakHabitatfiches}
 \title{Genereert habitatfiche(s) van LSVI op basis van de opgegeven parameters}
 \usage{
-maakHabitatfiches(Versie = geefUniekeWaarden("Versie", "VersieLSVI"),
-  Habitatgroep = geefUniekeWaarden("Habitatgroep", "Habitatgroepnaam"),
-  Habitattype = geefUniekeWaarden("Habitattype", "Habitatcode"),
-  Habitatsubtype = geefUniekeWaarden("Habitatsubtype", "Habitatcode_subtype"),
+maakHabitatfiches(ConnectieLSVIhabitats, Versie = "alle",
+  Habitatgroep = "alle", Habitattype = "alle", Habitatsubtype = "alle",
   verbose = TRUE)
 }
 \arguments{
+\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
+
 \item{Versie}{De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".  Bij de default "alle" worden de gegevens voor de verschillende versies gegeven.}
 
 \item{Habitatgroep}{Parameter waarmee alle habitats van een bepaalde habitatgroep kunnen geselecteerd worden, bv. "Bossen", "Heiden", "(Half-)natuurlijke graslanden", "Zoete wateren",...   en "alle" (=default).  Deze waarde moet niet gespecifieerd worden als een bepaald habitat(sub)type geselecteerd wordt.}
@@ -22,17 +22,19 @@ maakHabitatfiches(Versie = geefUniekeWaarden("Versie", "VersieLSVI"),
 \item{verbose}{geeft de toestand van het systeem aan, om te zorgen dat boodschappen niet onnodig gegeven worden}
 }
 \value{
-Deze functie genereert habitatfiches in de vorm van html-files die in de working directory opgeslagen worden.
+Deze functie genereert een rapport met habitatfiches in de vorm van een html-file die in de working directory opgeslagen wordt.
 }
 \description{
-Deze functie genereert habitatfiches die gebruikt worden voor de bepaling van de Lokale Staat van Instandhouding van de habitatsubtypes die voldoen aan de opgegeven parameters.  (Om een tabel te genereren met deze informatie om zelf een fiche te kunnen samenstellen, wordt verwezen naar de functie geefInfoHabitatfiche().)
+Deze functie genereert habitatfiches die gebruikt worden voor de bepaling van de Lokale Staat van Instandhouding van de habitatsubtypes die voldoen aan de opgegeven parameters.  (Om een tabel te genereren met deze informatie om zelf een fiche te kunnen samenstellen, wordt verwezen naar de functie geefInfoHabitatfiche().  Om een rapport samen te stellen met alle fiches na elkaar in 1 document, wordt verwezen naar de functie maakLSVIrapport())
 
 De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten als string opgegeven worden.  Default is telkens 'alle', waarbij de soortenlijsten voor alle mogelijke waarden van die parameter weergegeven worden (m.a.w. er is geen selectie voor deze parameter).
 }
 \examples{
-\dontrun{
-maakHabitatfiches(Versie = "Versie 3", Habitatsubtype = "4010")
-}
+ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+maakHabitatfiches(ConnectieLSVIhabitats, Versie = "Versie 3", Habitatsubtype = "4010")
+library(RODBC)
+odbcClose(ConnectieLSVIhabitats)
+
 
 }
 

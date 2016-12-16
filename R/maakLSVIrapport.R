@@ -11,8 +11,12 @@
 #' @return Deze functie genereert habitatfiches in de vorm van html-files die in de working directory opgeslagen worden.
 #' 
 #' @examples 
-#' maakLSVIrapport(Bestandsnaam = "Habitatfiche_4030_versie3.html", 
-#'                 Versie = "Versie 3", Habitatsubtype = "4010")
+#' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+#' maakLSVIrapport(ConnectieLSVIhabitats, Bestandsnaam = "LSVIrapport_heiden_versie3.html", 
+#'                 Versie = "Versie 3", Habitatgroep = "Heiden")
+#' library(RODBC)
+#' odbcClose(ConnectieLSVIhabitats)
+#' 
 #'
 #' @export
 #'
@@ -23,13 +27,15 @@
 #'
 #'
 maakLSVIrapport <- 
-  function(Bestandsnaam = "LSVIrapport.html",
-           Versie = geefUniekeWaarden("Versie","VersieLSVI"), 
-           Habitatgroep = geefUniekeWaarden("Habitatgroep","Habitatgroepnaam"),  
-           Habitattype = geefUniekeWaarden("Habitattype","Habitatcode"), 
-           Habitatsubtype = geefUniekeWaarden("Habitatsubtype","Habitatcode_subtype"),
+  function(ConnectieLSVIhabitats,
+           Bestandsnaam = "LSVIrapport.html",
+           Versie = "alle", 
+           Habitatgroep = "alle",  
+           Habitattype= "alle", 
+           Habitatsubtype = "alle",
            verbose = TRUE){
     
+    assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
     assert_that(is.flag(verbose))
     assert_that(noNA(verbose))
     assert_that(is.character(Bestandsnaam))
@@ -37,7 +43,8 @@ maakLSVIrapport <-
     assert_that(cpos(Bestandsnaam, ".html")==nchar(Bestandsnaam)-4)
     
     render(system.file("LSVIrapport.Rmd", package = "LSVI"), 
-           params = list(Versie = Versie, Habitatgroep = Habitatgroep,
+           params = list(ConnectieLSVIhabitats = ConnectieLSVIhabitats,
+                         Versie = Versie, Habitatgroep = Habitatgroep,
                          Habitattype = Habitattype,
                          Habitatsubtype = Habitatsubtype),
            output_file = Bestandsnaam,

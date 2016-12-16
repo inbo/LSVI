@@ -21,13 +21,13 @@ connecteerMetLSVIdb(Server = "inbosql03\\\\prd",
 Deze functie geeft een open odbc-connectie naar de gespecifieerde databank.
 }
 \description{
-Deze functie maakt een connectie met de databank met LSVI-indicatoren.  Bedoeling van deze aparte functie is om de link naar deze databank maar op 1 plaats te bewaren, zodat deze bij het verplaatsen van de databank ook maar op een plaats aangepast moet worden.  Deze link wordt als argument meegegeven om gebruikers toe te laten om deze aan te passen.  (Deze link zou eigenlijk ook aanpasbaar moeten zijn in de functies die deze aanroepen!)
+Deze functie maakt een connectie met de databank met LSVI-indicatoren.  Deze connectie moet altijd geopend worden en meegegeven als argument om andere functies te kunnen gebruiken, want alle functies binnen dit package hebben een databankconnectie nodig om gegevens uit de databank te halen.  Zonder deze connectie werken ze niet.  Binnen INBO kunnen de defaultwaarden gebruikt worden, d.w.z. dat er geen argumenten meegegeven moeten worden in connecteerMetLSVIdb().  Gebruikers buiten INBO hebben een kopie van de databank nodig om met dit package te kunnen werken, en eventueel een aangepaste versie van deze functie.
 }
 \examples{
 library(RODBC)
-connectie <- connecteerMetLSVIdb()
-sqlQuery(connectie, "SELECT VersieLSVI, Referentie FROM Versie")
-odbcClose(connectie)
+ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+sqlQuery(ConnectieLSVIhabitats, "SELECT VersieLSVI, Referentie FROM Versie")
+odbcClose(ConnectieLSVIhabitats)
 
 }
 

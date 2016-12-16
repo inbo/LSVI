@@ -14,20 +14,22 @@ knitr::opts_chunk$set(echo = FALSE)
 
 library(xtable)
 library(tidyr)
+library(LSVI)
+library(dplyr)
 
 ```
 
 
 
 ```{r inladen_gegevens}
-
 # versie <- "Versie 3"
 # habitatsubtype <- "4010"
+# ConnectieLSVIhabitats <- connecteerMetLSVIdb()
 
+Habitatfiche <- geefInfoHabitatfiche(ConnectieLSVIhabitats = ConnectieLSVIhabitats, Versie = versie, 
+                                     Habitatsubtype = habitatsubtype)
 
-Habitatfiche <- geefInfoHabitatfiche(Versie = versie, Habitatsubtype = habitatsubtype)
-
-Versie <- geefVersieInfo() %>%
+Versie <- geefVersieInfo(ConnectieLSVIhabitats) %>%
   filter_(~VersieLSVI == versie)
 
 ```

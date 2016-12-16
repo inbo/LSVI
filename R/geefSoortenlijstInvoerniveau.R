@@ -5,16 +5,20 @@
 #' Deze functie geeft voor de gespecifieerde soortengroepen een lijst van soorten of soortengroepen op het gekozen niveau (dus soms tot op soortniveau, soms tot op genusniveau of hoger).  Om dezelfde soortenlijst als de habitatfiches te bekomen, moet het niveau vermeld worden dat in de tabel Indicator_habitat in de LSVI-databank vermeld is (en de SoortengroepID's die hierbij vermeld zijn).  Een lager nummer geeft een meer generieke groepering (dichter bij de opgegeven SoortengroepIDs), een hoger nummer een meer specifiek niveau (dichter bij het soortniveau).  Het maximale aantal niveaus of het niveau waarop het soortniveau gespecifieerd is, is indicatorspecifiek en afhankelijk van het aantal groepen of subgroepen dat in de LSVI gedefinieerd zijn (bv. opdeling van sleutelsoorten in bomen en kruiden of vermelding van genus i.p.v. soort zorgen elk voor een extra niveau).  Om een lijst van soorten op soortniveau te bekomen, wordt beter de functie geefSoortenlijstSoortniveau() gebruikt.   
 #'
 #'
+#' @inheritParams selecteerIndicatoren
 #' @param Soortengroeplijst dataframe waarin per niveau aangegeven wordt (tabel Niveau met een int die het niveau aangeeft) welke soortengroepen geselecteerd moeten worden (tabel SoortengroepIDs met een string waarin de ID's na mekaar weergegeven worden, gescheiden door een komma)
 #'
 #' @return Deze functie geeft een tabel met velden SoortengroepID, evt. SoortensubgroepID, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van soorten binnen eenzelfde indicator).  WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort bevat enkel genusnaam en soortnaam (zonder auteursnaam).  SoortensubgroepID wordt enkel gegeven als het record een minder diep niveau betreft dan het soortniveau en is het SoortengroepID van het niveau van het record, dus van een niveau dieper dan SoortengroepID.
 #' 
 #' @examples
+#' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
 #' Soortengroeplijst <- 
 #'      data.frame(Niveau = c(1, 2), 
 #'                 SoortengroepIDs = c("139,142,372", "370"), 
 #'                 stringsAsFactors = FALSE)
-#' geefSoortenlijstInvoerniveau(Soortengroeplijst)
+#' geefSoortenlijstInvoerniveau(ConnectieLSVIhabitats, Soortengroeplijst)
+#' library(RODBC)
+#' odbcClose(ConnectieLSVIhabitats)
 #'
 #' @export
 #'
@@ -24,7 +28,9 @@
 #'
 #'
 geefSoortenlijstInvoerniveau <- 
-  function(Soortengroeplijst){
+  function(ConnectieLSVIhabitats, Soortengroeplijst){
+    
+    assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
     assert_that(inherits(Soortengroeplijst, "data.frame"))
     assert_that(has_name(Soortengroeplijst, "Niveau"))
     assert_that(has_name(Soortengroeplijst, "SoortengroepIDs"))
@@ -71,10 +77,7 @@ geefSoortenlijstInvoerniveau <-
                 WHERE Soortengroepniveau.Niveau = %s", 
                 Soortengroeplijst[Soortengroeplijst$Niveau==n,"SoortengroepIDs"], n, n - 1)
 
-
-      connectie <- connecteerMetLSVIdb()
-      Soortenlijst_n <- sqlQuery(connectie, query, stringsAsFactors = FALSE)
-      odbcClose(connectie)
+      Soortenlijst_n <- sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
       
       Soortenlijst <- Soortenlijst %>%
         bind_rows(Soortenlijst_n)

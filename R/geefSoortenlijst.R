@@ -12,28 +12,35 @@
 #' @return Deze functie geeft een tabel met velden Versie, Habitattype, Habitatsubtype, Criterium, Indicator, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van soorten binnen eenzelfde indicator).  WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort bevat enkel genusnaam en soortnaam (zonder auteursnaam).
 #' 
 #' @examples
-#' geefSoortenlijst(Habitattype = "4010", Soortenlijsttype = "LSVIfiche")
-#' geefSoortenlijst(Habitattype = "4010", Soortenlijsttype = "Soortniveau")
-#' geefSoortenlijst(Habitattype = "4010", Soortenlijsttype = "alle")
+#' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+#' geefSoortenlijst(ConnectieLSVIhabitats, Habitattype = "4010", Soortenlijsttype = "LSVIfiche")
+#' geefSoortenlijst(ConnectieLSVIhabitats, Habitattype = "4010", Soortenlijsttype = "Soortniveau")
+#' geefSoortenlijst(ConnectieLSVIhabitats, Habitattype = "4010", Soortenlijsttype = "alle")
+#' library(RODBC)
+#' odbcClose(ConnectieLSVIhabitats)
 #'
 #' @export
 #'
 #' @importFrom dplyr %>% select_ distinct_ filter group_by_ summarise_ ungroup mutate_ left_join rename_
-#' @importFrom RODBC sqlQuery odbcClose
+#' @importFrom RODBC sqlQuery
 #'
 #'
 geefSoortenlijst <- 
-  function(Versie = geefUniekeWaarden("Versie","VersieLSVI"), 
-           Habitatgroep = geefUniekeWaarden("Habitatgroep","Habitatgroepnaam"),  
-           Habitattype = geefUniekeWaarden("Habitattype","Habitatcode"), 
-           Habitatsubtype = geefUniekeWaarden("Habitatsubtype","Habitatcode_subtype"), 
-           Criterium = geefUniekeWaarden("Criterium","Naam"), 
-           Indicator = geefUniekeWaarden("Indicator","Naam"),
+  function(ConnectieLSVIhabitats,
+           Versie = "alle", 
+           Habitatgroep = "alle",  
+           Habitattype = "alle", 
+           Habitatsubtype = "alle", 
+           Criterium = "alle", 
+           Indicator = "alle",
            Soortenlijsttype = c("LSVIfiche", "Soortniveau", "alle")){
     
+    assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
     match.arg(Soortenlijsttype)
     
-    Selectiegegevens <- selecteerIndicatoren(Versie, Habitatgroep, Habitattype, Habitatsubtype, Criterium, Indicator)
+    Selectiegegevens <- 
+      selecteerIndicatoren(ConnectieLSVIhabitats, Versie, Habitatgroep, 
+                           Habitattype, Habitatsubtype, Criterium, Indicator)
     
     #nu de soortgegevens ophalen:
     if(Soortenlijsttype[1] == "LSVIfiche"){
@@ -48,7 +55,7 @@ geefSoortenlijst <-
         rename_(Niveau = ~NiveauSoortenlijstFiche)
       
       #dan voor elk niveau de gegevens ophalen
-      Soortenlijst <- geefSoortenlijstInvoerniveau(SoortengroepIDperNiveau)
+      Soortenlijst <- geefSoortenlijstInvoerniveau(ConnectieLSVIhabitats, SoortengroepIDperNiveau)
       
     } else if(Soortenlijsttype == "Soortniveau" | Soortenlijsttype == "alle"){
       #de andere optie: gegevens van het diepste niveau ophalen
@@ -59,7 +66,8 @@ geefSoortenlijst <-
         summarise_(SoortengroepIDs = ~ paste(SoortengroepID, collapse=","))
       
       Soortenlijst <- 
-        geefSoortenlijstSoortniveau(Soortengroeplijst = SoortengroepIDs$SoortengroepIDs,
+        geefSoortenlijstSoortniveau(ConnectieLSVIhabitats,
+                                    Soortengroeplijst = SoortengroepIDs$SoortengroepIDs,
                                     Soortenlijsttype = Soortenlijsttype)
       
     } 

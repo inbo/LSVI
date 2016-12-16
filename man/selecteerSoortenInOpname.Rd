@@ -4,9 +4,11 @@
 \alias{selecteerSoortenInOpname}
 \title{Controle van de ingevoerde opname}
 \usage{
-selecteerSoortenInOpname(Data_soorten, Soortengroeplijst)
+selecteerSoortenInOpname(ConnectieLSVIhabitats, Data_soorten, Soortengroeplijst)
 }
 \arguments{
+\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
+
 \item{Data_soorten}{Bedekkingen van de sleutelsoorten in de vorm van een data.frame met velden ID en Soort_NL of Soort_Latijn.  Eventueel andere velden worden gewoon teruggegeven bij de uitvoer. (Eventueel zou hier ook de NBNTaxonVersionKey kunnen gebruikt worden.)}
 
 \item{Soortengroeplijst}{string waarin de SoortengroepID's na elkaar weergegeven worden, gescheiden door een komma}

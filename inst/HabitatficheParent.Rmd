@@ -1,0 +1,36 @@
+---
+title: "Habitatfiche"
+date: "`r Sys.Date()`"
+output: html_document
+params: 
+  ConnectieLSVIhabitats: "dummy"
+  Versie: "Versie 3"
+  Habitatsubtype: "4010"
+---
+
+
+```{r setupParent, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r libraries, include=FALSE}
+library(LSVI)
+library(dplyr)
+```
+
+```{r}
+if(inherits(params$ConnectieLSVIhabitats, "RODBC")){
+  ConnectieLSVIhabitats <- params$ConnectieLSVIhabitats
+} else {
+  #print("Connectiefout!")
+  ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+}
+versie <- params$Versie
+habitatsubtype <- params$Habitatsubtype
+
+```
+
+```{r child="Habitatfiche.Rmd"}
+
+```
+
