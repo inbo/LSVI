@@ -2,185 +2,54 @@
 title: "Habitatfiche"
 date: "`r Sys.Date()`"
 output: html_document
-params: 
-  Versie: "Versie 3"
-  Habitatsubtype: "4010"
 ---
 
-```{r setup, include=FALSE}
+
+```{r setupChild, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-```{r libraries, include=FALSE}
-library(RODBC)
-library(dplyr)
-library(lazyeval)
-library(LSVI)
+
+```{r librariesChild, include=FALSE}
+
 library(xtable)
 library(tidyr)
+library(LSVI)
+library(dplyr)
 
 ```
 
 
 
 ```{r inladen_gegevens}
+# versie <- "Versie 3"
+# habitatsubtype <- "4010"
+# ConnectieLSVIhabitats <- connecteerMetLSVIdb()
 
-query_habitatfiche <- sprintf(
-  "SELECT Habitatsubtype.Habitatcode_subtype, Habitatsubtype.Habitatnaam_subtype,
-    Criterium.Naam AS Criterium, Indicator.Naam As Indicator, 
-    Indicator_habitat.Beschrijving, Indicator_habitat.Beschrijving_naSoorten, 
-    Indicator_habitat.Maatregelen, Indicator_habitat.Opmerkingen, Indicator_habitat.Referenties,
-    Indicator_habitat.NiveauSoortenlijstFiche, Indicator_habitat.SoortengroepID
-  FROM ((Indicator_habitat INNER JOIN Habitatsubtype ON Indicator_habitat.HabitatsubtypeID = Habitatsubtype.Id)
-          INNER JOIN (Indicator INNER JOIN Criterium on Indicator.CriteriumID = Criterium.Id)
-                        ON Indicator_habitat.IndicatorID = Indicator.Id)
-          INNER JOIN Versie ON Indicator_habitat.VersieID = Versie.Id
-  WHERE (Versie.VersieLSVI='%s') AND (Habitatsubtype.Habitatcode_subtype='%s')",
-  params$Versie, params$Habitatsubtype
-)
-  
+Habitatfiche <- geefInfoHabitatfiche(ConnectieLSVIhabitats = ConnectieLSVIhabitats, Versie = versie, 
+                                     Habitatsubtype = habitatsubtype)
 
-query_beoordelingsfiche <- sprintf(
-  "SELECT Habitatsubtype.Habitatcode_subtype, Habitatsubtype.Habitatnaam_subtype,
-    Criterium.Naam AS Criterium, Indicator.Naam As Indicator, 
-    Indicator_beoordeling.Opmerkingen, Indicator_beoordeling.Referenties,
-    Beoordeling.Kwaliteitsniveau, Beoordeling.Beoordeling_letterlijk
-  FROM (((Indicator_habitat INNER JOIN Habitatsubtype ON Indicator_habitat.HabitatsubtypeID = Habitatsubtype.Id)
-              INNER JOIN Versie ON Indicator_habitat.VersieID = Versie.Id)
-          INNER JOIN IndicatortabellenKoppeling ON Indicator_habitat.Id = IndicatortabellenKoppeling.Indicator_habitatID)
-        INNER JOIN 
-              ((Indicator_beoordeling INNER JOIN Beoordeling ON Indicator_beoordeling.Id = Beoordeling.Indicator_beoordelingID)
-            INNER JOIN (Indicator INNER JOIN Criterium on Indicator.CriteriumID = Criterium.Id)
-                        ON Indicator_beoordeling.IndicatorID = Indicator.Id)
-          ON IndicatortabellenKoppeling.Indicator_beoordelingID = Indicator_beoordeling.Id
-  WHERE (Versie.VersieLSVI='%s') AND (Habitatsubtype.Habitatcode_subtype='%s')",
-  params$Versie, params$Habitatsubtype
-)
-  
-
-query_versie <- sprintf("SELECT * FROM Versie WHERE Versie.VersieLSVI='%s'", params$Versie)
-
-
-LSVIdb <- connecteerMetLSVIdb()
-
-Habitatfiche <- sqlQuery(LSVIdb, query_habitatfiche, stringsAsFactors = FALSE)
-
-Beoordelingsfiche <- sqlQuery(LSVIdb, query_beoordelingsfiche, stringsAsFactors = FALSE)
-
-Versie <- sqlQuery(LSVIdb, query_versie, stringsAsFactors = FALSE)
-
-odbcClose(LSVIdb)
-
-Soortenlijst <- geefSoortenlijst(Versie = params$Versie, Habitatsubtype = params$Habitatsubtype) %>%
-  mutate_(
-    VersieLSVI = ~NULL,
-    Habitattype = ~NULL,
-    Habitatsubtype = ~NULL,
-    TotNaam = ~ ifelse(is.na(WetNaamKort),
-                       NedNaam,
-                       ifelse(is.na(NedNaam),
-                              sprintf("_%s_",WetNaamKort),
-                              sprintf("%s (_%s_)", NedNaam, WetNaamKort)))
-                       
-  ) %>%
-  arrange_(~ TotNaam)
-
-OmschrijvingKolommen <- NULL
-for(i in colnames(Soortenlijst)){
-  if(grepl("Omschrijving",i)){
-    OmschrijvingKolommen <- c(OmschrijvingKolommen, i)
-  }
-}
-OmschrijvingKolommen <- 
-  OmschrijvingKolommen[order(as.integer(substr(OmschrijvingKolommen, 13, nchar(OmschrijvingKolommen))), 
-                             decreasing = TRUE)]
-  
-Soortenlijst <- Soortenlijst %>%
-  group_by_(
-    ~ SoortengroepID,
-    ~ Criterium,
-    ~ Indicator,
-    .dots = OmschrijvingKolommen
-  ) %>%
-  summarise_(
-    Soortenlijst = ~ paste(as.vector(TotNaam), collapse = ", ")
-  ) %>%
-  ungroup()
-
-laatste_i <- 0
-for(i in 1:length(OmschrijvingKolommen)){
-  laatste_i <- max(laatste_i, length(OmschrijvingKolommen))
-  Soortenlijst <- Soortenlijst %>%
-    mutate_(
-      Soortenlijst = interp(~ ifelse(is.na(var), Soortenlijst, 
-                                     paste("**",var,":** ",Soortenlijst, sep="")), 
-                            var = as.name(OmschrijvingKolommen[1]))
-    ) %>%
-    select(
-      - matches(OmschrijvingKolommen[1])
-    )
-  
-  OmschrijvingKolommen <- OmschrijvingKolommen[-1]
-  
-  if(i < laatste_i){
-    Soortenlijst <- Soortenlijst %>%
-      group_by_(
-        ~ SoortengroepID,
-        ~ Criterium,
-        ~ Indicator,
-        .dots = OmschrijvingKolommen
-      ) %>%
-      summarise_(
-        Soortenlijst = ~ paste(as.vector(Soortenlijst), collapse = ",  ")
-      ) %>%
-      ungroup()
-  } else {
-    Soortenlijst <- Soortenlijst %>%
-      group_by_(
-        ~ SoortengroepID,
-        ~ Criterium,
-        ~ Indicator
-      ) %>%
-      summarise_(
-        Soortenlijst = ~ paste(as.vector(Soortenlijst), collapse = ",  ")
-      ) %>%
-      ungroup()
-  }
-    
-}
-      
-
-paste2 <- function(...,sep=", ") {
-    L <- list(...)
-    L <- lapply(L,function(x) {x[is.na(x)] <- ""; x})
-    gsub(paste0("(^",sep,"|",sep,"$)"),"",
-                gsub(paste0(sep,sep),sep,
-                     do.call(paste,c(L,list(sep=sep)))))
-}
-
-Habitatfiche2 <- Habitatfiche %>%
-  left_join(Soortenlijst %>% 
-              select_(
-                ~ SoortengroepID,
-                ~Soortenlijst
-              ), 
-            by = c("SoortengroepID" = "SoortengroepID")) %>%
-  mutate_(
-    Beschrijving = ~ paste2(Beschrijving, Soortenlijst, Beschrijving_naSoorten, sep = " ")
-  )
+Versie <- geefVersieInfo(ConnectieLSVIhabitats) %>%
+  filter_(~VersieLSVI == versie)
 
 ```
 
 
-##Habitattype `r Habitatfiche[1,"Habitatcode_subtype"]`: `r Habitatfiche[1,"Habitatnaam_subtype"]`
+####Habitatsubtype `r Habitatfiche[1,"Habitatsubtype"]`: `r Habitatfiche[1,"Habitatsubtypenaam"]`
 
-###Habitatkarakteristieken
+#####Habitatkarakteristieken
 
 ```{r habitatkarakteristieken, results='asis'}
 
-for(criterium in unique(Habitatfiche$Criterium)){
+Habitatkarakteristieken <- Habitatfiche %>%
+  select_(Criterium = ~Criterium.habitat, Indicator = ~Indicator.habitat,
+          ~Beschrijving, ~Maatregelen, Opmerkingen = ~Opmerkingen.habitat,
+          Referenties = ~Referenties.habitat) %>%
+  distinct_()
+
+for(criterium in unique(Habitatkarakteristieken$Criterium)){
   cat(criterium)
-  Habitatkarakteristieken <- Habitatfiche2 %>%
+  Habitattabel <- Habitatkarakteristieken %>%
     filter_(~Criterium == criterium) %>%
     select_(
       ~ Indicator, 
@@ -190,22 +59,26 @@ for(criterium in unique(Habitatfiche$Criterium)){
       ~ Referenties
     ) %>%
     xtable(digits = ncol(.))
-  print(Habitatkarakteristieken, type = "html", include.rownames = FALSE)
+  print(Habitattabel, type = "html", include.rownames = FALSE)
 }
 
 ```
 
 
-###Beoordelingsmatrix
+#####Beoordelingsmatrix
 
 ```{r beoordelingsmatrix, results='asis', message=FALSE, warning=FALSE}
 
-Beoordelingsfiche <- Beoordelingsfiche %>%
+Beoordelingsfiche <- Habitatfiche %>%
+  select_(~Beoordeling, Criterium = ~Criterium.beoordeling, Indicator = ~Indicator.beoordeling, 
+          Opmerkingen = ~Opmerkingen.beoordeling, Referenties = ~Referenties.beoordeling,
+          ~Kwaliteitsniveau) %>%
+  distinct_() %>%
   inner_join(data.frame(Kwaliteitsniveau=c(1,2), Referentieniveau = c(Versie$Kwaliteitsniveau1,Versie$Kwaliteitsniveau2), stringsAsFactors = FALSE)) %>%
   select(-Kwaliteitsniveau)%>%
-  spread(key = Referentieniveau, value = Beoordeling_letterlijk)
+  spread(key = Referentieniveau, value = Beoordeling)
 
-for(Criterium in unique(Habitatfiche$Criterium)){
+for(Criterium in unique(Habitatfiche$Criterium.beoordeling)){   #hier wordt Criterium in Habitatfiche gebruikt omdat deze volgorde juist staat
   cat(Criterium)
   Beoordelingsmatrix <- 
     xtable(Beoordelingsfiche[Beoordelingsfiche$Criterium==Criterium,
@@ -214,4 +87,5 @@ for(Criterium in unique(Habitatfiche$Criterium)){
 }
 
 ```
+
 

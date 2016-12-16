@@ -4,26 +4,25 @@
 \alias{geefSoortenlijst}
 \title{Genereert soortenlijst(en) LSVI op basis van de opgegeven parameters}
 \usage{
-geefSoortenlijst(Versie = geefUniekeWaarden("Versie", "VersieLSVI"),
-  Habitatgroep = geefUniekeWaarden("Habitatgroep", "Habitatgroepnaam"),
-  Habitattype = geefUniekeWaarden("Habitattype", "Habitatcode"),
-  Habitatsubtype = geefUniekeWaarden("Habitatsubtype", "Habitatcode_subtype"),
-  Criterium = geefUniekeWaarden("Criterium", "Naam"),
-  Indicator = geefUniekeWaarden("Indicator", "Naam"),
+geefSoortenlijst(ConnectieLSVIhabitats, Versie = "alle",
+  Habitatgroep = "alle", Habitattype = "alle", Habitatsubtype = "alle",
+  Criterium = "alle", Indicator = "alle",
   Soortenlijsttype = c("LSVIfiche", "Soortniveau", "alle"))
 }
 \arguments{
-\item{Versie}{De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".  Bij de default "alle" worden de soortenlijsten voor de verschillende versies gegeven.}
+\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
+
+\item{Versie}{De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".  Bij de default "alle" worden de gegevens voor de verschillende versies gegeven.}
 
 \item{Habitatgroep}{Parameter waarmee alle habitats van een bepaalde habitatgroep kunnen geselecteerd worden, bv. "Bossen", "Heiden", "(Half-)natuurlijke graslanden", "Zoete wateren",...   en "alle" (=default).  Deze waarde moet niet gespecifieerd worden als een bepaald habitat(sub)type geselecteerd wordt.}
 
-\item{Habitattype}{Parameter waarmee een habitattype kan geselecteerd worden.  Als dit habitattype meerdere subtypes heeft, zullen de soortenlijsten van alle subtypes van dit habitattype weergegeven worden.}
+\item{Habitattype}{Parameter waarmee een habitattype kan geselecteerd worden.  Als dit habitattype meerdere subtypes heeft, zullen de gegevens van alle subtypes van dit habitattype weergegeven worden.}
 
 \item{Habitatsubtype}{Parameter waarmee een habitatsubtype geselecteerd kan worden.  Als deze waarde ingevuld is, is het niet nodig om de parameters Habitatgroep en Habitattype te specifieren.}
 
-\item{Criterium}{Het LSVI-criterium waarvoor de soortenlijst gegeven wordt: "Vegetatie", "Structuur", "Verstoring" of "alle".}
+\item{Criterium}{Het LSVI-criterium waarvoor de gegevens geselecteerd worden: "Vegetatie", "Structuur", "Verstoring" of "alle".}
 
-\item{Indicator}{De indicator waarvoor de soortenlijst gegeven wordt.}
+\item{Indicator}{De indicator waarvoor de gegevens uit de databank gehaald worden.}
 
 \item{Soortenlijsttype}{"LSVIfiche" betekent dat de soortenlijst van de habitatfiche wordt overgenomen, "Soortniveau" betekent dat alle soorten worden weergegeven die in de groepen vallen die aan de parameters voldoen (bv. alle soorten bomen en struiken als dit in LSVI-fiche vermeld is), "alle" betekent dat alle soorten en alle taxonomische en morfologische groepen worden weergegeven die volledig in de groepen vallen die aan de parameters voldoen (dus gelijkaardig als Soortniveau, maar dan uitgebreid naar hogere taxonomische en morfologische groepen).}
 }
@@ -38,9 +37,12 @@ Er zijn 2 opties: de soorten weergeven zoals in de habitatfiches (op soortniveau
 De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten als string opgegeven worden.  Default is telkens 'alle', waarbij de soortenlijsten voor alle mogelijke waarden van die parameter weergegeven worden (m.a.w. er is geen selectie voor deze parameter).
 }
 \examples{
-geefSoortenlijst(Habitattype = "4010", Soortenlijsttype = "LSVIfiche")
-geefSoortenlijst(Habitattype = "4010", Soortenlijsttype = "Soortniveau")
-geefSoortenlijst(Habitattype = "4010", Soortenlijsttype = "alle")
+ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+geefSoortenlijst(ConnectieLSVIhabitats, Habitattype = "4010", Soortenlijsttype = "LSVIfiche")
+geefSoortenlijst(ConnectieLSVIhabitats, Habitattype = "4010", Soortenlijsttype = "Soortniveau")
+geefSoortenlijst(ConnectieLSVIhabitats, Habitattype = "4010", Soortenlijsttype = "alle")
+library(RODBC)
+odbcClose(ConnectieLSVIhabitats)
 
 }
 
