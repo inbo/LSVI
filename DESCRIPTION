@@ -13,8 +13,13 @@ Imports:
     dplyr,
     rmarkdown,
     lazyeval,
-    tibble
+    utils,
+    testthat,
+    pander,
+    tidyr,
+    readr,
+    cwhmisc
 Suggests:
     xtable,
-    tidyr
+    knitr
 RoxygenNote: 5.0.1

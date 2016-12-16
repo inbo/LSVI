@@ -4,25 +4,30 @@
 \alias{geefSoortenlijstInvoerniveau}
 \title{Genereert soorten(groep)lijst(en) LSVI op basis van SoortengroepID en Niveau}
 \usage{
-geefSoortenlijstInvoerniveau(Soortengroeplijst)
+geefSoortenlijstInvoerniveau(ConnectieLSVIhabitats, Soortengroeplijst)
 }
 \arguments{
+\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
+
 \item{Soortengroeplijst}{dataframe waarin per niveau aangegeven wordt (tabel Niveau met een int die het niveau aangeeft) welke soortengroepen geselecteerd moeten worden (tabel SoortengroepIDs met een string waarin de ID's na mekaar weergegeven worden, gescheiden door een komma)}
 }
 \value{
-Deze functie geeft een tabel met velden SoortengroepID, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van soorten binnen eenzelfde indicator).  WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort bevat enkel genusnaam en soortnaam (zonder auteursnaam).
+Deze functie geeft een tabel met velden SoortengroepID, evt. SoortensubgroepID, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van soorten binnen eenzelfde indicator).  WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort bevat enkel genusnaam en soortnaam (zonder auteursnaam).  SoortensubgroepID wordt enkel gegeven als het record een minder diep niveau betreft dan het soortniveau en is het SoortengroepID van het niveau van het record, dus van een niveau dieper dan SoortengroepID.
 }
 \description{
 Deze functie genereert soortenlijsten (met wetenschappelijke en Nederlandse namen) uit de databank met de criteria en indicatoren voor de bepaling van de Lokale Staat van Instandhouding.  Het is in feite een hulpfunctie die voor verschillende andere functies gebruikt wordt en die de complexe zoekfunctie in de tabellen met soorten uitvoert op basis van een opgegeven SoortengroepID (en in die zin iets minder gebruiksvriendelijk is).  Voor een selectie van soortenlijsten op basis van specifieke parameters is de functie geefSoortenlijst() een beter alternatief.
 
-Deze functie geeft voor de gespecifieerde soortengroepen een lijst van soorten of soortengroepen op het gekozen niveau (dus soms tot op soortniveau, soms tot op genusniveau of hoger).  Om dezelfde soortenlijst als de habitatfiches te bekomen, moet het niveau vermeld worden dat in de tabel Indicator_habitat in de LSVI-databank vermeld is (en de SoortengroepID's die hierbij vermeld zijn).  Een lager nummer geeft een meer generieke groepering, een hoger nummer een meer specifiek niveau.  Het maximale aantal niveaus of het niveau waarop het soortniveau gespecifieerd is, is indicatorspecifiek en afhankelijk van het aantal groepen of subgroepen dat in de LSVI gedefinieerd zijn (bv. opdeling van sleutelsoorten in bomen en kruiden of vermelding van genus i.p.v. soort zorgen elk voor een extra niveau).  Om een lijst van soorten op soortniveau te bekomen, wordt beter de functie geefSoortenlijstSoortniveau() gebruikt.
+Deze functie geeft voor de gespecifieerde soortengroepen een lijst van soorten of soortengroepen op het gekozen niveau (dus soms tot op soortniveau, soms tot op genusniveau of hoger).  Om dezelfde soortenlijst als de habitatfiches te bekomen, moet het niveau vermeld worden dat in de tabel Indicator_habitat in de LSVI-databank vermeld is (en de SoortengroepID's die hierbij vermeld zijn).  Een lager nummer geeft een meer generieke groepering (dichter bij de opgegeven SoortengroepIDs), een hoger nummer een meer specifiek niveau (dichter bij het soortniveau).  Het maximale aantal niveaus of het niveau waarop het soortniveau gespecifieerd is, is indicatorspecifiek en afhankelijk van het aantal groepen of subgroepen dat in de LSVI gedefinieerd zijn (bv. opdeling van sleutelsoorten in bomen en kruiden of vermelding van genus i.p.v. soort zorgen elk voor een extra niveau).  Om een lijst van soorten op soortniveau te bekomen, wordt beter de functie geefSoortenlijstSoortniveau() gebruikt.
 }
 \examples{
+ConnectieLSVIhabitats <- connecteerMetLSVIdb()
 Soortengroeplijst <- 
      data.frame(Niveau = c(1, 2), 
                 SoortengroepIDs = c("139,142,372", "370"), 
                 stringsAsFactors = FALSE)
-geefSoortenlijstInvoerniveau(Soortengroeplijst)
+geefSoortenlijstInvoerniveau(ConnectieLSVIhabitats, Soortengroeplijst)
+library(RODBC)
+odbcClose(ConnectieLSVIhabitats)
 
 }
 

@@ -1,19 +1,19 @@
 #' @title Connecteer met de databank met LSVI-indicatoren
 #'
-#' @description Deze functie maakt een connectie met de databank met LSVI-indicatoren.  Bedoeling van deze aparte functie is om de link naar deze databank maar op 1 plaats te bewaren, zodat deze bij het verplaatsen van de databank ook maar op een plaats aangepast moet worden.  Deze link wordt als argument meegegeven om gebruikers toe te laten om deze aan te passen.  (Deze link zou eigenlijk ook aanpasbaar moeten zijn in de functies die deze aanroepen!)
+#' @description Deze functie maakt een connectie met de databank met LSVI-indicatoren.  Deze connectie moet altijd geopend worden en meegegeven als argument om andere functies te kunnen gebruiken, want alle functies binnen dit package hebben een databankconnectie nodig om gegevens uit de databank te halen.  Zonder deze connectie werken ze niet.  Binnen INBO kunnen de defaultwaarden gebruikt worden, d.w.z. dat er geen argumenten meegegeven moeten worden in connecteerMetLSVIdb().  Gebruikers buiten INBO hebben een kopie van de databank nodig om met dit package te kunnen werken, en eventueel een aangepaste versie van deze functie.  
 #'
-#' @param Server de server waarop de databank staat (standaard "inbosql03\\prd")
-#' @param Databank de naam van de databank (standaard "D0122_00_LSVIHabitatTypes")
-#' @param Gebruiker standaard een gebruiker met leesrechten, andere opties zijn "pc-eigenaar" waarbij de login en wachtwoord gebruikt wordt waarmee ingelogd is op de pc of een eigen gebruikersnaam en wachtwoord ingeven
-#' @param Wachtwoord standaard een gebruiker met leesrechten, moet niet ingevuld worden als Gebruiker "pc-eigenaar" is
+#' @param Server de server waarop de databank staat die aangeroepen wordt (standaard "inbosql03\\prd")
+#' @param Databank de naam van de databank die aangeroepen wordt (standaard "D0122_00_LSVIHabitatTypes")
+#' @param Gebruiker gebruiker van de databank, standaard een gebruiker met leesrechten, andere opties zijn "pc-eigenaar" waarbij de login en wachtwoord gebruikt wordt waarmee ingelogd is op de pc of een eigen gebruikersnaam en wachtwoord ingeven
+#' @param Wachtwoord wachtwoord van de gebruiker van de databank, standaard een gebruiker met leesrechten, moet niet ingevuld worden als Gebruiker "pc-eigenaar" is
 #'
 #' @return Deze functie geeft een open odbc-connectie naar de gespecifieerde databank.
 #' 
 #' @examples 
 #' library(RODBC)
-#' connectie <- connecteerMetLSVIdb()
-#' sqlQuery(connectie, "SELECT VersieLSVI, Referentie FROM Versie")
-#' odbcClose(connectie)
+#' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+#' sqlQuery(ConnectieLSVIhabitats, "SELECT VersieLSVI, Referentie FROM Versie")
+#' odbcClose(ConnectieLSVIhabitats)
 #'
 #' @export
 #'
@@ -45,5 +45,5 @@ connecteerMetLSVIdb <-
       
     
   
-  connectie <- odbcDriverConnect(Connectiestring)
+  ConnectieLSVIhabitats <- odbcDriverConnect(Connectiestring)
 }
