@@ -23,7 +23,6 @@
 #' @importFrom rmarkdown render
 #' @importFrom RODBC sqlQuery odbcClose
 #' @importFrom assertthat assert_that noNA is.flag
-#' @importFrom cwhmisc cpos
 #'
 #'
 maakLSVIrapport <- 
@@ -39,8 +38,10 @@ maakLSVIrapport <-
     assert_that(is.flag(verbose))
     assert_that(noNA(verbose))
     assert_that(is.character(Bestandsnaam))
-    assert_that(grepl(".html", Bestandsnaam))
-    assert_that(cpos(Bestandsnaam, ".html")==nchar(Bestandsnaam)-4)
+    if(!grepl(".html$", Bestandsnaam)){
+      stop("De bestandnaam moet eindigen op '.html'")
+    }
+    
     
     render(system.file("LSVIrapport.Rmd", package = "LSVI"), 
            params = list(ConnectieLSVIhabitats = ConnectieLSVIhabitats,
