@@ -1,10 +1,15 @@
 #' @title Berekent de opgegeven AnalyseVariabele van de opgegeven soortgroep voor de opname
 #'
 #' @description Deze functie bepaalt/berekent de opgegeven analysevariabele op basis van een opgegeven soortengroep voor de opgegeven opname.  Voorbeelden van analysevariabelen zijn 
+#' 
 #' - 'aantal_aanwezig' die het aantal soorten uit de opgegeven soortengroep telt die aanwezig zijn in de opname.
+#' 
 #' - 'aantal_frequent_aanwezig' die het aantal soorten uit de opgegeven soortengroep telt die minstens frequent aanwezig zijn in de opname.  (Analoge analysevariabelen bestaan voor alle categorieen uit de Tansley-schaal.)
+#' 
 #' - 'aantal_afwezig' die het aantal soorten uit de opgegeven soortengroep telt die niet aanwezig zijn in de opname, wat wil zeggen dat ze niet voorkomen in de opname of dat in de opname hun Tansley-bedekking als 'afwezig' gequoteerd is.
+#' 
 #' - 'bedekking_vegetatie' berekent voor de opname de totale bedekking van alle soorten uit de opgegeven soortengroep (in %).
+#' 
 #' - 'bedekking_vegetatie_Tansley' berekent voor de opname de totale bedekking van alle soorten uit de opgegeven soortengroep en zet deze om naar de Tansley-schaal
 #' 
 #' De berekening van andere analysevariabelen uit de databank ('grootte_grootste_vegetatievlek', 'aantal_aanwezig_kruidlaag' en 'bedekking_grondvlak') is sterk afhankelijk van de verzamelde gegevens en wordt daarom niet in een generieke functie gestoken.  Ze gebeurt voor elk van de verzamelde gegevens in de specifieke functie die op maat van de gegevens geschreven is.

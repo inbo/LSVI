@@ -1,6 +1,6 @@
 #' @title Berekent de totale bedekking van de soorten van een bepaalde soortengroep die in een opname aanwezig is
 #'
-#' @description Deze hulpfunctie bepaalt de bedekking van de soorten van een bepaalde soortengroep dat aanwezig is in een bepaalde opname.  Omdat het een technische hulpfunctie is, wordt hier gebruik gemaakt van ID's uit de databank.  Beter is om gebruik te maken van de generieke functie berekenAnalyseVariabele die meer mogelijkheden heeft voor het selecteren van de soortengroep.
+#' @description Deze hulpfunctie bepaalt de bedekking van de soorten van een bepaalde soortengroep dat aanwezig is in een bepaalde opname.  Omdat het een technische hulpfunctie is, wordt hier gebruik gemaakt van ID's uit de databank.  Beter is om gebruik te maken van de generieke functie berekenAnalyseVariabele waarbij het eenvoudiger is om de soortengroep te selecteren.
 #'
 #' 
 #' @inheritParams selecteerIndicatoren

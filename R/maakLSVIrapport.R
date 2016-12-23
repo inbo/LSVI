@@ -14,6 +14,8 @@
 #' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
 #' maakLSVIrapport(ConnectieLSVIhabitats, Bestandsnaam = "LSVIrapport_heiden_versie3.html", 
 #'                 Versie = "Versie 3", Habitatgroep = "Heiden")
+#' maakLSVIrapport(ConnectieLSVIhabitats, Bestandsnaam = "LSVIrapport_4010.html", 
+#'                 Habitatsubtype = "4010")
 #' library(RODBC)
 #' odbcClose(ConnectieLSVIhabitats)
 #' 
