@@ -206,7 +206,7 @@ Om zelf een script te schrijven om de LSVI te berekenen op basis van veldopnamen
     - check of je gegevens omgezet kunnen worden naar AnalyseVariabelen, deze beperkte set aan variabelen zijn niet habitatspecifiek, wat een generieke aanpak over habitattypes heen mogelijk maakt
     - maak waar zinvol een 'vertaaltabel' van variabelenamen of categorienamen, of gegevens zoals bedekkingsschalen, waarin je in de ene kolom de namen uit je eigen gegevens opneemt, en in de andere kolom de naamgeving die in dit package gebruikt kan worden
     - om bedekkingen om te zetten van percentages naar Tansley-waarden of omgekeerd, zijn er de functies vertaalBedekkingTansley() en vertaalTansleyPercentage()
-    - maak gebruik van de functie berekenAnalyseVariabele() voor gegevens bestaande uit soortenlijsten met bedekkingen of categorische variabelen.  (Idee is dat naargelang de noden meerdere dergelijke 'bouwstenen' toegevoegd worden aan dit package, zie ook ....)
+    - maak gebruik van de functie berekenAnalyseVariabele() voor gegevens bestaande uit soortenlijsten met bedekkingen of categorische variabelen.  (Idee is dat naargelang de noden meerdere dergelijke 'bouwstenen' toegevoegd worden aan dit package, zie ook Doelstellingen)
 - zodra je gegevens in het juiste formaat staan, kan je de LSVI berekenen met de functie berekenLSVIbasis()
 
 <!-- Idee is om het demoscript berekenLSVIdemo hier toe te voegen, of toch het gedeelte exclusief foutcontrole.  Ik wacht met het maken van een kopie tot dit script getest en aangepast is na het vullen van de databank. -->
