@@ -4,7 +4,7 @@ date: "`r Sys.Date()`"
 output: html_document
 params: 
   ConnectieLSVIhabitats: "dummy"
-  Versie: "Versie 3"
+  Versie: "Versie 2.0"
   Habitatgroep: "Heiden"
   Habitattype: "4010"
   Habitatsubtype: "4010"
@@ -47,22 +47,22 @@ Indicatoren <- selecteerIndicatoren(ConnectieLSVIhabitats,
 
 Uitvoer <- NULL
 
-for(versie in unique(Indicatoren$Versie)){
+for (versie in unique(Indicatoren$Versie)) {
   Uitvoer <- c(Uitvoer, paste("#", versie, sep = ""))
   VersieIndicatoren <- Indicatoren %>%
     filter_(~Versie == versie)
-  for(habitatgroep in unique(VersieIndicatoren$Habitatgroepnaam)){
+  for (habitatgroep in unique(VersieIndicatoren$Habitatgroepnaam)) {
     Uitvoer <- c(Uitvoer, paste("##",habitatgroep, sep = ""))
     Subset <- VersieIndicatoren %>%
       filter_(~Habitatgroepnaam == habitatgroep)
-    for(habitattype in unique(as.character(Subset$Habitattype))){
+    for (habitattype in unique(as.character(Subset$Habitattype))) {
       Subsubset <- Subset %>%
         filter_(~habitattype == habitattype)
-      habitatnaam <- ifelse(is.na(Subsubset$Habitatnaam),
+      habitatnaam <- ifelse(is.na(unique(Subsubset$Habitatnaam)),
                             "",
                             paste(": ", unique(Subsubset$Habitatnaam), sep = ""))
       Uitvoer <- c(Uitvoer, paste("###Habitattype ", habitattype, habitatnaam, "\n", sep = ""))
-      for(habitatsubtype in unique(as.character(Indicatoren$Habitatsubtype))){
+      for (habitatsubtype in unique(as.character(Subsubset$Habitatsubtype))) {
         Uitvoer <- c(Uitvoer, knit_child("Habitatfiche.Rmd"))
         
       }

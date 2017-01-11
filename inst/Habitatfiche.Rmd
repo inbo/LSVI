@@ -5,12 +5,12 @@ output: html_document
 ---
 
 
-```{r setupChild, include=FALSE}
+```{r include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
 
-```{r librariesChild, include=FALSE}
+```{r include=FALSE}
 
 library(xtable)
 library(tidyr)
@@ -21,7 +21,7 @@ library(dplyr)
 
 
 
-```{r inladen_gegevens}
+```{r}
 # versie <- "Versie 3"
 # habitatsubtype <- "4010"
 # ConnectieLSVIhabitats <- connecteerMetLSVIdb()
@@ -39,7 +39,7 @@ Versie <- geefVersieInfo(ConnectieLSVIhabitats) %>%
 
 #####Habitatkarakteristieken
 
-```{r habitatkarakteristieken, results='asis'}
+```{r results='asis'}
 
 Habitatkarakteristieken <- Habitatfiche %>%
   select_(Criterium = ~Criterium.habitat, Indicator = ~Indicator.habitat,
@@ -67,7 +67,7 @@ for(criterium in unique(Habitatkarakteristieken$Criterium)){
 
 #####Beoordelingsmatrix
 
-```{r beoordelingsmatrix, results='asis', message=FALSE, warning=FALSE}
+```{r results='asis', message=FALSE, warning=FALSE}
 
 Beoordelingsfiche <- Habitatfiche %>%
   select_(~Beoordeling, Criterium = ~Criterium.beoordeling, Indicator = ~Indicator.beoordeling, 
@@ -82,7 +82,7 @@ for(Criterium in unique(Habitatfiche$Criterium.beoordeling)){   #hier wordt Crit
   cat(Criterium)
   Beoordelingsmatrix <- 
     xtable(Beoordelingsfiche[Beoordelingsfiche$Criterium==Criterium,
-                        c("Indicator","Gunstige staat","Streefwaarde","Opmerkingen","Referenties")])
+                        c("Indicator",c(Versie$Kwaliteitsniveau1,Versie$Kwaliteitsniveau2),"Opmerkingen","Referenties")])
   print(Beoordelingsmatrix, type = "html", include.rownames = FALSE)
 }
 
