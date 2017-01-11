@@ -1,0 +1,215 @@
+---
+title: "Handleiding LSVI-package"
+author: "Els Lommelen"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Handleiding LSVI-package}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Leeswijzer
+
+Deze handleiding is bedoeld voor iedereen die met het package LSVI zal werken.  Ze richt zich zowel op gebruikers die de gegevens uit de databank willen raadplegen maar nooit met R gewerkt hebben als op ervaren R-gebruikers die eigen scripts willen ontwikkelen voor de verwerking van hun veldopnames (berekening van LSVI).  Er wordt wel van uitgegaan dat gebruikers een grondige kennis hebben over LSVI van habitattypen (terminologie, achtergrond,...).
+
+De handleiding is zo opgesteld dat ze voor beide groepen de relevante informatie bevat om aan de slag te gaan.  Enkele hoofdstukken gaan over de opbouw en het gebruik van het package, en deze zijn zinvol om te lezen voor alle gebruikers:
+
+- __Doelstellingen en inhoud package__: de globale opbouw van de databank en het package, met extra terminologie die in het package gebruikt is en ook een ruw overzicht van de inhoud (groepen van functies).  In een tweede onderdeel wordt dieper ingegaan op de doelstelling: een package van en voor LSVI-gebruikers.  In feite bevat dit deel alle informatie die niet specifiek over het gebruik van de code zelf gaat.
+- __Installatie van het package__
+- __Gebruik basisfuncties__, onderdeel __Basis van LSVI-package__: hoe de functies in het LSVI-package gebruiken
+
+Voor beginnende R-gebruikers is er onder __Gebruik basisfuncties__ een extra onderdeel __Wegwijs in R__ waarin ingegaan wordt op enkele basishandelingen in R die nuttig kunnen zijn bij het gebruik van dit package (hoe documentatie opzoeken en hoe de bekomen informatie opslaan voor gebruik in Excel).
+
+Voor ervaren R-gebruikers is er een extra hoofdstuk __Gebruik van bouwstenen__, waarin uitgelegd wordt hoe ze hun eigen veldgegevens kunnen verwerken gebruik makend van 'technische' berekenfuncties (bouwstenen) in de databank.
+
+#Doelstellingen en inhoud package
+
+##Inhoud package
+
+Doelstellingen van het package LSVI zijn om de informatie in verband met het bepalen van de lokale staat van instandhouding (LSVI) van habitattypen digitaal ter beschikking te stellen en de functionaliteit aan te bieden om deze LSVI te berekenen (zie Doelstellingen voor details).  Het project bestaat uit 2 onderdelen die onlosmakelijk met elkaar verbonden zijn: een databank die de informatie bevat en het package dat beide doelstellingen uitvoert, gebruik makend van de informatie uit de databank.
+
+De __databank__ bevat alle informatie uit de LSVI-rapporten van de habitattypen, waarbij de verschillende versies van de rapporten naast elkaar opgeslagen zijn en dus afzonderlijk geraadpleegd of gebruikt kunnen worden.  Behalve de teksten die letterlijk uit de rapporten overgenomen zijn, bevat de databank ook informatie in een vorm die door het package gebruikt kan worden om de informatie op de juiste manier uit de databank te halen of om berekeningen te maken.  Zo is voor elke beoordeling van een indicator een opsplitsing gemaakt in 'voorwaarden': de elementaire onderdelen die deel uitmaken van deze beoordeling en die herleid kunnen worden tot een statement dat door een computer geëvalueerd kan worden.  Vaak zijn deze voorwaarden de onderdelen die in de rapporten gescheiden zijn door 'en' en/of 'of', soms is de opsplitsing ook gemaakt uit louter technische noodzaak (bv. '10% < x < 50%' wordt vervangen door de voorwaarden 'x > 10%' en 'x < 50%').  Voor elk van deze voorwaarden is gedetailleerde informatie opgenomen over de variabele die nodig is om deze beoordeling te kunnen maken, die enerzijds bedoeld is om de gebruiker te informeren en anderzijds om de LSVI-berekening gemakkelijk te kunnen automatiseren.
+
+De aard (complexiteit) van de informatie in de LSVI-rapporten en de vereiste om ook als basis te dienen voor de rekenmodule hebben geleid tot een eerder complexe databankstructuur.  We hebben dit opgevangen door in het __package__ functies voorzien die louter dienen om de databank te bevragen: met de functies geefVersieInfo(), geefInfoHabitatfiche(), geefSoortenlijst() en geefInvoervereisten() samen kan alle info uit de databank opgevraagd worden.  Ze focussen respectievelijk op informatie over de versies van de rapporten (__geefVersieInfo()__), de letterlijke info uit de LSVI-rapporten (__geefInfoHabitatfiche()__), de soortenlijsten die aan de habitattypes/indicatoren hangen (__geefSoortenlijst()__) en de info over de voorwaarden die nodig zijn voor de berekening (__geefInvoervereisten()__).  
+
+Daarnaast bevat het package enkele functies die deze informatie meteen in een rapport giet: __maakLSVIrapport()__ genereert een rapport waarin de habitatfiches van de geselecteerde gegevens na elkaar weergegeven worden (inclusief titels), en __maakHabitatfiches()__ slaat elke habitatfiche op in een apart bestand.
+
+Verder bevat het package functies m.b.t. de berekening van de LSVI.  Omdat niet alle veldopnames hetzelfde formaat hebben (wat en hoe verzameld, naamgeving, eenheden,...), zal voor elk type veldopname een aparte functie geschreven moeten worden.  Voorlopig is er enkel de functie __berekenLSVIdemo()__ die als voorbeeld dient voor het schrijven van een dergelijke functie.  Het principe van deze functies is dat ze de gegevens van de veldopnames eerst omzetten naar het juiste formaat, waarna een aantal 'bouwstenen' worden gebruikt om de berekening zelf te maken.
+
+Deze bouwstenen zijn in feite hulpfuncties die een noodzakelijke of vaak gebruikte stap van de berekening uitvoeren.  Zo voert __berekenLSVIbasis()__ de berekening van de LSVI uit als voor elke voorwaarde een waarde opgegeven is (en deze gegevens in een welbepaald formaat ingevoerd worden).  Om de waarden voor een aantal van deze voorwaarden te berekenen op basis van een soortenlijst met bedekkingen, kan de functie __berekenAnalyseVariabele()__ gebruikt worden.  Deze bouwstenen worden ook in het package ter berschikking gesteld zodat ervaren R-gebruikers met hun eigen veldobservaties aan de slag kunnen gaan (zie Doelstellingen en Gebruik van bouwstenen).
+
+##Doelstellingen
+
+Momenteel bevat het package enkel een basisfunctionaliteit: zoekfuncties om alle onderdelen van de databank weer te geven in een naar ons gevoel logische groepering, en enkele basisfuncties voor de berekening van de LSVI.  Op de planning staan een berekenLSVI-functie voor de verwerking van de fieldmap-gegevens (o.a. opnamen in bossen), waarschijnlijk aangevuld met enkele nieuwe bouwstenen, en een rekenmodule voor LSVI-opnamen om de LSVI van Natura 2000-habitattypen toe te voegen aan het platform PAS/DPB.  
+
+De doelstelling is om het package op deze manier stap voor stap verder uit te breiden met nieuwe functionaliteiten op vraag van gebruikers, in het kader van projecten, naar aanleiding van nieuwe berekeningswijzen voor de LSVI,...  We verwachten hiervoor input van de gebruikers (hoe berekenen,...).  Ook hopen we dat alle scripts die in het kader van de LSVI ontwikkeld worden, uiteindelijk hun weg vinden naar dit package (zie ook de laatste paragraaf van dit onderdeel).  Op die manier is er één plaats waar iedereen voor LSVI-informatie en -berekeningen terecht kan, kan iedereen alle eerder ontwikkelde berekeningsmethoden voor de LSVI op zijn/haar gegevens toepassen en vermijden we binnen INBO een wildgroei van berekeningsmethoden met licht afwijkende resultaten.
+
+We testen de functies die we ontwikkelen, maar we zien ook wel eens iets over het hoofd.  Het is dus (zeker in het begin) mogelijk dat er nog foutjes in geslopen zijn, dat de functies niet in alle omstandigheden een correct resultaat (of correcte foutmelding) geven, of dat een functie zich 'irritant' gedraagt (bv. foutmelding geven als je een hoofdletter ingeeft i.p.v. een kleine letter op een plaats waar dit verschil niet relevant is).  __Als je deze of andere problemen tegenkomt, meld ze ons dan a.u.b.__ (en ga er niet van uit dat je collega's dat doen).  Geef dan bij voorkeur het script door waarbij het misloopt (waar van toepassing inclusief de gegevens of een suggestie voor het resultaat), dit helpt ons om het probleem te situeren en aan te pakken.  Ook alle andere feedback is trouwens welkom.
+
+Het idee is dus om op termijn voor zoveel mogelijk relevante gegevensbronnen (vnl. databanken) een berekenLSVI-functie op maat te schrijven en ter beschikking te stellen via dit package.  Omdat dit niet haalbaar is op korte termijn, en omdat het wellicht niet haalbaar is om voor elke onderzoeker/project een functie op maat te maken, streven we ernaar om functies aan te bieden waarmee de onderzoekers met een minimale inspanning zelf scripts op maat kunnen maken.  Uiteraard geven we vanuit BMK de onderzoekers hierbij de nodige ondersteuning.
+
+We willen dit in de eerste plaats bereiken door de berekenLSVI-functies zo generiek mogelijk te maken, zodat alle gebruikers met min of meer dezelfde veldgegevens gebruik kunnen maken van dezelfde functie (mits uitvoeren van enkele kleine bewerkingen vooraf, bv. hernoemen van variabelenamen of aanpassen van de eenheden van de variabelen).  Een bijkomend voordeel van deze aanpak is dat het aantal functies in het package beperkt blijft, en het geheel dus meer overzichtelijk blijft.
+
+Daarnaast gaan we zoveel mogelijk deelstappen voor deze functies op een generiek niveau schrijven en als aparte functies ('bouwstenen') ter beschikking stellen, zodat ervaren R-gebruikers zelf met deze bouwstenen aan de slag kunnen gaan om hun eigen berekenscript te schrijven.  Dit zorgt ervoor dat dezelfde of gelijkaardige deelscripts niet meermaals opnieuw ontwikkeld moeten worden, wat enerzijds een tijdswinst oplevert, en anderzijds het voordeel dat bij wijziging van de inzichten maar 1 script moet aangepast worden.
+
+Als je zelf een script ontwikkelt dat in aanmerking zou kunnen komen om als berekenLSVI-functie of bouwsteen opgenomen te worden in het package, wees dan collegiaal met je collega's die later een gelijkaardig script nodig hebben en neem contact op met de beheerder van dit package ('cre' in description-file, zie code hieronder).  We bekijken dan samen op welke manier je het script kan aanleveren en hoe we eventueel resterende taken verdelen. (_Aan het berekenscript wordt bij voorkeur een stukje script toegevoegd dat foutcontrole uitvoert op de argumenten van de functie, en documentatie over wat de functie doet, en er wordt bij voorkeur ook een aparte testfunctie geschreven die nagaat of de functie in verschillende situaties het juiste resultaat geeft.  We kunnen dit zelf toevoegen of je hierbij helpen, maar het is handig als we hiervoor wat bijkomende informatie krijgen._)  Als bedankje word je uiteraard vermeld in de auteurslijst van het package.
+
+```{r}
+packageDescription(pkg = "LSVI")
+```
+
+
+#Installatie van het package
+
+Het package kan als volgt geïnstalleerd worden: <!-- werkt waarschijnlijk pas als er iets in de master zit -->
+
+```{r eval = FALSE}
+devtools::install_github("inbo/LSVI", build_vignettes = TRUE)
+```
+
+Om de functies uit het package te kunnen gebruiken, moet een connectie gemaakt kunnen worden met de databank 'D0122_00_LSVIHabitatTypes' die op server 'inbosql03\\\\prd' staat en alle informatie in verband met de LSVI-indicatoren bevat (zie 'Doelstellingen en inhoud package' > 'Inhoud package').  Dit betekent dat gebruikers die niet op het INBO-netwerk werken, een kopie van deze databank nodig hebben en de locatie en naam van deze databank telkens moeten specifiëren in de functie connecteerMetLSVIdb().
+
+#Gebruik basisfuncties
+
+##Wegwijs in R
+
+(Wat extra uitleg voor diegenen die niet vertrouwd zijn met R.)
+
+###Packages en documentatie
+
+Om in R packages te kunnen gebruiken, moeten deze telkens (na elke herstart van de R-console) eerst ingeladen worden met de functie 'library()'.  Om de functies in verband met de LSVI te gebruiken, voer je dus eerst het commando 'library(LSVI)' in.  Dit kan wel enkel met reeds geïnstalleerde packages, die in het venster rechtsonder onder de tab Packages vermeld zijn.  Andere packages moet je eerst eenmalig installeren (via de knop Install of het commando install.packages("naam_nieuw_package")).
+
+Als je in de lijst met packages onder de tab Packages op een packagenaam klikt, krijg je de documentatie van het package: eventuele handleidingen (onder de link 'User guides, package vignettes and other documentation') en een klikbare lijst met alle functies die in het package beschikbaar zijn.
+
+Zodra een package ingeladen is, kan je deze documentatie van functies ook opvragen door een '?' te typen, gevolgd door de naam van de functie, bijvoorbeeld:
+
+```{r eval = FALSE}
+?maakLSVIrapport
+```
+
+Deze documentatie geeft aan wat de functie doet en hoe je de functie moet gebruiken:
+
+- Description: beschrijft wat de functie doet
+- Usage: geeft de argumenten weer en de defaultwaarden die voor deze argumenten meegegeven worden (zie ook Arguments)
+- Arguments: de argumenten die je met de functie kan of moet meegeven.  Hiermee bepaal je dus zelf welke uitvoer je wil, door bijvoorbeeld te kiezen voor een bepaalde versie of bepaald habitattype.  Of bij berekenfuncties geef je hier een tabel mee met de veldobservaties waarop de berekening uitgevoerd moet worden.  Voor deze argumenten moet je een waarde meegeven als er geen waarde vermeld is onder Usage, in het andere geval mag je een waarde meegeven (als je dit niet doet, wordt de onder Usage vermelde defaultwaarde gebruikt).
+- Value: wat de functie teruggeeft.  Dit is voor het LSVI-package vaak een tabel met gegevens, in bovenstaand voorbeeld wordt een document gegenereerd dat automatisch opgeslagen wordt in de map waarin je op dat moment werkt.
+- Examples: een of meerdere voorbeelden die tonen hoe je de functie kan gebruiken.  Als het package LSVI ingeladen is (dus na intypen van 'library(LSVI)'), kan je deze voorbeelden kopiëren en uittesten.  Door de argumenten aan te passen (of toe te voegen of te wissen), kan je op een gemakkelijke manier je eigen script maken.
+
+_(Leeswijzer: info over het gebruik van de functies in het LSVI-package staat onder 'Basis van LSVI-package'.  Wat hier volgt, is wat met de gegenereerde gegevens gedaan kan worden.  We raden daarom aan om eerst 'Basis van LSVI-package' te lezen.)_
+
+###Wat met gegenereerde gegevens in tabelvorm?
+
+Vaak genereert een functie gegevens in de vorm van een tabel.  Hoe kan je hier nu mee verdergaan?  
+
+We illustreren dit a.d.h.v de functie geefSoortenlijst().  Als we deze functie op zich gebruiken zoals in de documentatie is weergegeven (eerste voorbeeld), dan wordt de uitvoer weergegeven in de R-console:
+
+```{r}
+library(LSVI)
+ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+geefSoortenlijst(ConnectieLSVIhabitats, Habitattype = "4010", Soortenlijsttype = "LSVIfiche")
+```
+
+Omdat de tabel te breed is, wordt deze opgesplitst in 4 delen, die onder elkaar weergegeven worden.  Deze tabel wordt ook enkel weergegeven, niet opgeslagen, en op deze manier kunnen we er achteraf geen bewerkingen mee doen.  Beter is om de tabel toe te kennen aan een variabele, we geven hier die variabele de naam 'soortenlijst4010':
+
+```{r}
+soortenlijst4010 <- geefSoortenlijst(ConnectieLSVIhabitats, Habitattype = "4010", Soortenlijsttype = "LSVIfiche")
+```
+
+Als je dit commando in je eigen console runt, verschijnt deze variabele in het venster rechtsboven onder de tab Environment (dat een overzicht geeft van alle variabelen).  Bij tabellen kan je deze variabele bekijken door erop te klikken.
+
+In R kan je deze variabele tonen door de variabelenaam in te typen (dan krijg je dezelfde uitvoer van de tabel in 4 delen).  Je kan er ook allerlei bewerkingen mee uitvoeren (sorteren, selecteren,...), maar daarvoor verwijzen we naar een basiscursus van R.
+
+Wat we hier wel tonen, is hoe deze tabel opgeslagen kan worden, zodat hij achteraf in Excel geopend kan worden.  Dit kan met de functie 'write_delim()' uit het package 'readr'.  Om deze tabel met naam 'soortenlijst4010.csv' op te slaan in de map R op de C-schijf, gebruiken we volgende commando's:
+
+```{r eval=FALSE}
+library(readr)
+write_delim(soortenlijst4010, "C:/R/soortenlijst4010.csv", delim = ";")
+```
+
+We hebben hier het absolute path (C:/R) weergegeven, een andere mogelijkheid is om het path relatief ten opzichte van de 'working directory' weer te geven.  Dit is de map waarin je aan 't werken bent.  Je kan deze working directory zelf bepalen door het commando 'setwd("C:/.../mijn_werkmap")'.  Als je in een project werkt waarin je al je scripts opslaat (aan te raden), dan is de root van dit project automatisch je working directory.
+
+'delim' geeft aan dat het scheidingsteken tussen de tabellen een ; is.  Hier kan je ook een ander teken kiezen, maar dan moet je de gegevens in Excel nog manueel in kolommen zetten via Gegevens -> Tekst naar kolommen.
+
+###Wat met een list van tabellen?
+
+Functies als berekenLSVIbasis() en berekenLSVIdemo() geven gegevens terug in de vorm van een list van 3 tabellen.  Ter illustratie nemen we het voorbeeld van de functie berekenLSVIdemo().
+
+```{r}
+library(readr)
+Data_indicatoren <- 
+    read_csv2(system.file("vbdata/opname_4010_gelayout_indicatoren.csv", package = "LSVI"))
+Data_soorten <- 
+    read_csv2(system.file("vbdata/opname_4010_gelayout_soorten.csv", package = "LSVI"))
+ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+berekenLSVIdemo(ConnectieLSVIhabitats, Versie = "Versie 3", Kwaliteitsniveau = "1", 
+                Data_indicatoren, Data_soorten)
+```
+
+De uitvoer bestaat uit 3 tabellen onder elkaar, aangeduid met [[1]], [[2]] en [[3]].
+
+We gaan weer beginnen met de uitvoer in een variabele ('resultaat') te steken om er bewerkingen op te kunnen uitvoeren:
+
+```{r}
+resultaat <- berekenLSVIdemo(ConnectieLSVIhabitats, Versie = "Versie 3", 
+                             Kwaliteitsniveau = "1", Data_indicatoren, Data_soorten)
+```
+
+Nu kunnen we de afzonderlijke tabellen als volgt uit de variabele Resultaat halen:
+
+```{r}
+resultaat[[1]]
+resultaat[[2]]
+resultaat[[3]]
+```
+
+Met deze tabellen kan verder gewerkt worden zoals hierboven beschreven is ('Wat met gegenereerde gegevens in tabelvorm?') 
+
+
+##Basis van LSVI-package
+
+Vermits de meeste functies een connectie met de databank vereisen, moet eerst een connectie met de databank aangemaakt worden via de functie connecteerMetLSVIdb().  Deze connectie moet doorgegeven worden als argument in de meeste functies.  Na gebruik kan deze connectie terug gesloten worden met de functie odbcClose() uit het package RODBC.  Het script ziet er bijgevolg als volgt uit:
+
+```{r eval=FALSE}
+library(LSVI)
+ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+
+# Hier worden de functies uit het LSVI-package uitgevoerd
+
+library(RODBC)
+odbcClose(ConnectieLSVIhabitats)
+```
+
+De andere functies kunnen min of meer in groepen ingedeeld worden op basis van het eerste deel van hun naam:
+
+- maakXXX: deze functies genereren een bestand (.html) waarin de informatie uit de databank in een rapportageformaat weergegeven wordt
+- geefXXX: deze functies genereren een tabel met informatie uit de databank
+- berekenXXX: deze functies voeren berekeningen uit m.b.t. de LSVI op basis van opgegeven veldgegevens
+- andere (selecteerXXX en vertaalXXX): hulpfuncties die eventueel relevant kunnen zijn voor gevorderde R-gebruikers (zie 'Gebruik van bouwstenen')
+
+Voor de functies van voornamelijk de eerste twee groepen zijn er een aantal argumenten die facultatief meegegeven kunnen worden: Versie, Habitatgroep, Habitattype, Habitatsubtype, Criterium en Indicator.  Door hiervoor waarden op te geven, kunnen de relevante gegevens uit de databank geselecteerd worden.  Voor de argumenten waarvoor geen specifieke waarden opgegeven zijn, wordt de default 'alle' gebruikt, waardoor alle beschikbare gegevens voor dat argument uit de databank gehaald worden.
+
+Voor een overzicht van de belangrijkste beschikbare functies verwijzen we naar een eerder hoofdstuk in deze handleiding ('Doelstellingen en inhoud package') en voor de gedetailleerde beschrijving verwijzen we naar de documentatie van de functies zelf.  In deze documentatie wordt verwezen naar hulpfuncties waar het relevant is om deze te gebruiken.  
+
+Enkele functies worden niet of amper vermeld in deze handleiding of de documentatie van andere functies.  Dit zijn technische hulpfuncties die moeilijk zijn in gebruik (vaak doordat ze als argumenten identificatienummers uit de databank nodig hebben) en die een meer gebruiksvriendelijk alternatief hebben.  Ze dienen doorgaans als hulpfunctie voor hun gebruiksvriendelijke alternatieven en/of andere basisfuncties en zijn in de documentatie duidelijk benoemd als 'hulpfunctie' met vaak de vermelding van het meer gebruiksvriendelijke alternatief.  We willen ervaren R-gebruikers de kans te geven om deze indien nodig te gebruiken, vandaar dat we ervoor kiezen om deze toch beschikbaar te stellen. 
+
+#Gebruik van bouwstenen
+
+Om zelf een script te schrijven om de LSVI te berekenen op basis van veldopnamen, doorloop je best volgende stappen:
+
+- zoek met geefInvoervereisten() op welke informatie vereist is voor de versie en habitattypes waarvoor je de berekening wil maken, en lees in de documentatie van berekenLSVIbasis() in welk formaat deze informatie moet samengesteld worden
+- analyseer hoe je je eigen gegevens kan koppelen aan VoorwaardeID en omvormen naar dit formaat.  Dit is de stap die het meeste werk en creativiteit vraagt.  De koppelingen zullen voor een groot deel handmatig moeten gebeuren, en mogelijk moeten er ook een aantal berekeningen uitgevoerd worden.  Enkele tips:
+    - check of je gegevens omgezet kunnen worden naar AnalyseVariabelen, deze beperkte set aan variabelen zijn niet habitatspecifiek, wat een generieke aanpak over habitattypes heen mogelijk maakt
+    - maak waar zinvol een 'vertaaltabel' van variabelenamen of categorienamen, of gegevens zoals bedekkingsschalen, waarin je in de ene kolom de namen uit je eigen gegevens opneemt, en in de andere kolom de naamgeving die in dit package gebruikt kan worden
+    - om bedekkingen om te zetten van percentages naar Tansley-waarden of omgekeerd, zijn er de functies vertaalBedekkingTansley() en vertaalTansleyPercentage()
+    - maak gebruik van de functie berekenAnalyseVariabele() voor gegevens bestaande uit soortenlijsten met bedekkingen of categorische variabelen.  (Idee is dat naargelang de noden meerdere dergelijke 'bouwstenen' toegevoegd worden aan dit package, zie ook Doelstellingen)
+- zodra je gegevens in het juiste formaat staan, kan je de LSVI berekenen met de functie berekenLSVIbasis()
+
+<!-- Idee is om het demoscript berekenLSVIdemo hier toe te voegen, of toch het gedeelte exclusief foutcontrole.  Ik wacht met het maken van een kopie tot dit script getest en aangepast is na het vullen van de databank. -->
+
+Vragen of hulp nodig?  Spring gerust binnen bij BMK.
+
