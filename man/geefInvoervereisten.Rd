@@ -29,7 +29,7 @@ geefInvoervereisten(ConnectieLSVIhabitats, Versie = "alle",
 Deze functie geeft een tabel met de hierboven beschreven informatie uit de databank.
 }
 \description{
-Deze functie geeft alle informatie die nodig is om veldobservaties klaar te maken voor de berekening van de de Lokale Staat van Instandhouding met de functie berekenLSVI().  Allereerst geeft ze de 'VoorwaardeID' die gekoppeld moet worden aan de observaties, samen met informatie uit de LSVI-tabellen (vnl. beoordelingsmatrix) en een beschrijving van de voorwaarde ('VoorwaardeNaam') die zou moeten toelaten om de koppeling te maken.  
+Deze functie geeft alle informatie die nodig is om veldobservaties klaar te maken voor de berekening van de de Lokale Staat van Instandhouding met de functie berekenLSVI().  Allereerst geeft ze de 'VoorwaardeID' die gekoppeld moet worden aan de observaties, samen met informatie uit de LSVI-tabellen (vnl. beoordelingsmatrix) en een beschrijving van de voorwaarde ('VoorwaardeNaam') die zou moeten toelaten om de koppeling te maken.
 
 Verder geeft ze informatie over de Waarde die verwacht wordt in de functie berekenLSVI().  AnalyseVariabele is een korte omschrijving voor de variabele waarde, bv. 'aantal_frequent_aanwezig' staat voor 'het aantal soorten dat minimaal frequent aanwezig is'.  Voor een aantal voorwaarden, i.e. de voorwaarden met betrekking tot opnames van soorten, kan Waarde berekend worden met de functie berekenAnalyseVariabele op basis van de AnalyseVariabele, SoortengroepID en een soortenlijst met bedekkingen.  Voor andere gegevens zal de koppeling met VoorwaardeID 'handmatig' moeten gebeuren.  Ingeval van grote datasets is het aan te raden om een koppeling te zoeken tussen deze AnalyseVariabele en de variabele in de dataset, zodat niet voor elke voorwaarde afzonderlijk een koppeling moet gemaakt worden.
 
@@ -37,7 +37,7 @@ Voor elke AnalyseVariabele is informatie over het formaat dat verwacht wordt voo
 }
 \examples{
 ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-geefInvoervereisten(ConnectieLSVIhabitats, Versie = "Versie 3", 
+geefInvoervereisten(ConnectieLSVIhabitats, Versie = "Versie 3",
                     Habitatsubtype = "4010", Kwaliteitsniveau = "1")
 library(RODBC)
 odbcClose(ConnectieLSVIhabitats)
