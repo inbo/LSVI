@@ -224,7 +224,7 @@ geefInfoHabitatfiche <-
       Habitatfiche$Opmerkingen.beoordeling <-
         gsub("_","",Habitatfiche$Opmerkingen.beoordeling)
       Habitatfiche$Beoordeling_letterlijk <-
-        gsub("_","",Habitatfiche$Beoordeling_letterlijk)
+        gsub("_","",Habitatfiche$Beoordeling)
     }
 
     return(Habitatfiche)
