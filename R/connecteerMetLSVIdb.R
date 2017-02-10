@@ -5,7 +5,7 @@
 #' @param Server de server waarop de databank staat die aangeroepen wordt (standaard "inbosql03\\prd")
 #' @param Databank de naam van de databank die aangeroepen wordt (standaard "D0122_00_LSVIHabitatTypes")
 #' @param Gebruiker gebruiker van de databank, standaard "pc-eigenaar" waarbij de login en wachtwoord gebruikt wordt waarmee ingelogd is op de pc, andere opties zijn "lezer" waarbij een gebruiker met leesrechten aangemaakt wordt (dit kan enkel als dit geïnstalleerd is op je pc) of een eigen gebruikersnaam en wachtwoord ingeven
-#' @param Wachtwoord wachtwoord van de gebruiker van de databank, standaard een gebruiker met leesrechten, moet niet ingevuld worden als Gebruiker "pc-eigenaar" is
+#' @param Wachtwoord wachtwoord van de gebruiker van de databank, standaard de tekst "geen", moet niet ingevuld worden als Gebruiker "pc-eigenaar" is
 #'
 #' @return Deze functie geeft een open odbc-connectie naar de gespecifieerde databank.
 #'
@@ -26,7 +26,7 @@ connecteerMetLSVIdb <-
   function(Server = "inbosql03\\prd",
            Databank = "D0122_00_LSVIHabitatTypes",
            Gebruiker = "pc-eigenaar",
-           Wachtwoord = "Geen"){
+           Wachtwoord = "geen"){
 
   assert_that(is.string(Server))
   assert_that(is.string(Databank))
@@ -41,7 +41,7 @@ connecteerMetLSVIdb <-
     if (Gebruiker == "lezer") {
       Gebruiker <- "D0122_AppR"
       Wachtwoord <-
-        tryCatch(Wachtwoord <- scan(file = "./credentials",
+        tryCatch(Wachtwoord <- scan(file = system.file("credentials", package = "LSVI"),
                                     what = "character"),
                  error = function(e) {
                    print("Error: Geen wachtwoord gevonden")
