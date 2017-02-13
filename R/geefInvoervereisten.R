@@ -176,6 +176,7 @@ geefInvoervereisten <- function(ConnectieLSVIhabitats,
   query_voorwaardeinfo <-
     sprintf("SELECT Voorwaarde.Id AS VoorwaardeID,
             VoorwaardeNaam.Omschrijving AS VoorwaardeNaam,
+            Voorwaarde.Referentiewaarde, Voorwaarde.Operator,
             Voorwaarde.SoortengroepID, Soortengroep.Omschrijving AS SoortengroepNaam,
             AnalyseVariabele.VariabeleNaam as AnalyseVariabele,
             AnalyseVariabele.Eenheid, TypeVariabele.Naam AS TypeVariabele,
@@ -190,7 +191,8 @@ geefInvoervereisten <- function(ConnectieLSVIhabitats,
             WHERE Voorwaarde.Id in (%s)",VoorwaardenIDs)
 
   Voorwaardeinfo <- sqlQuery(ConnectieLSVIhabitats, query_voorwaardeinfo, stringsAsFactors = FALSE) %>%
-    group_by_(~VoorwaardeID, ~VoorwaardeNaam, ~SoortengroepID, ~SoortengroepNaam,
+    group_by_(~VoorwaardeID, ~VoorwaardeNaam, ~Referentiewaarde, ~Operator,
+              ~SoortengroepID, ~SoortengroepNaam,
               ~AnalyseVariabele, ~Vegetatielaag, ~Eenheid, ~TypeVariabele) %>%
     summarise_(
       Invoermasker = ~paste(Invoerwaarde, collapse = ", ")
