@@ -19,14 +19,14 @@ library(dplyr)
 ```
 
 ```{r}
-if(inherits(params$ConnectieLSVIhabitats, "RODBC")){
+if (inherits(params$ConnectieLSVIhabitats, "RODBC")) {
   ConnectieLSVIhabitats <- params$ConnectieLSVIhabitats
 } else {
   #print("Connectiefout!")
   ConnectieLSVIhabitats <- connecteerMetLSVIdb()
 }
-versie <- params$Versie
-habitatsubtype <- params$Habitatsubtype
+VersieRapportdeel <- params$Versie
+HabitatsubtypeFiche <- params$Habitatsubtype
 
 ```
 

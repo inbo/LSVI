@@ -47,22 +47,22 @@ Indicatoren <- selecteerIndicatoren(ConnectieLSVIhabitats,
 
 Uitvoer <- NULL
 
-for (versie in unique(Indicatoren$Versie)) {
-  Uitvoer <- c(Uitvoer, paste("#", versie, sep = ""))
+for (VersieRapportdeel in unique(Indicatoren$Versie)) {
+  Uitvoer <- c(Uitvoer, paste("#", VersieRapportdeel, sep = ""))
   VersieIndicatoren <- Indicatoren %>%
-    filter_(~Versie == versie)
-  for (habitatgroep in unique(VersieIndicatoren$Habitatgroepnaam)) {
-    Uitvoer <- c(Uitvoer, paste("##",habitatgroep, sep = ""))
+    filter_(~Versie == VersieRapportdeel)
+  for (Habitatgroep in unique(VersieIndicatoren$Habitatgroepnaam)) {
+    Uitvoer <- c(Uitvoer, paste("##",Habitatgroep, sep = ""))
     Subset <- VersieIndicatoren %>%
-      filter_(~Habitatgroepnaam == habitatgroep)
-    for (habitattype in unique(as.character(Subset$Habitattype))) {
+      filter_(~Habitatgroepnaam == Habitatgroep)
+    for (Habitat in unique(as.character(Subset$Habitattype))) {
       Subsubset <- Subset %>%
-        filter_(~habitattype == habitattype)
-      habitatnaam <- ifelse(is.na(unique(Subsubset$Habitatnaam)),
+        filter_(~Habitattype == Habitat)
+      Habitatnaam <- ifelse(is.na(unique(Subsubset$Habitatnaam)),
                             "",
                             paste(": ", unique(Subsubset$Habitatnaam), sep = ""))
-      Uitvoer <- c(Uitvoer, paste("###Habitattype ", habitattype, habitatnaam, "\n", sep = ""))
-      for (habitatsubtype in unique(as.character(Subsubset$Habitatsubtype))) {
+      Uitvoer <- c(Uitvoer, paste("###Habitattype ", Habitat, Habitatnaam, "\n", sep = ""))
+      for (HabitatsubtypeFiche in unique(as.character(Subsubset$Habitatsubtype))) {
         Uitvoer <- c(Uitvoer, knit_child("Habitatfiche.Rmd"))
         
       }
@@ -77,6 +77,6 @@ for (versie in unique(Indicatoren$Versie)) {
 
 
 ```{r output, results='asis'}
-cat(Uitvoer, sep="\n")
+cat(Uitvoer, sep = "\n")
 ```
 

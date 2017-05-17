@@ -22,15 +22,15 @@ library(dplyr)
 
 
 ```{r}
-# versie <- "Versie 3"
-# habitatsubtype <- "4010"
+# VersieRapportdeel <- "Versie 3"
+# HabitatsubtypeFiche <- "4010"
 # ConnectieLSVIhabitats <- connecteerMetLSVIdb()
 
-Habitatfiche <- geefInfoHabitatfiche(ConnectieLSVIhabitats = ConnectieLSVIhabitats, Versie = versie, 
-                                     Habitatsubtype = habitatsubtype)
+Habitatfiche <- geefInfoHabitatfiche(ConnectieLSVIhabitats = ConnectieLSVIhabitats, Versie = VersieRapportdeel, 
+                                     Habitatsubtype = HabitatsubtypeFiche)
 
 Versie <- geefVersieInfo(ConnectieLSVIhabitats) %>%
-  filter_(~VersieLSVI == versie)
+  filter_(~VersieLSVI == VersieRapportdeel)
 
 ```
 
@@ -47,7 +47,7 @@ Habitatkarakteristieken <- Habitatfiche %>%
           Referenties = ~Referenties.habitat) %>%
   distinct_()
 
-for(criterium in unique(Habitatkarakteristieken$Criterium)){
+for (criterium in unique(Habitatkarakteristieken$Criterium)) {
   cat(criterium)
   Habitattabel <- Habitatkarakteristieken %>%
     filter_(~Criterium == criterium) %>%
@@ -70,18 +70,25 @@ for(criterium in unique(Habitatkarakteristieken$Criterium)){
 ```{r results='asis', message=FALSE, warning=FALSE}
 
 Beoordelingsfiche <- Habitatfiche %>%
-  select_(~Beoordeling, Criterium = ~Criterium.beoordeling, Indicator = ~Indicator.beoordeling, 
-          Opmerkingen = ~Opmerkingen.beoordeling, Referenties = ~Referenties.beoordeling,
+  select_(~Beoordeling, Criterium = ~Criterium.beoordeling, 
+          Indicator = ~Indicator.beoordeling, 
+          Opmerkingen = ~Opmerkingen.beoordeling, 
+          Referenties = ~Referenties.beoordeling,
           ~Kwaliteitsniveau) %>%
   distinct_() %>%
-  inner_join(data.frame(Kwaliteitsniveau=c(1,2), Referentieniveau = c(Versie$Kwaliteitsniveau1,Versie$Kwaliteitsniveau2), stringsAsFactors = FALSE)) %>%
-  select(-Kwaliteitsniveau)%>%
+  inner_join(
+    data.frame(Kwaliteitsniveau = c(1,2), 
+               Referentieniveau = c(Versie$Kwaliteitsniveau1, 
+                                    Versie$Kwaliteitsniveau2),
+               stringsAsFactors = FALSE)
+  ) %>%
+  select(-Kwaliteitsniveau) %>%
   spread(key = Referentieniveau, value = Beoordeling)
 
-for(Criterium in unique(Habitatfiche$Criterium.beoordeling)){   #hier wordt Criterium in Habitatfiche gebruikt omdat deze volgorde juist staat
+for (Criterium in unique(Habitatfiche$Criterium.beoordeling)) {   #hier wordt Criterium in Habitatfiche gebruikt omdat deze volgorde juist staat
   cat(Criterium)
   Beoordelingsmatrix <- 
-    xtable(Beoordelingsfiche[Beoordelingsfiche$Criterium==Criterium,
+    xtable(Beoordelingsfiche[Beoordelingsfiche$Criterium == Criterium,
                         c("Indicator",c(Versie$Kwaliteitsniveau1,Versie$Kwaliteitsniveau2),"Opmerkingen","Referenties")])
   print(Beoordelingsmatrix, type = "html", include.rownames = FALSE)
 }
