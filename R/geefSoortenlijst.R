@@ -30,7 +30,6 @@ geefSoortenlijst <-
            Versie = "alle",
            Habitatgroep = "alle",
            Habitattype = "alle",
-           Habitatsubtype = "alle",
            Criterium = "alle",
            Indicator = "alle",
            Soortenlijsttype = c("LSVIfiche", "Soortniveau", "alle")){
@@ -40,7 +39,7 @@ geefSoortenlijst <-
 
     Selectiegegevens <-
       selecteerIndicatoren(ConnectieLSVIhabitats, Versie, Habitatgroep,
-                           Habitattype, Habitatsubtype, Criterium, Indicator)
+                           Habitattype, Criterium, Indicator)
 
     #nu de soortgegevens ophalen:
     if(Soortenlijsttype[1] == "LSVIfiche"){

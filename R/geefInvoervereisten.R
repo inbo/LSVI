@@ -14,7 +14,7 @@
 #' @examples
 #' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
 #' geefInvoervereisten(ConnectieLSVIhabitats, Versie = "Versie 3",
-#'                     Habitatsubtype = "4010", Kwaliteitsniveau = "1")
+#'                     Habitattype = "4010", Kwaliteitsniveau = "1")
 #' library(RODBC)
 #' odbcClose(ConnectieLSVIhabitats)
 #'
@@ -29,7 +29,6 @@ geefInvoervereisten <- function(ConnectieLSVIhabitats,
                                 Versie = "alle",
                                 Habitatgroep = "alle",
                                 Habitattype = "alle",
-                                Habitatsubtype = "alle",
                                 Criterium = "alle",
                                 Indicator = "alle",
                                 Kwaliteitsniveau = "alle"){
@@ -49,7 +48,7 @@ geefInvoervereisten <- function(ConnectieLSVIhabitats,
 
 
   Selectiewaarden <-
-    selecteerIndicatoren(ConnectieLSVIhabitats, Versie, Habitatgroep, Habitattype, Habitatsubtype,
+    selecteerIndicatoren(ConnectieLSVIhabitats, Versie, Habitatgroep, Habitattype,
                          Criterium, Indicator) %>%
     select_(~Versie, ~Habitattype, ~Habitatsubtype, ~Indicator_beoordelingID)
 

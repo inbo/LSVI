@@ -1,6 +1,6 @@
 #' @title Genereert LSVI-rapport op basis van de opgegeven parameters
 #'
-#' @description Deze functie genereert een rapport met habitatfiches die gebruikt worden voor de bepaling van de Lokale Staat van Instandhouding van de habitatsubtypes die voldoen aan de opgegeven parameters.  (Om een tabel te genereren met deze informatie om zelf een rapport te kunnen samenstellen, wordt verwezen naar de functie geefInfoHabitatfiche().)
+#' @description Deze functie genereert een rapport met habitatfiches die gebruikt worden voor de bepaling van de Lokale Staat van Instandhouding van de habitat(sub)types die voldoen aan de opgegeven parameters.  (Om een tabel te genereren met deze informatie om zelf een rapport te kunnen samenstellen, wordt verwezen naar de functie geefInfoHabitatfiche().)
 #'
 #' @template Zoekparameters
 #'
@@ -14,8 +14,8 @@
 #' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
 #' maakLSVIrapport(ConnectieLSVIhabitats, Bestandsnaam = "LSVIrapport_heiden_versie3.html", 
 #'                 Versie = "Versie 3", Habitatgroep = "Heiden")
-#' maakLSVIrapport(ConnectieLSVIhabitats, Bestandsnaam = "LSVIrapport_4010.html", 
-#'                 Habitatsubtype = "4010")
+#' maakLSVIrapport(ConnectieLSVIhabitats, Bestandsnaam = "LSVIrapport_4010.html",
+#'                 Habitattype = "4010")
 #' library(RODBC)
 #' odbcClose(ConnectieLSVIhabitats)
 #' 
@@ -33,7 +33,6 @@ maakLSVIrapport <-
            Versie = "alle", 
            Habitatgroep = "alle",  
            Habitattype= "alle", 
-           Habitatsubtype = "alle",
            verbose = TRUE){
     
     assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
@@ -48,8 +47,7 @@ maakLSVIrapport <-
     render(system.file("LSVIrapport.Rmd", package = "LSVI"), 
            params = list(ConnectieLSVIhabitats = ConnectieLSVIhabitats,
                          Versie = Versie, Habitatgroep = Habitatgroep,
-                         Habitattype = Habitattype,
-                         Habitatsubtype = Habitatsubtype),
+                         Habitattype = Habitattype),
            output_file = Bestandsnaam,
            output_dir = getwd())
 

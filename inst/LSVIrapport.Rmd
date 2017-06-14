@@ -7,7 +7,6 @@ params:
   Versie: "Versie 2.0"
   Habitatgroep: "Heiden"
   Habitattype: "4010"
-  Habitatsubtype: "4010"
 ---
 
 ```{r setup, include=FALSE}
@@ -33,7 +32,7 @@ if(inherits(params$ConnectieLSVIhabitats, "RODBC")){
 
 Indicatoren <- selecteerIndicatoren(ConnectieLSVIhabitats,
                                     params$Versie, params$Habitatgroep, 
-                                    params$Habitattype, params$Habitatsubtype,
+                                    params$Habitattype,
                                     HabitatnamenToevoegen = TRUE) %>%
   select_(~Versie, ~Habitatgroepnaam, ~Habitattype, ~Habitatnaam,
           ~Habitatsubtype, ~Habitatsubtypenaam) %>%

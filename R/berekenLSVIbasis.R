@@ -5,8 +5,8 @@
 #' @inheritParams selecteerIndicatoren
 #' @param Versie De versie van het LSVI-rapport op basis waarvan de berekening gemaakt wordt, bv. "Versie 2" of "Versie 3".  Bij de default "alle" wordt de LSVI volgens de verschillende versies berekend.
 #' @param Kwaliteitsniveau Voor elke versie van de LSVI zijn er een of meerdere kwaliteitsniveaus gedefinieerd in de databank.  Zo is er bij Versie 2.0 een onderscheid gemaakt tussen goede staat (A), voldoende staat (B) en gedegradeerde staat (C).  Hier duidt kwaliteitsniveau 1 de grens tussen voldoende (B) en gedegradeerd (C) aan en kwaliteitsniveau 2 het onderscheid tussen goed (A) en voldoende (B).  Bij Versie 3 duidt kwaliteitsniveau 1 op het onderscheid tussen ongunstig en gunstig en kwaliteitsniveau 2 op de streefwaarde.  De betekenissen van de 2 kwaliteitsniveaus voor de verschillende versies is weergegeven in de tabel Versie in de databank en kan opgevraagd met de functie geefVersieInfo().  Geef als parameter Kwaliteitsniveau op op basis van welk kwaliteitsniveau de berekening gemaakt moet worden (strikt genomen is de berekening van de LSVI de berekening volgens kwaliteitsniveau 1).
-#' @param Data_voorwaarden Gegevens over de opgemeten indicatoren in de vorm van een data.frame met velden ID, Habitatsubtype, VoorwaardeID en Waarde, waarbij ID een groeperende variabele is voor een opname (plaats en tijdstip).  Habitatsubtype moet overeenkomen met de naamgeving in de LSVI-databank (op te zoeken door geefUniekeWaarden("Habitatsubtype", "Habitatcode_subtype")).  VoorwaardeID komt overeen met de ID in de databank die gekoppeld is aan de voorwaarde (= deelitem binnen beoordeling) en Waarde is de waarde die voor die voorwaarde geobserveerd of gemeten is.  Het type van deze waarde moet overeenkomen met het type dat verwacht wordt volgens de LSVI (geheel getal als een aantal (soorten) verwacht wordt, decimaal getal tussen 0 en 100 als een percentage verwacht wordt, een van de mogelijke categorieen bij een categorische variabele,...).  Ook is het belangrijk dat de opgegeven VoorwaardeID's uit de databank voorwaarden zijn die voor de opgegeven versie, het opgegeven habitatsubtype en kwaliteitsniveau.  De informatie die nodig is om observaties te koppelen aan de VoorwaardeID's en de noodzakelijke info samen te brengen, kan opgevraagd worden met de functie geefInvoervereisten().
-#' 
+#' @param Data_voorwaarden Gegevens over de opgemeten indicatoren in de vorm van een data.frame met velden ID, Habitattype, VoorwaardeID en Waarde, waarbij ID een groeperende variabele is voor een opname (plaats en tijdstip).  Habitattype moet overeenkomen met de naamgeving in de LSVI-databank (op te zoeken door geefUniekeWaarden("Habitattype", "Code")).  VoorwaardeID komt overeen met de ID in de databank die gekoppeld is aan de voorwaarde (= deelitem binnen beoordeling) en Waarde is de waarde die voor die voorwaarde geobserveerd of gemeten is.  Het type van deze waarde moet overeenkomen met het type dat verwacht wordt volgens de LSVI (geheel getal als een aantal (soorten) verwacht wordt, decimaal getal tussen 0 en 100 als een percentage verwacht wordt, een van de mogelijke categorieen bij een categorische variabele,...).  Ook is het belangrijk dat de opgegeven VoorwaardeID's uit de databank voorwaarden zijn die voor de opgegeven versie, het opgegeven habitatsubtype en kwaliteitsniveau.  De informatie die nodig is om observaties te koppelen aan de VoorwaardeID's en de noodzakelijke info samen te brengen, kan opgevraagd worden met de functie geefInvoervereisten().
+#'
 #'
 #' @return Deze functie genereert de resultaten in de vorm van een list met 3 tabellen: een eerste met de beoordelingen per criterium en kwaliteitsniveau, een tweede met de beoordelingen per indicator en kwaliteitsniveau, en een derde met de detailgegevens inclusief meetwaarden.
 #' 
@@ -15,7 +15,7 @@
 #'    data.frame(ID = "Jo1380",
 #'               VoorwaardeID = c(3,4,5,7,2,1),
 #'               Waarde = c("abundant","frequent",35,3,3,1),
-#'               Habitatsubtype = 4010,
+#'               Habitattype = 4010,
 #'               stringsAsFactors = FALSE)
 #' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
 #' berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "Versie 3", 
@@ -82,7 +82,7 @@ berekenLSVIbasis <-
     query <- sprintf(
       "SELECT 
       Versie.VersieLSVI,
-      Habitatsubtype.Habitatcode_subtype,
+      Habitattype.Code AS Habitattype,
       Criterium.Naam AS Criterium,
       Indicator.Naam AS Indicator,
       Beoordeling.Id AS BeoordelingID,
@@ -96,7 +96,7 @@ berekenLSVIbasis <-
       ON Indicator_beoordeling.ID = IndicatortabellenKoppeling.Indicator_beoordelingID)
       INNER JOIN Indicator_habitat 
       ON IndicatortabellenKoppeling.Indicator_habitatID = Indicator_habitat.Id)
-      INNER JOIN Habitatsubtype ON Indicator_habitat.HabitatsubtypeID = Habitatsubtype.Id)
+      INNER JOIN Habitattype ON Indicator_habitat.HabitattypeId = Habitattype.Id)
       INNER JOIN Versie ON Indicator_habitat.VersieID = Versie.Id %s",
       Voorwaarden)
     
@@ -225,7 +225,7 @@ berekenLSVIbasis <-
         WaardeN = ~ifelse(tolower(Waarde) == tolower(Invoermasker), Volgnummer, -1),
         RefWaardeN = ~ifelse(tolower(Referentiewaarde) == tolower(Invoermasker), Volgnummer, -1)
       ) %>%
-      group_by_(~ID, ~VoorwaardeID, ~Waarde, ~Habitatsubtype, ~VoorwaardeNaam,
+      group_by_(~ID, ~VoorwaardeID, ~Waarde, ~Habitattype, ~VoorwaardeNaam,
                 ~Referentiewaarde, ~Operator, ~SoortengroepID, ~VariabeleNaam,
                 ~Eenheid, ~TypeVariabele, ~Vegetatielaag) %>%
       summarise_(
@@ -337,20 +337,20 @@ berekenLSVIbasis <-
     Resultaat_beoordeling <- Data %>%
       left_join(Resultaat,
                 by = c("ID" = "ID", "VoorwaardeID" = "VoorwaardeID")) %>%
-      full_join(GroeperendeInfo, 
-                by = c("BeoordelingID" = "BeoordelingID", 
-                       "Habitatsubtype" = "Habitatcode_subtype"))
-    
+      full_join(GroeperendeInfo,
+                by = c("BeoordelingID" = "BeoordelingID",
+                       "Habitattype" = "Habitattype"))
+
     #resultaten op niveau van indicator uitselecteren
     Resultaat_indicator <- Resultaat_beoordeling %>%
-      select_(~ID, ~Habitatsubtype, ~VersieLSVI, ~Criterium, ~Kwaliteitsniveau, 
+      select_(~ID, ~Habitattype, ~VersieLSVI, ~Criterium, ~Kwaliteitsniveau,
               ~Indicator, ~Beoordeling_letterlijk, ~Beoordeling_indicator,
               ~BeoordelingID) %>%
       distinct_()
     
     #resultaten op niveau van criterium afleiden
     Resultaat_criterium <- Resultaat_beoordeling %>%
-      group_by_(~ID, ~Habitatsubtype, ~VersieLSVI, ~Criterium, ~Kwaliteitsniveau) %>%
+      group_by_(~ID, ~Habitattype, ~VersieLSVI, ~Criterium, ~Kwaliteitsniveau) %>%
       summarise_(
         Beoordeling_criterium = ~as.logical(min(Beoordeling_indicator))
       ) %>%
