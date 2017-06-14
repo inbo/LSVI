@@ -24,7 +24,7 @@
 
 connecteerMetLSVIdb <-
   function(Server = "inbosql03\\prd",
-           Databank = "D0122_00_LSVIHabitatTypes",
+           Databank = "D0122_03_LSVIHabitatTypes",
            Gebruiker = "pc-eigenaar",
            Wachtwoord = "geen"){
 
