@@ -74,30 +74,49 @@ selecteerIndicatoren <-
 
 
     query_uitbreiding <- ifelse(HabitatnamenToevoegen,
-                                "Habitattype.Naam AS Habitatnaam,
-    Habitatsubtype.Naam AS Habitatsubtypenaam,
-    Habitatsubtype.Omschrijving AS HabitatsubtypeOmschrijving,
-                                Habitatgroep.Naam AS Habitatgroepnaam,",
+                                "Habitatselectie.Habitatnaam,
+    Habitatselectie.Habitatsubtypenaam,
+    Habitatselectie.HabitatsubtypeOmschrijving,
+                                Habitatselectie.Habitatgroepnaam, ",
                                 "")
 
     #eerst de selectiegegevens ophalen en de nodige gegevens uit tabel Indicator_habitat, query samenstellen op basis van parameters
     Parametervoorwaarde <- FALSE
-    query <- sprintf("SELECT Versie.VersieLSVI AS Versie, Habitattype.Code AS Habitattype,
-    Habitatsubtype.Code AS Habitatsubtype,
-    %s
-    Criterium.Naam AS Criterium, Indicator.Naam AS Indicator, 
-    Indicator_habitat.Id AS Indicator_habitatID,
-    Indicator_habitat.SoortengroepID, Indicator_habitat.NiveauSoortenlijstFiche,
-    IndicatortabellenKoppeling.Indicator_beoordelingID
-    FROM (((Indicator_habitat
-    INNER JOIN ((Habitattype AS Habitatsubtype INNER JOIN Habitattype ON Habitatsubtype.ParentId = Habitattype.Id)
-    INNER JOIN Habitatgroep ON Habitattype.HabitatgroepId = Habitatgroep.Id)
-    ON Indicator_habitat.HabitattypeID = Habitattype.Id)
-    INNER JOIN (Indicator INNER JOIN Criterium ON Indicator.CriteriumID = Criterium.Id)
-    ON Indicator_habitat.IndicatorID = Indicator.Id)
-    INNER JOIN Versie ON Indicator_habitat.VersieID = Versie.Id)
-    LEFT JOIN IndicatortabellenKoppeling
-    ON Indicator_habitat.Id = IndicatortabellenKoppeling.Indicator_habitatId",
+    query <- sprintf("WITH Habitatselectie
+        AS
+        (
+          SELECT Habitatgroep.Naam AS Habitatgroepnaam,
+            Ht1.Code AS Habitattype, Ht1.Naam AS Habitatnaam,
+            Ht1.Code AS Habitatsubtype, Ht1.Naam AS Habitatsubtypenaam,
+            Ht1.Omschrijving AS HabitatsubtypeOmschrijving,
+            Ht1.Id AS HabitattypeId
+          FROM Habitattype AS Ht1 INNER JOIN Habitatgroep
+          ON Ht1.HabitatgroepId = Habitatgroep.Id
+          WHERE Ht1.ParentId IS NULL
+        UNION ALL
+          SELECT Habitatselectie.Habitatgroepnaam,
+            Habitatselectie.Habitattype, Habitatselectie.Habitatnaam,
+            Ht2.Code AS Habitatsubtype, Ht2.Naam AS Habitatsubtypenaam,
+            Ht2.Omschrijving AS HabitatsubtypeOmschrijving,
+            Ht2.Id AS HabitattypeId
+          FROM Habitatselectie INNER JOIN Habitattype AS Ht2
+          ON Habitatselectie.HabitattypeId = Ht2.ParentId
+        )
+        SELECT Versie.VersieLSVI AS Versie, Habitatselectie.Habitattype,
+            Habitatselectie.Habitatsubtype, %s
+            Criterium.Naam AS Criterium, Indicator.Naam AS Indicator,
+            Indicator_habitat.Id AS Indicator_habitatID,
+            Indicator_habitat.SoortengroepID,
+            Indicator_habitat.NiveauSoortenlijstFiche,
+            IndicatortabellenKoppeling.Indicator_beoordelingID
+        FROM (((Indicator_habitat
+        INNER JOIN Habitatselectie
+        ON Indicator_habitat.HabitattypeID = Habitatselectie.HabitattypeId)
+        INNER JOIN (Indicator INNER JOIN Criterium ON Indicator.CriteriumID = Criterium.Id)
+        ON Indicator_habitat.IndicatorID = Indicator.Id)
+        INNER JOIN Versie ON Indicator_habitat.VersieID = Versie.Id)
+        LEFT JOIN IndicatortabellenKoppeling
+        ON Indicator_habitat.Id = IndicatortabellenKoppeling.Indicator_habitatId",
                      query_uitbreiding)
     if (Versie[1] != "alle") {
       query <- sprintf("%s WHERE Versie.VersieLSVI = '%s'", query, Versie)
@@ -110,7 +129,9 @@ selecteerIndicatoren <-
         Voegwoord <- "WHERE"
         Parametervoorwaarde <- TRUE
       }
-      query <- sprintf("%s %s Habitatgroep.Naam = '%s'", query, Voegwoord, Habitatgroep)
+      query <-
+        sprintf("%s %s Habitatselectie.Habitatgroepnaam = '%s'",
+                query, Voegwoord, Habitatgroep)
     }
     if (Habitattype[1] != "alle") {
       if (Parametervoorwaarde) {
@@ -120,7 +141,8 @@ selecteerIndicatoren <-
         Parametervoorwaarde <- TRUE
       }
       query <-
-        sprintf("%s %s (Habitattype.Code = '%s' OR Habitatsubtype.Code = '%s')",
+        sprintf("%s %s (Habitatselectie.Habitattype = '%s' OR
+                Habitatselectie.Habitatsubtype = '%s')",
                 query, Voegwoord, Habitattype, Habitattype)
     }
     if (Criterium[1] != "alle") {
