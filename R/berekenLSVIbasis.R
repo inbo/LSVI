@@ -9,20 +9,20 @@
 #'
 #'
 #' @return Deze functie genereert de resultaten in de vorm van een list met 3 tabellen: een eerste met de beoordelingen per criterium en kwaliteitsniveau, een tweede met de beoordelingen per indicator en kwaliteitsniveau, en een derde met de detailgegevens inclusief meetwaarden.
-#' 
-#' @examples 
-#' Data_voorwaarden <- 
+#'
+#' @examples
+#' Data_voorwaarden <-
 #'    data.frame(ID = "Jo1380",
 #'               VoorwaardeID = c(3,4,5,7,2,1),
 #'               Waarde = c("abundant","frequent",35,3,3,1),
 #'               Habitattype = 4010,
 #'               stringsAsFactors = FALSE)
 #' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-#' berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "Versie 3", 
+#' berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "Versie 3",
 #'                  Kwaliteitsniveau = "1", Data_voorwaarden)
 #' library(RODBC)
 #' odbcClose(ConnectieLSVIhabitats)
-#' 
+#'
 #'
 #' @export
 #'
@@ -32,55 +32,55 @@
 #' @importFrom pander evals
 #'
 #'
-berekenLSVIbasis <- 
+berekenLSVIbasis <-
   function(ConnectieLSVIhabitats,
            Versie = "alle",
            Kwaliteitsniveau = "alle",
            Data_voorwaarden){
-    
-    #controle invoer    
+
+    #controle invoer
     assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
-    
+
     assert_that(is.string(Versie))
     if(!(Versie %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Versie","VersieLSVI"))){
-      stop(sprintf("Versie moet een van de volgende waarden zijn: %s", 
+      stop(sprintf("Versie moet een van de volgende waarden zijn: %s",
                    geefUniekeWaarden(ConnectieLSVIhabitats,"Versie","VersieLSVI")))
     }
-    
-    Kwaliteitsniveau <- ifelse(Kwaliteitsniveau==1, "1", 
-                               ifelse(Kwaliteitsniveau==2, "2", 
+
+    Kwaliteitsniveau <- ifelse(Kwaliteitsniveau==1, "1",
+                               ifelse(Kwaliteitsniveau==2, "2",
                                       Kwaliteitsniveau))
     assert_that(is.string(Kwaliteitsniveau))
-    if(!(Kwaliteitsniveau %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Beoordeling", 
+    if(!(Kwaliteitsniveau %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Beoordeling",
                                                         "Kwaliteitsniveau"))){
-      stop(sprintf("Kwaliteitsniveau moet een van de volgende waarden zijn: %s", 
+      stop(sprintf("Kwaliteitsniveau moet een van de volgende waarden zijn: %s",
                    geefUniekeWaarden(ConnectieLSVIhabitats,"Beoordeling","Kwaliteitsniveau")))
     }
-    
+
     assert_that(inherits(Data_voorwaarden, "data.frame"))
     assert_that(has_name(Data_voorwaarden, "ID"))
     assert_that(has_name(Data_voorwaarden, "VoorwaardeID"))
-    if(!all(Data_voorwaarden$VoorwaardeID %in% 
+    if(!all(Data_voorwaarden$VoorwaardeID %in%
             geefUniekeWaarden(ConnectieLSVIhabitats,"Voorwaarde", "Id"))){
       stop("Niet alle waarden vermeld onder Data_voorwaarden$VoorwaardeID komen overeen met waarden vermeld in de databank.")
     }
     assert_that(has_name(Data_voorwaarden, "Waarde"))
-    
+
     #nodige info ophalen uit de databank
-    Voorwaarden <- 
+    Voorwaarden <-
       ifelse(Versie[1]=="alle",
              ifelse(Kwaliteitsniveau[1]=="alle","",
                     sprintf("WHERE Beoordeling.Kwaliteitsniveau = '%s'", Kwaliteitsniveau[1])),
              ifelse(Kwaliteitsniveau[1]=="alle",
                     sprintf("WHERE Versie.VersieLSVI = '%s'", Versie[1]),
                     sprintf("WHERE Versie.VersieLSVI = '%s' AND Beoordeling.Kwaliteitsniveau = '%s'", Versie[1], Kwaliteitsniveau[1])))
-    
+
     #in hoeverre is het naar performantie toe zinvol om enkel de te onderzoeken habitattypes te selecteren?
     #dit dan hier doen door een AND toe te voegen als de Voorwaarden-string niet "" is
-    
-    
+
+
     query <- sprintf(
-      "SELECT 
+      "SELECT
       Versie.VersieLSVI,
       Habitattype.Code AS Habitattype,
       Criterium.Naam AS Criterium,
@@ -88,23 +88,23 @@ berekenLSVIbasis <-
       Beoordeling.Id AS BeoordelingID,
       Beoordeling.Kwaliteitsniveau,
       Beoordeling.Beoordeling_letterlijk
-      FROM (((((Beoordeling INNER JOIN Indicator_beoordeling 
+      FROM (((((Beoordeling INNER JOIN Indicator_beoordeling
       ON Beoordeling.Indicator_beoordelingID = Indicator_beoordeling.Id)
       INNER JOIN (Indicator INNER JOIN Criterium ON Indicator.CriteriumID = Criterium.Id)
       ON Indicator_beoordeling.IndicatorID = Indicator.Id)
-      INNER JOIN IndicatortabellenKoppeling 
+      INNER JOIN IndicatortabellenKoppeling
       ON Indicator_beoordeling.ID = IndicatortabellenKoppeling.Indicator_beoordelingID)
-      INNER JOIN Indicator_habitat 
+      INNER JOIN Indicator_habitat
       ON IndicatortabellenKoppeling.Indicator_habitatID = Indicator_habitat.Id)
       INNER JOIN Habitattype ON Indicator_habitat.HabitattypeId = Habitattype.Id)
       INNER JOIN Versie ON Indicator_habitat.VersieID = Versie.Id %s",
       Voorwaarden)
-    
+
     GroeperendeInfo <- sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
-    
+
     BeoordelingIDs <- paste(unique(GroeperendeInfo$BeoordelingID), collapse = ",")
-    
-    query <- 
+
+    query <-
       sprintf("
               WITH voorwaardencombinatie
               AS
@@ -143,16 +143,16 @@ berekenLSVIbasis <-
               )
               Select * FROM voorwaardencombinatie",
               BeoordelingIDs)
-    
+
     CombinatieVoorwaarden <- sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
-    
-    
-    VoorwaardeIDs <- 
+
+
+    VoorwaardeIDs <-
       paste(unique(c(CombinatieVoorwaarden[!is.na(CombinatieVoorwaarden$VoorwaardeID1),]$VoorwaardeID1,
-                     CombinatieVoorwaarden[!is.na(CombinatieVoorwaarden$VoorwaardeID2),]$VoorwaardeID2)), 
+                     CombinatieVoorwaarden[!is.na(CombinatieVoorwaarden$VoorwaardeID2),]$VoorwaardeID2)),
             collapse = ",")
-    
-    query <- 
+
+    query <-
       sprintf("
               SELECT Voorwaarde.Id AS VoorwaardeID,
               VoorwaardeNaam.Omschrijving AS VoorwaardeNaam,
@@ -175,18 +175,18 @@ berekenLSVIbasis <-
               ON Voorwaarde.AnalyseVariabeleID = AnalyseVariabele.Id
               WHERE Voorwaarde.Id in (%s)",
               VoorwaardeIDs)
-    
-    
+
+
     Voorwaarden <- sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
-    
+
     #data koppelen aan voorwaarden uit de databank en dan 'berekeningen' (vgl met referentiewaarde) doen
     Data_voorwaarden <- Data_voorwaarden %>%
       left_join(Voorwaarden, by = c("VoorwaardeID" = "VoorwaardeID"))
-    
+
     #berekeningen: vergelijking getallen met referentiewaarde
     Resultaat_getal <- Data_voorwaarden %>%
       filter_(~TypeVariabele %in% c("Geheel getal", "Decimaal getal", "Percentage"))
-    
+
     #pipe onderbreken voor foutcontrole: test of getallen het juiste formaat hebben
     Foutcontrole <- Resultaat_getal %>%
       select_(~Waarde, ~TypeVariabele) %>%
@@ -206,7 +206,7 @@ berekenLSVIbasis <-
     if(max(Foutcontrole$TypeVariabele == "Percentage" & !is.na(Foutcontrole$WaardeGetal) & Foutcontrole$WaardeGetal > 100)){
       stop("Foute invoer in Data_voorwaarden$Waarde: een getal > 100 ingevoerd waar een percentage verwacht wordt")
     }
-    
+
     #berekening verderzetten
     Resultaat_getal <- Resultaat_getal %>%
       mutate_(
@@ -216,8 +216,8 @@ berekenLSVIbasis <-
                          NA),
         Vergelijking = ~NULL
       )
-    
-    
+
+
     #berekeningen: vergelijking categorieen met referentiewaarde
     Resultaat_categorie <- Data_voorwaarden %>%
       filter_(~TypeVariabele == "Categorie") %>%
@@ -233,12 +233,12 @@ berekenLSVIbasis <-
         RefWaardeN = ~max(RefWaardeN)
       ) %>%
       ungroup()
-    
+
     #pipe even onderbreken voor de foutcontrole
     if(all(!is.na(Resultaat_categorie$Waarde)) & min(Resultaat_categorie$WaardeN) < 0){
       stop("Foute invoer in Data_voorwaarden$Waarde: niet alle categorische waarden komen overeen met het invoermasker uit de databank")
     }
-    
+
     #en de berekening verder afwerken
     Resultaat_categorie <- Resultaat_categorie %>%
       mutate_(
@@ -249,15 +249,15 @@ berekenLSVIbasis <-
         Vergelijking = ~NULL,
         WaardeN = ~NULL,
         RefWaardeN = ~NULL
-      ) 
-    
-    
-    
+      )
+
+
+
     #berekeningen: nog uitwerken!
     Resultaat_janee <- Data_voorwaarden %>%
       filter_(~TypeVariabele == "Ja/nee") %>%
       mutate_(Status = NA)                #uitwerken zodra hier voorbeelden van in de db zitten
-    
+
     #samenvoegen resultaten berekeningen
     Resultaat <- Resultaat_getal %>%
       bind_rows(Resultaat_categorie) %>%
@@ -266,12 +266,12 @@ berekenLSVIbasis <-
         Invoermasker = ~NULL,
         Volgnummer = ~NULL
       )
-    
+
     #nu een recursieve functie om de voorwaarden te combineren tot een beoordeling
     groepeerVoorwaarden <- function(CombinerenVoorwaardenID){
       Record <- CombinatieVoorwaarden %>%
         filter_(~Id == CombinerenVoorwaardenID)
-      Data <- data.frame(ID = NULL, VoorwaardeID = NULL, 
+      Data <- data.frame(ID = NULL, VoorwaardeID = NULL,
                          Beoordeling_indicator = NULL, BeoordelingID = NULL)
       if(!is.na(Record$ChildID1)){
         Data <- Data %>%
@@ -303,11 +303,11 @@ berekenLSVIbasis <-
         Data <- Data %>%
           bind_rows(Data_resultaat)
       }
-      
+
       Beoordelingberekening <- Data %>%
           group_by_(~ID) %>%
           summarise_(
-            Beoordeling_indicator = 
+            Beoordeling_indicator =
               ~ifelse(all(!is.na(Beoordeling_indicator)),
                       ifelse(Record$BewerkingAND,
                              as.logical(min(Beoordeling_indicator)),
@@ -318,14 +318,14 @@ berekenLSVIbasis <-
       Data <- Data %>%
         mutate_(
           Beoordeling_indicator = ~NULL
-        ) %>% 
+        ) %>%
         left_join(Beoordelingberekening, by = c("ID" = "ID"))
-      
+
       return(Data)
     }
-    
+
     #recursieve functie uitvoeren voor alle beoordelingen en dan extra info aan hangen
-    Data <- data.frame(ID = NULL, VoorwaardeID = NULL, 
+    Data <- data.frame(ID = NULL, VoorwaardeID = NULL,
                        Beoordeling_indicator = NULL, BeoordelingID = NULL)
     for(i in unique(CombinatieVoorwaarden$BeoordelingID)){
       Data <- Data %>%
@@ -333,7 +333,7 @@ berekenLSVIbasis <-
                                         filter_(~BeoordelingID == i))$Id) %>%
                     mutate_(BeoordelingID = ~i))
     }
-    
+
     Resultaat_beoordeling <- Data %>%
       left_join(Resultaat,
                 by = c("ID" = "ID", "VoorwaardeID" = "VoorwaardeID")) %>%
@@ -347,7 +347,7 @@ berekenLSVIbasis <-
               ~Indicator, ~Beoordeling_letterlijk, ~Beoordeling_indicator,
               ~BeoordelingID) %>%
       distinct_()
-    
+
     #resultaten op niveau van criterium afleiden
     Resultaat_criterium <- Resultaat_beoordeling %>%
       group_by_(~ID, ~Habitattype, ~VersieLSVI, ~Criterium, ~Kwaliteitsniveau) %>%
@@ -355,7 +355,7 @@ berekenLSVIbasis <-
         Beoordeling_criterium = ~as.logical(min(Beoordeling_indicator))
       ) %>%
       ungroup()
-      
-    
+
+
     return(list(as.data.frame(Resultaat_criterium), Resultaat_indicator, Resultaat_beoordeling))
   }

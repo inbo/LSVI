@@ -92,8 +92,8 @@ geefInfoHabitatfiche <-
         arrange_(~ TotNaam)
 
       OmschrijvingKolommen <- NULL
-      for(i in colnames(Soortenlijst)){
-        if(grepl("Omschrijving",i)){
+      for (i in colnames(Soortenlijst)) {
+        if (grepl("Omschrijving",i)) {
           OmschrijvingKolommen <- c(OmschrijvingKolommen, i)
         }
       }
@@ -114,7 +114,7 @@ geefInfoHabitatfiche <-
         ungroup()
 
       laatste_i <- 0
-      for(i in seq_len(length(OmschrijvingKolommen))){
+      for (i in seq_len(length(OmschrijvingKolommen))) {
         laatste_i <- max(laatste_i, length(OmschrijvingKolommen))
         Soortenlijst <- Soortenlijst %>%
           mutate_(
@@ -123,12 +123,12 @@ geefInfoHabitatfiche <-
                                   var = as.name(OmschrijvingKolommen[1]))
           ) %>%
           select(
-            - dplyr::matches(OmschrijvingKolommen[1])
+            -dplyr::matches(OmschrijvingKolommen[1])
           )
 
         OmschrijvingKolommen <- OmschrijvingKolommen[-1]
 
-        if(i < laatste_i){
+        if (i < laatste_i) {
           Soortenlijst <- Soortenlijst %>%
             group_by_(
               ~ SoortengroepID,
@@ -208,7 +208,7 @@ geefInfoHabitatfiche <-
     }
 
 
-    if(Stijl[1] == "tekst"){
+    if (Stijl[1] == "tekst") {
       Habitatfiche$Habitatnaam <- gsub("_","",Habitatfiche$Habitatnaam)
       Habitatfiche$Habitatsubtypenaam <-
         gsub("_","",Habitatfiche$Habitatsubtypenaam)

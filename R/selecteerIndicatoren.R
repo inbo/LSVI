@@ -26,7 +26,7 @@
 #' @importFrom assertthat assert_that
 #'
 #'
-selecteerIndicatoren <- 
+selecteerIndicatoren <-
   function(ConnectieLSVIhabitats,
            Versie = "alle",
            Habitatgroep = "alle",
@@ -34,21 +34,21 @@ selecteerIndicatoren <-
            Criterium = "alle",
            Indicator = "alle",
            HabitatnamenToevoegen = FALSE){
-    
+
     assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
-    
+
     assert_that(is.string(Versie))
-    if(!(Versie %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Versie","VersieLSVI"))){
-      stop(sprintf("Versie moet een van de volgende waarden zijn: %s", 
+    if (!(Versie %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Versie","VersieLSVI"))) {
+      stop(sprintf("Versie moet een van de volgende waarden zijn: %s",
                    geefUniekeWaarden(ConnectieLSVIhabitats,"Versie","VersieLSVI")))
     }
-    
+
     assert_that(is.string(Habitatgroep))
     if (!(Habitatgroep %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Habitatgroep","Naam"))) {
       stop(sprintf("Habitatgroep moet een van de volgende waarden zijn: %s",
                    geefUniekeWaarden(ConnectieLSVIhabitats,"Habitatgroep","Naam")))
     }
-    
+
     Habitattype <- ifelse(is.numeric(Habitattype),
                           as.character(Habitattype),
                           Habitattype)
@@ -57,29 +57,29 @@ selecteerIndicatoren <-
       stop(sprintf("Habitattype moet een van de volgende waarden zijn: %s",
                    geefUniekeWaarden(ConnectieLSVIhabitats,"Habitattype","Code")))
     }
-    
+
     assert_that(is.string(Criterium))
-    if(!(Criterium %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Criterium","Naam"))){
-      stop(sprintf("Criterium moet een van de volgende waarden zijn: %s", 
+    if (!(Criterium %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Criterium","Naam"))) {
+      stop(sprintf("Criterium moet een van de volgende waarden zijn: %s",
                    geefUniekeWaarden(ConnectieLSVIhabitats,"Criterium","Naam")))
     }
-    
+
     assert_that(is.string(Indicator))
-    if(!(Indicator %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Indicator","Naam"))){
-      stop(sprintf("Indicator moet een van de volgende waarden zijn: %s", 
+    if (!(Indicator %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Indicator","Naam"))) {
+      stop(sprintf("Indicator moet een van de volgende waarden zijn: %s",
                    geefUniekeWaarden(ConnectieLSVIhabitats,"Indicator","Naam")))
     }
-    
+
     assert_that(is.logical(HabitatnamenToevoegen))
-    
-    
+
+
     query_uitbreiding <- ifelse(HabitatnamenToevoegen,
                                 "Habitattype.Naam AS Habitatnaam,
     Habitatsubtype.Naam AS Habitatsubtypenaam,
     Habitatsubtype.Omschrijving AS HabitatsubtypeOmschrijving,
                                 Habitatgroep.Naam AS Habitatgroepnaam,",
                                 "")
-    
+
     #eerst de selectiegegevens ophalen en de nodige gegevens uit tabel Indicator_habitat, query samenstellen op basis van parameters
     Parametervoorwaarde <- FALSE
     query <- sprintf("SELECT Versie.VersieLSVI AS Versie, Habitattype.Code AS Habitattype,

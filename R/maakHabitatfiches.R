@@ -8,13 +8,13 @@
 #' @param verbose geeft de toestand van het systeem aan, om te zorgen dat boodschappen niet onnodig gegeven worden
 #'
 #' @return Deze functie genereert een rapport met habitatfiches in de vorm van een html-file die in de working directory opgeslagen wordt.
-#' 
-#' @examples 
+#'
+#' @examples
 #' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
 #' maakHabitatfiches(ConnectieLSVIhabitats, Versie = "Versie 3", Habitattype = "4010")
 #' library(RODBC)
 #' odbcClose(ConnectieLSVIhabitats)
-#' 
+#'
 #'
 #' @export
 #'
@@ -23,13 +23,13 @@
 #' @importFrom assertthat assert_that noNA is.flag
 #'
 #'
-maakHabitatfiches <- 
+maakHabitatfiches <-
   function(ConnectieLSVIhabitats,
-           Versie = "alle", 
-           Habitatgroep = "alle",  
-           Habitattype = "alle", 
+           Versie = "alle",
+           Habitatgroep = "alle",
+           Habitattype = "alle",
            verbose = TRUE){
-    
+
     assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
     assert_that(is.flag(verbose))
     assert_that(noNA(verbose))
@@ -41,8 +41,8 @@ maakHabitatfiches <-
       for(habitatsubtype in unique(as.character(Indicatoren$Habitatsubtype))){
         Bestandnaam <- sprintf("Habitatfiche_%s_%s.html",
                                habitatsubtype,
-                               sub(versie, 
-                                   pattern = " ", 
+                               sub(versie,
+                                   pattern = " ",
                                    replacement = ""))
         render(system.file("HabitatficheParent.Rmd", package = "LSVI"),
                params = list(ConnectieLSVIhabitats = ConnectieLSVIhabitats,
@@ -55,7 +55,7 @@ maakHabitatfiches <-
     if(verbose){
       message(sprintf("De fiche(s) is/zijn opgeslagen in de working directory: %s", getwd()))
     }
-    
-    
+
+
   }
 

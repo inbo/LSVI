@@ -9,16 +9,16 @@
 #' @param verbose geeft de toestand van het systeem aan, om te zorgen dat boodschappen niet onnodig gegeven worden
 #'
 #' @return Deze functie genereert habitatfiches in de vorm van html-files die in de working directory opgeslagen worden.
-#' 
-#' @examples 
+#'
+#' @examples
 #' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-#' maakLSVIrapport(ConnectieLSVIhabitats, Bestandsnaam = "LSVIrapport_heiden_versie3.html", 
+#' maakLSVIrapport(ConnectieLSVIhabitats, Bestandsnaam = "LSVIrapport_heiden_versie3.html",
 #'                 Versie = "Versie 3", Habitatgroep = "Heiden")
 #' maakLSVIrapport(ConnectieLSVIhabitats, Bestandsnaam = "LSVIrapport_4010.html",
 #'                 Habitattype = "4010")
 #' library(RODBC)
 #' odbcClose(ConnectieLSVIhabitats)
-#' 
+#'
 #'
 #' @export
 #'
@@ -27,34 +27,34 @@
 #' @importFrom assertthat assert_that noNA is.flag
 #'
 #'
-maakLSVIrapport <- 
+maakLSVIrapport <-
   function(ConnectieLSVIhabitats,
            Bestandsnaam = "LSVIrapport.html",
-           Versie = "alle", 
-           Habitatgroep = "alle",  
-           Habitattype= "alle", 
+           Versie = "alle",
+           Habitatgroep = "alle",
+           Habitattype= "alle",
            verbose = TRUE){
-    
+
     assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
     assert_that(is.flag(verbose))
     assert_that(noNA(verbose))
     assert_that(is.character(Bestandsnaam))
-    if(!grepl(".html$", Bestandsnaam)){
+    if (!grepl(".html$", Bestandsnaam)) {
       stop("De bestandnaam moet eindigen op '.html'")
     }
-    
-    
-    render(system.file("LSVIrapport.Rmd", package = "LSVI"), 
+
+
+    render(system.file("LSVIrapport.Rmd", package = "LSVI"),
            params = list(ConnectieLSVIhabitats = ConnectieLSVIhabitats,
                          Versie = Versie, Habitatgroep = Habitatgroep,
                          Habitattype = Habitattype),
            output_file = Bestandsnaam,
            output_dir = getwd())
 
-    if(verbose){
+    if (verbose) {
       message(sprintf("Het rapport is opgeslagen in de working directory: %s", getwd()))
     }
-    
-    
+
+
   }
 
