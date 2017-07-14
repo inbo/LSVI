@@ -35,10 +35,10 @@ maakHabitatfiches <-
     assert_that(noNA(verbose))
 
     Indicatoren <- selecteerIndicatoren(ConnectieLSVIhabitats, Versie, Habitatgroep,
-                                        Habitattype)
+                                        Habitattype, HabitatnamenToevoegen = TRUE)
 
-    for(versie in unique(Indicatoren$Versie)){
-      for(habitatsubtype in unique(as.character(Indicatoren$Habitatsubtype))){
+    for (versie in unique(Indicatoren$Versie)) {
+      for (habitatsubtype in unique(as.character(Indicatoren$Habitatsubtype))) {
         Bestandnaam <- sprintf("Habitatfiche_%s_%s.html",
                                habitatsubtype,
                                sub(versie,
@@ -47,12 +47,13 @@ maakHabitatfiches <-
         render(system.file("HabitatficheParent.Rmd", package = "LSVI"),
                params = list(ConnectieLSVIhabitats = ConnectieLSVIhabitats,
                              Versie = versie,
-                             Habitatsubtype = habitattype),
+                             Habitatsubtype = habitatsubtype,
+                             Habitatnaam = unique(Indicatoren[Indicatoren$Habitatsubtype == habitatsubtype,"Habitatsubtypenaam"])),
                output_file = Bestandnaam,
                output_dir = getwd())
       }
     }
-    if(verbose){
+    if (verbose) {
       message(sprintf("De fiche(s) is/zijn opgeslagen in de working directory: %s", getwd()))
     }
 

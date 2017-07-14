@@ -62,7 +62,21 @@ for (VersieRapportdeel in unique(Indicatoren$Versie)) {
                             paste(": ", unique(Subsubset$Habitatnaam), sep = ""))
       Uitvoer <- c(Uitvoer, paste("###Habitattype ", Habitat, Habitatnaam, "\n", sep = ""))
       for (HabitatsubtypeFiche in unique(as.character(Subsubset$Habitatsubtype))) {
-        Uitvoer <- c(Uitvoer, knit_child("Habitatfiche.Rmd"))
+        Habitatsubtypenaam <- 
+          ifelse(is.na(unique((Subsubset %>% 
+                                filter_(~Habitatsubtype == HabitatsubtypeFiche))$Habitatsubtypenaam)),
+                 "",
+                 paste(": ", unique((Subsubset %>% 
+                                filter_(~Habitatsubtype == HabitatsubtypeFiche))$Habitatsubtypenaam), sep = ""))
+        if (HabitatsubtypeFiche != Habitat) {
+          Uitvoer <- 
+            c(Uitvoer,
+              paste("####Habitatsubtype ", HabitatsubtypeFiche, 
+                    Habitatsubtypenaam, "\n", sep = ""))
+        }
+        Uitvoer <- 
+          c(Uitvoer,
+            knit_child("Habitatfiche.Rmd"))
         
       }
     }

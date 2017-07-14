@@ -35,8 +35,6 @@ Versie <- geefVersieInfo(ConnectieLSVIhabitats) %>%
 ```
 
 
-####Habitatsubtype `r Habitatfiche[1,"Habitatsubtype"]`: `r Habitatfiche[1,"Habitatsubtypenaam"]`
-
 #####Habitatkarakteristieken
 
 ```{r results='asis'}
@@ -45,10 +43,12 @@ Habitatkarakteristieken <- Habitatfiche %>%
   select_(Criterium = ~Criterium.habitat, Indicator = ~Indicator.habitat,
           ~Beschrijving, ~Maatregelen, Opmerkingen = ~Opmerkingen.habitat,
           Referenties = ~Referenties.habitat) %>%
-  distinct_()
+  distinct_() %>%
+  mutate_(fCriterium = ~factor(Criterium, , levels = c("Vegetatie", "Structuur", "Verstoring"), ordered = TRUE)) %>%
+  arrange_(~fCriterium)
 
 for (criterium in unique(Habitatkarakteristieken$Criterium)) {
-  cat(criterium)
+  cat("__", criterium, "__", sep = "")
   Habitattabel <- Habitatkarakteristieken %>%
     filter_(~Criterium == criterium) %>%
     select_(
@@ -83,10 +83,12 @@ Beoordelingsfiche <- Habitatfiche %>%
                stringsAsFactors = FALSE)
   ) %>%
   select(-Kwaliteitsniveau) %>%
-  spread(key = Referentieniveau, value = Beoordeling)
+  spread(key = Referentieniveau, value = Beoordeling) %>%
+  mutate_(fCriterium = ~factor(Criterium, , levels = c("Vegetatie", "Structuur", "Verstoring"), ordered = TRUE)) %>%
+  arrange_(~fCriterium)
 
-for (Criterium in unique(Habitatfiche$Criterium.beoordeling)) {   #hier wordt Criterium in Habitatfiche gebruikt omdat deze volgorde juist staat
-  cat(Criterium)
+for (Criterium in unique(Beoordelingsfiche$Criterium)) {   
+  cat("__", Criterium, "__", sep = "")
   Beoordelingsmatrix <- 
     xtable(Beoordelingsfiche[Beoordelingsfiche$Criterium == Criterium,
                         c("Indicator",c(Versie$Kwaliteitsniveau1,Versie$Kwaliteitsniveau2),"Opmerkingen","Referenties")])

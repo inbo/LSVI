@@ -6,6 +6,7 @@ params:
   ConnectieLSVIhabitats: "dummy"
   Versie: "Versie 3"
   Habitatsubtype: "4010"
+  Habitatnaam: "Natte heide"
 ---
 
 
@@ -27,8 +28,11 @@ if (inherits(params$ConnectieLSVIhabitats, "RODBC")) {
 }
 VersieRapportdeel <- params$Versie
 HabitatsubtypeFiche <- params$Habitatsubtype
+Habitatnaam <- params$Habitatnaam
 
 ```
+
+####Habitattype `r HabitatsubtypeFiche`: `r Habitatnaam`
 
 ```{r child="Habitatfiche.Rmd"}
 
