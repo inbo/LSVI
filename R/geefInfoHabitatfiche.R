@@ -73,6 +73,14 @@ geefInfoHabitatfiche <-
 
     Beoordelingsmatrix <- sqlQuery(ConnectieLSVIhabitats, query_beoordelingsfiche, stringsAsFactors = FALSE)
 
+    paste2 <- function(...,sep=", ") {
+      L <- list(...)
+      L <- lapply(L,function(x) {x[is.na(x)] <- ""; x})
+      gsub(paste0("(^",sep,"|",sep,"$)"),"",
+           gsub(paste0(sep,sep),sep,
+                do.call(paste,c(L,list(sep = sep)))))
+    }
+
     if (!all(is.na(Habitatkarakteristieken$SoortengroepID))) {
       Soortenlijst <-
         geefSoortenlijst(ConnectieLSVIhabitats, Versie, Habitatgroep, Habitattype,
@@ -155,15 +163,6 @@ geefInfoHabitatfiche <-
 
       }
 
-
-      paste2 <- function(...,sep=", ") {
-        L <- list(...)
-        L <- lapply(L,function(x) {x[is.na(x)] <- ""; x})
-        gsub(paste0("(^",sep,"|",sep,"$)"),"",
-             gsub(paste0(sep,sep),sep,
-                  do.call(paste,c(L,list(sep = sep)))))
-      }
-
       Habitatfiche <- Selectiegegevens %>%
         left_join(Habitatkarakteristieken %>% mutate_(SoortengroepID = ~NULL),
                   by = c("Indicator_habitatID" = "Indicator_habitatID")) %>%
@@ -192,7 +191,7 @@ geefInfoHabitatfiche <-
         left_join(Habitatkarakteristieken,
                   by = c("Indicator_habitatID" = "Indicator_habitatID")) %>%
         mutate_(
-          Beschrijving = ~ paste(Beschrijving, Beschrijving_naSoorten, sep = " ")
+          Beschrijving = ~ paste2(Beschrijving, Beschrijving_naSoorten, sep = " ")
         ) %>%
         left_join(Beoordelingsmatrix,
                   by = c("Indicator_beoordelingID" = "Indicator_beoordelingID"),
