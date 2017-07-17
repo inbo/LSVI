@@ -155,24 +155,32 @@ berekenLSVIbasis <-
     query <-
       sprintf("
               SELECT Voorwaarde.Id AS VoorwaardeID,
-              VoorwaardeNaam.Omschrijving AS VoorwaardeNaam,
+              Voorwaarde.VoorwaardeNaam,
+              Voorwaarde.ExtraBewerking,
               Voorwaarde.Referentiewaarde,
               Voorwaarde.Operator,
-              Voorwaarde.SoortengroepID,
+              Voorwaarde.SoortengroepId,
               Soortengroep.Omschrijving AS SoortengroepNaam,
               AnalyseVariabele.VariabeleNaam,
               AnalyseVariabele.Eenheid,
               TypeVariabele.Naam AS TypeVariabele,
-              Invoermasker.Waarde AS Invoermasker,
-              Invoermasker.Volgnummer,
-              Vegetatielaag.Omschrijving AS Vegetatielaag
-              FROM ((Voorwaarde
-              LEFT JOIN VoorwaardeNaam ON Voorwaarde.VoorwaardeNaamID = VoorwaardeNaam.Id)
-              LEFT JOIN Soortengroep ON Voorwaarde.SoortengroepID = Soortengroep.Id)
-              INNER JOIN (((AnalyseVariabele LEFT JOIN TypeVariabele ON AnalyseVariabele.TypeVariabeleID = TypeVariabele.Id)
-              LEFT JOIN Vegetatielaag ON AnalyseVariabele.VegetatielaagID = Vegetatielaag.Id)
-              LEFT JOIN Invoermasker ON AnalyseVariabele.Id = Invoermasker.AnalyseVariabeleID)
-              ON Voorwaarde.AnalyseVariabeleID = AnalyseVariabele.Id
+              LijstItem.Waarde AS Invoermasker,
+              LijstItem.Volgnummer,
+              StudieItem.Waarde AS StudieItem
+              FROM (((Voorwaarde
+                LEFT JOIN Soortengroep
+                  ON Voorwaarde.SoortengroepID = Soortengroep.Id)
+              INNER JOIN (AnalyseVariabele
+                  LEFT JOIN TypeVariabele
+                    ON AnalyseVariabele.TypeVariabeleID = TypeVariabele.Id)
+                ON Voorwaarde.AnalyseVariabeleId = AnalyseVariabele.Id)
+              LEFT JOIN (Lijst
+                          LEFT JOIN LijstItem ON Lijst.Id = LijstItem.LijstId)
+                ON Voorwaarde.InvoermaskerId = Lijst.Id)
+              LEFT JOIN (Studiegroep
+                          LEFT JOIN StudieItem
+                            ON Studiegroep.Id = StudieItem.StudiegroepId)
+                ON Voorwaarde.StudiegroepId = Studiegroep.Id
               WHERE Voorwaarde.Id in (%s)",
               VoorwaardeIDs)
 
@@ -227,7 +235,7 @@ berekenLSVIbasis <-
       ) %>%
       group_by_(~ID, ~VoorwaardeID, ~Waarde, ~Habitattype, ~VoorwaardeNaam,
                 ~Referentiewaarde, ~Operator, ~SoortengroepID, ~VariabeleNaam,
-                ~Eenheid, ~TypeVariabele, ~Vegetatielaag) %>%
+                ~Eenheid, ~TypeVariabele, ~StudieItem) %>%
       summarise_(
         WaardeN = ~max(WaardeN),
         RefWaardeN = ~max(RefWaardeN)
@@ -235,7 +243,7 @@ berekenLSVIbasis <-
       ungroup()
 
     #pipe even onderbreken voor de foutcontrole
-    if(all(!is.na(Resultaat_categorie$Waarde)) & min(Resultaat_categorie$WaardeN) < 0){
+    if (all(!is.na(Resultaat_categorie$Waarde)) & min(Resultaat_categorie$WaardeN) < 0) {
       stop("Foute invoer in Data_voorwaarden$Waarde: niet alle categorische waarden komen overeen met het invoermasker uit de databank")
     }
 
