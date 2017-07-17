@@ -66,7 +66,7 @@ test_that("Parameter Data_soorten heeft correct formaat", {
                                     Data_soorten %>%
                                       mutate_(
                                         Soort_Latijn =
-                                          ~ifelse(Soort_Latijn=="Myrica gale",
+                                          ~ifelse(Soort_Latijn == "Myrica gale",
                                                   "Myrca gale",
                                                   Soort_Latijn)
                                         ),
