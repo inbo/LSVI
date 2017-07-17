@@ -42,17 +42,17 @@ berekenLSVIbasis <-
     assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
 
     assert_that(is.string(Versie))
-    if(!(Versie %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Versie","VersieLSVI"))){
+    if (!(Versie %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Versie","VersieLSVI"))) {
       stop(sprintf("Versie moet een van de volgende waarden zijn: %s",
                    geefUniekeWaarden(ConnectieLSVIhabitats,"Versie","VersieLSVI")))
     }
 
-    Kwaliteitsniveau <- ifelse(Kwaliteitsniveau==1, "1",
-                               ifelse(Kwaliteitsniveau==2, "2",
+    Kwaliteitsniveau <- ifelse(Kwaliteitsniveau == 1, "1",
+                               ifelse(Kwaliteitsniveau == 2, "2",
                                       Kwaliteitsniveau))
     assert_that(is.string(Kwaliteitsniveau))
-    if(!(Kwaliteitsniveau %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Beoordeling",
-                                                        "Kwaliteitsniveau"))){
+    if (!(Kwaliteitsniveau %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Beoordeling",
+                                                        "Kwaliteitsniveau"))) {
       stop(sprintf("Kwaliteitsniveau moet een van de volgende waarden zijn: %s",
                    geefUniekeWaarden(ConnectieLSVIhabitats,"Beoordeling","Kwaliteitsniveau")))
     }
@@ -60,18 +60,18 @@ berekenLSVIbasis <-
     assert_that(inherits(Data_voorwaarden, "data.frame"))
     assert_that(has_name(Data_voorwaarden, "ID"))
     assert_that(has_name(Data_voorwaarden, "VoorwaardeID"))
-    if(!all(Data_voorwaarden$VoorwaardeID %in%
-            geefUniekeWaarden(ConnectieLSVIhabitats,"Voorwaarde", "Id"))){
+    if (!all(Data_voorwaarden$VoorwaardeID %in%
+            geefUniekeWaarden(ConnectieLSVIhabitats,"Voorwaarde", "Id"))) {
       stop("Niet alle waarden vermeld onder Data_voorwaarden$VoorwaardeID komen overeen met waarden vermeld in de databank.")
     }
     assert_that(has_name(Data_voorwaarden, "Waarde"))
 
     #nodige info ophalen uit de databank
     Voorwaarden <-
-      ifelse(Versie[1]=="alle",
-             ifelse(Kwaliteitsniveau[1]=="alle","",
+      ifelse(Versie[1] == "alle",
+             ifelse(Kwaliteitsniveau[1] == "alle","",
                     sprintf("WHERE Beoordeling.Kwaliteitsniveau = '%s'", Kwaliteitsniveau[1])),
-             ifelse(Kwaliteitsniveau[1]=="alle",
+             ifelse(Kwaliteitsniveau[1] == "alle",
                     sprintf("WHERE Versie.VersieLSVI = '%s'", Versie[1]),
                     sprintf("WHERE Versie.VersieLSVI = '%s' AND Beoordeling.Kwaliteitsniveau = '%s'", Versie[1], Kwaliteitsniveau[1])))
 
@@ -202,16 +202,16 @@ berekenLSVIbasis <-
         WaardeGetal = ~as.numeric(Waarde),
         WaardeInt = ~as.integer(Waarde)
       )
-    if(max(is.na(Foutcontrole$WaardeGetal) & !is.na(Foutcontrole$Waarde))){
+    if (max(is.na(Foutcontrole$WaardeGetal) & !is.na(Foutcontrole$Waarde))) {
       stop("Foute invoer in Data_voorwaarden$Waarde: geen getal ingevoerd waar een getal verwacht wordt")
     }
-    if(max(!is.na(Foutcontrole$WaardeGetal) & Foutcontrole$WaardeGetal < 0)){
+    if (max(!is.na(Foutcontrole$WaardeGetal) & Foutcontrole$WaardeGetal < 0)) {
       stop("Foute invoer in Data_voorwaarden$Waarde: een negatief getal ingevoerd")  #nog checken in oude db of er refwaarden zijn die negatief mogen zijn
     }
-    if(max(Foutcontrole$TypeVariabele == "Geheel getal" & !is.na(Foutcontrole$WaardeGetal) & Foutcontrole$WaardeInt != Foutcontrole$WaardeGetal)){
+    if (max(Foutcontrole$TypeVariabele == "Geheel getal" & !is.na(Foutcontrole$WaardeGetal) & Foutcontrole$WaardeInt != Foutcontrole$WaardeGetal)) {
       stop("Foute invoer in Data_voorwaarden$Waarde: een kommagetal ingevoerd waar een geheel getal verwacht wordt")
     }
-    if(max(Foutcontrole$TypeVariabele == "Percentage" & !is.na(Foutcontrole$WaardeGetal) & Foutcontrole$WaardeGetal > 100)){
+    if (max(Foutcontrole$TypeVariabele == "Percentage" & !is.na(Foutcontrole$WaardeGetal) & Foutcontrole$WaardeGetal > 100)) {
       stop("Foute invoer in Data_voorwaarden$Waarde: een getal > 100 ingevoerd waar een percentage verwacht wordt")
     }
 
@@ -281,15 +281,15 @@ berekenLSVIbasis <-
         filter_(~Id == CombinerenVoorwaardenID)
       Data <- data.frame(ID = NULL, VoorwaardeID = NULL,
                          Beoordeling_indicator = NULL, BeoordelingID = NULL)
-      if(!is.na(Record$ChildID1)){
+      if (!is.na(Record$ChildID1)) {
         Data <- Data %>%
           bind_rows(groepeerVoorwaarden(Record$ChildID1))
       }
-      if(!is.na(Record$ChildID2)){
+      if (!is.na(Record$ChildID2)) {
         Data <- Data %>%
           bind_rows(groepeerVoorwaarden(Record$ChildID2))
       }
-      if(!is.na(Record$VoorwaardeID1)){
+      if (!is.na(Record$VoorwaardeID1)) {
         Data_resultaat <- Resultaat %>%
           filter_(~VoorwaardeID %in% Record$VoorwaardeID1) %>%
           select_(~ID, ~VoorwaardeID, ~Status) %>%
@@ -300,7 +300,7 @@ berekenLSVIbasis <-
         Data <- Data %>%
           bind_rows(Data_resultaat)
       }
-      if(!is.na(Record$VoorwaardeID2)){
+      if (!is.na(Record$VoorwaardeID2)) {
         Data_resultaat <- Resultaat %>%
           filter_(~VoorwaardeID %in% Record$VoorwaardeID2) %>%
           select_(~ID, ~VoorwaardeID, ~Status) %>%
@@ -335,7 +335,7 @@ berekenLSVIbasis <-
     #recursieve functie uitvoeren voor alle beoordelingen en dan extra info aan hangen
     Data <- data.frame(ID = NULL, VoorwaardeID = NULL,
                        Beoordeling_indicator = NULL, BeoordelingID = NULL)
-    for(i in unique(CombinatieVoorwaarden$BeoordelingID)){
+    for (i in unique(CombinatieVoorwaarden$BeoordelingID)) {
       Data <- Data %>%
         bind_rows(groepeerVoorwaarden((CombinatieVoorwaarden %>%
                                         filter_(~BeoordelingID == i))$Id) %>%
