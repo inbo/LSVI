@@ -22,9 +22,18 @@
 #'               VoorwaardeID = c(858,859,210,2121,2346,2469,1300,1301),
 #'               Waarde = c(1,3,"d",10,10,10,"d",2),
 #'               stringsAsFactors = FALSE)
+#' library(readr)
+#' Data_habitat <-
+#'     read_csv2(system.file("vbdata/opname4030habitat.csv", package = "LSVI"),
+#'               col_types = list(col_character(), col_character(),col_character()))
+#' Data_voorwaarden <-
+#'     read_csv2(system.file("vbdata/opname4030voorwaarden.csv", package = "LSVI"))
+#' Data_soortenKenmerken <-
+#'     read_csv2(system.file("vbdata/opname4030soortenKenmerken.csv", package = "LSVI"))
 #' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
 #' berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "Versie 3",
-#'                  Kwaliteitsniveau = "1", Data_voorwaarden)
+#'                  Kwaliteitsniveau = "1", Data_habitat,
+#'                  Data_voorwaarden, Data_soortenKenmerken)
 #' library(RODBC)
 #' odbcClose(ConnectieLSVIhabitats)
 #'
@@ -41,7 +50,9 @@ berekenLSVIbasis <-
   function(ConnectieLSVIhabitats,
            Versie = "alle",
            Kwaliteitsniveau = "alle",
-           Data_voorwaarden){
+           Data_habitat,
+           Data_voorwaarden,
+           Data_soortenKenmerken){
 
     #controle invoer
     assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
@@ -62,14 +73,68 @@ berekenLSVIbasis <-
                    geefUniekeWaarden(ConnectieLSVIhabitats,"Beoordeling","Kwaliteitsniveau")))
     }
 
+    assert_that(inherits(Data_habitat, "data.frame"))
+    assert_that(has_name(Data_habitat, "ID"))
+    assert_that(has_name(Data_habitat, "Habitattype"))
+    if (!all(Data_habitat$Habitattype %in%
+             geefUniekeWaarden(ConnectieLSVIhabitats,"Habitattype", "Code"))) {
+      stop("Niet alle waarden vermeld onder Data_habitat$Habitattype komen overeen met waarden vermeld in de databank.")
+    }
+
     assert_that(inherits(Data_voorwaarden, "data.frame"))
     assert_that(has_name(Data_voorwaarden, "ID"))
-    assert_that(has_name(Data_voorwaarden, "VoorwaardeID"))
-    if (!all(Data_voorwaarden$VoorwaardeID %in%
-            geefUniekeWaarden(ConnectieLSVIhabitats,"Voorwaarde", "Id"))) {
-      stop("Niet alle waarden vermeld onder Data_voorwaarden$VoorwaardeID komen overeen met waarden vermeld in de databank.")
+    assert_that(has_name(Data_voorwaarden, "Criterium"))
+    if (!all(Data_voorwaarden$Criterium %in%
+            geefUniekeWaarden(ConnectieLSVIhabitats,"Criterium", "Naam"))) {
+      stop("Niet alle waarden vermeld onder Data_voorwaarden$Criterium komen overeen met waarden vermeld in de databank.")
     }
+    assert_that(has_name(Data_voorwaarden, "Indicator"))
+    if (!all(Data_voorwaarden$Indicator %in%
+             geefUniekeWaarden(ConnectieLSVIhabitats,"Indicator", "Naam"))) {
+      stop("Niet alle waarden vermeld onder Data_voorwaarden$Indicator komen overeen met waarden vermeld in de databank.")
+    }
+    #misschien best ook testen dat die indicator-criterium-combinatie in de databank voorkomt?  En of deze voor dat habitattype voorkomt, maar dat best verderop doen
+    #Voorwaarde ook verplichten?  Anders wel testen of het ok is als het aanwezig is.
     assert_that(has_name(Data_voorwaarden, "Waarde"))
+    assert_that(has_name(Data_voorwaarden, "Type"))
+    if (!all(Data_voorwaarden$Type %in%
+             geefUniekeWaarden(ConnectieLSVIhabitats,"TypeVariabele", "Naam"))) {
+      stop("Niet alle waarden vermeld onder Data_voorwaarden$Type komen overeen met waarden vermeld in de databank.")
+    }
+    assert_that(has_name(Data_voorwaarden, "Invoertype"))
+    if (!all(is.na(Data_voorwaarden$Invoertype) |
+             Data_voorwaarden$Invoertype %in%
+             geefUniekeWaarden(ConnectieLSVIhabitats,"Lijst", "Naam"))) {
+      stop("Niet alle waarden vermeld onder Data_voorwaarden$Invoertype komen overeen met waarden vermeld in de databank.")
+    }
+    assert_that(has_name(Data_voorwaarden, "Eenheid"))
+    if (!all(Data_voorwaarden$Eenheid %in%
+             geefUniekeWaarden(ConnectieLSVIhabitats,"AnalyseVariabele", "Eenheid"))) {
+      stop("Niet alle waarden vermeld onder Data_voorwaarden$Eenheid komen overeen met waarden vermeld in de databank.")
+    }
+
+    assert_that(inherits(Data_soortenKenmerken, "data.frame"))
+    assert_that(has_name(Data_soortenKenmerken, "ID"))
+    assert_that(has_name(Data_soortenKenmerken, "Kenmerk"))
+    assert_that(has_name(Data_soortenKenmerken, "TypeKenmerk"))
+    #hier moet nog controle op gebeuren!!!
+    assert_that(has_name(Data_soortenKenmerken, "Waarde"))
+    assert_that(has_name(Data_soortenKenmerken, "Type"))
+    if (!all(Data_soortenKenmerken$Type %in%
+             geefUniekeWaarden(ConnectieLSVIhabitats,"TypeVariabele", "Naam"))) {
+      stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Type komen overeen met waarden vermeld in de databank.")
+    }
+    assert_that(has_name(Data_soortenKenmerken, "Invoertype"))
+    if (!all(is.na(Data_soortenKenmerken$Invoertype) |
+             Data_soortenKenmerken$Invoertype %in%
+             geefUniekeWaarden(ConnectieLSVIhabitats,"Lijst", "Naam"))) {
+      stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Invoertype komen overeen met waarden vermeld in de databank.")
+    }
+    assert_that(has_name(Data_soortenKenmerken, "Eenheid"))
+    if (!all(Data_soortenKenmerken$Eenheid %in%
+             geefUniekeWaarden(ConnectieLSVIhabitats,"AnalyseVariabele", "Eenheid"))) {
+      stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Eenheid komen overeen met waarden vermeld in de databank.")
+    }
 
     #nodige info ophalen uit de databank
     Voorwaarden <-
@@ -105,7 +170,8 @@ berekenLSVIbasis <-
       INNER JOIN Versie ON Indicator_habitat.VersieID = Versie.Id %s",
       Voorwaarden)
 
-    GroeperendeInfo <- sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
+    GroeperendeInfo <- sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE) %>%
+      inner_join(Data_habitat, by = c("Habitattype" = "Habitattype"))
 
     BeoordelingIDs <- paste(unique(GroeperendeInfo$BeoordelingID), collapse = "','")
 
@@ -192,6 +258,18 @@ berekenLSVIbasis <-
 
 
     Voorwaarden <- sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
+
+
+
+
+    #Hier de voorwaarden combineren met de recursieve functie, en tijdens dat proces ergens de berekeningen aanroepen?
+    #Of op een of andere manier ID en habitattype aan de tabel koppelen, en dan eerst de berekeningen doen?  Mogelijkheid om habitattype in query mee te nemen?
+    #moeten ook gekoppeld worden: Criterium en Indicator!
+    #eventueel in plaats van voorgaande werken met functie geefInvoervereisten en combinatie uitvoeren via veld combinatie?
+
+
+
+
 
     #data koppelen aan voorwaarden uit de databank en dan 'berekeningen' (vgl met referentiewaarde) doen
     Data_voorwaarden <- Data_voorwaarden %>%
