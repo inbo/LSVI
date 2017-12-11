@@ -14,7 +14,7 @@
 #' @examples
 #' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
 #' geefInvoervereisten(ConnectieLSVIhabitats, Versie = "Versie 3",
-#'                     Habitatsubtype = "4010", Kwaliteitsniveau = "1")
+#'                     Habitattype = "4010", Kwaliteitsniveau = "1")
 #' library(RODBC)
 #' odbcClose(ConnectieLSVIhabitats)
 #'
@@ -29,7 +29,6 @@ geefInvoervereisten <- function(ConnectieLSVIhabitats,
                                 Versie = "alle",
                                 Habitatgroep = "alle",
                                 Habitattype = "alle",
-                                Habitatsubtype = "alle",
                                 Criterium = "alle",
                                 Indicator = "alle",
                                 Kwaliteitsniveau = "alle"){
@@ -49,7 +48,7 @@ geefInvoervereisten <- function(ConnectieLSVIhabitats,
 
 
   Selectiewaarden <-
-    selecteerIndicatoren(ConnectieLSVIhabitats, Versie, Habitatgroep, Habitattype, Habitatsubtype,
+    selecteerIndicatoren(ConnectieLSVIhabitats, Versie, Habitatgroep, Habitattype,
                          Criterium, Indicator) %>%
     select_(~Versie, ~Habitattype, ~Habitatsubtype, ~Indicator_beoordelingID)
 
@@ -175,29 +174,69 @@ geefInvoervereisten <- function(ConnectieLSVIhabitats,
 
   query_voorwaardeinfo <-
     sprintf("SELECT Voorwaarde.Id AS VoorwaardeID,
-            VoorwaardeNaam.Omschrijving AS VoorwaardeNaam,
+            Voorwaarde.VoorwaardeNaam, Voorwaarde.ExtraBewerking,
             Voorwaarde.Referentiewaarde, Voorwaarde.Operator,
-            Voorwaarde.SoortengroepID, Soortengroep.Omschrijving AS SoortengroepNaam,
             AnalyseVariabele.VariabeleNaam as AnalyseVariabele,
             AnalyseVariabele.Eenheid, TypeVariabele.Naam AS TypeVariabele,
-            Invoermasker.Waarde AS Invoerwaarde,
-            Vegetatielaag.Omschrijving AS Vegetatielaag
-            FROM ((Voorwaarde LEFT JOIN VoorwaardeNaam ON Voorwaarde.VoorwaardeNaamID = VoorwaardeNaam.Id)
-                        LEFT JOIN Soortengroep ON Voorwaarde.SoortengroepID = Soortengroep.Id)
-            LEFT JOIN (((AnalyseVariabele LEFT JOIN Invoermasker ON AnalyseVariabele.ID = Invoermasker.AnalyseVariabeleID)
-                       LEFT JOIN TypeVariabele ON AnalyseVariabele.TypeVariabeleID = TypeVariabele.Id)
-                       LEFT JOIN Vegetatielaag ON AnalyseVariabele.VegetatielaagID = Vegetatielaag.Id)
-            ON Voorwaarde.AnalyseVariabeleID = AnalyseVariabele.Id
+            Lijst.Naam AS Invoertype, LijstItem.Waarde As Invoerwaarde,
+            LijstItem.Volgnummer AS Invoervolgnr,
+            LijstItem.Omschrijving AS Invoeromschrijving,
+            LijstItem.Ondergrens AS Invoerondergrens,
+            LijstItem.Gemiddelde AS Invoergemiddelde,
+            Lijstitem.Bovengrens AS Invoerbovengrens,
+            Voorwaarde.SoortengroepID,
+            Soortengroep.Omschrijving AS SoortengroepNaam,
+            Studiegroep.Naam AS Studiegroepnaam,
+            Studiegroep.LijstNaam as Studielijstnaam,
+            StudieItem.Waarde As Studiewaarde,
+            StudieItem.Volgnummer AS Studievolgnr,
+            StudieItem.Omschrijving AS Studieomschrijving,
+            StudieItem.Ondergrens AS Studieondergrens,
+            StudieItem.Gemiddelde AS Studiegemiddelde,
+            Studieitem.Bovengrens AS Studiebovengrens,
+            SubAnalyseVariabele.VariabeleNaam as SubAnalyseVariabele,
+            SubAnalyseVariabele.Eenheid AS SubEenheid,
+            TypeSubVariabele.Naam AS TypeSubVariabele,
+            Voorwaarde.SubReferentiewaarde, Voorwaarde.SubOperator,
+            SubLijst.Naam AS SubInvoertype, SubLijstItem.Waarde As SubInvoerwaarde,
+            SubLijstItem.Volgnummer AS SubInvoervolgnr,
+            SubLijstItem.Omschrijving AS SubInvoeromschrijving,
+            SubLijstItem.Ondergrens AS SubInvoerondergrens,
+            SubLijstItem.Gemiddelde AS SubInvoergemiddelde,
+            SubLijstitem.Bovengrens AS SubInvoerbovengrens
+            FROM (((((Voorwaarde LEFT JOIN Soortengroep
+                       ON Voorwaarde.SoortengroepID = Soortengroep.Id)
+            LEFT JOIN (AnalyseVariabele
+              LEFT JOIN TypeVariabele
+                       ON AnalyseVariabele.TypeVariabeleID = TypeVariabele.Id)
+            ON Voorwaarde.AnalyseVariabeleID = AnalyseVariabele.Id)
+            LEFT JOIN (Lijst
+                      LEFT JOIN LijstItem ON Lijst.Id = LijstItem.LijstId)
+              ON Voorwaarde.InvoermaskerId = Lijst.Id)
+            LEFT JOIN (Studiegroep
+                      LEFT JOIN StudieItem
+                            ON Studiegroep.Id = StudieItem.StudiegroepId)
+              ON Voorwaarde.StudiegroepId = Studiegroep.Id)
+            LEFT JOIN (AnalyseVariabele AS SubAnalyseVariabele
+              LEFT JOIN TypeVariabele AS TypeSubVariabele
+            ON SubAnalyseVariabele.TypeVariabeleID = TypeSubVariabele.Id)
+            ON Voorwaarde.SubAnalyseVariabeleID = SubAnalyseVariabele.Id)
+            LEFT JOIN (Lijst AS SubLijst
+                      LEFT JOIN LijstItem AS SubLijstItem
+                        ON SubLijst.Id = SubLijstItem.LijstId)
+              ON Voorwaarde.SubInvoermaskerId = SubLijst.Id
             WHERE Voorwaarde.Id in (%s)",VoorwaardenIDs)
 
-  Voorwaardeinfo <- sqlQuery(ConnectieLSVIhabitats, query_voorwaardeinfo, stringsAsFactors = FALSE) %>%
-    group_by_(~VoorwaardeID, ~VoorwaardeNaam, ~Referentiewaarde, ~Operator,
-              ~SoortengroepID, ~SoortengroepNaam,
-              ~AnalyseVariabele, ~Vegetatielaag, ~Eenheid, ~TypeVariabele) %>%
-    summarise_(
-      Invoermasker = ~paste(Invoerwaarde, collapse = ", ")
-    ) %>%
-    ungroup()
+  Voorwaardeinfo <- sqlQuery(ConnectieLSVIhabitats, query_voorwaardeinfo, stringsAsFactors = FALSE) #%>%
+    # arrange_(~Invoervolgnr, ~Studievolgnr, ~SubInvoervolgnr) %>%
+    # group_by_(-~Invoervolgnr)
+    # group_by_(~VoorwaardeID, ~VoorwaardeNaam, ~Referentiewaarde, ~Operator,
+    #           ~SoortengroepID, ~SoortengroepNaam,
+    #           ~AnalyseVariabele, ~Vegetatielaag, ~Eenheid, ~TypeVariabele) %>%
+    # summarise_(
+    #   Invoermasker = ~paste(Invoerwaarde, collapse = ", ")
+    # ) %>%
+    # ungroup()
 
 
   Invoervereisten <- Selectiewaarden %>%

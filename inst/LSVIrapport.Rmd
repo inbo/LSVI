@@ -7,7 +7,6 @@ params:
   Versie: "Versie 2.0"
   Habitatgroep: "Heiden"
   Habitattype: "4010"
-  Habitatsubtype: "4010"
 ---
 
 ```{r setup, include=FALSE}
@@ -24,7 +23,7 @@ library(knitr)
 
 ```{r gegevens_inladen}
 
-if(inherits(params$ConnectieLSVIhabitats, "RODBC")){
+if (inherits(params$ConnectieLSVIhabitats, "RODBC")) {
   ConnectieLSVIhabitats <- params$ConnectieLSVIhabitats
 } else {
   #print("Connectiefout!")
@@ -33,7 +32,7 @@ if(inherits(params$ConnectieLSVIhabitats, "RODBC")){
 
 Indicatoren <- selecteerIndicatoren(ConnectieLSVIhabitats,
                                     params$Versie, params$Habitatgroep, 
-                                    params$Habitattype, params$Habitatsubtype,
+                                    params$Habitattype,
                                     HabitatnamenToevoegen = TRUE) %>%
   select_(~Versie, ~Habitatgroepnaam, ~Habitattype, ~Habitatnaam,
           ~Habitatsubtype, ~Habitatsubtypenaam) %>%
@@ -47,23 +46,37 @@ Indicatoren <- selecteerIndicatoren(ConnectieLSVIhabitats,
 
 Uitvoer <- NULL
 
-for (versie in unique(Indicatoren$Versie)) {
-  Uitvoer <- c(Uitvoer, paste("#", versie, sep = ""))
+for (VersieRapportdeel in unique(Indicatoren$Versie)) {
+  Uitvoer <- c(Uitvoer, paste("#", VersieRapportdeel, sep = ""))
   VersieIndicatoren <- Indicatoren %>%
-    filter_(~Versie == versie)
-  for (habitatgroep in unique(VersieIndicatoren$Habitatgroepnaam)) {
-    Uitvoer <- c(Uitvoer, paste("##",habitatgroep, sep = ""))
+    filter_(~Versie == VersieRapportdeel)
+  for (Habitatgroep in unique(VersieIndicatoren$Habitatgroepnaam)) {
+    Uitvoer <- c(Uitvoer, paste("##",Habitatgroep, sep = ""))
     Subset <- VersieIndicatoren %>%
-      filter_(~Habitatgroepnaam == habitatgroep)
-    for (habitattype in unique(as.character(Subset$Habitattype))) {
+      filter_(~Habitatgroepnaam == Habitatgroep)
+    for (Habitat in unique(as.character(Subset$Habitattype))) {
       Subsubset <- Subset %>%
-        filter_(~habitattype == habitattype)
-      habitatnaam <- ifelse(is.na(unique(Subsubset$Habitatnaam)),
+        filter_(~Habitattype == Habitat)
+      Habitatnaam <- ifelse(is.na(unique(Subsubset$Habitatnaam)),
                             "",
                             paste(": ", unique(Subsubset$Habitatnaam), sep = ""))
-      Uitvoer <- c(Uitvoer, paste("###Habitattype ", habitattype, habitatnaam, "\n", sep = ""))
-      for (habitatsubtype in unique(as.character(Subsubset$Habitatsubtype))) {
-        Uitvoer <- c(Uitvoer, knit_child("Habitatfiche.Rmd"))
+      Uitvoer <- c(Uitvoer, paste("###Habitattype ", Habitat, Habitatnaam, "\n", sep = ""))
+      for (HabitatsubtypeFiche in unique(as.character(Subsubset$Habitatsubtype))) {
+        Habitatsubtypenaam <- 
+          ifelse(is.na(unique((Subsubset %>% 
+                                filter_(~Habitatsubtype == HabitatsubtypeFiche))$Habitatsubtypenaam)),
+                 "",
+                 paste(": ", unique((Subsubset %>% 
+                                filter_(~Habitatsubtype == HabitatsubtypeFiche))$Habitatsubtypenaam), sep = ""))
+        if (HabitatsubtypeFiche != Habitat) {
+          Uitvoer <- 
+            c(Uitvoer,
+              paste("####Habitatsubtype ", HabitatsubtypeFiche, 
+                    Habitatsubtypenaam, "\n", sep = ""))
+        }
+        Uitvoer <- 
+          c(Uitvoer,
+            knit_child("Habitatfiche.Rmd"))
         
       }
     }
@@ -77,6 +90,6 @@ for (versie in unique(Indicatoren$Versie)) {
 
 
 ```{r output, results='asis'}
-cat(Uitvoer, sep="\n")
+cat(Uitvoer, sep = "\n")
 ```
 

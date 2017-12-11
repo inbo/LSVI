@@ -191,7 +191,7 @@ De andere functies kunnen min of meer in groepen ingedeeld worden op basis van h
 - berekenXXX: deze functies voeren berekeningen uit m.b.t. de LSVI op basis van opgegeven veldgegevens
 - andere (selecteerXXX en vertaalXXX): hulpfuncties die eventueel relevant kunnen zijn voor gevorderde R-gebruikers (zie 'Gebruik van bouwstenen')
 
-Voor de functies van voornamelijk de eerste twee groepen zijn er een aantal argumenten die facultatief meegegeven kunnen worden: Versie, Habitatgroep, Habitattype, Habitatsubtype, Criterium en Indicator.  Door hiervoor waarden op te geven, kunnen de relevante gegevens uit de databank geselecteerd worden.  Voor de argumenten waarvoor geen specifieke waarden opgegeven zijn, wordt de default 'alle' gebruikt, waardoor alle beschikbare gegevens voor dat argument uit de databank gehaald worden.
+Voor de functies van voornamelijk de eerste twee groepen zijn er een aantal argumenten die facultatief meegegeven kunnen worden: Versie, Habitatgroep, Habitattype, Criterium en Indicator.  Door hiervoor waarden op te geven, kunnen de relevante gegevens uit de databank geselecteerd worden.  Voor de argumenten waarvoor geen specifieke waarden opgegeven zijn, wordt de default 'alle' gebruikt, waardoor alle beschikbare gegevens voor dat argument uit de databank gehaald worden.
 
 Voor een overzicht van de belangrijkste beschikbare functies verwijzen we naar een eerder hoofdstuk in deze handleiding ('Doelstellingen en inhoud package') en voor de gedetailleerde beschrijving verwijzen we naar de documentatie van de functies zelf.  In deze documentatie wordt verwezen naar hulpfuncties waar het relevant is om deze te gebruiken.  
 

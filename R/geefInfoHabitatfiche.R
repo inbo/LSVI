@@ -1,6 +1,6 @@
 #' @title Geeft tabel met info uit de LSVI-rapporten voor de opgegeven parameters
 #'
-#' @description Deze functie geeft de inhoud van de tabellen habitatkarakteristieken en beoordelingsmatrix uit de rapporten van de Lokale Staat van Instandhouding voor de habitatsubtypes die voldoen aan de opgegeven parameters.  Volledigheidshalve geeft ze ook de uitgebreide namen van de habitattypes en habitatsubtypes.  De uitvoer van deze functie kan gebruikt worden om rapportages op te maken (bv. rapport samenstellen met LSVI-criteria,...).  Een 'afgewerkt rapport' kan gegenereerd worden met de functie maakHabitatfiches().
+#' @description Deze functie geeft de inhoud van de tabellen habitatkarakteristieken en beoordelingsmatrix uit de rapporten van de Lokale Staat van Instandhouding voor de habitattypes die voldoen aan de opgegeven parameters.  Volledigheidshalve geeft ze ook de uitgebreide namen van de habitattypes en habitatsubtypes.  De uitvoer van deze functie kan gebruikt worden om rapportages op te maken (bv. rapport samenstellen met LSVI-criteria,...).  Een 'afgewerkt rapport' kan gegenereerd worden met de functie maakHabitatfiches().
 #'
 #'@template Zoekparameters
 #'
@@ -11,7 +11,7 @@
 #'
 #' @examples
 #' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-#' geefInfoHabitatfiche(ConnectieLSVIhabitats, Versie = "Versie 3", Habitatsubtype = "4010")
+#' geefInfoHabitatfiche(ConnectieLSVIhabitats, Versie = "Versie 3", Habitattype = "4010")
 #' library(RODBC)
 #' odbcClose(ConnectieLSVIhabitats)
 #'
@@ -28,7 +28,6 @@ geefInfoHabitatfiche <-
            Versie = "alle",
            Habitatgroep = "alle",
            Habitattype = "alle",
-           Habitatsubtype = "alle",
            Criterium = "alle",
            Indicator = "alle",
            Stijl = c("Rmd", "tekst")){
@@ -37,7 +36,7 @@ geefInfoHabitatfiche <-
     assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
 
     Selectiegegevens <-
-      selecteerIndicatoren(ConnectieLSVIhabitats, Versie, Habitatgroep, Habitattype, Habitatsubtype,
+      selecteerIndicatoren(ConnectieLSVIhabitats, Versie, Habitatgroep, Habitattype,
                            Criterium, Indicator, HabitatnamenToevoegen = TRUE)
 
     Indicator_hIDs <-
@@ -74,9 +73,17 @@ geefInfoHabitatfiche <-
 
     Beoordelingsmatrix <- sqlQuery(ConnectieLSVIhabitats, query_beoordelingsfiche, stringsAsFactors = FALSE)
 
+    paste2 <- function(...,sep=", ") {
+      L <- list(...)
+      L <- lapply(L,function(x) {x[is.na(x)] <- ""; x})
+      gsub(paste0("(^",sep,"|",sep,"$)"),"",
+           gsub(paste0(sep,sep),sep,
+                do.call(paste,c(L,list(sep = sep)))))
+    }
+
     if (!all(is.na(Habitatkarakteristieken$SoortengroepID))) {
       Soortenlijst <-
-        geefSoortenlijst(ConnectieLSVIhabitats, Versie, Habitatgroep, Habitattype, Habitatsubtype,
+        geefSoortenlijst(ConnectieLSVIhabitats, Versie, Habitatgroep, Habitattype,
                          Criterium, Indicator, "LSVIfiche") %>%
         filter_(~!is.na(WetNaamKort) | !is.na(NedNaam)) %>%
         mutate_(
@@ -93,8 +100,8 @@ geefInfoHabitatfiche <-
         arrange_(~ TotNaam)
 
       OmschrijvingKolommen <- NULL
-      for(i in colnames(Soortenlijst)){
-        if(grepl("Omschrijving",i)){
+      for (i in colnames(Soortenlijst)) {
+        if (grepl("Omschrijving",i)) {
           OmschrijvingKolommen <- c(OmschrijvingKolommen, i)
         }
       }
@@ -115,7 +122,7 @@ geefInfoHabitatfiche <-
         ungroup()
 
       laatste_i <- 0
-      for(i in seq_len(length(OmschrijvingKolommen))){
+      for (i in seq_len(length(OmschrijvingKolommen))) {
         laatste_i <- max(laatste_i, length(OmschrijvingKolommen))
         Soortenlijst <- Soortenlijst %>%
           mutate_(
@@ -124,12 +131,12 @@ geefInfoHabitatfiche <-
                                   var = as.name(OmschrijvingKolommen[1]))
           ) %>%
           select(
-            - dplyr::matches(OmschrijvingKolommen[1])
+            -dplyr::matches(OmschrijvingKolommen[1])
           )
 
         OmschrijvingKolommen <- OmschrijvingKolommen[-1]
 
-        if(i < laatste_i){
+        if (i < laatste_i) {
           Soortenlijst <- Soortenlijst %>%
             group_by_(
               ~ SoortengroepID,
@@ -154,15 +161,6 @@ geefInfoHabitatfiche <-
             ungroup()
         }
 
-      }
-
-
-      paste2 <- function(...,sep=", ") {
-        L <- list(...)
-        L <- lapply(L,function(x) {x[is.na(x)] <- ""; x})
-        gsub(paste0("(^",sep,"|",sep,"$)"),"",
-             gsub(paste0(sep,sep),sep,
-                  do.call(paste,c(L,list(sep = sep)))))
       }
 
       Habitatfiche <- Selectiegegevens %>%
@@ -193,7 +191,7 @@ geefInfoHabitatfiche <-
         left_join(Habitatkarakteristieken,
                   by = c("Indicator_habitatID" = "Indicator_habitatID")) %>%
         mutate_(
-          Beschrijving = ~ paste(Beschrijving, Beschrijving_naSoorten, sep = " ")
+          Beschrijving = ~ paste2(Beschrijving, Beschrijving_naSoorten, sep = " ")
         ) %>%
         left_join(Beoordelingsmatrix,
                   by = c("Indicator_beoordelingID" = "Indicator_beoordelingID"),
@@ -209,7 +207,7 @@ geefInfoHabitatfiche <-
     }
 
 
-    if(Stijl[1] == "tekst"){
+    if (Stijl[1] == "tekst") {
       Habitatfiche$Habitatnaam <- gsub("_","",Habitatfiche$Habitatnaam)
       Habitatfiche$Habitatsubtypenaam <-
         gsub("_","",Habitatfiche$Habitatsubtypenaam)

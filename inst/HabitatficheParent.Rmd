@@ -6,6 +6,7 @@ params:
   ConnectieLSVIhabitats: "dummy"
   Versie: "Versie 3"
   Habitatsubtype: "4010"
+  Habitatnaam: "Natte heide"
 ---
 
 
@@ -19,16 +20,19 @@ library(dplyr)
 ```
 
 ```{r}
-if(inherits(params$ConnectieLSVIhabitats, "RODBC")){
+if (inherits(params$ConnectieLSVIhabitats, "RODBC")) {
   ConnectieLSVIhabitats <- params$ConnectieLSVIhabitats
 } else {
   #print("Connectiefout!")
   ConnectieLSVIhabitats <- connecteerMetLSVIdb()
 }
-versie <- params$Versie
-habitatsubtype <- params$Habitatsubtype
+VersieRapportdeel <- params$Versie
+HabitatsubtypeFiche <- params$Habitatsubtype
+Habitatnaam <- params$Habitatnaam
 
 ```
+
+####Habitattype `r HabitatsubtypeFiche`: `r Habitatnaam`
 
 ```{r child="Habitatfiche.Rmd"}
 

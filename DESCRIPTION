@@ -20,6 +20,7 @@ Imports:
     readr
 Suggests:
     xtable,
-    knitr
+    knitr,
+    rmarkdown
 RoxygenNote: 5.0.1
 VignetteBuilder: knitr
