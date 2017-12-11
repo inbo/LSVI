@@ -19,4 +19,3 @@ Deze functie geeft een aangepaste tabel Data_soorten terug waarin enkel de soort
 \description{
 Deze hulpfunctie controleert of de ingevoerde opname geen fouten bevat en koppelt ze meteen aan de opgegeven soortenlijst.  Ze controleert of veld ID en een veld met een soortenlijst (soort_Latijn of soort_NL) aanwezig is, en controleert voor de soortenlijst of de namen wel bestaan (conform zijn met de LSVI-databank).  Problemen hiermee geven een error.  Verder controleert ze of alle soorten uit de opgegeven soortengroep(en) in de opname aanwezig zijn en ze geeft een warning als dit niet zo is.
 }
-

@@ -23,4 +23,3 @@ Deze functie vertaalt een ingevoerde vector van categorieen uit de Tansley-schaa
 vertaalTansleyPercentage(c("sporadisch", "frequent", "codominant"))
 
 }
-

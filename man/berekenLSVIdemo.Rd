@@ -14,15 +14,15 @@ berekenLSVIdemo(ConnectieLSVIhabitats, Versie = "alle",
 
 \item{Kwaliteitsniveau}{Voor elke versie van de LSVI zijn er een of meerdere kwaliteitsniveaus gedefinieerd in de databank.  Zo is er bij Versie 2.0 een onderscheid gemaakt tussen goede staat (A), voldoende staat (B) en gedegradeerde staat (C).  Hier duidt kwaliteitsniveau 1 de grens tussen voldoende (B) en gedegradeerd (C) aan en kwaliteitsniveau 2 het onderscheid tussen goed (A) en voldoende (B).  Bij Versie 3 duidt kwaliteitsniveau 1 op het onderscheid tussen ongunstig en gunstig en kwaliteitsniveau 2 op de streefwaarde.  De betekenissen van de 2 kwaliteitsniveaus voor de verschillende versies is weergegeven in de tabel Versie in de databank en kan opgevraagd met de functie geefVersieInfo().  Geef als parameter Kwaliteitsniveau op op basis van welk kwaliteitsniveau de berekening gemaakt moet worden (strikt genomen is de berekening van de LSVI de berekening volgens kwaliteitsniveau 1).}
 
-\item{Data_indicatoren}{Gegevens over de indicatoren in de vorm van een data.frame met velden ID, Habitatsubtype, Criterium, Indicator en Waarde, waarbij ID een groeperende variabele is voor een opname (plaats en tijdstip) en Waarde de waarde die voor die indicator geobserveerd of gemeten is.  Habitatsutbype, Criterium en Indicator moeten overeenkomen met de naamgeving in de LSVI-databank (op te zoeken door resp. geefUniekeWaarden("Habitatsubtype", "Habitatcode_subtype"), geefUniekeWaarden("Criterium", "Naam") en geefUniekeWaarden("Indicator", "Naam")).  Waarde moet voldoen aan de beschrijving die opgevraagd kan worden met geefInvoervereisten().}
+\item{Data_indicatoren}{Gegevens over de indicatoren in de vorm van een data.frame met velden ID, Habitattype, Criterium, Indicator en Waarde, waarbij ID een groeperende variabele is voor een opname (plaats en tijdstip) en Waarde de waarde die voor die indicator geobserveerd of gemeten is.  Habitatsutbype, Criterium en Indicator moeten overeenkomen met de naamgeving in de LSVI-databank (op te zoeken door resp. geefUniekeWaarden("Habitatsubtype", "Habitatcode_subtype"), geefUniekeWaarden("Criterium", "Naam") en geefUniekeWaarden("Indicator", "Naam")).  Waarde moet voldoen aan de beschrijving die opgevraagd kan worden met geefInvoervereisten().}
 
-\item{Data_soorten}{Bedekkingen van de sleutelsoorten in de vorm van een data.frame met velden ID, Habitatsubtype, Soort_NL of Soort_Latijn en Bedekking.}
+\item{Data_soorten}{Bedekkingen van de sleutelsoorten in de vorm van een data.frame met velden ID, Habitattype, Soort_NL of Soort_Latijn en Bedekking.}
 }
 \value{
 Deze functie genereert de resultaten in de vorm van een list met 3 tabellen: een eerste met de beoordelingen per criterium en kwaliteitsniveau, een tweede met de beoordelingen per indicator en kwaliteitsniveau, en een derde met de detailgegevens inclusief meetwaarden.
 }
 \description{
-Deze functie bepaalt de Lokale Staat van Instandhouding voor de testdata in dit package.  Bedoeling van deze functie is om met een eenvoudig voorbeeld te tonen hoe aan de hand van functies uit het LSVI-package een 'rekenmodule' gemaakt kan worden voor het berekenen van de LSVI van een opname.  
+Deze functie bepaalt de Lokale Staat van Instandhouding voor de testdata in dit package.  Bedoeling van deze functie is om met een eenvoudig voorbeeld te tonen hoe aan de hand van functies uit het LSVI-package een 'rekenmodule' gemaakt kan worden voor het berekenen van de LSVI van een opname.
 
 Het zou mooi zijn om op termijn via dit package gelijkaardige rekenmodules aan te kunnen bieden voor de berekening van de LSVI voor alle relevante databanken die op het inbo gebruikt worden.  Daarom een oproep om bij het ontwikkelen van scripts, deze te bezorgen aan de beheerder van het package, zodat ze beschikbaar gesteld kunnen worden via het package.
 
@@ -30,16 +30,15 @@ Dus voor elk type opname-gegevens (elke databank) moet een gelijkaardig script a
 }
 \examples{
 library(readr)
-Data_indicatoren <- 
+Data_indicatoren <-
     read_csv2(system.file("vbdata/opname_4010_gelayout_indicatoren.csv", package = "LSVI"))
-Data_soorten <- 
+Data_soorten <-
     read_csv2(system.file("vbdata/opname_4010_gelayout_soorten.csv", package = "LSVI"))
 ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-berekenLSVIdemo(ConnectieLSVIhabitats, Versie = "Versie 3", Kwaliteitsniveau = "1", 
+berekenLSVIdemo(ConnectieLSVIhabitats, Versie = "Versie 3", Kwaliteitsniveau = "1",
                 Data_indicatoren, Data_soorten)
 library(RODBC)
 odbcClose(ConnectieLSVIhabitats)
 plot(1)
 
 }
-

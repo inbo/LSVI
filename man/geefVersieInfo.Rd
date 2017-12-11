@@ -22,4 +22,3 @@ library(RODBC)
 odbcClose(ConnectieLSVIhabitats)
 
 }
-

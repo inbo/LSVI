@@ -23,4 +23,3 @@ sqlQuery(ConnectieLSVIhabitats, "SELECT VersieLSVI, Referentie FROM Versie")
 odbcClose(ConnectieLSVIhabitats)
 
 }
-

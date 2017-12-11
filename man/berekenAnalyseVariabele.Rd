@@ -58,4 +58,3 @@ library(RODBC)
 odbcClose(ConnectieLSVIhabitats)
 
 }
-

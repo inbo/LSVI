@@ -26,4 +26,3 @@ vertaalBedekkingTansley(c(2.5, 10, 30))
 
 
 }
-
