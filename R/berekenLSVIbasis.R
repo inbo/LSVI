@@ -17,6 +17,11 @@
 #'               Waarde = c("abundant","frequent",35,3,3,1),
 #'               Habitattype = 4010,
 #'               stringsAsFactors = FALSE)
+#' Data_voorwaarden <-
+#'    data.frame(ID = "Jo1380",
+#'               VoorwaardeID = c(858,859,210,2121,2346,2469,1300,1301),
+#'               Waarde = c(1,3,"d",10,10,10,"d",2),
+#'               stringsAsFactors = FALSE)
 #' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
 #' berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "Versie 3",
 #'                  Kwaliteitsniveau = "1", Data_voorwaarden)
@@ -102,22 +107,22 @@ berekenLSVIbasis <-
 
     GroeperendeInfo <- sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
 
-    BeoordelingIDs <- paste(unique(GroeperendeInfo$BeoordelingID), collapse = ",")
+    BeoordelingIDs <- paste(unique(GroeperendeInfo$BeoordelingID), collapse = "','")
 
     query <-
       sprintf("
               WITH voorwaardencombinatie
               AS
               (
-              SELECT CombinerenVoorwaarden.Id,
-              CombinerenVoorwaarden.BeoordelingID,
-              CombinerenVoorwaarden.VoorwaardeID1,
-              CombinerenVoorwaarden.VoorwaardeID2,
-              CombinerenVoorwaarden.ChildID1,
-              CombinerenVoorwaarden.ChildID2,
-              CombinerenVoorwaarden.BewerkingAND
-              FROM CombinerenVoorwaarden
-              WHERE CombinerenVoorwaarden.BeoordelingID in (%s)
+              SELECT CV1.Id,
+              CV1.BeoordelingID,
+              CV1.VoorwaardeID1,
+              CV1.VoorwaardeID2,
+              CV1.ChildID1,
+              CV1.ChildID2,
+              CV1.BewerkingAND
+              FROM CombinerenVoorwaarden AS CV1
+              WHERE CV1.BeoordelingID in ('%s')
               UNION ALL
               SELECT CombinerenVoorwaarden2.Id,
               CombinerenVoorwaarden2.BeoordelingID,
@@ -127,8 +132,8 @@ berekenLSVIbasis <-
               CombinerenVoorwaarden2.ChildID2,
               CombinerenVoorwaarden2.BewerkingAND
               FROM CombinerenVoorwaarden AS CombinerenVoorwaarden2
-              INNER JOIN CombinerenVoorwaarden
-              ON CombinerenVoorwaarden2.Id = CombinerenVoorwaarden.ChildID1
+              INNER JOIN voorwaardencombinatie
+              ON CombinerenVoorwaarden2.Id = voorwaardencombinatie.ChildID1
               UNION ALL
               SELECT CombinerenVoorwaarden3.Id,
               CombinerenVoorwaarden3.BeoordelingID,
@@ -138,8 +143,8 @@ berekenLSVIbasis <-
               CombinerenVoorwaarden3.ChildID2,
               CombinerenVoorwaarden3.BewerkingAND
               FROM CombinerenVoorwaarden AS CombinerenVoorwaarden3
-              INNER JOIN CombinerenVoorwaarden
-              ON CombinerenVoorwaarden3.Id = CombinerenVoorwaarden.ChildID2
+              INNER JOIN voorwaardencombinatie
+              ON CombinerenVoorwaarden3.Id = voorwaardencombinatie.ChildID2
               )
               Select * FROM voorwaardencombinatie",
               BeoordelingIDs)
@@ -165,6 +170,7 @@ berekenLSVIbasis <-
               AnalyseVariabele.Eenheid,
               TypeVariabele.Naam AS TypeVariabele,
               LijstItem.Waarde AS Invoermasker,
+              LijstItem.Gemiddelde,
               LijstItem.Volgnummer,
               StudieItem.Waarde AS StudieItem
               FROM (((Voorwaarde
@@ -230,11 +236,11 @@ berekenLSVIbasis <-
     Resultaat_categorie <- Data_voorwaarden %>%
       filter_(~TypeVariabele == "Categorie") %>%
       mutate_(
-        WaardeN = ~ifelse(tolower(Waarde) == tolower(Invoermasker), Volgnummer, -1),
-        RefWaardeN = ~ifelse(tolower(Referentiewaarde) == tolower(Invoermasker), Volgnummer, -1)
+        WaardeN = ~ifelse(tolower(Waarde) == tolower(Invoermasker), Gemiddelde, -1),
+        RefWaardeN = ~ifelse(tolower(Referentiewaarde) == tolower(Invoermasker), Gemiddelde, -1)
       ) %>%
-      group_by_(~ID, ~VoorwaardeID, ~Waarde, ~Habitattype, ~VoorwaardeNaam,
-                ~Referentiewaarde, ~Operator, ~SoortengroepID, ~VariabeleNaam,
+      group_by_(~ID, ~VoorwaardeID, ~Waarde, ~VoorwaardeNaam,
+                ~Referentiewaarde, ~Operator, ~SoortengroepId, ~VariabeleNaam,
                 ~Eenheid, ~TypeVariabele, ~StudieItem) %>%
       summarise_(
         WaardeN = ~max(WaardeN),
@@ -243,7 +249,8 @@ berekenLSVIbasis <-
       ungroup()
 
     #pipe even onderbreken voor de foutcontrole
-    if (all(!is.na(Resultaat_categorie$Waarde)) & min(Resultaat_categorie$WaardeN) < 0) {
+    if (all(!is.na(Resultaat_categorie$Waarde)) &
+        min(Resultaat_categorie$WaardeN, na.rm = TRUE) < 0) {
       stop("Foute invoer in Data_voorwaarden$Waarde: niet alle categorische waarden komen overeen met het invoermasker uit de databank")
     }
 
@@ -272,7 +279,8 @@ berekenLSVIbasis <-
       bind_rows(Resultaat_janee) %>%
       mutate_(
         Invoermasker = ~NULL,
-        Volgnummer = ~NULL
+        Volgnummer = ~NULL,
+        Gemiddelde = ~NULL
       )
 
     #nu een recursieve functie om de voorwaarden te combineren tot een beoordeling
@@ -332,10 +340,15 @@ berekenLSVIbasis <-
       return(Data)
     }
 
+    #onderstaande best herschrijven met group-by en do, werkt momenteel niet omwille van db-probleem (record invasieve exoten ontbreekt bij CombinerenVoorwaarden)
+
+    GroeperendeInfo <- GroeperendeInfo %>%
+      filter(Habitattype == "4030")
+
     #recursieve functie uitvoeren voor alle beoordelingen en dan extra info aan hangen
     Data <- data.frame(ID = NULL, VoorwaardeID = NULL,
                        Beoordeling_indicator = NULL, BeoordelingID = NULL)
-    for (i in unique(CombinatieVoorwaarden$BeoordelingID)) {
+    for (i in unique(GroeperendeInfo$BeoordelingID)) {
       Data <- Data %>%
         bind_rows(groepeerVoorwaarden((CombinatieVoorwaarden %>%
                                         filter_(~BeoordelingID == i))$Id) %>%
@@ -345,9 +358,8 @@ berekenLSVIbasis <-
     Resultaat_beoordeling <- Data %>%
       left_join(Resultaat,
                 by = c("ID" = "ID", "VoorwaardeID" = "VoorwaardeID")) %>%
-      full_join(GroeperendeInfo,
-                by = c("BeoordelingID" = "BeoordelingID",
-                       "Habitattype" = "Habitattype"))
+      left_join(GroeperendeInfo,
+                by = c("BeoordelingID" = "BeoordelingID"))
 
     #resultaten op niveau van indicator uitselecteren
     Resultaat_indicator <- Resultaat_beoordeling %>%

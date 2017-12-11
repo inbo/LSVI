@@ -4,18 +4,18 @@
 \alias{connecteerMetLSVIdb}
 \title{Connecteer met de databank met LSVI-indicatoren}
 \usage{
-connecteerMetLSVIdb(Server = "inbosql03\\\\prd",
-  Databank = "D0122_00_LSVIHabitatTypes", Gebruiker = "D0122_AppR",
-  Wachtwoord = "***REMOVED***")
+connecteerMetLSVIdb(Server = "INBO-SQL07-PRD.inbo.be",
+  Databank = "D0122_00_LSVIHabitatTypes", Gebruiker = "pc-eigenaar",
+  Wachtwoord = "geen")
 }
 \arguments{
-\item{Server}{de server waarop de databank staat die aangeroepen wordt (standaard "inbosql03\\prd")}
+\item{Server}{de server waarop de databank staat die aangeroepen wordt (standaard "INBO-SQL07-PRD.inbo.be")}
 
 \item{Databank}{de naam van de databank die aangeroepen wordt (standaard "D0122_00_LSVIHabitatTypes")}
 
-\item{Gebruiker}{gebruiker van de databank, standaard een gebruiker met leesrechten, andere opties zijn "pc-eigenaar" waarbij de login en wachtwoord gebruikt wordt waarmee ingelogd is op de pc of een eigen gebruikersnaam en wachtwoord ingeven}
+\item{Gebruiker}{gebruiker van de databank, standaard "pc-eigenaar" waarbij de login en wachtwoord gebruikt wordt waarmee ingelogd is op de pc, andere opties zijn "lezer" waarbij een gebruiker met leesrechten aangemaakt wordt (dit kan enkel als dit geïnstalleerd is op je pc) of een eigen gebruikersnaam en wachtwoord ingeven}
 
-\item{Wachtwoord}{wachtwoord van de gebruiker van de databank, standaard een gebruiker met leesrechten, moet niet ingevuld worden als Gebruiker "pc-eigenaar" is}
+\item{Wachtwoord}{wachtwoord van de gebruiker van de databank, standaard de tekst "geen", moet niet ingevuld worden als Gebruiker "pc-eigenaar" is}
 }
 \value{
 Deze functie geeft een open odbc-connectie naar de gespecifieerde databank.
@@ -30,4 +30,3 @@ sqlQuery(ConnectieLSVIhabitats, "SELECT VersieLSVI, Referentie FROM Versie")
 odbcClose(ConnectieLSVIhabitats)
 
 }
-
