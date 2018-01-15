@@ -23,6 +23,7 @@
 #' @importFrom RODBC sqlQuery odbcClose
 #' @importFrom dplyr %>% select_ filter_ group_by_ summarise_ ungroup left_join mutate_ rowwise
 #' @importFrom tidyr gather_
+#' @importFrom assertthat assert_that is.string
 #'
 #'
 geefInvoervereisten <- function(ConnectieLSVIhabitats,
@@ -54,11 +55,11 @@ geefInvoervereisten <- function(ConnectieLSVIhabitats,
 
   Indicator_beoordelingIDs <-
     paste(unique((Selectiewaarden %>% filter_(~!is.na(Indicator_beoordelingID)))$Indicator_beoordelingID),
-                 collapse = ",")
+                 collapse = "','")
 
   query_selecteerKwaliteitsniveau <-
     ifelse(Kwaliteitsniveau[1] == "alle","",
-           sprintf("AND Beoordeling.Kwaliteitsniveau = %s",
+           sprintf("AND Beoordeling.Kwaliteitsniveau = '%s'",
                    Kwaliteitsniveau))
 
   query_LSVIinfo <-
@@ -70,29 +71,29 @@ geefInvoervereisten <- function(ConnectieLSVIhabitats,
             FROM (Indicator_beoordeling LEFT JOIN Beoordeling ON Indicator_beoordeling.Id = Beoordeling.Indicator_beoordelingID)
             LEFT JOIN (Indicator INNER JOIN Criterium ON Indicator.CriteriumID = Criterium.Id)
             ON Indicator_beoordeling.IndicatorID = Indicator.Id
-            WHERE Indicator_beoordeling.Id in (%s) %s",
+            WHERE Indicator_beoordeling.Id in ('%s') %s",
             Indicator_beoordelingIDs, query_selecteerKwaliteitsniveau)
 
   LSVIinfo <- sqlQuery(ConnectieLSVIhabitats, query_LSVIinfo, stringsAsFactors = FALSE)
 
   BeoordelingIDs <-
     paste(unique((LSVIinfo %>% filter_(~!is.na(BeoordelingID)))$BeoordelingID),
-                 collapse = ",")
+                 collapse = "','")
 
   query_combinerenVoorwaarden <-
     sprintf("
             WITH voorwaardencombinatie
             AS
             (
-            SELECT CombinerenVoorwaarden.Id,
-            CombinerenVoorwaarden.BeoordelingID,
-            CombinerenVoorwaarden.VoorwaardeID1,
-            CombinerenVoorwaarden.VoorwaardeID2,
-            CombinerenVoorwaarden.ChildID1,
-            CombinerenVoorwaarden.ChildID2,
-            CombinerenVoorwaarden.BewerkingAND
-            FROM CombinerenVoorwaarden
-            WHERE CombinerenVoorwaarden.BeoordelingID in (%s)
+            SELECT CombinerenVoorwaarden1.Id,
+            CombinerenVoorwaarden1.BeoordelingID,
+            CombinerenVoorwaarden1.VoorwaardeID1,
+            CombinerenVoorwaarden1.VoorwaardeID2,
+            CombinerenVoorwaarden1.ChildID1,
+            CombinerenVoorwaarden1.ChildID2,
+            CombinerenVoorwaarden1.BewerkingAND
+            FROM CombinerenVoorwaarden AS CombinerenVoorwaarden1
+            WHERE CombinerenVoorwaarden1.BeoordelingID in ('%s')
             UNION ALL
             SELECT CombinerenVoorwaarden2.Id,
             CombinerenVoorwaarden2.BeoordelingID,
@@ -102,8 +103,8 @@ geefInvoervereisten <- function(ConnectieLSVIhabitats,
             CombinerenVoorwaarden2.ChildID2,
             CombinerenVoorwaarden2.BewerkingAND
             FROM CombinerenVoorwaarden AS CombinerenVoorwaarden2
-            INNER JOIN CombinerenVoorwaarden
-            ON CombinerenVoorwaarden2.Id = CombinerenVoorwaarden.ChildID1
+            INNER JOIN voorwaardencombinatie
+            ON CombinerenVoorwaarden2.Id = voorwaardencombinatie.ChildID1
             UNION ALL
             SELECT CombinerenVoorwaarden3.Id,
             CombinerenVoorwaarden3.BeoordelingID,
@@ -113,8 +114,8 @@ geefInvoervereisten <- function(ConnectieLSVIhabitats,
             CombinerenVoorwaarden3.ChildID2,
             CombinerenVoorwaarden3.BewerkingAND
             FROM CombinerenVoorwaarden AS CombinerenVoorwaarden3
-            INNER JOIN CombinerenVoorwaarden
-            ON CombinerenVoorwaarden3.Id = CombinerenVoorwaarden.ChildID2
+            INNER JOIN voorwaardencombinatie
+            ON CombinerenVoorwaarden3.Id = voorwaardencombinatie.ChildID2
             )
             Select * FROM voorwaardencombinatie",
               BeoordelingIDs)
@@ -170,7 +171,7 @@ geefInvoervereisten <- function(ConnectieLSVIhabitats,
 
   VoorwaardenIDs <-
     paste(unique((BasisVoorwaarden %>% filter_(~!is.na(VoorwaardeID)))$VoorwaardeID),
-          collapse = ",")
+          collapse = "','")
 
   query_voorwaardeinfo <-
     sprintf("SELECT Voorwaarde.Id AS VoorwaardeID,
@@ -225,7 +226,7 @@ geefInvoervereisten <- function(ConnectieLSVIhabitats,
                       LEFT JOIN LijstItem AS SubLijstItem
                         ON SubLijst.Id = SubLijstItem.LijstId)
               ON Voorwaarde.SubInvoermaskerId = SubLijst.Id
-            WHERE Voorwaarde.Id in (%s)",VoorwaardenIDs)
+            WHERE Voorwaarde.Id in ('%s')",VoorwaardenIDs)
 
   Voorwaardeinfo <- sqlQuery(ConnectieLSVIhabitats, query_voorwaardeinfo, stringsAsFactors = FALSE) #%>%
     # arrange_(~Invoervolgnr, ~Studievolgnr, ~SubInvoervolgnr) %>%
