@@ -23,7 +23,8 @@
 #' @export
 #'
 #' @importFrom RODBC sqlQuery odbcClose
-#' @importFrom assertthat assert_that
+#' @importFrom assertthat assert_that is.string
+#' @importFrom dplyr %>%
 #'
 #'
 selecteerIndicatoren <-
@@ -164,7 +165,17 @@ selecteerIndicatoren <-
       query <- sprintf("%s %s Indicator.Naam = '%s'", query, Voegwoord, Indicator)
     }
 
-    Selectiegegevens <- sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
+    Selectiegegevens <-
+      sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE) %>%
+      mutate_(
+        Habitattype = ~ifelse(is.numeric(Habitattype),
+                              as.character(Habitattype),
+                              Habitattype),
+        Habitatsubtype = ~ifelse(is.numeric(Habitatsubtype),
+                                 as.character(Habitatsubtype),
+                                 Habitatsubtype)
+      )
+
 
     return(Selectiegegevens)
 
