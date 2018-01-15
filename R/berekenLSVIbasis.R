@@ -136,130 +136,179 @@ berekenLSVIbasis <-
       stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Eenheid komen overeen met waarden vermeld in de databank.")
     }
 
-    #nodige info ophalen uit de databank
-    Voorwaarden <-
-      ifelse(Versie[1] == "alle",
-             ifelse(Kwaliteitsniveau[1] == "alle","",
-                    sprintf("WHERE Beoordeling.Kwaliteitsniveau = '%s'", Kwaliteitsniveau[1])),
-             ifelse(Kwaliteitsniveau[1] == "alle",
-                    sprintf("WHERE Versie.VersieLSVI = '%s'", Versie[1]),
-                    sprintf("WHERE Versie.VersieLSVI = '%s' AND Beoordeling.Kwaliteitsniveau = '%s'", Versie[1], Kwaliteitsniveau[1])))
-
-    #in hoeverre is het naar performantie toe zinvol om enkel de te onderzoeken habitattypes te selecteren?
-    #dit dan hier doen door een AND toe te voegen als de Voorwaarden-string niet "" is
-
-
-    query <- sprintf(
-      "SELECT
-      Versie.VersieLSVI,
-      Habitattype.Code AS Habitattype,
-      Criterium.Naam AS Criterium,
-      Indicator.Naam AS Indicator,
-      Beoordeling.Id AS BeoordelingID,
-      Beoordeling.Kwaliteitsniveau,
-      Beoordeling.Beoordeling_letterlijk
-      FROM (((((Beoordeling INNER JOIN Indicator_beoordeling
-      ON Beoordeling.Indicator_beoordelingID = Indicator_beoordeling.Id)
-      INNER JOIN (Indicator INNER JOIN Criterium ON Indicator.CriteriumID = Criterium.Id)
-      ON Indicator_beoordeling.IndicatorID = Indicator.Id)
-      INNER JOIN IndicatortabellenKoppeling
-      ON Indicator_beoordeling.ID = IndicatortabellenKoppeling.Indicator_beoordelingID)
-      INNER JOIN Indicator_habitat
-      ON IndicatortabellenKoppeling.Indicator_habitatID = Indicator_habitat.Id)
-      INNER JOIN Habitattype ON Indicator_habitat.HabitattypeId = Habitattype.Id)
-      INNER JOIN Versie ON Indicator_habitat.VersieID = Versie.Id %s",
-      Voorwaarden)
-
-    GroeperendeInfo <- sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE) %>%
-      inner_join(Data_habitat, by = c("Habitattype" = "Habitattype"))
-
-    BeoordelingIDs <- paste(unique(GroeperendeInfo$BeoordelingID), collapse = "','")
-
-    query <-
-      sprintf("
-              WITH voorwaardencombinatie
-              AS
-              (
-              SELECT CV1.Id,
-              CV1.BeoordelingID,
-              CV1.VoorwaardeID1,
-              CV1.VoorwaardeID2,
-              CV1.ChildID1,
-              CV1.ChildID2,
-              CV1.BewerkingAND
-              FROM CombinerenVoorwaarden AS CV1
-              WHERE CV1.BeoordelingID in ('%s')
-              UNION ALL
-              SELECT CombinerenVoorwaarden2.Id,
-              CombinerenVoorwaarden2.BeoordelingID,
-              CombinerenVoorwaarden2.VoorwaardeID1,
-              CombinerenVoorwaarden2.VoorwaardeID2,
-              CombinerenVoorwaarden2.ChildID1,
-              CombinerenVoorwaarden2.ChildID2,
-              CombinerenVoorwaarden2.BewerkingAND
-              FROM CombinerenVoorwaarden AS CombinerenVoorwaarden2
-              INNER JOIN voorwaardencombinatie
-              ON CombinerenVoorwaarden2.Id = voorwaardencombinatie.ChildID1
-              UNION ALL
-              SELECT CombinerenVoorwaarden3.Id,
-              CombinerenVoorwaarden3.BeoordelingID,
-              CombinerenVoorwaarden3.VoorwaardeID1,
-              CombinerenVoorwaarden3.VoorwaardeID2,
-              CombinerenVoorwaarden3.ChildID1,
-              CombinerenVoorwaarden3.ChildID2,
-              CombinerenVoorwaarden3.BewerkingAND
-              FROM CombinerenVoorwaarden AS CombinerenVoorwaarden3
-              INNER JOIN voorwaardencombinatie
-              ON CombinerenVoorwaarden3.Id = voorwaardencombinatie.ChildID2
-              )
-              Select * FROM voorwaardencombinatie",
-              BeoordelingIDs)
-
-    CombinatieVoorwaarden <- sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
+    #nodige info ophalen uit de databank en koppelen aan gegevens
+    Resultaat <-
+      Data_habitat %>%
+      left_join(
+        geefInvoervereisten(ConnectieLSVIhabitats,
+                            Versie,
+                            Habitattype = unique(Data_habitat$Habitattype),  #selecteerIndicatoren zou aangepast moeten worden om dit toe te laten!
+                            Kwaliteitsniveau = Kwaliteitsniveau),
+        by = c("Habitattype")) %>%
+      left_join(
+        Data_voorwaarden,
+        by = c("ID", "Criterium", "Indicator"),
+        suffix = c("", ".vw")
+      ) %>%          #hier moeten de niet opgegeven voorwaarden nog berekend worden en de overbodige informatie gewist!!!
+      mutate_(
+        AnalyseVariabele = ~NULL,
+        SoortengroepID = ~NULL,
+        SoortengroepNaam = ~NULL,
+        Studiegroepnaam = ~NULL,
+        Studielijstnaam = ~NULL,
+        Studiewaarde = ~NULL,
+        Studievolgnr = ~NULL,
+        Studieomschrijving = ~NULL,
+        Studieondergrens = ~NULL,
+        Studiegemiddelde = ~NULL,
+        Studiebovengrens = ~NULL,
+        SubAnalyseVariabele = ~NULL,
+        SubEenheid = ~NULL,
+        TypeSubVariabele = ~NULL,
+        SubReferentiewaarde = ~NULL,
+        SubOperator = ~NULL,
+        SubInvoertype = ~NULL,
+        SubInvoerwaarde = ~NULL,
+        SubInvoervolgnr = ~NULL,
+        SubInvoeromschrijving = ~NULL,
+        SubInvoerondergrens = ~NULL,
+        SubInvoergemiddelde = ~NULL,
+        SubInvoerbovengrens = ~NULL
+      ) %>%
+      distinct_() %>%
+      mutate_(
+        Status =
+          ~ifelse(is.na(Waarde),
+                  NA,
+                  berekenStatus(.))
+      )
 
 
-    VoorwaardeIDs <-
-      paste(unique(c(CombinatieVoorwaarden[!is.na(CombinatieVoorwaarden$VoorwaardeID1),]$VoorwaardeID1,
-                     CombinatieVoorwaarden[!is.na(CombinatieVoorwaarden$VoorwaardeID2),]$VoorwaardeID2)),
-            collapse = ",")
 
-    query <-
-      sprintf("
-              SELECT Voorwaarde.Id AS VoorwaardeID,
-              Voorwaarde.VoorwaardeNaam,
-              Voorwaarde.ExtraBewerking,
-              Voorwaarde.Referentiewaarde,
-              Voorwaarde.Operator,
-              Voorwaarde.SoortengroepId,
-              Soortengroep.Omschrijving AS SoortengroepNaam,
-              AnalyseVariabele.VariabeleNaam,
-              AnalyseVariabele.Eenheid,
-              TypeVariabele.Naam AS TypeVariabele,
-              LijstItem.Waarde AS Invoermasker,
-              LijstItem.Gemiddelde,
-              LijstItem.Volgnummer,
-              StudieItem.Waarde AS StudieItem
-              FROM (((Voorwaarde
-                LEFT JOIN Soortengroep
-                  ON Voorwaarde.SoortengroepID = Soortengroep.Id)
-              INNER JOIN (AnalyseVariabele
-                  LEFT JOIN TypeVariabele
-                    ON AnalyseVariabele.TypeVariabeleID = TypeVariabele.Id)
-                ON Voorwaarde.AnalyseVariabeleId = AnalyseVariabele.Id)
-              LEFT JOIN (Lijst
-                          LEFT JOIN LijstItem ON Lijst.Id = LijstItem.LijstId)
-                ON Voorwaarde.InvoermaskerId = Lijst.Id)
-              LEFT JOIN (Studiegroep
-                          LEFT JOIN StudieItem
-                            ON Studiegroep.Id = StudieItem.StudiegroepId)
-                ON Voorwaarde.StudiegroepId = Studiegroep.Id
-              WHERE Voorwaarde.Id in (%s)",
-              VoorwaardeIDs)
-
-
-    Voorwaarden <- sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
-
-
+#info uit db ophalen, oude versie
+    # Voorwaarden <-
+    #   ifelse(Versie[1] == "alle",
+    #          ifelse(Kwaliteitsniveau[1] == "alle","",
+    #                 sprintf("WHERE Beoordeling.Kwaliteitsniveau = '%s'", Kwaliteitsniveau[1])),
+    #          ifelse(Kwaliteitsniveau[1] == "alle",
+    #                 sprintf("WHERE Versie.VersieLSVI = '%s'", Versie[1]),
+    #                 sprintf("WHERE Versie.VersieLSVI = '%s' AND Beoordeling.Kwaliteitsniveau = '%s'", Versie[1], Kwaliteitsniveau[1])))
+    #
+    # #in hoeverre is het naar performantie toe zinvol om enkel de te onderzoeken habitattypes te selecteren?
+    # #dit dan hier doen door een AND toe te voegen als de Voorwaarden-string niet "" is
+    #
+    #
+    # query <- sprintf(
+    #   "SELECT
+    #   Versie.VersieLSVI,
+    #   Habitattype.Code AS Habitattype,
+    #   Criterium.Naam AS Criterium,
+    #   Indicator.Naam AS Indicator,
+    #   Beoordeling.Id AS BeoordelingID,
+    #   Beoordeling.Kwaliteitsniveau,
+    #   Beoordeling.Beoordeling_letterlijk
+    #   FROM (((((Beoordeling INNER JOIN Indicator_beoordeling
+    #   ON Beoordeling.Indicator_beoordelingID = Indicator_beoordeling.Id)
+    #   INNER JOIN (Indicator INNER JOIN Criterium ON Indicator.CriteriumID = Criterium.Id)
+    #   ON Indicator_beoordeling.IndicatorID = Indicator.Id)
+    #   INNER JOIN IndicatortabellenKoppeling
+    #   ON Indicator_beoordeling.ID = IndicatortabellenKoppeling.Indicator_beoordelingID)
+    #   INNER JOIN Indicator_habitat
+    #   ON IndicatortabellenKoppeling.Indicator_habitatID = Indicator_habitat.Id)
+    #   INNER JOIN Habitattype ON Indicator_habitat.HabitattypeId = Habitattype.Id)
+    #   INNER JOIN Versie ON Indicator_habitat.VersieID = Versie.Id %s",
+    #   Voorwaarden)
+    #
+    # GroeperendeInfo <- sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE) %>%
+    #   inner_join(Data_habitat, by = c("Habitattype" = "Habitattype"))
+    #
+    # BeoordelingIDs <- paste(unique(GroeperendeInfo$BeoordelingID), collapse = "','")
+    #
+    # query <-
+    #   sprintf("
+    #           WITH voorwaardencombinatie
+    #           AS
+    #           (
+    #           SELECT CV1.Id,
+    #           CV1.BeoordelingID,
+    #           CV1.VoorwaardeID1,
+    #           CV1.VoorwaardeID2,
+    #           CV1.ChildID1,
+    #           CV1.ChildID2,
+    #           CV1.BewerkingAND
+    #           FROM CombinerenVoorwaarden AS CV1
+    #           WHERE CV1.BeoordelingID in ('%s')
+    #           UNION ALL
+    #           SELECT CombinerenVoorwaarden2.Id,
+    #           CombinerenVoorwaarden2.BeoordelingID,
+    #           CombinerenVoorwaarden2.VoorwaardeID1,
+    #           CombinerenVoorwaarden2.VoorwaardeID2,
+    #           CombinerenVoorwaarden2.ChildID1,
+    #           CombinerenVoorwaarden2.ChildID2,
+    #           CombinerenVoorwaarden2.BewerkingAND
+    #           FROM CombinerenVoorwaarden AS CombinerenVoorwaarden2
+    #           INNER JOIN voorwaardencombinatie
+    #           ON CombinerenVoorwaarden2.Id = voorwaardencombinatie.ChildID1
+    #           UNION ALL
+    #           SELECT CombinerenVoorwaarden3.Id,
+    #           CombinerenVoorwaarden3.BeoordelingID,
+    #           CombinerenVoorwaarden3.VoorwaardeID1,
+    #           CombinerenVoorwaarden3.VoorwaardeID2,
+    #           CombinerenVoorwaarden3.ChildID1,
+    #           CombinerenVoorwaarden3.ChildID2,
+    #           CombinerenVoorwaarden3.BewerkingAND
+    #           FROM CombinerenVoorwaarden AS CombinerenVoorwaarden3
+    #           INNER JOIN voorwaardencombinatie
+    #           ON CombinerenVoorwaarden3.Id = voorwaardencombinatie.ChildID2
+    #           )
+    #           Select * FROM voorwaardencombinatie",
+    #           BeoordelingIDs)
+    #
+    # CombinatieVoorwaarden <- sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
+    #
+    #
+    # VoorwaardeIDs <-
+    #   paste(unique(c(CombinatieVoorwaarden[!is.na(CombinatieVoorwaarden$VoorwaardeID1),]$VoorwaardeID1,
+    #                  CombinatieVoorwaarden[!is.na(CombinatieVoorwaarden$VoorwaardeID2),]$VoorwaardeID2)),
+    #         collapse = ",")
+    #
+    # query <-
+    #   sprintf("
+    #           SELECT Voorwaarde.Id AS VoorwaardeID,
+    #           Voorwaarde.VoorwaardeNaam,
+    #           Voorwaarde.ExtraBewerking,
+    #           Voorwaarde.Referentiewaarde,
+    #           Voorwaarde.Operator,
+    #           Voorwaarde.SoortengroepId,
+    #           Soortengroep.Omschrijving AS SoortengroepNaam,
+    #           AnalyseVariabele.VariabeleNaam,
+    #           AnalyseVariabele.Eenheid,
+    #           TypeVariabele.Naam AS TypeVariabele,
+    #           LijstItem.Waarde AS Invoermasker,
+    #           LijstItem.Gemiddelde,
+    #           LijstItem.Volgnummer,
+    #           StudieItem.Waarde AS StudieItem
+    #           FROM (((Voorwaarde
+    #             LEFT JOIN Soortengroep
+    #               ON Voorwaarde.SoortengroepID = Soortengroep.Id)
+    #           INNER JOIN (AnalyseVariabele
+    #               LEFT JOIN TypeVariabele
+    #                 ON AnalyseVariabele.TypeVariabeleID = TypeVariabele.Id)
+    #             ON Voorwaarde.AnalyseVariabeleId = AnalyseVariabele.Id)
+    #           LEFT JOIN (Lijst
+    #                       LEFT JOIN LijstItem ON Lijst.Id = LijstItem.LijstId)
+    #             ON Voorwaarde.InvoermaskerId = Lijst.Id)
+    #           LEFT JOIN (Studiegroep
+    #                       LEFT JOIN StudieItem
+    #                         ON Studiegroep.Id = StudieItem.StudiegroepId)
+    #             ON Voorwaarde.StudiegroepId = Studiegroep.Id
+    #           WHERE Voorwaarde.Id in (%s)",
+    #           VoorwaardeIDs)
+    #
+    #
+    # Voorwaarden <- sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
+    #
+    #
 
 
     #Hier de voorwaarden combineren met de recursieve functie, en tijdens dat proces ergens de berekeningen aanroepen?
@@ -280,6 +329,7 @@ berekenLSVIbasis <-
       filter_(~TypeVariabele %in% c("Geheel getal", "Decimaal getal", "Percentage"))
 
     #pipe onderbreken voor foutcontrole: test of getallen het juiste formaat hebben
+    #NOTA: deze foutcontrole zou best gebeuren op de ingevoerde gegevens (dus op Waarde met Type als referentiewaarde)!
     Foutcontrole <- Resultaat_getal %>%
       select_(~Waarde, ~TypeVariabele) %>%
       mutate_(
