@@ -6,7 +6,7 @@
 \usage{
 berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "alle",
   Kwaliteitsniveau = "alle", Data_habitat, Data_voorwaarden,
-  Data_soortenKenmerken)
+  Data_soortenKenmerken, LIJST = geefVertaallijst(ConnectieLSVIhabitats))
 }
 \arguments{
 \item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
@@ -24,17 +24,6 @@ Deze functie genereert de resultaten in de vorm van een list met 3 tabellen: een
 Deze functie bepaalt de Lokale Staat van Instandhouding op basis van een opgegeven tabel met VoorwaardeID en een opgegeven waarde, die in het juiste formaat moet zijn.  Zie voor meer informatie hierover onder Data_voorwaarden.
 }
 \examples{
-Data_voorwaarden <-
-   data.frame(ID = "Jo1380",
-              VoorwaardeID = c(3,4,5,7,2,1),
-              Waarde = c("abundant","frequent",35,3,3,1),
-              Habitattype = 4010,
-              stringsAsFactors = FALSE)
-Data_voorwaarden <-
-   data.frame(ID = "Jo1380",
-              VoorwaardeID = c(858,859,210,2121,2346,2469,1300,1301),
-              Waarde = c(1,3,"d",10,10,10,"d",2),
-              stringsAsFactors = FALSE)
 library(readr)
 Data_habitat <-
     read_csv2(system.file("vbdata/opname4030habitat.csv", package = "LSVI"),

@@ -66,7 +66,7 @@ geefInvoervereisten <- function(ConnectieLSVIhabitats,
     sprintf("SELECT Indicator_beoordeling.Id AS Indicator_beoordelingID,
             Criterium.Naam AS Criterium, Indicator.Naam AS Indicator,
             Beoordeling.Beoordeling_letterlijk AS Beoordeling,
-            Beoordeling.kwaliteitsniveau,
+            Beoordeling.Kwaliteitsniveau,
             Beoordeling.Id as BeoordelingID
             FROM (Indicator_beoordeling LEFT JOIN Beoordeling ON Indicator_beoordeling.Id = Beoordeling.Indicator_beoordelingID)
             LEFT JOIN (Indicator INNER JOIN Criterium ON Indicator.CriteriumID = Criterium.Id)
