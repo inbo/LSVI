@@ -33,17 +33,14 @@
 #' Data_soorten <- merge(Data_soorten, Schaalomzetting, 
 #'                       by.x = "Bedekking", by.y = "Schaal_opname")
 #'                       
-#' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-#' berekenAnalyseVariabele(ConnectieLSVIhabitats, "aantal_aanwezig", 
+#' berekenAnalyseVariabele("aantal_aanwezig", 
 #'                         Data_soorten, "369,143")
-#' berekenAnalyseVariabele(ConnectieLSVIhabitats, "aantal_frequent_aanwezig", 
+#' berekenAnalyseVariabele("aantal_frequent_aanwezig", 
 #'                         Data_soorten, "369,143")
-#' berekenAnalyseVariabele(ConnectieLSVIhabitats, "bedekking_vegetatie", 
+#' berekenAnalyseVariabele("bedekking_vegetatie", 
 #'                         Data_soorten, "369,143")
-#' berekenAnalyseVariabele(ConnectieLSVIhabitats, "bedekking_vegetatie_Tansley", 
+#' berekenAnalyseVariabele("bedekking_vegetatie_Tansley", 
 #'                         Data_soorten, "369,143")
-#' library(RODBC)
-#' odbcClose(ConnectieLSVIhabitats)
 #'
 #' @export   
 #'
@@ -54,10 +51,10 @@
 #'
 #'
 berekenAnalyseVariabele <- 
-  function(ConnectieLSVIhabitats,
-           AnalyseVariabele,
+  function(AnalyseVariabele,
            Data_soorten, 
-           Soortengroeplijst){
+           Soortengroeplijst,
+           ConnectieLSVIhabitats = connecteerMetLSVIdb()){
     
     assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
     assert_that(is.string(AnalyseVariabele))
@@ -68,13 +65,13 @@ berekenAnalyseVariabele <-
     Analysevariabelen <- 
       c(Analysevariabelen, "aantal_aanwezig", "aantal_afwezig", 
         "bedekking_vegetatie", "bedekking_vegetatie_tansley")
-    if(!AnalyseVariabele %in% Analysevariabelen){
+    if (!AnalyseVariabele %in% Analysevariabelen) {
       stop(sprintf("De AnalyseVariabele is geen geldige waarde, geef een van volgende waarden op: %s",
                    paste(Analysevariabelen, collapse = ", ")))
     }
     
-    if(grepl("aantal", AnalyseVariabele)){
-      if(grepl("aantal_[[:alpha:]]*_aanwezig", AnalyseVariabele)){
+    if (grepl("aantal", AnalyseVariabele)) {
+      if (grepl("aantal_[[:alpha:]]*_aanwezig", AnalyseVariabele)) {
         Minimumniveau <- gsub(
           pattern = "aantal_([[:alpha:]]*)_aanwezig",
           replacement = "\\1",
@@ -88,12 +85,12 @@ berekenAnalyseVariabele <-
         )
       }
       Resultaat <- 
-        berekenAantalSoorten(ConnectieLSVIhabitats, Data_soorten, Soortengroeplijst, 
-                             Minimumniveau)
+        berekenAantalSoorten(Data_soorten, Soortengroeplijst, 
+                             Minimumniveau, ConnectieLSVIhabitats)
     } else {
       Resultaat <- 
-        berekenBedekkingSoorten(ConnectieLSVIhabitats, Data_soorten, Soortengroeplijst)
-      if(grepl("tansley",AnalyseVariabele)){
+        berekenBedekkingSoorten(Data_soorten, Soortengroeplijst, ConnectieLSVIhabitats)
+      if (grepl("tansley",AnalyseVariabele)) {
         Resultaat$Tansley <- vertaalBedekkingTansley(Resultaat$Waarde)
       }
     }

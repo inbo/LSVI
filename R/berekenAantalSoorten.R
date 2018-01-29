@@ -19,12 +19,9 @@
 #' Data_soorten <- merge(Data_soorten, Schaalomzetting, 
 #'                       by.x = "Bedekking", by.y = "Schaal_opname")
 #' Soortengroeplijst <- "369,143"
-#' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-#' berekenAantalSoorten(ConnectieLSVIhabitats, Data_soorten, Soortengroeplijst)
-#' berekenAantalSoorten(ConnectieLSVIhabitats, Data_soorten, Soortengroeplijst, 
+#' berekenAantalSoorten(Data_soorten, Soortengroeplijst)
+#' berekenAantalSoorten(Data_soorten, Soortengroeplijst, 
 #'                      Minimumniveau = "Frequent")
-#' library(RODBC)
-#' odbcClose(ConnectieLSVIhabitats)
 #'
 #' @export   
 #'
@@ -35,10 +32,10 @@
 #'
 
 berekenAantalSoorten <- 
-  function(ConnectieLSVIhabitats,
-           Data_soorten, 
+  function(Data_soorten, 
            Soortengroeplijst, 
-           Minimumniveau = "aanwezig"){
+           Minimumniveau = "aanwezig",
+           ConnectieLSVIhabitats = connecteerMetLSVIdb()){
     
     assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
     assert_that(inherits(Data_soorten, "data.frame"))
@@ -47,11 +44,11 @@ berekenAantalSoorten <-
     assert_that(has_name(Data_soorten, "Tansley"))
     Tansley <- read_csv(system.file("schaaltabellen/Tansley.csv", package = "LSVI"))
     Data_soorten$Tansley <- tolower(Data_soorten$Tansley)
-    if(!all(Data_soorten$Tansley %in% c(Tansley$Voluit, Tansley$Afgekort))){
+    if (!all(Data_soorten$Tansley %in% c(Tansley$Voluit, Tansley$Afgekort))) {
       stop(sprintf("Niet alle bedekkingen vermeld onder Data_soorten$Tansley komen overeen met de Tansley-schaal (%s)",
            paste(Tansley$Voluit, collapse = ", ")))
     }
-    if(!all(Data_soorten$Tansley %in% Tansley$Voluit)){
+    if (!all(Data_soorten$Tansley %in% Tansley$Voluit)) {
       Data_soorten <- Data_soorten %>%
         left_join(Tansley %>% select_(~Afgekort, ~Voluit), 
                   by = c("Tansley" = "Afgekort")) %>%
@@ -89,7 +86,7 @@ berekenAantalSoorten <-
     MinimumniveauF <- factor(Minimumniveau, levels = Tansley$Voluit)      
     
     
-    Data_soorten <- selecteerSoortenInOpname(ConnectieLSVIhabitats, Data_soorten, Soortengroeplijst) %>%
+    Data_soorten <- selecteerSoortenInOpname(Data_soorten, Soortengroeplijst, ConnectieLSVIhabitats) %>%
       mutate_(
         SoortensubgroepID = ~ ifelse(is.na(SoortensubgroepID),  
                                      WetNaamKort,
@@ -106,7 +103,7 @@ berekenAantalSoorten <-
       ungroup()
 
     
-    if(MinimumniveauF == "afwezig"){
+    if (MinimumniveauF == "afwezig") {
       Aantal_soorten <- Data_soorten %>%
         filter_(~as.numeric(TansleyF) == as.numeric(MinimumniveauF)) %>%
         group_by_(~ID, ~SoortengroepID) %>%

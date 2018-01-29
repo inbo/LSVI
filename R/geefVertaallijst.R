@@ -4,7 +4,8 @@
 #' 
 #' @export
 
-geefVertaallijst <- function(ConnectieLSVIhabitats) {
+geefVertaallijst <- 
+  function(ConnectieLSVIhabitats) {
   Connectie <- connecteerMetLSVIdb()
   query <- 
     "SELECT Lijst.Naam, LijstItem.Waarde, LijstItem.Volgnummer, LijstItem.Omschrijving, LijstItem.Ondergrens,

@@ -4,14 +4,15 @@
 \alias{geefUniekeWaarden}
 \title{Geef alle unieke waarden van een veld uit de databank met de LSVI-indicatoren voorafgegaan door "alle"}
 \usage{
-geefUniekeWaarden(ConnectieLSVIhabitats, Tabelnaam, Veldnaam)
+geefUniekeWaarden(Tabelnaam, Veldnaam,
+  ConnectieLSVIhabitats = connecteerMetLSVIdb())
 }
 \arguments{
-\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
-
 \item{Tabelnaam}{De naam van de tabel waarin het veld zich bevindt (String)}
 
 \item{Veldnaam}{De naam van het veld (in de bij Tabelnaam opgegeven tabel) waarvan de waarden moeten opgezocht worden (String)}
+
+\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
 }
 \value{
 Deze functie geeft een vector bestaande uit "alle" en de verschillende waarden uit de gespecifieerde tabel.
@@ -20,9 +21,6 @@ Deze functie geeft een vector bestaande uit "alle" en de verschillende waarden u
 Deze functie geeft een vector met alle verschillende waarden die een gespecifieerd veld van een gespecifieerde tabel in de databank met LSVI-indicatoren staan, voorafgegaan door de (toegevoegde) waarde "alle".  Deze functie wordt in verschillende functies van het package gebruikt om de invoer van parameters te controleren (waar de mogelijke invoer bestaat uit 'alle' of een item uit het veld).
 }
 \examples{
-ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-geefUniekeWaarden(ConnectieLSVIhabitats,"Habitatgroep","Habitatgroepnaam")
-library(RODBC)
-odbcClose(ConnectieLSVIhabitats)
+geefUniekeWaarden("Habitatgroep","Naam")
 
 }

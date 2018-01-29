@@ -4,18 +4,19 @@
 \alias{berekenLSVIbasis}
 \title{Berekent de LSVI op basis van VoorwaardeID en opgegeven waarden}
 \usage{
-berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "alle",
-  Kwaliteitsniveau = "alle", Data_habitat, Data_voorwaarden,
-  Data_soortenKenmerken, LIJST = geefVertaallijst(ConnectieLSVIhabitats))
+berekenLSVIbasis(Versie = "alle", Kwaliteitsniveau = "alle", Data_habitat,
+  Data_voorwaarden, Data_soortenKenmerken,
+  ConnectieLSVIhabitats = connecteerMetLSVIdb(),
+  LIJST = geefVertaallijst(ConnectieLSVIhabitats))
 }
 \arguments{
-\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
-
 \item{Versie}{De versie van het LSVI-rapport op basis waarvan de berekening gemaakt wordt, bv. "Versie 2" of "Versie 3".  Bij de default "alle" wordt de LSVI volgens de verschillende versies berekend.}
 
 \item{Kwaliteitsniveau}{Voor elke versie van de LSVI zijn er een of meerdere kwaliteitsniveaus gedefinieerd in de databank.  Zo is er bij Versie 2.0 een onderscheid gemaakt tussen goede staat (A), voldoende staat (B) en gedegradeerde staat (C).  Hier duidt kwaliteitsniveau 1 de grens tussen voldoende (B) en gedegradeerd (C) aan en kwaliteitsniveau 2 het onderscheid tussen goed (A) en voldoende (B).  Bij Versie 3 duidt kwaliteitsniveau 1 op het onderscheid tussen ongunstig en gunstig en kwaliteitsniveau 2 op de streefwaarde.  De betekenissen van de 2 kwaliteitsniveaus voor de verschillende versies is weergegeven in de tabel Versie in de databank en kan opgevraagd met de functie geefVersieInfo().  Geef als parameter Kwaliteitsniveau op op basis van welk kwaliteitsniveau de berekening gemaakt moet worden (strikt genomen is de berekening van de LSVI de berekening volgens kwaliteitsniveau 1).}
 
 \item{Data_voorwaarden}{Gegevens over de opgemeten indicatoren in de vorm van een data.frame met velden ID, Habitattype, VoorwaardeID en Waarde, waarbij ID een groeperende variabele is voor een opname (plaats en tijdstip).  Habitattype moet overeenkomen met de naamgeving in de LSVI-databank (op te zoeken door geefUniekeWaarden("Habitattype", "Code")).  VoorwaardeID komt overeen met de ID in de databank die gekoppeld is aan de voorwaarde (= deelitem binnen beoordeling) en Waarde is de waarde die voor die voorwaarde geobserveerd of gemeten is.  Het type van deze waarde moet overeenkomen met het type dat verwacht wordt volgens de LSVI (geheel getal als een aantal (soorten) verwacht wordt, decimaal getal tussen 0 en 100 als een percentage verwacht wordt, een van de mogelijke categorieen bij een categorische variabele,...).  Ook is het belangrijk dat de opgegeven VoorwaardeID's uit de databank voorwaarden zijn die voor de opgegeven versie, het opgegeven habitatsubtype en kwaliteitsniveau.  De informatie die nodig is om observaties te koppelen aan de VoorwaardeID's en de noodzakelijke info samen te brengen, kan opgevraagd worden met de functie geefInvoervereisten().}
+
+\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
 }
 \value{
 Deze functie genereert de resultaten in de vorm van een list met 3 tabellen: een eerste met de beoordelingen per criterium en kwaliteitsniveau, een tweede met de beoordelingen per indicator en kwaliteitsniveau, en een derde met de detailgegevens inclusief meetwaarden.
@@ -32,12 +33,9 @@ Data_voorwaarden <-
     read_csv2(system.file("vbdata/opname4030voorwaarden.csv", package = "LSVI"))
 Data_soortenKenmerken <-
     read_csv2(system.file("vbdata/opname4030soortenKenmerken.csv", package = "LSVI"))
-ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-berekenLSVIbasis(ConnectieLSVIhabitats, Versie = "Versie 3",
+berekenLSVIbasis(Versie = "Versie 3",
                  Kwaliteitsniveau = "1", Data_habitat,
                  Data_voorwaarden, Data_soortenKenmerken)
-library(RODBC)
-odbcClose(ConnectieLSVIhabitats)
 
 
 }

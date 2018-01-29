@@ -4,13 +4,11 @@
 \alias{geefInvoervereisten}
 \title{Geeft de invoervereisten voor de waarde van een opname}
 \usage{
-geefInvoervereisten(ConnectieLSVIhabitats, Versie = "alle",
-  Habitatgroep = "alle", Habitattype = "alle", Criterium = "alle",
-  Indicator = "alle", Kwaliteitsniveau = "alle")
+geefInvoervereisten(Versie = "alle", Habitatgroep = "alle",
+  Habitattype = "alle", Criterium = "alle", Indicator = "alle",
+  Kwaliteitsniveau = "alle", ConnectieLSVIhabitats = connecteerMetLSVIdb())
 }
 \arguments{
-\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
-
 \item{Versie}{De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".  Bij de default "alle" worden de gegevens voor de verschillende versies gegeven.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Versie", "VersieLSVI") of geefVersieInfo(ConnectieLSVIhabitats).}
 
 \item{Habitatgroep}{Parameter waarmee alle habitats van een bepaalde habitatgroep kunnen geselecteerd worden, bv. "Bossen", "Heiden", "(Half-)natuurlijke graslanden", "Zoete wateren",...   en "alle" (=default).  Deze waarde moet niet gespecifieerd worden als een bepaald habitat(sub)type geselecteerd wordt.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Habitatgroep", "Habitatgroepnaam").}
@@ -22,6 +20,8 @@ geefInvoervereisten(ConnectieLSVIhabitats, Versie = "alle",
 \item{Indicator}{De indicator waarvoor de gegevens uit de databank gehaald worden.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Indicator", "Naam").}
 
 \item{Kwaliteitsniveau}{Voor elke versie van de LSVI zijn er een of meerdere kwaliteitsniveaus gedefinieerd in de databank.  Zo is er bij Versie 2.0 een onderscheid gemaakt tussen goede staat (A), voldoende staat (B) en gedegradeerde staat (C).  Hier duidt kwaliteitsniveau 1 de grens tussen voldoende (B) en gedegradeerd (C) aan en kwaliteitsniveau 2 het onderscheid tussen goed (A) en voldoende (B).  Bij Versie 3 duidt kwaliteitsniveau 1 op het onderscheid tussen ongunstig en gunstig en kwaliteitsniveau 2 op de streefwaarde.  De betekenissen van de 2 kwaliteitsniveaus voor de verschillende versies is weergegeven in de tabel Versie in de databank en kan opgevraagd met de functie geefVersieInfo().  Geef als parameter Kwaliteitsniveau op op basis van welk kwaliteitsniveau de berekening gemaakt moet worden (strikt genomen is de berekening van de LSVI de berekening volgens kwaliteitsniveau 1).}
+
+\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
 }
 \value{
 Deze functie geeft een tabel met de hierboven beschreven informatie uit de databank.
@@ -34,10 +34,7 @@ Verder geeft ze informatie over de Waarde die verwacht wordt in de functie berek
 Voor elke AnalyseVariabele is informatie over het formaat dat verwacht wordt voor Waarde: de Eenheid (die niet opgenomen moet worden in Waarde maar wel de grootte-orde van het verwachte getal aangeeft), het formaat van de variabele (TypeVariabele), bij categorische variabelen het 'Invoermasker' (mogelijke waarden) en de Vegetatielaag die bekeken moet worden.
 }
 \examples{
-ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-geefInvoervereisten(ConnectieLSVIhabitats, Versie = "Versie 3",
+geefInvoervereisten(Versie = "Versie 3",
                     Habitattype = "4010", Kwaliteitsniveau = "1")
-library(RODBC)
-odbcClose(ConnectieLSVIhabitats)
 
 }

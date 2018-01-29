@@ -4,13 +4,11 @@
 \alias{geefInfoHabitatfiche}
 \title{Geeft tabel met info uit de LSVI-rapporten voor de opgegeven parameters}
 \usage{
-geefInfoHabitatfiche(ConnectieLSVIhabitats, Versie = "alle",
-  Habitatgroep = "alle", Habitattype = "alle", Criterium = "alle",
-  Indicator = "alle", Stijl = c("Rmd", "tekst"))
+geefInfoHabitatfiche(Versie = "alle", Habitatgroep = "alle",
+  Habitattype = "alle", Criterium = "alle", Indicator = "alle",
+  Stijl = c("Rmd", "tekst"), ConnectieLSVIhabitats = connecteerMetLSVIdb())
 }
 \arguments{
-\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
-
 \item{Versie}{De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".  Bij de default "alle" worden de gegevens voor de verschillende versies gegeven.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Versie", "VersieLSVI") of geefVersieInfo(ConnectieLSVIhabitats).}
 
 \item{Habitatgroep}{Parameter waarmee alle habitats van een bepaalde habitatgroep kunnen geselecteerd worden, bv. "Bossen", "Heiden", "(Half-)natuurlijke graslanden", "Zoete wateren",...   en "alle" (=default).  Deze waarde moet niet gespecifieerd worden als een bepaald habitat(sub)type geselecteerd wordt.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Habitatgroep", "Habitatgroepnaam").}
@@ -22,6 +20,8 @@ geefInfoHabitatfiche(ConnectieLSVIhabitats, Versie = "alle",
 \item{Indicator}{De indicator waarvoor de gegevens uit de databank gehaald worden.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Indicator", "Naam").}
 
 \item{Stijl}{Keuze uit "Rmd" en "tekst".  Bij Rmd (default) worden soortgroepnamen voorafgegaan en gevolgd door "__" en Latijnse namen van soorten door "_", waardoor deze bij gebruik van RMarkdown worden omgezet naar resp. vet en italics.  Bij tekst worden deze underscores weggelaten.}
+
+\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
 }
 \value{
 Deze functie genereert een tabel met alle gegevens die nodig zijn om de tabellen habitatkarakteristieken en beoordelingsmatrix uit de LSVI-rapporten te genereren.
@@ -32,9 +32,6 @@ Deze functie geeft de inhoud van de tabellen habitatkarakteristieken en beoordel
 De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten als string opgegeven worden.  Default is telkens 'alle', waarbij de soortenlijsten voor alle mogelijke waarden van die parameter weergegeven worden (m.a.w. er is geen selectie voor deze parameter).
 }
 \examples{
-ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-geefInfoHabitatfiche(ConnectieLSVIhabitats, Versie = "Versie 3", Habitattype = "4010")
-library(RODBC)
-odbcClose(ConnectieLSVIhabitats)
+geefInfoHabitatfiche(Versie = "Versie 3", Habitattype = "4030")
 
 }

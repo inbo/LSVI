@@ -11,11 +11,8 @@
 #' @return Deze functie geeft een tabel met velden SoortengroepID, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van soorten binnen eenzelfde indicator).  WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort bevat enkel genusnaam en soortnaam (zonder auteursnaam).
 #' 
 #' @examples
-#' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-#' geefSoortenlijstSoortniveau(ConnectieLSVIhabitats,"139,142,370,371")
-#' geefSoortenlijstSoortniveau(ConnectieLSVIhabitats,"139,142,370,371","Soortniveau")
-#' library(RODBC)
-#' odbcClose(ConnectieLSVIhabitats)
+#' geefSoortenlijstSoortniveau("139,142,370,371")
+#' geefSoortenlijstSoortniveau("139,142,370,371","Soortniveau")
 #'
 #' @export
 #'
@@ -25,19 +22,19 @@
 #'
 #'
 geefSoortenlijstSoortniveau <- 
-  function(ConnectieLSVIhabitats,
-           Soortengroeplijst, 
-           Soortenlijsttype = c("alle", "Soortniveau")){
+  function(Soortengroeplijst, 
+           Soortenlijsttype = c("alle", "Soortniveau"),
+           ConnectieLSVIhabitats = connecteerMetLSVIdb()){
     
     assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
     assert_that(is.string(Soortengroeplijst))
     assert_that(noNA(Soortengroeplijst))
-    if(!grepl("^([[:digit:]]+,)*[[:digit:]]+$", Soortengroeplijst)){
+    if (!grepl("^([[:digit:]]+,)*[[:digit:]]+$", Soortengroeplijst)) {
       stop("Soortengroeplijst bestaat niet uit een reeks getallen gescheiden door een komma")
     }
     match.arg(Soortenlijsttype)
     
-    if(Soortenlijsttype[1] == "Soortniveau"){
+    if (Soortenlijsttype[1] == "Soortniveau") {
       query <- 
         sprintf("WITH Soortengroepniveau
                 AS
@@ -60,7 +57,7 @@ geefSoortenlijstSoortniveau <-
       
       Soortenlijst <- sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
       
-    } else if (Soortenlijsttype[1] == "alle"){
+    } else if (Soortenlijsttype[1] == "alle") {
       query <- 
         sprintf("WITH Soortengroepniveau
                 AS

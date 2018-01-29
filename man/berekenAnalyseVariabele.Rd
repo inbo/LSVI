@@ -4,17 +4,17 @@
 \alias{berekenAnalyseVariabele}
 \title{Berekent de opgegeven AnalyseVariabele van de opgegeven soortgroep voor de opname}
 \usage{
-berekenAnalyseVariabele(ConnectieLSVIhabitats, AnalyseVariabele, Data_soorten,
-  Soortengroeplijst)
+berekenAnalyseVariabele(AnalyseVariabele, Data_soorten, Soortengroeplijst,
+  ConnectieLSVIhabitats = connecteerMetLSVIdb())
 }
 \arguments{
-\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
-
 \item{AnalyseVariabele}{Zie description voor voorbeelden.}
 
 \item{Data_soorten}{Bedekkingen van de sleutelsoorten in de vorm van een data.frame met velden ID, Soort_NL of Soort_Latijn en Percentage (bedekking in procent) of Tansley (bedekking in Tansley-schaal), afhankelijk van het type AnalyseVariabele.  Voor een analysevariabele startend met 'aantal' moet Data_soorten het veld Tansley bevatten (en bij voorkeur ook Percentage als een soortenlijst gegeven wordt die voor de LSVI-berekening gegroepeerd moet worden tot een hoger niveau, bv. Genusniveau), voor een analysevariabele startend met 'bedekking' het veld Bedekking.}
 
 \item{Soortengroeplijst}{string waarin de SoortengroepID's na elkaar weergegeven worden, gescheiden door een komma}
+
+\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
 }
 \value{
 Deze functie genereert de resultaten in de vorm van een tabel met voor elk ID en elke SoortenlijstID het aantal soorten of de bedekking van de soorten.
@@ -45,16 +45,13 @@ Schaalomzetting <-
 Data_soorten <- merge(Data_soorten, Schaalomzetting, 
                       by.x = "Bedekking", by.y = "Schaal_opname")
                       
-ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-berekenAnalyseVariabele(ConnectieLSVIhabitats, "aantal_aanwezig", 
+berekenAnalyseVariabele("aantal_aanwezig", 
                         Data_soorten, "369,143")
-berekenAnalyseVariabele(ConnectieLSVIhabitats, "aantal_frequent_aanwezig", 
+berekenAnalyseVariabele("aantal_frequent_aanwezig", 
                         Data_soorten, "369,143")
-berekenAnalyseVariabele(ConnectieLSVIhabitats, "bedekking_vegetatie", 
+berekenAnalyseVariabele("bedekking_vegetatie", 
                         Data_soorten, "369,143")
-berekenAnalyseVariabele(ConnectieLSVIhabitats, "bedekking_vegetatie_Tansley", 
+berekenAnalyseVariabele("bedekking_vegetatie_Tansley", 
                         Data_soorten, "369,143")
-library(RODBC)
-odbcClose(ConnectieLSVIhabitats)
 
 }

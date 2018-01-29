@@ -12,11 +12,8 @@
 #' @return Deze functie geeft een tabel met de hierboven beschreven informatie uit de databank.
 #'
 #' @examples
-#' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-#' geefInvoervereisten(ConnectieLSVIhabitats, Versie = "Versie 3",
+#' geefInvoervereisten(Versie = "Versie 3",
 #'                     Habitattype = "4010", Kwaliteitsniveau = "1")
-#' library(RODBC)
-#' odbcClose(ConnectieLSVIhabitats)
 #'
 #' @export
 #'
@@ -26,13 +23,13 @@
 #' @importFrom assertthat assert_that is.string
 #'
 #'
-geefInvoervereisten <- function(ConnectieLSVIhabitats,
-                                Versie = "alle",
+geefInvoervereisten <- function(Versie = "alle",
                                 Habitatgroep = "alle",
                                 Habitattype = "alle",
                                 Criterium = "alle",
                                 Indicator = "alle",
-                                Kwaliteitsniveau = "alle"){
+                                Kwaliteitsniveau = "alle",
+                                ConnectieLSVIhabitats = connecteerMetLSVIdb()){
 
   assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
 
@@ -40,17 +37,32 @@ geefInvoervereisten <- function(ConnectieLSVIhabitats,
                              ifelse(Kwaliteitsniveau == 2, "2",
                                     Kwaliteitsniveau))
   assert_that(is.string(Kwaliteitsniveau))
-  if (!(Kwaliteitsniveau %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Beoordeling",
-                                               "Kwaliteitsniveau"))) {
-    stop(sprintf("Kwaliteitsniveau moet een van de volgende waarden zijn: %s",
-                 geefUniekeWaarden(ConnectieLSVIhabitats,"Beoordeling","Kwaliteitsniveau")))
+  if (!(Kwaliteitsniveau %in% geefUniekeWaarden("Beoordeling",
+                                               "Kwaliteitsniveau",
+                                               ConnectieLSVIhabitats))) {
+    stop(
+      sprintf(
+        "Kwaliteitsniveau moet een van de volgende waarden zijn: %s",
+        geefUniekeWaarden(
+          "Beoordeling",
+          "Kwaliteitsniveau",
+          ConnectieLSVIhabitats
+        )
+      )
+    )
   }
 
 
 
   Selectiewaarden <-
-    selecteerIndicatoren(ConnectieLSVIhabitats, Versie, Habitatgroep, Habitattype,
-                         Criterium, Indicator) %>%
+    selecteerIndicatoren(
+      Versie = Versie,
+      Habitatgroep = Habitatgroep,
+      Habitattype = Habitattype,
+      Criterium = Criterium,
+      Indicator = Indicator,
+      ConnectieLSVIhabitats = ConnectieLSVIhabitats
+    ) %>%
     select_(~Versie, ~Habitattype, ~Habitatsubtype, ~Indicator_beoordelingID)
 
   Indicator_beoordelingIDs <-

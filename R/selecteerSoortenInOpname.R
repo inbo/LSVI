@@ -19,9 +19,9 @@
 #'
 #'
 selecteerSoortenInOpname <- 
-  function(ConnectieLSVIhabitats,
-           Data_soorten, 
-           Soortengroeplijst){
+  function(Data_soorten, 
+           Soortengroeplijst,
+           ConnectieLSVIhabitats){
     
     assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
     assert_that(inherits(Data_soorten, "data.frame"))
@@ -41,21 +41,25 @@ selecteerSoortenInOpname <-
         gsub(
           pattern = "^([[:alpha:]]*) ([[:alpha:]]*) (.*)",
           replacement = "\\1 \\2",
-          x = geefUniekeWaarden(ConnectieLSVIhabitats, "Soort", "WetNaam")
+          x = geefUniekeWaarden("Soort", "WetNaam", ConnectieLSVIhabitats)
         ),
         Soortengroepenlijst$WetNaam
       )
     Soortenlijst_NL <-
-      c(geefUniekeWaarden(ConnectieLSVIhabitats, "Soort", "NedNaam"),
+      c(geefUniekeWaarden("Soort", "NedNaam", ConnectieLSVIhabitats),
         Soortengroepenlijst$WetNaam)
       
     
     #de soorten van het eerste niveau uit de soortengroep ophalen
     Soortengroep <- 
-      geefSoortenlijstInvoerniveau(ConnectieLSVIhabitats,
-                                   data.frame(Niveau = 1,
-                                              SoortengroepIDs = Soortengroeplijst,
-                                              stringsAsFactors = FALSE)) %>%
+      geefSoortenlijstInvoerniveau(
+        data.frame(
+          Niveau = 1,
+          SoortengroepIDs = Soortengroeplijst,
+          stringsAsFactors = FALSE
+        ),
+        ConnectieLSVIhabitats
+      ) %>%
       select_(
         ~ SoortengroepID,
         ~ SoortensubgroepID,
@@ -64,27 +68,30 @@ selecteerSoortenInOpname <-
       )
     
     #als het Latijnse namen zijn: eerst auteursnamen verwijderen om vergelijking te vergemakkelijken
-    if(has_name(Data_soorten, "Soort_Latijn")){
+    if (has_name(Data_soorten, "Soort_Latijn")) {
       Data_soorten$WetNaamKort <- gsub(
         pattern = "^([[:alpha:]]*) ([[:alpha:]]*) (.*)",
         replacement = "\\1 \\2",
         x = Data_soorten$Soort_Latijn
       )
       #controleren of alle namen in de databank voorkomen, anders foutmelding geven
-      if(!all(!is.na(Data_soorten$WetNaamKort) & Data_soorten$WetNaamKort %in% Soortenlijst_Latijn)){
+      if (!all(!is.na(Data_soorten$WetNaamKort) & Data_soorten$WetNaamKort %in% Soortenlijst_Latijn)) {
         stop("Niet alle waarden vermeld onder Data_soorten$Soort_Latijn komen overeen met wetenschappelijke namen van soorten in de databank.")
       } else {
         #testen of alle namen van de soortengroep in de opname voorkomen (indien niet, ook subniveaus testen), anders een waarschuwing geven
-        if(!all(Soortengroep$WetNaamKort %in% Data_soorten$WetNaamKort)){
+        if (!all(Soortengroep$WetNaamKort %in% Data_soorten$WetNaamKort)) {
           OntbrekendeSoorten <- Soortengroep %>%
             anti_join(Data_soorten, by = c("WetNaamKort" = "WetNaamKort"))
-          if(has_name(OntbrekendeSoorten, "SoortensubgroepID") & 
-             !all(is.na(OntbrekendeSoorten$SoortensubgroepID))){
+          if (has_name(OntbrekendeSoorten, "SoortensubgroepID") & 
+             !all(is.na(OntbrekendeSoorten$SoortensubgroepID))) {
             Subsoorten <- OntbrekendeSoorten %>%
-              filter_(~!is.na(SoortensubgroepID))%>%
+              filter_(~!is.na(SoortensubgroepID)) %>%
               summarise_(SoortensubgroepIDs = ~ paste(SoortensubgroepID, collapse=","))
-            Subsoortengroep <- geefSoortenlijstSoortniveau(ConnectieLSVIhabitats,
-                                                           Subsoorten$SoortensubgroepIDs) %>%
+            Subsoortengroep <- 
+              geefSoortenlijstSoortniveau(
+                Subsoorten$SoortensubgroepIDs,
+                ConnectieLSVIhabitats
+              ) %>%
               mutate_(
                 WetNaam = ~ NULL,
                 SoortensubgroepID = ~ SoortengroepID,
@@ -103,7 +110,7 @@ selecteerSoortenInOpname <-
               )
             Soortengroep <- Soortengroep %>%
               bind_rows(Subsoortengroep)
-            if(!all(OntbrekendeSoorten$SoortensubgroepID %in% Subsoortengroep$SoortensubgroepID)){
+            if (!all(OntbrekendeSoorten$SoortensubgroepID %in% Subsoortengroep$SoortensubgroepID)) {
               warning("Niet alle te evalueren soorten zijn opgenomen onder Data_soorten$Soort_Latijn, er wordt van uitgegaan dat de niet opgenomen soorten niet waargenomen zijn")
             }
           } else {
@@ -114,19 +121,22 @@ selecteerSoortenInOpname <-
       } 
     } else {
       #en nu dezelfde procedure voor Nederlandse namen
-      if(!all(!is.na(Data_soorten$Soort_NL) & Data_soorten$Soort_NL %in% Soortenlijst_NL)){
+      if (!all(!is.na(Data_soorten$Soort_NL) & Data_soorten$Soort_NL %in% Soortenlijst_NL)) {
         stop("Niet alle waarden vermeld onder Data_soorten$Soort_NL komen overeen met Nederlandse namen van soorten in de databank.")
       } else {
-        if(!all(Soortengroep$NedNaam %in% Data_soorten$Soort_NL)){
+        if (!all(Soortengroep$NedNaam %in% Data_soorten$Soort_NL)) {
           OntbrekendeSoorten <- Soortengroep %>%
             anti_join(Data_soorten, by = c("NedNaam" = "Soort_NL"))
-          if(has_name(OntbrekendeSoorten, "SoortensubgroepID") & 
-             !all(is.na(OntbrekendeSoorten$SoortensubgroepID))){
+          if (has_name(OntbrekendeSoorten, "SoortensubgroepID") & 
+             !all(is.na(OntbrekendeSoorten$SoortensubgroepID))) {
             Subsoorten <- OntbrekendeSoorten %>%
-              filter_(~!is.na(SoortensubgroepID))%>%
+              filter_(~!is.na(SoortensubgroepID)) %>%
               summarise_(SoortensubgroepIDs = ~ paste(SoortensubgroepID, collapse=","))
-            Subsoortengroep <- geefSoortenlijstSoortniveau(ConnectieLSVIhabitats,
-                                                           Subsoorten$SoortensubgroepIDs) %>%
+            Subsoortengroep <- 
+              geefSoortenlijstSoortniveau(
+                Subsoorten$SoortensubgroepIDs,
+                ConnectieLSVIhabitats
+              ) %>%
               mutate_(
                 WetNaam = ~ NULL,
                 SoortensubgroepID = ~ SoortengroepID,
@@ -145,7 +155,7 @@ selecteerSoortenInOpname <-
               )
             Soortengroep <- Soortengroep %>%
               bind_rows(Subsoortengroep)
-            if(!all(OntbrekendeSoorten$SoortensubgroepID %in% Subsoortengroep$SoortensubgroepID)){
+            if (!all(OntbrekendeSoorten$SoortensubgroepID %in% Subsoortengroep$SoortensubgroepID)) {
               warning("Niet alle te evalueren soorten zijn opgenomen onder Data_soorten$Soort_NL, er wordt van uitgegaan dat de niet opgenomen soorten niet waargenomen zijn")
             }
           } else {

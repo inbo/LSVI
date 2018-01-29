@@ -19,10 +19,7 @@
 #' Data_soorten <- merge(Data_soorten, Schaalomzetting, 
 #'                       by.x = "Bedekking", by.y = "Schaal_opname")
 #' Soortengroeplijst <- "369,143"
-#' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-#' berekenBedekkingSoorten(ConnectieLSVIhabitats, Data_soorten, Soortengroeplijst)
-#' library(RODBC)
-#' odbcClose(ConnectieLSVIhabitats)
+#' berekenBedekkingSoorten(Data_soorten, Soortengroeplijst)
 #'
 #' @export   
 #'
@@ -33,8 +30,9 @@
 #'
 #'
 berekenBedekkingSoorten <- 
-  function(ConnectieLSVIhabitats, Data_soorten, 
-           Soortengroeplijst){
+  function(Data_soorten, 
+           Soortengroeplijst,
+           ConnectieLSVIhabitats = connecteerMetLSVIdb()){
     
     assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
     assert_that(inherits(Data_soorten, "data.frame"))
@@ -45,7 +43,7 @@ berekenBedekkingSoorten <-
     
     
     Bedekking_soorten <- 
-      selecteerSoortenInOpname(ConnectieLSVIhabitats, Data_soorten, Soortengroeplijst) %>%
+      selecteerSoortenInOpname(Data_soorten, Soortengroeplijst, ConnectieLSVIhabitats) %>%
       group_by_(~ID, ~SoortengroepID) %>%
       summarise_(Waarde = ~ (1 - prod((100 - Percentage) /100, na.rm=TRUE)) * 100) %>%
       ungroup()

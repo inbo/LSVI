@@ -4,14 +4,12 @@
 \alias{geefSoortenlijst}
 \title{Genereert soortenlijst(en) LSVI op basis van de opgegeven parameters}
 \usage{
-geefSoortenlijst(ConnectieLSVIhabitats, Versie = "alle",
-  Habitatgroep = "alle", Habitattype = "alle", Criterium = "alle",
-  Indicator = "alle", Soortenlijsttype = c("LSVIfiche", "Soortniveau",
-  "alle"))
+geefSoortenlijst(Versie = "alle", Habitatgroep = "alle",
+  Habitattype = "alle", Criterium = "alle", Indicator = "alle",
+  Soortenlijsttype = c("LSVIfiche", "Soortniveau", "alle"),
+  ConnectieLSVIhabitats = connecteerMetLSVIdb())
 }
 \arguments{
-\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
-
 \item{Versie}{De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".  Bij de default "alle" worden de gegevens voor de verschillende versies gegeven.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Versie", "VersieLSVI") of geefVersieInfo(ConnectieLSVIhabitats).}
 
 \item{Habitatgroep}{Parameter waarmee alle habitats van een bepaalde habitatgroep kunnen geselecteerd worden, bv. "Bossen", "Heiden", "(Half-)natuurlijke graslanden", "Zoete wateren",...   en "alle" (=default).  Deze waarde moet niet gespecifieerd worden als een bepaald habitat(sub)type geselecteerd wordt.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Habitatgroep", "Habitatgroepnaam").}
@@ -23,6 +21,8 @@ geefSoortenlijst(ConnectieLSVIhabitats, Versie = "alle",
 \item{Indicator}{De indicator waarvoor de gegevens uit de databank gehaald worden.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Indicator", "Naam").}
 
 \item{Soortenlijsttype}{"LSVIfiche" betekent dat de soortenlijst van de habitatfiche wordt overgenomen, "Soortniveau" betekent dat alle soorten worden weergegeven die in de groepen vallen die aan de parameters voldoen (bv. alle soorten bomen en struiken als dit in LSVI-fiche vermeld is), "alle" betekent dat alle soorten en alle taxonomische en morfologische groepen worden weergegeven die volledig in de groepen vallen die aan de parameters voldoen (dus gelijkaardig als Soortniveau, maar dan uitgebreid naar hogere taxonomische en morfologische groepen).}
+
+\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
 }
 \value{
 Deze functie geeft een tabel met velden Versie, Habitattype, Habitatsubtype, Criterium, Indicator, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van soorten binnen eenzelfde indicator).  WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort bevat enkel genusnaam en soortnaam (zonder auteursnaam).
@@ -35,11 +35,8 @@ Er zijn 2 opties: de soorten weergeven zoals in de habitatfiches (op soortniveau
 De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten als string opgegeven worden.  Default is telkens 'alle', waarbij de soortenlijsten voor alle mogelijke waarden van die parameter weergegeven worden (m.a.w. er is geen selectie voor deze parameter).
 }
 \examples{
-ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-geefSoortenlijst(ConnectieLSVIhabitats, Habitattype = "4010", Soortenlijsttype = "LSVIfiche")
-geefSoortenlijst(ConnectieLSVIhabitats, Habitattype = "4010", Soortenlijsttype = "Soortniveau")
-geefSoortenlijst(ConnectieLSVIhabitats, Habitattype = "4010", Soortenlijsttype = "alle")
-library(RODBC)
-odbcClose(ConnectieLSVIhabitats)
+geefSoortenlijst(Habitattype = "4010", Soortenlijsttype = "LSVIfiche")
+geefSoortenlijst(Habitattype = "4010", Soortenlijsttype = "Soortniveau")
+geefSoortenlijst(Habitattype = "4010", Soortenlijsttype = "alle")
 
 }

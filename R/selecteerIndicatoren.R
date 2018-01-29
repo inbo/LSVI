@@ -15,10 +15,8 @@
 #' @return Deze functie geeft een tabel met velden Versie, Habitattype, Habitatsubtype, Criterium, Indicator, Indicator_habitatID, SoortengroepID en NiveauSoortenlijstFiche.
 #'
 #' @examples
-#' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-#' selecteerIndicatoren(ConnectieLSVIhabitats, Versie = "Versie 3", Habitattype = "4010")
-#' library(RODBC)
-#' odbcClose(ConnectieLSVIhabitats)
+#' selecteerIndicatoren(Versie = "Versie 3", Habitattype = "4010")
+#' selecteerIndicatoren(Versie = "Versie 3", Habitatgroep = "Heiden")
 #'
 #' @export
 #'
@@ -28,47 +26,47 @@
 #'
 #'
 selecteerIndicatoren <-
-  function(ConnectieLSVIhabitats,
-           Versie = "alle",
+  function(Versie = "alle",
            Habitatgroep = "alle",
            Habitattype = "alle",
            Criterium = "alle",
            Indicator = "alle",
-           HabitatnamenToevoegen = FALSE){
+           HabitatnamenToevoegen = FALSE,
+           ConnectieLSVIhabitats = connecteerMetLSVIdb()){
 
     assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
 
     assert_that(is.string(Versie))
-    if (!(Versie %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Versie","VersieLSVI"))) {
+    if (!(Versie %in% geefUniekeWaarden("Versie", "VersieLSVI", ConnectieLSVIhabitats))) {
       stop(sprintf("Versie moet een van de volgende waarden zijn: %s",
-                   geefUniekeWaarden(ConnectieLSVIhabitats,"Versie","VersieLSVI")))
+                   geefUniekeWaarden("Versie", "VersieLSVI", ConnectieLSVIhabitats)))
     }
 
     assert_that(is.string(Habitatgroep))
-    if (!(Habitatgroep %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Habitatgroep","Naam"))) {
+    if (!(Habitatgroep %in% geefUniekeWaarden("Habitatgroep", "Naam", ConnectieLSVIhabitats))) {
       stop(sprintf("Habitatgroep moet een van de volgende waarden zijn: %s",
-                   geefUniekeWaarden(ConnectieLSVIhabitats,"Habitatgroep","Naam")))
+                   geefUniekeWaarden("Habitatgroep", "Naam", ConnectieLSVIhabitats)))
     }
 
     Habitattype <- ifelse(is.numeric(Habitattype),
                           as.character(Habitattype),
                           Habitattype)
     assert_that(is.string(Habitattype))
-    if (!(Habitattype %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Habitattype","Code"))) {
+    if (!(Habitattype %in% geefUniekeWaarden("Habitattype", "Code", ConnectieLSVIhabitats))) {
       stop(sprintf("Habitattype moet een van de volgende waarden zijn: %s",
-                   geefUniekeWaarden(ConnectieLSVIhabitats,"Habitattype","Code")))
+                   geefUniekeWaarden("Habitattype", "Code", ConnectieLSVIhabitats)))
     }
 
     assert_that(is.string(Criterium))
-    if (!(Criterium %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Criterium","Naam"))) {
+    if (!(Criterium %in% geefUniekeWaarden("Criterium", "Naam", ConnectieLSVIhabitats))) {
       stop(sprintf("Criterium moet een van de volgende waarden zijn: %s",
-                   geefUniekeWaarden(ConnectieLSVIhabitats,"Criterium","Naam")))
+                   geefUniekeWaarden("Criterium", "Naam", ConnectieLSVIhabitats)))
     }
 
     assert_that(is.string(Indicator))
-    if (!(Indicator %in% geefUniekeWaarden(ConnectieLSVIhabitats,"Indicator","Naam"))) {
+    if (!(Indicator %in% geefUniekeWaarden("Indicator", "Naam", ConnectieLSVIhabitats))) {
       stop(sprintf("Indicator moet een van de volgende waarden zijn: %s",
-                   geefUniekeWaarden(ConnectieLSVIhabitats,"Indicator","Naam")))
+                   geefUniekeWaarden("Indicator", "Naam", ConnectieLSVIhabitats)))
     }
 
     assert_that(is.logical(HabitatnamenToevoegen))

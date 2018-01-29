@@ -10,10 +10,7 @@
 #' @return Deze functie genereert een tabel met alle gegevens die nodig zijn om de tabellen habitatkarakteristieken en beoordelingsmatrix uit de LSVI-rapporten te genereren.
 #'
 #' @examples
-#' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-#' geefInfoHabitatfiche(ConnectieLSVIhabitats, Versie = "Versie 3", Habitattype = "4010")
-#' library(RODBC)
-#' odbcClose(ConnectieLSVIhabitats)
+#' geefInfoHabitatfiche(Versie = "Versie 3", Habitattype = "4030")
 #'
 #' @export
 #'
@@ -24,20 +21,27 @@
 #'
 
 geefInfoHabitatfiche <-
-  function(ConnectieLSVIhabitats,
-           Versie = "alle",
+  function(Versie = "alle",
            Habitatgroep = "alle",
            Habitattype = "alle",
            Criterium = "alle",
            Indicator = "alle",
-           Stijl = c("Rmd", "tekst")){
+           Stijl = c("Rmd", "tekst"),
+           ConnectieLSVIhabitats = connecteerMetLSVIdb()){
 
     match.arg(Stijl)
     assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
 
     Selectiegegevens <-
-      selecteerIndicatoren(ConnectieLSVIhabitats, Versie, Habitatgroep, Habitattype,
-                           Criterium, Indicator, HabitatnamenToevoegen = TRUE)
+      selecteerIndicatoren(
+        Versie = Versie,
+        Habitatgroep = Habitatgroep,
+        Habitattype = Habitattype,
+        Criterium = Criterium,
+        Indicator = Indicator,
+        HabitatnamenToevoegen = TRUE,
+        ConnectieLSVIhabitats
+      )
 
     Indicator_hIDs <-
       paste(unique((Selectiegegevens %>% filter_(~!is.na(Indicator_habitatID)))$Indicator_habitatID),
@@ -83,8 +87,15 @@ geefInfoHabitatfiche <-
 
     if (!all(is.na(Habitatkarakteristieken$SoortengroepID))) {
       Soortenlijst <-
-        geefSoortenlijst(ConnectieLSVIhabitats, Versie, Habitatgroep, Habitattype,
-                         Criterium, Indicator, "LSVIfiche") %>%
+        geefSoortenlijst(
+          Versie = Versie,
+          Habitatgroep = Habitatgroep,
+          Habitattype = Habitattype,
+          Criterium = Criterium,
+          Indicator = Indicator,
+          Soortenlijsttype = "LSVIfiche",
+          ConnectieLSVIhabitats = ConnectieLSVIhabitats
+        ) %>%
         filter_(~!is.na(WetNaamKort) | !is.na(NedNaam)) %>%
         mutate_(
           Versie = ~NULL,

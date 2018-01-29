@@ -11,14 +11,11 @@
 #' @return Deze functie geeft een tabel met velden SoortengroepID, evt. SoortensubgroepID, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van soorten binnen eenzelfde indicator).  WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort bevat enkel genusnaam en soortnaam (zonder auteursnaam).  SoortensubgroepID wordt enkel gegeven als het record een minder diep niveau betreft dan het soortniveau en is het SoortengroepID van het niveau van het record, dus van een niveau dieper dan SoortengroepID.
 #' 
 #' @examples
-#' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
 #' Soortengroeplijst <- 
 #'      data.frame(Niveau = c(1, 2), 
 #'                 SoortengroepIDs = c("139,142,372", "370"), 
 #'                 stringsAsFactors = FALSE)
-#' geefSoortenlijstInvoerniveau(ConnectieLSVIhabitats, Soortengroeplijst)
-#' library(RODBC)
-#' odbcClose(ConnectieLSVIhabitats)
+#' geefSoortenlijstInvoerniveau(Soortengroeplijst)
 #'
 #' @export
 #'
@@ -28,7 +25,8 @@
 #'
 #'
 geefSoortenlijstInvoerniveau <- 
-  function(ConnectieLSVIhabitats, Soortengroeplijst){
+  function(Soortengroeplijst,
+           ConnectieLSVIhabitats = connecteerMetLSVIdb()){
     
     assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
     assert_that(inherits(Soortengroeplijst, "data.frame"))
@@ -36,11 +34,11 @@ geefSoortenlijstInvoerniveau <-
     assert_that(has_name(Soortengroeplijst, "SoortengroepIDs"))
     assert_that(is.character(Soortengroeplijst$SoortengroepIDs))
     assert_that(noNA(Soortengroeplijst$SoortengroepIDs))
-    if(!all(grepl("^([[:digit:]]+,)*[[:digit:]]+$", Soortengroeplijst$SoortengroepIDs))){
+    if (!all(grepl("^([[:digit:]]+,)*[[:digit:]]+$", Soortengroeplijst$SoortengroepIDs))) {
       stop("Niet alle SoortengroepIDs bestaan uit een reeks getallen gescheiden door een komma")
     }
     
-    for(i in seq(nrow(Soortengroeplijst))){
+    for (i in seq(nrow(Soortengroeplijst))) {
       Soortengroeplijst$Niveau[i] <- 
         ifelse(is.string(Soortengroeplijst$Niveau[i]),
                as.numeric(Soortengroeplijst$Niveau[i]),
@@ -51,7 +49,7 @@ geefSoortenlijstInvoerniveau <-
     #voor elk niveau de gegevens ophalen op basis van een query samengesteld op basis van het niveau, en deze gegevens aan elkaar plakken
     #met 1 query lukt het niet om Omschrijving op de verschillende niveaus binnen te halen, dus we beperken ons tot een omschrijving op het niveau net boven het niveau van de vermelde soort(engroep)
     Soortenlijst <- NULL
-    for(n in Soortengroeplijst$Niveau){
+    for (n in Soortengroeplijst$Niveau) {
       query <- 
         sprintf("WITH Soortengroepniveau
                 AS
@@ -75,7 +73,7 @@ geefSoortenlijstInvoerniveau <-
                 LEFT JOIN Soortengroep ON Soortengroepniveau.SoortensubgroepID = Soortengroep.Id
                 LEFT JOIN Soort ON Soortengroepniveau.SoortID = Soort.Id
                 WHERE Soortengroepniveau.Niveau = %s", 
-                Soortengroeplijst[Soortengroeplijst$Niveau==n,"SoortengroepIDs"], n, n - 1)
+                Soortengroeplijst[Soortengroeplijst$Niveau == n,"SoortengroepIDs"], n, n - 1)
 
       Soortenlijst_n <- sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
       
