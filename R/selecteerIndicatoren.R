@@ -48,9 +48,12 @@ selecteerIndicatoren <-
                    geefUniekeWaarden("Habitatgroep", "Naam", ConnectieLSVIhabitats)))
     }
 
-    Habitattype <- ifelse(is.numeric(Habitattype),
-                          as.character(Habitattype),
-                          Habitattype)
+    Habitattype <- 
+      ifelse(
+        is.numeric(Habitattype),
+        as.character(Habitattype),
+        Habitattype
+      )
     assert_that(is.string(Habitattype))
     if (!(Habitattype %in% geefUniekeWaarden("Habitattype", "Code", ConnectieLSVIhabitats))) {
       stop(sprintf("Habitattype moet een van de volgende waarden zijn: %s",
@@ -165,13 +168,19 @@ selecteerIndicatoren <-
 
     Selectiegegevens <-
       sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE) %>%
-      mutate_(
-        Habitattype = ~ifelse(is.numeric(Habitattype),
-                              as.character(Habitattype),
-                              Habitattype),
-        Habitatsubtype = ~ifelse(is.numeric(Habitatsubtype),
-                                 as.character(Habitatsubtype),
-                                 Habitatsubtype)
+      mutate(
+        Habitattype = 
+          ifelse(
+            rep(is.numeric(.data$Habitattype), length(.data$Habitattype)),
+            as.character(.data$Habitattype),
+            .data$Habitattype
+          ),
+        Habitatsubtype = 
+          ifelse(
+            rep(is.numeric(.data$Habitatsubtype), length(.data$Habitatsubtype)),
+            as.character(.data$Habitatsubtype),
+            .data$Habitatsubtype
+          )
       )
 
 

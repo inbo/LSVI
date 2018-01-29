@@ -25,15 +25,15 @@ vertaalTansleyPercentage <-
     assert_that(inherits(Tansley, "data.frame"))
     assert_that(has_name(Tansley, "Voluit"))
     assert_that(has_name(Tansley, "GemBedekking"))
-    assert_that(is.numeric(Tansley$GemBedekking))
+    assert_that(rep(is.numeric(Tansley$GemBedekking), length(Tansley$GemBedekking)))
     
     assert_that(is.vector(TansleyVector))
-    assert_that(is.character(TansleyVector))
+    assert_that(rep(is.character(TansleyVector), length(TansleyVector)))
     TansleyVector <- tolower(TansleyVector)
 
-    if(has_name(Tansley, "Afgekort")){
-      if(max(TansleyVector %in% Tansley$Afgekort)){
-        for(i in seq_len(length(TansleyVector))){
+    if (has_name(Tansley, "Afgekort")) {
+      if (max(TansleyVector %in% Tansley$Afgekort)) {
+        for (i in seq_len(length(TansleyVector))) {
           TansleyVector[i] <- 
             ifelse(TansleyVector[i] %in% Tansley$Afgekort,
                    Tansley[!is.na(Tansley$Afgekort) & Tansley$Afgekort == TansleyVector[i],]$Voluit,
@@ -41,7 +41,7 @@ vertaalTansleyPercentage <-
         }
       }
     }
-    if(!all(TansleyVector %in% Tansley$Voluit)){
+    if (!all(TansleyVector %in% Tansley$Voluit)) {
       stop(sprintf("Niet alle bedekkingen vermeld in de TansleyVector komen overeen met de Tansley-schaal (%s)",
                    paste(Tansley$Voluit, collapse = ", ")))
     }

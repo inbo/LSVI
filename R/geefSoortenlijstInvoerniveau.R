@@ -32,7 +32,12 @@ geefSoortenlijstInvoerniveau <-
     assert_that(inherits(Soortengroeplijst, "data.frame"))
     assert_that(has_name(Soortengroeplijst, "Niveau"))
     assert_that(has_name(Soortengroeplijst, "SoortengroepIDs"))
-    assert_that(is.character(Soortengroeplijst$SoortengroepIDs))
+    assert_that(
+      rep(
+        is.character(Soortengroeplijst$SoortengroepIDs),
+        length(Soortengroeplijst$SoortengroepIDs)
+      )
+    )
     assert_that(noNA(Soortengroeplijst$SoortengroepIDs))
     if (!all(grepl("^([[:digit:]]+,)*[[:digit:]]+$", Soortengroeplijst$SoortengroepIDs))) {
       stop("Niet alle SoortengroepIDs bestaan uit een reeks getallen gescheiden door een komma")

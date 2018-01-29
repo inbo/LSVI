@@ -24,21 +24,21 @@ vertaalBedekkingTansley <-
   function(Percentages, 
            Tansley = read_csv(system.file("schaaltabellen/Tansley.csv", package = "LSVI"))){
     assert_that(is.vector(Percentages))
-    assert_that(is.numeric(Percentages))
-    if(!all(Percentages >=0 & Percentages <= 100)){
+    assert_that(rep(is.numeric(Percentages), length(Percentages)))
+    if (!all(Percentages >= 0 & Percentages <= 100)) {
       stop("Niet alle ingegeven percentages liggen tussen 0 en 100 %")
     }
     
     assert_that(inherits(Tansley, "data.frame"))
     assert_that(has_name(Tansley, "Voluit"))
     assert_that(has_name(Tansley, "Ondergrens"))
-    assert_that(is.numeric(Tansley$Ondergrens))
+    assert_that(rep(is.numeric(Tansley$Ondergrens), length(Tansley$Ondergrens)))
     assert_that(has_name(Tansley, "Bovengrens"))
-    assert_that(is.numeric(Tansley$Bovengrens))
+    assert_that(rep(is.numeric(Tansley$Bovengrens), length(Tansley$Bovengrens)))
     
     Resultaat <- rep(NA, length(seq_len(length(Percentages))))
-    for(teller in seq_len(length(Percentages))){
-      for(i in seq_len(nrow(Tansley))){
+    for (teller in seq_len(length(Percentages))) {
+      for (i in seq_len(nrow(Tansley))) {
         Resultaat[teller] <- 
           unlist(ifelse(Percentages[teller] >= Tansley[i,"Ondergrens"] & 
                  Percentages[teller] < Tansley[i,"Bovengrens"],

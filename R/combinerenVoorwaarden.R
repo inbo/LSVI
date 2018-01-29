@@ -21,8 +21,8 @@ combinerenVoorwaarden <-
   function(Formule, VoorwaardeID, Status){
     
     assert_that(is.character(Formule))
-    assert_that(is.numeric(VoorwaardeID))
-    assert_that(is.logical(Status))
+    assert_that(rep(is.numeric(VoorwaardeID), length(VoorwaardeID)))
+    assert_that(rep(is.logical(Status), length(Status)))
     assert_that(length(VoorwaardeID) == length(Status))
     #nog testen of Formule bestaat uit EN, OF, haakjes en VoorwaardeID's (en evt. andere tekens die logische berekening toelaten)
 
