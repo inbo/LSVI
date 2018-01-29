@@ -12,7 +12,7 @@
 #' @export
 #' 
 #' @importFrom assertthat assert_that has_name
-#' @importFrom dplyr %>% left_join mutate select filter bind_rows
+#' @importFrom dplyr %>% left_join mutate select filter bind_rows as.tbl
 #' 
 
 vertaalInvoerInterval <- 
