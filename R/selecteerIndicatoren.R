@@ -34,42 +34,77 @@ selecteerIndicatoren <-
            HabitatnamenToevoegen = FALSE,
            ConnectieLSVIhabitats = connecteerMetLSVIdb()){
 
-    assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
+    assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
 
     assert_that(is.string(Versie))
-    if (!(Versie %in% geefUniekeWaarden("Versie", "VersieLSVI", ConnectieLSVIhabitats))) {
-      stop(sprintf("Versie moet een van de volgende waarden zijn: %s",
-                   geefUniekeWaarden("Versie", "VersieLSVI", ConnectieLSVIhabitats)))
+    if (
+      !(Versie %in%
+        geefUniekeWaarden("Versie", "VersieLSVI", ConnectieLSVIhabitats))
+    ) {
+      stop(
+        sprintf(
+          "Versie moet een van de volgende waarden zijn: %s",
+          geefUniekeWaarden("Versie", "VersieLSVI", ConnectieLSVIhabitats)
+        )
+      )
     }
 
     assert_that(is.string(Habitatgroep))
-    if (!(Habitatgroep %in% geefUniekeWaarden("Habitatgroep", "Naam", ConnectieLSVIhabitats))) {
-      stop(sprintf("Habitatgroep moet een van de volgende waarden zijn: %s",
-                   geefUniekeWaarden("Habitatgroep", "Naam", ConnectieLSVIhabitats)))
+    if (
+      !(Habitatgroep %in%
+        geefUniekeWaarden("Habitatgroep", "Naam", ConnectieLSVIhabitats))
+    ) {
+      stop(
+        sprintf(
+          "Habitatgroep moet een van de volgende waarden zijn: %s",
+          geefUniekeWaarden("Habitatgroep", "Naam", ConnectieLSVIhabitats)
+        )
+      )
     }
 
-    Habitattype <- 
+    Habitattype <-
       ifelse(
         is.numeric(Habitattype),
         as.character(Habitattype),
         Habitattype
       )
     assert_that(is.string(Habitattype))
-    if (!(Habitattype %in% geefUniekeWaarden("Habitattype", "Code", ConnectieLSVIhabitats))) {
-      stop(sprintf("Habitattype moet een van de volgende waarden zijn: %s",
-                   geefUniekeWaarden("Habitattype", "Code", ConnectieLSVIhabitats)))
+    if (
+      !(Habitattype %in%
+        geefUniekeWaarden("Habitattype", "Code", ConnectieLSVIhabitats))
+    ) {
+      stop(
+        sprintf(
+          "Habitattype moet een van de volgende waarden zijn: %s",
+          geefUniekeWaarden("Habitattype", "Code", ConnectieLSVIhabitats)
+        )
+      )
     }
 
     assert_that(is.string(Criterium))
-    if (!(Criterium %in% geefUniekeWaarden("Criterium", "Naam", ConnectieLSVIhabitats))) {
-      stop(sprintf("Criterium moet een van de volgende waarden zijn: %s",
-                   geefUniekeWaarden("Criterium", "Naam", ConnectieLSVIhabitats)))
+    if (
+      !(Criterium %in%
+        geefUniekeWaarden("Criterium", "Naam", ConnectieLSVIhabitats))
+    ) {
+      stop(
+        sprintf(
+          "Criterium moet een van de volgende waarden zijn: %s",
+          geefUniekeWaarden("Criterium", "Naam", ConnectieLSVIhabitats)
+        )
+      )
     }
 
     assert_that(is.string(Indicator))
-    if (!(Indicator %in% geefUniekeWaarden("Indicator", "Naam", ConnectieLSVIhabitats))) {
-      stop(sprintf("Indicator moet een van de volgende waarden zijn: %s",
-                   geefUniekeWaarden("Indicator", "Naam", ConnectieLSVIhabitats)))
+    if (
+      !(Indicator %in%
+        geefUniekeWaarden("Indicator", "Naam", ConnectieLSVIhabitats))
+    ) {
+      stop(
+        sprintf(
+          "Indicator moet een van de volgende waarden zijn: %s",
+          geefUniekeWaarden("Indicator", "Naam", ConnectieLSVIhabitats)
+        )
+      )
     }
 
     assert_that(is.logical(HabitatnamenToevoegen))
@@ -82,9 +117,12 @@ selecteerIndicatoren <-
                                 Habitatselectie.Habitatgroepnaam, ",
                                 "")
 
-    #eerst de selectiegegevens ophalen en de nodige gegevens uit tabel Indicator_habitat, query samenstellen op basis van parameters
+    #eerst de selectiegegevens ophalen en de nodige gegevens uit tabel
+    #Indicator_habitat, query samenstellen op basis van parameters
     Parametervoorwaarde <- FALSE
-    query <- sprintf("WITH Habitatselectie
+    query <-
+      sprintf(
+        "WITH Habitatselectie
         AS
         (
           SELECT Habitatgroep.Naam AS Habitatgroepnaam,
@@ -114,12 +152,16 @@ selecteerIndicatoren <-
         FROM (((Indicator_habitat
         INNER JOIN Habitatselectie
         ON Indicator_habitat.HabitattypeID = Habitatselectie.HabitattypeId)
-        INNER JOIN (Indicator INNER JOIN Criterium ON Indicator.CriteriumID = Criterium.Id)
+        INNER JOIN
+          (Indicator INNER JOIN Criterium
+            ON Indicator.CriteriumID = Criterium.Id)
         ON Indicator_habitat.IndicatorID = Indicator.Id)
         INNER JOIN Versie ON Indicator_habitat.VersieID = Versie.Id)
         LEFT JOIN IndicatortabellenKoppeling
-        ON Indicator_habitat.Id = IndicatortabellenKoppeling.Indicator_habitatId",
-                     query_uitbreiding)
+        ON Indicator_habitat.Id =
+          IndicatortabellenKoppeling.Indicator_habitatId",
+        query_uitbreiding
+      )
     if (Versie[1] != "alle") {
       query <- sprintf("%s WHERE Versie.VersieLSVI = '%s'", query, Versie)
       Parametervoorwaarde <- TRUE
@@ -154,7 +196,8 @@ selecteerIndicatoren <-
         Voegwoord <- "WHERE"
         Parametervoorwaarde <- TRUE
       }
-      query <- sprintf("%s %s Criterium.Naam = '%s'", query, Voegwoord, Criterium)
+      query <-
+        sprintf("%s %s Criterium.Naam = '%s'", query, Voegwoord, Criterium)
     }
     if (Indicator[1] != "alle") {
       if (Parametervoorwaarde) {
@@ -163,19 +206,20 @@ selecteerIndicatoren <-
         Voegwoord <- "WHERE"
         Parametervoorwaarde <- TRUE
       }
-      query <- sprintf("%s %s Indicator.Naam = '%s'", query, Voegwoord, Indicator)
+      query <-
+        sprintf("%s %s Indicator.Naam = '%s'", query, Voegwoord, Indicator)
     }
 
     Selectiegegevens <-
       sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE) %>%
       mutate(
-        Habitattype = 
+        Habitattype =
           ifelse(
             rep(is.numeric(.data$Habitattype), length(.data$Habitattype)),
             as.character(.data$Habitattype),
             .data$Habitattype
           ),
-        Habitatsubtype = 
+        Habitatsubtype =
           ifelse(
             rep(is.numeric(.data$Habitatsubtype), length(.data$Habitatsubtype)),
             as.character(.data$Habitatsubtype),
@@ -187,4 +231,3 @@ selecteerIndicatoren <-
     return(Selectiegegevens)
 
   }
-

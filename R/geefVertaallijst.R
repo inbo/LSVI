@@ -4,19 +4,16 @@
 #' 
 #' @export
 
-geefVertaallijst <- 
+geefVertaallijst <-
   function(ConnectieLSVIhabitats) {
   Connectie <- connecteerMetLSVIdb()
-  query <- 
-    "SELECT Lijst.Naam, LijstItem.Waarde, LijstItem.Volgnummer, LijstItem.Omschrijving, LijstItem.Ondergrens,
+  query <-
+    "SELECT Lijst.Naam, LijstItem.Waarde, LijstItem.Volgnummer,
+    LijstItem.Omschrijving, LijstItem.Ondergrens,
     LijstItem.Gemiddelde, LijstItem.Bovengrens
     FROM LijstItem INNER JOIN Lijst ON LijstItem.LijstId = Lijst.Id"
-  LIJST <- RODBC::sqlQuery(Connectie, query, stringsAsFactors = FALSE)
-  RODBC::odbcClose(Connectie)
-  
+  LIJST <- sqlQuery(Connectie, query, stringsAsFactors = FALSE)
+  odbcClose(Connectie)
+
   return(LIJST)
 }
-
-
-
-

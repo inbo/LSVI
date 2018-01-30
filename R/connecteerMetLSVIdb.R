@@ -41,24 +41,28 @@ connecteerMetLSVIdb <-
     if (Gebruiker == "lezer") {
       Gebruiker <- "D0122_AppR"
       Wachtwoord <-
-        tryCatch(Wachtwoord <- scan(file = system.file("credentials", package = "LSVI"),
-                                    what = "character"),
-                 error = function(e) {
-                   print("Error: Geen wachtwoord gevonden")
-                   return(NULL)
-                 },
-                 warning = function(w) {
-                   print("Error: Geen wachtwoord gevonden")
-                   return(NULL)
-                 },
-                 message = FALSE)
+        tryCatch(
+          Wachtwoord <-
+            scan(
+              file = system.file("credentials", package = "LSVI"),
+              what = "character"
+            ),
+          error = function(e) {
+            print("Error: Geen wachtwoord gevonden")
+            return(NULL)
+          },
+          warning = function(w) {
+            print("Error: Geen wachtwoord gevonden")
+            return(NULL)
+          },
+          message = FALSE
+        )
     }
     Connectiestring <-
       sprintf("Driver=SQL Server;Server=%s;Database=%s;UID=%s;PWD=%s",
               Server, Databank, Gebruiker, Wachtwoord)
   }
 
-
-
   ConnectieLSVIhabitats <- odbcDriverConnect(Connectiestring)
+  return(ConnectieLSVIhabitats)
 }

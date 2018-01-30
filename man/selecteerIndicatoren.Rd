@@ -34,5 +34,6 @@ De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten
 }
 \examples{
 selecteerIndicatoren(Versie = "Versie 3", Habitattype = "4010")
+selecteerIndicatoren(Versie = "Versie 3", Habitatgroep = "Heiden")
 
 }

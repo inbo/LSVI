@@ -31,27 +31,30 @@ geefSoortenlijst <-
            Soortenlijsttype = c("LSVIfiche", "Soortniveau", "alle"),
            ConnectieLSVIhabitats = connecteerMetLSVIdb()){
 
-    assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
+    assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
     match.arg(Soortenlijsttype)
 
     Selectiegegevens <-
       selecteerIndicatoren(
-        Versie = Versie, 
+        Versie = Versie,
         Habitatgroep = Habitatgroep,
         Habitattype = Habitattype,
-        Criterium = Criterium, 
+        Criterium = Criterium,
         Indicator = Indicator,
         ConnectieLSVIhabitats = ConnectieLSVIhabitats)
 
     #nu de soortgegevens ophalen:
     if (Soortenlijsttype[1] == "LSVIfiche") {
-      #eerst oplijsten welke gegevens moeten opgehaald worden per niveau van Soortengroep en SoortengroepSoort
+      #eerst oplijsten welke gegevens moeten opgehaald worden
+      #per niveau van Soortengroep en SoortengroepSoort
       SoortengroepIDperNiveau <- Selectiegegevens %>%
         select_(~SoortengroepID, ~NiveauSoortenlijstFiche) %>%
         distinct_() %>%
         filter(!is.na(.data$SoortengroepID)) %>%
         group_by_(~NiveauSoortenlijstFiche) %>%
-        summarise_(SoortengroepIDs = ~ paste(SoortengroepID, collapse=",")) %>%
+        summarise_(
+          SoortengroepIDs = ~ paste(SoortengroepID, collapse = ",")
+        ) %>%
         ungroup() %>%
         rename_(Niveau = ~NiveauSoortenlijstFiche)
 
@@ -60,8 +63,11 @@ geefSoortenlijst <-
       }
 
       #dan voor elk niveau de gegevens ophalen
-      Soortenlijst <- 
-        geefSoortenlijstInvoerniveau(SoortengroepIDperNiveau, ConnectieLSVIhabitats)
+      Soortenlijst <-
+        geefSoortenlijstInvoerniveau(
+          SoortengroepIDperNiveau,
+          ConnectieLSVIhabitats
+        )
 
     } else if (Soortenlijsttype == "Soortniveau" | Soortenlijsttype == "alle") {
       #de andere optie: gegevens van het diepste niveau ophalen
@@ -69,16 +75,18 @@ geefSoortenlijst <-
         select_(~SoortengroepID) %>%
         distinct_() %>%
         filter(!is.na(.data$SoortengroepID)) %>%
-        summarise_(SoortengroepIDs = ~ paste(SoortengroepID, collapse=","))
+        summarise_(SoortengroepIDs = ~ paste(SoortengroepID, collapse = ","))
 
       if (SoortengroepIDs$SoortengroepIDs == "") {
         stop("Voor de opgegeven argumenten is er geen soortenlijst")
       }
 
       Soortenlijst <-
-        geefSoortenlijstSoortniveau(Soortengroeplijst = SoortengroepIDs$SoortengroepIDs,
-                                    Soortenlijsttype = Soortenlijsttype,
-                                    ConnectieLSVIhabitats)
+        geefSoortenlijstSoortniveau(
+          Soortengroeplijst = SoortengroepIDs$SoortengroepIDs,
+          Soortenlijsttype = Soortenlijsttype,
+          ConnectieLSVIhabitats
+        )
 
     }
 
@@ -87,7 +95,7 @@ geefSoortenlijst <-
     SoortenlijstSelectie <- Selectiegegevens %>%
       left_join(
         Soortenlijst,
-        by = ("SoortengroepID" = "SoortengroepID")
+        by = ("SoortengroepID")
       ) %>%
       mutate_(
         NiveauSoortenlijstFiche = ~NULL
@@ -96,4 +104,3 @@ geefSoortenlijst <-
     return(SoortenlijstSelectie)
 
   }
-

@@ -11,7 +11,7 @@
 #' @export
 #'
 #' @importFrom assertthat assert_that has_name
-#' @importFrom dplyr %>% mutate_ select_ group_by_ do_
+#' @importFrom dplyr %>% mutate select group_by do
 #' @importFrom tidyr unnest
 #'
 #'
@@ -23,61 +23,72 @@ berekenStatus <-
     assert_that(has_name(Statustabel, "RefMin"))
     assert_that(has_name(Statustabel, "RefMax"))
     assert_that(has_name(Statustabel, "Operator"))
-    # assert_that(has_name(Statustabel, "TypeVariabele"))
-    # assert_that(has_name(Statustabel, "Eenheid"))
-    # assert_that(has_name(Statustabel, "Invoertype"))
     assert_that(has_name(Statustabel, "WaardeMin"))
     assert_that(has_name(Statustabel, "WaardeMax"))
-    # assert_that(has_name(Statustabel, "Type"))
-    # assert_that(has_name(Statustabel, "Invoertype.vw"))
-    # assert_that(has_name(Statustabel, "Eenheid.vw"))
 
     berekenStatusWaarde <- function(Dataset) {
       colnames(Dataset) <- c("Rijnr", "Waarde", "Operator", "Ref")
-      
+
       Dataset %>%
-        mutate_(
-          Vergelijking = ~paste(Waarde, Operator, Ref, sep = " "),
-          Status = ~ifelse(!is.na(Waarde),
-                           sapply(evals(Vergelijking), function(x){as.logical(x[2])}),
-                           NA)
+        mutate(
+          Vergelijking =
+            paste(.data$Waarde, .data$Operator, .data$Ref, sep = " "),
+          Status =
+            ifelse(
+              !is.na(.data$Waarde),
+              sapply(
+                evals(.data$Vergelijking),
+                function(x) {
+                  as.logical(x[2])
+                }
+              ),
+              NA
+            )
         ) %>%
-        select_(
-          ~Rijnr,
-          ~Status
+        select(
+          .data$Rijnr,
+          .data$Status
         )
     }
-    
+
     berekenStatusGelijkheid <- function(Dataset) {
       Dataset %>%
-        mutate_(
-          Status = ~(WaardeMin > RefMin & WaardeMax < RefMin)
+        mutate(
+          Status =
+            .data$WaardeMin > .data$RefMin & .data$WaardeMax < .data$RefMin
         ) %>%
-        select_(
-          ~Rijnr,
-          ~Status
+        select(
+          .data$Rijnr,
+          .data$Status
         )
     }
-    
-    
+
+
     Statustabel2 <- Statustabel %>%
-      group_by_(~Operator) %>%
-      do_(
-        Status = 
-          ~switch(unique(.$Operator),
-                 "<" = berekenStatusWaarde(.[c("Rijnr","WaardeMax", "Operator", "RefMin")]),
-                 "<=" = berekenStatusWaarde(.[c("Rijnr","WaardeMax", "Operator", "RefMax")]),
-                 ">" = berekenStatusWaarde(.[c("Rijnr","WaardeMin", "Operator", "RefMax")]),
-                 ">=" = berekenStatusWaarde(.[c("Rijnr","WaardeMin", "Operator", "RefMin")]),
+      group_by(.data$Operator) %>%
+      do(
+        Status =
+          switch(unique(.data$Operator),
+                 "<" = berekenStatusWaarde(
+                   .[c("Rijnr", "WaardeMax", "Operator", "RefMin")]
+                 ),
+                 "<=" = berekenStatusWaarde(
+                   .[c("Rijnr", "WaardeMax", "Operator", "RefMax")]
+                 ),
+                 ">" = berekenStatusWaarde(
+                   .[c("Rijnr", "WaardeMin", "Operator", "RefMax")]
+                 ),
+                 ">=" = berekenStatusWaarde(
+                   .[c("Rijnr", "WaardeMin", "Operator", "RefMin")]
+                 ),
                  "=" = berekenStatusGelijkheid(.)
         )
       ) %>%
-      unnest(Status) %>%
-      select_(
-        ~Rijnr,
-        ~Status
+      unnest(.data$Status) %>%
+      select(
+        .data$Rijnr,
+        .data$Status
       )
 
     return(Statustabel2)
   }
-

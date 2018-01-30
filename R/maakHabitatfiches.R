@@ -27,11 +27,11 @@ maakHabitatfiches <-
            ConnectieLSVIhabitats = connecteerMetLSVIdb(),
            verbose = TRUE){
 
-    assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
+    assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
     assert_that(is.flag(verbose))
     assert_that(noNA(verbose))
 
-    Indicatoren <- 
+    Indicatoren <-
       selecteerIndicatoren(
         Versie = Versie,
         Habitatgroep = Habitatgroep,
@@ -41,24 +41,39 @@ maakHabitatfiches <-
 
     for (versie in unique(Indicatoren$Versie)) {
       for (habitatsubtype in unique(as.character(Indicatoren$Habitatsubtype))) {
-        Bestandnaam <- sprintf("Habitatfiche_%s_%s.html",
-                               habitatsubtype,
-                               sub(versie,
-                                   pattern = " ",
-                                   replacement = ""))
-        render(system.file("HabitatficheParent.Rmd", package = "LSVI"),
-               params = list(ConnectieLSVIhabitats = ConnectieLSVIhabitats,
-                             Versie = versie,
-                             Habitatsubtype = habitatsubtype,
-                             Habitatnaam = unique(Indicatoren[Indicatoren$Habitatsubtype == habitatsubtype,"Habitatsubtypenaam"])),
-               output_file = Bestandnaam,
-               output_dir = getwd())
+        Bestandnaam <-
+          sprintf(
+            "Habitatfiche_%s_%s.html",
+            habitatsubtype,
+            sub(versie, pattern = " ", replacement = "")
+          )
+        render(
+          system.file("HabitatficheParent.Rmd", package = "LSVI"),
+          params =
+            list(
+              ConnectieLSVIhabitats = ConnectieLSVIhabitats,
+              Versie = versie,
+              Habitatsubtype = habitatsubtype,
+              Habitatnaam =
+                unique(
+                  Indicatoren[
+                    Indicatoren$Habitatsubtype == habitatsubtype,
+                    "Habitatsubtypenaam"
+                  ]
+                )
+            ),
+          output_file = Bestandnaam,
+          output_dir = getwd()
+        )
       }
     }
     if (verbose) {
-      message(sprintf("De fiche(s) is/zijn opgeslagen in de working directory: %s", getwd()))
+      message(
+        sprintf(
+          "De fiche(s) is/zijn opgeslagen in de working directory: %s",
+          getwd()
+        )
+      )
     }
 
-
   }
-

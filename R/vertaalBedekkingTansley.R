@@ -48,5 +48,4 @@ vertaalBedekkingTansley <-
     }
     
     return(Resultaat)
-
   }

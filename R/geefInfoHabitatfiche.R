@@ -30,7 +30,7 @@ geefInfoHabitatfiche <-
            ConnectieLSVIhabitats = connecteerMetLSVIdb()){
 
     match.arg(Stijl)
-    assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
+    assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
 
     Selectiegegevens <-
       selecteerIndicatoren(
@@ -44,8 +44,13 @@ geefInfoHabitatfiche <-
       )
 
     Indicator_hIDs <-
-      paste(unique((Selectiegegevens %>% filter_(~!is.na(Indicator_habitatID)))$Indicator_habitatID),
-            collapse = ",")
+      paste(
+        unique(
+          (Selectiegegevens %>%
+             filter_(~!is.na(Indicator_habitatID)))$Indicator_habitatID
+        ),
+        collapse = ","
+      )
 
     query_habitatfiche <- sprintf(
       "SELECT Indicator_habitat.Id AS Indicator_habitatID,
@@ -58,31 +63,55 @@ geefInfoHabitatfiche <-
     )
 
     Indicator_bIDs <-
-      paste(unique((Selectiegegevens %>% filter_(~!is.na(Indicator_beoordelingID)))$Indicator_beoordelingID),
-            collapse = ",")
+      paste(
+        unique(
+          (Selectiegegevens %>%
+             filter_(~!is.na(Indicator_beoordelingID)))$Indicator_beoordelingID
+        ),
+        collapse = ","
+      )
 
     query_beoordelingsfiche <- sprintf(
       "SELECT Indicator_beoordeling.Id AS Indicator_beoordelingID,
       Criterium.Naam AS Criterium, Indicator.Naam As Indicator,
       Indicator_beoordeling.Opmerkingen, Indicator_beoordeling.Referenties,
       Beoordeling.Kwaliteitsniveau, Beoordeling.Beoordeling_letterlijk
-      FROM (Indicator_beoordeling INNER JOIN Beoordeling ON Indicator_beoordeling.Id = Beoordeling.Indicator_beoordelingID)
-      INNER JOIN (Indicator INNER JOIN Criterium on Indicator.CriteriumID = Criterium.Id)
+      FROM
+      (Indicator_beoordeling INNER JOIN Beoordeling
+        ON Indicator_beoordeling.Id = Beoordeling.Indicator_beoordelingID)
+      INNER JOIN
+        (Indicator INNER JOIN Criterium on Indicator.CriteriumID = Criterium.Id)
       ON Indicator_beoordeling.IndicatorID = Indicator.Id
       WHERE Indicator_beoordeling.Id in (%s)",
       Indicator_bIDs
     )
 
-    Habitatkarakteristieken <- sqlQuery(ConnectieLSVIhabitats, query_habitatfiche, stringsAsFactors = FALSE)
+    Habitatkarakteristieken <-
+      sqlQuery(
+        ConnectieLSVIhabitats,
+        query_habitatfiche,
+        stringsAsFactors = FALSE
+      )
 
-    Beoordelingsmatrix <- sqlQuery(ConnectieLSVIhabitats, query_beoordelingsfiche, stringsAsFactors = FALSE)
+    Beoordelingsmatrix <-
+      sqlQuery(
+        ConnectieLSVIhabitats,
+        query_beoordelingsfiche,
+        stringsAsFactors = FALSE
+      )
 
-    paste2 <- function(...,sep=", ") {
+    paste2 <- function(..., sep=", ") {
       L <- list(...)
-      L <- lapply(L,function(x) {x[is.na(x)] <- ""; x})
-      gsub(paste0("(^",sep,"|",sep,"$)"),"",
-           gsub(paste0(sep,sep),sep,
-                do.call(paste,c(L,list(sep = sep)))))
+      L <-
+        lapply(
+          L,
+          function(x) {
+            x[is.na(x)] <- ""; x
+          }
+        )
+      gsub(paste0("(^", sep, "|", sep, "$)"), "",
+           gsub(paste0(sep, sep), sep,
+                do.call(paste, c(L, list(sep = sep)))))
     }
 
     if (!all(is.na(Habitatkarakteristieken$SoortengroepID))) {
@@ -101,24 +130,33 @@ geefInfoHabitatfiche <-
           Versie = ~NULL,
           Habitattype = ~NULL,
           Habitatsubtype = ~NULL,
+          Indicator_habitatID = ~NULL,
+          Indicator_beoordelingID = ~NULL,
           TotNaam = ~ ifelse(is.na(WetNaamKort),
                              NedNaam,
                              ifelse(is.na(NedNaam),
-                                    sprintf("_%s_",WetNaamKort),
+                                    sprintf("_%s_", WetNaamKort),
                                     sprintf("%s (_%s_)", NedNaam, WetNaamKort)))
 
         ) %>%
+        distinct_() %>%
         arrange_(~ TotNaam)
 
       OmschrijvingKolommen <- NULL
       for (i in colnames(Soortenlijst)) {
-        if (grepl("Omschrijving",i)) {
+        if (grepl("Omschrijving", i)) {
           OmschrijvingKolommen <- c(OmschrijvingKolommen, i)
         }
       }
       OmschrijvingKolommen <-
-        OmschrijvingKolommen[order(as.integer(substr(OmschrijvingKolommen, 13, nchar(OmschrijvingKolommen))),
-                                   decreasing = TRUE)]
+        OmschrijvingKolommen[
+          order(
+            as.integer(
+              substr(OmschrijvingKolommen, 13, nchar(OmschrijvingKolommen))
+            ),
+            decreasing = TRUE
+          )
+        ]
 
       Soortenlijst <- Soortenlijst %>%
         group_by_(
@@ -137,9 +175,15 @@ geefInfoHabitatfiche <-
         laatste_i <- max(laatste_i, length(OmschrijvingKolommen))
         Soortenlijst <- Soortenlijst %>%
           mutate_(
-            Soortenlijst = interp(~ ifelse(is.na(var), Soortenlijst,
-                                           paste("__",var,":__ ",Soortenlijst, sep="")),
-                                  var = as.name(OmschrijvingKolommen[1]))
+            Soortenlijst =
+              interp(
+                ~ ifelse(
+                  is.na(var),
+                  Soortenlijst,
+                  paste("__", var, ":__ ", Soortenlijst, sep = "")
+                ),
+                var = as.name(OmschrijvingKolommen[1])
+              )
           ) %>%
           select(
             -dplyr::matches(OmschrijvingKolommen[1])
@@ -184,13 +228,16 @@ geefInfoHabitatfiche <-
                     ),
                   by = c("SoortengroepID" = "SoortengroepID")) %>%
         mutate_(
-          Beschrijving = ~ paste2(Beschrijving, Soortenlijst, Beschrijving_naSoorten, sep = " ")
+          Beschrijving =
+            ~ paste2(Beschrijving, Soortenlijst, Beschrijving_naSoorten,
+                     sep = " ")
         ) %>%
         left_join(Beoordelingsmatrix,
                   by = c("Indicator_beoordelingID" = "Indicator_beoordelingID"),
                   suffix = c(".habitat", ".beoordeling")) %>%
         select_(~Versie, ~Habitattype, ~Habitatnaam, ~Habitatsubtype,
-                ~Habitatsubtypenaam, ~HabitatsubtypeOmschrijving, ~Criterium.habitat,
+                ~Habitatsubtypenaam, ~HabitatsubtypeOmschrijving,
+                ~Criterium.habitat,
                 ~Indicator.habitat, ~Beschrijving, ~Maatregelen,
                 ~Opmerkingen.habitat, ~Referenties.habitat, ~Soortenlijst,
                 Beoordeling = ~Beoordeling_letterlijk, ~Criterium.beoordeling,
@@ -202,14 +249,16 @@ geefInfoHabitatfiche <-
         left_join(Habitatkarakteristieken,
                   by = c("Indicator_habitatID" = "Indicator_habitatID")) %>%
         mutate_(
-          Beschrijving = ~ paste2(Beschrijving, Beschrijving_naSoorten, sep = " ")
+          Beschrijving =
+            ~ paste2(Beschrijving, Beschrijving_naSoorten, sep = " ")
         ) %>%
         left_join(Beoordelingsmatrix,
                   by = c("Indicator_beoordelingID" = "Indicator_beoordelingID"),
                   suffix = c(".habitat", ".beoordeling")) %>%
         mutate_(Soortenlijst = ~NA) %>%
         select_(~Versie, ~Habitattype, ~Habitatnaam, ~Habitatsubtype,
-                ~Habitatsubtypenaam, ~HabitatsubtypeOmschrijving, ~Criterium.habitat,
+                ~Habitatsubtypenaam, ~HabitatsubtypeOmschrijving,
+                ~Criterium.habitat,
                 ~Indicator.habitat, ~Beschrijving, ~Maatregelen,
                 ~Opmerkingen.habitat, ~Referenties.habitat, ~Soortenlijst,
                 Beoordeling = ~Beoordeling_letterlijk, ~Criterium.beoordeling,
@@ -219,21 +268,21 @@ geefInfoHabitatfiche <-
 
 
     if (Stijl[1] == "tekst") {
-      Habitatfiche$Habitatnaam <- gsub("_","",Habitatfiche$Habitatnaam)
+      Habitatfiche$Habitatnaam <- gsub("_", "", Habitatfiche$Habitatnaam)
       Habitatfiche$Habitatsubtypenaam <-
-        gsub("_","",Habitatfiche$Habitatsubtypenaam)
+        gsub("_", "", Habitatfiche$Habitatsubtypenaam)
       Habitatfiche$HabitatsubtypeOmschrijving <-
-        gsub("_","",Habitatfiche$HabitatsubtypeOmschrijving)
-      Habitatfiche$Beschrijving <- gsub("_","",Habitatfiche$Beschrijving)
+        gsub("_", "", Habitatfiche$HabitatsubtypeOmschrijving)
+      Habitatfiche$Beschrijving <- gsub("_", "", Habitatfiche$Beschrijving)
       Habitatfiche$Maatregelen <-
-        gsub("_","",Habitatfiche$Maatregelen)
+        gsub("_", "", Habitatfiche$Maatregelen)
       Habitatfiche$Opmerkingen.habitat <-
-        gsub("_","",Habitatfiche$Opmerkingen.habitat)
-      Habitatfiche$Soortenlijst <- gsub("_","",Habitatfiche$Soortenlijst)
+        gsub("_", "", Habitatfiche$Opmerkingen.habitat)
+      Habitatfiche$Soortenlijst <- gsub("_", "", Habitatfiche$Soortenlijst)
       Habitatfiche$Opmerkingen.beoordeling <-
-        gsub("_","",Habitatfiche$Opmerkingen.beoordeling)
+        gsub("_", "", Habitatfiche$Opmerkingen.beoordeling)
       Habitatfiche$Beoordeling_letterlijk <-
-        gsub("_","",Habitatfiche$Beoordeling)
+        gsub("_", "", Habitatfiche$Beoordeling)
     }
 
     return(Habitatfiche)

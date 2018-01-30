@@ -32,7 +32,7 @@ maakLSVIrapport <-
            ConnectieLSVIhabitats = connecteerMetLSVIdb(),
            verbose = TRUE){
 
-    assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
+    assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
     assert_that(is.flag(verbose))
     assert_that(noNA(verbose))
     assert_that(is.character(Bestandsnaam))
@@ -49,9 +49,12 @@ maakLSVIrapport <-
            output_dir = getwd())
 
     if (verbose) {
-      message(sprintf("Het rapport is opgeslagen in de working directory: %s", getwd()))
+      message(
+        sprintf(
+          "Het rapport is opgeslagen in de working directory: %s",
+          getwd()
+        )
+      )
     }
 
-
   }
-

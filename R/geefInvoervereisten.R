@@ -31,7 +31,7 @@ geefInvoervereisten <- function(Versie = "alle",
                                 Kwaliteitsniveau = "alle",
                                 ConnectieLSVIhabitats = connecteerMetLSVIdb()){
 
-  assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
+  assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
 
   Kwaliteitsniveau <- ifelse(Kwaliteitsniveau == 1, "1",
                              ifelse(Kwaliteitsniveau == 2, "2",
@@ -66,11 +66,16 @@ geefInvoervereisten <- function(Versie = "alle",
     select_(~Versie, ~Habitattype, ~Habitatsubtype, ~Indicator_beoordelingID)
 
   Indicator_beoordelingIDs <-
-    paste(unique((Selectiewaarden %>% filter_(~!is.na(Indicator_beoordelingID)))$Indicator_beoordelingID),
-                 collapse = "','")
+    paste(
+      unique(
+        (Selectiewaarden %>%
+           filter_(~!is.na(Indicator_beoordelingID)))$Indicator_beoordelingID
+      ),
+      collapse = "','"
+    )
 
-  query_selecteerKwaliteitsniveau <-
-    ifelse(Kwaliteitsniveau[1] == "alle","",
+  query_selectKwaliteitsniveau <-
+    ifelse(Kwaliteitsniveau[1] == "alle", "",
            sprintf("AND Beoordeling.Kwaliteitsniveau = '%s'",
                    Kwaliteitsniveau))
 
@@ -80,17 +85,26 @@ geefInvoervereisten <- function(Versie = "alle",
             Beoordeling.Beoordeling_letterlijk AS Beoordeling,
             Beoordeling.Kwaliteitsniveau,
             Beoordeling.Id as BeoordelingID
-            FROM (Indicator_beoordeling LEFT JOIN Beoordeling ON Indicator_beoordeling.Id = Beoordeling.Indicator_beoordelingID)
-            LEFT JOIN (Indicator INNER JOIN Criterium ON Indicator.CriteriumID = Criterium.Id)
+            FROM
+              (Indicator_beoordeling LEFT JOIN Beoordeling
+              ON Indicator_beoordeling.Id = Beoordeling.Indicator_beoordelingID)
+            LEFT JOIN
+              (Indicator INNER JOIN Criterium
+                ON Indicator.CriteriumID = Criterium.Id)
             ON Indicator_beoordeling.IndicatorID = Indicator.Id
             WHERE Indicator_beoordeling.Id in ('%s') %s",
-            Indicator_beoordelingIDs, query_selecteerKwaliteitsniveau)
+            Indicator_beoordelingIDs, query_selectKwaliteitsniveau)
 
-  LSVIinfo <- sqlQuery(ConnectieLSVIhabitats, query_LSVIinfo, stringsAsFactors = FALSE)
+  LSVIinfo <-
+    sqlQuery(ConnectieLSVIhabitats, query_LSVIinfo, stringsAsFactors = FALSE)
 
   BeoordelingIDs <-
-    paste(unique((LSVIinfo %>% filter_(~!is.na(BeoordelingID)))$BeoordelingID),
-                 collapse = "','")
+    paste(
+      unique(
+        (LSVIinfo %>% filter_(~!is.na(BeoordelingID)))$BeoordelingID
+      ),
+      collapse = "','"
+    )
 
   query_combinerenVoorwaarden <-
     sprintf("
@@ -135,12 +149,20 @@ geefInvoervereisten <- function(Versie = "alle",
   Voorwaarden <- sqlQuery(ConnectieLSVIhabitats, query_combinerenVoorwaarden,
                           stringsAsFactors = FALSE) %>%
     mutate_(
-      Combinatie = ~ifelse(is.na(VoorwaardeID1),
-                           ifelse(is.na(VoorwaardeID2),"",VoorwaardeID2),
-                           ifelse(is.na(VoorwaardeID2),VoorwaardeID1,
-                                  ifelse(BewerkingAND,
-                                         paste(VoorwaardeID1,VoorwaardeID2, sep = " EN "),
-                                         paste(VoorwaardeID1,VoorwaardeID2, sep = " OF "))))
+      Combinatie =
+        ~ifelse(
+          is.na(VoorwaardeID1),
+          ifelse(is.na(VoorwaardeID2), "", VoorwaardeID2),
+          ifelse(
+            is.na(VoorwaardeID2),
+            VoorwaardeID1,
+            ifelse(
+              BewerkingAND,
+              paste(VoorwaardeID1, VoorwaardeID2, sep = " EN "),
+              paste(VoorwaardeID1, VoorwaardeID2, sep = " OF ")
+            )
+          )
+        )
     ) %>%
     distinct_()
 
@@ -149,21 +171,28 @@ geefInvoervereisten <- function(Versie = "alle",
       filter_(~Id == ID)
     Combinatie <-
       paste(Record$Combinatie,
-            ifelse((Record$Combinatie != "" & !is.na(Record$ChildID1)) |
-                     (Record$Combinatie != "" & !is.na(Record$ChildID2)),
-                   ifelse(Record$BewerkingAND," EN ", " OF "),""),
-            ifelse(is.na(Record$ChildID1),"",
-                   paste("(",RecFunctie(Record$ChildID1),")", sep = "")),
+            ifelse(
+              (Record$Combinatie != "" & !is.na(Record$ChildID1)) |
+                (Record$Combinatie != "" & !is.na(Record$ChildID2)),
+              ifelse(Record$BewerkingAND, " EN ", " OF "), ""
+            ),
+            ifelse(is.na(Record$ChildID1), "",
+                   paste("(", RecFunctie(Record$ChildID1), ")", sep = "")),
             ifelse(!is.na(Record$ChildID1) & !is.na(Record$ChildID2),
-                   ifelse(Record$BewerkingAND," EN ", " OF "),""),
-            ifelse(is.na(Record$ChildID2),"",
-                   paste("(",RecFunctie(Record$ChildID2),")", sep = "")),
+                   ifelse(Record$BewerkingAND, " EN ", " OF "), ""),
+            ifelse(is.na(Record$ChildID2), "",
+                   paste("(", RecFunctie(Record$ChildID2), ")", sep = "")),
             sep = "")[1]
     return(Combinatie)
   }
 
-  Children <- unique(c((Voorwaarden %>% filter_(~!is.na(ChildID1)))$ChildID1,
-                       (Voorwaarden %>% filter_(~!is.na(ChildID2)))$ChildID2))
+  Children <-
+    unique(
+      c(
+        (Voorwaarden %>% filter_(~!is.na(ChildID1)))$ChildID1,
+        (Voorwaarden %>% filter_(~!is.na(ChildID2)))$ChildID2
+      )
+    )
 
   BasisVoorwaarden <- Voorwaarden %>%
     filter_(~!Id %in% Children) %>%
@@ -182,8 +211,12 @@ geefInvoervereisten <- function(Versie = "alle",
     select_(~BeoordelingID, ~Combinatie, ~VoorwaardeID)
 
   VoorwaardenIDs <-
-    paste(unique((BasisVoorwaarden %>% filter_(~!is.na(VoorwaardeID)))$VoorwaardeID),
-          collapse = "','")
+    paste(
+      unique(
+        (BasisVoorwaarden %>% filter_(~!is.na(VoorwaardeID)))$VoorwaardeID
+      ),
+      collapse = "','"
+    )
 
   query_voorwaardeinfo <-
     sprintf("SELECT Voorwaarde.Id AS VoorwaardeID,
@@ -211,7 +244,8 @@ geefInvoervereisten <- function(Versie = "alle",
             SubAnalyseVariabele.Eenheid AS SubEenheid,
             TypeSubVariabele.Naam AS TypeSubVariabele,
             Voorwaarde.SubReferentiewaarde, Voorwaarde.SubOperator,
-            SubLijst.Naam AS SubInvoertype, SubLijstItem.Waarde As SubInvoerwaarde,
+            SubLijst.Naam AS SubInvoertype,
+            SubLijstItem.Waarde As SubInvoerwaarde,
             SubLijstItem.Volgnummer AS SubInvoervolgnr,
             SubLijstItem.Omschrijving AS SubInvoeromschrijving,
             SubLijstItem.Ondergrens AS SubInvoerondergrens,
@@ -238,9 +272,14 @@ geefInvoervereisten <- function(Versie = "alle",
                       LEFT JOIN LijstItem AS SubLijstItem
                         ON SubLijst.Id = SubLijstItem.LijstId)
               ON Voorwaarde.SubInvoermaskerId = SubLijst.Id
-            WHERE Voorwaarde.Id in ('%s')",VoorwaardenIDs)
+            WHERE Voorwaarde.Id in ('%s')", VoorwaardenIDs)
 
-  Voorwaardeinfo <- sqlQuery(ConnectieLSVIhabitats, query_voorwaardeinfo, stringsAsFactors = FALSE) #%>%
+  Voorwaardeinfo <-
+    sqlQuery(
+      ConnectieLSVIhabitats,
+      query_voorwaardeinfo,
+      stringsAsFactors = FALSE
+    ) #%>%
     # arrange_(~Invoervolgnr, ~Studievolgnr, ~SubInvoervolgnr) %>%
     # group_by_(-~Invoervolgnr)
     # group_by_(~VoorwaardeID, ~VoorwaardeNaam, ~Referentiewaarde, ~Operator,
@@ -253,11 +292,13 @@ geefInvoervereisten <- function(Versie = "alle",
 
 
   Invoervereisten <- Selectiewaarden %>%
-    left_join(LSVIinfo, by = c("Indicator_beoordelingID" = "Indicator_beoordelingID")) %>%
+    left_join(
+      LSVIinfo,
+      by = c("Indicator_beoordelingID" = "Indicator_beoordelingID")
+    ) %>%
     mutate_(Indicator_beoordelingID = ~NULL) %>%
     left_join(BasisVoorwaarden, by = c("BeoordelingID" = "BeoordelingID")) %>%
     left_join(Voorwaardeinfo, by = c("VoorwaardeID" = "VoorwaardeID"))
 
   return(Invoervereisten)
 }
-

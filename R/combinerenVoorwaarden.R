@@ -17,9 +17,9 @@
 #' @importFrom pander evals
 #' 
 
-combinerenVoorwaarden <- 
+combinerenVoorwaarden <-
   function(Formule, VoorwaardeID, Status){
-    
+
     assert_that(is.character(Formule))
     assert_that(all(sapply(VoorwaardeID, is.numeric)))
     assert_that(all(sapply(Status, is.logical)))
@@ -32,7 +32,7 @@ combinerenVoorwaarden <-
       Formule <- gsub(VoorwaardeID[i], Status[i], Formule)
     }
     Resultaat <- as.logical(evals(Formule)[[1]]$result)
-    
+
     return(Resultaat)
-    
+
   }

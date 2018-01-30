@@ -27,7 +27,7 @@
 #' @export
 #'
 #' @importFrom RODBC sqlQuery odbcClose
-#' @importFrom dplyr %>% select_ distinct_ filter_ mutate_ row_number rename_ left_join summarise_ group_by_ ungroup bind_rows
+#' @importFrom dplyr %>% select distinct filter mutate row_number rename left_join summarise group_by ungroup bind_rows
 #' @importFrom assertthat assert_that has_name
 #' @importFrom pander evals
 #'
@@ -42,14 +42,18 @@ berekenLSVIbasis <-
            LIJST = geefVertaallijst(ConnectieLSVIhabitats)){
 
     #controle invoer
-    assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
+    assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
 
     assert_that(is.string(Versie))
-    if (!(Versie %in% geefUniekeWaarden("Versie","VersieLSVI",ConnectieLSVIhabitats))) {
+    if (
+      !(Versie %in%
+        geefUniekeWaarden("Versie", "VersieLSVI", ConnectieLSVIhabitats)
+      )
+    ) {
       stop(
         sprintf(
           "Versie moet een van de volgende waarden zijn: %s",
-          geefUniekeWaarden("Versie","VersieLSVI",ConnectieLSVIhabitats)
+          geefUniekeWaarden("Versie", "VersieLSVI", ConnectieLSVIhabitats)
         )
       )
     }
@@ -58,7 +62,7 @@ berekenLSVIbasis <-
                                ifelse(Kwaliteitsniveau == 2, "2",
                                       Kwaliteitsniveau))
     assert_that(is.string(Kwaliteitsniveau))
-    if (!(Kwaliteitsniveau %in% 
+    if (!(Kwaliteitsniveau %in%
           geefUniekeWaarden(
             "Beoordeling",
             "Kwaliteitsniveau",
@@ -68,7 +72,11 @@ berekenLSVIbasis <-
       stop(
         sprintf(
           "Kwaliteitsniveau moet een van de volgende waarden zijn: %s",
-          geefUniekeWaarden("Beoordeling","Kwaliteitsniveau",ConnectieLSVIhabitats)
+          geefUniekeWaarden(
+            "Beoordeling",
+            "Kwaliteitsniveau",
+            ConnectieLSVIhabitats
+          )
         )
       )
     }
@@ -78,7 +86,7 @@ berekenLSVIbasis <-
     assert_that(has_name(Data_habitat, "Habitattype"))
     if (!all(Data_habitat$Habitattype %in%
              geefUniekeWaarden("Habitattype", "Code", ConnectieLSVIhabitats))) {
-      stop("Niet alle waarden vermeld onder Data_habitat$Habitattype komen overeen met waarden vermeld in de databank.")
+      stop("Niet alle waarden vermeld onder Data_habitat$Habitattype komen overeen met waarden vermeld in de databank.") #nolint
     }
 
     assert_that(inherits(Data_voorwaarden, "data.frame"))
@@ -86,31 +94,43 @@ berekenLSVIbasis <-
     assert_that(has_name(Data_voorwaarden, "Criterium"))
     if (!all(Data_voorwaarden$Criterium %in%
             geefUniekeWaarden("Criterium", "Naam", ConnectieLSVIhabitats))) {
-      stop("Niet alle waarden vermeld onder Data_voorwaarden$Criterium komen overeen met waarden vermeld in de databank.")
+      stop("Niet alle waarden vermeld onder Data_voorwaarden$Criterium komen overeen met waarden vermeld in de databank.") #nolint
     }
     assert_that(has_name(Data_voorwaarden, "Indicator"))
     if (!all(Data_voorwaarden$Indicator %in%
              geefUniekeWaarden("Indicator", "Naam", ConnectieLSVIhabitats))) {
-      stop("Niet alle waarden vermeld onder Data_voorwaarden$Indicator komen overeen met waarden vermeld in de databank.")
+      stop("Niet alle waarden vermeld onder Data_voorwaarden$Indicator komen overeen met waarden vermeld in de databank.") #nolint
     }
     #misschien best ook testen dat die indicator-criterium-combinatie in de databank voorkomt?  En of deze voor dat habitattype voorkomt, maar dat best verderop doen
     #Voorwaarde ook verplichten?  Anders wel testen of het ok is als het aanwezig is.
     assert_that(has_name(Data_voorwaarden, "Waarde"))
     assert_that(has_name(Data_voorwaarden, "Type"))
-    if (!all(Data_voorwaarden$Type %in%
-             geefUniekeWaarden("TypeVariabele", "Naam", ConnectieLSVIhabitats))) {
-      stop("Niet alle waarden vermeld onder Data_voorwaarden$Type komen overeen met waarden vermeld in de databank.")
+    if (
+      !all(
+        Data_voorwaarden$Type %in%
+          geefUniekeWaarden("TypeVariabele", "Naam", ConnectieLSVIhabitats)
+      )
+    ) {
+      stop("Niet alle waarden vermeld onder Data_voorwaarden$Type komen overeen met waarden vermeld in de databank.") #nolint
     }
     assert_that(has_name(Data_voorwaarden, "Invoertype"))
     if (!all(is.na(Data_voorwaarden$Invoertype) |
              Data_voorwaarden$Invoertype %in%
              geefUniekeWaarden("Lijst", "Naam", ConnectieLSVIhabitats))) {
-      stop("Niet alle waarden vermeld onder Data_voorwaarden$Invoertype komen overeen met waarden vermeld in de databank.")
+      stop("Niet alle waarden vermeld onder Data_voorwaarden$Invoertype komen overeen met waarden vermeld in de databank.") #nolint
     }
     assert_that(has_name(Data_voorwaarden, "Eenheid"))
-    if (!all(Data_voorwaarden$Eenheid %in%
-             geefUniekeWaarden("AnalyseVariabele", "Eenheid", ConnectieLSVIhabitats))) {
-      stop("Niet alle waarden vermeld onder Data_voorwaarden$Eenheid komen overeen met waarden vermeld in de databank.")
+    if (
+      !all(
+        Data_voorwaarden$Eenheid %in%
+           geefUniekeWaarden(
+             "AnalyseVariabele",
+             "Eenheid",
+             ConnectieLSVIhabitats
+           )
+      )
+    ) {
+      stop("Niet alle waarden vermeld onder Data_voorwaarden$Eenheid komen overeen met waarden vermeld in de databank.") #nolint
     }
 
     assert_that(inherits(Data_soortenKenmerken, "data.frame"))
@@ -120,87 +140,120 @@ berekenLSVIbasis <-
     #hier moet nog controle op gebeuren!!!
     assert_that(has_name(Data_soortenKenmerken, "Waarde"))
     assert_that(has_name(Data_soortenKenmerken, "Type"))
-    if (!all(Data_soortenKenmerken$Type %in%
-             geefUniekeWaarden("TypeVariabele", "Naam", ConnectieLSVIhabitats))) {
-      stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Type komen overeen met waarden vermeld in de databank.")
+    if (
+      !all(Data_soortenKenmerken$Type %in%
+           geefUniekeWaarden(
+             "TypeVariabele",
+             "Naam",
+             ConnectieLSVIhabitats
+           )
+        )
+    ) {
+      stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Type komen overeen met waarden vermeld in de databank.") #nolint
     }
     assert_that(has_name(Data_soortenKenmerken, "Invoertype"))
     if (!all(is.na(Data_soortenKenmerken$Invoertype) |
              Data_soortenKenmerken$Invoertype %in%
              geefUniekeWaarden("Lijst", "Naam", ConnectieLSVIhabitats))) {
-      stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Invoertype komen overeen met waarden vermeld in de databank.")
+      stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Invoertype komen overeen met waarden vermeld in de databank.") #nolint
     }
     assert_that(has_name(Data_soortenKenmerken, "Eenheid"))
-    if (!all(Data_soortenKenmerken$Eenheid %in%
-             geefUniekeWaarden("AnalyseVariabele", "Eenheid", ConnectieLSVIhabitats))) {
-      stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Eenheid komen overeen met waarden vermeld in de databank.")
+    if (
+      !all(
+        Data_soortenKenmerken$Eenheid %in%
+          geefUniekeWaarden("AnalyseVariabele", "Eenheid", ConnectieLSVIhabitats)
+      )
+    ) {
+      stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Eenheid komen overeen met waarden vermeld in de databank.") #nolint
     }
 
-    
-    #nodige info ophalen uit de databank 
-    Invoervereisten <- 
-      geefInvoervereisten(Versie,
-                          Habitattype = unique(Data_habitat$Habitattype),  #selecteerIndicatoren zou aangepast moeten worden om dit toe te laten!
-                          Kwaliteitsniveau = Kwaliteitsniveau,
-                          ConnectieLSVIhabitats = ConnectieLSVIhabitats) %>%
-      select_(
-        ~Versie, ~Habitattype, ~Habitatsubtype, ~Criterium, ~Indicator, ~Beoordeling, ~Kwaliteitsniveau,
-        ~BeoordelingID, ~Combinatie, ~VoorwaardeID, ~VoorwaardeNaam, ~ExtraBewerking, ~Referentiewaarde, 
-        ~Operator, ~Eenheid, ~TypeVariabele, ~Invoertype
+
+    #nodige info ophalen uit de databank
+    Invoervereisten <-
+      geefInvoervereisten(
+        Versie,
+        Habitattype = unique(Data_habitat$Habitattype),  #selecteerIndicatoren zou aangepast moeten worden om dit toe te laten!
+        Kwaliteitsniveau = Kwaliteitsniveau,
+        ConnectieLSVIhabitats = ConnectieLSVIhabitats
       ) %>%
-      distinct_() %>%
-      filter_(~!is.na(TypeVariabele)) %>%
-      mutate_(
-        Rijnr = ~row_number(VoorwaardeID)
+      select(
+        .data$Versie,
+        .data$Habitattype,
+        .data$Habitatsubtype,
+        .data$Criterium,
+        .data$Indicator,
+        .data$Beoordeling,
+        .data$Kwaliteitsniveau,
+        .data$BeoordelingID,
+        .data$Combinatie,
+        .data$VoorwaardeID,
+        .data$VoorwaardeNaam,
+        .data$ExtraBewerking,
+        .data$Referentiewaarde,
+        .data$Operator,
+        .data$Eenheid,
+        .data$TypeVariabele,
+        .data$Invoertype
+      ) %>%
+      distinct() %>%
+      filter(!is.na(.data$TypeVariabele)) %>%
+      mutate(
+        Rijnr = row_number(.data$VoorwaardeID)
       )
-    
-    IntervalVereisten <- 
+
+    IntervalVereisten <-
       vertaalInvoerInterval(
-        Invoervereisten[, c("Rijnr", "TypeVariabele", "Referentiewaarde", "Eenheid", "Invoertype")],
+        Invoervereisten[
+          , c("Rijnr", "TypeVariabele", "Referentiewaarde",
+              "Eenheid", "Invoertype")
+        ],
         LIJST
       ) %>%
-      rename_(
-        RefMin = ~Min,
-        RefMax = ~Max
+      rename(
+        RefMin = .data$Min,
+        RefMax = .data$Max
       )
-    
+
     Invoervereisten <- Invoervereisten %>%
       left_join(
         IntervalVereisten,
         by = c("Rijnr")
       ) %>%
-      mutate_(
-        Rijnr = ~NULL
+      mutate(
+        Rijnr = NULL
       )
-    
-    
+
+
     #ingevoerde voorwaarden omzetten naar interval
     Data_voorwaarden <- Data_voorwaarden %>%
-      mutate_(
-        Rijnr = ~row_number(ID)
+      mutate(
+        Rijnr = row_number(.data$ID)
       )
-    
+
     InvervalVoorwaarden <-
       vertaalInvoerInterval(
-        Data_voorwaarden[, c("Rijnr", "Type", "Waarde", "Eenheid", "Invoertype")],
+        Data_voorwaarden[
+          , c("Rijnr", "Type", "Waarde", "Eenheid", "Invoertype")
+        ],
         LIJST
       ) %>%
-      rename_(
-        WaardeMin = ~Min,
-        WaardeMax = ~Max
+      rename(
+        WaardeMin = .data$Min,
+        WaardeMax = .data$Max
       )
-    
+
     Data_voorwaarden <- Data_voorwaarden %>%
       left_join(
         InvervalVoorwaarden,
         by = c("Rijnr")
       ) %>%
-      mutate_(
-        Rijnr = ~NULL
+      mutate(
+        Rijnr = NULL
       )
-    
-    
-    #voorwaardegegevens koppelen aan info uit de databank en niet opgegeven voorwaarden berekenen
+
+
+    #voorwaardegegevens koppelen aan info uit de databank
+    #en niet opgegeven voorwaarden berekenen
     Resultaat <-
       Data_habitat %>%
       left_join(
@@ -236,58 +289,74 @@ berekenLSVIbasis <-
       #   SubInvoergemiddelde = ~NULL,
       #   SubInvoerbovengrens = ~NULL
       # ) %>%
-      distinct_() %>%
-      mutate_(
-        Rijnr = ~row_number(VoorwaardeID)
-      ) 
-    
+      distinct() %>%
+      mutate(
+        Rijnr = row_number(.data$VoorwaardeID)
+      )
+
     Statusberekening <-
-      berekenStatus(Resultaat[, c("Rijnr", "RefMin", "RefMax", "Operator", "WaardeMin", "WaardeMax")])
-    
+      berekenStatus(
+        Resultaat[
+          , c("Rijnr", "RefMin", "RefMax", "Operator", "WaardeMin", "WaardeMax")
+        ]
+      )
+
     Resultaat <- Resultaat %>%
       left_join(
         Statusberekening,
         by = c("Rijnr")
       ) %>%
-      mutate_(
-        Rijnr = ~NULL
+      mutate(
+        Rijnr = NULL
       ) %>%
-      rename_(
-        Status_voorwaarde = ~Status
+      rename(
+        Status_voorwaarde = .data$Status
       )
-    
+
+
     #resultaten op niveau van indicator afleiden
     Resultaat_indicator <- Resultaat %>%
-      group_by_(
-        ~ID,
-        ~Habitattype,   #en hier zouden extra gegevens uit Data_habitat moeten toegevoegd worden
-        ~Versie,
-        ~Habitattype.y,
-        ~Criterium,
-        ~Indicator,
-        ~Beoordeling,
-        ~Kwaliteitsniveau,
-        ~BeoordelingID
+      group_by(
+        .data$ID,
+        .data$Habitattype,   #en hier zouden extra gegevens uit Data_habitat moeten toegevoegd worden
+        .data$Versie,
+        .data$Habitattype.y,
+        .data$Criterium,
+        .data$Indicator,
+        .data$Beoordeling,
+        .data$Kwaliteitsniveau,
+        .data$BeoordelingID
       ) %>%
-      summarise_(
-        Status_indicator = 
-          ~combinerenVoorwaarden(
-            unique(Combinatie),
-            VoorwaardeID,
-            Status_voorwaarde
+      summarise(
+        Status_indicator =
+          combinerenVoorwaarden(
+            unique(.data$Combinatie),
+            .data$VoorwaardeID,
+            .data$Status_voorwaarde
           )
       ) %>%
       ungroup()
-      
 
     #resultaten op niveau van criterium afleiden
     Resultaat_criterium <- Resultaat_indicator %>%
-      group_by_(~ID, ~Habitattype, ~Versie, ~Criterium, ~Kwaliteitsniveau) %>%
-      summarise_(
-        Status_criterium = ~as.logical(all(Status_indicator))
+      group_by(
+        .data$ID,
+        .data$Habitattype,
+        .data$Versie,
+        .data$Criterium,
+        .data$Kwaliteitsniveau
+      ) %>%
+      summarise(
+        Status_criterium = as.logical(all(.data$Status_indicator))
       ) %>%
       ungroup()
-    
 
-    return(list(as.data.frame(Resultaat_criterium), Resultaat_indicator, Resultaat))
+
+    return(
+      list(
+        as.data.frame(Resultaat_criterium),
+        Resultaat_indicator,
+        Resultaat
+      )
+    )
   }

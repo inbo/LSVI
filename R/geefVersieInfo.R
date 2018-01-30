@@ -14,7 +14,7 @@
 #' @importFrom RODBC sqlQuery odbcClose
 #'
 #'
-geefVersieInfo <- 
+geefVersieInfo <-
   function(ConnectieLSVIhabitats = connecteerMetLSVIdb()){
 
   assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))

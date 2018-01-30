@@ -15,11 +15,11 @@
 #' @importFrom dplyr %>% left_join mutate select filter bind_rows as.tbl
 #' 
 
-vertaalInvoerInterval <- 
+vertaalInvoerInterval <-
   function(Dataset, LIJST){
-    
+
     colnames(Dataset) <- c("Rijnr", "Type", "Waarde", "Eenheid", "Invoertype")
-    
+
     #nog herschrijven
     # assert_that(inherits(Dataset, "data.frame"))
     # assert_that(has_name(Dataset, "Type"))
@@ -50,16 +50,26 @@ vertaalInvoerInterval <-
     #     )
     #   )
     # }
-    
+
     LIJST <- LIJST %>%
       as.tbl() %>%
       filter(Naam == "Tansley IHD") %>%
       mutate(
         Ondergrens = as.numeric(.data$Ondergrens),
-        Ondergrens = ifelse(is.na(.data$Ondergrens), .data$Gemiddelde, .data$Ondergrens),
+        Ondergrens =
+          ifelse(
+            is.na(.data$Ondergrens),
+            .data$Gemiddelde,
+            .data$Ondergrens
+          ),
         #Ondergrens = ifelse(is.na(.data$Ondergrens), .data$Volgnummer, .data$Ondergrens),
         Bovengrens = as.numeric(.data$Bovengrens),
-        Bovengrens = ifelse(is.na(.data$Bovengrens), .data$Gemiddelde, .data$Bovengrens)
+        Bovengrens =
+          ifelse(
+            is.na(.data$Bovengrens),
+            .data$Gemiddelde,
+            .data$Bovengrens
+          )
         #Bovengrens = ifelse(is.na(.data$Bovengrens), .data$Volgnummer, .data$Bovengrens)
       ) %>%
       select(
@@ -68,7 +78,7 @@ vertaalInvoerInterval <-
         .data$Ondergrens,
         .data$Bovengrens
       )
-     
+
     Resultaat <- Dataset %>%
       filter(tolower(.data$Type) == "categorie") %>%
       left_join(
@@ -85,7 +95,7 @@ vertaalInvoerInterval <-
         Dataset %>%
           filter(tolower(.data$Type) == "percentage") %>%
           mutate(
-            Min = as.numeric(gsub(",", ".", .data$Waarde))/100,
+            Min = as.numeric(gsub(",", ".", .data$Waarde)) / 100,
             Max = Min
           )
       ) %>%
@@ -102,7 +112,7 @@ vertaalInvoerInterval <-
         .data$Min,
         .data$Max
       )
-    
+
     return(Resultaat)
-    
+
   }
