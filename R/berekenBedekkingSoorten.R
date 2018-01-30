@@ -39,7 +39,7 @@ berekenBedekkingSoorten <-
     assert_that(has_name(Data_soorten, "ID"))
     
     assert_that(has_name(Data_soorten, "Percentage"))
-    assert_that(rep(is.numeric(Data_soorten$Percentage), length(Data_soorten$Percentage)))
+    assert_that(all(sapply(Data_soorten$Percentage, is.numeric)))
     
     
     Bedekking_soorten <- 

@@ -32,9 +32,9 @@ vertaalBedekkingTansley <-
     assert_that(inherits(Tansley, "data.frame"))
     assert_that(has_name(Tansley, "Voluit"))
     assert_that(has_name(Tansley, "Ondergrens"))
-    assert_that(rep(is.numeric(Tansley$Ondergrens), length(Tansley$Ondergrens)))
+    assert_that(all(sapply(Tansley$Ondergrens,is.numeric)))
     assert_that(has_name(Tansley, "Bovengrens"))
-    assert_that(rep(is.numeric(Tansley$Bovengrens), length(Tansley$Bovengrens)))
+    assert_that(all(sapply(Tansley$Bovengrens, is.numeric)))
     
     Resultaat <- rep(NA, length(seq_len(length(Percentages))))
     for (teller in seq_len(length(Percentages))) {

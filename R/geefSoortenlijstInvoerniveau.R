@@ -33,9 +33,8 @@ geefSoortenlijstInvoerniveau <-
     assert_that(has_name(Soortengroeplijst, "Niveau"))
     assert_that(has_name(Soortengroeplijst, "SoortengroepIDs"))
     assert_that(
-      rep(
-        is.character(Soortengroeplijst$SoortengroepIDs),
-        length(Soortengroeplijst$SoortengroepIDs)
+      all(
+        sapply(Soortengroeplijst$SoortengroepIDs, is.character)
       )
     )
     assert_that(noNA(Soortengroeplijst$SoortengroepIDs))
