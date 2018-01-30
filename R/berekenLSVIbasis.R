@@ -230,7 +230,7 @@ berekenLSVIbasis <-
         Rijnr = row_number(.data$ID)
       )
 
-    InvervalVoorwaarden <-
+    IntervalVoorwaarden <-
       vertaalInvoerInterval(
         Data_voorwaarden[
           , c("Rijnr", "Type", "Waarde", "Eenheid", "Invoertype")
@@ -244,7 +244,7 @@ berekenLSVIbasis <-
 
     Data_voorwaarden <- Data_voorwaarden %>%
       left_join(
-        InvervalVoorwaarden,
+        IntervalVoorwaarden,
         by = c("Rijnr")
       ) %>%
       mutate(
