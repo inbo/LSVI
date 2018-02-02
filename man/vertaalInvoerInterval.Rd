@@ -7,7 +7,7 @@
 vertaalInvoerInterval(Dataset, LIJST)
 }
 \arguments{
-\item{Dataset}{dataframe met velden Type, Waarde, Eenheid en Invoertype}
+\item{Dataset}{dataframe met velden Rijnr, Type, Waarde, Eenheid en Invoertype}
 }
 \value{
 Dataframe met velden Min

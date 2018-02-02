@@ -2,7 +2,7 @@
 #'
 #' @description Deze functie zet ingevoerde gegevens van meerdere types om naar een interval bestaande uit minimumwaarde en maximumwaarde.  De functie gebruikt Type, Eenheid en Invoertype om te bepalen welke omzetting eventueel nodig is.  Percentages worden bv. omgezet naar een decimaal getal (waarbij minimum en maximum dezelfde waarde zullen krijgen), en categorische variabelen met Invoertype Tansley worden omgezet naar de onder- en bovengrens die in de databank gegeven worden voor de betreffende categorie.
 #' 
-#' @param Dataset dataframe met velden Type, Waarde, Eenheid en Invoertype
+#' @param Dataset dataframe met velden Rijnr, Type, Waarde, Eenheid en Invoertype
 #' 
 #' @return Dataframe met velden Min
 #' 
@@ -53,7 +53,6 @@ vertaalInvoerInterval <-
 
     LIJST <- LIJST %>%
       as.tbl() %>%
-      filter(Naam == "Tansley IHD") %>%
       mutate(
         Ondergrens = as.numeric(.data$Ondergrens),
         Ondergrens =
