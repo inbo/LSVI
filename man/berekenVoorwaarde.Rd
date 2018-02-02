@@ -7,6 +7,10 @@
 berekenVoorwaarde(VoorwaardeID, Kenmerken, ConnectieLSVIhabitats, LIJST)
 }
 \arguments{
+\item{VoorwaardeID}{ID-nummer (uit databank) van de voorwaarde die moet berekend worden}
+
+\item{Kenmerken}{Dataframe met soorten of kenmerken en hun bedekking voor 1 opname met minimum de velden ...}
+
 \item{LIJST}{}
 }
 \value{
