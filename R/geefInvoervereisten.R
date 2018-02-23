@@ -278,6 +278,7 @@ geefInvoervereisten <- function(Versie = "alle",
     sqlQuery(
       ConnectieLSVIhabitats,
       query_voorwaardeinfo,
+      as.is = TRUE,
       stringsAsFactors = FALSE
     ) #%>%
     # arrange_(~Invoervolgnr, ~Studievolgnr, ~SubInvoervolgnr) %>%
@@ -289,7 +290,6 @@ geefInvoervereisten <- function(Versie = "alle",
     #   Invoermasker = ~paste(Invoerwaarde, collapse = ", ")
     # ) %>%
     # ungroup()
-
 
   Invoervereisten <- Selectiewaarden %>%
     left_join(
