@@ -38,22 +38,50 @@ analyseVariabele_c <-
       sqlQuery(
         ConnectieLSVIhabitats,
         queryVoorwaarde,
+        as.is = TRUE,
         stringsAsFactors = FALSE
+      )
+    
+    Kenmerken <- Kenmerken %>%
+      mutate(
+        Rijnr = row_number(.data$Kenmerk)
+      )
+    
+    VertaaldeKenmerken <-
+      vertaalInvoerInterval(
+        Kenmerken[
+          , c("Rijnr", "Type", "Waarde",
+              "Eenheid", "Invoertype")
+          ],
+        LIJST
+      ) %>%
+      rename(
+        WaardeMin = .data$Min,
+        WaardeMax = .data$Max
+      )
+    
+    Kenmerken2 <- Kenmerken %>%
+      left_join(
+        VertaaldeKenmerken,
+        by = c("Rijnr")
+      ) %>%
+      mutate(
+        Rijnr = NULL,
+        Kenmerk = tolower(.data$Kenmerk)
       )
     
     AnalyseObject <-
       new(
         Class = VoorwaardeInfo$TypeAnalyseVariabele,
         VoorwaardeID = VoorwaardeID,
-        Kenmerken = Kenmerken) 
+        Kenmerken = Kenmerken2) 
     
     #Soortengroep nog toevoegen!!!
       
     if (!is.na(VoorwaardeInfo$StudiegroepId)) {
       queryStudiegroep <-
         sprintf(
-          "SELECT StudieItem.Waarde, StudieItem.Ondergrens,
-          StudieItem.Gemiddelde, StudieItem.Bovengrens
+          "SELECT StudieItem.Waarde, StudieItem.Volgnummer
           FROM StudieItem
           WHERE StudieItem.StudiegroepId  = '%s'",
           VoorwaardeInfo$StudiegroepId
@@ -68,6 +96,8 @@ analyseVariabele_c <-
     }
     
     if (!is.na(VoorwaardeInfo$SubAnalyseVariabele)) {
+      setSubAnalyseVariabele(AnalyseObject) <-
+        VoorwaardeInfo$SubAnalyseVariabele
       SAV <-
         vertaalInvoerInterval(
           data.frame(
