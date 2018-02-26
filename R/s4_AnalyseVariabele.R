@@ -5,7 +5,6 @@
 #' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
 #' 
 #' @importFrom assertthat assert_that
-#' @importFrom RODBC sqlQuery
 #' 
 setClass(
   Class = "AnalyseVariabele", 
@@ -83,6 +82,7 @@ setValidity(
 #     }
 # )
 
+#' @export
 setGeneric(
   name = "getKenmerken",
   def = function(object) {
@@ -98,6 +98,7 @@ setMethod(
   }
 )
 
+#' @export
 setGeneric(
   name = "setKenmerken<-",
   def = function(object, value) {
@@ -115,6 +116,7 @@ setReplaceMethod(
   }
 )
 
+#' @export
 setGeneric(
   name = "getVoorwaardeID",
   def = function(object) {
@@ -130,6 +132,7 @@ setMethod(
   }
 )
 
+#' @export
 setGeneric(
   name = "setVoorwaardeID<-",
   def = function(object, value) {
@@ -147,6 +150,7 @@ setReplaceMethod(
   }
 )
 
+#' @export
 setGeneric(
   name = "getSoortengroep",
   def = function(object) {
@@ -162,6 +166,7 @@ setMethod(
   }
 )
 
+#' @export
 setGeneric(
   name = "setSoortengroep<-",
   def = function(object, value) {
@@ -179,6 +184,7 @@ setReplaceMethod(
   }
 )
 
+#' @export
 setGeneric(
   name = "getStudiegroep",
   def = function(object) {
@@ -194,6 +200,7 @@ setMethod(
   }
 )
 
+#' @export
 setGeneric(
   name = "setStudiegroep<-",
   def = function(object, value) {
@@ -211,6 +218,7 @@ setReplaceMethod(
   }
 )
 
+#' @export
 setGeneric(
   name = "getSubAnalyseVariabele",
   def = function(object) {
@@ -226,6 +234,7 @@ setMethod(
   }
 )
 
+#' @export
 setGeneric(
   name = "setSubAnalyseVariabele<-",
   def = function(object, value) {
@@ -243,6 +252,7 @@ setReplaceMethod(
   }
 )
 
+#' @export
 setGeneric(
   name = "getSubRefMin",
   def = function(object) {
@@ -258,6 +268,7 @@ setMethod(
   }
 )
 
+#' @export
 setGeneric(
   name = "setSubRefMin<-",
   def = function(object, value) {
@@ -275,6 +286,7 @@ setReplaceMethod(
   }
 )
 
+#' @export
 setGeneric(
   name = "getSubRefMax",
   def = function(object) {
@@ -290,6 +302,7 @@ setMethod(
   }
 )
 
+#' @export
 setGeneric(
   name = "setSubRefMax<-",
   def = function(object, value) {
@@ -307,6 +320,7 @@ setReplaceMethod(
   }
 )
 
+#' @export
 setGeneric(
   name = "getSubOperator",
   def = function(object) {
@@ -322,6 +336,7 @@ setMethod(
   }
 )
 
+#' @export
 setGeneric(
   name = "setSubOperator<-",
   def = function(object, value) {
@@ -339,6 +354,7 @@ setReplaceMethod(
   }
 )
 
+#' @export
 setGeneric(
   name = "berekenWaarde",
   def = function(object) {
