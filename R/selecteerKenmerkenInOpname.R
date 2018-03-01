@@ -39,20 +39,19 @@ selecteerKenmerkenInOpname <-
           by = c("Kenmerk" = "NBNTaxonVersionKey")
         )
       #Hier moet nog toegevoegd worden dat subsoorten opgehaald worden als de soorten zelf niet in de kenmerkenlijst staan (zie berekenAantalSoorten en selecteerSoortenInOpname)
-      
+
     }
-    
+
     if (length(Studiegroep) > 0) {
-      
+
       Resultaat <- Kenmerken %>%
         filter(.data$TypeKenmerk == "studiegroep") %>%
         inner_join(
           Studiegroep,
           by = c("Kenmerk" = "Waarde")
         )
-      
     }
-    
+
     if (!identical(SubAnalyseVariabele, character(0)) &&
         SubAnalyseVariabele == "bedekking") {
       Resultaat <- Resultaat %>%
@@ -62,14 +61,14 @@ selecteerKenmerkenInOpname <-
           Operator = SubOperator,
           Rijnr = row_number(.data$Kenmerk)
         )
-      
+
       SubStatusberekening <-
         berekenStatus(
           Resultaat[
             , c("Rijnr", "RefMin", "RefMax", "Operator", "WaardeMin", "WaardeMax")
             ]
         )
-      
+
       Resultaat <- Resultaat %>%
         left_join(
           SubStatusberekening,
@@ -81,7 +80,7 @@ selecteerKenmerkenInOpname <-
         filter(
           .data$Status == TRUE
         )
-      
+
     } else {
       Resultaat <- Resultaat %>%
         filter(

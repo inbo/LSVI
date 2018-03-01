@@ -163,7 +163,11 @@ berekenLSVIbasis <-
     if (
       !all(
         Data_soortenKenmerken$Eenheid %in%
-          geefUniekeWaarden("AnalyseVariabele", "Eenheid", ConnectieLSVIhabitats)
+          geefUniekeWaarden(
+            "AnalyseVariabele",
+            "Eenheid",
+            ConnectieLSVIhabitats
+          )
       )
     ) {
       stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Eenheid komen overeen met waarden vermeld in de databank.") #nolint
@@ -265,7 +269,7 @@ berekenLSVIbasis <-
         Data_voorwaarden,
         by = c("ID", "Criterium", "Indicator"),
         suffix = c("", ".vw")
-      ) %>%          
+      ) %>%
       rowwise() %>%
       mutate(
         Berekening =           #is in principe enkel nodig als .data$Waarde NA is

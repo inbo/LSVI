@@ -7,7 +7,7 @@
 #' @importFrom dplyr %>%
 #' @include s4_AnalyseVariabele.R
 setClass(
-  Class = "aantal", 
+  Class = "aantal",
   representation =
     representation(),
   contains = "AnalyseVariabele"
@@ -17,7 +17,7 @@ setMethod(
   f = "berekenWaarde",
   signature = "aantal",
   definition = function(object) {
-    
+
     Resultaat <-
       selecteerKenmerkenInOpname(
         object@Kenmerken,
@@ -28,9 +28,9 @@ setMethod(
         object@SubRefMax,
         object@SubOperator
       )
-    
+
     Aantal <- nrow(Resultaat)
-    
+
     return(Aantal)
   }
 )

@@ -33,6 +33,6 @@ geefUniekeWaarden <-
   query <- sprintf("SELECT %s FROM %s", Veldnaam, Tabelnaam)
   Waarden <- sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
   UniekeWaarden <- c("alle", unique(Waarden[, Veldnaam]))
-  
+
   return(UniekeWaarden)
 }

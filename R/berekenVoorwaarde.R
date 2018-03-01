@@ -24,18 +24,24 @@ berekenVoorwaarde <-
     ConnectieNBN,
     LIJST
   ) {
-    
+
     KenmerkenID <- Kenmerken %>%
       filter(.data$ID == OpnameID)
-    
-    AV <- analyseVariabele_c(VoorwaardeID, KenmerkenID, ConnectieLSVIhabitats, ConnectieNBN, LIJST)
-    
+
+    AV <-
+      analyseVariabele_c(
+        VoorwaardeID,
+        KenmerkenID,
+        ConnectieLSVIhabitats,
+        ConnectieNBN,
+        LIJST
+      )
+
     Waarde <- berekenWaarde(AV)
-    
+
     if (length(Waarde) == 1) {
       Waarde <- c(Waarde, Waarde)
     }
-    
+
     return(Waarde)
-    
   }

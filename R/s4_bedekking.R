@@ -7,7 +7,7 @@
 #' @importFrom dplyr %>%
 #' @include s4_AnalyseVariabele.R
 setClass(
-  Class = "bedekking", 
+  Class = "bedekking",
   representation =
     representation(),
   contains = "AnalyseVariabele"
@@ -17,7 +17,7 @@ setMethod(
   f = "berekenWaarde",
   signature = "bedekking",
   definition = function(object) {
-    
+
     Resultaat <-
       selecteerKenmerkenInOpname(
         object@Kenmerken,
@@ -29,17 +29,17 @@ setMethod(
         object@SubOperator
       ) %>%
       mutate(
-        Gemiddelde = 
+        Gemiddelde =
           (.data$WaardeMin + .data$WaardeMax) / 2
       )
-    
+
     #onderstaande is om te testen of het concept werkt, berekening moet nog aangepast worden!!!
-    BedekkingGem <- 
-      (1 - prod((100 - Resultaat$Gemiddelde) / 100, na.rm = TRUE)) * 100
-    
+    BedekkingGem <-
+      (1 - prod( (100 - Resultaat$Gemiddelde) / 100, na.rm = TRUE)) * 100
+
     BedekkingMin <- BedekkingGem * 0.9
     BedekkingMax <- BedekkingGem * 1.1
-    
+
     return(c(BedekkingMin, BedekkingMax))
   }
 )

@@ -13,7 +13,7 @@ geefVertaallijst <-
     LijstItem.Omschrijving, LijstItem.Ondergrens,
     LijstItem.Gemiddelde, LijstItem.Bovengrens
     FROM LijstItem INNER JOIN Lijst ON LijstItem.LijstId = Lijst.Id"
-  LIJST <- 
+  LIJST <-
     sqlQuery(Connectie, query, stringsAsFactors = FALSE) %>%
     mutate(
       Ondergrens = .data$Ondergrens / 100,

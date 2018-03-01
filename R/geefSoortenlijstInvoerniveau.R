@@ -98,7 +98,8 @@ geefSoortenlijstInvoerniveau <-
           FROM Soortengroepniveau
             LEFT JOIN Soortengroep
               ON Soortengroepniveau.SoortensubgroepID = Soortengroep.Id
-            LEFT JOIN (Soort LEFT JOIN Taxontype ON Soort.TaxonTypeId = Taxontype.Id)
+            LEFT JOIN 
+              (Soort LEFT JOIN Taxontype ON Soort.TaxonTypeId = Taxontype.Id)
               ON Soortengroepniveau.SoortID = Soort.Id
           WHERE Soortengroepniveau.Niveau = %s",
           Soortengroeplijst[Soortengroeplijst$Niveau == n, "SoortengroepIDs"],

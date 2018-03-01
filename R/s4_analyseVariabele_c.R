@@ -16,7 +16,7 @@ analyseVariabele_c <-
   ) {
     assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
     assert_that(inherits(ConnectieNBN, "RODBC"))
-    
+
     queryVoorwaarde <-
       sprintf(
         "SELECT AV.VariabeleNaam AS TypeAnalyseVariabele,
@@ -27,11 +27,11 @@ analyseVariabele_c <-
         TypeVariabele.Naam AS TypeSubVariabele,
         Voorwaarde.SubReferentiewaarde, Voorwaarde.SubOperator,
         Lijst.Naam AS SubInvoermasker
-        FROM ((Voorwaarde LEFT JOIN 
+        FROM ((Voorwaarde LEFT JOIN
           (AnalyseVariabele SAV LEFT JOIN TypeVariabele
               ON SAV.TypeVariabeleId = TypeVariabele.Id)
             ON Voorwaarde.SubAnalyseVariabeleId = SAV.Id)
-          LEFT JOIN AnalyseVariabele AV 
+          LEFT JOIN AnalyseVariabele AV
             ON Voorwaarde.AnalyseVariabeleId = AV.Id)
         LEFT JOIN Lijst ON Voorwaarde.SubInvoermaskerId = Lijst.Id
         WHERE Voorwaarde.Id = '%s'",
@@ -44,11 +44,11 @@ analyseVariabele_c <-
         as.is = TRUE,
         stringsAsFactors = FALSE
       )
-    
+
     KenmerkenSoort <- Kenmerken %>%
       filter(tolower(.data$TypeKenmerk) == "soort_latijn") %>%
       mutate(
-        Kenmerk = 
+        Kenmerk =
           gsub(
             pattern = "^([[:alpha:]]*) ([[:alpha:]]*) (.*)",
             replacement = "\\1 \\2",
@@ -59,11 +59,11 @@ analyseVariabele_c <-
         Kenmerken %>%
           filter(tolower(.data$TypeKenmerk) == "soort_nl")
       )
-    
+
     Vertaling <-
       get_nbn_key(KenmerkenSoort$Kenmerk, channel = ConnectieNBN) %>%
       select(.data$InputName, .data$NBNKey)
-    
+
     KenmerkenSoort <- KenmerkenSoort %>%
       left_join(
         Vertaling,
@@ -74,7 +74,7 @@ analyseVariabele_c <-
         NBNKey = NULL,
         TypeKenmerk = "soort_nbn"
       )
-    
+
     Kenmerken <- Kenmerken %>%
       filter(
         !tolower(.data$TypeKenmerk) %in% c("soort_latijn", "soort_nl")
@@ -85,7 +85,7 @@ analyseVariabele_c <-
       mutate(
         Rijnr = row_number(.data$Kenmerk)
       )
-    
+
     VertaaldeKenmerken <-
       vertaalInvoerInterval(
         Kenmerken[
@@ -98,7 +98,7 @@ analyseVariabele_c <-
         WaardeMin = .data$Min,
         WaardeMax = .data$Max
       )
-    
+
     Kenmerken2 <- Kenmerken %>%
       left_join(
         VertaaldeKenmerken,
@@ -108,13 +108,13 @@ analyseVariabele_c <-
         Rijnr = NULL,
         Kenmerk = tolower(.data$Kenmerk)
       )
-    
+
     AnalyseObject <-
       new(
         Class = VoorwaardeInfo$TypeAnalyseVariabele,
         VoorwaardeID = VoorwaardeID,
-        Kenmerken = Kenmerken2) 
-    
+        Kenmerken = Kenmerken2)
+
     if (!is.na(VoorwaardeInfo$SoortengroepId)) {
       Soortengroep <-
         geefSoortenlijstInvoerniveau(
@@ -132,7 +132,7 @@ analyseVariabele_c <-
           .data$Taxontype
         )
       setSoortengroep(AnalyseObject) <- Soortengroep
-      
+
       if (!all(is.na(Soortengroep$SoortensubgroepID))) {
         Subsoorten <- Soortengroep %>%
           filter_(~!is.na(SoortensubgroepID)) %>%
@@ -148,7 +148,7 @@ analyseVariabele_c <-
         setSoortensubgroep(AnalyseObject) <- Subsoortengroep
       }
     }
-      
+
     if (!is.na(VoorwaardeInfo$StudiegroepId)) {
       queryStudiegroep <-
         sprintf(
@@ -165,7 +165,7 @@ analyseVariabele_c <-
         )
       setStudiegroep(AnalyseObject) <- Studiegroep
     }
-    
+
     if (!is.na(VoorwaardeInfo$SubAnalyseVariabele)) {
       setSubAnalyseVariabele(AnalyseObject) <-
         VoorwaardeInfo$SubAnalyseVariabele
@@ -185,6 +185,6 @@ analyseVariabele_c <-
       setSubRefMax(AnalyseObject) <- SAV$Max
       setSubOperator(AnalyseObject) <- VoorwaardeInfo$SubOperator
     }
-    
+
     return(AnalyseObject)
   }

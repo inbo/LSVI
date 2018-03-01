@@ -94,7 +94,8 @@ geefSoortenlijstSoortniveau <-
                  Soort.NBNTaxonVersionKey,
                  Taxontype.Naam AS Taxontype
           FROM Soortengroepniveau
-          LEFT JOIN (Soort INNER JOIN Taxontype ON Soort.TaxonTypeId = Taxontype.Id)
+          LEFT JOIN 
+            (Soort INNER JOIN Taxontype ON Soort.TaxonTypeId = Taxontype.Id)
             ON Soortengroepniveau.SoortID = Soort.Id
           LEFT JOIN
             (Soortengroep INNER JOIN Soortengroeptype

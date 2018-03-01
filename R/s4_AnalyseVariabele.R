@@ -7,8 +7,8 @@
 #' @importFrom assertthat assert_that
 #' 
 setClass(
-  Class = "AnalyseVariabele", 
-  representation = 
+  Class = "AnalyseVariabele",
+  representation =
     representation(
       VoorwaardeID = "numeric",
       Soortengroep = "data.frame",
@@ -26,7 +26,7 @@ setClass(
 setValidity(
   "AnalyseVariabele",
   function(object) {
-    
+
     if (length(object@Kenmerken) > 0) {
       assert_that(has_name(object@Kenmerken, "Kenmerk"))
       assert_that(is.character(object@Kenmerken$Kenmerk))
