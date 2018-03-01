@@ -90,9 +90,12 @@ geefSoortenlijstSoortniveau <-
                  Soortengroep.Naam AS NedNaam_groep,
                  Soortengroep.WetNaam AS WetNaam_groep,
                  Soortengroeptype.Omschrijving AS Soortengroeptype,
-                 Soort.WetNaam, Soort.NedNaam
+                 Soort.WetNaam, Soort.NedNaam,
+                 Soort.NBNTaxonVersionKey,
+                 Taxontype.Naam AS Taxontype
           FROM Soortengroepniveau
-          LEFT JOIN Soort ON Soortengroepniveau.SoortID = Soort.Id
+          LEFT JOIN (Soort INNER JOIN Taxontype ON Soort.TaxonTypeId = Taxontype.Id)
+            ON Soortengroepniveau.SoortID = Soort.Id
           LEFT JOIN
             (Soortengroep INNER JOIN Soortengroeptype
               ON Soortengroep.SoortengroeptypeID = Soortengroeptype.Id)

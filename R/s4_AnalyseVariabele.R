@@ -12,6 +12,7 @@ setClass(
     representation(
       VoorwaardeID = "numeric",
       Soortengroep = "data.frame",
+      Soortensubgroep = "data.frame",
       Studiegroep = "data.frame",
       SubAnalyseVariabele = "character",
       SubRefMin = "numeric",
@@ -34,9 +35,9 @@ setValidity(
       assert_that(
         all(
           tolower(object@Kenmerken$TypeKenmerk) %in%
-            c("studiegroep", "soort_latijn", "soort_nl")
+            c("studiegroep", "soort_latijn", "soort_nl", "soort_nbn")
         ),
-        msg = "TypeKenmerk moet een van de volgende waarden zijn: studiegroep, soort_latijn, soort_nl"
+        msg = "TypeKenmerk moet een van de volgende waarden zijn: studiegroep, soort_nbn, soort_latijn, soort_nl" #nolint
       )
     }
     return(TRUE)
@@ -183,6 +184,41 @@ setReplaceMethod(
     return(object)
   }
 )
+
+#' @export
+setGeneric(
+  name = "getSoortensubgroep",
+  def = function(object) {
+    standardGeneric("getSoortensubgroep")
+  }
+)
+
+setMethod(
+  f = "getSoortensubgroep",
+  signature = "AnalyseVariabele",
+  definition = function(object) {
+    return(object@Soortensubgroep)
+  }
+)
+
+#' @export
+setGeneric(
+  name = "setSoortensubgroep<-",
+  def = function(object, value) {
+    standardGeneric("setSoortensubgroep<-")
+  }
+)
+
+setReplaceMethod(
+  f = "setSoortensubgroep",
+  signature = "AnalyseVariabele",
+  definition = function(object, value) {
+    object@Soortensubgroep <- value
+    validObject(object)
+    return(object)
+  }
+)
+
 
 #' @export
 setGeneric(

@@ -91,11 +91,15 @@ geefSoortenlijstInvoerniveau <-
                  Soortengroepniveau.Omschrijving,
                  Soortengroep.WetNaam AS WetNaam_groep,
                  Soortengroep.Naam AS NedNaam_groep,
-                 Soort.WetNaam, Soort.NedNaam, Soortengroepniveau.Niveau
+                 Soort.WetNaam, Soort.NedNaam,
+                 Soort.NBNTaxonVersionKey,
+                 Taxontype.Naam AS Taxontype,
+                 Soortengroepniveau.Niveau
           FROM Soortengroepniveau
             LEFT JOIN Soortengroep
               ON Soortengroepniveau.SoortensubgroepID = Soortengroep.Id
-            LEFT JOIN Soort ON Soortengroepniveau.SoortID = Soort.Id
+            LEFT JOIN (Soort LEFT JOIN Taxontype ON Soort.TaxonTypeId = Taxontype.Id)
+              ON Soortengroepniveau.SoortID = Soort.Id
           WHERE Soortengroepniveau.Niveau = %s",
           Soortengroeplijst[Soortengroeplijst$Niveau == n, "SoortengroepIDs"],
           n,

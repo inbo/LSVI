@@ -4,7 +4,8 @@
 \alias{analyseVariabele_c}
 \title{Constructor van s4-classe AnalyseVariabele}
 \usage{
-analyseVariabele_c(VoorwaardeID, Kenmerken, ConnectieLSVIhabitats, LIJST)
+analyseVariabele_c(VoorwaardeID, Kenmerken, ConnectieLSVIhabitats, ConnectieNBN,
+  LIJST)
 }
 \description{
 Constructor van s4-classe AnalyseVariabele

@@ -2,6 +2,7 @@
 #' 
 #' @importFrom assertthat assert_that
 #' @importFrom RODBC sqlQuery
+#' @importFrom n2khelper get_nbn_key
 #' 
 #' @export
 
@@ -10,9 +11,11 @@ analyseVariabele_c <-
     VoorwaardeID,
     Kenmerken,
     ConnectieLSVIhabitats,
+    ConnectieNBN,
     LIJST
   ) {
     assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
+    assert_that(inherits(ConnectieNBN, "RODBC"))
     
     queryVoorwaarde <-
       sprintf(
@@ -42,7 +45,43 @@ analyseVariabele_c <-
         stringsAsFactors = FALSE
       )
     
+    KenmerkenSoort <- Kenmerken %>%
+      filter(tolower(.data$TypeKenmerk) == "soort_latijn") %>%
+      mutate(
+        Kenmerk = 
+          gsub(
+            pattern = "^([[:alpha:]]*) ([[:alpha:]]*) (.*)",
+            replacement = "\\1 \\2",
+            x = .data$Kenmerk
+          )
+      ) %>%
+      bind_rows(
+        Kenmerken %>%
+          filter(tolower(.data$TypeKenmerk) == "soort_nl")
+      )
+    
+    Vertaling <-
+      get_nbn_key(KenmerkenSoort$Kenmerk, channel = ConnectieNBN) %>%
+      select(.data$InputName, .data$NBNKey)
+    
+    KenmerkenSoort <- KenmerkenSoort %>%
+      left_join(
+        Vertaling,
+        by = c("Kenmerk" = "InputName")
+      ) %>%
+      mutate(
+        Kenmerk = .data$NBNKey,
+        NBNKey = NULL,
+        TypeKenmerk = "soort_nbn"
+      )
+    
     Kenmerken <- Kenmerken %>%
+      filter(
+        !tolower(.data$TypeKenmerk) %in% c("soort_latijn", "soort_nl")
+      ) %>%
+      bind_rows(
+        KenmerkenSoort
+      ) %>%
       mutate(
         Rijnr = row_number(.data$Kenmerk)
       )
@@ -76,7 +115,39 @@ analyseVariabele_c <-
         VoorwaardeID = VoorwaardeID,
         Kenmerken = Kenmerken2) 
     
-    #Soortengroep nog toevoegen!!!
+    if (!is.na(VoorwaardeInfo$SoortengroepId)) {
+      Soortengroep <-
+        geefSoortenlijstInvoerniveau(
+          data.frame(
+            Niveau = 1,
+            SoortengroepIDs = as.character(VoorwaardeInfo$SoortengroepId),
+            stringsAsFactors = FALSE
+          ),
+          ConnectieLSVIhabitats = ConnectieLSVIhabitats
+        ) %>%
+        select(
+          .data$SoortengroepID,
+          .data$SoortensubgroepID,
+          .data$NBNTaxonVersionKey,
+          .data$Taxontype
+        )
+      setSoortengroep(AnalyseObject) <- Soortengroep
+      
+      if (!all(is.na(Soortengroep$SoortensubgroepID))) {
+        Subsoorten <- Soortengroep %>%
+          filter_(~!is.na(SoortensubgroepID)) %>%
+          summarise_(
+            SoortensubgroepIDs =
+              ~ paste(SoortensubgroepID, collapse = ",")
+          )
+        Subsoortengroep <-
+          geefSoortenlijstSoortniveau(
+            Subsoorten$SoortensubgroepIDs,
+            ConnectieLSVIhabitats = ConnectieLSVIhabitats
+          )
+        setSoortensubgroep(AnalyseObject) <- Subsoortengroep
+      }
+    }
       
     if (!is.na(VoorwaardeInfo$StudiegroepId)) {
       queryStudiegroep <-
