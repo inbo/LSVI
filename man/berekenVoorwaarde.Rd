@@ -4,7 +4,8 @@
 \alias{berekenVoorwaarde}
 \title{Berekent de voorwaarde op basis van datasets}
 \usage{
-berekenVoorwaarde(VoorwaardeID, Kenmerken, ConnectieLSVIhabitats, LIJST)
+berekenVoorwaarde(OpnameID, VoorwaardeID, Kenmerken, ConnectieLSVIhabitats,
+  ConnectieNBN, LIJST)
 }
 \arguments{
 \item{VoorwaardeID}{ID-nummer (uit databank) van de voorwaarde die moet berekend worden}
@@ -12,6 +13,8 @@ berekenVoorwaarde(VoorwaardeID, Kenmerken, ConnectieLSVIhabitats, LIJST)
 \item{Kenmerken}{Dataframe met soorten of kenmerken en hun bedekking voor 1 opname met minimum de velden ...}
 
 \item{LIJST}{}
+
+\item{ID}{nummer van de opname}
 }
 \value{
 Meestal 1 waarde die het resultaat is van de berekening.  Ingeval de opgegeven datasets data bevatten die als interval geïnterpreteerd worden (bv. bedekkingen opgegeven als Tansley-categorieën), dan wordt een minimum en maximum doorgegeven als een vector met 2 getallen.

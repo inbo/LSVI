@@ -1,6 +1,7 @@
 #' Haalt vertaallijst op uit databank
 #' 
 #' @importFrom RODBC sqlQuery odbcClose
+#' @importFrom dplyr %>% mutate
 #' 
 #' @export
 
@@ -12,7 +13,13 @@ geefVertaallijst <-
     LijstItem.Omschrijving, LijstItem.Ondergrens,
     LijstItem.Gemiddelde, LijstItem.Bovengrens
     FROM LijstItem INNER JOIN Lijst ON LijstItem.LijstId = Lijst.Id"
-  LIJST <- sqlQuery(Connectie, query, stringsAsFactors = FALSE)
+  LIJST <- 
+    sqlQuery(Connectie, query, stringsAsFactors = FALSE) %>%
+    mutate(
+      Ondergrens = .data$Ondergrens / 100,
+      Gemiddelde = .data$Gemiddelde / 100,
+      Bovengrens = .data$Bovengrens / 100
+    )
   odbcClose(Connectie)
 
   return(LIJST)

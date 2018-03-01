@@ -39,10 +39,12 @@ berekenLSVIbasis <-
            Data_voorwaarden,
            Data_soortenKenmerken,
            ConnectieLSVIhabitats = connecteerMetLSVIdb(),
+           ConnectieNBN = connecteerMetLSVIdb(Databank = "D0017_00_NBNData"),
            LIJST = geefVertaallijst(ConnectieLSVIhabitats)){
 
     #controle invoer
     assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
+    assert_that(inherits(ConnectieNBN, "RODBC"))
 
     assert_that(is.string(Versie))
     if (
@@ -263,35 +265,37 @@ berekenLSVIbasis <-
         Data_voorwaarden,
         by = c("ID", "Criterium", "Indicator"),
         suffix = c("", ".vw")
-      ) %>%          #hier moeten de niet opgegeven voorwaarden nog berekend worden en de overbodige informatie gewist!!!
-      # mutate_(
-      #   AnalyseVariabele = ~NULL,
-      #   SoortengroepID = ~NULL,
-      #   SoortengroepNaam = ~NULL,
-      #   Studiegroepnaam = ~NULL,
-      #   Studielijstnaam = ~NULL,
-      #   Studiewaarde = ~NULL,
-      #   Studievolgnr = ~NULL,
-      #   Studieomschrijving = ~NULL,
-      #   Studieondergrens = ~NULL,
-      #   Studiegemiddelde = ~NULL,
-      #   Studiebovengrens = ~NULL,
-      #   SubAnalyseVariabele = ~NULL,
-      #   SubEenheid = ~NULL,
-      #   TypeSubVariabele = ~NULL,
-      #   SubReferentiewaarde = ~NULL,
-      #   SubOperator = ~NULL,
-      #   SubInvoertype = ~NULL,
-      #   SubInvoerwaarde = ~NULL,
-      #   SubInvoervolgnr = ~NULL,
-      #   SubInvoeromschrijving = ~NULL,
-      #   SubInvoerondergrens = ~NULL,
-      #   SubInvoergemiddelde = ~NULL,
-      #   SubInvoerbovengrens = ~NULL
-      # ) %>%
-      distinct() %>%
+      ) %>%          
+      rowwise() %>%
       mutate(
-        Rijnr = row_number(.data$VoorwaardeID)
+        Berekening =           #is in principe enkel nodig als .data$Waarde NA is
+          list(
+            berekenVoorwaarde(
+              .data$ID,
+              .data$VoorwaardeID,
+              Data_soortenKenmerken,
+              ConnectieLSVIhabitats,
+              ConnectieNBN,
+              LIJST
+            )
+          ),
+        WaardeMin =
+          ifelse(
+            is.na(.data$WaardeMin),
+            .data$Berekening[[1]],
+            .data$WaardeMin
+          ),
+        WaardeMax =
+          ifelse(
+            is.na(.data$WaardeMax),
+            .data$Berekening[[2]],
+            .data$WaardeMax
+          ),
+        Berekening = NULL
+      ) %>%
+      ungroup() %>%
+      mutate(
+        Rijnr = row_number(.data$ID)
       )
 
     Statusberekening <-
