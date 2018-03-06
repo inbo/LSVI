@@ -110,14 +110,13 @@ We illustreren dit a.d.h.v de functie geefSoortenlijst().  Als we deze functie o
 
 ```{r}
 library(LSVI)
-ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-geefSoortenlijst(ConnectieLSVIhabitats, Habitattype = "4010", Soortenlijsttype = "LSVIfiche")
+geefSoortenlijst(Habitattype = "4010", Soortenlijsttype = "LSVIfiche")
 ```
 
 Omdat de tabel te breed is, wordt deze opgesplitst in 4 delen, die onder elkaar weergegeven worden.  Deze tabel wordt ook enkel weergegeven, niet opgeslagen, en op deze manier kunnen we er achteraf geen bewerkingen mee doen.  Beter is om de tabel toe te kennen aan een variabele, we geven hier die variabele de naam 'soortenlijst4010':
 
 ```{r}
-soortenlijst4010 <- geefSoortenlijst(ConnectieLSVIhabitats, Habitattype = "4010", Soortenlijsttype = "LSVIfiche")
+soortenlijst4010 <- geefSoortenlijst(Habitattype = "4010", Soortenlijsttype = "LSVIfiche")
 ```
 
 Als je dit commando in je eigen console runt, verschijnt deze variabele in het venster rechtsboven onder de tab Environment (dat een overzicht geeft van alle variabelen).  Bij tabellen kan je deze variabele bekijken door erop te klikken.
@@ -137,17 +136,24 @@ We hebben hier het absolute path (C:/R) weergegeven, een andere mogelijkheid is 
 
 ###Wat met een list van tabellen?
 
-Functies als berekenLSVIbasis() en berekenLSVIdemo() geven gegevens terug in de vorm van een list van 3 tabellen.  Ter illustratie nemen we het voorbeeld van de functie berekenLSVIdemo().
+De functie berekenLSVIbasis() geeft gegevens terug in de vorm van een list van 3 tabellen.
 
 ```{r}
 library(readr)
-Data_indicatoren <- 
-    read_csv2(system.file("vbdata/opname_4010_gelayout_indicatoren.csv", package = "LSVI"))
-Data_soorten <- 
-    read_csv2(system.file("vbdata/opname_4010_gelayout_soorten.csv", package = "LSVI"))
-ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-berekenLSVIdemo(ConnectieLSVIhabitats, Versie = "Versie 3", Kwaliteitsniveau = "1", 
-                Data_indicatoren, Data_soorten)
+Data_habitat <-
+  read_csv2(
+    system.file("vbdata/opname4030habitat.csv", package = "LSVI"),
+    col_types = list(col_character(), col_character(),col_character())
+  )
+Data_voorwaarden <-
+  read_csv2(system.file("vbdata/opname4030voorwaarden.csv", package = "LSVI"))
+Data_soortenKenmerken <-
+  read_csv2(system.file("vbdata/opname4030soortenKenmerken.csv", package = "LSVI"))
+berekenLSVIbasis(
+  Versie = "Versie 3",
+  Kwaliteitsniveau = "1", Data_habitat,
+  Data_voorwaarden, Data_soortenKenmerken
+)
 ```
 
 De uitvoer bestaat uit 3 tabellen onder elkaar, aangeduid met [[1]], [[2]] en [[3]].
@@ -155,8 +161,12 @@ De uitvoer bestaat uit 3 tabellen onder elkaar, aangeduid met [[1]], [[2]] en [[
 We gaan weer beginnen met de uitvoer in een variabele ('resultaat') te steken om er bewerkingen op te kunnen uitvoeren:
 
 ```{r}
-resultaat <- berekenLSVIdemo(ConnectieLSVIhabitats, Versie = "Versie 3", 
-                             Kwaliteitsniveau = "1", Data_indicatoren, Data_soorten)
+resultaat <- 
+  berekenLSVIbasis(
+    Versie = "Versie 3",
+    Kwaliteitsniveau = "1", Data_habitat,
+    Data_voorwaarden, Data_soortenKenmerken
+  )
 ```
 
 Nu kunnen we de afzonderlijke tabellen als volgt uit de variabele Resultaat halen:
@@ -172,24 +182,12 @@ Met deze tabellen kan verder gewerkt worden zoals hierboven beschreven is ('Wat 
 
 ##Basis van LSVI-package
 
-Vermits de meeste functies een connectie met de databank vereisen, moet eerst een connectie met de databank aangemaakt worden via de functie connecteerMetLSVIdb().  Deze connectie moet doorgegeven worden als argument in de meeste functies.  Na gebruik kan deze connectie terug gesloten worden met de functie odbcClose() uit het package RODBC.  Het script ziet er bijgevolg als volgt uit:
-
-```{r eval=FALSE}
-library(LSVI)
-ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-
-# Hier worden de functies uit het LSVI-package uitgevoerd
-
-library(RODBC)
-odbcClose(ConnectieLSVIhabitats)
-```
-
-De andere functies kunnen min of meer in groepen ingedeeld worden op basis van het eerste deel van hun naam:
+De functies kunnen min of meer in groepen ingedeeld worden op basis van het eerste deel van hun naam:
 
 - maakXXX: deze functies genereren een bestand (.html) waarin de informatie uit de databank in een rapportageformaat weergegeven wordt
 - geefXXX: deze functies genereren een tabel met informatie uit de databank
 - berekenXXX: deze functies voeren berekeningen uit m.b.t. de LSVI op basis van opgegeven veldgegevens
-- andere (selecteerXXX en vertaalXXX): hulpfuncties die eventueel relevant kunnen zijn voor gevorderde R-gebruikers (zie 'Gebruik van bouwstenen')
+- andere (selecteerXXX, vertaalXXX en connecteerXXX): hulpfuncties die eventueel relevant kunnen zijn voor gevorderde R-gebruikers (zie 'Gebruik van bouwstenen')
 
 Voor de functies van voornamelijk de eerste twee groepen zijn er een aantal argumenten die facultatief meegegeven kunnen worden: Versie, Habitatgroep, Habitattype, Criterium en Indicator.  Door hiervoor waarden op te geven, kunnen de relevante gegevens uit de databank geselecteerd worden.  Voor de argumenten waarvoor geen specifieke waarden opgegeven zijn, wordt de default 'alle' gebruikt, waardoor alle beschikbare gegevens voor dat argument uit de databank gehaald worden.
 
@@ -197,6 +195,7 @@ Voor een overzicht van de belangrijkste beschikbare functies verwijzen we naar e
 
 Enkele functies worden niet of amper vermeld in deze handleiding of de documentatie van andere functies.  Dit zijn technische hulpfuncties die moeilijk zijn in gebruik (vaak doordat ze als argumenten identificatienummers uit de databank nodig hebben) en die een meer gebruiksvriendelijk alternatief hebben.  Ze dienen doorgaans als hulpfunctie voor hun gebruiksvriendelijke alternatieven en/of andere basisfuncties en zijn in de documentatie duidelijk benoemd als 'hulpfunctie' met vaak de vermelding van het meer gebruiksvriendelijke alternatief.  We willen ervaren R-gebruikers de kans te geven om deze indien nodig te gebruiken, vandaar dat we ervoor kiezen om deze toch beschikbaar te stellen. 
 
+<!--
 #Gebruik van bouwstenen
 
 Om zelf een script te schrijven om de LSVI te berekenen op basis van veldopnamen, doorloop je best volgende stappen:
@@ -207,9 +206,7 @@ Om zelf een script te schrijven om de LSVI te berekenen op basis van veldopnamen
     - maak waar zinvol een 'vertaaltabel' van variabelenamen of categorienamen, of gegevens zoals bedekkingsschalen, waarin je in de ene kolom de namen uit je eigen gegevens opneemt, en in de andere kolom de naamgeving die in dit package gebruikt kan worden
     - om bedekkingen om te zetten van percentages naar Tansley-waarden of omgekeerd, zijn er de functies vertaalBedekkingTansley() en vertaalTansleyPercentage()
     - maak gebruik van de functie berekenAnalyseVariabele() voor gegevens bestaande uit soortenlijsten met bedekkingen of categorische variabelen.  (Idee is dat naargelang de noden meerdere dergelijke 'bouwstenen' toegevoegd worden aan dit package, zie ook Doelstellingen)
-- zodra je gegevens in het juiste formaat staan, kan je de LSVI berekenen met de functie berekenLSVIbasis()
-
-<!-- Idee is om het demoscript berekenLSVIdemo hier toe te voegen, of toch het gedeelte exclusief foutcontrole.  Ik wacht met het maken van een kopie tot dit script getest en aangepast is na het vullen van de databank. -->
+- zodra je gegevens in het juiste formaat staan, kan je de LSVI berekenen met de functie berekenLSVIbasis() -->
 
 Vragen of hulp nodig?  Spring gerust binnen bij BMK.
 
