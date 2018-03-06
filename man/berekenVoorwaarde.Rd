@@ -12,7 +12,7 @@ berekenVoorwaarde(OpnameID, VoorwaardeID, Kenmerken, ConnectieLSVIhabitats,
 
 \item{Kenmerken}{Dataframe met soorten of kenmerken en hun bedekking voor 1 opname met minimum de velden ...}
 
-\item{LIJST}{}
+\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
 
 \item{ID}{nummer van de opname}
 }
