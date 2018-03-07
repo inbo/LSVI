@@ -1,6 +1,6 @@
 #' @title combineert de Status van voorwaarden via de opgegeven formule
 #'
-#' @description Nog aanvullen
+#' @description Technische hulpfunctie die in een formule de ID's vervangt door opgegeven logische waarden en het resultaat van de formule teruggeeft.
 #' 
 #' @param Formule string van ID's gecombineerd met EN en OF, bijvoorbeeld '(720 EN 721) OF 15'
 #' @param VoorwaardeID vector van alle voorwaardeID's die voorkomen in de Formule
@@ -9,7 +9,11 @@
 #' @return logische waarde TRUE/FALSE die de uitkomst van de Formule is (gecombineerd met VoorwaardeID en Status)
 #' 
 #' @examples 
-#' 
+#' combinerenVoorwaarden(
+#'   "(720 EN 721) OF 15",
+#'   c(720, 721, 15),
+#'   c(TRUE, FALSE, TRUE)
+#' )
 #' 
 #' @export
 #' 

@@ -5,7 +5,7 @@
 \alias{bedekking-class}
 \title{S4-klasse die de totale bedekking van de soorten berekent}
 \description{
-Deze klasse Bedekking staat in voor de berekening van waarden voor TypeVariabele Bedekking op basis van opgegeven kenmerken
+Deze klasse Bedekking staat in voor de berekening van waarden voor TypeVariabele Bedekking op basis van opgegeven kenmerken.  Ze is een nakomeling van de klasse AnalyseVariabele.
 }
 \section{Slots}{
 

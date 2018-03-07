@@ -1,11 +1,13 @@
 #' @title Berekent de Status voor de records van een een opgegeven tabel
 #'
-#' @description Deze functie, die bedoeld is als hulpfunctie voor de hoofdfunctie berekenLSVIbasis, voegt een kolom Status toe aan de opgegeven tabel waarin ze de status evalueert op basis van onder andere de velden Waarde, Referentiewaarde en Operator (zie parameter Statustabel) en ze wist ook enkele velden.
+#' @description Deze functie, die bedoeld is als hulpfunctie voor de hoofdfunctie berekenLSVIbasis, evalueert de status van de records van een opgegeven 'statustabel' met velden Waarde, Referentiewaarde en Operator.
+#' 
+#' Deze functie, die bedoeld is als hulpfunctie voor de hoofdfunctie berekenLSVIbasis, voegt een kolom Status toe aan de opgegeven tabel waarin ze de status evalueert op basis van onder andere de velden Waarde, Referentiewaarde en Operator (zie parameter Statustabel) en ze wist ook enkele velden.
 #'
-#' @param Statustabel Tabel met velden ...
+#' @param Statustabel Dataframe met velden Rijnr, RefMin, RefMax, Operator, WaardeMin en WaardeMax.
 #'
 #'
-#' @return Deze functie voegt een extra kolom Status toe aan de opgegeven tabel en verwijdert de velden ...
+#' @return Deze functie geeft een tabel terug met velden Rijnr en Status
 #'
 #'
 #' @export

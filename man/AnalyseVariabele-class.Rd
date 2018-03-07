@@ -3,9 +3,9 @@
 \docType{class}
 \name{AnalyseVariabele-class}
 \alias{AnalyseVariabele-class}
-\title{S4-klasse waarin de generieke}
+\title{S4-klasse waarin de generieke onderdelen gedefinieerd worden die voor alle afgeleide klassen gelden (bv. aantal, bedekking,...)}
 \description{
-Deze virtuele klasse Waarde geeft de mogelijkheid om verschillende typen waarden (getallen, categorische variabelen,...) in eenzelfde veld te bewaren en er gelijkbaardige bewerkingen op uit te voeren (bv. met elkaar te vergelijken).
+Deze virtuele klasse Waarde geeft de mogelijkheid om een aantal klassen en methoden die gelijk zijn voor alle verschillende analysevariabelen, maar eenmaal te moeten aanmaken.  Idee is dat voor elke afgeleide klasse minstens de methode berekenWaarde aangemaakt wordt.
 }
 \section{Slots}{
 

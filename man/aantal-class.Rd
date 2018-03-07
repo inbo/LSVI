@@ -5,7 +5,7 @@
 \alias{aantal-class}
 \title{S4-klasse die aantal soorten met een bepaalde bedekking berekent}
 \description{
-Deze klasse Aantal staat in voor de berekening van waarden voor TypeVariabele Aantal op basis van opgegeven kenmerken
+Deze klasse Aantal staat in voor de berekening van waarden voor TypeVariabele Aantal op basis van opgegeven kenmerken.  Ze is een nakomeling van de klasse AnalyseVariabele.
 }
 \section{Slots}{
 

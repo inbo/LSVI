@@ -1,5 +1,7 @@
 #' Constructor van s4-classe AnalyseVariabele
 #' 
+#' Een constructor is een gebruiksvriendelijke functie die een s4-klasse aanmaakt, zodat een gebruiker niet rechtstreeks geconfronteerd wordt met het aanmaken van een object voor een s4-klasse.  In dit geval worden alle als parameter toegevoegde gegevens netjes in het object gestoken, alsook extra info die uit de databank gehaald wordt.  Een deel van de validatie gebeurt in de s4-klasse AnalyseVariabele zelf.
+#' 
 #' @importFrom assertthat assert_that
 #' @importFrom RODBC sqlQuery
 #' @importFrom n2khelper get_nbn_key
