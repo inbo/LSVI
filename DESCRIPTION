@@ -28,15 +28,8 @@ Remotes:
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr
 Collate: 
-    'berekenAantalSoorten.R'
-    'berekenAnalyseVariabele.R'
-    'berekenBedekkingSoorten.R'
     'berekenLSVIbasis.R'
-    'berekenLSVIdemo.R'
     'berekenStatus.R'
-    'berekenStatusWaardeCat.R'
-    'berekenStatusWaardeGetal.R'
-    'berekenStatusWaardeJaNee.R'
     'berekenVoorwaarde.R'
     'combinerenVoorwaarden.R'
     'connecteerMetLSVIdb.R'
@@ -57,6 +50,4 @@ Collate:
     'selecteerIndicatoren.R'
     'selecteerKenmerkenInOpname.R'
     'selecteerSoortenInOpname.R'
-    'vertaalBedekkingTansley.R'
     'vertaalInvoerInterval.R'
-    'vertaalTansleyPercentage.R'
