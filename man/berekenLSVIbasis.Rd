@@ -5,7 +5,7 @@
 \title{Berekent de LSVI op basis van VoorwaardeID en opgegeven waarden}
 \usage{
 berekenLSVIbasis(Versie = "alle", Kwaliteitsniveau = "alle", Data_habitat,
-  Data_voorwaarden, Data_soortenKenmerken,
+  Data_voorwaarden = data.frame(ID = character()), Data_soortenKenmerken,
   ConnectieLSVIhabitats = connecteerMetLSVIdb(),
   ConnectieNBN = connecteerMetLSVIdb(Databank = "D0017_00_NBNData"),
   LIJST = geefVertaallijst(ConnectieLSVIhabitats))

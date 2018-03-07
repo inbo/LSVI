@@ -39,7 +39,7 @@ berekenLSVIbasis <-
   function(Versie = "alle",
            Kwaliteitsniveau = "alle",
            Data_habitat,
-           Data_voorwaarden,
+           Data_voorwaarden = data.frame(ID = character()),
            Data_soortenKenmerken,
            ConnectieLSVIhabitats = connecteerMetLSVIdb(),
            ConnectieNBN = connecteerMetLSVIdb(Databank = "D0017_00_NBNData"),
@@ -49,132 +49,19 @@ berekenLSVIbasis <-
     assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
     assert_that(inherits(ConnectieNBN, "RODBC"))
 
-    assert_that(is.string(Versie))
-    if (
-      !(Versie %in%
-        geefUniekeWaarden("Versie", "VersieLSVI", ConnectieLSVIhabitats)
-      )
-    ) {
-      stop(
-        sprintf(
-          "Versie moet een van de volgende waarden zijn: %s",
-          geefUniekeWaarden("Versie", "VersieLSVI", ConnectieLSVIhabitats)
-        )
-      )
-    }
+    invoercontroleVersie(Versie, ConnectieLSVIhabitats)
+    
+    invoercontroleKwaliteitsniveau(Kwaliteitsniveau, ConnectieLSVIhabitats)
 
-    Kwaliteitsniveau <- ifelse(Kwaliteitsniveau == 1, "1",
-                               ifelse(Kwaliteitsniveau == 2, "2",
-                                      Kwaliteitsniveau))
-    assert_that(is.string(Kwaliteitsniveau))
-    if (!(Kwaliteitsniveau %in%
-          geefUniekeWaarden(
-            "Beoordeling",
-            "Kwaliteitsniveau",
-            ConnectieLSVIhabitats
-          )
-        )) {
-      stop(
-        sprintf(
-          "Kwaliteitsniveau moet een van de volgende waarden zijn: %s",
-          geefUniekeWaarden(
-            "Beoordeling",
-            "Kwaliteitsniveau",
-            ConnectieLSVIhabitats
-          )
-        )
-      )
-    }
+    invoercontroleData_habitat(Data_habitat, ConnectieLSVIhabitats)
 
-    assert_that(inherits(Data_habitat, "data.frame"))
-    assert_that(has_name(Data_habitat, "ID"))
-    assert_that(has_name(Data_habitat, "Habitattype"))
-    if (!all(Data_habitat$Habitattype %in%
-             geefUniekeWaarden("Habitattype", "Code", ConnectieLSVIhabitats))) {
-      stop("Niet alle waarden vermeld onder Data_habitat$Habitattype komen overeen met waarden vermeld in de databank.") #nolint
+    if (nrow(Data_voorwaarden) > 0) {
+      invoercontroleData_voorwaarden(Data_voorwaarden, ConnectieLSVIhabitats)
+    } else {
+      assert_that(has_name(Data_voorwaarden, "ID"))
     }
-
-    assert_that(inherits(Data_voorwaarden, "data.frame"))
-    assert_that(has_name(Data_voorwaarden, "ID"))
-    assert_that(has_name(Data_voorwaarden, "Criterium"))
-    if (!all(Data_voorwaarden$Criterium %in%
-            geefUniekeWaarden("Criterium", "Naam", ConnectieLSVIhabitats))) {
-      stop("Niet alle waarden vermeld onder Data_voorwaarden$Criterium komen overeen met waarden vermeld in de databank.") #nolint
-    }
-    assert_that(has_name(Data_voorwaarden, "Indicator"))
-    if (!all(Data_voorwaarden$Indicator %in%
-             geefUniekeWaarden("Indicator", "Naam", ConnectieLSVIhabitats))) {
-      stop("Niet alle waarden vermeld onder Data_voorwaarden$Indicator komen overeen met waarden vermeld in de databank.") #nolint
-    }
-    #misschien best ook testen dat die indicator-criterium-combinatie in de databank voorkomt?  En of deze voor dat habitattype voorkomt, maar dat best verderop doen
-    #Voorwaarde ook verplichten?  Anders wel testen of het ok is als het aanwezig is.
-    assert_that(has_name(Data_voorwaarden, "Waarde"))
-    assert_that(has_name(Data_voorwaarden, "Type"))
-    if (
-      !all(
-        Data_voorwaarden$Type %in%
-          geefUniekeWaarden("TypeVariabele", "Naam", ConnectieLSVIhabitats)
-      )
-    ) {
-      stop("Niet alle waarden vermeld onder Data_voorwaarden$Type komen overeen met waarden vermeld in de databank.") #nolint
-    }
-    assert_that(has_name(Data_voorwaarden, "Invoertype"))
-    if (!all(is.na(Data_voorwaarden$Invoertype) |
-             Data_voorwaarden$Invoertype %in%
-             geefUniekeWaarden("Lijst", "Naam", ConnectieLSVIhabitats))) {
-      stop("Niet alle waarden vermeld onder Data_voorwaarden$Invoertype komen overeen met waarden vermeld in de databank.") #nolint
-    }
-    assert_that(has_name(Data_voorwaarden, "Eenheid"))
-    if (
-      !all(
-        Data_voorwaarden$Eenheid %in%
-           geefUniekeWaarden(
-             "AnalyseVariabele",
-             "Eenheid",
-             ConnectieLSVIhabitats
-           )
-      )
-    ) {
-      stop("Niet alle waarden vermeld onder Data_voorwaarden$Eenheid komen overeen met waarden vermeld in de databank.") #nolint
-    }
-
-    assert_that(inherits(Data_soortenKenmerken, "data.frame"))
-    assert_that(has_name(Data_soortenKenmerken, "ID"))
-    assert_that(has_name(Data_soortenKenmerken, "Kenmerk"))
-    assert_that(has_name(Data_soortenKenmerken, "TypeKenmerk"))
-    #hier moet nog controle op gebeuren!!!
-    assert_that(has_name(Data_soortenKenmerken, "Waarde"))
-    assert_that(has_name(Data_soortenKenmerken, "Type"))
-    if (
-      !all(Data_soortenKenmerken$Type %in%
-           geefUniekeWaarden(
-             "TypeVariabele",
-             "Naam",
-             ConnectieLSVIhabitats
-           )
-        )
-    ) {
-      stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Type komen overeen met waarden vermeld in de databank.") #nolint
-    }
-    assert_that(has_name(Data_soortenKenmerken, "Invoertype"))
-    if (!all(is.na(Data_soortenKenmerken$Invoertype) |
-             Data_soortenKenmerken$Invoertype %in%
-             geefUniekeWaarden("Lijst", "Naam", ConnectieLSVIhabitats))) {
-      stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Invoertype komen overeen met waarden vermeld in de databank.") #nolint
-    }
-    assert_that(has_name(Data_soortenKenmerken, "Eenheid"))
-    if (
-      !all(
-        Data_soortenKenmerken$Eenheid %in%
-          geefUniekeWaarden(
-            "AnalyseVariabele",
-            "Eenheid",
-            ConnectieLSVIhabitats
-          )
-      )
-    ) {
-      stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Eenheid komen overeen met waarden vermeld in de databank.") #nolint
-    }
+    
+    invoercontroleData_soortenKenmerken(Data_soortenKenmerken, ConnectieLSVIhabitats)
 
 
     #nodige info ophalen uit de databank
@@ -233,7 +120,7 @@ berekenLSVIbasis <-
       )
 
 
-    #ingevoerde voorwaarden omzetten naar interval
+    #ingevoerde voorwaarden omzetten naar interval (nog rekening houden met lege dataframe!!!!!!!!!!!!!!!!)
     Data_voorwaarden <- Data_voorwaarden %>%
       mutate(
         Rijnr = row_number(.data$ID)
