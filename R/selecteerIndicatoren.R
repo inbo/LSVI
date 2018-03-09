@@ -7,7 +7,7 @@
 #' @param ConnectieLSVIhabitats Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.
 #' @param Versie De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".  Bij de default "alle" worden de gegevens voor de verschillende versies gegeven.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Versie", "VersieLSVI") of geefVersieInfo(ConnectieLSVIhabitats).
 #' @param Habitatgroep Parameter waarmee alle habitats van een bepaalde habitatgroep kunnen geselecteerd worden, bv. "Bossen", "Heiden", "(Half-)natuurlijke graslanden", "Zoete wateren",...   en "alle" (=default).  Deze waarde moet niet gespecifieerd worden als een bepaald habitat(sub)type geselecteerd wordt.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Habitatgroep", "Habitatgroepnaam").
-#' @param Habitattype Parameter waarmee een habitattype of habitatsubtype kan geselecteerd worden.  Als dit een habitattype betreft met meerdere subtypes, zullen de gegevens van alle subtypes van dit habitattype weergegeven worden.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Habitattype", "Code").
+#' @param Habitattype Parameter waarmee een habitattype of habitatsubtype kan geselecteerd worden.  Als dit een habitattype betreft met meerdere subtypes, zullen de gegevens van alle subtypes van dit habitattype weergegeven worden.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Habitattype", "Code").  Er is voor deze parameter ook de mogelijkheid om een vector van meerdere habitat(sub)typen op te geven.
 #' @param Criterium Het LSVI-criterium waarvoor de gegevens geselecteerd worden: "Vegetatie", "Structuur", "Verstoring" of "alle".
 #' @param Indicator De indicator waarvoor de gegevens uit de databank gehaald worden.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Indicator", "Naam").
 #' @param HabitatnamenToevoegen Moeten de namen van de habitattypen en habitatsubtypen toegevoegd worden als extra kolommen?  (Bij FALSE worden enkel de habitatcodes toegevoegd, niet de volledige namen.)
@@ -36,18 +36,7 @@ selecteerIndicatoren <-
 
     assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
 
-    assert_that(is.string(Versie))
-    if (
-      !(Versie %in%
-        geefUniekeWaarden("Versie", "VersieLSVI", ConnectieLSVIhabitats))
-    ) {
-      stop(
-        sprintf(
-          "Versie moet een van de volgende waarden zijn: %s",
-          geefUniekeWaarden("Versie", "VersieLSVI", ConnectieLSVIhabitats)
-        )
-      )
-    }
+    invoercontroleVersie(Versie, ConnectieLSVIhabitats)
 
     assert_that(is.string(Habitatgroep))
     if (
@@ -62,21 +51,21 @@ selecteerIndicatoren <-
       )
     }
 
-    Habitattype <-
-      ifelse(
-        is.numeric(Habitattype),
-        as.character(Habitattype),
-        Habitattype
-      )
-    assert_that(is.string(Habitattype))
+    
+    if (is.numeric(Habitattype)) {
+      Habitattype <- as.character(Habitattype)
+    }
+    assert_that(is.character(Habitattype))
     if (
-      !(Habitattype %in%
+      !all(Habitattype %in%
         geefUniekeWaarden("Habitattype", "Code", ConnectieLSVIhabitats))
     ) {
+      Habitattypen <-
+        paste(geefUniekeWaarden("Habitattype", "Code", ConnectieLSVIhabitats), collapse = ", ")
       stop(
         sprintf(
-          "Habitattype moet een van de volgende waarden zijn: %s",
-          geefUniekeWaarden("Habitattype", "Code", ConnectieLSVIhabitats)
+          "De opgegeven habitattypen mogen enkel de volgende waarden zijn: %s",
+          Habitattypen
         )
       )
     }
@@ -184,10 +173,12 @@ selecteerIndicatoren <-
         Voegwoord <- "WHERE"
         Parametervoorwaarde <- TRUE
       }
+      Habitattypen <-
+        paste(Habitattype, collapse = "','")
       query <-
-        sprintf("%s %s (Habitatselectie.Habitattype = '%s' OR
-                Habitatselectie.Habitatsubtype = '%s')",
-                query, Voegwoord, Habitattype, Habitattype)
+        sprintf("%s %s (Habitatselectie.Habitattype in ('%s') OR
+                Habitatselectie.Habitatsubtype in ('%s'))",
+                query, Voegwoord, Habitattypen, Habitattypen)
     }
     if (Criterium[1] != "alle") {
       if (Parametervoorwaarde) {

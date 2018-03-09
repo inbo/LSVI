@@ -68,7 +68,7 @@ berekenLSVIbasis <-
     Invoervereisten <-
       geefInvoervereisten(
         Versie,
-        Habitattype = unique(Data_habitat$Habitattype),  #selecteerIndicatoren zou aangepast moeten worden om dit toe te laten!
+        Habitattype = unique(Data_habitat$Habitattype),
         Kwaliteitsniveau = Kwaliteitsniveau,
         ConnectieLSVIhabitats = ConnectieLSVIhabitats
       ) %>%
