@@ -172,10 +172,28 @@ berekenLSVIbasis <-
             )
           )
       ) %>%
-      ungroup() %>%
+      unnest() %>%
       select(
         .data$Rijnr,
         .data$Berekening
+      ) %>%
+      group_by(.data$Rijnr) %>%
+      summarise(
+        Min = min(.data$Berekening),
+        Max = max(.data$Berekening)
+      ) %>%
+      ungroup() %>%
+      mutate(
+        Samen =
+          ifelse(
+            .data$Min == .data$Max,
+            .data$Min,
+            paste(
+              round(.data$Min, 2),
+              round(.data$Max, 2),
+              sep = " - ")
+          ),
+        Berekening = NULL
       )
     
     Resultaat <- Resultaat %>%
@@ -187,22 +205,30 @@ berekenLSVIbasis <-
         WaardeMin =
           ifelse(
             is.na(.data$WaardeMin),
-            .data$Berekening[[1]],
+            .data$Min,
             .data$WaardeMin
           ),
         WaardeMax =
           ifelse(
             is.na(.data$WaardeMax),
-            .data$Berekening[[2]],
+            .data$Min,
             .data$WaardeMax
+          ),
+        Type =
+          ifelse(
+            is.na(.data$Waarde),
+            "Berekend",
+            .data$Type
           ),
         Waarde =
           ifelse(
             is.na(.data$Waarde),
-            .data$Berekening[[3]],
+            .data$Samen,
             .data$Waarde
           ),
-        Berekening = NULL
+        Min = NULL,
+        Max = NULL,
+        Samen = NULL
       )
 
     Statusberekening <-
@@ -218,10 +244,22 @@ berekenLSVIbasis <-
         by = c("Rijnr")
       ) %>%
       mutate(
-        Rijnr = NULL
+        Rijnr = NULL,
+        ExtraBewerking = NULL,
+        Referentiewaarde = NULL,
+        Operator = NULL,
+        Eenheid = NULL,
+        TypeVariabele = NULL,
+        Invoertype = NULL,
+        RefMin = NULL,
+        RefMax = NULL,
+        WaardeMin = NULL,
+        WaardeMax = NULL
       ) %>%
       rename(
-        Status_voorwaarde = .data$Status
+        Status_voorwaarde = .data$Status,
+        Invoertype = .data$Invoertype.vw,
+        Eenheid = .data$Eenheid.vw
       )
 
 

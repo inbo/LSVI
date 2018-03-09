@@ -7,7 +7,7 @@
 #' @param VoorwaardeID ID-nummer (uit LSVI-indicatorendatabank) van de voorwaarde die moet berekend worden
 #' @param Kenmerken Dataframe met soorten of kenmerken en hun bedekking voor 1 opname met minimum de velden ID, Kenmerk, TypeKenmerk, Waarde, Type, Invoertype en Eenheid (data identiek aan Data_soortenKenmerken in berekenLSVIbasis)
 #' 
-#' @return Meestal 1 waarde die het resultaat is van de berekening.  Ingeval de opgegeven datasets data bevatten die als interval geïnterpreteerd worden (bv. bedekkingen opgegeven als Tansley-categorieën), dan wordt een minimum en maximum doorgegeven als een vector met 2 getallen.
+#' @return Een vector van 2 waarden die het resultaat is van de berekening, namelijk het minimum en het maximum van het interval waartussen de berekende waarde ligt.  Als het resultaat een exacte waarde is en geen interval, bevat de vector tweemaal dezelfde waarde.  (Het resultaat is een interval als de brondata categorische variabelen zijn, bv. bedekkingen volgens de beheermonitoringschaal of Tansley-schaal.)
 #' 
 #' @importFrom RODBC sqlQuery
 #' 
