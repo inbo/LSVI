@@ -36,14 +36,22 @@
 #'
 #'
 berekenLSVIbasis <-
-  function(Versie = "alle",
-           Kwaliteitsniveau = "alle",
-           Data_habitat,
-           Data_voorwaarden = data.frame(ID = character()),
-           Data_soortenKenmerken,
-           ConnectieLSVIhabitats = connecteerMetLSVIdb(),
-           ConnectieNBN = connecteerMetLSVIdb(Databank = "D0017_00_NBNData"),
-           LIJST = geefVertaallijst(ConnectieLSVIhabitats)){
+  function(
+    Versie = "alle",
+    Kwaliteitsniveau = "alle",
+    Data_habitat,
+    Data_voorwaarden = 
+      data.frame(
+        ID = character(),
+        Criterium = character(),
+        Indicator = character()
+      ),
+    Data_soortenKenmerken,
+    ConnectieLSVIhabitats = connecteerMetLSVIdb(),
+    ConnectieNBN =
+      connecteerMetLSVIdb(Databank = "D0017_00_NBNData"),
+    LIJST = geefVertaallijst(ConnectieLSVIhabitats)
+  ){
 
     #controle invoer
     assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
@@ -56,7 +64,12 @@ berekenLSVIbasis <-
     invoercontroleData_habitat(Data_habitat, ConnectieLSVIhabitats)
 
     if (nrow(Data_voorwaarden) > 0) {
-      invoercontroleData_voorwaarden(Data_voorwaarden, ConnectieLSVIhabitats)
+      Data_voorwaarden <- 
+        invoercontroleData_voorwaarden(
+          Data_voorwaarden,
+          ConnectieLSVIhabitats,
+          LIJST
+        )
     } else {
       assert_that(has_name(Data_voorwaarden, "ID"))
     }
@@ -113,34 +126,6 @@ berekenLSVIbasis <-
     Invoervereisten <- Invoervereisten %>%
       left_join(
         IntervalVereisten,
-        by = c("Rijnr")
-      ) %>%
-      mutate(
-        Rijnr = NULL
-      )
-
-
-    #ingevoerde voorwaarden omzetten naar interval (nog rekening houden met lege dataframe!!!!!!!!!!!!!!!!)
-    Data_voorwaarden <- Data_voorwaarden %>%
-      mutate(
-        Rijnr = row_number(.data$ID)
-      )
-
-    IntervalVoorwaarden <-
-      vertaalInvoerInterval(
-        Data_voorwaarden[
-          , c("Rijnr", "Type", "Waarde", "Eenheid", "Invoertype")
-        ],
-        LIJST
-      ) %>%
-      rename(
-        WaardeMin = .data$Min,
-        WaardeMax = .data$Max
-      )
-
-    Data_voorwaarden <- Data_voorwaarden %>%
-      left_join(
-        IntervalVoorwaarden,
         by = c("Rijnr")
       ) %>%
       mutate(

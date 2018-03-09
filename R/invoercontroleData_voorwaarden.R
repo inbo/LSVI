@@ -1,6 +1,6 @@
 #' Invoercontrole voor dataframe Data_voorwaarden
 #'
-#' Om te vermijden dat we meermaals dezelfde invoercontrole moeten uitvoeren en om de hoofdscripts overzichtelijk te houden, maken we voor elke invoercontrole een aparte hulpfunctie aan, die we kunnen aanroepen.  Deze wordt NIET geëxporteerd, dus deze functies kunnen niet als commando gerund worden (maar worden wel gerund als de functie waarin ze voorkomen, aangeroepen wordt).
+#' Om te vermijden dat we meermaals dezelfde invoercontrole moeten uitvoeren en om de hoofdscripts overzichtelijk te houden, maken we voor elke invoercontrole een aparte hulpfunctie aan, die we kunnen aanroepen.  Deze wordt NIET geëxporteerd, dus deze functies kunnen niet als commando gerund worden (maar worden wel gerund als de functie waarin ze voorkomen, aangeroepen wordt).  Ingeval van Data_voorwaarden is ook de omzetting van de voorwaarden naar een interval opgenomen in de functie.
 #'
 #' @param Data_voorwaarden dataframe waarop invoercontrole moet gebeuren.
 #' @inheritParams berekenLSVIbasis
@@ -8,7 +8,7 @@
 #' @importFrom assertthat assert_that has_name
 #'
 invoercontroleData_voorwaarden <- 
-  function(Data_voorwaarden, ConnectieLSVIhabitats) {
+  function(Data_voorwaarden, ConnectieLSVIhabitats, LIJST) {
     assert_that(inherits(Data_voorwaarden, "data.frame"))
     assert_that(has_name(Data_voorwaarden, "ID"))
     assert_that(has_name(Data_voorwaarden, "Criterium"))
@@ -53,4 +53,32 @@ invoercontroleData_voorwaarden <-
       stop("Niet alle waarden vermeld onder Data_voorwaarden$Eenheid komen overeen met waarden vermeld in de databank.") #nolint
     }
     
+    #ingevoerde voorwaarden omzetten naar interval
+    Data_voorwaarden <- Data_voorwaarden %>%
+      mutate(
+        Rijnr = row_number(.data$ID)
+      )
+    
+    IntervalVoorwaarden <-
+      vertaalInvoerInterval(
+        Data_voorwaarden[
+          , c("Rijnr", "Type", "Waarde", "Eenheid", "Invoertype")
+          ],
+        LIJST
+      ) %>%
+      rename(
+        WaardeMin = .data$Min,
+        WaardeMax = .data$Max
+      )
+    
+    Data_voorwaarden <- Data_voorwaarden %>%
+      left_join(
+        IntervalVoorwaarden,
+        by = c("Rijnr")
+      ) %>%
+      mutate(
+        Rijnr = NULL
+      )
+    
+    return(Data_voorwaarden)
   }
