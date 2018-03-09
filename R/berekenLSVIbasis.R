@@ -49,7 +49,7 @@ berekenLSVIbasis <-
         WaardeMax = double(),
         stringsAsFactors = FALSE
       ),
-    Data_soortenKenmerken,
+    Data_soortenKenmerken = data.frame(ID = character()),
     ConnectieLSVIhabitats = connecteerMetLSVIdb(),
     ConnectieNBN =
       connecteerMetLSVIdb(Databank = "D0017_00_NBNData"),
@@ -81,7 +81,18 @@ berekenLSVIbasis <-
       assert_that(has_name(Data_voorwaarden, "WaardeMax"))
     }
     
-    invoercontroleData_soortenKenmerken(Data_soortenKenmerken, ConnectieLSVIhabitats)
+    if (nrow(Data_soortenKenmerken) > 0) {
+      Data_soortenKenmerken <-
+        invoercontroleData_soortenKenmerken(
+          Data_soortenKenmerken,
+          ConnectieLSVIhabitats,
+          ConnectieNBN,
+          LIJST
+        )
+    } else {
+      assert_that(has_name(Data_soortenKenmerken, "ID"))
+    }
+    
 
 
     #nodige info ophalen uit de databank
@@ -167,7 +178,6 @@ berekenLSVIbasis <-
               .data$VoorwaardeID,
               Data_soortenKenmerken,
               ConnectieLSVIhabitats,
-              ConnectieNBN,
               LIJST
             )
           )

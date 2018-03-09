@@ -4,7 +4,6 @@
 #' 
 #' @importFrom assertthat assert_that
 #' @importFrom RODBC sqlQuery
-#' @importFrom n2khelper get_nbn_key
 #' 
 #' @export
 
@@ -13,11 +12,9 @@ analyseVariabele_c <-
     VoorwaardeID,
     Kenmerken,
     ConnectieLSVIhabitats,
-    ConnectieNBN,
     LIJST
   ) {
     assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
-    assert_that(inherits(ConnectieNBN, "RODBC"))
 
     queryVoorwaarde <-
       sprintf(
@@ -46,76 +43,15 @@ analyseVariabele_c <-
         as.is = TRUE,
         stringsAsFactors = FALSE
       )
-
-    KenmerkenSoort <- Kenmerken %>%
-      filter(tolower(.data$TypeKenmerk) == "soort_latijn") %>%
-      mutate(
-        Kenmerk =
-          gsub(
-            pattern = "^([[:alpha:]]*) ([[:alpha:]]*) (.*)",
-            replacement = "\\1 \\2",
-            x = .data$Kenmerk
-          )
-      ) %>%
-      bind_rows(
-        Kenmerken %>%
-          filter(tolower(.data$TypeKenmerk) == "soort_nl")
-      )
-
-    Vertaling <-
-      get_nbn_key(KenmerkenSoort$Kenmerk, channel = ConnectieNBN) %>%
-      select(.data$InputName, .data$NBNKey)
-
-    KenmerkenSoort <- KenmerkenSoort %>%
-      left_join(
-        Vertaling,
-        by = c("Kenmerk" = "InputName")
-      ) %>%
-      mutate(
-        Kenmerk = .data$NBNKey,
-        NBNKey = NULL,
-        TypeKenmerk = "soort_nbn"
-      )
-
-    Kenmerken <- Kenmerken %>%
-      filter(
-        !tolower(.data$TypeKenmerk) %in% c("soort_latijn", "soort_nl")
-      ) %>%
-      bind_rows(
-        KenmerkenSoort
-      ) %>%
-      mutate(
-        Rijnr = row_number(.data$Kenmerk)
-      )
-
-    VertaaldeKenmerken <-
-      vertaalInvoerInterval(
-        Kenmerken[
-          , c("Rijnr", "Type", "Waarde",
-              "Eenheid", "Invoertype")
-          ],
-        LIJST
-      ) %>%
-      rename(
-        WaardeMin = .data$Min,
-        WaardeMax = .data$Max
-      )
-
-    Kenmerken2 <- Kenmerken %>%
-      left_join(
-        VertaaldeKenmerken,
-        by = c("Rijnr")
-      ) %>%
-      mutate(
-        Rijnr = NULL,
-        Kenmerk = tolower(.data$Kenmerk)
-      )
-
+    
     AnalyseObject <-
       new(
         Class = VoorwaardeInfo$TypeAnalyseVariabele,
-        VoorwaardeID = VoorwaardeID,
-        Kenmerken = Kenmerken2)
+        VoorwaardeID = VoorwaardeID)
+
+    if (nrow(Kenmerken) > 0) {
+      setKenmerken(AnalyseObject) <- Kenmerken
+    }
 
     if (!is.na(VoorwaardeInfo$SoortengroepId)) {
       Soortengroep <-

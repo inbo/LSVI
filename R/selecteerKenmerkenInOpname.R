@@ -31,6 +31,10 @@ selecteerKenmerkenInOpname <-
     SubOperator
   ){
 
+    if (length(Kenmerken) == 0) {
+      return(NA)
+    }
+    
     if (length(Soortengroep) > 0) {
       Resultaat <- Kenmerken %>%
         filter(tolower(.data$TypeKenmerk) == "soort_nbn") %>%

@@ -5,7 +5,7 @@
 \title{Berekent de voorwaarde op basis van datasets}
 \usage{
 berekenVoorwaarde(OpnameID, VoorwaardeID, Kenmerken, ConnectieLSVIhabitats,
-  ConnectieNBN, LIJST)
+  LIJST)
 }
 \arguments{
 \item{OpnameID}{nummer van de opname}

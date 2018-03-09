@@ -19,7 +19,6 @@ berekenVoorwaarde <-
     VoorwaardeID,
     Kenmerken,
     ConnectieLSVIhabitats,
-    ConnectieNBN,
     LIJST
   ) {
 
@@ -31,7 +30,6 @@ berekenVoorwaarde <-
         VoorwaardeID,
         KenmerkenID,
         ConnectieLSVIhabitats,
-        ConnectieNBN,
         LIJST
       )
 

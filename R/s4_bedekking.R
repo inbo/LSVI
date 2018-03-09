@@ -27,7 +27,13 @@ setMethod(
         object@SubRefMin,
         object@SubRefMax,
         object@SubOperator
-      ) %>%
+      ) 
+    
+    if (length(Resultaat) == 1 & all(is.na(Resultaat))) {
+      return(NA)
+    }
+    
+    Resultaat <- Resultaat %>%
       mutate(
         Gemiddelde =
           (.data$WaardeMin + .data$WaardeMax) / 2

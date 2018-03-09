@@ -1,16 +1,20 @@
 #' Invoercontrole voor dataframe Data_soortenKenmerken
 #'
-#' Om te vermijden dat we meermaals dezelfde invoercontrole moeten uitvoeren en om de hoofdscripts overzichtelijk te houden, maken we voor elke invoercontrole een aparte hulpfunctie aan, die we kunnen aanroepen.  Deze wordt NIET geëxporteerd, dus deze functies kunnen niet als commando gerund worden (maar worden wel gerund als de functie waarin ze voorkomen, aangeroepen wordt).
+#' Om te vermijden dat we meermaals dezelfde invoercontrole moeten uitvoeren en om de hoofdscripts overzichtelijk te houden, maken we voor elke invoercontrole een aparte hulpfunctie aan, die we kunnen aanroepen.  Deze wordt NIET geëxporteerd, dus deze functies kunnen niet als commando gerund worden (maar worden wel gerund als de functie waarin ze voorkomen, aangeroepen wordt).  Ingeval van Data_soortenKenmerken is ook de omzetting van soortnamen naar een NBNTaxonVersionKey en de omzettingen van bedekkingen naar een interval opgenomen in de functie.
 #'
 #' @param Data_soortenKenmerken dataframe waarop invoercontrole moet gebeuren.
 #' @inheritParams berekenLSVIbasis
 #'
 #' @importFrom assertthat assert_that has_name
+#' @importFrom n2khelper get_nbn_key
 #' 
 #' @export
 #'
 invoercontroleData_soortenKenmerken <- 
-  function(Data_soortenKenmerken, ConnectieLSVIhabitats) {
+  function(Data_soortenKenmerken, ConnectieLSVIhabitats, ConnectieNBN, LIJST) {
+    assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
+    assert_that(inherits(ConnectieNBN, "RODBC"))
+    
     assert_that(inherits(Data_soortenKenmerken, "data.frame"))
     assert_that(has_name(Data_soortenKenmerken, "ID"))
     assert_that(has_name(Data_soortenKenmerken, "Kenmerk"))
@@ -48,4 +52,74 @@ invoercontroleData_soortenKenmerken <-
     ) {
       stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Eenheid komen overeen met waarden vermeld in de databank.") #nolint
     }
+    
+    
+    #○mzettingen naar een bruikbare dataframe
+    Kenmerken <- Data_soortenKenmerken #naamsverandering is omdat code verplaatst is
+    
+    KenmerkenSoort <- Kenmerken %>%
+      filter(tolower(.data$TypeKenmerk) == "soort_latijn") %>%
+      mutate(
+        Kenmerk =
+          gsub(
+            pattern = "^([[:alpha:]]*) ([[:alpha:]]*) (.*)",
+            replacement = "\\1 \\2",
+            x = .data$Kenmerk
+          )
+      ) %>%
+      bind_rows(
+        Kenmerken %>%
+          filter(tolower(.data$TypeKenmerk) == "soort_nl")
+      )
+    
+    Vertaling <-
+      get_nbn_key(KenmerkenSoort$Kenmerk, channel = ConnectieNBN) %>%
+      select(.data$InputName, .data$NBNKey)
+    
+    KenmerkenSoort <- KenmerkenSoort %>%
+      left_join(
+        Vertaling,
+        by = c("Kenmerk" = "InputName")
+      ) %>%
+      mutate(
+        Kenmerk = .data$NBNKey,
+        NBNKey = NULL,
+        TypeKenmerk = "soort_nbn"
+      )
+    
+    Kenmerken <- Kenmerken %>%
+      filter(
+        !tolower(.data$TypeKenmerk) %in% c("soort_latijn", "soort_nl")
+      ) %>%
+      bind_rows(
+        KenmerkenSoort
+      ) %>%
+      mutate(
+        Rijnr = row_number(.data$Kenmerk)
+      )
+    
+    VertaaldeKenmerken <-
+      vertaalInvoerInterval(
+        Kenmerken[
+          , c("Rijnr", "Type", "Waarde",
+              "Eenheid", "Invoertype")
+          ],
+        LIJST
+      ) %>%
+      rename(
+        WaardeMin = .data$Min,
+        WaardeMax = .data$Max
+      )
+    
+    Kenmerken2 <- Kenmerken %>%
+      left_join(
+        VertaaldeKenmerken,
+        by = c("Rijnr")
+      ) %>%
+      mutate(
+        Rijnr = NULL,
+        Kenmerk = tolower(.data$Kenmerk)
+      )
+    
+    return(Kenmerken2)
   }
