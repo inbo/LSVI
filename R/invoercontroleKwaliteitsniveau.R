@@ -6,6 +6,8 @@
 #' @inheritParams berekenLSVIbasis
 #'
 #' @importFrom assertthat assert_that is.string
+#' 
+#' @export
 #'
 invoercontroleKwaliteitsniveau <- 
   function(Kwaliteitsniveau, ConnectieLSVIhabitats) {

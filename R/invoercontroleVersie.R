@@ -7,6 +7,8 @@
 #'
 #' @importFrom assertthat assert_that is.string
 #' @importFrom dplyr %>%
+#' 
+#' @export
 #'
 invoercontroleVersie <- function(Versie, ConnectieLSVIhabitats) {
   assert_that(is.string(Versie))

@@ -6,6 +6,8 @@
 #' @inheritParams berekenLSVIbasis
 #'
 #' @importFrom assertthat assert_that has_name
+#' 
+#' @export
 #'
 invoercontroleData_habitat <- function(Data_habitat, ConnectieLSVIhabitats) {
   assert_that(inherits(Data_habitat, "data.frame"))

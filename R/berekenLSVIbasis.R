@@ -141,7 +141,6 @@ berekenLSVIbasis <-
 
 
     #voorwaardegegevens koppelen aan info uit de databank
-    #en niet opgegeven voorwaarden berekenen
     Resultaat <-
       Data_habitat %>%
       left_join(
@@ -152,9 +151,16 @@ berekenLSVIbasis <-
         by = c("ID", "Criterium", "Indicator"),
         suffix = c("", ".vw")
       ) %>%
+      mutate(
+        Rijnr = row_number(.data$ID)
+      )
+    
+    #niet opgegeven voorwaarden berekenen
+    BerekendResultaat <- Resultaat %>%
+      filter(is.na(.data$Waarde)) %>%
       rowwise() %>%
       mutate(
-        Berekening =           #is in principe enkel nodig als .data$Waarde NA is
+        Berekening =
           list(
             berekenVoorwaarde(
               .data$ID,
@@ -164,7 +170,20 @@ berekenLSVIbasis <-
               ConnectieNBN,
               LIJST
             )
-          ),
+          )
+      ) %>%
+      ungroup() %>%
+      select(
+        .data$Rijnr,
+        .data$Berekening
+      )
+    
+    Resultaat <- Resultaat %>%
+      left_join(
+        BerekendResultaat,
+        by = c("Rijnr")
+      ) %>%
+      mutate(
         WaardeMin =
           ifelse(
             is.na(.data$WaardeMin),
@@ -177,11 +196,13 @@ berekenLSVIbasis <-
             .data$Berekening[[2]],
             .data$WaardeMax
           ),
+        Waarde =
+          ifelse(
+            is.na(.data$Waarde),
+            .data$Berekening[[3]],
+            .data$Waarde
+          ),
         Berekening = NULL
-      ) %>%
-      ungroup() %>%
-      mutate(
-        Rijnr = row_number(.data$ID)
       )
 
     Statusberekening <-

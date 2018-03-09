@@ -6,6 +6,8 @@
 #' @inheritParams berekenLSVIbasis
 #'
 #' @importFrom assertthat assert_that has_name
+#' 
+#' @export
 #'
 invoercontroleData_soortenKenmerken <- 
   function(Data_soortenKenmerken, ConnectieLSVIhabitats) {
