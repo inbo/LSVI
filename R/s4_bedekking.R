@@ -33,18 +33,21 @@ setMethod(
       return(NA)
     }
     
-    Resultaat <- Resultaat %>%
-      mutate(
-        Gemiddelde =
-          (.data$WaardeMin + .data$WaardeMax) / 2
-      )
+    # Resultaat <- Resultaat %>%
+    #   mutate(
+    #     Gemiddelde =
+    #       (.data$WaardeMin + .data$WaardeMax) / 2
+    #   )
 
     #onderstaande is om te testen of het concept werkt, berekening moet nog aangepast worden!!!
-    BedekkingGem <-
-      (1 - prod( (100 - Resultaat$Gemiddelde) / 100, na.rm = TRUE)) * 100
+    BedekkingMin <-
+      (1.0 - prod( (1.0 - Resultaat$WaardeMin), na.rm = TRUE))
+    
+    BedekkingMax <-
+      (1.0 - prod( (1.0 - Resultaat$WaardeMax), na.rm = TRUE))
 
-    BedekkingMin <- BedekkingGem * 0.9
-    BedekkingMax <- BedekkingGem * 1.1
+    # BedekkingMin <- BedekkingGem * 0.9
+    # BedekkingMax <- BedekkingGem * 1.1
 
     return(c(BedekkingMin, BedekkingMax))
   }
