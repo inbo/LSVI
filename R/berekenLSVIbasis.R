@@ -44,7 +44,10 @@ berekenLSVIbasis <-
       data.frame(
         ID = character(),
         Criterium = character(),
-        Indicator = character()
+        Indicator = character(),
+        WaardeMin = double(),
+        WaardeMax = double(),
+        stringsAsFactors = FALSE
       ),
     Data_soortenKenmerken,
     ConnectieLSVIhabitats = connecteerMetLSVIdb(),
@@ -72,6 +75,10 @@ berekenLSVIbasis <-
         )
     } else {
       assert_that(has_name(Data_voorwaarden, "ID"))
+      assert_that(has_name(Data_voorwaarden, "Criterium"))
+      assert_that(has_name(Data_voorwaarden, "Indicator"))
+      assert_that(has_name(Data_voorwaarden, "WaardeMin"))
+      assert_that(has_name(Data_voorwaarden, "WaardeMax"))
     }
     
     invoercontroleData_soortenKenmerken(Data_soortenKenmerken, ConnectieLSVIhabitats)

@@ -6,7 +6,8 @@
 \usage{
 berekenLSVIbasis(Versie = "alle", Kwaliteitsniveau = "alle", Data_habitat,
   Data_voorwaarden = data.frame(ID = character(), Criterium = character(),
-  Indicator = character()), Data_soortenKenmerken,
+  Indicator = character(), WaardeMin = double(), WaardeMax = double(),
+  stringsAsFactors = FALSE), Data_soortenKenmerken,
   ConnectieLSVIhabitats = connecteerMetLSVIdb(),
   ConnectieNBN = connecteerMetLSVIdb(Databank = "D0017_00_NBNData"),
   LIJST = geefVertaallijst(ConnectieLSVIhabitats))
