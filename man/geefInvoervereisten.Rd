@@ -6,7 +6,8 @@
 \usage{
 geefInvoervereisten(Versie = "alle", Habitatgroep = "alle",
   Habitattype = "alle", Criterium = "alle", Indicator = "alle",
-  Kwaliteitsniveau = "alle", ConnectieLSVIhabitats = connecteerMetLSVIdb())
+  Kwaliteitsniveau = "alle", Weergave = c("basis", "uitgebreid"),
+  ConnectieLSVIhabitats = connecteerMetLSVIdb())
 }
 \arguments{
 \item{Versie}{De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".  Bij de default "alle" worden de gegevens voor de verschillende versies gegeven.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Versie", "VersieLSVI") of geefVersieInfo(ConnectieLSVIhabitats).}
@@ -20,6 +21,8 @@ geefInvoervereisten(Versie = "alle", Habitatgroep = "alle",
 \item{Indicator}{De indicator waarvoor de gegevens uit de databank gehaald worden.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Indicator", "Naam").}
 
 \item{Kwaliteitsniveau}{Voor elke versie van de LSVI zijn er een of meerdere kwaliteitsniveaus gedefinieerd in de databank.  Zo is er bij Versie 2.0 een onderscheid gemaakt tussen goede staat (A), voldoende staat (B) en gedegradeerde staat (C).  Hier duidt kwaliteitsniveau 1 de grens tussen voldoende (B) en gedegradeerd (C) aan en kwaliteitsniveau 2 het onderscheid tussen goed (A) en voldoende (B).  Bij Versie 3 duidt kwaliteitsniveau 1 op het onderscheid tussen ongunstig en gunstig en kwaliteitsniveau 2 op de streefwaarde (uiteindelijk niet opgenomen in rapport).  De betekenissen van de 2 kwaliteitsniveaus voor de verschillende versies is weergegeven in de tabel Versie in de databank en kan opgevraagd met de functie geefVersieInfo().  Geef als parameter Kwaliteitsniveau op op basis van welk kwaliteitsniveau de berekening gemaakt moet worden.  (Strikt genomen is de berekening van de LSVI de berekening volgens kwaliteitsniveau 1.)}
+
+\item{Weergave}{Wat moet er in de tabel weergegeven worden?  De default 'basis' geeft een meer overzichtelijke tabel waarbij mogelijke invoerwaarden gescheiden door een komma in 1 cel weergegeven worden, 'uitgebreid' geeft deze invoerwaarden met alle bijhorende informatie weer in aparte records, waardoor de tabel groot en onoverzichtelijk is.}
 
 \item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
 }
