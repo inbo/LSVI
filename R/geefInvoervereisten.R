@@ -1,10 +1,14 @@
 #' @title Geeft de invoervereisten voor de waarde van een opname
 #'
-#' @description Deze functie geeft alle informatie die nodig is om veldobservaties klaar te maken voor de berekening van de de Lokale Staat van Instandhouding met de functie berekenLSVI().  Allereerst geeft ze de 'VoorwaardeID' die gekoppeld moet worden aan de observaties, samen met informatie uit de LSVI-tabellen (vnl. beoordelingsmatrix) en een beschrijving van de voorwaarde ('VoorwaardeNaam') die zou moeten toelaten om de koppeling te maken.
+#' @description Deze functie geeft alle informatie die nodig is om veldobservaties klaar te maken voor de berekening van de de Lokale Staat van Instandhouding met de functie berekenLSVI(), alsook de berekeningsregels die gebruikt worden.  Allereerst geeft ze de 'VoorwaardeNaam' die vermeld moet worden bij de observaties (zie Data_voorwaarden bij berekenLSVIbasis), samen met informatie uit de LSVI-tabellen (vnl. beoordelingsmatrix) en een beschrijving van de voorwaarde ('VoorwaardeNaam') die zou moeten toelaten om de koppeling te maken.
 #'
-#' Verder geeft ze informatie over de Waarde die verwacht wordt in de functie berekenLSVI().  AnalyseVariabele is een korte omschrijving voor de variabele waarde, bv. 'aantal_frequent_aanwezig' staat voor 'het aantal soorten dat minimaal frequent aanwezig is'.  Voor een aantal voorwaarden, i.e. de voorwaarden met betrekking tot opnames van soorten, kan Waarde berekend worden met de functie berekenAnalyseVariabele op basis van de AnalyseVariabele, SoortengroepID en een soortenlijst met bedekkingen.  Voor andere gegevens zal de koppeling met VoorwaardeID 'handmatig' moeten gebeuren.  Ingeval van grote datasets is het aan te raden om een koppeling te zoeken tussen deze AnalyseVariabele en de variabele in de dataset, zodat niet voor elke voorwaarde afzonderlijk een koppeling moet gemaakt worden.
+#' Verder geeft ze informatie over de Waarde die verwacht wordt in de functie berekenLSVIbasis().  AnalyseVariabele is een korte omschrijving voor de variabele waarde, bv. 'aantal' staat voor het aantal soorten of klassen en 'bedekking' voor de totale bedekking van de lijst soorten of klassen.  'Referentiewaarde' en 'Operator' geven respectievelijk de grenswaarde en de vergelijking aan op basis waarvan de beoordeling van de waarde zal gebeuren.  Voor elke AnalyseVariabele wordt informatie gegeven over het formaat dat verwacht wordt voor Waarde: de 'Eenheid' (die niet opgenomen moet worden in Waarde maar wel de grootte-orde van het verwachte getal aangeeft), het formaat van de variabele ('TypeVariabele'), en bij categorische variabelen het 'Invoertype' en de 'Invoerwaarde' (een naam voor de categorische variabele en de mogelijke waarden die deze kan aannemen).
+#' 
+#' Waar nodig, wordt een soortengroep of studiegroep opgegeven.  Een studiegroep is eigenlijk equivalent aan een soortengroep: de verschillende klassen of fasen of ... waarvoor een bedekking of andere analysevariabele moet berekend worden.  Voorbeelden zijn groeiklassen, vegetatielagen, ...  Omwille van de overzichtelijkheid van de tabel is voor de Soortengroep enkel een ID gegeven, de volledige lijst kan opgevraagd worden met de functie geefSoortenlijstInvoerniveau.
+#' 
+#' Ingeval van de AnalyseVariabele aantal kan er ook een SubAnalyseVariabele vermeld zijn, meestal 'bedekking', die aangeeft aan welke voorwaarde elke soort of klasse afzonderlijk moet voldoen.  Aan deze SubAnalysevariabele zijn dezelfde velden gekoppeld als aan AnalyseVariabele, nl. SubReferentiewaarde, SubOperator, SubEenheid, TypeSubVariabele, SubInvoertype en SubInvoerwaarde.  Bijvoorbeeld, bij de voorwaarde 'minimum 5 soorten minimum talrijk aanwezig' zal de AnalyseVariabele 'aantal' zijn, de Referentiewaarde '5', de Operator '>=', TypeVariabele 'Geheel getal', SubAnalysevariabele 'bedekking', SubReferentiewaarde 'T', SubOperator '>=', TypeSubVariabele 'Categorie' en SubInvoertype 'Beheermonitoringsschaal 2017'.
 #'
-#' Voor elke AnalyseVariabele is informatie over het formaat dat verwacht wordt voor Waarde: de Eenheid (die niet opgenomen moet worden in Waarde maar wel de grootte-orde van het verwachte getal aangeeft), het formaat van de variabele (TypeVariabele), bij categorische variabelen het 'Invoermasker' (mogelijke waarden) en de Vegetatielaag die bekeken moet worden.
+#' 
 #'
 #' @inheritParams selecteerIndicatoren
 #' @inheritParams berekenLSVIbasis
@@ -13,8 +17,11 @@
 #' @return Deze functie geeft een tabel met de hierboven beschreven informatie uit de databank.
 #'
 #' @examples
-#' geefInvoervereisten(Versie = "Versie 3",
-#'                     Habitattype = "4010", Kwaliteitsniveau = "1")
+#' geefInvoervereisten(
+#'   Versie = "Versie 3",
+#'   Habitattype = "4030",
+#'   Kwaliteitsniveau = "1"
+#' )
 #'
 #' @export
 #'
