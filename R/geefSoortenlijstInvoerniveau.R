@@ -11,14 +11,11 @@
 #' @return Deze functie geeft een tabel met velden SoortengroepID, evt. SoortensubgroepID, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van soorten binnen eenzelfde indicator).  WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort bevat enkel genusnaam en soortnaam (zonder auteursnaam).  SoortensubgroepID wordt enkel gegeven als het record een minder diep niveau betreft dan het soortniveau en is het SoortengroepID van het niveau van het record, dus van een niveau dieper dan SoortengroepID.
 #' 
 #' @examples
-#' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
 #' Soortengroeplijst <- 
 #'      data.frame(Niveau = c(1, 2), 
 #'                 SoortengroepIDs = c("139,142,372", "370"), 
 #'                 stringsAsFactors = FALSE)
-#' geefSoortenlijstInvoerniveau(ConnectieLSVIhabitats, Soortengroeplijst)
-#' library(RODBC)
-#' odbcClose(ConnectieLSVIhabitats)
+#' geefSoortenlijstInvoerniveau(Soortengroeplijst)
 #'
 #' @export
 #'
@@ -27,63 +24,98 @@
 #' @importFrom assertthat assert_that noNA is.count has_name 
 #'
 #'
-geefSoortenlijstInvoerniveau <- 
-  function(ConnectieLSVIhabitats, Soortengroeplijst){
-    
-    assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
+geefSoortenlijstInvoerniveau <-
+  function(Soortengroeplijst,
+           ConnectieLSVIhabitats = connecteerMetLSVIdb()){
+
+    assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
     assert_that(inherits(Soortengroeplijst, "data.frame"))
     assert_that(has_name(Soortengroeplijst, "Niveau"))
     assert_that(has_name(Soortengroeplijst, "SoortengroepIDs"))
-    assert_that(is.character(Soortengroeplijst$SoortengroepIDs))
+    assert_that(
+      all(
+        sapply(Soortengroeplijst$SoortengroepIDs, is.character)
+      )
+    )
     assert_that(noNA(Soortengroeplijst$SoortengroepIDs))
-    if(!all(grepl("^([[:digit:]]+,)*[[:digit:]]+$", Soortengroeplijst$SoortengroepIDs))){
-      stop("Niet alle SoortengroepIDs bestaan uit een reeks getallen gescheiden door een komma")
+    if (
+      !all(
+        grepl(
+          "^([[:digit:]]+,)*[[:digit:]]+$",
+          Soortengroeplijst$SoortengroepIDs
+        )
+      )
+    ) {
+      stop("Niet alle SoortengroepIDs bestaan uit een reeks getallen gescheiden door een komma") #nolint
     }
-    
-    for(i in seq(nrow(Soortengroeplijst))){
-      Soortengroeplijst$Niveau[i] <- 
+
+    for (i in seq(nrow(Soortengroeplijst))) {
+      Soortengroeplijst$Niveau[i] <-
         ifelse(is.string(Soortengroeplijst$Niveau[i]),
                as.numeric(Soortengroeplijst$Niveau[i]),
                Soortengroeplijst$Niveau[i])
       assert_that(is.count(Soortengroeplijst$Niveau[i]))
     }
-    
-    #voor elk niveau de gegevens ophalen op basis van een query samengesteld op basis van het niveau, en deze gegevens aan elkaar plakken
-    #met 1 query lukt het niet om Omschrijving op de verschillende niveaus binnen te halen, dus we beperken ons tot een omschrijving op het niveau net boven het niveau van de vermelde soort(engroep)
-    Soortenlijst <- NULL
-    for(n in Soortengroeplijst$Niveau){
-      query <- 
-        sprintf("WITH Soortengroepniveau
-                AS
-                (
-                  SELECT Soortengroep.Id as SoortengroepID, Soortengroep.Omschrijving, 
-                       SoortengroepSoort.SoortensubgroepID, SoortengroepSoort.SoortID, 0 AS Niveau
-                  FROM Soortengroep INNER JOIN SoortengroepSoort ON Soortengroep.Id = SoortengroepSoort.SoortengroepID
-                  WHERE Soortengroep.Id in (%s)
-                  UNION ALL
-                  SELECT Soortengroepniveau.SoortengroepID, s2.Omschrijving,
-                       ss2.SoortensubgroepID, ss2.SoortID, Niveau + 1
-                  FROM (Soortengroep AS s2 INNER JOIN SoortengroepSoort AS ss2 ON s2.Id = ss2.SoortengroepID)
-                  INNER JOIN Soortengroepniveau ON s2.Id = Soortengroepniveau.SoortensubgroepID
-                  WHERE Niveau < %s
-                )
-                SELECT Soortengroepniveau.SoortengroepID, Soortengroepniveau.SoortensubgroepID,  
-                       Soortengroepniveau.Omschrijving,
-                       Soortengroep.WetNaam AS WetNaam_groep, Soortengroep.Naam AS NedNaam_groep, 
-                       Soort.WetNaam, Soort.NedNaam, Soortengroepniveau.Niveau
-                FROM Soortengroepniveau 
-                LEFT JOIN Soortengroep ON Soortengroepniveau.SoortensubgroepID = Soortengroep.Id
-                LEFT JOIN Soort ON Soortengroepniveau.SoortID = Soort.Id
-                WHERE Soortengroepniveau.Niveau = %s", 
-                Soortengroeplijst[Soortengroeplijst$Niveau==n,"SoortengroepIDs"], n, n - 1)
 
-      Soortenlijst_n <- sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
-      
+    #voor elk niveau de gegevens ophalen op basis van een query samengesteld
+    #op basis van het niveau, en deze gegevens aan elkaar plakken
+    #met 1 query lukt het niet om Omschrijving op de verschillende niveaus
+    #binnen te halen, dus we beperken ons tot een omschrijving op het niveau
+    #net boven het niveau van de vermelde soort(engroep)
+    Soortenlijst <- NULL
+    for (n in Soortengroeplijst$Niveau) {
+      query <-
+        sprintf(
+          "WITH Soortengroepniveau
+          AS
+          (
+            SELECT Soortengroep.Id as SoortengroepID,
+                 Soortengroep.Omschrijving,
+                 SoortengroepSoort.SoortensubgroepID,
+                 SoortengroepSoort.SoortID, 0 AS Niveau
+            FROM Soortengroep INNER JOIN SoortengroepSoort
+              ON Soortengroep.Id = SoortengroepSoort.SoortengroepID
+            WHERE Soortengroep.Id in (%s)
+            UNION ALL
+            SELECT Soortengroepniveau.SoortengroepID, s2.Omschrijving,
+                 ss2.SoortensubgroepID, ss2.SoortID, Niveau + 1
+            FROM
+              (Soortengroep AS s2 INNER JOIN SoortengroepSoort AS ss2
+                ON s2.Id = ss2.SoortengroepID)
+              INNER JOIN Soortengroepniveau
+                ON s2.Id = Soortengroepniveau.SoortensubgroepID
+            WHERE Niveau < %s
+          )
+          SELECT Soortengroepniveau.SoortengroepID,
+                 Soortengroepniveau.SoortensubgroepID,
+                 Soortengroepniveau.Omschrijving,
+                 Soortengroep.WetNaam AS WetNaam_groep,
+                 Soortengroep.Naam AS NedNaam_groep,
+                 Soort.WetNaam, Soort.NedNaam,
+                 Soort.NBNTaxonVersionKey,
+                 Taxontype.Naam AS Taxontype,
+                 Soortengroepniveau.Niveau
+          FROM Soortengroepniveau
+            LEFT JOIN Soortengroep
+              ON Soortengroepniveau.SoortensubgroepID = Soortengroep.Id
+            LEFT JOIN
+              (Soort LEFT JOIN Taxontype ON Soort.TaxonTypeId = Taxontype.Id)
+              ON Soortengroepniveau.SoortID = Soort.Id
+          WHERE Soortengroepniveau.Niveau = %s",
+          Soortengroeplijst[Soortengroeplijst$Niveau == n, "SoortengroepIDs"],
+          n,
+          n - 1
+        )
+
+      Soortenlijst_n <-
+        sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
+
       Soortenlijst <- Soortenlijst %>%
         bind_rows(Soortenlijst_n)
     }
-    
-    #Kolommen met WetNaam (uit tabellen Soortengroep en Soort) samenvoegen, id voor NedNaam, en een kolom WetNaamKort toevoegen
+
+    #Kolommen met WetNaam (uit tabellen Soortengroep en Soort) samenvoegen,
+    #id voor NedNaam, en een kolom WetNaamKort toevoegen
     Soortenlijst <- Soortenlijst %>%
       mutate_(
         WetNaam = ~ifelse(is.na(WetNaam), WetNaam_groep, WetNaam),
@@ -97,12 +129,7 @@ geefSoortenlijstInvoerniveau <-
         WetNaam_groep = ~NULL,
         NedNaam_groep = ~NULL,
         Niveau = ~NULL
-      ) 
-    
-    #kolommen wissen die enkel NA's bevatten: geeft problemen voor andere functies: toch maar niet doen
-    #Soortenlijst <- Filter(function(x)!all(is.na(x)),Soortenlijst)
-    
-    
-    return(Soortenlijst)  
-  }
+      )
 
+    return(Soortenlijst)
+  }

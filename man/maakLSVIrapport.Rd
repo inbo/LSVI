@@ -4,22 +4,20 @@
 \alias{maakLSVIrapport}
 \title{Genereert LSVI-rapport op basis van de opgegeven parameters}
 \usage{
-maakLSVIrapport(ConnectieLSVIhabitats, Bestandsnaam = "LSVIrapport.html",
-  Versie = "alle", Habitatgroep = "alle", Habitattype = "alle",
-  Habitatsubtype = "alle", verbose = TRUE)
+maakLSVIrapport(Bestandsnaam = "LSVIrapport.html", Versie = "alle",
+  Habitatgroep = "alle", Habitattype = "alle",
+  ConnectieLSVIhabitats = connecteerMetLSVIdb(), verbose = TRUE)
 }
 \arguments{
-\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
-
 \item{Bestandsnaam}{Een naam voor het html-bestand dat gegenereerd wordt, bestaande uit een string die eindigt op '.html'}
 
 \item{Versie}{De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".  Bij de default "alle" worden de gegevens voor de verschillende versies gegeven.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Versie", "VersieLSVI") of geefVersieInfo(ConnectieLSVIhabitats).}
 
 \item{Habitatgroep}{Parameter waarmee alle habitats van een bepaalde habitatgroep kunnen geselecteerd worden, bv. "Bossen", "Heiden", "(Half-)natuurlijke graslanden", "Zoete wateren",...   en "alle" (=default).  Deze waarde moet niet gespecifieerd worden als een bepaald habitat(sub)type geselecteerd wordt.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Habitatgroep", "Habitatgroepnaam").}
 
-\item{Habitattype}{Parameter waarmee een habitattype kan geselecteerd worden.  Als dit habitattype meerdere subtypes heeft, zullen de gegevens van alle subtypes van dit habitattype weergegeven worden.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Habitattype", "Habitatcode").}
+\item{Habitattype}{Parameter waarmee een habitattype of habitatsubtype kan geselecteerd worden.  Als dit een habitattype betreft met meerdere subtypes, zullen de gegevens van alle subtypes van dit habitattype weergegeven worden.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Habitattype", "Code").  Er is voor deze parameter ook de mogelijkheid om een vector van meerdere habitat(sub)typen op te geven.}
 
-\item{Habitatsubtype}{Parameter waarmee een habitatsubtype geselecteerd kan worden.  Als deze waarde ingevuld is, is het niet nodig om de parameters Habitatgroep en Habitattype te specifieren.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Habitatsubtype", "Habitatcode_subtype").}
+\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
 
 \item{verbose}{geeft de toestand van het systeem aan, om te zorgen dat boodschappen niet onnodig gegeven worden}
 }
@@ -27,19 +25,15 @@ maakLSVIrapport(ConnectieLSVIhabitats, Bestandsnaam = "LSVIrapport.html",
 Deze functie genereert habitatfiches in de vorm van html-files die in de working directory opgeslagen worden.
 }
 \description{
-Deze functie genereert een rapport met habitatfiches die gebruikt worden voor de bepaling van de Lokale Staat van Instandhouding van de habitatsubtypes die voldoen aan de opgegeven parameters.  (Om een tabel te genereren met deze informatie om zelf een rapport te kunnen samenstellen, wordt verwezen naar de functie geefInfoHabitatfiche().)
+Deze functie genereert een rapport met habitatfiches die gebruikt worden voor de bepaling van de Lokale Staat van Instandhouding van de habitat(sub)types die voldoen aan de opgegeven parameters.  (Om een tabel te genereren met deze informatie om zelf een rapport te kunnen samenstellen, wordt verwezen naar de functie geefInfoHabitatfiche().)
 
 De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten als string opgegeven worden.  Default is telkens 'alle', waarbij de soortenlijsten voor alle mogelijke waarden van die parameter weergegeven worden (m.a.w. er is geen selectie voor deze parameter).
 }
 \examples{
-ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-maakLSVIrapport(ConnectieLSVIhabitats, Bestandsnaam = "LSVIrapport_heiden_versie3.html", 
+maakLSVIrapport(Bestandsnaam = "LSVIrapport_heiden_versie3.html",
                 Versie = "Versie 3", Habitatgroep = "Heiden")
-maakLSVIrapport(ConnectieLSVIhabitats, Bestandsnaam = "LSVIrapport_4010.html", 
-                Habitatsubtype = "4010")
-library(RODBC)
-odbcClose(ConnectieLSVIhabitats)
+maakLSVIrapport(Bestandsnaam = "LSVIrapport_4010.html",
+                Habitattype = "4010")
 
 
 }
-

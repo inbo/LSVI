@@ -4,7 +4,7 @@
 \alias{geefVersieInfo}
 \title{Geeft informatie over de verschillende versies voor de berekening van de LSVI}
 \usage{
-geefVersieInfo(ConnectieLSVIhabitats)
+geefVersieInfo(ConnectieLSVIhabitats = connecteerMetLSVIdb())
 }
 \arguments{
 \item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
@@ -16,10 +16,6 @@ Deze functie geeft de tabel Versie uit de databank.
 Deze functie geeft een overzicht van alle versies die er zijn voor de berekening van de de Lokale Staat van Instandhouding, met naast de opsomming van de versies en de referenties een overzicht van de 2 kwaliteitsniveaus of types van beoordelingscriteria die in deze versie gedefinieerd zijn.
 }
 \examples{
-ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-geefVersieInfo(ConnectieLSVIhabitats)
-library(RODBC)
-odbcClose(ConnectieLSVIhabitats)
+geefVersieInfo()
 
 }
-

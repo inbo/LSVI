@@ -1,0 +1,14 @@
+ID;Kenmerk;TypeKenmerk;Waarde;Type;Invoertype;Eenheid
+JR0216;Pioniersstadium;studiegroep;f;Categorie;Tansley IHD;
+Ts2036;Pioniersstadium;studiegroep;f;Categorie;Tansley IHD;
+JR0216;Ontwikkelingsstadium;studiegroep;0;Percentage;;%
+Ts2036;Ontwikkelingsstadium;studiegroep;cd;Categorie;Tansley IHD;
+JR0216;Climaxstadium;studiegroep;0;Percentage;;%
+Ts2036;Climaxstadium;studiegroep;a;Categorie;Tansley IHD;
+JR0216;Degeneratiestadium;studiegroep;0;Percentage;;%
+Ts2036;Degeneratiestadium;studiegroep;0;Percentage;;%
+JR0216;Carex pilulifera;Soort_Latijn;1;Ja/nee;;
+JR0216;Calluna vulgaris;Soort_Latijn;1;Ja/nee;;
+Ts2036;Carex pilulifera;Soort_Latijn;1;Ja/nee;;
+Ts2036;Calluna vulgaris;Soort_Latijn;1;Ja/nee;;
+Ts2036;Festuca filiformis;Soort_Latijn;1;Ja/nee;;

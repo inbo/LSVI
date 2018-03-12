@@ -17,10 +17,42 @@ Imports:
     testthat,
     pander,
     tidyr,
-    readr
+    readr,
+    n2khelper
 Suggests:
     xtable,
     knitr,
     rmarkdown
-RoxygenNote: 5.0.1
+Remotes:
+    inbo/n2khelper
+RoxygenNote: 6.0.1
 VignetteBuilder: knitr
+Collate: 
+    'berekenLSVIbasis.R'
+    'berekenStatus.R'
+    'berekenVoorwaarde.R'
+    'combinerenVoorwaarden.R'
+    'connecteerMetLSVIdb.R'
+    'geefInfoHabitatfiche.R'
+    'geefInvoervereisten.R'
+    'geefSoortenlijst.R'
+    'geefSoortenlijstInvoerniveau.R'
+    'geefSoortenlijstSoortniveau.R'
+    'geefUniekeWaarden.R'
+    'geefVersieInfo.R'
+    'geefVertaallijst.R'
+    'invoercontroleData_habitat.R'
+    'invoercontroleData_soortenKenmerken.R'
+    'invoercontroleData_voorwaarden.R'
+    'invoercontroleKwaliteitsniveau.R'
+    'invoercontroleVersie.R'
+    'maakHabitatfiches.R'
+    'maakLSVIrapport.R'
+    's4_AnalyseVariabele.R'
+    's4_aantal.R'
+    's4_analyseVariabele_c.R'
+    's4_bedekking.R'
+    'selecteerIndicatoren.R'
+    'selecteerKenmerkenInOpname.R'
+    'selecteerSoortenInOpname.R'
+    'vertaalInvoerInterval.R'

@@ -7,17 +7,15 @@
 #' @return Deze functie geeft de tabel Versie uit de databank.
 #'
 #' @examples
-#' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-#' geefVersieInfo(ConnectieLSVIhabitats)
-#' library(RODBC)
-#' odbcClose(ConnectieLSVIhabitats)
+#' geefVersieInfo()
 #'
 #' @export
 #'
 #' @importFrom RODBC sqlQuery odbcClose
 #'
 #'
-geefVersieInfo <- function(ConnectieLSVIhabitats){
+geefVersieInfo <-
+  function(ConnectieLSVIhabitats = connecteerMetLSVIdb()){
 
   assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
 

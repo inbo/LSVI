@@ -11,11 +11,8 @@
 #' @return Deze functie geeft een tabel met velden SoortengroepID, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van soorten binnen eenzelfde indicator).  WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort bevat enkel genusnaam en soortnaam (zonder auteursnaam).
 #' 
 #' @examples
-#' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-#' geefSoortenlijstSoortniveau(ConnectieLSVIhabitats,"139,142,370,371")
-#' geefSoortenlijstSoortniveau(ConnectieLSVIhabitats,"139,142,370,371","Soortniveau")
-#' library(RODBC)
-#' odbcClose(ConnectieLSVIhabitats)
+#' geefSoortenlijstSoortniveau("139,142,370,371")
+#' geefSoortenlijstSoortniveau("139,142,370,371","Soortniveau")
 #'
 #' @export
 #'
@@ -24,69 +21,92 @@
 #' @importFrom assertthat assert_that noNA is.string
 #'
 #'
-geefSoortenlijstSoortniveau <- 
-  function(ConnectieLSVIhabitats,
-           Soortengroeplijst, 
-           Soortenlijsttype = c("alle", "Soortniveau")){
-    
-    assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
+geefSoortenlijstSoortniveau <-
+  function(Soortengroeplijst,
+           Soortenlijsttype = c("alle", "Soortniveau"),
+           ConnectieLSVIhabitats = connecteerMetLSVIdb()){
+
+    assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
     assert_that(is.string(Soortengroeplijst))
     assert_that(noNA(Soortengroeplijst))
-    if(!grepl("^([[:digit:]]+,)*[[:digit:]]+$", Soortengroeplijst)){
-      stop("Soortengroeplijst bestaat niet uit een reeks getallen gescheiden door een komma")
+    if (!grepl("^([[:digit:]]+,)*[[:digit:]]+$", Soortengroeplijst)) {
+      stop("Soortengroeplijst bestaat niet uit een reeks getallen gescheiden door een komma") #nolint
     }
     match.arg(Soortenlijsttype)
-    
-    if(Soortenlijsttype[1] == "Soortniveau"){
-      query <- 
-        sprintf("WITH Soortengroepniveau
-                AS
-                (
-                  SELECT Soortengroep.Id as SoortengroepID, 
-                       SoortengroepSoort.SoortensubgroepID, SoortengroepSoort.SoortID, 0 AS Niveau
-                  FROM Soortengroep INNER JOIN SoortengroepSoort ON Soortengroep.Id = SoortengroepSoort.SoortengroepID
-                  WHERE Soortengroep.Id in (%s)
-                  UNION ALL
-                  SELECT Soortengroepniveau.SoortengroepID,
-                       ss2.SoortensubgroepID, ss2.SoortID, Niveau + 1
-                  FROM (Soortengroep AS s2 INNER JOIN SoortengroepSoort AS ss2 ON s2.Id = ss2.SoortengroepID)
-                  INNER JOIN Soortengroepniveau ON s2.Id = Soortengroepniveau.SoortensubgroepID
-                )
-                SELECT Soortengroepniveau.SoortengroepID, 
-                       Soort.WetNaam, Soort.NedNaam
-                FROM Soortengroepniveau 
-                INNER JOIN Soort ON Soortengroepniveau.SoortID = Soort.Id", 
-                Soortengroeplijst)
-      
-      Soortenlijst <- sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
-      
-    } else if (Soortenlijsttype[1] == "alle"){
-      query <- 
-        sprintf("WITH Soortengroepniveau
-                AS
-                (
-                  SELECT Soortengroep.Id as SoortengroepID,
-                       SoortengroepSoort.SoortensubgroepID, SoortengroepSoort.SoortID, 0 AS Niveau
-                  FROM Soortengroep INNER JOIN SoortengroepSoort ON Soortengroep.Id = SoortengroepSoort.SoortengroepID
-                  WHERE Soortengroep.Id in (%s)
-                  UNION ALL
-                  SELECT Soortengroepniveau.SoortengroepID,
-                       ss2.SoortensubgroepID, ss2.SoortID, Niveau + 1
-                  FROM (Soortengroep AS s2 INNER JOIN SoortengroepSoort AS ss2 ON s2.Id = ss2.SoortengroepID)
-                  INNER JOIN Soortengroepniveau ON s2.Id = Soortengroepniveau.SoortensubgroepID
-                )
-                SELECT Soortengroepniveau.SoortengroepID,
-                       Soortengroep.Naam AS NedNaam_groep, Soortengroep.WetNaam AS WetNaam_groep,
-                       Soortengroeptype.Omschrijving AS Soortengroeptype,
-                       Soort.WetNaam, Soort.NedNaam
-                FROM Soortengroepniveau 
-                LEFT JOIN Soort ON Soortengroepniveau.SoortID = Soort.Id
-                LEFT JOIN (Soortengroep INNER JOIN Soortengroeptype ON Soortengroep.SoortengroeptypeID = Soortengroeptype.Id)
-                    ON Soortengroepniveau.SoortensubgroepID = Soortengroep.Id", 
-                Soortengroeplijst)
-      
-      Soortenlijst <- sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
-      
+
+    if (Soortenlijsttype[1] == "Soortniveau") {
+      query <-
+        sprintf(
+          "WITH Soortengroepniveau
+          AS
+          (
+            SELECT Soortengroep.Id as SoortengroepID,
+                 SoortengroepSoort.SoortensubgroepID,
+                 SoortengroepSoort.SoortID, 0 AS Niveau
+            FROM Soortengroep INNER JOIN SoortengroepSoort
+              ON Soortengroep.Id = SoortengroepSoort.SoortengroepID
+            WHERE Soortengroep.Id in (%s)
+            UNION ALL
+            SELECT Soortengroepniveau.SoortengroepID,
+                 ss2.SoortensubgroepID, ss2.SoortID, Niveau + 1
+            FROM
+              (Soortengroep AS s2 INNER JOIN SoortengroepSoort AS ss2
+                ON s2.Id = ss2.SoortengroepID)
+              INNER JOIN Soortengroepniveau
+                ON s2.Id = Soortengroepniveau.SoortensubgroepID
+          )
+          SELECT Soortengroepniveau.SoortengroepID,
+                 Soort.WetNaam, Soort.NedNaam
+          FROM Soortengroepniveau
+          INNER JOIN Soort ON Soortengroepniveau.SoortID = Soort.Id",
+          Soortengroeplijst
+        )
+
+      Soortenlijst <-
+        sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
+
+    } else if (Soortenlijsttype[1] == "alle") {
+      query <-
+        sprintf(
+          "WITH Soortengroepniveau
+          AS
+          (
+            SELECT Soortengroep.Id as SoortengroepID,
+                 SoortengroepSoort.SoortensubgroepID,
+                 SoortengroepSoort.SoortID, 0 AS Niveau
+            FROM Soortengroep INNER JOIN SoortengroepSoort
+              ON Soortengroep.Id = SoortengroepSoort.SoortengroepID
+            WHERE Soortengroep.Id in (%s)
+            UNION ALL
+            SELECT Soortengroepniveau.SoortengroepID,
+                 ss2.SoortensubgroepID, ss2.SoortID, Niveau + 1
+            FROM
+              (Soortengroep AS s2 INNER JOIN SoortengroepSoort AS ss2
+                ON s2.Id = ss2.SoortengroepID)
+              INNER JOIN Soortengroepniveau
+                ON s2.Id = Soortengroepniveau.SoortensubgroepID
+          )
+          SELECT Soortengroepniveau.SoortengroepID,
+                 Soortengroep.Naam AS NedNaam_groep,
+                 Soortengroep.WetNaam AS WetNaam_groep,
+                 Soortengroeptype.Omschrijving AS Soortengroeptype,
+                 Soort.WetNaam, Soort.NedNaam,
+                 Soort.NBNTaxonVersionKey,
+                 Taxontype.Naam AS Taxontype
+          FROM Soortengroepniveau
+          LEFT JOIN
+            (Soort INNER JOIN Taxontype ON Soort.TaxonTypeId = Taxontype.Id)
+            ON Soortengroepniveau.SoortID = Soort.Id
+          LEFT JOIN
+            (Soortengroep INNER JOIN Soortengroeptype
+              ON Soortengroep.SoortengroeptypeID = Soortengroeptype.Id)
+            ON Soortengroepniveau.SoortensubgroepID = Soortengroep.Id",
+          Soortengroeplijst
+        )
+
+      Soortenlijst <-
+        sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
+
       Soortenlijst <- Soortenlijst %>%
         mutate_(
           NedNaam = ~ifelse(is.na(NedNaam) & Soortengroeptype != "Conceptueel",
@@ -99,11 +119,11 @@ geefSoortenlijstSoortniveau <-
           WetNaam_groep = ~NULL,
           Soortengroeptype = ~NULL
         )
-      
     }
-    
-     
-    #Kolommen met WetNaam (uit tabellen Soortengroep en Soort) samenvoegen, id voor NedNaam, en een kolom WetNaamKort toevoegen
+
+
+    #Kolommen met WetNaam (uit tabellen Soortengroep en Soort) samenvoegen,
+    #id voor NedNaam, en een kolom WetNaamKort toevoegen
     Soortenlijst <- Soortenlijst %>%
       distinct_() %>%
       filter_(
@@ -120,4 +140,3 @@ geefSoortenlijstSoortniveau <-
 
     return(Soortenlijst)
   }
-

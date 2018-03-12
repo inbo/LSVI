@@ -11,10 +11,7 @@
 #' @return Deze functie geeft een vector bestaande uit "alle" en de verschillende waarden uit de gespecifieerde tabel.
 #' 
 #' @examples 
-#' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-#' geefUniekeWaarden(ConnectieLSVIhabitats,"Habitatgroep","Habitatgroepnaam")
-#' library(RODBC)
-#' odbcClose(ConnectieLSVIhabitats)
+#' geefUniekeWaarden("Habitatgroep","Naam")
 #'
 #' @export
 #'
@@ -22,16 +19,20 @@
 #' @importFrom assertthat assert_that is.string noNA
 #'
 
-geefUniekeWaarden <- function(ConnectieLSVIhabitats, Tabelnaam, Veldnaam){
-  
-  assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
+geefUniekeWaarden <-
+  function(Tabelnaam,
+           Veldnaam,
+           ConnectieLSVIhabitats = connecteerMetLSVIdb()) {
+
+  assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
   assert_that(is.string(Tabelnaam))
   assert_that(noNA(Tabelnaam))
   assert_that(is.string(Veldnaam))
   assert_that(noNA(Veldnaam))
-  
-  query <- sprintf("SELECT %s FROM %s",Veldnaam, Tabelnaam)
+
+  query <- sprintf("SELECT %s FROM %s", Veldnaam, Tabelnaam)
   Waarden <- sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
-  UniekeWaarden <- c("alle", unique(Waarden[,Veldnaam]))
+  UniekeWaarden <- c("alle", unique(Waarden[, Veldnaam]))
+
   return(UniekeWaarden)
 }

@@ -26,8 +26,12 @@ library(dplyr)
 # HabitatsubtypeFiche <- "4010"
 # ConnectieLSVIhabitats <- connecteerMetLSVIdb()
 
-Habitatfiche <- geefInfoHabitatfiche(ConnectieLSVIhabitats = ConnectieLSVIhabitats, Versie = VersieRapportdeel, 
-                                     Habitattype = HabitatsubtypeFiche)
+Habitatfiche <- 
+  geefInfoHabitatfiche(
+    ConnectieLSVIhabitats = ConnectieLSVIhabitats,
+    Versie = VersieRapportdeel,
+    Habitattype = HabitatsubtypeFiche
+  )
 
 Versie <- geefVersieInfo(ConnectieLSVIhabitats) %>%
   filter_(~VersieLSVI == VersieRapportdeel)

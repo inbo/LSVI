@@ -11,13 +11,10 @@
 #' @return Deze functie genereert habitatfiches in de vorm van html-files die in de working directory opgeslagen worden.
 #'
 #' @examples
-#' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-#' maakLSVIrapport(ConnectieLSVIhabitats, Bestandsnaam = "LSVIrapport_heiden_versie3.html",
+#' maakLSVIrapport(Bestandsnaam = "LSVIrapport_heiden_versie3.html",
 #'                 Versie = "Versie 3", Habitatgroep = "Heiden")
-#' maakLSVIrapport(ConnectieLSVIhabitats, Bestandsnaam = "LSVIrapport_4010.html",
+#' maakLSVIrapport(Bestandsnaam = "LSVIrapport_4010.html",
 #'                 Habitattype = "4010")
-#' library(RODBC)
-#' odbcClose(ConnectieLSVIhabitats)
 #'
 #'
 #' @export
@@ -28,14 +25,14 @@
 #'
 #'
 maakLSVIrapport <-
-  function(ConnectieLSVIhabitats,
-           Bestandsnaam = "LSVIrapport.html",
+  function(Bestandsnaam = "LSVIrapport.html",
            Versie = "alle",
            Habitatgroep = "alle",
            Habitattype= "alle",
+           ConnectieLSVIhabitats = connecteerMetLSVIdb(),
            verbose = TRUE){
 
-    assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
+    assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
     assert_that(is.flag(verbose))
     assert_that(noNA(verbose))
     assert_that(is.character(Bestandsnaam))
@@ -52,9 +49,12 @@ maakLSVIrapport <-
            output_dir = getwd())
 
     if (verbose) {
-      message(sprintf("Het rapport is opgeslagen in de working directory: %s", getwd()))
+      message(
+        sprintf(
+          "Het rapport is opgeslagen in de working directory: %s",
+          getwd()
+        )
+      )
     }
 
-
   }
-

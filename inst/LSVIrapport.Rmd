@@ -30,10 +30,14 @@ if (inherits(params$ConnectieLSVIhabitats, "RODBC")) {
   ConnectieLSVIhabitats <- connecteerMetLSVIdb()
 }
 
-Indicatoren <- selecteerIndicatoren(ConnectieLSVIhabitats,
-                                    params$Versie, params$Habitatgroep, 
-                                    params$Habitattype,
-                                    HabitatnamenToevoegen = TRUE) %>%
+Indicatoren <- 
+  selecteerIndicatoren(
+    ConnectieLSVIhabitats = ConnectieLSVIhabitats,
+    Versie = params$Versie,
+    Habitatgroep = params$Habitatgroep, 
+    Habitattype = params$Habitattype,
+    HabitatnamenToevoegen = TRUE
+  ) %>%
   select_(~Versie, ~Habitatgroepnaam, ~Habitattype, ~Habitatnaam,
           ~Habitatsubtype, ~Habitatsubtypenaam) %>%
   distinct_()

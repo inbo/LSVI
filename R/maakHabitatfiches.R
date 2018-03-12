@@ -10,10 +10,7 @@
 #' @return Deze functie genereert een rapport met habitatfiches in de vorm van een html-file die in de working directory opgeslagen wordt.
 #'
 #' @examples
-#' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-#' maakHabitatfiches(ConnectieLSVIhabitats, Versie = "Versie 3", Habitattype = "4010")
-#' library(RODBC)
-#' odbcClose(ConnectieLSVIhabitats)
+#' maakHabitatfiches(Versie = "Versie 3", Habitattype = "4010")
 #'
 #'
 #' @export
@@ -24,39 +21,59 @@
 #'
 #'
 maakHabitatfiches <-
-  function(ConnectieLSVIhabitats,
-           Versie = "alle",
+  function(Versie = "alle",
            Habitatgroep = "alle",
            Habitattype = "alle",
+           ConnectieLSVIhabitats = connecteerMetLSVIdb(),
            verbose = TRUE){
 
-    assert_that(inherits(ConnectieLSVIhabitats,"RODBC"))
+    assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
     assert_that(is.flag(verbose))
     assert_that(noNA(verbose))
 
-    Indicatoren <- selecteerIndicatoren(ConnectieLSVIhabitats, Versie, Habitatgroep,
-                                        Habitattype, HabitatnamenToevoegen = TRUE)
+    Indicatoren <-
+      selecteerIndicatoren(
+        Versie = Versie,
+        Habitatgroep = Habitatgroep,
+        Habitattype = Habitattype,
+        HabitatnamenToevoegen = TRUE,
+        ConnectieLSVIhabitats = ConnectieLSVIhabitats)
 
     for (versie in unique(Indicatoren$Versie)) {
       for (habitatsubtype in unique(as.character(Indicatoren$Habitatsubtype))) {
-        Bestandnaam <- sprintf("Habitatfiche_%s_%s.html",
-                               habitatsubtype,
-                               sub(versie,
-                                   pattern = " ",
-                                   replacement = ""))
-        render(system.file("HabitatficheParent.Rmd", package = "LSVI"),
-               params = list(ConnectieLSVIhabitats = ConnectieLSVIhabitats,
-                             Versie = versie,
-                             Habitatsubtype = habitatsubtype,
-                             Habitatnaam = unique(Indicatoren[Indicatoren$Habitatsubtype == habitatsubtype,"Habitatsubtypenaam"])),
-               output_file = Bestandnaam,
-               output_dir = getwd())
+        Bestandnaam <-
+          sprintf(
+            "Habitatfiche_%s_%s.html",
+            habitatsubtype,
+            sub(versie, pattern = " ", replacement = "")
+          )
+        render(
+          system.file("HabitatficheParent.Rmd", package = "LSVI"),
+          params =
+            list(
+              ConnectieLSVIhabitats = ConnectieLSVIhabitats,
+              Versie = versie,
+              Habitatsubtype = habitatsubtype,
+              Habitatnaam =
+                unique(
+                  Indicatoren[
+                    Indicatoren$Habitatsubtype == habitatsubtype,
+                    "Habitatsubtypenaam"
+                  ]
+                )
+            ),
+          output_file = Bestandnaam,
+          output_dir = getwd()
+        )
       }
     }
     if (verbose) {
-      message(sprintf("De fiche(s) is/zijn opgeslagen in de working directory: %s", getwd()))
+      message(
+        sprintf(
+          "De fiche(s) is/zijn opgeslagen in de working directory: %s",
+          getwd()
+        )
+      )
     }
 
-
   }
-

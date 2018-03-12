@@ -1,0 +1,11 @@
+ID;Criterium;Indicator;Voorwaarde;Waarde;Type;Invoertype;Eenheid
+JR0216;Structuur;dwergstruiken;bedekking;f;Categorie;Tansley IHD;
+Ts2036;Structuur;dwergstruiken;bedekking;cd;Categorie;Tansley IHD;
+JR0216;Verstoring;vergrassing;bedekking;o;Categorie;Tansley IHD;
+Ts2036;Verstoring;vergrassing;bedekking;f;Categorie;Tansley IHD;
+JR0216;Verstoring;verruiging;bedekking;35;Percentage;;%
+Ts2036;Verstoring;verruiging;bedekking;0;Percentage;;%
+JR0216;Verstoring;verbossing;bedekking;35;Percentage;;%
+Ts2036;Verstoring;verbossing;bedekking;7,5;Percentage;;%
+JR0216;Verstoring;invasieve exoten;bedekking;0;Percentage;;%
+Ts2036;Verstoring;invasieve exoten;bedekking;0;Percentage;;%

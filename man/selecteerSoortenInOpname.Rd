@@ -4,14 +4,14 @@
 \alias{selecteerSoortenInOpname}
 \title{Controle van de ingevoerde opname}
 \usage{
-selecteerSoortenInOpname(ConnectieLSVIhabitats, Data_soorten, Soortengroeplijst)
+selecteerSoortenInOpname(Data_soorten, Soortengroeplijst, ConnectieLSVIhabitats)
 }
 \arguments{
-\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
-
 \item{Data_soorten}{Bedekkingen van de sleutelsoorten in de vorm van een data.frame met velden ID en Soort_NL of Soort_Latijn.  Eventueel andere velden worden gewoon teruggegeven bij de uitvoer. (Eventueel zou hier ook de NBNTaxonVersionKey kunnen gebruikt worden.)}
 
 \item{Soortengroeplijst}{string waarin de SoortengroepID's na elkaar weergegeven worden, gescheiden door een komma}
+
+\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
 }
 \value{
 Deze functie geeft een aangepaste tabel Data_soorten terug waarin enkel de soorten uit de soortenlijst(en) opgenomen zijn en die bovendien gekoppeld is aan de gegevens van de soortenlijst.
@@ -19,4 +19,3 @@ Deze functie geeft een aangepaste tabel Data_soorten terug waarin enkel de soort
 \description{
 Deze hulpfunctie controleert of de ingevoerde opname geen fouten bevat en koppelt ze meteen aan de opgegeven soortenlijst.  Ze controleert of veld ID en een veld met een soortenlijst (soort_Latijn of soort_NL) aanwezig is, en controleert voor de soortenlijst of de namen wel bestaan (conform zijn met de LSVI-databank).  Problemen hiermee geven een error.  Verder controleert ze of alle soorten uit de opgegeven soortengroep(en) in de opname aanwezig zijn en ze geeft een warning als dit niet zo is.
 }
-

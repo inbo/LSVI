@@ -4,43 +4,45 @@
 \alias{geefInvoervereisten}
 \title{Geeft de invoervereisten voor de waarde van een opname}
 \usage{
-geefInvoervereisten(ConnectieLSVIhabitats, Versie = "alle",
-  Habitatgroep = "alle", Habitattype = "alle", Habitatsubtype = "alle",
-  Criterium = "alle", Indicator = "alle", Kwaliteitsniveau = "alle")
+geefInvoervereisten(Versie = "alle", Habitatgroep = "alle",
+  Habitattype = "alle", Criterium = "alle", Indicator = "alle",
+  Kwaliteitsniveau = "alle", Weergave = c("basis", "uitgebreid"),
+  ConnectieLSVIhabitats = connecteerMetLSVIdb())
 }
 \arguments{
-\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
-
 \item{Versie}{De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".  Bij de default "alle" worden de gegevens voor de verschillende versies gegeven.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Versie", "VersieLSVI") of geefVersieInfo(ConnectieLSVIhabitats).}
 
 \item{Habitatgroep}{Parameter waarmee alle habitats van een bepaalde habitatgroep kunnen geselecteerd worden, bv. "Bossen", "Heiden", "(Half-)natuurlijke graslanden", "Zoete wateren",...   en "alle" (=default).  Deze waarde moet niet gespecifieerd worden als een bepaald habitat(sub)type geselecteerd wordt.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Habitatgroep", "Habitatgroepnaam").}
 
-\item{Habitattype}{Parameter waarmee een habitattype kan geselecteerd worden.  Als dit habitattype meerdere subtypes heeft, zullen de gegevens van alle subtypes van dit habitattype weergegeven worden.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Habitattype", "Habitatcode").}
-
-\item{Habitatsubtype}{Parameter waarmee een habitatsubtype geselecteerd kan worden.  Als deze waarde ingevuld is, is het niet nodig om de parameters Habitatgroep en Habitattype te specifieren.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Habitatsubtype", "Habitatcode_subtype").}
+\item{Habitattype}{Parameter waarmee een habitattype of habitatsubtype kan geselecteerd worden.  Als dit een habitattype betreft met meerdere subtypes, zullen de gegevens van alle subtypes van dit habitattype weergegeven worden.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Habitattype", "Code").  Er is voor deze parameter ook de mogelijkheid om een vector van meerdere habitat(sub)typen op te geven.}
 
 \item{Criterium}{Het LSVI-criterium waarvoor de gegevens geselecteerd worden: "Vegetatie", "Structuur", "Verstoring" of "alle".}
 
 \item{Indicator}{De indicator waarvoor de gegevens uit de databank gehaald worden.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Indicator", "Naam").}
 
-\item{Kwaliteitsniveau}{Voor elke versie van de LSVI zijn er een of meerdere kwaliteitsniveaus gedefinieerd in de databank.  Zo is er bij Versie 2.0 een onderscheid gemaakt tussen goede staat (A), voldoende staat (B) en gedegradeerde staat (C).  Hier duidt kwaliteitsniveau 1 de grens tussen voldoende (B) en gedegradeerd (C) aan en kwaliteitsniveau 2 het onderscheid tussen goed (A) en voldoende (B).  Bij Versie 3 duidt kwaliteitsniveau 1 op het onderscheid tussen ongunstig en gunstig en kwaliteitsniveau 2 op de streefwaarde.  De betekenissen van de 2 kwaliteitsniveaus voor de verschillende versies is weergegeven in de tabel Versie in de databank en kan opgevraagd met de functie geefVersieInfo().  Geef als parameter Kwaliteitsniveau op op basis van welk kwaliteitsniveau de berekening gemaakt moet worden (strikt genomen is de berekening van de LSVI de berekening volgens kwaliteitsniveau 1).}
+\item{Kwaliteitsniveau}{Voor elke versie van de LSVI zijn er een of meerdere kwaliteitsniveaus gedefinieerd in de databank.  Zo is er bij Versie 2.0 een onderscheid gemaakt tussen goede staat (A), voldoende staat (B) en gedegradeerde staat (C).  Hier duidt kwaliteitsniveau 1 de grens tussen voldoende (B) en gedegradeerd (C) aan en kwaliteitsniveau 2 het onderscheid tussen goed (A) en voldoende (B).  Bij Versie 3 duidt kwaliteitsniveau 1 op het onderscheid tussen ongunstig en gunstig en kwaliteitsniveau 2 op de streefwaarde (uiteindelijk niet opgenomen in rapport).  De betekenissen van de 2 kwaliteitsniveaus voor de verschillende versies is weergegeven in de tabel Versie in de databank en kan opgevraagd met de functie geefVersieInfo().  Geef als parameter Kwaliteitsniveau op op basis van welk kwaliteitsniveau de berekening gemaakt moet worden.  (Strikt genomen is de berekening van de LSVI de berekening volgens kwaliteitsniveau 1.)}
+
+\item{Weergave}{Wat moet er in de tabel weergegeven worden?  De default 'basis' geeft een meer overzichtelijke tabel waarbij mogelijke invoerwaarden gescheiden door een komma in 1 cel weergegeven worden, 'uitgebreid' geeft deze invoerwaarden met alle bijhorende informatie weer in aparte records, waardoor de tabel groot en onoverzichtelijk is.}
+
+\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
 }
 \value{
 Deze functie geeft een tabel met de hierboven beschreven informatie uit de databank.
 }
 \description{
-Deze functie geeft alle informatie die nodig is om veldobservaties klaar te maken voor de berekening van de de Lokale Staat van Instandhouding met de functie berekenLSVI().  Allereerst geeft ze de 'VoorwaardeID' die gekoppeld moet worden aan de observaties, samen met informatie uit de LSVI-tabellen (vnl. beoordelingsmatrix) en een beschrijving van de voorwaarde ('VoorwaardeNaam') die zou moeten toelaten om de koppeling te maken.
+Deze functie geeft alle informatie die nodig is om veldobservaties klaar te maken voor de berekening van de de Lokale Staat van Instandhouding met de functie berekenLSVI(), alsook de berekeningsregels die gebruikt worden.  Allereerst geeft ze de 'Voorwaarde' die vermeld moet worden bij de observaties (zie Data_voorwaarden bij berekenLSVIbasis), samen met informatie uit de LSVI-tabellen (vnl. beoordelingsmatrix) en een beschrijving van de voorwaarde ('Voorwaarde') die zou moeten toelaten om de koppeling te maken.
 
-Verder geeft ze informatie over de Waarde die verwacht wordt in de functie berekenLSVI().  AnalyseVariabele is een korte omschrijving voor de variabele waarde, bv. 'aantal_frequent_aanwezig' staat voor 'het aantal soorten dat minimaal frequent aanwezig is'.  Voor een aantal voorwaarden, i.e. de voorwaarden met betrekking tot opnames van soorten, kan Waarde berekend worden met de functie berekenAnalyseVariabele op basis van de AnalyseVariabele, SoortengroepID en een soortenlijst met bedekkingen.  Voor andere gegevens zal de koppeling met VoorwaardeID 'handmatig' moeten gebeuren.  Ingeval van grote datasets is het aan te raden om een koppeling te zoeken tussen deze AnalyseVariabele en de variabele in de dataset, zodat niet voor elke voorwaarde afzonderlijk een koppeling moet gemaakt worden.
+Verder geeft ze informatie over de Waarde die verwacht wordt in de functie berekenLSVIbasis().  AnalyseVariabele is een korte omschrijving voor de variabele waarde, bv. 'aantal' staat voor het aantal soorten of klassen en 'bedekking' voor de totale bedekking van de lijst soorten of klassen.  'Referentiewaarde' en 'Operator' geven respectievelijk de grenswaarde en de vergelijking aan op basis waarvan de beoordeling van de waarde zal gebeuren.  Voor elke AnalyseVariabele wordt informatie gegeven over het formaat dat verwacht wordt voor Waarde: de 'Eenheid' (die niet opgenomen moet worden in Waarde maar wel de grootte-orde van het verwachte getal aangeeft), het formaat van de variabele ('TypeVariabele'), en bij categorische variabelen het 'Invoertype' en de 'Invoerwaarde' (een naam voor de categorische variabele en de mogelijke waarden die deze kan aannemen).
 
-Voor elke AnalyseVariabele is informatie over het formaat dat verwacht wordt voor Waarde: de Eenheid (die niet opgenomen moet worden in Waarde maar wel de grootte-orde van het verwachte getal aangeeft), het formaat van de variabele (TypeVariabele), bij categorische variabelen het 'Invoermasker' (mogelijke waarden) en de Vegetatielaag die bekeken moet worden.
+Waar nodig, wordt een soortengroep of studiegroep opgegeven.  Een studiegroep is eigenlijk equivalent aan een soortengroep: de verschillende klassen of fasen of ... waarvoor een bedekking of andere analysevariabele moet berekend worden.  Voorbeelden zijn groeiklassen, vegetatielagen, ...  Omwille van de overzichtelijkheid van de tabel is voor de Soortengroep enkel een ID gegeven, de volledige lijst kan opgevraagd worden met de functie geefSoortenlijstInvoerniveau.
+
+Ingeval van de AnalyseVariabele aantal kan er ook een SubAnalyseVariabele vermeld zijn, meestal 'bedekking', die aangeeft aan welke voorwaarde elke soort of klasse afzonderlijk moet voldoen.  Aan deze SubAnalysevariabele zijn dezelfde velden gekoppeld als aan AnalyseVariabele, nl. SubReferentiewaarde, SubOperator, SubEenheid, TypeSubVariabele, SubInvoertype en SubInvoerwaarde.  Bijvoorbeeld, bij de voorwaarde 'minimum 5 soorten minimum talrijk aanwezig' zal de AnalyseVariabele 'aantal' zijn, de Referentiewaarde '5', de Operator '>=', TypeVariabele 'Geheel getal', SubAnalysevariabele 'bedekking', SubReferentiewaarde 'T', SubOperator '>=', TypeSubVariabele 'Categorie' en SubInvoertype 'Beheermonitoringsschaal 2017'.
 }
 \examples{
-ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-geefInvoervereisten(ConnectieLSVIhabitats, Versie = "Versie 3",
-                    Habitatsubtype = "4010", Kwaliteitsniveau = "1")
-library(RODBC)
-odbcClose(ConnectieLSVIhabitats)
+geefInvoervereisten(
+  Versie = "Versie 3",
+  Habitattype = "4030",
+  Kwaliteitsniveau = "1"
+)
 
 }
-
