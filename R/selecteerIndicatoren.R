@@ -51,7 +51,7 @@ selecteerIndicatoren <-
       )
     }
 
-    
+
     if (is.numeric(Habitattype)) {
       Habitattype <- as.character(Habitattype)
     }
@@ -61,7 +61,10 @@ selecteerIndicatoren <-
         geefUniekeWaarden("Habitattype", "Code", ConnectieLSVIhabitats))
     ) {
       Habitattypen <-
-        paste(geefUniekeWaarden("Habitattype", "Code", ConnectieLSVIhabitats), collapse = ", ")
+        paste(
+          geefUniekeWaarden("Habitattype", "Code", ConnectieLSVIhabitats),
+          collapse = ", "
+        )
       stop(
         sprintf(
           "De opgegeven habitattypen mogen enkel de volgende waarden zijn: %s",

@@ -9,13 +9,13 @@
 #' 
 #' @export
 #'
-invoercontroleKwaliteitsniveau <- 
+invoercontroleKwaliteitsniveau <-
   function(Kwaliteitsniveau, ConnectieLSVIhabitats) {
-    
+
     Kwaliteitsniveau <- ifelse(Kwaliteitsniveau == 1, "1",
                                ifelse(Kwaliteitsniveau == 2, "2",
                                       Kwaliteitsniveau))
-    
+
     assert_that(is.string(Kwaliteitsniveau))
     if (!(Kwaliteitsniveau %in%
           geefUniekeWaarden(

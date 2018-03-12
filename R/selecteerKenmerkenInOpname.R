@@ -34,7 +34,7 @@ selecteerKenmerkenInOpname <-
     if (length(Kenmerken) == 0) {
       return(NA)
     }
-    
+
     if (length(Soortengroep) > 0) {
       Resultaat <- Kenmerken %>%
         filter(tolower(.data$TypeKenmerk) == "soort_nbn") %>%
@@ -69,8 +69,15 @@ selecteerKenmerkenInOpname <-
       SubStatusberekening <-
         berekenStatus(
           Resultaat[
-            , c("Rijnr", "RefMin", "RefMax", "Operator", "WaardeMin", "WaardeMax")
-            ]
+            , c(
+              "Rijnr",
+              "RefMin",
+              "RefMax",
+              "Operator",
+              "WaardeMin",
+              "WaardeMax"
+            )
+          ]
         )
 
       Resultaat <- Resultaat %>%

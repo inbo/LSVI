@@ -27,12 +27,12 @@ setMethod(
         object@SubRefMin,
         object@SubRefMax,
         object@SubOperator
-      ) 
-    
+      )
+
     if (length(Resultaat) == 1 & all(is.na(Resultaat))) {
       return(NA)
     }
-    
+
     # Resultaat <- Resultaat %>%
     #   mutate(
     #     Gemiddelde =
@@ -42,7 +42,7 @@ setMethod(
     #onderstaande is om te testen of het concept werkt, berekening moet nog aangepast worden!!!
     BedekkingMin <-
       (1.0 - prod( (1.0 - Resultaat$WaardeMin), na.rm = TRUE))
-    
+
     BedekkingMax <-
       (1.0 - prod( (1.0 - Resultaat$WaardeMax), na.rm = TRUE))
 

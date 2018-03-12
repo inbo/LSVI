@@ -9,7 +9,7 @@
 #' 
 #' @export
 #'
-invoercontroleData_voorwaarden <- 
+invoercontroleData_voorwaarden <-
   function(Data_voorwaarden, ConnectieLSVIhabitats, LIJST) {
     assert_that(inherits(Data_voorwaarden, "data.frame"))
     assert_that(has_name(Data_voorwaarden, "ID"))
@@ -54,25 +54,26 @@ invoercontroleData_voorwaarden <-
     ) {
       stop("Niet alle waarden vermeld onder Data_voorwaarden$Eenheid komen overeen met waarden vermeld in de databank.") #nolint
     }
-    
+
     #ingevoerde voorwaarden omzetten naar interval
     Data_voorwaarden <- Data_voorwaarden %>%
       mutate(
         Rijnr = row_number(.data$ID)
       )
-    
+
     IntervalVoorwaarden <-
       vertaalInvoerInterval(
         Data_voorwaarden[
           , c("Rijnr", "Type", "Waarde", "Eenheid", "Invoertype")
           ],
-        LIJST
+        LIJST,
+        ConnectieLSVIhabitats
       ) %>%
       rename(
         WaardeMin = .data$Min,
         WaardeMax = .data$Max
       )
-    
+
     Data_voorwaarden <- Data_voorwaarden %>%
       left_join(
         IntervalVoorwaarden,
@@ -81,6 +82,6 @@ invoercontroleData_voorwaarden <-
       mutate(
         Rijnr = NULL
       )
-    
+
     return(Data_voorwaarden)
   }

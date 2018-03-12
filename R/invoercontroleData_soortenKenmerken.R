@@ -10,11 +10,11 @@
 #' 
 #' @export
 #'
-invoercontroleData_soortenKenmerken <- 
+invoercontroleData_soortenKenmerken <-
   function(Data_soortenKenmerken, ConnectieLSVIhabitats, ConnectieNBN, LIJST) {
     assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
     assert_that(inherits(ConnectieNBN, "RODBC"))
-    
+
     assert_that(inherits(Data_soortenKenmerken, "data.frame"))
     assert_that(has_name(Data_soortenKenmerken, "ID"))
     assert_that(has_name(Data_soortenKenmerken, "Kenmerk"))
@@ -52,11 +52,11 @@ invoercontroleData_soortenKenmerken <-
     ) {
       stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Eenheid komen overeen met waarden vermeld in de databank.") #nolint
     }
-    
-    
+
+
     #○mzettingen naar een bruikbare dataframe
     Kenmerken <- Data_soortenKenmerken #naamsverandering is omdat code verplaatst is
-    
+
     KenmerkenSoort <- Kenmerken %>%
       filter(tolower(.data$TypeKenmerk) == "soort_latijn") %>%
       mutate(
@@ -71,11 +71,11 @@ invoercontroleData_soortenKenmerken <-
         Kenmerken %>%
           filter(tolower(.data$TypeKenmerk) == "soort_nl")
       )
-    
+
     Vertaling <-
       get_nbn_key(KenmerkenSoort$Kenmerk, channel = ConnectieNBN) %>%
       select(.data$InputName, .data$NBNKey)
-    
+
     KenmerkenSoort <- KenmerkenSoort %>%
       left_join(
         Vertaling,
@@ -86,7 +86,7 @@ invoercontroleData_soortenKenmerken <-
         NBNKey = NULL,
         TypeKenmerk = "soort_nbn"
       )
-    
+
     Kenmerken <- Kenmerken %>%
       filter(
         !tolower(.data$TypeKenmerk) %in% c("soort_latijn", "soort_nl")
@@ -97,20 +97,21 @@ invoercontroleData_soortenKenmerken <-
       mutate(
         Rijnr = row_number(.data$Kenmerk)
       )
-    
+
     VertaaldeKenmerken <-
       vertaalInvoerInterval(
         Kenmerken[
           , c("Rijnr", "Type", "Waarde",
               "Eenheid", "Invoertype")
           ],
-        LIJST
+        LIJST,
+        ConnectieLSVIhabitats
       ) %>%
       rename(
         WaardeMin = .data$Min,
         WaardeMax = .data$Max
       )
-    
+
     Kenmerken2 <- Kenmerken %>%
       left_join(
         VertaaldeKenmerken,
@@ -120,6 +121,6 @@ invoercontroleData_soortenKenmerken <-
         Rijnr = NULL,
         Kenmerk = tolower(.data$Kenmerk)
       )
-    
+
     return(Kenmerken2)
   }

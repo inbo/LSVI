@@ -43,7 +43,7 @@ analyseVariabele_c <-
         as.is = TRUE,
         stringsAsFactors = FALSE
       )
-    
+
     AnalyseObject <-
       new(
         Class = VoorwaardeInfo$TypeAnalyseVariabele,
@@ -117,7 +117,8 @@ analyseVariabele_c <-
             Invoertype = VoorwaardeInfo$SubInvoermasker,
             stringsAsFactors = FALSE
           ),
-          LIJST
+          LIJST,
+          ConnectieLSVIhabitats
         )
       setSubRefMin(AnalyseObject) <- SAV$Min
       setSubRefMax(AnalyseObject) <- SAV$Max

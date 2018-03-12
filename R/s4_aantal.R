@@ -32,7 +32,7 @@ setMethod(
     if (length(Resultaat) == 1 & all(is.na(Resultaat))) {
       return(NA)
     }
-    
+
     Aantal <- nrow(Resultaat)
 
     return(Aantal)

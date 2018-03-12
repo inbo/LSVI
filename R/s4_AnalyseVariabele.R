@@ -44,45 +44,6 @@ setValidity(
   }
 )
 
-# setMethod(
-#   f = "initialize",
-#   signature = "AnalyseVariabele",
-#   definition = 
-#     function(
-#       .Object,
-#       VoorwaardeID,
-#       Soortengroep,
-#       Studiegroep,
-#       SubAnalyseVariabele,
-#       SubRefMin,
-#       SubRefMax,
-#       SubOperator,
-#       LIJST,
-#       Kenmerken
-#     ) {
-#       
-#       .Object@VoorwaardeID <- VoorwaardeID
-#       
-#       if (!missing(Studiegroep)) {
-#         .Object@Studiegroep <- Studiegroep
-#       }
-#       
-#       if (!missing(SubAnalyseVariabele)) {
-#         .Object@SubAnalyseVariabele <- SubAnalyseVariabele
-#         .Object@SubRefMin <- SubRefMin
-#         .Object@SubRefMax <- SubRefMax
-#         .Object@SubOperator <- SubOperator
-#       }
-#         
-#       if (!missing(Kenmerken)) {
-#         .Object@Kenmerken <- Kenmerken
-#       }
-#       validObject(.Object)
-#       
-#       return(.Object)
-#     }
-# )
-
 #' @export
 setGeneric(
   name = "getKenmerken",

@@ -40,7 +40,7 @@ berekenLSVIbasis <-
     Versie = "alle",
     Kwaliteitsniveau = "alle",
     Data_habitat,
-    Data_voorwaarden = 
+    Data_voorwaarden =
       data.frame(
         ID = character(),
         Criterium = character(),
@@ -61,13 +61,13 @@ berekenLSVIbasis <-
     assert_that(inherits(ConnectieNBN, "RODBC"))
 
     invoercontroleVersie(Versie, ConnectieLSVIhabitats)
-    
+
     invoercontroleKwaliteitsniveau(Kwaliteitsniveau, ConnectieLSVIhabitats)
 
     invoercontroleData_habitat(Data_habitat, ConnectieLSVIhabitats)
 
     if (nrow(Data_voorwaarden) > 0) {
-      Data_voorwaarden <- 
+      Data_voorwaarden <-
         invoercontroleData_voorwaarden(
           Data_voorwaarden,
           ConnectieLSVIhabitats,
@@ -80,7 +80,7 @@ berekenLSVIbasis <-
       assert_that(has_name(Data_voorwaarden, "WaardeMin"))
       assert_that(has_name(Data_voorwaarden, "WaardeMax"))
     }
-    
+
     if (nrow(Data_soortenKenmerken) > 0) {
       Data_soortenKenmerken <-
         invoercontroleData_soortenKenmerken(
@@ -92,7 +92,7 @@ berekenLSVIbasis <-
     } else {
       assert_that(has_name(Data_soortenKenmerken, "ID"))
     }
-    
+
 
 
     #nodige info ophalen uit de databank
@@ -134,7 +134,8 @@ berekenLSVIbasis <-
           , c("Rijnr", "TypeVariabele", "Referentiewaarde",
               "Eenheid", "Invoertype")
         ],
-        LIJST
+        LIJST,
+        ConnectieLSVIhabitats
       ) %>%
       rename(
         RefMin = .data$Min,
@@ -165,7 +166,7 @@ berekenLSVIbasis <-
       mutate(
         Rijnr = row_number(.data$ID)
       )
-    
+
     #niet opgegeven voorwaarden berekenen
     BerekendResultaat <- Resultaat %>%
       filter(is.na(.data$Waarde)) %>%
@@ -205,7 +206,7 @@ berekenLSVIbasis <-
           ),
         Berekening = NULL
       )
-    
+
     Resultaat <- Resultaat %>%
       left_join(
         BerekendResultaat,
@@ -310,6 +311,7 @@ berekenLSVIbasis <-
       ) %>%
       ungroup()
 
+    odbcClose(ConnectieLSVIhabitats)
 
     return(
       list(
