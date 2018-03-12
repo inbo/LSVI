@@ -1,6 +1,6 @@
 #' @title Geeft de invoervereisten voor de waarde van een opname
 #'
-#' @description Deze functie geeft alle informatie die nodig is om veldobservaties klaar te maken voor de berekening van de de Lokale Staat van Instandhouding met de functie berekenLSVI(), alsook de berekeningsregels die gebruikt worden.  Allereerst geeft ze de 'VoorwaardeNaam' die vermeld moet worden bij de observaties (zie Data_voorwaarden bij berekenLSVIbasis), samen met informatie uit de LSVI-tabellen (vnl. beoordelingsmatrix) en een beschrijving van de voorwaarde ('VoorwaardeNaam') die zou moeten toelaten om de koppeling te maken.
+#' @description Deze functie geeft alle informatie die nodig is om veldobservaties klaar te maken voor de berekening van de de Lokale Staat van Instandhouding met de functie berekenLSVI(), alsook de berekeningsregels die gebruikt worden.  Allereerst geeft ze de 'Voorwaarde' die vermeld moet worden bij de observaties (zie Data_voorwaarden bij berekenLSVIbasis), samen met informatie uit de LSVI-tabellen (vnl. beoordelingsmatrix) en een beschrijving van de voorwaarde ('Voorwaarde') die zou moeten toelaten om de koppeling te maken.
 #'
 #' Verder geeft ze informatie over de Waarde die verwacht wordt in de functie berekenLSVIbasis().  AnalyseVariabele is een korte omschrijving voor de variabele waarde, bv. 'aantal' staat voor het aantal soorten of klassen en 'bedekking' voor de totale bedekking van de lijst soorten of klassen.  'Referentiewaarde' en 'Operator' geven respectievelijk de grenswaarde en de vergelijking aan op basis waarvan de beoordeling van de waarde zal gebeuren.  Voor elke AnalyseVariabele wordt informatie gegeven over het formaat dat verwacht wordt voor Waarde: de 'Eenheid' (die niet opgenomen moet worden in Waarde maar wel de grootte-orde van het verwachte getal aangeeft), het formaat van de variabele ('TypeVariabele'), en bij categorische variabelen het 'Invoertype' en de 'Invoerwaarde' (een naam voor de categorische variabele en de mogelijke waarden die deze kan aannemen).
 #' 
@@ -230,7 +230,7 @@ geefInvoervereisten <- function(Versie = "alle",
 
   query_voorwaardeinfo <-
     sprintf("SELECT Voorwaarde.Id AS VoorwaardeID,
-            Voorwaarde.VoorwaardeNaam, Voorwaarde.ExtraBewerking,
+            Voorwaarde.VoorwaardeNaam AS Voorwaarde, Voorwaarde.ExtraBewerking,
             Voorwaarde.Referentiewaarde, Voorwaarde.Operator,
             AnalyseVariabele.VariabeleNaam as AnalyseVariabele,
             AnalyseVariabele.Eenheid, TypeVariabele.Naam AS TypeVariabele,
@@ -300,7 +300,7 @@ geefInvoervereisten <- function(Versie = "alle",
         .data$SubInvoervolgnr
       ) %>%
       group_by(
-        .data$VoorwaardeID, .data$VoorwaardeNaam,
+        .data$VoorwaardeID, .data$Voorwaarde,
         .data$ExtraBewerking, .data$Referentiewaarde,
         .data$Operator, .data$AnalyseVariabele,
         .data$Eenheid, .data$TypeVariabele,
@@ -321,7 +321,7 @@ geefInvoervereisten <- function(Versie = "alle",
       ) %>%
       ungroup() %>%
       select(                   #volgorde aanpassen
-        .data$VoorwaardeID, .data$VoorwaardeNaam,
+        .data$VoorwaardeID, .data$Voorwaarde,
         .data$ExtraBewerking, .data$Referentiewaarde,
         .data$Operator, .data$AnalyseVariabele,
         .data$Eenheid, .data$TypeVariabele,
