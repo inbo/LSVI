@@ -290,7 +290,7 @@ geefInvoervereisten <- function(Versie = "alle",
       query_voorwaardeinfo,
       as.is = TRUE,
       stringsAsFactors = FALSE
-    ) 
+    )
 
   if (tolower(Weergave[1]) == "basis") {
     Voorwaardeinfo <- Voorwaardeinfo %>%
