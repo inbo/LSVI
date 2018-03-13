@@ -78,17 +78,23 @@ vertaalInvoerInterval <-
       )
 
     Resultaat <- Dataset %>%
-      filter(tolower(.data$Type) == "categorie") %>%
-      left_join(
-        LIJST,
-        by = c("Invoertype" = "Naam", "Waarde" = "Waarde")
-      ) %>%
-      mutate(
-        Min = .data$Ondergrens,
-        Max = .data$Bovengrens,
-        Ondergrens = NULL,
-        Bovengrens = NULL
-      ) %>%
+      filter(tolower(.data$Type) == "categorie") 
+
+    if (nrow(Resultaat) > 0) {
+      Resultaat <- Resultaat %>%
+        left_join(
+          LIJST,
+          by = c("Invoertype" = "Naam", "Waarde" = "Waarde")
+        ) %>%
+        mutate(
+          Min = .data$Ondergrens,
+          Max = .data$Bovengrens,
+          Ondergrens = NULL,
+          Bovengrens = NULL
+        )
+    }
+
+    Resultaat <- Resultaat %>%
       bind_rows(
         Dataset %>%
           filter(tolower(.data$Type) == "percentage") %>%

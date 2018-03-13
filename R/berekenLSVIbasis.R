@@ -64,7 +64,8 @@ berekenLSVIbasis <-
 
     invoercontroleKwaliteitsniveau(Kwaliteitsniveau, ConnectieLSVIhabitats)
 
-    invoercontroleData_habitat(Data_habitat, ConnectieLSVIhabitats)
+    Data_Habitat <-
+      invoercontroleData_habitat(Data_habitat, ConnectieLSVIhabitats)
 
     if (nrow(Data_voorwaarden) > 0) {
       Data_voorwaarden <-

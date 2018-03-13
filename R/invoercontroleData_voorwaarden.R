@@ -14,19 +14,37 @@ invoercontroleData_voorwaarden <-
     assert_that(inherits(Data_voorwaarden, "data.frame"))
     assert_that(has_name(Data_voorwaarden, "ID"))
     assert_that(has_name(Data_voorwaarden, "Criterium"))
+    if (!is.character(Data_voorwaarden$Criterium)) {
+      Data_voorwaarden$Criterium <- as.character(Data_voorwaarden$Criterium)
+    }
     if (!all(Data_voorwaarden$Criterium %in%
              geefUniekeWaarden("Criterium", "Naam", ConnectieLSVIhabitats))) {
       stop("Niet alle waarden vermeld onder Data_voorwaarden$Criterium komen overeen met waarden vermeld in de databank.") #nolint
     }
     assert_that(has_name(Data_voorwaarden, "Indicator"))
+    if (!is.character(Data_voorwaarden$Indicator)) {
+      Data_voorwaarden$Indicator <- as.character(Data_voorwaarden$Indicator)
+    }
     if (!all(Data_voorwaarden$Indicator %in%
              geefUniekeWaarden("Indicator", "Naam", ConnectieLSVIhabitats))) {
       stop("Niet alle waarden vermeld onder Data_voorwaarden$Indicator komen overeen met waarden vermeld in de databank.") #nolint
+    }
+    assert_that(has_name(Data_voorwaarden, "Voorwaarde"))
+    if (!is.character(Data_voorwaarden$Voorwaarde)) {
+      Data_voorwaarden$Voorwaarde <- as.character(Data_voorwaarden$Voorwaarde)
+    }
+    Data_voorwaarden$Voorwaarde <- tolower(Data_voorwaarden$Voorwaarde)
+    if (!all(Data_voorwaarden$Voorwaarde %in%
+             geefUniekeWaarden("Voorwaarde", "VoorwaardeNaam", ConnectieLSVIhabitats))) {
+      stop("Niet alle waarden vermeld onder Data_voorwaarden$Voorwaarde komen overeen met waarden vermeld in de databank.") #nolint
     }
     #misschien best ook testen dat die indicator-criterium-combinatie in de databank voorkomt?  En of deze voor dat habitattype voorkomt, maar dat best verderop doen
     #Voorwaarde ook verplichten?  Anders wel testen of het ok is als het aanwezig is.
     assert_that(has_name(Data_voorwaarden, "Waarde"))
     assert_that(has_name(Data_voorwaarden, "Type"))
+    if (!is.character(Data_voorwaarden$Type)) {
+      Data_voorwaarden$Type <- as.character(Data_voorwaarden$Type)
+    }
     if (
       !all(
         Data_voorwaarden$Type %in%
@@ -36,12 +54,18 @@ invoercontroleData_voorwaarden <-
       stop("Niet alle waarden vermeld onder Data_voorwaarden$Type komen overeen met waarden vermeld in de databank.") #nolint
     }
     assert_that(has_name(Data_voorwaarden, "Invoertype"))
+    if (!is.character(Data_voorwaarden$Invoertype)) {
+      Data_voorwaarden$Invoertype <- as.character(Data_voorwaarden$Invoertype)
+    }
     if (!all(is.na(Data_voorwaarden$Invoertype) |
              Data_voorwaarden$Invoertype %in%
              geefUniekeWaarden("Lijst", "Naam", ConnectieLSVIhabitats))) {
       stop("Niet alle waarden vermeld onder Data_voorwaarden$Invoertype komen overeen met waarden vermeld in de databank.") #nolint
     }
     assert_that(has_name(Data_voorwaarden, "Eenheid"))
+    if (!is.character(Data_voorwaarden$Eenheid)) {
+      Data_voorwaarden$Eenheid <- as.character(Data_voorwaarden$Eenheid)
+    }
     if (
       !all(
         Data_voorwaarden$Eenheid %in%

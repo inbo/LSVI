@@ -13,8 +13,12 @@ invoercontroleData_habitat <- function(Data_habitat, ConnectieLSVIhabitats) {
   assert_that(inherits(Data_habitat, "data.frame"))
   assert_that(has_name(Data_habitat, "ID"))
   assert_that(has_name(Data_habitat, "Habitattype"))
+  if (!is.character(Data_habitat$Habitattype)) {
+    Data_habitat$Habitattype <- as.character(Data_habitat$Habitattype)
+  }
   if (!all(Data_habitat$Habitattype %in%
            geefUniekeWaarden("Habitattype", "Code", ConnectieLSVIhabitats))) {
     stop("Niet alle waarden vermeld onder Data_habitat$Habitattype komen overeen met waarden vermeld in de databank.") #nolint
   }
+  return(Data_habitat)
 }

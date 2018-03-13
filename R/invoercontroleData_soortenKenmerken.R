@@ -18,10 +18,22 @@ invoercontroleData_soortenKenmerken <-
     assert_that(inherits(Data_soortenKenmerken, "data.frame"))
     assert_that(has_name(Data_soortenKenmerken, "ID"))
     assert_that(has_name(Data_soortenKenmerken, "Kenmerk"))
+    if (!is.character(Data_soortenKenmerken$Kenmerk)) {
+      Data_soortenKenmerken$Kenmerk <-
+        as.character(Data_soortenKenmerken$Kenmerk)
+    }
     assert_that(has_name(Data_soortenKenmerken, "TypeKenmerk"))
+    if (!is.character(Data_soortenKenmerken$TypeKenmerk)) {
+      Data_soortenKenmerken$TypeKenmerk <-
+        as.character(Data_soortenKenmerken$TypeKenmerk)
+    }
     #hier moet nog controle op gebeuren!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     assert_that(has_name(Data_soortenKenmerken, "Waarde"))
     assert_that(has_name(Data_soortenKenmerken, "Type"))
+    if (!is.character(Data_soortenKenmerken$Type)) {
+      Data_soortenKenmerken$Type <-
+        as.character(Data_soortenKenmerken$Type)
+    }
     if (
       !all(Data_soortenKenmerken$Type %in%
            geefUniekeWaarden(
@@ -34,12 +46,20 @@ invoercontroleData_soortenKenmerken <-
       stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Type komen overeen met waarden vermeld in de databank.") #nolint
     }
     assert_that(has_name(Data_soortenKenmerken, "Invoertype"))
+    if (!is.character(Data_soortenKenmerken$Invoertype)) {
+      Data_soortenKenmerken$Invoertype <-
+        as.character(Data_soortenKenmerken$Invoertype)
+    }
     if (!all(is.na(Data_soortenKenmerken$Invoertype) |
              Data_soortenKenmerken$Invoertype %in%
              geefUniekeWaarden("Lijst", "Naam", ConnectieLSVIhabitats))) {
       stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Invoertype komen overeen met waarden vermeld in de databank.") #nolint
     }
     assert_that(has_name(Data_soortenKenmerken, "Eenheid"))
+    if (!is.character(Data_soortenKenmerken$Eenheid)) {
+      Data_soortenKenmerken$Eenheid <-
+        as.character(Data_soortenKenmerken$Eenheid)
+    }
     if (
       !all(
         Data_soortenKenmerken$Eenheid %in%
