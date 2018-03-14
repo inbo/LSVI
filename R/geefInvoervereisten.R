@@ -26,7 +26,7 @@
 #' @export
 #'
 #' @importFrom RODBC sqlQuery odbcClose
-#' @importFrom dplyr %>% select_ filter_ group_by_ summarise_ ungroup left_join mutate_ rowwise
+#' @importFrom dplyr %>% select_ filter_ group_by_ summarise_ ungroup left_join mutate_ rowwise arrange
 #' @importFrom tidyr gather_
 #' @importFrom assertthat assert_that is.string
 #'
