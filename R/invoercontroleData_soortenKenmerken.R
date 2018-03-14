@@ -82,8 +82,14 @@ invoercontroleData_soortenKenmerken <-
       mutate(
         Kenmerk =
           gsub(
-            pattern = "^([[:alpha:]]*) ([[:alpha:]]*) (.*)",
+            pattern = "^(.*?) (.*?)( .*|$)",
             replacement = "\\1 \\2",
+            x = .data$Kenmerk
+          ),
+        Kenmerk =
+          gsub(
+            pattern = " species",
+            replacement = "",
             x = .data$Kenmerk
           )
       ) %>%
@@ -100,7 +106,21 @@ invoercontroleData_soortenKenmerken <-
       left_join(
         Vertaling,
         by = c("Kenmerk" = "InputName")
-      ) %>%
+      )
+    
+    Fouten <- KenmerkenSoort %>%
+      filter(is.na(.data$NBNKey))
+    if (nrow(Fouten) > 0) {
+      stop(
+        paste(
+          "Volgende soortnamen zijn niet teruggevonden in de databank: ",
+          Fouten$Kenmerk,
+          ".  Check de spelling en/of laat de auteursnaam weg bij genera."
+        )
+      )
+    }
+    
+    KenmerkenSoort <- KenmerkenSoort %>%
       mutate(
         Kenmerk = .data$NBNKey,
         NBNKey = NULL,
