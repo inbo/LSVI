@@ -112,10 +112,9 @@ invoercontroleData_soortenKenmerken <-
       filter(is.na(.data$NBNKey))
     if (nrow(Fouten) > 0) {
       stop(
-        paste(
-          "Volgende soortnamen zijn niet teruggevonden in de databank: ",
-          Fouten$Kenmerk,
-          ".  Check de spelling en/of laat de auteursnaam weg bij genera."
+        sprintf(
+          "Volgende soortnamen zijn niet teruggevonden in de databank: %s.  Check de spelling en/of laat de auteursnaam weg bij genera.",
+          paste(Fouten$Kenmerk, collapse = ", ")
         )
       )
     }
