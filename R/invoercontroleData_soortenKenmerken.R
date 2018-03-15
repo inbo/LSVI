@@ -6,14 +6,12 @@
 #' @inheritParams berekenLSVIbasis
 #'
 #' @importFrom assertthat assert_that has_name
-#' @importFrom n2khelper get_nbn_key
 #' 
 #' @export
 #'
 invoercontroleData_soortenKenmerken <-
-  function(Data_soortenKenmerken, ConnectieLSVIhabitats, ConnectieNBN, LIJST) {
+  function(Data_soortenKenmerken, ConnectieLSVIhabitats, LIJST) {
     assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
-    assert_that(inherits(ConnectieNBN, "RODBC"))
 
     assert_that(inherits(Data_soortenKenmerken, "data.frame"))
     assert_that(has_name(Data_soortenKenmerken, "ID"))
@@ -77,6 +75,31 @@ invoercontroleData_soortenKenmerken <-
     #○mzettingen naar een bruikbare dataframe
     Kenmerken <- Data_soortenKenmerken #naamsverandering is omdat code verplaatst is
 
+    QuerySoorten <-
+      "SELECT WetNaam, NedNaam, NBNTaxonVersionKey, TaxonTypeId
+      FROM Soort WHERE NBNTaxonVersionKey IS NOT NULL"
+
+    Taxonlijst <- 
+      sqlQuery(ConnectieLSVIhabitats, QuerySoorten, stringsAsFactors = FALSE)
+
+    #Voorlopig worden enkel soorten gekoppeld, maar er zouden ook genera, ondersoorten, varieteiten,... gekoppeld moeten worden.
+    Soortenlijst <- Taxonlijst %>%
+      filter(is.na(TaxonTypeId)) %>%
+      mutate(
+        WetNaam =
+          gsub(
+            pattern = "^(.*?) (.*?)( .*|$)",
+            replacement = "\\1 \\2",
+            x = .data$WetNaam
+          ),
+        WetNaam =
+          gsub(
+            pattern = " species",
+            replacement = "",
+            x = .data$WetNaam
+          )
+      )
+
     KenmerkenSoort <- Kenmerken %>%
       filter(tolower(.data$TypeKenmerk) == "soort_latijn") %>%
       mutate(
@@ -93,27 +116,32 @@ invoercontroleData_soortenKenmerken <-
             x = .data$Kenmerk
           )
       ) %>%
+      left_join(
+        Soortenlijst %>%
+          select(
+            .data$WetNaam, .data$NBNTaxonVersionKey
+          ),
+        by = c("Kenmerk" = "WetNaam")
+      ) %>%
       bind_rows(
         Kenmerken %>%
-          filter(tolower(.data$TypeKenmerk) == "soort_nl")
+          filter(tolower(.data$TypeKenmerk) == "soort_nl") %>%
+          left_join(
+            Soortenlijst %>%
+              select(
+                .data$WetNaam, .data$NBNTaxonVersionKey
+              ),
+            by = c("Kenmerk" = "WetNaam")
+          )
       )
 
-    Vertaling <-
-      get_nbn_key(KenmerkenSoort$Kenmerk, channel = ConnectieNBN) %>%
-      select(.data$InputName, .data$NBNKey)
-
-    KenmerkenSoort <- KenmerkenSoort %>%
-      left_join(
-        Vertaling,
-        by = c("Kenmerk" = "InputName")
-      )
     
     Fouten <- KenmerkenSoort %>%
-      filter(is.na(.data$NBNKey))
+      filter(is.na(.data$NBNTaxonVersionKey))
     if (nrow(Fouten) > 0) {
       stop(
         sprintf(
-          "Volgende soortnamen zijn niet teruggevonden in de databank: %s.  Check de spelling en/of laat de auteursnaam weg bij genera.",
+          "Volgende soortnamen zijn niet teruggevonden in de databank: %s.  Check de spelling en/of laat de auteursnaam weg bij genera.",  #nolint
           paste(Fouten$Kenmerk, collapse = ", ")
         )
       )
@@ -121,8 +149,8 @@ invoercontroleData_soortenKenmerken <-
     
     KenmerkenSoort <- KenmerkenSoort %>%
       mutate(
-        Kenmerk = .data$NBNKey,
-        NBNKey = NULL,
+        Kenmerk = .data$NBNTaxonVersionKey,
+        NBNTaxonVersionKey = NULL,
         TypeKenmerk = "soort_nbn"
       )
 

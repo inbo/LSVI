@@ -51,14 +51,11 @@ berekenLSVIbasis <-
       ),
     Data_soortenKenmerken = data.frame(ID = character()),
     ConnectieLSVIhabitats = connecteerMetLSVIdb(),
-    ConnectieNBN =
-      connecteerMetLSVIdb(Databank = "D0017_00_NBNData"),
     LIJST = geefVertaallijst(ConnectieLSVIhabitats)
   ){
 
     #controle invoer
     assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
-    assert_that(inherits(ConnectieNBN, "RODBC"))
 
     invoercontroleVersie(Versie, ConnectieLSVIhabitats)
 
@@ -87,7 +84,6 @@ berekenLSVIbasis <-
         invoercontroleData_soortenKenmerken(
           Data_soortenKenmerken,
           ConnectieLSVIhabitats,
-          ConnectieNBN,
           LIJST
         )
     } else {

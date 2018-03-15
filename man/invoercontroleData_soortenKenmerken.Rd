@@ -5,7 +5,7 @@
 \title{Invoercontrole voor dataframe Data_soortenKenmerken}
 \usage{
 invoercontroleData_soortenKenmerken(Data_soortenKenmerken,
-  ConnectieLSVIhabitats, ConnectieNBN, LIJST)
+  ConnectieLSVIhabitats, LIJST)
 }
 \arguments{
 \item{Data_soortenKenmerken}{dataframe waarop invoercontrole moet gebeuren.}
