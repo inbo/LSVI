@@ -63,6 +63,10 @@ analyseVariabele_c <-
           ),
           ConnectieLSVIhabitats = ConnectieLSVIhabitats
         ) %>%
+        mutate(
+          NBNTaxonVersionKey =
+            tolower(.data$NBNTaxonVersionKey)
+        ) %>%
         select(
           .data$SoortengroepID,
           .data$SoortensubgroepID,
