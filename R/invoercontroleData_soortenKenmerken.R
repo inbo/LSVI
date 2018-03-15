@@ -139,7 +139,7 @@ invoercontroleData_soortenKenmerken <-
     Fouten <- KenmerkenSoort %>%
       filter(is.na(.data$NBNTaxonVersionKey))
     if (nrow(Fouten) > 0) {
-      stop(
+      warning(
         sprintf(
           "Volgende soortnamen zijn niet teruggevonden in de databank: %s.  Check de spelling en/of laat de auteursnaam weg bij genera.",  #nolint
           paste(Fouten$Kenmerk, collapse = ", ")
