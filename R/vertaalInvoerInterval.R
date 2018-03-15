@@ -78,7 +78,7 @@ vertaalInvoerInterval <-
       )
 
     Resultaat <- Dataset %>%
-      filter(tolower(.data$Type) == "categorie") 
+      filter(tolower(.data$Type) == "categorie")
 
     if (nrow(Resultaat) > 0) {
       Resultaat <- Resultaat %>%

@@ -34,8 +34,12 @@ invoercontroleData_voorwaarden <-
       Data_voorwaarden$Voorwaarde <- as.character(Data_voorwaarden$Voorwaarde)
     }
     Data_voorwaarden$Voorwaarde <- tolower(Data_voorwaarden$Voorwaarde)
-    if (!all(Data_voorwaarden$Voorwaarde %in%
-             geefUniekeWaarden("Voorwaarde", "VoorwaardeNaam", ConnectieLSVIhabitats))) {
+    if (
+      !all(
+        Data_voorwaarden$Voorwaarde %in%
+        geefUniekeWaarden("Voorwaarde", "VoorwaardeNaam", ConnectieLSVIhabitats)
+      )
+    ) {
       stop("Niet alle waarden vermeld onder Data_voorwaarden$Voorwaarde komen overeen met waarden vermeld in de databank.") #nolint
     }
     #misschien best ook testen dat die indicator-criterium-combinatie in de databank voorkomt?  En of deze voor dat habitattype voorkomt, maar dat best verderop doen
