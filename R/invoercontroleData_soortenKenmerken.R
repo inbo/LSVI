@@ -75,16 +75,16 @@ invoercontroleData_soortenKenmerken <-
     #○mzettingen naar een bruikbare dataframe
     Kenmerken <- Data_soortenKenmerken #naamsverandering is omdat code verplaatst is
 
+    #Voorlopig worden enkel soorten gekoppeld, maar er zouden ook genera, ondersoorten, varieteiten,... gekoppeld moeten worden.  Zodra de db hiervoor in orde is: Taxontype.Naam AS Taxontype opslaan en hierop selecteren om de lijst te formatteren;
     QuerySoorten <-
       "SELECT WetNaam, NedNaam, NBNTaxonVersionKey, TaxonTypeId
       FROM Soort WHERE NBNTaxonVersionKey IS NOT NULL"
 
-    Taxonlijst <- 
+    Taxonlijst <-
       sqlQuery(ConnectieLSVIhabitats, QuerySoorten, stringsAsFactors = FALSE)
 
-    #Voorlopig worden enkel soorten gekoppeld, maar er zouden ook genera, ondersoorten, varieteiten,... gekoppeld moeten worden.
     Soortenlijst <- Taxonlijst %>%
-      filter(is.na(TaxonTypeId)) %>%
+      filter(is.na(TaxonTypeId)) %>%  #Taxontype == "Soort"
       mutate(
         WetNaam =
           gsub(
@@ -98,6 +98,18 @@ invoercontroleData_soortenKenmerken <-
             replacement = "",
             x = .data$WetNaam
           )
+      )
+
+    #ophalen lijst voor genera.  Idee is om deze te koppelen aan de soortenlijst, zodra de NBNkeys beschikbaar zijn
+    Generalijst <-
+      sqlQuery(
+        ConnectieLSVIhabitats,
+        "SELECT WetNaam, Naam AS NedNaam FROM Soortengroep
+        WHERE SoortengroeptypeId = '1'",
+        stringsAsFactors = FALSE
+      ) %>%
+      mutate(
+        TaxonType = "Genus"
       )
 
     KenmerkenSoort <- Kenmerken %>%
@@ -135,7 +147,7 @@ invoercontroleData_soortenKenmerken <-
           )
       )
 
-    
+
     Fouten <- KenmerkenSoort %>%
       filter(is.na(.data$NBNTaxonVersionKey))
     if (nrow(Fouten) > 0) {
@@ -146,7 +158,7 @@ invoercontroleData_soortenKenmerken <-
         )
       )
     }
-    
+
     KenmerkenSoort <- KenmerkenSoort %>%
       mutate(
         Kenmerk = .data$NBNTaxonVersionKey,
