@@ -143,7 +143,7 @@ describe("berekenLSVIbasis", {
           ),
         Data_soortenKenmerken
       ),
-      "Foute invoer in Data_voorwaarden\\$Waarde: geen getal ingevoerd waar een getal verwacht wordt" #nolint
+      "Niet alle opgegeven percentages zijn numerieke waarden." #nolint
     )
     expect_error(
       berekenLSVIbasis(

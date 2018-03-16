@@ -99,7 +99,17 @@ vertaalInvoerInterval <-
         Dataset %>%
           filter(tolower(.data$Type) == "percentage") %>%
           mutate(
-            Min = as.numeric(gsub(",", ".", .data$Waarde)) / 100,
+            Min = 
+              tryCatch(
+                as.numeric(gsub(",", ".", .data$Waarde)) / 100,
+                warning = function(w) {
+                  if (grepl("NAs introduced by coercion", w)) {
+                    stop("Niet alle opgegeven percentages zijn numerieke waarden")
+                  } else {
+                    as.numeric(gsub(",", ".", .data$Waarde)) / 100
+                  }
+                }
+              ),
             Max = Min
           )
       ) %>%
@@ -107,7 +117,17 @@ vertaalInvoerInterval <-
         Dataset %>%
           filter(!tolower(.data$Type) %in% c("categorie", "percentage")) %>%
           mutate(
-            Min = as.numeric(gsub(",", ".", .data$Waarde)),
+            Min = 
+              tryCatch(
+                as.numeric(gsub(",", ".", .data$Waarde)),
+                warning = function(w) {
+                  if (grepl("NAs introduced by coercion", w)) {
+                    stop("Niet alle opgegeven getallen zijn numerieke waarden")
+                  } else {
+                    as.numeric(gsub(",", ".", .data$Waarde))
+                  }
+                }
+              ),
             Max = Min
           )
       ) %>%
