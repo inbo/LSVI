@@ -349,7 +349,7 @@ describe("berekenLSVIbasis", {
               )
           )
       ),
-      "Niet alle waarden vermeld onder Data_soorten\\$Bedekking komen overeen met de bedekkingsschaal die gebruikt wordt voor deze monitoring."
+      "Niet alle waarden vermeld onder Data_soorten\\$Bedekking komen overeen met de bedekkingsschaal die gebruikt wordt voor deze monitoring."  #nolint
     )
     expect_error(
       berekenLSVIbasis(
@@ -367,7 +367,7 @@ describe("berekenLSVIbasis", {
               )
           )
       ),
-      "Niet alle waarden vermeld onder Data_soorten\\$Bedekking komen overeen met de bedekkingsschaal die gebruikt wordt voor deze monitoring."
+      "Niet alle waarden vermeld onder Data_soorten\\$Bedekking komen overeen met de bedekkingsschaal die gebruikt wordt voor deze monitoring." #nolint
     )
     expect_error(
       berekenLSVIbasis(
@@ -491,7 +491,7 @@ describe("berekenLSVIbasis", {
     )
     #nog testen: "Niet alle te evalueren soorten zijn opgenomen onder Data_soorten\\$Soort_Latijn, er wordt van uitgegaan dat de niet opgenomen soorten niet waargenomen zijn"
     #nog extra tests toevoegen voor genera en habitatsubtypes als de ontwikkeling hiervoor op punt staat
-    
+
   })
 
 })

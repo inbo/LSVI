@@ -1,7 +1,7 @@
 context("test s4_Aantal")
 
 describe("s4_Aantal", {
-  
+
   it("In- en uitvoer van slots gebeurt correct", {
     expect_identical(
       new(Class = "aantal")@VoorwaardeID,
@@ -30,7 +30,7 @@ describe("s4_Aantal", {
       getKenmerken(
         new(
           Class = "aantal",
-          Kenmerken = 
+          Kenmerken =
             data.frame(
               Kenmerk = c("nbn123", "testgroep"),
               TypeKenmerk = c("soort_nbn", "studiegroep"),
@@ -43,7 +43,7 @@ describe("s4_Aantal", {
     expect_error(
       new(
         Class = "aantal",
-        Kenmerken = 
+        Kenmerken =
           data.frame(
             Kenmerk = c("nbn123", "testgroep"),
             TypeKenmerk = c("soort_nbn", "soortengroep"),
@@ -54,7 +54,7 @@ describe("s4_Aantal", {
     expect_error(
       new(
         Class = "aantal",
-        Kenmerken = 
+        Kenmerken =
           data.frame(
             Kenmerk = c("nbn123", 3.14),
             TypeKenmerk = c("soort_nbn", "studiegroep"),
@@ -65,7 +65,7 @@ describe("s4_Aantal", {
     expect_error(
       new(
         Class = "aantal",
-        Kenmerken = 
+        Kenmerken =
           data.frame(
             Kenmerk = c("nbn123", "testgroep"),
             Groep = c("soort_nbn", "studiegroep"),
@@ -74,8 +74,7 @@ describe("s4_Aantal", {
       )
     )
   })
-  
-  
+
   it("Berekening BerekenWaarde gebeurt correct", {
     expect_equal(
       berekenWaarde(
@@ -184,7 +183,7 @@ describe("s4_Aantal", {
       2
     )
   })
-  
+
   #nog toevoegen als het opzoeken van soorten in subniveaus opgelost is: de aggregatie van bedekkingen gebeurt correct
 
 })
