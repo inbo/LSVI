@@ -351,25 +351,24 @@ describe("berekenLSVIbasis", {
       ),
       "Niet alle waarden vermeld onder Data_soorten\\$Bedekking komen overeen met de bedekkingsschaal die gebruikt wordt voor deze monitoring."
     )
-    it("dataframe Data_soortenKenmerken heeft correct formaat", {
-      expect_error(
-        berekenLSVIbasis(
-          Versie = "Versie 3",
-          Kwaliteitsniveau = "1",
-          Data_habitat,
-          Data_voorwaarden,
-          Data_soortenKenmerken %>%
-            mutate(
-              Waarde =
-                ifelse(
-                  .data$Waarde == "f",
-                  11,
-                  .data$Waarde
-                )
-            )
-        ),
-        "Niet alle waarden vermeld onder Data_soorten\\$Bedekking komen overeen met de bedekkingsschaal die gebruikt wordt voor deze monitoring."
-      )
+    expect_error(
+      berekenLSVIbasis(
+        Versie = "Versie 3",
+        Kwaliteitsniveau = "1",
+        Data_habitat,
+        Data_voorwaarden,
+        Data_soortenKenmerken %>%
+          mutate(
+            Waarde =
+              ifelse(
+                .data$Waarde == "f",
+                11,
+                .data$Waarde
+              )
+          )
+      ),
+      "Niet alle waarden vermeld onder Data_soorten\\$Bedekking komen overeen met de bedekkingsschaal die gebruikt wordt voor deze monitoring."
+    )
     expect_error(
       berekenLSVIbasis(
         Versie = "Versie 3",
@@ -406,6 +405,91 @@ describe("berekenLSVIbasis", {
       ),
       "Volgende soortnamen zijn niet teruggevonden in de databank"
     )
+    expect_equal(
+      berekenLSVIbasis(
+        Versie = "Versie 3",
+        Kwaliteitsniveau = "1",
+        Data_habitat,
+        Data_voorwaarden,
+        Data_soortenKenmerken %>%
+          mutate(
+            Kenmerk =
+              ifelse(
+                .data$Kenmerk == "Calluna vulgaris",
+                "Struikhei",
+                .data$Kenmerk
+              ),
+            TypeKenmerk =
+              ifelse(
+                .data$Kenmerk == "Struikhei",
+                "soort_nl",
+                .data$TypeKenmerk
+              )
+          )
+      ),
+      Resultaat
+    )
+    expect_warning(
+      berekenLSVIbasis(
+        Versie = "Versie 3",
+        Kwaliteitsniveau = "1",
+        Data_habitat,
+        Data_voorwaarden,
+        Data_soortenKenmerken %>%
+          mutate(
+            TypeKenmerk =
+              ifelse(
+                .data$Kenmerk == "Calluna vulgaris",
+                "soort_NL",
+                .data$TypeKenmerk
+              )
+          )
+      ),
+      "Volgende soortnamen zijn niet teruggevonden in de databank"
+    )
+    expect_equal(
+      berekenLSVIbasis(
+        Versie = "Versie 3",
+        Kwaliteitsniveau = "1",
+        Data_habitat,
+        Data_voorwaarden,
+        Data_soortenKenmerken %>%
+          mutate(
+            Kenmerk =
+              ifelse(
+                .data$Kenmerk == "Calluna vulgaris",
+                "INBSYS0000014446",
+                .data$Kenmerk
+              ),
+            TypeKenmerk =
+              ifelse(
+                .data$Kenmerk == "INBSYS0000014446",
+                "soort_nbn",
+                .data$TypeKenmerk
+              )
+          )
+      ),
+      Resultaat
+    )
+    expect_warning(
+      berekenLSVIbasis(
+        Versie = "Versie 3",
+        Kwaliteitsniveau = "1",
+        Data_habitat,
+        Data_voorwaarden,
+        Data_soortenKenmerken %>%
+          mutate(
+            TypeKenmerk =
+              ifelse(
+                .data$Kenmerk == "Calluna vulgaris",
+                "soort_nbn",
+                .data$TypeKenmerk
+              )
+          )
+      ),
+      "Volgende soortnamen zijn niet teruggevonden in de databank"
+    )
+    #nog testen: "Niet alle te evalueren soorten zijn opgenomen onder Data_soorten\\$Soort_Latijn, er wordt van uitgegaan dat de niet opgenomen soorten niet waargenomen zijn"
     #nog extra tests toevoegen voor genera en habitatsubtypes als de ontwikkeling hiervoor op punt staat
     
   })
