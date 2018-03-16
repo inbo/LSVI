@@ -331,6 +331,85 @@ describe("berekenLSVIbasis", {
       )
     )
   })
+
+  it("dataframe Data_soortenKenmerken heeft correct formaat", {
+    expect_error(
+      berekenLSVIbasis(
+        Versie = "Versie 3",
+        Kwaliteitsniveau = "1",
+        Data_habitat,
+        Data_voorwaarden,
+        Data_soortenKenmerken %>%
+          mutate(
+            Waarde =
+              ifelse(
+                .data$Waarde == "f",
+                "foute invoer",
+                .data$Waarde
+              )
+          )
+      ),
+      "Niet alle waarden vermeld onder Data_soorten\\$Bedekking komen overeen met de bedekkingsschaal die gebruikt wordt voor deze monitoring."
+    )
+    it("dataframe Data_soortenKenmerken heeft correct formaat", {
+      expect_error(
+        berekenLSVIbasis(
+          Versie = "Versie 3",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden,
+          Data_soortenKenmerken %>%
+            mutate(
+              Waarde =
+                ifelse(
+                  .data$Waarde == "f",
+                  11,
+                  .data$Waarde
+                )
+            )
+        ),
+        "Niet alle waarden vermeld onder Data_soorten\\$Bedekking komen overeen met de bedekkingsschaal die gebruikt wordt voor deze monitoring."
+      )
+    expect_error(
+      berekenLSVIbasis(
+        Versie = "Versie 3",
+        Kwaliteitsniveau = "1",
+        Data_habitat,
+        Data_voorwaarden,
+        Data_soortenKenmerken %>%
+          mutate(
+            Waarde =
+              ifelse(
+                .data$Waarde == 0,
+                "foute invoer",
+                .data$Waarde
+              )
+          )
+      ),
+      "Niet alle opgegeven percentages zijn numerieke waarden."
+    )
+    expect_warning(
+      berekenLSVIbasis(
+        Versie = "Versie 3",
+        Kwaliteitsniveau = "1",
+        Data_habitat,
+        Data_voorwaarden,
+        Data_soortenKenmerken %>%
+          mutate(
+            Kenmerk =
+              ifelse(
+                .data$Kenmerk == "Calluna vulgaris",
+                "Calla vulgaris",
+                .data$Kenmerk
+              )
+          )
+      ),
+      "Volgende soortnamen zijn niet teruggevonden in de databank"
+    )
+    #nog extra tests toevoegen voor genera en habitatsubtypes als de ontwikkeling hiervoor op punt staat
+    
+  })
+
 })
 
 

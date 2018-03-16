@@ -154,7 +154,7 @@ invoercontroleData_soortenKenmerken <-
       warning(
         sprintf(
           "Volgende soortnamen zijn niet teruggevonden in de databank: %s.  Check de spelling en/of laat de auteursnaam weg bij genera.",  #nolint
-          paste(Fouten$Kenmerk, collapse = ", ")
+          paste(unique(Fouten$Kenmerk), collapse = ", ")
         )
       )
     }
