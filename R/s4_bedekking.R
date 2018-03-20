@@ -4,7 +4,8 @@
 #' 
 #' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
 #' 
-#' @importFrom dplyr %>%
+#' @importFrom methods setClass setMethod
+#' 
 #' @include s4_AnalyseVariabele.R
 setClass(
   Class = "bedekking",

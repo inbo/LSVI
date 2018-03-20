@@ -20,9 +20,10 @@
 #'
 #' @export
 #'
-#' @importFrom RODBC sqlQuery odbcClose
+#' @importFrom RODBC sqlQuery
 #' @importFrom assertthat assert_that is.string
-#' @importFrom dplyr %>%
+#' @importFrom dplyr %>% mutate
+#' @importFrom rlang .data
 #'
 #'
 selecteerIndicatoren <-

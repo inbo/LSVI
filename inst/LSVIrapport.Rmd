@@ -38,9 +38,11 @@ Indicatoren <-
     Habitattype = params$Habitattype,
     HabitatnamenToevoegen = TRUE
   ) %>%
-  select_(~Versie, ~Habitatgroepnaam, ~Habitattype, ~Habitatnaam,
-          ~Habitatsubtype, ~Habitatsubtypenaam) %>%
-  distinct_()
+  select(
+    .data$Versie, .data$Habitatgroepnaam, .data$Habitattype, .data$Habitatnaam,
+    .data$Habitatsubtype, .data$Habitatsubtypenaam
+  ) %>%
+  distinct()
 
 ```
 
@@ -53,14 +55,14 @@ Uitvoer <- NULL
 for (VersieRapportdeel in unique(Indicatoren$Versie)) {
   Uitvoer <- c(Uitvoer, paste("#", VersieRapportdeel, sep = ""))
   VersieIndicatoren <- Indicatoren %>%
-    filter_(~Versie == VersieRapportdeel)
+    filter(.data$Versie == VersieRapportdeel)
   for (Habitatgroep in unique(VersieIndicatoren$Habitatgroepnaam)) {
     Uitvoer <- c(Uitvoer, paste("##",Habitatgroep, sep = ""))
     Subset <- VersieIndicatoren %>%
-      filter_(~Habitatgroepnaam == Habitatgroep)
+      filter(.data$Habitatgroepnaam == Habitatgroep)
     for (Habitat in unique(as.character(Subset$Habitattype))) {
       Subsubset <- Subset %>%
-        filter_(~Habitattype == Habitat)
+        filter(.data$Habitattype == Habitat)
       Habitatnaam <- ifelse(is.na(unique(Subsubset$Habitatnaam)),
                             "",
                             paste(": ", unique(Subsubset$Habitatnaam), sep = ""))
@@ -68,10 +70,10 @@ for (VersieRapportdeel in unique(Indicatoren$Versie)) {
       for (HabitatsubtypeFiche in unique(as.character(Subsubset$Habitatsubtype))) {
         Habitatsubtypenaam <- 
           ifelse(is.na(unique((Subsubset %>% 
-                                filter_(~Habitatsubtype == HabitatsubtypeFiche))$Habitatsubtypenaam)),
+                                filter(.data$Habitatsubtype == HabitatsubtypeFiche))$Habitatsubtypenaam)),
                  "",
                  paste(": ", unique((Subsubset %>% 
-                                filter_(~Habitatsubtype == HabitatsubtypeFiche))$Habitatsubtypenaam), sep = ""))
+                                filter(.data$Habitatsubtype == HabitatsubtypeFiche))$Habitatsubtypenaam), sep = ""))
         if (HabitatsubtypeFiche != Habitat) {
           Uitvoer <- 
             c(Uitvoer,

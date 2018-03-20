@@ -16,7 +16,6 @@
 #' @export
 #'
 #' @importFrom rmarkdown render
-#' @importFrom RODBC sqlQuery odbcClose
 #' @importFrom assertthat assert_that noNA is.flag
 #'
 #'

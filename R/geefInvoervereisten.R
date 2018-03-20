@@ -25,9 +25,10 @@
 #'
 #' @export
 #'
-#' @importFrom RODBC sqlQuery odbcClose
-#' @importFrom dplyr %>% select_ filter_ group_by_ summarise_ ungroup left_join mutate_ rowwise arrange
-#' @importFrom tidyr gather_
+#' @importFrom RODBC sqlQuery
+#' @importFrom dplyr %>% select filter group_by summarise ungroup left_join mutate rowwise arrange distinct
+#' @importFrom tidyr gather
+#' @importFrom rlang .data
 #' @importFrom assertthat assert_that is.string
 #'
 #'
@@ -73,13 +74,21 @@ geefInvoervereisten <- function(Versie = "alle",
       Indicator = Indicator,
       ConnectieLSVIhabitats = ConnectieLSVIhabitats
     ) %>%
-    select_(~Versie, ~Habitattype, ~Habitatsubtype, ~Indicator_beoordelingID)
+    select(
+      .data$Versie,
+      .data$Habitattype,
+      .data$Habitatsubtype,
+      .data$Indicator_beoordelingID
+    )
 
   Indicator_beoordelingIDs <-
     paste(
       unique(
         (Selectiewaarden %>%
-           filter_(~!is.na(Indicator_beoordelingID)))$Indicator_beoordelingID
+           filter(
+             !is.na(.data$Indicator_beoordelingID)
+           )
+         )$Indicator_beoordelingID
       ),
       collapse = "','"
     )
@@ -111,7 +120,7 @@ geefInvoervereisten <- function(Versie = "alle",
   BeoordelingIDs <-
     paste(
       unique(
-        (LSVIinfo %>% filter_(~!is.na(BeoordelingID)))$BeoordelingID
+        (LSVIinfo %>% filter(!is.na(.data$BeoordelingID)))$BeoordelingID
       ),
       collapse = "','"
     )
@@ -158,27 +167,27 @@ geefInvoervereisten <- function(Versie = "alle",
 
   Voorwaarden <- sqlQuery(ConnectieLSVIhabitats, query_combinerenVoorwaarden,
                           stringsAsFactors = FALSE) %>%
-    mutate_(
+    mutate(
       Combinatie =
-        ~ifelse(
-          is.na(VoorwaardeID1),
-          ifelse(is.na(VoorwaardeID2), "", VoorwaardeID2),
+        ifelse(
+          is.na(.data$VoorwaardeID1),
+          ifelse(is.na(.data$VoorwaardeID2), "", .data$VoorwaardeID2),
           ifelse(
-            is.na(VoorwaardeID2),
-            VoorwaardeID1,
+            is.na(.data$VoorwaardeID2),
+            .data$VoorwaardeID1,
             ifelse(
-              BewerkingAND,
-              paste(VoorwaardeID1, VoorwaardeID2, sep = " EN "),
-              paste(VoorwaardeID1, VoorwaardeID2, sep = " OF ")
+              .data$BewerkingAND,
+              paste(.data$VoorwaardeID1, .data$VoorwaardeID2, sep = " EN "),
+              paste(.data$VoorwaardeID1, .data$VoorwaardeID2, sep = " OF ")
             )
           )
         )
     ) %>%
-    distinct_()
+    distinct()
 
   RecFunctie <- function(ID) {
     Record <- Voorwaarden %>%
-      filter_(~Id == ID)
+      filter(.data$Id == ID)
     Combinatie <-
       paste(Record$Combinatie,
             ifelse(
@@ -199,31 +208,41 @@ geefInvoervereisten <- function(Versie = "alle",
   Children <-
     unique(
       c(
-        (Voorwaarden %>% filter_(~!is.na(ChildID1)))$ChildID1,
-        (Voorwaarden %>% filter_(~!is.na(ChildID2)))$ChildID2
+        (Voorwaarden %>% filter(!is.na(.data$ChildID1)))$ChildID1,
+        (Voorwaarden %>% filter(!is.na(.data$ChildID2)))$ChildID2
       )
     )
 
   BasisVoorwaarden <- Voorwaarden %>%
-    filter_(~!Id %in% Children) %>%
-    select_(~Id, ~BeoordelingID) %>%
+    filter(!.data$Id %in% Children) %>%
+    select(.data$Id, .data$BeoordelingID) %>%
     rowwise() %>%
-    mutate_(
-      Combinatie = ~RecFunctie(Id)
+    mutate(
+      Combinatie = RecFunctie(.data$Id)
     ) %>%
     left_join(
-      Voorwaarden %>% select_(~BeoordelingID, ~VoorwaardeID1, ~VoorwaardeID2),
+      Voorwaarden %>%
+        select(
+          .data$BeoordelingID,
+          .data$VoorwaardeID1,
+          .data$VoorwaardeID2
+        ),
       by = c("BeoordelingID")
     ) %>%
-    select_(~BeoordelingID, ~VoorwaardeID1, ~VoorwaardeID2, ~Combinatie) %>%
-    gather_("MagWeg", "VoorwaardeID", c("VoorwaardeID1", "VoorwaardeID2")) %>%
-    filter_(~!is.na(VoorwaardeID)) %>%
-    select_(~BeoordelingID, ~Combinatie, ~VoorwaardeID)
+    select(
+      .data$BeoordelingID,
+      .data$VoorwaardeID1,
+      .data$VoorwaardeID2,
+      .data$Combinatie
+    ) %>%
+    gather("MagWeg", "VoorwaardeID", c("VoorwaardeID1", "VoorwaardeID2")) %>%
+    filter(!is.na(.data$VoorwaardeID)) %>%
+    select(.data$BeoordelingID, .data$Combinatie, .data$VoorwaardeID)
 
   VoorwaardenIDs <-
     paste(
       unique(
-        (BasisVoorwaarden %>% filter_(~!is.na(VoorwaardeID)))$VoorwaardeID
+        (BasisVoorwaarden %>% filter(!is.na(.data$VoorwaardeID)))$VoorwaardeID
       ),
       collapse = "','"
     )

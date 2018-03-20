@@ -9,7 +9,8 @@
 #' 
 #' @return Een vector van 2 waarden die het resultaat is van de berekening, namelijk het minimum en het maximum van het interval waartussen de berekende waarde ligt.  Als het resultaat een exacte waarde is en geen interval, bevat de vector tweemaal dezelfde waarde.  (Het resultaat is een interval als de brondata categorische variabelen zijn, bv. bedekkingen volgens de beheermonitoringschaal of Tansley-schaal.)
 #' 
-#' @importFrom RODBC sqlQuery
+#' @importFrom rlang .data
+#' @importFrom dplyr filter
 #' 
 #' @export
 

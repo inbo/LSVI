@@ -6,6 +6,9 @@
 #' @inheritParams berekenLSVIbasis
 #'
 #' @importFrom assertthat assert_that has_name
+#' @importFrom RODBC sqlQuery
+#' @importFrom dplyr %>% filter mutate select left_join bind_rows rename
+#' @importFrom rlang .data
 #' 
 #' @export
 #'

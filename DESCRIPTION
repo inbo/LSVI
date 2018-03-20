@@ -8,23 +8,21 @@ Depends:
 License: GPL-3
 LazyData: true
 Imports:
-    RODBC,
     assertthat,
     dplyr,
-    rmarkdown,
     lazyeval,
-    utils,
-    testthat,
+    methods,
     pander,
-    tidyr,
     readr,
-    n2khelper
+    rmarkdown,
+    RODBC,
+    testthat,
+    tidyr,
+    utils,
+    rlang
 Suggests:
     xtable,
-    knitr,
-    rmarkdown
-Remotes:
-    inbo/n2khelper
+    knitr
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr
 Collate: 

@@ -18,8 +18,8 @@
 #'
 #' @export
 #'
-#' @importFrom dplyr %>% select_ distinct_ filter group_by_ summarise_ ungroup mutate_ left_join rename_
-#' @importFrom RODBC sqlQuery
+#' @importFrom dplyr %>% select distinct filter group_by summarise ungroup mutate_ left_join rename
+#' @importFrom rlang .data
 #'
 #'
 geefSoortenlijst <-
@@ -48,15 +48,15 @@ geefSoortenlijst <-
       #eerst oplijsten welke gegevens moeten opgehaald worden
       #per niveau van Soortengroep en SoortengroepSoort
       SoortengroepIDperNiveau <- Selectiegegevens %>%
-        select_(~SoortengroepID, ~NiveauSoortenlijstFiche) %>%
-        distinct_() %>%
+        select(.data$SoortengroepID, .data$NiveauSoortenlijstFiche) %>%
+        distinct() %>%
         filter(!is.na(.data$SoortengroepID)) %>%
-        group_by_(~NiveauSoortenlijstFiche) %>%
-        summarise_(
-          SoortengroepIDs = ~ paste(SoortengroepID, collapse = ",")
+        group_by(.data$NiveauSoortenlijstFiche) %>%
+        summarise(
+          SoortengroepIDs = paste(.data$SoortengroepID, collapse = ",")
         ) %>%
         ungroup() %>%
-        rename_(Niveau = ~NiveauSoortenlijstFiche)
+        rename(Niveau = .data$NiveauSoortenlijstFiche)
 
       if (nrow(SoortengroepIDperNiveau) == 0) {
         stop("Voor de opgegeven argumenten is er geen soortenlijst")
@@ -72,10 +72,10 @@ geefSoortenlijst <-
     } else if (Soortenlijsttype == "Soortniveau" | Soortenlijsttype == "alle") {
       #de andere optie: gegevens van het diepste niveau ophalen
       SoortengroepIDs <- Selectiegegevens %>%
-        select_(~SoortengroepID) %>%
-        distinct_() %>%
+        select(.data$SoortengroepID) %>%
+        distinct() %>%
         filter(!is.na(.data$SoortengroepID)) %>%
-        summarise_(SoortengroepIDs = ~ paste(SoortengroepID, collapse = ","))
+        summarise(SoortengroepIDs = paste(.data$SoortengroepID, collapse = ","))
 
       if (SoortengroepIDs$SoortengroepIDs == "") {
         stop("Voor de opgegeven argumenten is er geen soortenlijst")
@@ -97,8 +97,8 @@ geefSoortenlijst <-
         Soortenlijst,
         by = ("SoortengroepID")
       ) %>%
-      mutate_(
-        NiveauSoortenlijstFiche = ~NULL
+      mutate(
+        NiveauSoortenlijstFiche = NULL
       )
 
     return(SoortenlijstSelectie)

@@ -29,10 +29,11 @@
 #'
 #' @export
 #'
-#' @importFrom RODBC sqlQuery odbcClose
-#' @importFrom dplyr %>% select distinct filter mutate row_number rename left_join summarise group_by ungroup bind_rows
+#' @importFrom RODBC odbcClose
+#' @importFrom dplyr %>% select distinct filter mutate row_number rename left_join summarise group_by ungroup rowwise
+#' @importFrom tidyr unnest
 #' @importFrom assertthat assert_that has_name
-#' @importFrom pander evals
+#' @importFrom rlang .data
 #'
 #'
 berekenLSVIbasis <-

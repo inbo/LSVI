@@ -11,7 +11,7 @@
 #'
 #' @export
 #'
-#' @importFrom RODBC sqlQuery odbcClose
+#' @importFrom RODBC sqlQuery
 #'
 #'
 geefVersieInfo <-

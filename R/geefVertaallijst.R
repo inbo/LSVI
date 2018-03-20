@@ -6,6 +6,7 @@
 #' 
 #' @importFrom RODBC sqlQuery odbcClose
 #' @importFrom dplyr %>% mutate
+#' @importFrom rlang .data
 #' 
 #' @return Dataframe met Naam, Waarde, Volgnummer, Omschrijving, Ondergrens, Gemiddelde en Bovengrens. Telkens is een waarde tussen 0 en 1 opgegeven die afkomstig is van het delen van het percentage door 100)
 #' 

@@ -16,8 +16,8 @@
 #'
 #' @export
 #'
-#' @importFrom dplyr %>% bind_rows mutate_ filter_ distinct_
-#' @importFrom RODBC sqlQuery odbcClose
+#' @importFrom dplyr %>% mutate filter distinct
+#' @importFrom RODBC sqlQuery
 #' @importFrom assertthat assert_that noNA is.string
 #'
 #'
@@ -108,16 +108,22 @@ geefSoortenlijstSoortniveau <-
         sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
 
       Soortenlijst <- Soortenlijst %>%
-        mutate_(
-          NedNaam = ~ifelse(is.na(NedNaam) & Soortengroeptype != "Conceptueel",
-                            NedNaam_groep,
-                            NedNaam),
-          WetNaam = ~ifelse(is.na(WetNaam) & Soortengroeptype != "Conceptueel",
-                            WetNaam_groep,
-                            WetNaam),
-          NedNaam_groep = ~NULL,
-          WetNaam_groep = ~NULL,
-          Soortengroeptype = ~NULL
+        mutate(
+          NedNaam =
+            ifelse(
+              is.na(.data$NedNaam) & .data$Soortengroeptype != "Conceptueel",
+              .data$NedNaam_groep,
+              .data$NedNaam
+            ),
+          WetNaam =
+            ifelse(
+              is.na(.data$WetNaam) & .data$Soortengroeptype != "Conceptueel",
+              .data$WetNaam_groep,
+              .data$WetNaam
+            ),
+          NedNaam_groep = NULL,
+          WetNaam_groep = NULL,
+          Soortengroeptype = NULL
         )
     }
 
@@ -125,16 +131,16 @@ geefSoortenlijstSoortniveau <-
     #Kolommen met WetNaam (uit tabellen Soortengroep en Soort) samenvoegen,
     #id voor NedNaam, en een kolom WetNaamKort toevoegen
     Soortenlijst <- Soortenlijst %>%
-      distinct_() %>%
-      filter_(
-        ~!is.na(WetNaam) | !is.na(NedNaam)
+      distinct() %>%
+      filter(
+        !is.na(.data$WetNaam) | !is.na(.data$NedNaam)
       ) %>%
-      mutate_(
-        WetNaamKort = ~
+      mutate(
+        WetNaamKort =
           gsub(
             pattern = "^([[:alpha:]]*) ([[:alpha:]]*) (.*)",
             replacement = "\\1 \\2",
-            x = WetNaam
+            x = .data$WetNaam
           )
       )
 

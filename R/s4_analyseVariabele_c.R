@@ -2,8 +2,13 @@
 #' 
 #' Een constructor is een gebruiksvriendelijke functie die een s4-klasse aanmaakt, zodat een gebruiker niet rechtstreeks geconfronteerd wordt met het aanmaken van een object voor een s4-klasse.  In dit geval worden alle als parameter toegevoegde gegevens netjes in het object gestoken, alsook extra info die uit de databank gehaald wordt.  Een deel van de validatie gebeurt in de s4-klasse AnalyseVariabele zelf.
 #' 
+#' @inheritParams berekenVoorwaarde
+#' 
 #' @importFrom assertthat assert_that
 #' @importFrom RODBC sqlQuery
+#' @importFrom methods new
+#' @importFrom dplyr %>% mutate select filter summarise
+#' @importFrom rlang .data
 #' 
 #' @export
 
@@ -77,10 +82,10 @@ analyseVariabele_c <-
 
       if (!all(is.na(Soortengroep$SoortensubgroepID))) {
         Subsoorten <- Soortengroep %>%
-          filter_(~!is.na(SoortensubgroepID)) %>%
-          summarise_(
+          filter(!is.na(.data$SoortensubgroepID)) %>%
+          summarise(
             SoortensubgroepIDs =
-              ~ paste(SoortensubgroepID, collapse = ",")
+              paste(.data$SoortensubgroepID, collapse = ",")
           )
         Subsoortengroep <-
           geefSoortenlijstSoortniveau(

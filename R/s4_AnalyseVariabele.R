@@ -4,7 +4,8 @@
 #' 
 #' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
 #' 
-#' @importFrom assertthat assert_that
+#' @importFrom assertthat assert_that has_name
+#' @importFrom methods setClass setValidity getGeneric setMethod setReplaceMethod validObject
 #' 
 setClass(
   Class = "AnalyseVariabele",

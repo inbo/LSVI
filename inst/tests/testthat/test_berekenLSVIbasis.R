@@ -2,6 +2,7 @@ context("test berekenLSVIbasis")
 
 library(readr)
 library(dplyr)
+library(rlang)
 
 Data_habitat <-
     read_csv2(

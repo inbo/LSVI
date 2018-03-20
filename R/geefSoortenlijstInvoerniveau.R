@@ -19,8 +19,8 @@
 #'
 #' @export
 #'
-#' @importFrom dplyr %>% bind_rows mutate_
-#' @importFrom RODBC sqlQuery odbcClose
+#' @importFrom dplyr %>% bind_rows mutate
+#' @importFrom RODBC sqlQuery
 #' @importFrom assertthat assert_that noNA is.count has_name 
 #'
 #'
@@ -117,18 +117,20 @@ geefSoortenlijstInvoerniveau <-
     #Kolommen met WetNaam (uit tabellen Soortengroep en Soort) samenvoegen,
     #id voor NedNaam, en een kolom WetNaamKort toevoegen
     Soortenlijst <- Soortenlijst %>%
-      mutate_(
-        WetNaam = ~ifelse(is.na(WetNaam), WetNaam_groep, WetNaam),
-        WetNaamKort = ~
+      mutate(
+        WetNaam =
+          ifelse(is.na(.data$WetNaam), .data$WetNaam_groep, .data$WetNaam),
+        WetNaamKort =
           gsub(
             pattern = "^([[:alpha:]]*) ([[:alpha:]]*) (.*)",
             replacement = "\\1 \\2",
-            x = WetNaam
+            x = .data$WetNaam
           ),
-        NedNaam = ~ifelse(is.na(NedNaam), NedNaam_groep, NedNaam),
-        WetNaam_groep = ~NULL,
-        NedNaam_groep = ~NULL,
-        Niveau = ~NULL
+        NedNaam =
+          ifelse(is.na(.data$NedNaam), .data$NedNaam_groep, .data$NedNaam),
+        WetNaam_groep = NULL,
+        NedNaam_groep = NULL,
+        Niveau = NULL
       )
 
     return(Soortenlijst)

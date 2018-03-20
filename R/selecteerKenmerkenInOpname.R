@@ -17,6 +17,7 @@
 #' @export   
 #'
 #' @importFrom dplyr %>% filter left_join inner_join mutate distinct
+#' @importFrom rlang .data
 #' @importFrom RODBC sqlQuery
 #'
 #'

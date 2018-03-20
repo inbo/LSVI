@@ -15,7 +15,7 @@
 #'
 #' @export
 #'
-#' @importFrom RODBC sqlQuery odbcClose
+#' @importFrom RODBC sqlQuery
 #' @importFrom assertthat assert_that is.string noNA
 #'
 

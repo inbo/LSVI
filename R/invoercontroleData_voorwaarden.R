@@ -6,6 +6,8 @@
 #' @inheritParams berekenLSVIbasis
 #'
 #' @importFrom assertthat assert_that has_name
+#' @importFrom dplyr %>% mutate row_number rename left_join
+#' @importFrom rlang .data
 #' 
 #' @export
 #'

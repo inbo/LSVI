@@ -14,7 +14,7 @@
 #' @export   
 #'
 #' @importFrom assertthat assert_that has_name
-#' @importFrom dplyr %>% inner_join anti_join summarise_ select_
+#' @importFrom dplyr %>% inner_join anti_join filter summarise select bind_rows mutate
 #' @importFrom RODBC sqlQuery
 #'
 #'
@@ -66,11 +66,11 @@ selecteerSoortenInOpname <-
         ),
         ConnectieLSVIhabitats
       ) %>%
-      select_(
-        ~ SoortengroepID,
-        ~ SoortensubgroepID,
-        ~ WetNaamKort,
-        ~ NedNaam
+      select(
+        .data$SoortengroepID,
+        .data$SoortensubgroepID,
+        .data$WetNaamKort,
+        .data$NedNaam
       )
 
     #als het Latijnse namen zijn: eerst auteursnamen verwijderen
@@ -99,30 +99,30 @@ selecteerSoortenInOpname <-
           if (has_name(OntbrekendeSoorten, "SoortensubgroepID") &
              !all(is.na(OntbrekendeSoorten$SoortensubgroepID))) {
             Subsoorten <- OntbrekendeSoorten %>%
-              filter_(~!is.na(SoortensubgroepID)) %>%
-              summarise_(
+              filter(!is.na(.data$SoortensubgroepID)) %>%
+              summarise(
                 SoortensubgroepIDs =
-                  ~ paste(SoortensubgroepID, collapse = ",")
+                  paste(.data$SoortensubgroepID, collapse = ",")
               )
             Subsoortengroep <-
               geefSoortenlijstSoortniveau(
                 Subsoorten$SoortensubgroepIDs,
                 ConnectieLSVIhabitats
               ) %>%
-              mutate_(
-                WetNaam = ~ NULL,
-                SoortensubgroepID = ~ SoortengroepID,
-                SoortengroepID = ~ NULL
+              mutate(
+                WetNaam = NULL,
+                SoortensubgroepID = .data$SoortengroepID,
+                SoortengroepID = NULL
               ) %>%
               inner_join(
                 OntbrekendeSoorten %>%
-                  select_(~ SoortengroepID, ~ SoortensubgroepID),
+                  select(.data$SoortengroepID, .data$SoortensubgroepID),
                 by = c("SoortensubgroepID" = "SoortensubgroepID")
               ) %>%
               inner_join(
                 Data_soorten %>%
-                  select_(~ WetNaamKort) %>%
-                  distinct_(),
+                  select(.data$WetNaamKort) %>%
+                  distinct(),
                 by = c("WetNaamKort" = "WetNaamKort")
               )
             Soortengroep <- Soortengroep %>%
@@ -157,30 +157,30 @@ selecteerSoortenInOpname <-
           if (has_name(OntbrekendeSoorten, "SoortensubgroepID") &
              !all(is.na(OntbrekendeSoorten$SoortensubgroepID))) {
             Subsoorten <- OntbrekendeSoorten %>%
-              filter_(~!is.na(SoortensubgroepID)) %>%
-              summarise_(
+              filter(!is.na(.data$SoortensubgroepID)) %>%
+              summarise(
                 SoortensubgroepIDs =
-                  ~ paste(SoortensubgroepID, collapse = ",")
+                  paste(.data$SoortensubgroepID, collapse = ",")
               )
             Subsoortengroep <-
               geefSoortenlijstSoortniveau(
                 Subsoorten$SoortensubgroepIDs,
                 ConnectieLSVIhabitats
               ) %>%
-              mutate_(
-                WetNaam = ~ NULL,
-                SoortensubgroepID = ~ SoortengroepID,
-                SoortengroepID = ~ NULL
+              mutate(
+                WetNaam = NULL,
+                SoortensubgroepID = .data$SoortengroepID,
+                SoortengroepID = NULL
               ) %>%
               inner_join(
                 OntbrekendeSoorten %>%
-                  select_(~ SoortengroepID, ~ SoortensubgroepID),
+                  select(.data$SoortengroepID, .data$SoortensubgroepID),
                 by = c("SoortensubgroepID" = "SoortensubgroepID")
               ) %>%
               inner_join(
                 Data_soorten %>%
-                  select_(~ Soort_NL) %>%
-                  distinct_(),
+                  select(.data$Soort_NL) %>%
+                  distinct(),
                 by = c("NedNaam" = "Soort_NL")
               )
             Soortengroep <- Soortengroep %>%

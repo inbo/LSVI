@@ -1,5 +1,7 @@
 context("test s4_Aantal")
 
+library(methods)
+
 describe("s4_Aantal", {
 
   it("In- en uitvoer van slots gebeurt correct", {

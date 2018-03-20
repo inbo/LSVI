@@ -2,3 +2,6 @@
 ^\.Rproj\.user$
 ^man-roxygen$
 ^\.lintr$
+^data$
+^inst/databanktoestanden$
+^inst/oudecode$
