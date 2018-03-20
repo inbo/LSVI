@@ -111,7 +111,7 @@ vertaalInvoerInterval <-
                   }
                 }
               ),
-            Max = Min
+            Max = .data$Min
           )
       ) %>%
       bind_rows(

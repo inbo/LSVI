@@ -87,7 +87,7 @@ invoercontroleData_soortenKenmerken <-
       sqlQuery(ConnectieLSVIhabitats, QuerySoorten, stringsAsFactors = FALSE)
 
     Soortenlijst <- Taxonlijst %>%
-      filter(is.na(TaxonTypeId)) %>%  #Taxontype == "Soort"
+      filter(is.na(.data$TaxonTypeId)) %>%  #Taxontype == "Soort"
       mutate(
         WetNaam =
           gsub(
