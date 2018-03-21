@@ -24,7 +24,7 @@ berekenLSVIbasis(Versie = "alle", Kwaliteitsniveau = "alle", Data_habitat,
 
 \item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
 
-\item{LIJST}{Dataframe met lijst die weergeeft hoe de vertaling moet gebeuren van categorische variabelen naar numerieke waarden (en omgekeerd).  Default worden deze waarden uit de databank met LSVI-indicatoren gehaald d.m.v. de functie vertaalInvoerInterval().  Aangeraden wordt om deze default te gebruiken (dus parameter niet expliciet invullen), of deze waar nodig aan te vullen met eigen categorieën.  Omdat er ook een omzetting moet gebeuren voor grenswaarden uit de databank, kan het niet doorgeven van een gedeelte van deze lijst problemen geven.}
+\item{LIJST}{Dataframe met lijst die weergeeft hoe de vertaling moet gebeuren van categorische variabelen naar numerieke waarden (en omgekeerd).  Default worden deze waarden uit de databank met LSVI-indicatoren gehaald d.m.v. de functie vertaalInvoerInterval().  Aangeraden wordt om deze default te gebruiken (dus parameter niet expliciet invullen), of deze waar nodig aan te vullen met eigen schalen.  Omdat er ook een omzetting moet gebeuren voor grenswaarden uit de databank, kan het niet doorgeven van een gedeelte van deze lijst problemen geven.}
 }
 \value{
 Deze functie genereert de resultaten in de vorm van een list met 3 tabellen: een eerste met de beoordelingen per criterium en kwaliteitsniveau, een tweede met de beoordelingen per indicator en kwaliteitsniveau, en een derde met de detailgegevens inclusief meetwaarden.

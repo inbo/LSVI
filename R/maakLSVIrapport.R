@@ -11,10 +11,21 @@
 #' @return Deze functie genereert habitatfiches in de vorm van html-files die in de working directory opgeslagen worden.
 #'
 #' @examples
-#' maakLSVIrapport(Bestandsnaam = "LSVIrapport_heiden_versie3.html",
-#'                 Versie = "Versie 3", Habitatgroep = "Heiden")
-#' maakLSVIrapport(Bestandsnaam = "LSVIrapport_4010.html",
-#'                 Habitattype = "4010")
+#' # Omwille van de iets langere lange duurtijd van de commando's staat bij
+#' # onderstaande voorbeelden de vermelding 'dontrun' (om problemen te vermijden
+#' # bij het testen van het package). Maar de voorbeelden werken en mogen zeker
+#' # uitgetest worden.
+#' \dontrun{
+#' maakLSVIrapport(
+#'   Bestandsnaam = "LSVIrapport_heiden_versie3.html",
+#'   Versie = "Versie 3", Habitatgroep = "Heiden"
+#' )
+#' maakLSVIrapport(
+#'   Bestandsnaam = "LSVIrapport_4010.html",
+#'   Habitattype = "4010"
+#' )
+#' }
+#' 
 #'
 #'
 #' @export

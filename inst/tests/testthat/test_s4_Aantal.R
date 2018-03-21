@@ -59,7 +59,7 @@ describe("s4_Aantal", {
         Kenmerken =
           data.frame(
             Kenmerk = c("nbn123", 3.14),
-            TypeKenmerk = c("soort_nbn", "studiegroep"),
+            TypeKenmerk = c("soort_nl", "studiegroep"),
             stringsAsFactors = FALSE
           )
       )

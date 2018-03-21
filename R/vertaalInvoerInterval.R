@@ -7,9 +7,6 @@
 #' 
 #' @return Dataframe met velden Min
 #' 
-#' @examples 
-#' 
-#' 
 #' @export
 #' 
 #' @importFrom assertthat assert_that has_name

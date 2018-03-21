@@ -7,12 +7,14 @@ Depends:
     R (>= 3.3.0)
 License: GPL-3
 LazyData: true
+Encoding: UTF-8
 Imports:
     assertthat,
     dplyr,
     lazyeval,
     methods,
     pander,
+    plyr,
     readr,
     rmarkdown,
     RODBC,

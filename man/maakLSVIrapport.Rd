@@ -30,10 +30,21 @@ Deze functie genereert een rapport met habitatfiches die gebruikt worden voor de
 De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten als string opgegeven worden.  Default is telkens 'alle', waarbij de soortenlijsten voor alle mogelijke waarden van die parameter weergegeven worden (m.a.w. er is geen selectie voor deze parameter).
 }
 \examples{
-maakLSVIrapport(Bestandsnaam = "LSVIrapport_heiden_versie3.html",
-                Versie = "Versie 3", Habitatgroep = "Heiden")
-maakLSVIrapport(Bestandsnaam = "LSVIrapport_4010.html",
-                Habitattype = "4010")
+# Omwille van de iets langere lange duurtijd van de commando's staat bij
+# onderstaande voorbeelden de vermelding 'dontrun' (om problemen te vermijden
+# bij het testen van het package). Maar de voorbeelden werken en mogen zeker
+# uitgetest worden.
+\dontrun{
+maakLSVIrapport(
+  Bestandsnaam = "LSVIrapport_heiden_versie3.html",
+  Versie = "Versie 3", Habitatgroep = "Heiden"
+)
+maakLSVIrapport(
+  Bestandsnaam = "LSVIrapport_4010.html",
+  Habitattype = "4010"
+)
+}
+
 
 
 }
