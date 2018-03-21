@@ -67,7 +67,10 @@ geefInfoHabitatfiche <-
       paste(
         unique(
           (Selectiegegevens %>%
-             filter(!is.na(.data$Indicator_beoordelingID)))$Indicator_beoordelingID
+             filter(
+               !is.na(.data$Indicator_beoordelingID)
+             )
+           )$Indicator_beoordelingID
         ),
         collapse = ","
       )
@@ -133,7 +136,7 @@ geefInfoHabitatfiche <-
           Habitatsubtype = NULL,
           Indicator_habitatID = NULL,
           Indicator_beoordelingID = NULL,
-          TotNaam = 
+          TotNaam =
             ifelse(
               is.na(.data$WetNaamKort),
               .data$NedNaam,
@@ -205,7 +208,7 @@ geefInfoHabitatfiche <-
               .dots = OmschrijvingKolommen
             ) %>%
             summarise(
-              Soortenlijst = 
+              Soortenlijst =
                 paste(as.vector(.data$Soortenlijst), collapse = ",  ")
             ) %>%
             ungroup()
@@ -217,7 +220,7 @@ geefInfoHabitatfiche <-
               .data$Indicator
             ) %>%
             summarise(
-              Soortenlijst = 
+              Soortenlijst =
                 paste(as.vector(.data$Soortenlijst), collapse = ",  ")
             ) %>%
             ungroup()
