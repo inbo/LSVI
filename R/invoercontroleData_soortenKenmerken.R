@@ -28,7 +28,13 @@ invoercontroleData_soortenKenmerken <-
       Data_soortenKenmerken$TypeKenmerk <-
         as.character(Data_soortenKenmerken$TypeKenmerk)
     }
-    #hier moet nog controle op gebeuren!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    assert_that(
+      all(
+        tolower(Data_soortenKenmerken$TypeKenmerk) %in%
+          c("studiegroep", "soort_nbn", "soort_latijn", "soort_nl")
+      ),
+      msg = "TypeKenmerk moet een van de volgende waarden zijn: studiegroep, soort_nbn, soort_latijn, soort_nl" #nolint
+    )
     assert_that(has_name(Data_soortenKenmerken, "Waarde"))
     assert_that(has_name(Data_soortenKenmerken, "Type"))
     if (!is.character(Data_soortenKenmerken$Type)) {
@@ -161,6 +167,23 @@ invoercontroleData_soortenKenmerken <-
         )
       )
     }
+    
+    Fouten <- Kenmerken %>%
+      filter(tolower(.data$TypeKenmerk) == "soort_nbn") %>%
+      mutate(
+        Fout = !.data$Kenmerk %in% Taxonlijst$NBNTaxonVersionKey
+      ) %>%
+      filter(.data$Fout == TRUE)
+    
+    if (nrow(Fouten) > 0) {
+      warning(
+        sprintf(
+          "Volgende NBNTaxonVersionKeys zijn niet teruggevonden in de databank: %s.  Check de juistheid hiervan als deze mogelijk relevant zijn voor de berekening.",  #nolint
+          paste(unique(Fouten$Kenmerk))
+        )
+      )
+    }
+      
 
     KenmerkenSoort <- KenmerkenSoort %>%
       mutate(

@@ -158,22 +158,22 @@ describe("berekenLSVIbasis", {
           ),
         Data_soortenKenmerken
       ),
-      "Foute invoer in Data_voorwaarden\\$Waarde: een negatief getal ingevoerd"
+      "Niet alle opgegeven percentages zijn positieve waarden"
     )
-    expect_error(
-      berekenLSVIbasis(
-        Versie = "Versie 3",
-        Kwaliteitsniveau = "1",
-        Data_habitat,
-        Data_voorwaarden %>%
-          mutate(
-            Waarde =
-              ifelse(.data$Waarde == "35", "3.5", .data$Waarde)
-          ),
-        Data_soortenKenmerken
-      ),
-      "Foute invoer in Data_voorwaarden\\$Waarde: een kommagetal ingevoerd waar een geheel getal verwacht wordt"  #nolint
-    )
+    # expect_error(
+    #   berekenLSVIbasis(
+    #     Versie = "Versie 3",
+    #     Kwaliteitsniveau = "1",
+    #     Data_habitat,
+    #     Data_voorwaarden %>%
+    #       mutate(
+    #         Type =
+    #           ifelse(.data$Waarde == "7,5", "Geheel getal", .data$Type)
+    #       ),
+    #     Data_soortenKenmerken
+    #   ),
+    #   "Een kommagetal ingevoerd waar een geheel getal verwacht wordt"
+    # )
     expect_equal(
       berekenLSVIbasis(
         Versie = "Versie 3",
@@ -217,7 +217,7 @@ describe("berekenLSVIbasis", {
           )
       )
     )
-    expect_error(
+    expect_warning(
       berekenLSVIbasis(
         Versie = "Versie 3",
         Kwaliteitsniveau = "1",
@@ -229,9 +229,9 @@ describe("berekenLSVIbasis", {
           ),
         Data_soortenKenmerken
       ),
-      "Foute invoer in Data_voorwaarden\\$Waarde: niet alle categorische waarden komen overeen met het invoermasker uit de databank"   #nolint
+      "Niet voor elke opgegeven categorische variabele is er een numerieke waarde opgenomen in de databank"   #nolint
     )
-    expect_error(
+    expect_warning(
       berekenLSVIbasis(
         Versie = "Versie 3",
         Kwaliteitsniveau = "1",
@@ -243,7 +243,7 @@ describe("berekenLSVIbasis", {
           ),
         Data_soortenKenmerken
       ),
-      "Foute invoer in Data_voorwaarden\\$Waarde: niet alle categorische waarden komen overeen met het invoermasker uit de databank"   #nolint
+      "Niet voor elke opgegeven categorische variabele is er een numerieke waarde opgenomen in de databank"   #nolint
     )
     expect_equal(
       berekenLSVIbasis(
@@ -334,7 +334,7 @@ describe("berekenLSVIbasis", {
   })
 
   it("dataframe Data_soortenKenmerken heeft correct formaat", {
-    expect_error(
+    expect_warning(
       berekenLSVIbasis(
         Versie = "Versie 3",
         Kwaliteitsniveau = "1",
@@ -350,9 +350,9 @@ describe("berekenLSVIbasis", {
               )
           )
       ),
-      "Niet alle waarden vermeld onder Data_soorten\\$Bedekking komen overeen met de bedekkingsschaal die gebruikt wordt voor deze monitoring."  #nolint
+      "Niet voor elke opgegeven categorische variabele is er een numerieke waarde opgenomen in de databank"  #nolint
     )
-    expect_error(
+    expect_warning(
       berekenLSVIbasis(
         Versie = "Versie 3",
         Kwaliteitsniveau = "1",
@@ -368,7 +368,7 @@ describe("berekenLSVIbasis", {
               )
           )
       ),
-      "Niet alle waarden vermeld onder Data_soorten\\$Bedekking komen overeen met de bedekkingsschaal die gebruikt wordt voor deze monitoring." #nolint
+      "Niet voor elke opgegeven categorische variabele is er een numerieke waarde opgenomen in de databank" #nolint
     )
     expect_error(
       berekenLSVIbasis(
@@ -406,7 +406,7 @@ describe("berekenLSVIbasis", {
       ),
       "Volgende soortnamen zijn niet teruggevonden in de databank"
     )
-    expect_equal(
+    expect_warning(
       berekenLSVIbasis(
         Versie = "Versie 3",
         Kwaliteitsniveau = "1",
@@ -428,9 +428,9 @@ describe("berekenLSVIbasis", {
               )
           )
       ),
-      Resultaat
+      "Volgende soortnamen zijn niet teruggevonden in de databank"
     )
-    expect_warning(
+    expect_equal(
       berekenLSVIbasis(
         Versie = "Versie 3",
         Kwaliteitsniveau = "1",
@@ -446,7 +446,7 @@ describe("berekenLSVIbasis", {
               )
           )
       ),
-      "Volgende soortnamen zijn niet teruggevonden in de databank"
+      Resultaat
     )
     expect_equal(
       berekenLSVIbasis(
@@ -488,7 +488,7 @@ describe("berekenLSVIbasis", {
               )
           )
       ),
-      "Volgende soortnamen zijn niet teruggevonden in de databank"
+      "Volgende NBNTaxonVersionKeys zijn niet teruggevonden in de databank"
     )
     #nog testen: "Niet alle te evalueren soorten zijn opgenomen onder Data_soorten\\$Soort_Latijn, er wordt van uitgegaan dat de niet opgenomen soorten niet waargenomen zijn"
     #nog extra tests toevoegen voor genera en habitatsubtypes als de ontwikkeling hiervoor op punt staat
