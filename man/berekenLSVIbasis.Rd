@@ -33,6 +33,7 @@ Deze functie genereert de resultaten in de vorm van een list met 3 tabellen: een
 Deze functie bepaalt de Lokale Staat van Instandhouding op basis van gegevens, die in het juiste formaat moeten aangeleverd worden.  Zie hiervoor de beschrijving bij de parameters ('Arguments') en de tabellen van het voorbeeld.  In principe is enkel de parameter Data_habitat verplicht om op te geven, maar extra datasets zijn uiteraard wel nodig om een resultaat te bekomen.  Welke datasets relevant zijn, is afhankelijk van de opgegeven habitattypes: voor een aantal habitattypes kan een tabel met observaties en hun bedekking of aanwezigheid (=parameter 'Data_soortenKenmerken') volstaan, voor bossen zijn bv. bijkomend gegevens nodig over dood hout.
 }
 \examples{
+library(LSVI)
 library(readr)
 Data_habitat <-
     read_csv2(system.file("vbdata/opname4030habitat.csv", package = "LSVI"),

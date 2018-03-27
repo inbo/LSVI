@@ -33,7 +33,8 @@ geefSoortenlijst <-
 
     assert_that(
       inherits(ConnectieLSVIhabitats, "DBIConnection") |
-        inherits(ConnectieLSVIhabitats, "Pool")
+        inherits(ConnectieLSVIhabitats, "Pool"),
+      msg = "Er is geen connectie met de databank met de LSVI-indicatoren"
     )
     match.arg(Soortenlijsttype)
 

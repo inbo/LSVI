@@ -14,6 +14,7 @@
 #' @return Deze functie genereert de resultaten in de vorm van een list met 3 tabellen: een eerste met de beoordelingen per criterium en kwaliteitsniveau, een tweede met de beoordelingen per indicator en kwaliteitsniveau, en een derde met de detailgegevens inclusief meetwaarden.
 #'
 #' @examples
+#' library(LSVI)
 #' library(readr)
 #' Data_habitat <-
 #'     read_csv2(system.file("vbdata/opname4030habitat.csv", package = "LSVI"),
@@ -57,7 +58,8 @@ berekenLSVIbasis <-
     #controle invoer
     assert_that(
       inherits(ConnectieLSVIhabitats, "DBIConnection") |
-        inherits(ConnectieLSVIhabitats, "Pool")
+        inherits(ConnectieLSVIhabitats, "Pool"),
+      msg = "Er is geen connectie met de databank met de LSVI-indicatoren"
     )
 
     invoercontroleVersie(Versie, ConnectieLSVIhabitats)

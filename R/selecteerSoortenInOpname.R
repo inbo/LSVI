@@ -25,7 +25,8 @@ selecteerSoortenInOpname <-
 
     assert_that(
       inherits(ConnectieLSVIhabitats, "DBIConnection") |
-        inherits(ConnectieLSVIhabitats, "Pool")
+        inherits(ConnectieLSVIhabitats, "Pool"),
+      msg = "Er is geen connectie met de databank met de LSVI-indicatoren"
     )
     assert_that(inherits(Data_soorten, "data.frame"))
     assert_that(has_name(Data_soorten, "ID"))

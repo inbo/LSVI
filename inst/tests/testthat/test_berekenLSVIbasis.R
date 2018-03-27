@@ -40,7 +40,7 @@ describe("berekenLSVIbasis", {
         Data_voorwaarden,
         Data_soortenKenmerken
       ),
-      "ConnectieLSVIhabitats does not inherit from class DBIconnection"
+      "Er is geen connectie met de databank met de LSVI-indicatoren"
     )
     ConnectieLSVIhabitats <-
       connecteerMetLSVIdb()

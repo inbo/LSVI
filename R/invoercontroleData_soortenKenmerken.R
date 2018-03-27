@@ -16,7 +16,8 @@ invoercontroleData_soortenKenmerken <-
   function(Data_soortenKenmerken, ConnectieLSVIhabitats, LIJST) {
     assert_that(
       inherits(ConnectieLSVIhabitats, "DBIConnection") |
-        inherits(ConnectieLSVIhabitats, "Pool")
+        inherits(ConnectieLSVIhabitats, "Pool"),
+      msg = "Er is geen connectie met de databank met de LSVI-indicatoren"
     )
 
     assert_that(inherits(Data_soortenKenmerken, "data.frame"))
