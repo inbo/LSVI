@@ -5,7 +5,7 @@
 \title{Genereert soorten(groep)lijst(en) LSVI op basis van SoortengroepID en Niveau}
 \usage{
 geefSoortenlijstInvoerniveau(Soortengroeplijst,
-  ConnectieLSVIhabitats = connecteerMetLSVIdb())
+  ConnectieLSVIhabitats = ConnectiePool)
 }
 \arguments{
 \item{Soortengroeplijst}{dataframe waarin per niveau aangegeven wordt (tabel Niveau met een int die het niveau aangeeft) welke soortengroepen geselecteerd moeten worden (tabel SoortengroepIDs met een string waarin de ID's na mekaar weergegeven worden, gescheiden door een komma)}

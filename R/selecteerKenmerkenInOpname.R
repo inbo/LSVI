@@ -16,8 +16,8 @@
 #'
 #' @export   
 #'
-#' @importFrom dplyr %>% filter left_join inner_join mutate
-#' @importFrom RODBC sqlQuery
+#' @importFrom dplyr %>% filter left_join inner_join mutate distinct
+#' @importFrom rlang .data
 #'
 #'
 selecteerKenmerkenInOpname <-
@@ -38,7 +38,7 @@ selecteerKenmerkenInOpname <-
     if (length(Soortengroep) > 0) {
       Resultaat <- Kenmerken %>%
         filter(tolower(.data$TypeKenmerk) == "soort_nbn") %>%
-        left_join(
+        inner_join(
           Soortengroep,
           by = c("Kenmerk" = "NBNTaxonVersionKey")
         )
@@ -90,13 +90,15 @@ selecteerKenmerkenInOpname <-
         ) %>%
         filter(
           .data$Status == TRUE
-        )
+        ) %>%
+        distinct()
 
     } else {
       Resultaat <- Resultaat %>%
         filter(
           .data$WaardeMax > 0
-        )
+        ) %>%
+        distinct()
     }
 
     return(Resultaat)

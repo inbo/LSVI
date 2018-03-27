@@ -4,7 +4,8 @@
 #' 
 #' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
 #' 
-#' @importFrom assertthat assert_that
+#' @importFrom assertthat assert_that has_name
+#' @importFrom methods setClass setValidity getGeneric setMethod setReplaceMethod validObject
 #' 
 setClass(
   Class = "AnalyseVariabele",
@@ -35,9 +36,9 @@ setValidity(
       assert_that(
         all(
           tolower(object@Kenmerken$TypeKenmerk) %in%
-            c("studiegroep", "soort_latijn", "soort_nl", "soort_nbn")
+            c("studiegroep", "soort_nbn")
         ),
-        msg = "TypeKenmerk moet een van de volgende waarden zijn: studiegroep, soort_nbn, soort_latijn, soort_nl" #nolint
+        msg = "TypeKenmerk moet een van de volgende waarden zijn: studiegroep, soort_nbn" #nolint
       )
     }
     return(TRUE)

@@ -2,8 +2,13 @@
 #' 
 #' Een constructor is een gebruiksvriendelijke functie die een s4-klasse aanmaakt, zodat een gebruiker niet rechtstreeks geconfronteerd wordt met het aanmaken van een object voor een s4-klasse.  In dit geval worden alle als parameter toegevoegde gegevens netjes in het object gestoken, alsook extra info die uit de databank gehaald wordt.  Een deel van de validatie gebeurt in de s4-klasse AnalyseVariabele zelf.
 #' 
+#' @inheritParams berekenVoorwaarde
+#' 
 #' @importFrom assertthat assert_that
-#' @importFrom RODBC sqlQuery
+#' @importFrom DBI dbGetQuery
+#' @importFrom methods new
+#' @importFrom dplyr %>% mutate select filter summarise
+#' @importFrom rlang .data
 #' 
 #' @export
 
@@ -14,7 +19,10 @@ analyseVariabele_c <-
     ConnectieLSVIhabitats,
     LIJST
   ) {
-    assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
+    assert_that(
+      inherits(ConnectieLSVIhabitats, "DBIConnection") |
+        inherits(ConnectieLSVIhabitats, "Pool")
+    )
 
     queryVoorwaarde <-
       sprintf(
@@ -37,11 +45,9 @@ analyseVariabele_c <-
           VoorwaardeID
         )
     VoorwaardeInfo <-
-      sqlQuery(
+      dbGetQuery(
         ConnectieLSVIhabitats,
-        queryVoorwaarde,
-        as.is = TRUE,
-        stringsAsFactors = FALSE
+        queryVoorwaarde
       )
 
     AnalyseObject <-
@@ -63,6 +69,10 @@ analyseVariabele_c <-
           ),
           ConnectieLSVIhabitats = ConnectieLSVIhabitats
         ) %>%
+        mutate(
+          NBNTaxonVersionKey =
+            tolower(.data$NBNTaxonVersionKey)
+        ) %>%
         select(
           .data$SoortengroepID,
           .data$SoortensubgroepID,
@@ -73,10 +83,10 @@ analyseVariabele_c <-
 
       if (!all(is.na(Soortengroep$SoortensubgroepID))) {
         Subsoorten <- Soortengroep %>%
-          filter_(~!is.na(SoortensubgroepID)) %>%
-          summarise_(
+          filter(!is.na(.data$SoortensubgroepID)) %>%
+          summarise(
             SoortensubgroepIDs =
-              ~ paste(SoortensubgroepID, collapse = ",")
+              paste(.data$SoortensubgroepID, collapse = ",")
           )
         Subsoortengroep <-
           geefSoortenlijstSoortniveau(
@@ -96,10 +106,9 @@ analyseVariabele_c <-
           VoorwaardeInfo$StudiegroepId
         )
       Studiegroep <-
-        sqlQuery(
+        dbGetQuery(
           ConnectieLSVIhabitats,
-          queryStudiegroep,
-          stringsAsFactors = FALSE
+          queryStudiegroep
         )
       setStudiegroep(AnalyseObject) <- Studiegroep
     }

@@ -4,8 +4,9 @@
 #' 
 #' @inheritParams berekenLSVIbasis
 #' 
-#' @importFrom RODBC sqlQuery odbcClose
+#' @importFrom DBI dbGetQuery
 #' @importFrom dplyr %>% mutate
+#' @importFrom rlang .data
 #' 
 #' @return Dataframe met Naam, Waarde, Volgnummer, Omschrijving, Ondergrens, Gemiddelde en Bovengrens. Telkens is een waarde tussen 0 en 1 opgegeven die afkomstig is van het delen van het percentage door 100)
 #' 
@@ -13,20 +14,24 @@
 
 geefVertaallijst <-
   function(ConnectieLSVIhabitats) {
-  Connectie <- connecteerMetLSVIdb()
+
+  assert_that(
+    inherits(ConnectieLSVIhabitats, "DBIConnection") |
+      inherits(ConnectieLSVIhabitats, "Pool")
+  )
+
   query <-
     "SELECT Lijst.Naam, LijstItem.Waarde, LijstItem.Volgnummer,
     LijstItem.Omschrijving, LijstItem.Ondergrens,
     LijstItem.Gemiddelde, LijstItem.Bovengrens
     FROM LijstItem INNER JOIN Lijst ON LijstItem.LijstId = Lijst.Id"
   LIJST <-
-    sqlQuery(Connectie, query, stringsAsFactors = FALSE) %>%
+    dbGetQuery(ConnectieLSVIhabitats, query) %>%
     mutate(
       Ondergrens = .data$Ondergrens / 100,
       Gemiddelde = .data$Gemiddelde / 100,
       Bovengrens = .data$Bovengrens / 100
     )
-  odbcClose(Connectie)
 
   return(LIJST)
 }

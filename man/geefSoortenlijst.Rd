@@ -7,7 +7,7 @@
 geefSoortenlijst(Versie = "alle", Habitatgroep = "alle",
   Habitattype = "alle", Criterium = "alle", Indicator = "alle",
   Soortenlijsttype = c("LSVIfiche", "Soortniveau", "alle"),
-  ConnectieLSVIhabitats = connecteerMetLSVIdb())
+  ConnectieLSVIhabitats = ConnectiePool)
 }
 \arguments{
 \item{Versie}{De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".  Bij de default "alle" worden de gegevens voor de verschillende versies gegeven.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Versie", "VersieLSVI") of geefVersieInfo(ConnectieLSVIhabitats).}

@@ -8,7 +8,7 @@
 #' @param Data_habitat Een opsomming van de te analyseren opnamen met opgave van het aanwezige habitattype (= het habitattype volgens welke criteria de beoordeling moet gebeuren).  Deze info moet doorgegeven worden in de vorm van een dataframe met minimum de velden ID en Habitattype, waarbij ID een groeperende variabele is voor een opname (plaats en tijdstip).  Habitattype moet overeenkomen met de naamgeving in de LSVI-databank (op te zoeken door geefUniekeWaarden("Habitattype", "Code")).  Eventuele extra velden zullen overgenomen worden bij de uitvoer.
 #' @param Data_voorwaarden Gegevens over de opgemeten indicatoren in de vorm van een data.frame met velden ID, Criterium, Indicator, Voorwaarde, Waarde, Type, Invoertype en Eenheid, waarbij ID de groeperende variabele voor een opname is die ook bij Data_habitat opgegeven is.  Criterium, Indicator en Voorwaarde moeten overeenkomen met de waarde in de databank (op te zoeken via de functie geefInvoervereisten()).  Waarde is de waarde die voor die voorwaarde geobserveerd of gemeten is en Type het soort variabele (zie geefUniekeWaarden("TypeVariabele", "Naam") voor de mogelijke waarden).  Ingeval van een categorische variabele moet bij Invoertype de naam van de lijst opgegeven worden waaruit deze waarde komt (bv. welke schaal gebruikt is, zie geefUniekeWaarden("Lijst", "Naam") voor alle mogelijkheden).
 #' @param Data_soortenKenmerken Gegevens van soorten en kenmerken en hun bedekking (m.a.w. enkel kenmerken waarvan een bedekking gemeten is, horen in deze tabel).  Deze dataframe moet de velden ID, Kenmerk, TypeKenmerk, Waarde, Type, Invoertype en Eenheid bevatten, waarbij ID de groeperende variabele voor een opname is die ook bij Data_habitat opgegeven is.  Kenmerk bevat een soortnaam of een naam die voorkomt in de lijst gegenereerd door geefUniekeWaarden("LijstItem", "Waarde") en TypeKenmerk geeft een beschrijving voor dat kenmerk: 'studiegroep', 'soort_Latijn', 'soort_NL' of 'soort_NBN'.  Waarde is de geobserveerde bedekking en Type het soort variabele dat voor de bedekking gebruikt is (zie geefUniekeWaarden("TypeVariabele", "Naam") voor de mogelijke waarden).  Ingeval van een categorische variabele moet bij Invoertype de naam van de lijst opgegeven worden welke schaal gebruikt is (zie geefUniekeWaarden("Lijst", "Naam") voor alle mogelijkheden).
-#' @param LIJST Dataframe met lijst die weergeeft hoe de vertaling moet gebeuren van categorische variabelen naar numerieke waarden (en omgekeerd).  Default worden deze waarden uit de databank met LSVI-indicatoren gehaald d.m.v. de functie vertaalInvoerInterval().  Aangeraden wordt om deze default te gebruiken (dus parameter niet expliciet invullen), of deze waar nodig aan te vullen met eigen categorieën.  Omdat er ook een omzetting moet gebeuren voor grenswaarden uit de databank, kan het niet doorgeven van een gedeelte van deze lijst problemen geven.
+#' @param LIJST Dataframe met lijst die weergeeft hoe de vertaling moet gebeuren van categorische variabelen naar numerieke waarden (en omgekeerd).  Default worden deze waarden uit de databank met LSVI-indicatoren gehaald d.m.v. de functie vertaalInvoerInterval().  Aangeraden wordt om deze default te gebruiken (dus parameter niet expliciet invullen), of deze waar nodig aan te vullen met eigen schalen.  Omdat er ook een omzetting moet gebeuren voor grenswaarden uit de databank, kan het niet doorgeven van een gedeelte van deze lijst problemen geven.
 #'
 #'
 #' @return Deze functie genereert de resultaten in de vorm van een list met 3 tabellen: een eerste met de beoordelingen per criterium en kwaliteitsniveau, een tweede met de beoordelingen per indicator en kwaliteitsniveau, en een derde met de detailgegevens inclusief meetwaarden.
@@ -29,10 +29,10 @@
 #'
 #' @export
 #'
-#' @importFrom RODBC sqlQuery odbcClose
-#' @importFrom dplyr %>% select distinct filter mutate row_number rename left_join summarise group_by ungroup bind_rows
+#' @importFrom dplyr %>% select distinct filter mutate row_number rename left_join summarise group_by ungroup rowwise
+#' @importFrom tidyr unnest
 #' @importFrom assertthat assert_that has_name
-#' @importFrom pander evals
+#' @importFrom rlang .data
 #'
 #'
 berekenLSVIbasis <-
@@ -50,21 +50,22 @@ berekenLSVIbasis <-
         stringsAsFactors = FALSE
       ),
     Data_soortenKenmerken = data.frame(ID = character()),
-    ConnectieLSVIhabitats = connecteerMetLSVIdb(),
-    ConnectieNBN =
-      connecteerMetLSVIdb(Databank = "D0017_00_NBNData"),
+    ConnectieLSVIhabitats = ConnectiePool,
     LIJST = geefVertaallijst(ConnectieLSVIhabitats)
   ){
 
     #controle invoer
-    assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
-    assert_that(inherits(ConnectieNBN, "RODBC"))
+    assert_that(
+      inherits(ConnectieLSVIhabitats, "DBIConnection") |
+        inherits(ConnectieLSVIhabitats, "Pool")
+    )
 
     invoercontroleVersie(Versie, ConnectieLSVIhabitats)
 
     invoercontroleKwaliteitsniveau(Kwaliteitsniveau, ConnectieLSVIhabitats)
 
-    invoercontroleData_habitat(Data_habitat, ConnectieLSVIhabitats)
+    Data_habitat <-
+      invoercontroleData_habitat(Data_habitat, ConnectieLSVIhabitats)
 
     if (nrow(Data_voorwaarden) > 0) {
       Data_voorwaarden <-
@@ -86,7 +87,6 @@ berekenLSVIbasis <-
         invoercontroleData_soortenKenmerken(
           Data_soortenKenmerken,
           ConnectieLSVIhabitats,
-          ConnectieNBN,
           LIJST
         )
     } else {
@@ -310,8 +310,6 @@ berekenLSVIbasis <-
         Status_criterium = as.logical(all(.data$Status_indicator))
       ) %>%
       ungroup()
-
-    odbcClose(ConnectieLSVIhabitats)
 
     return(
       list(

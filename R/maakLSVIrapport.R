@@ -11,16 +11,26 @@
 #' @return Deze functie genereert habitatfiches in de vorm van html-files die in de working directory opgeslagen worden.
 #'
 #' @examples
-#' maakLSVIrapport(Bestandsnaam = "LSVIrapport_heiden_versie3.html",
-#'                 Versie = "Versie 3", Habitatgroep = "Heiden")
-#' maakLSVIrapport(Bestandsnaam = "LSVIrapport_4010.html",
-#'                 Habitattype = "4010")
+#' # Omwille van de iets langere lange duurtijd van de commando's staat bij
+#' # onderstaande voorbeelden de vermelding 'dontrun' (om problemen te vermijden
+#' # bij het testen van het package). Maar de voorbeelden werken en mogen zeker
+#' # uitgetest worden.
+#' \dontrun{
+#' maakLSVIrapport(
+#'   Bestandsnaam = "LSVIrapport_heiden_versie3.html",
+#'   Versie = "Versie 3", Habitatgroep = "Heiden"
+#' )
+#' maakLSVIrapport(
+#'   Bestandsnaam = "LSVIrapport_4010.html",
+#'   Habitattype = "4010"
+#' )
+#' }
+#' 
 #'
 #'
 #' @export
 #'
 #' @importFrom rmarkdown render
-#' @importFrom RODBC sqlQuery odbcClose
 #' @importFrom assertthat assert_that noNA is.flag
 #'
 #'
@@ -29,10 +39,13 @@ maakLSVIrapport <-
            Versie = "alle",
            Habitatgroep = "alle",
            Habitattype= "alle",
-           ConnectieLSVIhabitats = connecteerMetLSVIdb(),
+           ConnectieLSVIhabitats = ConnectiePool,
            verbose = TRUE){
 
-    assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
+    assert_that(
+      inherits(ConnectieLSVIhabitats, "DBIConnection") |
+        inherits(ConnectieLSVIhabitats, "Pool")
+    )
     assert_that(is.flag(verbose))
     assert_that(noNA(verbose))
     assert_that(is.character(Bestandsnaam))

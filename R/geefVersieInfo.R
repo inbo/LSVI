@@ -11,18 +11,21 @@
 #'
 #' @export
 #'
-#' @importFrom RODBC sqlQuery odbcClose
+#' @importFrom DBI dbGetQuery
 #'
 #'
 geefVersieInfo <-
-  function(ConnectieLSVIhabitats = connecteerMetLSVIdb()){
+  function(ConnectieLSVIhabitats = ConnectiePool){
 
-  assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
+  assert_that(
+    inherits(ConnectieLSVIhabitats, "DBIConnection") |
+      inherits(ConnectieLSVIhabitats, "Pool")
+  )
 
   query <- "SELECT VersieLSVI, Referentie, Beschrijving,
   Kwaliteitsniveau1, Kwaliteitsniveau2 FROM Versie"
 
-  Versie <- sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
+  Versie <- dbGetQuery(ConnectieLSVIhabitats, query)
 
   return(Versie)
 }

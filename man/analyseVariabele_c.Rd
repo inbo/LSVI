@@ -6,6 +6,15 @@
 \usage{
 analyseVariabele_c(VoorwaardeID, Kenmerken, ConnectieLSVIhabitats, LIJST)
 }
+\arguments{
+\item{VoorwaardeID}{ID-nummer (uit LSVI-indicatorendatabank) van de voorwaarde die moet berekend worden}
+
+\item{Kenmerken}{Dataframe met soorten of kenmerken en hun bedekking voor 1 opname met minimum de velden ID, Kenmerk, TypeKenmerk, Waarde, Type, Invoertype en Eenheid (data identiek aan Data_soortenKenmerken in berekenLSVIbasis)}
+
+\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
+
+\item{LIJST}{Dataframe met lijst die weergeeft hoe de vertaling moet gebeuren van categorische variabelen naar numerieke waarden (en omgekeerd).  Default worden deze waarden uit de databank met LSVI-indicatoren gehaald d.m.v. de functie vertaalInvoerInterval().  Aangeraden wordt om deze default te gebruiken (dus parameter niet expliciet invullen), of deze waar nodig aan te vullen met eigen schalen.  Omdat er ook een omzetting moet gebeuren voor grenswaarden uit de databank, kan het niet doorgeven van een gedeelte van deze lijst problemen geven.}
+}
 \description{
 Een constructor is een gebruiksvriendelijke functie die een s4-klasse aanmaakt, zodat een gebruiker niet rechtstreeks geconfronteerd wordt met het aanmaken van een object voor een s4-klasse.  In dit geval worden alle als parameter toegevoegde gegevens netjes in het object gestoken, alsook extra info die uit de databank gehaald wordt.  Een deel van de validatie gebeurt in de s4-klasse AnalyseVariabele zelf.
 }

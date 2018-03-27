@@ -7,24 +7,26 @@ Depends:
     R (>= 3.3.0)
 License: GPL-3
 LazyData: true
+Encoding: UTF-8
 Imports:
-    RODBC,
     assertthat,
+    DBI,
     dplyr,
-    rmarkdown,
     lazyeval,
-    utils,
-    testthat,
+    methods,
+    odbc,
     pander,
-    tidyr,
+    plyr,
+    pool,
     readr,
-    n2khelper
+    rmarkdown,
+    testthat,
+    tidyr,
+    utils,
+    rlang
 Suggests:
     xtable,
-    knitr,
-    rmarkdown
-Remotes:
-    inbo/n2khelper
+    knitr
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr
 Collate: 
@@ -56,3 +58,4 @@ Collate:
     'selecteerKenmerkenInOpname.R'
     'selecteerSoortenInOpname.R'
     'vertaalInvoerInterval.R'
+    'zzz.R'

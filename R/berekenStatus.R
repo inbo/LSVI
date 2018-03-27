@@ -12,7 +12,9 @@
 #'
 #' @importFrom assertthat assert_that has_name
 #' @importFrom dplyr %>% mutate select group_by do
+#' @importFrom plyr .
 #' @importFrom tidyr unnest
+#' @importFrom rlang .data
 #'
 #'
 berekenStatus <-

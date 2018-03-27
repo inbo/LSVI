@@ -14,8 +14,9 @@
 #'
 #' @export
 #'
-#' @importFrom RODBC sqlQuery odbcClose
-#' @importFrom dplyr arrange_ mutate_ group_by_ summarise_ ungroup select select_ left_join
+#' @importFrom DBI dbGetQuery
+#' @importFrom dplyr arrange distinct mutate group_by summarise ungroup select left_join filter mutate_
+#' @importFrom rlang .data
 #' @importFrom lazyeval interp
 #' @importFrom assertthat assert_that
 #'
@@ -27,10 +28,13 @@ geefInfoHabitatfiche <-
            Criterium = "alle",
            Indicator = "alle",
            Stijl = c("Rmd", "tekst"),
-           ConnectieLSVIhabitats = connecteerMetLSVIdb()){
+           ConnectieLSVIhabitats = ConnectiePool){
 
     match.arg(Stijl)
-    assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
+    assert_that(
+      inherits(ConnectieLSVIhabitats, "DBIConnection") |
+        inherits(ConnectieLSVIhabitats, "Pool")
+    )
 
     Selectiegegevens <-
       selecteerIndicatoren(
@@ -47,7 +51,7 @@ geefInfoHabitatfiche <-
       paste(
         unique(
           (Selectiegegevens %>%
-             filter_(~!is.na(Indicator_habitatID)))$Indicator_habitatID
+             filter(!is.na(.data$Indicator_habitatID)))$Indicator_habitatID
         ),
         collapse = ","
       )
@@ -66,7 +70,10 @@ geefInfoHabitatfiche <-
       paste(
         unique(
           (Selectiegegevens %>%
-             filter_(~!is.na(Indicator_beoordelingID)))$Indicator_beoordelingID
+             filter(
+               !is.na(.data$Indicator_beoordelingID)
+             )
+           )$Indicator_beoordelingID
         ),
         collapse = ","
       )
@@ -87,17 +94,15 @@ geefInfoHabitatfiche <-
     )
 
     Habitatkarakteristieken <-
-      sqlQuery(
+      dbGetQuery(
         ConnectieLSVIhabitats,
-        query_habitatfiche,
-        stringsAsFactors = FALSE
+        query_habitatfiche
       )
 
     Beoordelingsmatrix <-
-      sqlQuery(
+      dbGetQuery(
         ConnectieLSVIhabitats,
-        query_beoordelingsfiche,
-        stringsAsFactors = FALSE
+        query_beoordelingsfiche
       )
 
     paste2 <- function(..., sep=", ") {
@@ -125,22 +130,26 @@ geefInfoHabitatfiche <-
           Soortenlijsttype = "LSVIfiche",
           ConnectieLSVIhabitats = ConnectieLSVIhabitats
         ) %>%
-        filter_(~!is.na(WetNaamKort) | !is.na(NedNaam)) %>%
-        mutate_(
-          Versie = ~NULL,
-          Habitattype = ~NULL,
-          Habitatsubtype = ~NULL,
-          Indicator_habitatID = ~NULL,
-          Indicator_beoordelingID = ~NULL,
-          TotNaam = ~ ifelse(is.na(WetNaamKort),
-                             NedNaam,
-                             ifelse(is.na(NedNaam),
-                                    sprintf("_%s_", WetNaamKort),
-                                    sprintf("%s (_%s_)", NedNaam, WetNaamKort)))
-
+        filter(!is.na(.data$WetNaamKort) | !is.na(.data$NedNaam)) %>%
+        mutate(
+          Versie = NULL,
+          Habitattype = NULL,
+          Habitatsubtype = NULL,
+          Indicator_habitatID = NULL,
+          Indicator_beoordelingID = NULL,
+          TotNaam =
+            ifelse(
+              is.na(.data$WetNaamKort),
+              .data$NedNaam,
+              ifelse(
+                is.na(.data$NedNaam),
+                sprintf("_%s_", .data$WetNaamKort),
+                sprintf("%s (_%s_)", .data$NedNaam, .data$WetNaamKort)
+              )
+            )
         ) %>%
-        distinct_() %>%
-        arrange_(~ TotNaam)
+        distinct() %>%
+        arrange(.data$TotNaam)
 
       OmschrijvingKolommen <- NULL
       for (i in colnames(Soortenlijst)) {
@@ -159,14 +168,14 @@ geefInfoHabitatfiche <-
         ]
 
       Soortenlijst <- Soortenlijst %>%
-        group_by_(
-          ~ SoortengroepID,
-          ~ Criterium,
-          ~ Indicator,
+        group_by(
+          .data$SoortengroepID,
+          .data$Criterium,
+          .data$Indicator,
           .dots = OmschrijvingKolommen
         ) %>%
-        summarise_(
-          Soortenlijst = ~ paste(as.vector(TotNaam), collapse = ", ")
+        summarise(
+          Soortenlijst = paste(as.vector(.data$TotNaam), collapse = ", ")
         ) %>%
         ungroup()
 
@@ -193,25 +202,27 @@ geefInfoHabitatfiche <-
 
         if (i < laatste_i) {
           Soortenlijst <- Soortenlijst %>%
-            group_by_(
-              ~ SoortengroepID,
-              ~ Criterium,
-              ~ Indicator,
+            group_by(
+              .data$SoortengroepID,
+              .data$Criterium,
+              .data$Indicator,
               .dots = OmschrijvingKolommen
             ) %>%
-            summarise_(
-              Soortenlijst = ~ paste(as.vector(Soortenlijst), collapse = ",  ")
+            summarise(
+              Soortenlijst =
+                paste(as.vector(.data$Soortenlijst), collapse = ",  ")
             ) %>%
             ungroup()
         } else {
           Soortenlijst <- Soortenlijst %>%
-            group_by_(
-              ~ SoortengroepID,
-              ~ Criterium,
-              ~ Indicator
+            group_by(
+              .data$SoortengroepID,
+              .data$Criterium,
+              .data$Indicator
             ) %>%
-            summarise_(
-              Soortenlijst = ~ paste(as.vector(Soortenlijst), collapse = ",  ")
+            summarise(
+              Soortenlijst =
+                paste(as.vector(.data$Soortenlijst), collapse = ",  ")
             ) %>%
             ungroup()
         }
@@ -219,51 +230,76 @@ geefInfoHabitatfiche <-
       }
 
       Habitatfiche <- Selectiegegevens %>%
-        left_join(Habitatkarakteristieken %>% mutate_(SoortengroepID = ~NULL),
-                  by = c("Indicator_habitatID" = "Indicator_habitatID")) %>%
-        left_join(Soortenlijst %>%
-                    select_(
-                      ~ SoortengroepID,
-                      ~Soortenlijst
-                    ),
-                  by = c("SoortengroepID" = "SoortengroepID")) %>%
-        mutate_(
-          Beschrijving =
-            ~ paste2(Beschrijving, Soortenlijst, Beschrijving_naSoorten,
-                     sep = " ")
+        left_join(
+          Habitatkarakteristieken %>%
+            mutate(SoortengroepID = NULL),
+          by = c("Indicator_habitatID" = "Indicator_habitatID")
         ) %>%
-        left_join(Beoordelingsmatrix,
-                  by = c("Indicator_beoordelingID" = "Indicator_beoordelingID"),
-                  suffix = c(".habitat", ".beoordeling")) %>%
-        select_(~Versie, ~Habitattype, ~Habitatnaam, ~Habitatsubtype,
-                ~Habitatsubtypenaam, ~HabitatsubtypeOmschrijving,
-                ~Criterium.habitat,
-                ~Indicator.habitat, ~Beschrijving, ~Maatregelen,
-                ~Opmerkingen.habitat, ~Referenties.habitat, ~Soortenlijst,
-                Beoordeling = ~Beoordeling_letterlijk, ~Criterium.beoordeling,
-                ~Indicator.beoordeling, ~Opmerkingen.beoordeling,
-                ~Referenties.beoordeling, ~Kwaliteitsniveau)
+        left_join(
+          Soortenlijst %>%
+            select(
+              .data$SoortengroepID,
+              .data$Soortenlijst
+              ),
+          by = c("SoortengroepID" = "SoortengroepID")
+        ) %>%
+        mutate(
+          Beschrijving =
+            paste2(
+              .data$Beschrijving,
+              .data$Soortenlijst,
+              .data$Beschrijving_naSoorten,
+              sep = " "
+            )
+        ) %>%
+        left_join(
+          Beoordelingsmatrix,
+          by = c("Indicator_beoordelingID" = "Indicator_beoordelingID"),
+          suffix = c(".habitat", ".beoordeling")
+        ) %>%
+        select(
+          .data$Versie, .data$Habitattype, .data$Habitatnaam,
+          .data$Habitatsubtype,
+          .data$Habitatsubtypenaam, .data$HabitatsubtypeOmschrijving,
+          .data$Criterium.habitat,
+          .data$Indicator.habitat, .data$Beschrijving, .data$Maatregelen,
+          .data$Opmerkingen.habitat, .data$Referenties.habitat,
+          .data$Soortenlijst,
+          Beoordeling = .data$Beoordeling_letterlijk,
+          .data$Criterium.beoordeling,
+          .data$Indicator.beoordeling, .data$Opmerkingen.beoordeling,
+          .data$Referenties.beoordeling, .data$Kwaliteitsniveau
+        )
     } else {
 
       Habitatfiche <- Selectiegegevens %>%
-        left_join(Habitatkarakteristieken,
-                  by = c("Indicator_habitatID" = "Indicator_habitatID")) %>%
-        mutate_(
-          Beschrijving =
-            ~ paste2(Beschrijving, Beschrijving_naSoorten, sep = " ")
+        left_join(
+          Habitatkarakteristieken,
+          by = c("Indicator_habitatID" = "Indicator_habitatID")
         ) %>%
-        left_join(Beoordelingsmatrix,
-                  by = c("Indicator_beoordelingID" = "Indicator_beoordelingID"),
-                  suffix = c(".habitat", ".beoordeling")) %>%
-        mutate_(Soortenlijst = ~NA) %>%
-        select_(~Versie, ~Habitattype, ~Habitatnaam, ~Habitatsubtype,
-                ~Habitatsubtypenaam, ~HabitatsubtypeOmschrijving,
-                ~Criterium.habitat,
-                ~Indicator.habitat, ~Beschrijving, ~Maatregelen,
-                ~Opmerkingen.habitat, ~Referenties.habitat, ~Soortenlijst,
-                Beoordeling = ~Beoordeling_letterlijk, ~Criterium.beoordeling,
-                ~Indicator.beoordeling, ~Opmerkingen.beoordeling,
-                ~Referenties.beoordeling, ~Kwaliteitsniveau)
+        mutate(
+          Beschrijving =
+            paste2(.data$Beschrijving, .data$Beschrijving_naSoorten, sep = " ")
+        ) %>%
+        left_join(
+          Beoordelingsmatrix,
+          by = c("Indicator_beoordelingID" = "Indicator_beoordelingID"),
+          suffix = c(".habitat", ".beoordeling")
+        ) %>%
+        mutate(Soortenlijst = NA) %>%
+        select(
+          .data$Versie, .data$Habitattype, .data$Habitatnaam,
+          .data$Habitatsubtype,
+          .data$Habitatsubtypenaam, .data$HabitatsubtypeOmschrijving,
+          .data$Criterium.habitat,
+          .data$Indicator.habitat, .data$Beschrijving, .data$Maatregelen,
+          .data$Opmerkingen.habitat, .data$Referenties.habitat,
+          .data$Soortenlijst,
+          Beoordeling = .data$Beoordeling_letterlijk,
+          .data$Criterium.beoordeling,
+          .data$Indicator.beoordeling, .data$Opmerkingen.beoordeling,
+          .data$Referenties.beoordeling, .data$Kwaliteitsniveau
+        )
     }
 
 

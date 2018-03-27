@@ -10,13 +10,17 @@
 #' @return Deze functie genereert een rapport met habitatfiches in de vorm van een html-file die in de working directory opgeslagen wordt.
 #'
 #' @examples
+#'  # Omwille van de iets langere lange duurtijd van het commando staat bij
+#' # onderstaande voorbeeld de vermelding 'dontrun' (om problemen te vermijden
+#' # bij het testen van het package). Maar het voorbeeld werkt en mag zeker
+#' # uitgetest worden.
+#' \dontrun{
 #' maakHabitatfiches(Versie = "Versie 3", Habitattype = "4010")
-#'
+#' }
 #'
 #' @export
 #'
 #' @importFrom rmarkdown render
-#' @importFrom RODBC sqlQuery odbcClose
 #' @importFrom assertthat assert_that noNA is.flag
 #'
 #'
@@ -24,10 +28,13 @@ maakHabitatfiches <-
   function(Versie = "alle",
            Habitatgroep = "alle",
            Habitattype = "alle",
-           ConnectieLSVIhabitats = connecteerMetLSVIdb(),
+           ConnectieLSVIhabitats = ConnectiePool,
            verbose = TRUE){
 
-    assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
+    assert_that(
+      inherits(ConnectieLSVIhabitats, "DBIConnection") |
+        inherits(ConnectieLSVIhabitats, "Pool")
+    )
     assert_that(is.flag(verbose))
     assert_that(noNA(verbose))
 

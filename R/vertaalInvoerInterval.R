@@ -7,13 +7,11 @@
 #' 
 #' @return Dataframe met velden Min
 #' 
-#' @examples 
-#' 
-#' 
 #' @export
 #' 
 #' @importFrom assertthat assert_that has_name
 #' @importFrom dplyr %>% left_join mutate select filter bind_rows as.tbl
+#' @importFrom rlang .data
 #' 
 
 vertaalInvoerInterval <-
@@ -55,6 +53,8 @@ vertaalInvoerInterval <-
     LIJST <- LIJST %>%
       as.tbl() %>%
       mutate(
+        Naam = tolower(.data$Naam),
+        Waarde = tolower(.data$Waarde),
         Ondergrens = as.numeric(.data$Ondergrens),
         Ondergrens =
           ifelse(
@@ -78,31 +78,70 @@ vertaalInvoerInterval <-
       )
 
     Resultaat <- Dataset %>%
-      filter(tolower(.data$Type) == "categorie") %>%
-      left_join(
-        LIJST,
-        by = c("Invoertype" = "Naam", "Waarde" = "Waarde")
-      ) %>%
-      mutate(
-        Min = .data$Ondergrens,
-        Max = .data$Bovengrens,
-        Ondergrens = NULL,
-        Bovengrens = NULL
-      ) %>%
+      filter(tolower(.data$Type) == "categorie")
+
+    if (nrow(Resultaat) > 0) {
+      Resultaat <- Resultaat %>%
+        mutate(
+          Invoertype = tolower(.data$Invoertype),
+          Waarde = tolower(.data$Waarde)
+        ) %>%
+        left_join(
+          LIJST,
+          by = c("Invoertype" = "Naam", "Waarde" = "Waarde")
+        ) %>%
+        mutate(
+          Min = .data$Ondergrens,
+          Max = .data$Bovengrens,
+          Ondergrens = NULL,
+          Bovengrens = NULL
+        )
+      
+      if (max(is.na(Resultaat$Min))) {
+        warning("Niet voor elke opgegeven categorische variabele is er een numerieke waarde opgenomen in de databank (zie functie vertaalInvoerInterval()), waardoor niet voor elke waarde een berekening gemaakt kan worden. Controleer de spelling van de categorische variabele, of neem contact op met de beheerder van het package om nieuwe numerieke waarden aan te leveren.")  #nolint
+      }
+    }
+
+    Resultaat <- Resultaat %>%
       bind_rows(
         Dataset %>%
           filter(tolower(.data$Type) == "percentage") %>%
           mutate(
-            Min = as.numeric(gsub(",", ".", .data$Waarde)) / 100,
-            Max = Min
+            Min =
+              tryCatch(
+                as.numeric(gsub(",", ".", .data$Waarde)) / 100,
+                warning = function(w) {
+                  if (grepl("NAs introduced by coercion", w)) {
+                    stop("Niet alle opgegeven percentages zijn numerieke waarden") #nolint
+                  } else {
+                    as.numeric(gsub(",", ".", .data$Waarde)) / 100
+                  }
+                }
+              ),
+            Max =
+              ifelse(
+                .data$Min >= 0,
+                .data$Min,
+                stop("Niet alle opgegeven percentages zijn positieve waarden")
+              )
           )
       ) %>%
       bind_rows(
         Dataset %>%
           filter(!tolower(.data$Type) %in% c("categorie", "percentage")) %>%
           mutate(
-            Min = as.numeric(gsub(",", ".", .data$Waarde)),
-            Max = Min
+            Min =
+              tryCatch(
+                as.numeric(gsub(",", ".", .data$Waarde)),
+                warning = function(w) {
+                  if (grepl("NAs introduced by coercion", w)) {
+                    stop("Niet alle opgegeven getallen zijn numerieke waarden")
+                  } else {
+                    as.numeric(gsub(",", ".", .data$Waarde))
+                  }
+                }
+              ),
+            Max = .data$Min
           )
       ) %>%
       select(
