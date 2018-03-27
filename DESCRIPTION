@@ -10,14 +10,16 @@ LazyData: true
 Encoding: UTF-8
 Imports:
     assertthat,
+    DBI,
     dplyr,
     lazyeval,
     methods,
+    odbc,
     pander,
     plyr,
+    pool,
     readr,
     rmarkdown,
-    RODBC,
     testthat,
     tidyr,
     utils,
@@ -56,3 +58,4 @@ Collate:
     'selecteerKenmerkenInOpname.R'
     'selecteerSoortenInOpname.R'
     'vertaalInvoerInterval.R'
+    'zzz.R'

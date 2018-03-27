@@ -28,10 +28,13 @@ maakHabitatfiches <-
   function(Versie = "alle",
            Habitatgroep = "alle",
            Habitattype = "alle",
-           ConnectieLSVIhabitats = connecteerMetLSVIdb(),
+           ConnectieLSVIhabitats = ConnectiePool,
            verbose = TRUE){
 
-    assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
+    assert_that(
+      inherits(ConnectieLSVIhabitats, "DBIConnection") |
+        inherits(ConnectieLSVIhabitats, "Pool")
+    )
     assert_that(is.flag(verbose))
     assert_that(noNA(verbose))
 

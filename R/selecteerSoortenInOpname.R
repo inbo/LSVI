@@ -15,7 +15,7 @@
 #'
 #' @importFrom assertthat assert_that has_name
 #' @importFrom dplyr %>% inner_join anti_join filter summarise select bind_rows mutate
-#' @importFrom RODBC sqlQuery
+#' @importFrom DBI dbGetQuery
 #'
 #'
 selecteerSoortenInOpname <-
@@ -23,7 +23,10 @@ selecteerSoortenInOpname <-
            Soortengroeplijst,
            ConnectieLSVIhabitats){
 
-    assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
+    assert_that(
+      inherits(ConnectieLSVIhabitats, "DBIConnection") |
+        inherits(ConnectieLSVIhabitats, "Pool")
+    )
     assert_that(inherits(Data_soorten, "data.frame"))
     assert_that(has_name(Data_soorten, "ID"))
     assert_that(
@@ -40,7 +43,7 @@ selecteerSoortenInOpname <-
           WHERE Soortengroeptype.Omschrijving <> 'Conceptueel'"
 
     Soortengroepenlijst <-
-      sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
+      dbGetQuery(ConnectieLSVIhabitats, query)
 
     Soortenlijst_Latijn <-
       c(

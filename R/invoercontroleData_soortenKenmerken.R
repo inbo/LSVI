@@ -6,7 +6,7 @@
 #' @inheritParams berekenLSVIbasis
 #'
 #' @importFrom assertthat assert_that has_name
-#' @importFrom RODBC sqlQuery
+#' @importFrom DBI dbGetQuery
 #' @importFrom dplyr %>% filter mutate select left_join bind_rows rename
 #' @importFrom rlang .data
 #' 
@@ -14,7 +14,10 @@
 #'
 invoercontroleData_soortenKenmerken <-
   function(Data_soortenKenmerken, ConnectieLSVIhabitats, LIJST) {
-    assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
+    assert_that(
+      inherits(ConnectieLSVIhabitats, "DBIConnection") |
+        inherits(ConnectieLSVIhabitats, "Pool")
+    )
 
     assert_that(inherits(Data_soortenKenmerken, "data.frame"))
     assert_that(has_name(Data_soortenKenmerken, "ID"))
@@ -90,7 +93,7 @@ invoercontroleData_soortenKenmerken <-
       FROM Soort WHERE NBNTaxonVersionKey IS NOT NULL"
 
     Taxonlijst <-
-      sqlQuery(ConnectieLSVIhabitats, QuerySoorten, stringsAsFactors = FALSE)
+      dbGetQuery(ConnectieLSVIhabitats, QuerySoorten)
 
     Soortenlijst <- Taxonlijst %>%
       filter(is.na(.data$TaxonTypeId)) %>%  #Taxontype == "Soort"
@@ -111,11 +114,10 @@ invoercontroleData_soortenKenmerken <-
 
     #ophalen lijst voor genera.  Idee is om deze te koppelen aan de soortenlijst, zodra de NBNkeys beschikbaar zijn
     Generalijst <-
-      sqlQuery(
+      dbGetQuery(
         ConnectieLSVIhabitats,
         "SELECT WetNaam, Naam AS NedNaam FROM Soortengroep
-        WHERE SoortengroeptypeId = '1'",
-        stringsAsFactors = FALSE
+        WHERE SoortengroeptypeId = '1'"
       ) %>%
       mutate(
         TaxonType = "Genus"

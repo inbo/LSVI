@@ -14,7 +14,7 @@
 #'
 #' @export
 #'
-#' @importFrom RODBC sqlQuery odbcClose
+#' @importFrom DBI dbGetQuery
 #' @importFrom dplyr arrange distinct mutate group_by summarise ungroup select left_join filter mutate_
 #' @importFrom rlang .data
 #' @importFrom lazyeval interp
@@ -28,10 +28,13 @@ geefInfoHabitatfiche <-
            Criterium = "alle",
            Indicator = "alle",
            Stijl = c("Rmd", "tekst"),
-           ConnectieLSVIhabitats = connecteerMetLSVIdb()){
+           ConnectieLSVIhabitats = ConnectiePool){
 
     match.arg(Stijl)
-    assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
+    assert_that(
+      inherits(ConnectieLSVIhabitats, "DBIConnection") |
+        inherits(ConnectieLSVIhabitats, "Pool")
+    )
 
     Selectiegegevens <-
       selecteerIndicatoren(
@@ -91,17 +94,15 @@ geefInfoHabitatfiche <-
     )
 
     Habitatkarakteristieken <-
-      sqlQuery(
+      dbGetQuery(
         ConnectieLSVIhabitats,
-        query_habitatfiche,
-        stringsAsFactors = FALSE
+        query_habitatfiche
       )
 
     Beoordelingsmatrix <-
-      sqlQuery(
+      dbGetQuery(
         ConnectieLSVIhabitats,
-        query_beoordelingsfiche,
-        stringsAsFactors = FALSE
+        query_beoordelingsfiche
       )
 
     paste2 <- function(..., sep=", ") {

@@ -15,23 +15,26 @@
 #'
 #' @export
 #'
-#' @importFrom RODBC sqlQuery
+#' @importFrom DBI dbGetQuery
 #' @importFrom assertthat assert_that is.string noNA
 #'
 
 geefUniekeWaarden <-
   function(Tabelnaam,
            Veldnaam,
-           ConnectieLSVIhabitats = connecteerMetLSVIdb()) {
+           ConnectieLSVIhabitats = ConnectiePool) {
 
-  assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
+  assert_that(
+    inherits(ConnectieLSVIhabitats, "DBIConnection") |
+      inherits(ConnectieLSVIhabitats, "Pool")
+  )
   assert_that(is.string(Tabelnaam))
   assert_that(noNA(Tabelnaam))
   assert_that(is.string(Veldnaam))
   assert_that(noNA(Veldnaam))
 
   query <- sprintf("SELECT %s FROM %s", Veldnaam, Tabelnaam)
-  Waarden <- sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
+  Waarden <- dbGetQuery(ConnectieLSVIhabitats, query)
   UniekeWaarden <- c("alle", unique(Waarden[, Veldnaam]))
 
   return(UniekeWaarden)

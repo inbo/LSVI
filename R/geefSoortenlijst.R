@@ -29,9 +29,12 @@ geefSoortenlijst <-
            Criterium = "alle",
            Indicator = "alle",
            Soortenlijsttype = c("LSVIfiche", "Soortniveau", "alle"),
-           ConnectieLSVIhabitats = connecteerMetLSVIdb()){
+           ConnectieLSVIhabitats = ConnectiePool){
 
-    assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
+    assert_that(
+      inherits(ConnectieLSVIhabitats, "DBIConnection") |
+        inherits(ConnectieLSVIhabitats, "Pool")
+    )
     match.arg(Soortenlijsttype)
 
     Selectiegegevens <-

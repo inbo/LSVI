@@ -17,16 +17,19 @@
 #' @export
 #'
 #' @importFrom dplyr %>% mutate filter distinct
-#' @importFrom RODBC sqlQuery
+#' @importFrom DBI dbGetQuery
 #' @importFrom assertthat assert_that noNA is.string
 #'
 #'
 geefSoortenlijstSoortniveau <-
   function(Soortengroeplijst,
            Soortenlijsttype = c("alle", "Soortniveau"),
-           ConnectieLSVIhabitats = connecteerMetLSVIdb()){
+           ConnectieLSVIhabitats = ConnectiePool){
 
-    assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
+    assert_that(
+      inherits(ConnectieLSVIhabitats, "DBIConnection") |
+        inherits(ConnectieLSVIhabitats, "Pool")
+    )
     assert_that(is.string(Soortengroeplijst))
     assert_that(noNA(Soortengroeplijst))
     if (!grepl("^([[:digit:]]+,)*[[:digit:]]+$", Soortengroeplijst)) {
@@ -63,7 +66,7 @@ geefSoortenlijstSoortniveau <-
         )
 
       Soortenlijst <-
-        sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
+        dbGetQuery(ConnectieLSVIhabitats, query)
 
     } else if (Soortenlijsttype[1] == "alle") {
       query <-
@@ -105,7 +108,7 @@ geefSoortenlijstSoortniveau <-
         )
 
       Soortenlijst <-
-        sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
+        dbGetQuery(ConnectieLSVIhabitats, query)
 
       Soortenlijst <- Soortenlijst %>%
         mutate(

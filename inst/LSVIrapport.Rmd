@@ -23,7 +23,10 @@ library(knitr)
 
 ```{r gegevens_inladen}
 
-if (inherits(params$ConnectieLSVIhabitats, "RODBC")) {
+if (
+  inherits(params$ConnectieLSVIhabitats, "DBIConnection") |
+    inherits(ConnectieLSVIhabitats, "Pool")
+) {
   ConnectieLSVIhabitats <- params$ConnectieLSVIhabitats
 } else {
   #print("Connectiefout!")

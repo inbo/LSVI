@@ -29,7 +29,6 @@
 #'
 #' @export
 #'
-#' @importFrom RODBC odbcClose
 #' @importFrom dplyr %>% select distinct filter mutate row_number rename left_join summarise group_by ungroup rowwise
 #' @importFrom tidyr unnest
 #' @importFrom assertthat assert_that has_name
@@ -51,12 +50,15 @@ berekenLSVIbasis <-
         stringsAsFactors = FALSE
       ),
     Data_soortenKenmerken = data.frame(ID = character()),
-    ConnectieLSVIhabitats = connecteerMetLSVIdb(),
+    ConnectieLSVIhabitats = ConnectiePool,
     LIJST = geefVertaallijst(ConnectieLSVIhabitats)
   ){
 
     #controle invoer
-    assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
+    assert_that(
+      inherits(ConnectieLSVIhabitats, "DBIConnection") |
+        inherits(ConnectieLSVIhabitats, "Pool")
+    )
 
     invoercontroleVersie(Versie, ConnectieLSVIhabitats)
 
@@ -308,8 +310,6 @@ berekenLSVIbasis <-
         Status_criterium = as.logical(all(.data$Status_indicator))
       ) %>%
       ungroup()
-
-    odbcClose(ConnectieLSVIhabitats)
 
     return(
       list(

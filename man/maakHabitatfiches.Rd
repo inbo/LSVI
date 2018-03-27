@@ -5,7 +5,7 @@
 \title{Genereert habitatfiche(s) van LSVI op basis van de opgegeven parameters}
 \usage{
 maakHabitatfiches(Versie = "alle", Habitatgroep = "alle",
-  Habitattype = "alle", ConnectieLSVIhabitats = connecteerMetLSVIdb(),
+  Habitattype = "alle", ConnectieLSVIhabitats = ConnectiePool,
   verbose = TRUE)
 }
 \arguments{

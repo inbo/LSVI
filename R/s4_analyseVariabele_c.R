@@ -5,7 +5,7 @@
 #' @inheritParams berekenVoorwaarde
 #' 
 #' @importFrom assertthat assert_that
-#' @importFrom RODBC sqlQuery
+#' @importFrom DBI dbGetQuery
 #' @importFrom methods new
 #' @importFrom dplyr %>% mutate select filter summarise
 #' @importFrom rlang .data
@@ -19,7 +19,10 @@ analyseVariabele_c <-
     ConnectieLSVIhabitats,
     LIJST
   ) {
-    assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
+    assert_that(
+      inherits(ConnectieLSVIhabitats, "DBIConnection") |
+        inherits(ConnectieLSVIhabitats, "Pool")
+    )
 
     queryVoorwaarde <-
       sprintf(
@@ -42,11 +45,9 @@ analyseVariabele_c <-
           VoorwaardeID
         )
     VoorwaardeInfo <-
-      sqlQuery(
+      dbGetQuery(
         ConnectieLSVIhabitats,
-        queryVoorwaarde,
-        as.is = TRUE,
-        stringsAsFactors = FALSE
+        queryVoorwaarde
       )
 
     AnalyseObject <-
@@ -105,10 +106,9 @@ analyseVariabele_c <-
           VoorwaardeInfo$StudiegroepId
         )
       Studiegroep <-
-        sqlQuery(
+        dbGetQuery(
           ConnectieLSVIhabitats,
-          queryStudiegroep,
-          stringsAsFactors = FALSE
+          queryStudiegroep
         )
       setStudiegroep(AnalyseObject) <- Studiegroep
     }

@@ -25,7 +25,7 @@
 #'
 #' @export
 #'
-#' @importFrom RODBC sqlQuery
+#' @importFrom DBI dbGetQuery
 #' @importFrom dplyr %>% select filter group_by summarise ungroup left_join mutate rowwise arrange distinct
 #' @importFrom tidyr gather
 #' @importFrom rlang .data
@@ -39,9 +39,12 @@ geefInvoervereisten <- function(Versie = "alle",
                                 Indicator = "alle",
                                 Kwaliteitsniveau = "alle",
                                 Weergave = c("basis", "uitgebreid"),
-                                ConnectieLSVIhabitats = connecteerMetLSVIdb()){
+                                ConnectieLSVIhabitats = ConnectiePool){
 
-  assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
+  assert_that(
+    inherits(ConnectieLSVIhabitats, "DBIConnection") |
+      inherits(ConnectieLSVIhabitats, "Pool")
+  )
   match.arg(Weergave)
 
   Kwaliteitsniveau <- ifelse(Kwaliteitsniveau == 1, "1",
@@ -115,7 +118,7 @@ geefInvoervereisten <- function(Versie = "alle",
             Indicator_beoordelingIDs, query_selectKwaliteitsniveau)
 
   LSVIinfo <-
-    sqlQuery(ConnectieLSVIhabitats, query_LSVIinfo, stringsAsFactors = FALSE)
+    dbGetQuery(ConnectieLSVIhabitats, query_LSVIinfo)
 
   BeoordelingIDs <-
     paste(
@@ -165,8 +168,8 @@ geefInvoervereisten <- function(Versie = "alle",
             Select * FROM voorwaardencombinatie",
               BeoordelingIDs)
 
-  Voorwaarden <- sqlQuery(ConnectieLSVIhabitats, query_combinerenVoorwaarden,
-                          stringsAsFactors = FALSE) %>%
+  Voorwaarden <-
+    dbGetQuery(ConnectieLSVIhabitats, query_combinerenVoorwaarden) %>%
     mutate(
       Combinatie =
         ifelse(
@@ -304,11 +307,9 @@ geefInvoervereisten <- function(Versie = "alle",
             WHERE Voorwaarde.Id in ('%s')", VoorwaardenIDs)
 
   Voorwaardeinfo <-
-    sqlQuery(
+    dbGetQuery(
       ConnectieLSVIhabitats,
-      query_voorwaardeinfo,
-      as.is = TRUE,
-      stringsAsFactors = FALSE
+      query_voorwaardeinfo
     )
 
   if (tolower(Weergave[1]) == "basis") {

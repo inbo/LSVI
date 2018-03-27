@@ -10,14 +10,15 @@
 #' @return Deze functie geeft een open odbc-connectie naar de gespecifieerde databank.
 #'
 #' @examples
-#' library(RODBC)
+#' library(DBI)
 #' ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-#' sqlQuery(ConnectieLSVIhabitats, "SELECT VersieLSVI, Referentie FROM Versie")
-#' odbcClose(ConnectieLSVIhabitats)
+#' dbGetQuery(ConnectieLSVIhabitats, "SELECT VersieLSVI, Referentie FROM Versie")
+#' dbDisconnect(ConnectieLSVIhabitats)
 #'
 #' @export
 #'
-#' @importFrom RODBC odbcDriverConnect
+#' @importFrom DBI dbConnect
+#' @importFrom odbc odbc
 #' @importFrom assertthat assert_that is.string
 #' @importFrom utils file_test
 #'
@@ -34,9 +35,15 @@ connecteerMetLSVIdb <-
   assert_that(is.string(Wachtwoord))
 
   if (Gebruiker == "pc-eigenaar") {
-    Connectiestring <-
-      sprintf("Driver=SQL Server;Server=%s;Database=%s;Trusted_Connection=Yes;",
-              Server, Databank)
+    ConnectieLSVIhabitats <-
+      dbConnect(
+        odbc(),
+        Driver = "SQL Server",
+        Server = Server,
+        Database = Databank,
+        Trusted_Connection = "True",
+        encoding = "UTF-8"
+      )
   } else {
     if (Gebruiker == "lezer") {
       Gebruiker <- "D0122_AppR"
@@ -58,11 +65,17 @@ connecteerMetLSVIdb <-
           message = FALSE
         )
     }
-    Connectiestring <-
-      sprintf("Driver=SQL Server;Server=%s;Database=%s;UID=%s;PWD=%s",
-              Server, Databank, Gebruiker, Wachtwoord)
+    ConnectieLSVIhabitats <-
+      dbConnect(
+        odbc(),
+        Driver = "SQL Server",
+        Server = Server,
+        Database = Databank,
+        UID = Gebruiker,
+        PWD = Wachtwoord,
+        encoding = "UTF-8"
+      )
   }
 
-  ConnectieLSVIhabitats <- odbcDriverConnect(Connectiestring)
   return(ConnectieLSVIhabitats)
 }

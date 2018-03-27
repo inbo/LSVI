@@ -20,15 +20,18 @@
 #' @export
 #'
 #' @importFrom dplyr %>% bind_rows mutate
-#' @importFrom RODBC sqlQuery
+#' @importFrom DBI dbGetQuery
 #' @importFrom assertthat assert_that noNA is.count has_name 
 #'
 #'
 geefSoortenlijstInvoerniveau <-
   function(Soortengroeplijst,
-           ConnectieLSVIhabitats = connecteerMetLSVIdb()){
+           ConnectieLSVIhabitats = ConnectiePool){
 
-    assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
+    assert_that(
+      inherits(ConnectieLSVIhabitats, "DBIConnection") |
+        inherits(ConnectieLSVIhabitats, "Pool")
+    )
     assert_that(inherits(Soortengroeplijst, "data.frame"))
     assert_that(has_name(Soortengroeplijst, "Niveau"))
     assert_that(has_name(Soortengroeplijst, "SoortengroepIDs"))
@@ -108,7 +111,7 @@ geefSoortenlijstInvoerniveau <-
         )
 
       Soortenlijst_n <-
-        sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE)
+        dbGetQuery(ConnectieLSVIhabitats, query)
 
       Soortenlijst <- Soortenlijst %>%
         bind_rows(Soortenlijst_n)

@@ -5,7 +5,7 @@
 \title{Genereert soortenlijst(en) LSVI op basis van SoortengroepID}
 \usage{
 geefSoortenlijstSoortniveau(Soortengroeplijst, Soortenlijsttype = c("alle",
-  "Soortniveau"), ConnectieLSVIhabitats = connecteerMetLSVIdb())
+  "Soortniveau"), ConnectieLSVIhabitats = ConnectiePool)
 }
 \arguments{
 \item{Soortengroeplijst}{string waarin de SoortengroepID's na elkaar weergegeven worden, gescheiden door een komma}

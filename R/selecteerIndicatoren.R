@@ -20,7 +20,7 @@
 #'
 #' @export
 #'
-#' @importFrom RODBC sqlQuery
+#' @importFrom DBI dbGetQuery
 #' @importFrom assertthat assert_that is.string
 #' @importFrom dplyr %>% mutate
 #' @importFrom rlang .data
@@ -33,9 +33,12 @@ selecteerIndicatoren <-
            Criterium = "alle",
            Indicator = "alle",
            HabitatnamenToevoegen = FALSE,
-           ConnectieLSVIhabitats = connecteerMetLSVIdb()){
+           ConnectieLSVIhabitats = ConnectiePool){
 
-    assert_that(inherits(ConnectieLSVIhabitats, "RODBC"))
+    assert_that(
+      inherits(ConnectieLSVIhabitats, "DBIConnection") |
+        inherits(ConnectieLSVIhabitats, "Pool")
+    )
 
     invoercontroleVersie(Versie, ConnectieLSVIhabitats)
 
@@ -206,7 +209,7 @@ selecteerIndicatoren <-
     }
 
     Selectiegegevens <-
-      sqlQuery(ConnectieLSVIhabitats, query, stringsAsFactors = FALSE) %>%
+      dbGetQuery(ConnectieLSVIhabitats, query) %>%
       mutate(
         Habitattype =
           ifelse(

@@ -4,7 +4,7 @@
 \alias{geefVersieInfo}
 \title{Geeft informatie over de verschillende versies voor de berekening van de LSVI}
 \usage{
-geefVersieInfo(ConnectieLSVIhabitats = connecteerMetLSVIdb())
+geefVersieInfo(ConnectieLSVIhabitats = ConnectiePool)
 }
 \arguments{
 \item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}

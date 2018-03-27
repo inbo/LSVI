@@ -29,7 +29,8 @@ Data_soortenKenmerken <-
 load(system.file("vbdata/Resultaat_test.Rdata", package = "LSVI"))
 
 describe("berekenLSVIbasis", {
-  it("ConnectieLSVIhabitats is een open RODBC-connectie", {
+  it("ConnectieLSVIhabitats is een open DBI-connectie", {
+    skip_on_cran()
     expect_error(
       berekenLSVIbasis(
         ConnectieLSVIhabitats = "geenConnectie",
@@ -39,7 +40,7 @@ describe("berekenLSVIbasis", {
         Data_voorwaarden,
         Data_soortenKenmerken
       ),
-      "ConnectieLSVIhabitats does not inherit from class RODBC"
+      "ConnectieLSVIhabitats does not inherit from class DBIconnection"
     )
     ConnectieLSVIhabitats <-
       connecteerMetLSVIdb()
@@ -57,6 +58,7 @@ describe("berekenLSVIbasis", {
   })
 
   it("parameter versie heeft correct formaat", {
+    skip_on_cran()
     expect_equal(
       berekenLSVIbasis(
         Versie = "Versie 3",
@@ -80,6 +82,7 @@ describe("berekenLSVIbasis", {
   })
 
   it("parameter kwaliteitsniveau heeft correct formaat", {
+    skip_on_cran()
     expect_equal(
       berekenLSVIbasis(
         Versie = "Versie 3",
@@ -113,6 +116,7 @@ describe("berekenLSVIbasis", {
   })
 
   it("dataframe Data_habitat heeft correct formaat", {
+    skip_on_cran()
     expect_error(
       berekenLSVIbasis(
         Versie = "Versie 3",
@@ -132,6 +136,7 @@ describe("berekenLSVIbasis", {
   })
 
   it("dataframe Data_voorwaarden heeft correct formaat", {
+    skip_on_cran()
     expect_error(
       berekenLSVIbasis(
         Versie = "Versie 3",
@@ -334,6 +339,7 @@ describe("berekenLSVIbasis", {
   })
 
   it("dataframe Data_soortenKenmerken heeft correct formaat", {
+    skip_on_cran()
     expect_warning(
       berekenLSVIbasis(
         Versie = "Versie 3",
