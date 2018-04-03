@@ -315,9 +315,9 @@ berekenLSVIbasis <-
 
     return(
       list(
-        as.data.frame(Resultaat_criterium),
-        Resultaat_indicator,
-        Resultaat
+        Resultaat_criterium = as.data.frame(Resultaat_criterium),
+        Resultaat_indicator = Resultaat_indicator,
+        Resultaat_detail = Resultaat
       )
     )
   }
