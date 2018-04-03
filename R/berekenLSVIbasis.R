@@ -259,8 +259,6 @@ berekenLSVIbasis <-
       mutate(
         Rijnr = NULL,
         ExtraBewerking = NULL,
-        Referentiewaarde = NULL,
-        Operator = NULL,
         Eenheid = NULL,
         TypeVariabele = NULL,
         Invoertype = NULL,
