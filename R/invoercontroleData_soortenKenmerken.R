@@ -160,9 +160,9 @@ invoercontroleData_soortenKenmerken <-
           left_join(
             Soortenlijst %>%
               select(
-                .data$WetNaam, .data$NBNTaxonVersionKey
+                .data$NedNaam, .data$NBNTaxonVersionKey
               ),
-            by = c("Kenmerk" = "WetNaam")
+            by = c("Kenmerk" = "NedNaam")
           )
       )
 
