@@ -71,13 +71,20 @@ invoercontroleData_soortenKenmerken <-
       Data_soortenKenmerken$Eenheid <-
         as.character(Data_soortenKenmerken$Eenheid)
     }
-    if (
-      !all(
-        Data_soortenKenmerken$Eenheid %in%
+    GeldigeWaarden <-
+      c(
         geefUniekeWaarden(
           "AnalyseVariabele",
           "Eenheid",
           ConnectieLSVIhabitats
+        ),
+        "Volume_ha",
+        "Aantal_ha"
+      )
+
+    if (
+      !all(
+         Data_soortenKenmerken$Eenheid %in% GeldigeWaarden
         )
       )
     ) {
