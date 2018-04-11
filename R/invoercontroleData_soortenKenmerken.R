@@ -71,16 +71,23 @@ invoercontroleData_soortenKenmerken <-
       Data_soortenKenmerken$Eenheid <-
         as.character(Data_soortenKenmerken$Eenheid)
     }
-    if (
-      !all(
-        Data_soortenKenmerken$Eenheid %in%
+    GeldigeWaarden <-
+      c(
         geefUniekeWaarden(
           "AnalyseVariabele",
           "Eenheid",
           ConnectieLSVIhabitats
+        ),
+        "Volume_ha",
+        "Aantal_ha"
+      )
+
+    if (
+      !all(
+         Data_soortenKenmerken$Eenheid %in% GeldigeWaarden
         )
       )
-    ) {
+     {
       stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Eenheid komen overeen met waarden vermeld in de databank.") #nolint
     }
 
