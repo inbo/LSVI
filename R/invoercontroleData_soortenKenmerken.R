@@ -209,6 +209,7 @@ invoercontroleData_soortenKenmerken <-
       bind_rows(
         KenmerkenSoort
       ) %>%
+      filter(!is.na(.data$Kenmerk)) %>%
       mutate(
         Rijnr = row_number(.data$Kenmerk)
       )
