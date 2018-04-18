@@ -54,7 +54,7 @@ geefInfoHabitatfiche <-
           (Selectiegegevens %>%
              filter(!is.na(.data$Indicator_habitatID)))$Indicator_habitatID
         ),
-        collapse = ","
+        collapse = "','"
       )
 
     query_habitatfiche <- sprintf(
@@ -63,7 +63,7 @@ geefInfoHabitatfiche <-
       Indicator_habitat.Maatregelen, Indicator_habitat.Opmerkingen,
       Indicator_habitat.Referenties, Indicator_habitat.SoortengroepID
       FROM Indicator_habitat
-      WHERE Indicator_habitat.Id in (%s)",
+      WHERE Indicator_habitat.Id in ('%s')",
       Indicator_hIDs
     )
 
@@ -76,7 +76,7 @@ geefInfoHabitatfiche <-
              )
            )$Indicator_beoordelingID
         ),
-        collapse = ","
+        collapse = "','"
       )
 
     query_beoordelingsfiche <- sprintf(
@@ -90,7 +90,7 @@ geefInfoHabitatfiche <-
       INNER JOIN
         (Indicator INNER JOIN Criterium on Indicator.CriteriumID = Criterium.Id)
       ON Indicator_beoordeling.IndicatorID = Indicator.Id
-      WHERE Indicator_beoordeling.Id in (%s)",
+      WHERE Indicator_beoordeling.Id in ('%s')",
       Indicator_bIDs
     )
 
