@@ -1,6 +1,6 @@
 #' @title Berekent de LSVI op basis van VoorwaardeID en opgegeven waarden
 #'
-#' @description Deze functie bepaalt de Lokale Staat van Instandhouding op basis van gegevens, die in het juiste formaat moeten aangeleverd worden.  Zie hiervoor de beschrijving bij de parameters ('Arguments') en de tabellen van het voorbeeld.  In principe is enkel de parameter Data_habitat verplicht om op te geven, maar extra datasets zijn uiteraard wel nodig om een resultaat te bekomen.  Welke datasets relevant zijn, is afhankelijk van de opgegeven habitattypes: voor een aantal habitattypes kan een tabel met observaties en hun bedekking of aanwezigheid (=parameter 'Data_soortenKenmerken') volstaan, voor bossen zijn bv. bijkomend gegevens nodig over dood hout.  
+#' @description Deze functie bepaalt de Lokale Staat van Instandhouding op basis van gegevens, die in het juiste formaat moeten aangeleverd worden.  Zie hiervoor de beschrijving bij de parameters ('Arguments') en de tabellen van het voorbeeld.  In principe is enkel de parameter Data_habitat verplicht om op te geven, maar extra datasets zijn uiteraard wel nodig om een resultaat te bekomen.  Welke datasets relevant zijn, is afhankelijk van de opgegeven habitattypes: voor een aantal habitattypes kan een tabel met observaties en hun bedekking of aanwezigheid (=parameter 'Data_soortenKenmerken') volstaan, voor bossen zijn bv. bijkomend gegevens nodig over dood hout.
 #'
 #' @inheritParams selecteerIndicatoren
 #' @param Versie De versie van het LSVI-rapport op basis waarvan de berekening gemaakt wordt, bv. "Versie 2.0" of "Versie 3".  Bij de default "alle" wordt de LSVI volgens de verschillende versies berekend.
@@ -224,7 +224,7 @@ berekenLSVIbasis <-
         WaardeMax =
           ifelse(
             is.na(.data$WaardeMax),
-            .data$Min,
+            .data$Max,
             .data$WaardeMax
           ),
         Type =
