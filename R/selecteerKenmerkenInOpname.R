@@ -56,6 +56,16 @@ selecteerKenmerkenInOpname <-
         )
     }
 
+    if (identical(SubAnalyseVariabele, character(0))) {
+      Resultaat <- Resultaat %>%
+        filter(
+          .data$WaardeMax > 0
+        ) %>%
+        distinct()
+
+      return(Resultaat)
+    }
+
     if (!identical(SubAnalyseVariabele, character(0)) &&
         SubAnalyseVariabele == "bedekking") {
       Resultaat <- Resultaat %>%
@@ -94,11 +104,6 @@ selecteerKenmerkenInOpname <-
         distinct()
 
     } else {
-      Resultaat <- Resultaat %>%
-        filter(
-          .data$WaardeMax > 0
-        ) %>%
-        distinct()
     }
 
     return(Resultaat)
