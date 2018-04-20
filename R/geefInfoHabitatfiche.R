@@ -59,9 +59,13 @@ geefInfoHabitatfiche <-
 
     query_habitatfiche <- sprintf(
       "SELECT Indicator_habitat.Id AS Indicator_habitatID,
-      Indicator_habitat.Beschrijving, Indicator_habitat.Beschrijving_naSoorten,
-      Indicator_habitat.Maatregelen, Indicator_habitat.Opmerkingen,
-      Indicator_habitat.Referenties, Indicator_habitat.SoortengroepID
+      cast(Indicator_habitat.Beschrijving AS nvarchar(1050)) AS Beschrijving,
+      cast(Indicator_habitat.Beschrijving_naSoorten AS nvarchar(150))
+        AS Beschrijving_naSoorten,
+      cast(Indicator_habitat.Maatregelen AS nvarchar(510)) AS Maatregelen,
+      cast(Indicator_habitat.Opmerkingen AS nvarchar(830)) AS Opmerkingen,
+      cast(Indicator_habitat.Referenties AS nvarchar(260)) AS Referenties,
+      Indicator_habitat.SoortengroepID
       FROM Indicator_habitat
       WHERE Indicator_habitat.Id in ('%s')",
       Indicator_hIDs
@@ -82,8 +86,11 @@ geefInfoHabitatfiche <-
     query_beoordelingsfiche <- sprintf(
       "SELECT Indicator_beoordeling.Id AS Indicator_beoordelingID,
       Criterium.Naam AS Criterium, Indicator.Naam As Indicator,
-      Indicator_beoordeling.Opmerkingen, Indicator_beoordeling.Referenties,
-      Beoordeling.Kwaliteitsniveau, Beoordeling.Beoordeling_letterlijk
+      cast(Indicator_beoordeling.Opmerkingen AS nvarchar(710)) AS Opmerkingen,
+      cast(Indicator_beoordeling.Referenties AS nvarchar(150)) AS Referenties,
+      Beoordeling.Kwaliteitsniveau,
+      cast(Beoordeling.Beoordeling_letterlijk AS nvarchar(360))
+        AS Beoordeling_letterlijk
       FROM
       (Indicator_beoordeling INNER JOIN Beoordeling
         ON Indicator_beoordeling.Id = Beoordeling.Indicator_beoordelingID)
