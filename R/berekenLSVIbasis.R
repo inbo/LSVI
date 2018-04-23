@@ -184,59 +184,31 @@ berekenLSVIbasis <-
               LIJST
             )
           ),
-        Min = unlist(.data$Berekening)["Min"],
-        Max = unlist(.data$Berekening)["Max"],
+        WaardeMin = unlist(.data$Berekening)["Min"],
+        WaardeMax = unlist(.data$Berekening)["Max"],
         nSoortenLSVI = unlist(.data$Berekening)["nSoortenLSVI"],
         Berekening = NULL
       ) %>%
       ungroup() %>%
       mutate(
-        Samen =
-          ifelse(
-            .data$Min == .data$Max,
-            .data$Min,
-            paste(
-              round(.data$Min, 2),
-              round(.data$Max, 2),
-              sep = " - ")
-          )
-      ) %>%
-      select(.data$Rijnr, .data$Min, .data$Max, .data$Samen, .data$nSoortenLSVI)
-
-    Resultaat <- Resultaat %>%
-      left_join(
-        BerekendResultaat,
-        by = c("Rijnr")
-      ) %>%
-      mutate(
-        WaardeMin =
-          ifelse(
-            is.na(.data$WaardeMin),
-            .data$Min,
-            .data$WaardeMin
-          ),
-        WaardeMax =
-          ifelse(
-            is.na(.data$WaardeMax),
-            .data$Max,
-            .data$WaardeMax
-          ),
-        Type =
-          ifelse(
-            is.na(.data$Waarde),
-            "Berekend",
-            .data$Type
-          ),
         Waarde =
           ifelse(
-            is.na(.data$Waarde),
-            .data$Samen,
-            .data$Waarde
+            .data$WaardeMin == .data$WaardeMax,
+            as.character(.data$WaardeMin),
+            paste(
+              round(.data$WaardeMin, 2),
+              round(.data$WaardeMax, 2),
+              sep = " - ")
           ),
-        Min = NULL,
-        Max = NULL,
-        Samen = NULL
+        AfkomstData = "berekend"
       )
+
+    Resultaat <- Resultaat %>%
+      filter(!is.na(.data$Waarde)) %>%
+      mutate(
+        AfkomstData = "observatie"
+      ) %>%
+      bind_rows(BerekendResultaat)
 
     Statusberekening <-
       berekenStatus(
