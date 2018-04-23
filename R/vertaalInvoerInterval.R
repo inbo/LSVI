@@ -5,7 +5,7 @@
 #' @param Dataset dataframe met velden Rijnr, Type, Waarde, Eenheid en Invoertype
 #' @inheritParams berekenLSVIbasis
 #' 
-#' @return Dataframe met velden Min
+#' @return Dataframe met velden Rijnr, Min en Max
 #' 
 #' @export
 #' 
