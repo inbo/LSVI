@@ -225,10 +225,7 @@ berekenLSVIbasis <-
       mutate(
         Rijnr = NULL,
         ExtraBewerking = NULL,
-        Referentiewaarde = NULL,
         Operator = NULL,
-        Eenheid = NULL,
-        TypeVariabele = NULL,
         Invoertype = NULL,
         RefMin = NULL,
         RefMax = NULL,
@@ -236,9 +233,18 @@ berekenLSVIbasis <-
         WaardeMax = NULL
       ) %>%
       rename(
+        EenheidRefwaarde = .data$Eenheid,
+        TypeRefwaarde = .data$TypeVariabele,
         Status_voorwaarde = .data$Status,
         Invoertype = .data$Invoertype.vw,
-        Eenheid = .data$Eenheid.vw
+        EenheidWaarde = .data$Eenheid.vw
+      ) %>%
+      arrange(
+        .data$ID,
+        .data$Habitattype,
+        .data$Versie,
+        .data$Criterium,
+        .data$Indicator
       )
 
 
