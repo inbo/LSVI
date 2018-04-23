@@ -183,17 +183,11 @@ berekenLSVIbasis <-
               ConnectieLSVIhabitats,
               LIJST
             )
-          )
-      ) %>%
-      unnest() %>%
-      select(
-        .data$Rijnr,
-        .data$Berekening
-      ) %>%
-      group_by(.data$Rijnr) %>%
-      summarise(
-        Min = min(.data$Berekening),
-        Max = max(.data$Berekening)
+          ),
+        Min = unlist(.data$Berekening)["Min"],
+        Max = unlist(.data$Berekening)["Max"],
+        nSoortenLSVI = unlist(.data$Berekening)["nSoortenLSVI"],
+        Berekening = NULL
       ) %>%
       ungroup() %>%
       mutate(
@@ -205,9 +199,9 @@ berekenLSVIbasis <-
               round(.data$Min, 2),
               round(.data$Max, 2),
               sep = " - ")
-          ),
-        Berekening = NULL
-      )
+          )
+      ) %>%
+      select(.data$Rijnr, .data$Min, .data$Max, .data$Samen, .data$nSoortenLSVI)
 
     Resultaat <- Resultaat %>%
       left_join(

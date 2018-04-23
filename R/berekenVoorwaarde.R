@@ -39,6 +39,15 @@ berekenVoorwaarde <-
     if (length(Waarde) == 1) {
       Waarde <- c(Waarde, Waarde)
     }
+    
+    #Aan de waarde als 3de item het totaal aantal soorten of kenmerken
+    #van het indicatorlijstje toevoegen (nog uitzoeken hoe er dit terug uit te halen bij berekenLSVIbasis!)
+    Waarden <-
+      list(
+        Min = Waarde[1],
+        Max = Waarde[2],
+        nSoortenLSVI = geefAantalSoortenLijst(AV)
+      )
 
-    return(Waarde)
+    return(Waarden)
   }
