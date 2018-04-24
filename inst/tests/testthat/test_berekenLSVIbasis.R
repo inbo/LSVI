@@ -148,7 +148,7 @@ describe("berekenLSVIbasis", {
               ifelse(.data$Waarde == 35, "drie", .data$Waarde)
           ),
         Data_soortenKenmerken
-      ),
+    ),
       "Niet alle opgegeven percentages zijn numerieke waarden." #nolint
     )
     expect_error(

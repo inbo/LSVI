@@ -19,7 +19,6 @@
       warning("Er kan geen connectie gelegd worden met de databank.  Voorzie bij elke functie zelf een link naar een databank met indicatoren voor elk habitattype.")
     }
   )
-    
 }
 
 #' @title Bij afsluiten de pool van connecties terug sluiten
@@ -31,4 +30,3 @@
 .onUnLoad <- function(libpath) {
   poolClose(ConnectiePool)
 }
-

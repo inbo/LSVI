@@ -112,7 +112,7 @@ vertaalIntervalUitvoer <-
           Max = NULL,
           Gem = NULL
         )
-      
+
       if (max(is.na(Resultaat$Waarde))) {
         warning("Er ging iets mis bij de omzetting van het berekend resultaat naar een categorische waarde (functie vertaalIntervalUitvoer).")  #nolint
       }

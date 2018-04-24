@@ -39,7 +39,7 @@ berekenVoorwaarde <-
     if (length(Waarde) == 1) {
       Waarde <- c(Waarde, Waarde)
     }
-    
+
     #Aan de waarde als 3de item het theoretisch maximum van de voorwaarde
     #toevoegen
     Waarden <-

@@ -96,7 +96,7 @@ vertaalInvoerInterval <-
           Ondergrens = NULL,
           Bovengrens = NULL
         )
-      
+
       if (max(is.na(Resultaat$Min))) {
         warning("Niet voor elke opgegeven categorische variabele is er een numerieke waarde opgenomen in de databank (zie functie vertaalInvoerInterval()), waardoor niet voor elke waarde een berekening gemaakt kan worden. Controleer de spelling van de categorische variabele, of neem contact op met de beheerder van het package om nieuwe numerieke waarden aan te leveren.")  #nolint
       }
