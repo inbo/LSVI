@@ -186,7 +186,7 @@ berekenLSVIbasis <-
           ),
         WaardeMin = unlist(.data$Berekening)["Min"],
         WaardeMax = unlist(.data$Berekening)["Max"],
-        nSoortenLSVI = unlist(.data$Berekening)["nSoortenLSVI"],
+        TheoretischMaximum = unlist(.data$Berekening)["TheoretischMaximum"],
         Berekening = NULL
       ) %>%
       ungroup() %>%

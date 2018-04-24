@@ -39,3 +39,17 @@ setMethod(
     return(Aantal)
   }
 )
+
+setMethod(           #bij deze methode nog rekening houden met eventuele dubbels in de soortenlijst!!!
+  f = "geefTheoretischMaximum",
+  signature = "aantal",
+  definition = function(object) {
+    if (nrow(object@Soortengroep) > 0) {
+      return(nrow(object@Soortengroep))
+    }
+    if (nrow(object@Studiegroep) > 0) {
+      return(nrow(object@Studiegroep))
+    }
+    return(NA)
+  }
+)

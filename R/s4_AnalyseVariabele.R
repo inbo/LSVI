@@ -362,22 +362,8 @@ setGeneric(
 
 #' @export
 setGeneric(
-  name = "geefAantalSoortenLijst",
+  name = "geefTheoretischMaximum",
   def = function(object) {
-    standardGeneric("geefAantalSoortenLijst")
-  }
-)
-
-setMethod(
-  f = "geefAantalSoortenLijst",
-  signature = "AnalyseVariabele",
-  definition = function(object) {
-    if (nrow(object@Soortengroep) > 0) {
-      return(nrow(object@Soortengroep))
-    }
-    if (nrow(object@Studiegroep) > 0) {
-      return(nrow(object@Studiegroep))
-    }
-    return(NA)
+    standardGeneric("geefTheoretischMaximum")
   }
 )

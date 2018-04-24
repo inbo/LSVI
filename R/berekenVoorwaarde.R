@@ -40,13 +40,13 @@ berekenVoorwaarde <-
       Waarde <- c(Waarde, Waarde)
     }
     
-    #Aan de waarde als 3de item het totaal aantal soorten of kenmerken
-    #van het indicatorlijstje toevoegen (nog uitzoeken hoe er dit terug uit te halen bij berekenLSVIbasis!)
+    #Aan de waarde als 3de item het theoretisch maximum van de voorwaarde
+    #toevoegen
     Waarden <-
       list(
         Min = Waarde[1],
         Max = Waarde[2],
-        nSoortenLSVI = geefAantalSoortenLijst(AV)
+        TheoretischMaximum = geefTheoretischMaximum(AV)
       )
 
     return(Waarden)
