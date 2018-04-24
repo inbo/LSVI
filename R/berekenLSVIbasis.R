@@ -191,22 +191,31 @@ berekenLSVIbasis <-
       ) %>%
       ungroup() %>%
       mutate(
-        Waarde =
-          ifelse(
-            .data$WaardeMin == .data$WaardeMax,
-            as.character(.data$WaardeMin),
-            paste(
-              round(.data$WaardeMin, 2),
-              round(.data$WaardeMax, 2),
-              sep = " - ")
-          ),
-        AfkomstData = "berekend"
+        Type = .data$TypeVariabele,
+        Invoertype.vw = .data$Invoertype,
+        Eenheid.vw = .data$Eenheid,
+        AfkomstWaarde = "berekend",
+        Waarde = NULL
+      )
+
+    BerekendResultaat <-
+      BerekendResultaat %>%
+      left_join(
+        vertaalIntervalUitvoer(
+          BerekendResultaat[
+            , c("Rijnr", "Type", "WaardeMin", "WaardeMax",
+              "Eenheid.vw", "Invoertype.vw")
+          ],
+          LIJST,
+          ConnectieLSVIhabitats
+        ),
+        by = c("Rijnr")
       )
 
     Resultaat <- Resultaat %>%
       filter(!is.na(.data$Waarde)) %>%
       mutate(
-        AfkomstData = "observatie"
+        AfkomstWaarde = "observatie"
       ) %>%
       bind_rows(BerekendResultaat)
 
@@ -225,19 +234,19 @@ berekenLSVIbasis <-
       mutate(
         Rijnr = NULL,
         ExtraBewerking = NULL,
-        Operator = NULL,
-        Invoertype = NULL,
         RefMin = NULL,
         RefMax = NULL,
         WaardeMin = NULL,
         WaardeMax = NULL
       ) %>%
       rename(
-        EenheidRefwaarde = .data$Eenheid,
         TypeRefwaarde = .data$TypeVariabele,
+        EenheidRefwaarde = .data$Eenheid,
+        InvoertypeRevwaarde = .data$Invoertype,
         Status_voorwaarde = .data$Status,
-        Invoertype = .data$Invoertype.vw,
-        EenheidWaarde = .data$Eenheid.vw
+        TypeWaarde = .data$Type,
+        EenheidWaarde = .data$Eenheid.vw,
+        InvoertypeWaarde = .data$Invoertype.vw
       ) %>%
       arrange(
         .data$ID,

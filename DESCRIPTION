@@ -57,5 +57,6 @@ Collate:
     'selecteerIndicatoren.R'
     'selecteerKenmerkenInOpname.R'
     'selecteerSoortenInOpname.R'
+    'vertaalIntervalUitvoer.R'
     'vertaalInvoerInterval.R'
     'zzz.R'
