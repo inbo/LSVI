@@ -70,7 +70,7 @@ selecteerKenmerkenInOpname <-
       return(Resultaat)
     }
 
-    if (!identical(SubAnalyseVariabele, character(0)) &&
+    if (!identical(SubAnalyseVariabele, character(0)) &
         SubAnalyseVariabele == "bedekking") {
       Resultaat <- Resultaat %>%
         mutate(
