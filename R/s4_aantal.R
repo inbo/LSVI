@@ -85,7 +85,7 @@ setMethod(
       }
       AantalMin <- nrow(ResultaatMin)
 
-      Aantal = c(AantalMin, AantalMax)
+      Aantal <- c(AantalMin, AantalMax)
       if (AantalMin != AantalMax) {
         warning("Voor sommige soorten of kenmerken is enkel aan- of afwezigheid opgegeven, geen bedekking, waardoor het aantal soorten dat aan een welbepaalde voorwaarde voldoet (bv. minimum een welbepaalde bedekking heeft), niet met zekerheid bepaald kan worden.  In deze gevallen is het resultaat als een range weergegeven.") #nolint
       }
@@ -100,11 +100,11 @@ setMethod(
           object@SubRefMax,
           object@SubOperator
         )
-      
+
       if (length(Resultaat) == 1 & all(is.na(Resultaat))) {
         return(NA)
       }
-      
+
       Aantal <- nrow(Resultaat)
     }
 

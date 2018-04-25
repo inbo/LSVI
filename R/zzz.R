@@ -16,7 +16,7 @@
         Trusted_Connection = "TRUE"
       ),
     error = function(e) {
-      warning("Er kan geen connectie gelegd worden met de databank.  Voorzie bij elke functie zelf een link naar een databank met indicatoren voor elk habitattype.")
+      warning("Er kan geen connectie gelegd worden met de databank.  Voorzie bij elke functie zelf een link naar een databank met indicatoren voor elk habitattype.") #nolint
     }
   )
 }

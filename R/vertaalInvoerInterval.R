@@ -167,7 +167,7 @@ vertaalInvoerInterval <-
 
     ResultaatJaNee <- Resultaat %>%
       filter(tolower(.data$Type) == "ja/nee")
-    
+
     if (nrow(ResultaatJaNee) > 0) {
       if (!all(ResultaatJaNee$Min %in% c(0, 1))) {
         stop("Niet alle opgegeven Ja/nee-waarden bevatten waarden die door R vertaald kunnen worden naar TRUE of FALSE.") #nolint

@@ -59,7 +59,7 @@ selecteerKenmerkenInOpname <-
     if (!exists("Resultaat")) {
       stop("Er ontbreekt een soortenlijst of studiegroeplijst in de databank.  Meld deze fout aan de beheerder van dit package.") #nolint
     }
-    
+
     if (identical(SubAnalyseVariabele, character(0))) {
       Resultaat <- Resultaat %>%
         filter(

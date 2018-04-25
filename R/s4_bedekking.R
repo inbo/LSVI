@@ -41,7 +41,7 @@ setMethod(
     #   )
 
     #onderstaande is om te testen of het concept werkt, berekening moet nog aangepast worden!!!
-      
+
     #Als er meer NA's zijn in WaardeMax dan in WaardeMin, wil dit zeggen dat
     #er aan-/afwezigheden opgegeven zijn in plaats van bedekkingen
     #In dat geval berekenen we geen bedekking en geven we een warning

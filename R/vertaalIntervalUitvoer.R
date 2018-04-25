@@ -17,7 +17,8 @@
 vertaalIntervalUitvoer <-
   function(Dataset, LIJST, ConnectieLSVIhabitats){
 
-    colnames(Dataset) <- c("Rijnr", "Type", "Min", "Max", "Eenheid", "Invoertype")
+    colnames(Dataset) <-
+      c("Rijnr", "Type", "Min", "Max", "Eenheid", "Invoertype")
 
     assert_that(inherits(Dataset, "data.frame"))
     assert_that(has_name(Dataset, "Rijnr"))
