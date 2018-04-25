@@ -19,22 +19,94 @@ setMethod(
   signature = "aantal",
   definition = function(object) {
 
-    Resultaat <-
-      selecteerKenmerkenInOpname(
-        object@Kenmerken,
-        object@Soortengroep,
-        object@Studiegroep,
-        object@SubAnalyseVariabele,
-        object@SubRefMin,
-        object@SubRefMax,
-        object@SubOperator
-      )
+    Kenmerken <- object@Kenmerken
+    #Als er meer NA's zijn in WaardeMax dan in WaardeMin, wil dit zeggen dat
+    #er aan-/afwezigheden opgegeven zijn in plaats van bedekkingen
+    #Als er in dat geval een subvoorwaarde opgegeven is, zijn we niet
+    #zeker of aan de subvoorwaarde voldaan is, dus we berekenen beide opties
+    #en geven een warning als de opties niet hetzelfde resultaat opleveren
+    if (
+      (sum(is.na(Kenmerken$WaardeMin)) < sum(is.na(Kenmerken$WaardeMax))) &
+      !identical(object@SubAnalyseVariabele, character(0))
+    ) {
+      Kenmerken <-
+        Kenmerken %>%
+        mutate(
+          WaardeMax =
+            ifelse(
+              is.na(.data$WaardeMax) & .data$WaardeMin == 0,
+              0,
+              .data$WaardeMax
+            )
+        )
+      Problemen <-
+        (Kenmerken %>%
+           mutate(
+             Rijnummers = row_number(ID)
+           ) %>%
+           filter(
+             is.na(.data$WaardeMax) & .data$WaardeMin == 1
+           )
+        )$Rijnummers
 
-    if (length(Resultaat) == 1 & all(is.na(Resultaat))) {
-      return(NA)
+      KenmerkenMax <- Kenmerken
+      KenmerkenMax[Problemen, ]$WaardeMin <- 1
+      KenmerkenMax[Problemen, ]$WaardeMax <- 1
+      ResultaatMax <-
+        selecteerKenmerkenInOpname(
+          KenmerkenMax,
+          object@Soortengroep,
+          object@Studiegroep,
+          object@SubAnalyseVariabele,
+          object@SubRefMin,
+          object@SubRefMax,
+          object@SubOperator
+        )
+      if (length(ResultaatMax) == 1 & all(is.na(ResultaatMax))) {
+        return(NA)
+      }
+      AantalMax <- nrow(ResultaatMax)
+
+      KenmerkenMin <- Kenmerken
+      KenmerkenMin[Problemen, ]$WaardeMin <- 0
+      KenmerkenMin[Problemen, ]$WaardeMax <- 0
+      ResultaatMin <-
+        selecteerKenmerkenInOpname(
+          KenmerkenMin,
+          object@Soortengroep,
+          object@Studiegroep,
+          object@SubAnalyseVariabele,
+          object@SubRefMin,
+          object@SubRefMax,
+          object@SubOperator
+        )
+      if (length(ResultaatMin) == 1 & all(is.na(ResultaatMin))) {
+        AantalMin <- 0
+      }
+      AantalMin <- nrow(ResultaatMin)
+
+      Aantal = c(AantalMin, AantalMax)
+      if (AantalMin != AantalMax) {
+        warning("Voor sommige soorten of kenmerken is enkel aan- of afwezigheid opgegeven, geen bedekking, waardoor het aantal soorten dat aan een welbepaalde voorwaarde voldoet (bv. minimum een welbepaalde bedekking heeft), niet met zekerheid bepaald kan worden.  In deze gevallen is het resultaat als een range weergegeven.") #nolint
+      }
+    } else {
+      Resultaat <-
+        selecteerKenmerkenInOpname(
+          object@Kenmerken,
+          object@Soortengroep,
+          object@Studiegroep,
+          object@SubAnalyseVariabele,
+          object@SubRefMin,
+          object@SubRefMax,
+          object@SubOperator
+        )
+      
+      if (length(Resultaat) == 1 & all(is.na(Resultaat))) {
+        return(NA)
+      }
+      
+      Aantal <- nrow(Resultaat)
     }
-
-    Aantal <- nrow(Resultaat)
 
     return(Aantal)
   }
