@@ -309,12 +309,6 @@ describe("berekenLSVIbasis", {
           ),
         Resultaat[[3]] %>%
           mutate(
-            Waarde =
-              ifelse(
-                .data$Waarde == "f" & .data$ID == "Ts2036",
-                0,
-                .data$Waarde
-              ),
             Status_voorwaarde =
               ifelse(
                 .data$Waarde == "f" & .data$ID == "Ts2036",
@@ -323,8 +317,8 @@ describe("berekenLSVIbasis", {
               ),
             Waarde =
               ifelse(
-                .data$Waarde == "f" & .data$ID == "JR0216",
-                1,
+                .data$Waarde == "f" & .data$ID == "Ts2036",
+                NA,
                 .data$Waarde
               ),
             Status_voorwaarde =
@@ -332,6 +326,12 @@ describe("berekenLSVIbasis", {
                 .data$Waarde == "f" & .data$ID == "JR0216",
                 NA,
                 .data$Status_voorwaarde
+              ),
+            Waarde =
+              ifelse(
+                .data$Waarde == "f" & .data$ID == "JR0216",
+                NA,
+                .data$Waarde
               )
           )
       )
@@ -412,7 +412,7 @@ describe("berekenLSVIbasis", {
       ),
       "Volgende soortnamen zijn niet teruggevonden in de databank"
     )
-    expect_warning(
+    expect_equal(
       berekenLSVIbasis(
         Versie = "Versie 3",
         Kwaliteitsniveau = "1",
@@ -434,9 +434,9 @@ describe("berekenLSVIbasis", {
               )
           )
       ),
-      "Volgende soortnamen zijn niet teruggevonden in de databank"
+      Resultaat
     )
-    expect_equal(
+    expect_warning(
       berekenLSVIbasis(
         Versie = "Versie 3",
         Kwaliteitsniveau = "1",
@@ -452,7 +452,7 @@ describe("berekenLSVIbasis", {
               )
           )
       ),
-      Resultaat
+      "Volgende soortnamen zijn niet teruggevonden in de databank"
     )
     expect_equal(
       berekenLSVIbasis(
@@ -499,6 +499,78 @@ describe("berekenLSVIbasis", {
     #nog testen: "Niet alle te evalueren soorten zijn opgenomen onder Data_soorten\\$Soort_Latijn, er wordt van uitgegaan dat de niet opgenomen soorten niet waargenomen zijn"
     #nog extra tests toevoegen voor genera en habitatsubtypes als de ontwikkeling hiervoor op punt staat
 
+  })
+  
+  it("afhandeling van Ja/nee in Data_soortenKenmerken is correct", {
+    skip_on_cran()
+    expect_warning(
+      berekenLSVIbasis(
+        Versie = "Versie 3",
+        Kwaliteitsniveau = "1",
+        Data_habitat,
+        Data_voorwaarden,
+        Data_soortenKenmerken %>%
+          mutate(
+            Waarde =
+              ifelse(
+                .data$Waarde == "0" & ID == "Ts2036",
+                "1",
+                .data$Waarde
+              ),
+            Type =
+              ifelse(
+                .data$Type == "Percentage" & ID == "Ts2036",
+                "Ja/nee",
+                .data$Type
+              )
+          )
+      ),
+      "Voor sommige soorten of kenmerken is enkel aan- of afwezigheid opgegeven, geen bedekking,"  #nolint
+    )
+    expect_equal(
+      berekenLSVIbasis(
+        Versie = "Versie 3",
+        Kwaliteitsniveau = "1",
+        Data_habitat,
+        Data_voorwaarden,
+        Data_soortenKenmerken %>%
+          mutate(
+            Waarde =
+              ifelse(
+                .data$Waarde == "0" & ID == "Ts2036",
+                "1",
+                .data$Waarde
+              ),
+            Type =
+              ifelse(
+                .data$Type == "Percentage" & ID == "Ts2036",
+                "Ja/nee",
+                .data$Type
+              )
+          )
+      ),
+      list(
+        Resultaat[[1]],
+        Resultaat[[2]],
+        Resultaat[[3]] %>%
+          mutate(
+            Waarde =
+              ifelse(
+                .data$Criterium == "Structuur" & ID == "Ts2036" &
+                  Referentiewaarde == "1",
+                "1 - 2",
+                .data$Waarde
+              ),
+            Waarde =
+              ifelse(
+                .data$Criterium == "Structuur" & ID == "Ts2036" &
+                  Referentiewaarde == "2",
+                "3 - 4",
+                .data$Waarde
+              )
+          )
+      )
+    )
   })
 
 })

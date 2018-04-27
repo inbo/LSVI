@@ -109,12 +109,10 @@ vertaalIntervalUitvoer <-
           Waarde =
             omzetfunctie(.data$Gem, .data$Invoertype),
           Waarde = as.character(.data$Waarde),
-          Min = NULL,
-          Max = NULL,
           Gem = NULL
         )
 
-      if (max(is.na(Resultaat$Waarde))) {
+      if (max(is.na(Resultaat$Waarde) & !is.na(Resultaat$Max))) {
         warning("Er ging iets mis bij de omzetting van het berekend resultaat naar een categorische waarde (functie vertaalIntervalUitvoer).")  #nolint
       }
     }
@@ -144,9 +142,7 @@ vertaalIntervalUitvoer <-
                   round(.data$Min, 1),
                   round(.data$Max, 1),
                   sep = " - ")
-              ),
-            Min = NULL,
-            Max = NULL
+              )
           )
       ) %>%
       select(

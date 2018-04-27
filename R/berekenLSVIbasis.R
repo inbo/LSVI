@@ -171,7 +171,7 @@ berekenLSVIbasis <-
 
     #niet opgegeven voorwaarden berekenen
     BerekendResultaat <- Resultaat %>%
-      filter(is.na(.data$Waarde)) %>%
+      filter(is.na(.data$Waarde) & is.na(.data$Type)) %>%
       rowwise() %>%
       mutate(
         Berekening =
@@ -213,7 +213,7 @@ berekenLSVIbasis <-
       )
 
     Resultaat <- Resultaat %>%
-      filter(!is.na(.data$Waarde)) %>%
+      filter(!is.na(.data$Waarde) | !is.na(.data$Type)) %>%
       mutate(
         AfkomstWaarde = "observatie"
       ) %>%
