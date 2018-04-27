@@ -5,6 +5,7 @@
 #' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
 #' 
 #' @importFrom methods setClass setMethod
+#' @importFrom dplyr %>% mutate row_number filter
 #' 
 #' @include s4_AnalyseVariabele.R
 setClass(
@@ -42,7 +43,7 @@ setMethod(
       Problemen <-
         (Kenmerken %>%
            mutate(
-             Rijnummers = row_number(ID)
+             Rijnummers = row_number(.data$ID)
            ) %>%
            filter(
              is.na(.data$WaardeMax) & .data$WaardeMin == 1

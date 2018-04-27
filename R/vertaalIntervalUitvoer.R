@@ -10,7 +10,7 @@
 #' @export
 #' 
 #' @importFrom assertthat assert_that has_name
-#' @importFrom dplyr %>% left_join mutate select filter bind_rows as.tbl
+#' @importFrom dplyr %>% mutate select filter arrange bind_rows as.tbl
 #' @importFrom rlang .data
 #' 
 
@@ -54,7 +54,7 @@ vertaalIntervalUitvoer <-
 
     LIJST <- LIJST %>%
       as.tbl() %>%
-      filter(!is.na(Ondergrens)) %>%
+      filter(!is.na(.data$Ondergrens)) %>%
       mutate(
         Naam = tolower(.data$Naam),
         Waarde = tolower(.data$Waarde),
