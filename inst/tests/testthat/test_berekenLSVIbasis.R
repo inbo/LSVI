@@ -165,20 +165,6 @@ describe("berekenLSVIbasis", {
       ),
       "Niet alle opgegeven percentages zijn positieve waarden"
     )
-    # expect_error(
-    #   berekenLSVIbasis(
-    #     Versie = "Versie 3",
-    #     Kwaliteitsniveau = "1",
-    #     Data_habitat,
-    #     Data_voorwaarden %>%
-    #       mutate(
-    #         Type =
-    #           ifelse(.data$Waarde == "7,5", "Geheel getal", .data$Type)
-    #       ),
-    #     Data_soortenKenmerken
-    #   ),
-    #   "Een kommagetal ingevoerd waar een geheel getal verwacht wordt"
-    # )
     expect_equal(
       berekenLSVIbasis(
         Versie = "Versie 3",
@@ -500,7 +486,7 @@ describe("berekenLSVIbasis", {
     #nog extra tests toevoegen voor genera en habitatsubtypes als de ontwikkeling hiervoor op punt staat
 
   })
-  
+
   it("afhandeling van Ja/nee in Data_soortenKenmerken is correct", {
     skip_on_cran()
     expect_warning(
