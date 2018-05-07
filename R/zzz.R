@@ -6,14 +6,19 @@
 #' @importFrom odbc odbc
 #' 
 .onLoad <- function(libname, pkgname) {
-  ConnectiePool <<-
-    dbPool(
-      drv = odbc(),
-      Driver = "SQL Server",
-      Database = "D0122_00_LSVIHabitatTypes",
-      Server = "INBO-SQL07-PRD.inbo.be",
-      Trusted_Connection = "TRUE"
-    )
+  tryCatch(
+    ConnectiePool <<-
+      dbPool(
+        drv = odbc(),
+        Driver = "SQL Server",
+        Database = "D0122_00_LSVIHabitatTypes",
+        Server = "INBO-SQL07-PRD.inbo.be",
+        Trusted_Connection = "TRUE"
+      ),
+    error = function(e) {
+      warning("Er kan geen connectie gelegd worden met de databank.  Voorzie bij elke functie zelf een link naar een databank met indicatoren voor elk habitattype.") #nolint
+    }
+  )
 }
 
 #' @title Bij afsluiten de pool van connecties terug sluiten
@@ -25,4 +30,3 @@
 .onUnLoad <- function(libpath) {
   poolClose(ConnectiePool)
 }
-

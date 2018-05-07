@@ -359,3 +359,11 @@ setGeneric(
     standardGeneric("berekenWaarde")
   }
 )
+
+#' @export
+setGeneric(
+  name = "geefTheoretischMaximum",
+  def = function(object) {
+    standardGeneric("geefTheoretischMaximum")
+  }
+)

@@ -56,7 +56,21 @@ selecteerKenmerkenInOpname <-
         )
     }
 
-    if (!identical(SubAnalyseVariabele, character(0)) &&
+    if (!exists("Resultaat")) {
+      stop("Er ontbreekt een soortenlijst of studiegroeplijst in de databank.  Meld deze fout aan de beheerder van dit package.") #nolint
+    }
+
+    if (identical(SubAnalyseVariabele, character(0))) {
+      Resultaat <- Resultaat %>%
+        filter(
+          .data$WaardeMax > 0
+        ) %>%
+        distinct()
+
+      return(Resultaat)
+    }
+
+    if (!identical(SubAnalyseVariabele, character(0)) &
         SubAnalyseVariabele == "bedekking") {
       Resultaat <- Resultaat %>%
         mutate(
@@ -94,11 +108,13 @@ selecteerKenmerkenInOpname <-
         distinct()
 
     } else {
-      Resultaat <- Resultaat %>%
-        filter(
-          .data$WaardeMax > 0
-        ) %>%
-        distinct()
+      stop(
+        paste(
+          "Onbekende subanalysevariabele",
+          SubAnalyseVariabele,
+          "in de indicatorendatabank.  Meld deze fout aan de beheerder van dit package."  #nolint
+        )
+      )
     }
 
     return(Resultaat)

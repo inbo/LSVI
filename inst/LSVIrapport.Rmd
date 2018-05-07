@@ -25,7 +25,7 @@ library(knitr)
 
 if (
   inherits(params$ConnectieLSVIhabitats, "DBIConnection") |
-    inherits(ConnectieLSVIhabitats, "Pool")
+    inherits(params$ConnectieLSVIhabitats, "Pool")
 ) {
   ConnectieLSVIhabitats <- params$ConnectieLSVIhabitats
 } else {

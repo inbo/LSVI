@@ -86,8 +86,7 @@ invoercontroleData_soortenKenmerken <-
       !all(
          Data_soortenKenmerken$Eenheid %in% GeldigeWaarden
         )
-      )
-     {
+      ) {
       stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Eenheid komen overeen met waarden vermeld in de databank.") #nolint
     }
 

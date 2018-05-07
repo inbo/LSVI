@@ -14,8 +14,8 @@ vertaalInvoerInterval(Dataset, LIJST, ConnectieLSVIhabitats)
 \item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
 }
 \value{
-Dataframe met velden Min
+Dataframe met velden Rijnr, Min en Max
 }
 \description{
-Deze functie zet ingevoerde gegevens van meerdere types om naar een interval bestaande uit minimumwaarde en maximumwaarde.  De functie gebruikt Type, Eenheid en Invoertype om te bepalen welke omzetting eventueel nodig is.  Percentages worden bv. omgezet naar een decimaal getal (waarbij minimum en maximum dezelfde waarde zullen krijgen), en categorische variabelen met Invoertype Tansley worden omgezet naar de onder- en bovengrens die in de databank gegeven worden voor de betreffende categorie (op basis van parameter LIJST).
+Deze functie zet ingevoerde gegevens van meerdere types om naar een interval bestaande uit minimumwaarde en maximumwaarde.  De functie gebruikt Type, Eenheid en Invoertype om te bepalen welke omzetting eventueel nodig is.  Percentages worden bv. omgezet naar een decimaal getal (waarbij minimum en maximum dezelfde waarde zullen krijgen), en categorische variabelen met Invoertype Tansley worden omgezet naar de onder- en bovengrens die in de databank gegeven worden voor de betreffende categorie (op basis van parameter LIJST).  Om een onderscheid te maken tussen numerieke waarden en aan-/afwezigheid, wordt voor deze laatste enkel de minimumwaarde ingevoerd (dus maximum = NA).
 }
