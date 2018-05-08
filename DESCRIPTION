@@ -54,6 +54,7 @@ Collate:
     's4_aantal.R'
     's4_analyseVariabele_c.R'
     's4_bedekking.R'
+    's4_aandeel.R'
     'selecteerIndicatoren.R'
     'selecteerKenmerkenInOpname.R'
     'selecteerSoortenInOpname.R'
