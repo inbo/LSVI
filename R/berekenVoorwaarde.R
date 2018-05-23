@@ -40,5 +40,14 @@ berekenVoorwaarde <-
       Waarde <- c(Waarde, Waarde)
     }
 
-    return(Waarde)
+    #Aan de waarde als 3de item het theoretisch maximum van de voorwaarde
+    #toevoegen
+    Waarden <-
+      list(
+        Min = Waarde[1],
+        Max = Waarde[2],
+        TheoretischMaximum = geefTheoretischMaximum(AV)
+      )
+
+    return(Waarden)
   }

@@ -1,11 +1,11 @@
 #' @title zet ingevoerde gegevens om naar een interval
 #'
-#' @description Deze functie zet ingevoerde gegevens van meerdere types om naar een interval bestaande uit minimumwaarde en maximumwaarde.  De functie gebruikt Type, Eenheid en Invoertype om te bepalen welke omzetting eventueel nodig is.  Percentages worden bv. omgezet naar een decimaal getal (waarbij minimum en maximum dezelfde waarde zullen krijgen), en categorische variabelen met Invoertype Tansley worden omgezet naar de onder- en bovengrens die in de databank gegeven worden voor de betreffende categorie (op basis van parameter LIJST).
+#' @description Deze functie zet ingevoerde gegevens van meerdere types om naar een interval bestaande uit minimumwaarde en maximumwaarde.  De functie gebruikt Type, Eenheid en Invoertype om te bepalen welke omzetting eventueel nodig is.  Percentages worden bv. omgezet naar een decimaal getal (waarbij minimum en maximum dezelfde waarde zullen krijgen), en categorische variabelen met Invoertype Tansley worden omgezet naar de onder- en bovengrens die in de databank gegeven worden voor de betreffende categorie (op basis van parameter LIJST).  Om een onderscheid te maken tussen numerieke waarden en aan-/afwezigheid, wordt voor deze laatste enkel de minimumwaarde ingevoerd (dus maximum = NA).
 #' 
 #' @param Dataset dataframe met velden Rijnr, Type, Waarde, Eenheid en Invoertype
 #' @inheritParams berekenLSVIbasis
 #' 
-#' @return Dataframe met velden Min
+#' @return Dataframe met velden Rijnr, Min en Max
 #' 
 #' @export
 #' 
@@ -96,8 +96,8 @@ vertaalInvoerInterval <-
           Ondergrens = NULL,
           Bovengrens = NULL
         )
-      
-      if (max(is.na(Resultaat$Min))) {
+
+      if (max(is.na(Resultaat$Min) & !is.na(Resultaat$Waarde))) {
         warning("Niet voor elke opgegeven categorische variabele is er een numerieke waarde opgenomen in de databank (zie functie vertaalInvoerInterval()), waardoor niet voor elke waarde een berekening gemaakt kan worden. Controleer de spelling van de categorische variabele, of neem contact op met de beheerder van het package om nieuwe numerieke waarden aan te leveren.")  #nolint
       }
     }
@@ -128,7 +128,9 @@ vertaalInvoerInterval <-
       ) %>%
       bind_rows(
         Dataset %>%
-          filter(!tolower(.data$Type) %in% c("categorie", "percentage")) %>%
+          filter(
+            tolower(.data$Type) %in% c("geheel getal", "decimaal getal")
+          ) %>%
           mutate(
             Min =
               tryCatch(
@@ -144,6 +146,35 @@ vertaalInvoerInterval <-
             Max = .data$Min
           )
       ) %>%
+      bind_rows(
+        Dataset %>%
+          filter(tolower(.data$Type) == "ja/nee") %>%
+          mutate(
+            Min =
+              tryCatch(
+                as.numeric(.data$Waarde),
+                warning = function(w) {
+                  if (grepl("NAs introduced by coercion", w)) {
+                    stop("Minstens een van de opgegeven Ja/nee-waarden bevat tekst") #nolint
+                  } else {
+                    as.numeric(.data$Waarde)
+                  }
+                }
+              ),
+            Max = NA
+          )
+      )
+
+    ResultaatJaNee <- Resultaat %>%
+      filter(tolower(.data$Type) == "ja/nee")
+
+    if (nrow(ResultaatJaNee) > 0) {
+      if (!all(ResultaatJaNee$Min %in% c(0, 1))) {
+        stop("Niet alle opgegeven Ja/nee-waarden bevatten waarden die door R vertaald kunnen worden naar TRUE of FALSE.") #nolint
+      }
+    }
+
+    Resultaat <- Resultaat %>%
       select(
         .data$Rijnr,
         .data$Min,

@@ -9,7 +9,7 @@
 #' @importFrom DBI dbGetQuery
 #' @importFrom dplyr %>% filter mutate select left_join bind_rows rename
 #' @importFrom rlang .data
-#' 
+#'
 #' @export
 #'
 invoercontroleData_soortenKenmerken <-
@@ -35,7 +35,7 @@ invoercontroleData_soortenKenmerken <-
     assert_that(
       all(
         tolower(Data_soortenKenmerken$TypeKenmerk) %in%
-          c("studiegroep", "soort_nbn", "soort_latijn", "soort_nl")
+          c("studiegroep", "soort_nbn", "soort_latijn", "soort_nl", "doodhout")
       ),
       msg = "TypeKenmerk moet een van de volgende waarden zijn: studiegroep, soort_nbn, soort_latijn, soort_nl" #nolint
     )
@@ -71,16 +71,22 @@ invoercontroleData_soortenKenmerken <-
       Data_soortenKenmerken$Eenheid <-
         as.character(Data_soortenKenmerken$Eenheid)
     }
-    if (
-      !all(
-        Data_soortenKenmerken$Eenheid %in%
+    GeldigeWaarden <-
+      c(
         geefUniekeWaarden(
           "AnalyseVariabele",
           "Eenheid",
           ConnectieLSVIhabitats
-        )
+        ),
+        "Volume_ha",
+        "Aantal_ha"
       )
-    ) {
+
+    if (
+      !all(
+         Data_soortenKenmerken$Eenheid %in% GeldigeWaarden
+        )
+      ) {
       stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Eenheid komen overeen met waarden vermeld in de databank.") #nolint
     }
 
@@ -153,9 +159,9 @@ invoercontroleData_soortenKenmerken <-
           left_join(
             Soortenlijst %>%
               select(
-                .data$WetNaam, .data$NBNTaxonVersionKey
+                .data$NedNaam, .data$NBNTaxonVersionKey
               ),
-            by = c("Kenmerk" = "WetNaam")
+            by = c("Kenmerk" = "NedNaam")
           )
       )
 
@@ -170,14 +176,14 @@ invoercontroleData_soortenKenmerken <-
         )
       )
     }
-    
+
     Fouten <- Kenmerken %>%
       filter(tolower(.data$TypeKenmerk) == "soort_nbn") %>%
       mutate(
         Fout = !.data$Kenmerk %in% Taxonlijst$NBNTaxonVersionKey
       ) %>%
       filter(.data$Fout == TRUE)
-    
+
     if (nrow(Fouten) > 0) {
       warning(
         sprintf(
@@ -186,7 +192,7 @@ invoercontroleData_soortenKenmerken <-
         )
       )
     }
-      
+
 
     KenmerkenSoort <- KenmerkenSoort %>%
       mutate(
@@ -202,6 +208,7 @@ invoercontroleData_soortenKenmerken <-
       bind_rows(
         KenmerkenSoort
       ) %>%
+      filter(!is.na(.data$Kenmerk)) %>%
       mutate(
         Rijnr = row_number(.data$Kenmerk)
       )

@@ -1,0 +1,76 @@
+---
+title: "Outline package LSVI"
+output: html_notebook
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tibble)
+library(dplyr)
+library(ggplot2)
+
+```
+
+###BerekenLSVIbasis
+
+Onderstaand schema geeft weer welke functies aangeroepen worden in de functie berekenLSVIbasis (rechtstreeks of onrechtstreeks, zie inspringing).  Vaak terugkerende functies:
+
+- geefUniekeWaarden: een functie die toelaat om een opgegeven kolom uit de databank te halen, wordt in deze context vooral gebruikt voor foutcontrole
+- vertaalInvoerInterval: een functie die opgegeven waarden (numeriek of categorisch) vertaalt naar een interval (voor door de gebruiker ingevoerde waarden en waarden uit de databank)
+
+```{r rekengedeelte, fig.width=7, fig.height=10, echo=FALSE}
+
+Dataset <- tribble(
+  ~Title, ~X, ~Y, ~Hjust, ~Vjust, ~Tekst,
+  "berekenLSVIbasis", -1, 2, 0, 0.5, "",
+  "invoercontroleVersie", 0, 0, 0, 0.5, "",
+  "geefUniekeWaarden", 1, -1, 0, 0.5, "",
+  "invoercontroleKwaliteitsniveau", 0, -2, 0, 0.5, "",
+  "geefUniekeWaarden", 1, -3, 0, 0.5, "",
+  "invoercontroleData_habitat", 0, -4, 0, 0.5, "",
+  "geefUniekeWaarden", 1, -5, 0, 0.5, "",
+  "invoercontroleData_voorwaarden", 0, -6, 0, 0.5, "",
+  "geefUniekeWaarden", 1, -7, 0, 0.5, "",
+  "vertaalInvoerInterval", 1, -8, 0, 0.5, "",
+  "geefUniekeWaarden", 2, -9, 0, 0.5, "",
+  "invoercontroleData_soortenKenmerken", 0, -10, 0, 0.5, "",
+  "geefUniekeWaarden", 1, -11, 0, 0.5, "",
+  "vertaalInvoerInterval", 1, -12, 0, 0.5, "",
+  "geefUniekeWaarden", 2, -13, 0, 0.5, "",
+  "geefInvoervereisten", 0, -15, 0, 0.5, "",
+  "selecteerIndicatoren", 1, -16, 0, 0.5, "",
+  "geefUniekeWaarden", 2, -17, 0, 0.5, "",
+  "vertaalInvoerInterval", 0, -18, 0, 0.5, "",
+  "geefUniekeWaarden", 1, -19, 0, 0.5, "",
+  "berekenVoorwaarde", 0, -20, 0, 0.5, "",
+  "analyseVariabele_c (constructor van s4 AnalyseVariabele)", 1, -21, 0, 0.5, "(s4-klassen en hun methoden zijn niet in dit schema opgenomen)",
+  "geefSoortenlijstInvoerniveau", 2, -22, 0, 0.5, "",
+  "geefSoortenlijstSoortniveau", 2, -23, 0, 0.5, "",
+  "vertaalInvoerInterval", 2, -24, 0, 0.5, "",
+  "geefUniekeWaarden", 3, -25, 0, 0.5, "",
+  "berekenWaarde (methode s4 afgeleid van AnalyseVariabele)", 1, -27, 0, 0.5, "",
+  "geefTheoretischMaximum (methode s4 afgeleid van AnalyseVariabele)", 1, -28, 0, 0.5, "",
+  "vertaalIntervalUitvoer", 0, -29, 0, 0.5, "",
+  "berekenStatus", 0, -30, 0, 0.5, ""
+)
+
+Dataset %>%
+  ggplot(aes(x = X, y = Y, hjust = Hjust, vjust = Vjust)) +
+  geom_text(aes(label = Tekst, y = Y - 5)) +
+  geom_label(
+    aes(label = Title, colour = Title),
+    show.legend = FALSE
+  ) +
+  xlim(-1, 25) +
+  ylim(-30, 2) +
+  theme(
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.background = element_blank()
+  )
+```
+
+

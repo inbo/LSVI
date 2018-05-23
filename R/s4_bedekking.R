@@ -41,15 +41,32 @@ setMethod(
     #   )
 
     #onderstaande is om te testen of het concept werkt, berekening moet nog aangepast worden!!!
-    BedekkingMin <-
-      (1.0 - prod( (1.0 - Resultaat$WaardeMin), na.rm = TRUE))
 
-    BedekkingMax <-
-      (1.0 - prod( (1.0 - Resultaat$WaardeMax), na.rm = TRUE))
+    #Als er meer NA's zijn in WaardeMax dan in WaardeMin, wil dit zeggen dat
+    #er aan-/afwezigheden opgegeven zijn in plaats van bedekkingen
+    #In dat geval berekenen we geen bedekking en geven we een warning
+    if (sum(is.na(Resultaat$WaardeMin)) < sum(is.na(Resultaat$WaardeMax))) {
+      BedekkingMin <- NA
+      BedekkingMax <- NA
+      warning("De bedekking is niet berekend voor indicatoren waarbij voor sommige soorten of kenmerken enkel aan- of afwezigheid opgegeven is") #nolint
+    } else {
+      BedekkingMin <-
+        (1.0 - prod( (1.0 - Resultaat$WaardeMin), na.rm = TRUE))
+      BedekkingMax <-
+        (1.0 - prod( (1.0 - Resultaat$WaardeMax), na.rm = TRUE))
+    }
 
     # BedekkingMin <- BedekkingGem * 0.9
     # BedekkingMax <- BedekkingGem * 1.1
 
     return(c(BedekkingMin, BedekkingMax))
+  }
+)
+
+setMethod(
+  f = "geefTheoretischMaximum",
+  signature = "bedekking",
+  definition = function(object) {
+    return(100)
   }
 )

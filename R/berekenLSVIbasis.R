@@ -1,6 +1,6 @@
 #' @title Berekent de LSVI op basis van VoorwaardeID en opgegeven waarden
 #'
-#' @description Deze functie bepaalt de Lokale Staat van Instandhouding op basis van gegevens, die in het juiste formaat moeten aangeleverd worden.  Zie hiervoor de beschrijving bij de parameters ('Arguments') en de tabellen van het voorbeeld.  In principe is enkel de parameter Data_habitat verplicht om op te geven, maar extra datasets zijn uiteraard wel nodig om een resultaat te bekomen.  Welke datasets relevant zijn, is afhankelijk van de opgegeven habitattypes: voor een aantal habitattypes kan een tabel met observaties en hun bedekking of aanwezigheid (=parameter 'Data_soortenKenmerken') volstaan, voor bossen zijn bv. bijkomend gegevens nodig over dood hout.  
+#' @description Deze functie bepaalt de Lokale Staat van Instandhouding op basis van gegevens, die in het juiste formaat moeten aangeleverd worden.  Zie hiervoor de beschrijving bij de parameters ('Arguments') en de tabellen van het voorbeeld.  In principe is enkel de parameter Data_habitat verplicht om op te geven, maar extra datasets zijn uiteraard wel nodig om een resultaat te bekomen.  Welke datasets relevant zijn, is afhankelijk van de opgegeven habitattypes: voor een aantal habitattypes kan een tabel met observaties en hun bedekking of aanwezigheid (=parameter 'Data_soortenKenmerken') volstaan, voor bossen zijn bv. bijkomend gegevens nodig over dood hout.
 #'
 #' @inheritParams selecteerIndicatoren
 #' @param Versie De versie van het LSVI-rapport op basis waarvan de berekening gemaakt wordt, bv. "Versie 2.0" of "Versie 3".  Bij de default "alle" wordt de LSVI volgens de verschillende versies berekend.
@@ -30,7 +30,7 @@
 #'
 #' @export
 #'
-#' @importFrom dplyr %>% select distinct filter mutate row_number rename left_join summarise group_by ungroup rowwise
+#' @importFrom dplyr %>% select distinct filter mutate row_number rename left_join summarise group_by ungroup rowwise bind_rows arrange
 #' @importFrom tidyr unnest
 #' @importFrom assertthat assert_that has_name
 #' @importFrom rlang .data
@@ -171,7 +171,7 @@ berekenLSVIbasis <-
 
     #niet opgegeven voorwaarden berekenen
     BerekendResultaat <- Resultaat %>%
-      filter(is.na(.data$Waarde)) %>%
+      filter(is.na(.data$Waarde) & is.na(.data$Type)) %>%
       rowwise() %>%
       mutate(
         Berekening =
@@ -183,66 +183,41 @@ berekenLSVIbasis <-
               ConnectieLSVIhabitats,
               LIJST
             )
-          )
-      ) %>%
-      unnest() %>%
-      select(
-        .data$Rijnr,
-        .data$Berekening
-      ) %>%
-      group_by(.data$Rijnr) %>%
-      summarise(
-        Min = min(.data$Berekening),
-        Max = max(.data$Berekening)
+          ),
+        WaardeMin = unlist(.data$Berekening)["Min"],
+        WaardeMax = unlist(.data$Berekening)["Max"],
+        TheoretischMaximum = unlist(.data$Berekening)["TheoretischMaximum"],
+        Berekening = NULL
       ) %>%
       ungroup() %>%
       mutate(
-        Samen =
-          ifelse(
-            .data$Min == .data$Max,
-            .data$Min,
-            paste(
-              round(.data$Min, 2),
-              round(.data$Max, 2),
-              sep = " - ")
-          ),
-        Berekening = NULL
+        Type = .data$TypeVariabele,
+        Invoertype.vw = .data$Invoertype,
+        Eenheid.vw = .data$Eenheid,
+        AfkomstWaarde = "berekend",
+        Waarde = NULL
+      )
+
+    BerekendResultaat <-
+      BerekendResultaat %>%
+      left_join(
+        vertaalIntervalUitvoer(
+          BerekendResultaat[
+            , c("Rijnr", "Type", "WaardeMin", "WaardeMax",
+              "Eenheid.vw", "Invoertype.vw")
+          ],
+          LIJST,
+          ConnectieLSVIhabitats
+        ),
+        by = c("Rijnr")
       )
 
     Resultaat <- Resultaat %>%
-      left_join(
-        BerekendResultaat,
-        by = c("Rijnr")
-      ) %>%
+      filter(!is.na(.data$Waarde) | !is.na(.data$Type)) %>%
       mutate(
-        WaardeMin =
-          ifelse(
-            is.na(.data$WaardeMin),
-            .data$Min,
-            .data$WaardeMin
-          ),
-        WaardeMax =
-          ifelse(
-            is.na(.data$WaardeMax),
-            .data$Min,
-            .data$WaardeMax
-          ),
-        Type =
-          ifelse(
-            is.na(.data$Waarde),
-            "Berekend",
-            .data$Type
-          ),
-        Waarde =
-          ifelse(
-            is.na(.data$Waarde),
-            .data$Samen,
-            .data$Waarde
-          ),
-        Min = NULL,
-        Max = NULL,
-        Samen = NULL
-      )
+        AfkomstWaarde = "observatie"
+      ) %>%
+      bind_rows(BerekendResultaat)
 
     Statusberekening <-
       berekenStatus(
@@ -259,18 +234,26 @@ berekenLSVIbasis <-
       mutate(
         Rijnr = NULL,
         ExtraBewerking = NULL,
-        Eenheid = NULL,
-        TypeVariabele = NULL,
-        Invoertype = NULL,
         RefMin = NULL,
         RefMax = NULL,
         WaardeMin = NULL,
         WaardeMax = NULL
       ) %>%
       rename(
+        TypeRefwaarde = .data$TypeVariabele,
+        EenheidRefwaarde = .data$Eenheid,
+        InvoertypeRevwaarde = .data$Invoertype,
         Status_voorwaarde = .data$Status,
-        Invoertype = .data$Invoertype.vw,
-        Eenheid = .data$Eenheid.vw
+        TypeWaarde = .data$Type,
+        EenheidWaarde = .data$Eenheid.vw,
+        InvoertypeWaarde = .data$Invoertype.vw
+      ) %>%
+      arrange(
+        .data$ID,
+        .data$Habitattype,
+        .data$Versie,
+        .data$Criterium,
+        .data$Indicator
       )
 
 

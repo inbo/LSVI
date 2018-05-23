@@ -1,12 +1,12 @@
 #' S4-klasse waarin de generieke onderdelen gedefinieerd worden die voor alle afgeleide klassen gelden (bv. aantal, bedekking,...)
-#' 
+#'
 #' Deze virtuele klasse Waarde geeft de mogelijkheid om een aantal klassen en methoden die gelijk zijn voor alle verschillende analysevariabelen, maar eenmaal te moeten aanmaken.  Idee is dat voor elke afgeleide klasse minstens de methode berekenWaarde aangemaakt wordt.
-#' 
+#'
 #' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
-#' 
+#'
 #' @importFrom assertthat assert_that has_name
 #' @importFrom methods setClass setValidity getGeneric setMethod setReplaceMethod validObject
-#' 
+#'
 setClass(
   Class = "AnalyseVariabele",
   representation =
@@ -36,7 +36,7 @@ setValidity(
       assert_that(
         all(
           tolower(object@Kenmerken$TypeKenmerk) %in%
-            c("studiegroep", "soort_nbn")
+            c("studiegroep", "soort_nbn", "doodhout")
         ),
         msg = "TypeKenmerk moet een van de volgende waarden zijn: studiegroep, soort_nbn" #nolint
       )
@@ -357,5 +357,13 @@ setGeneric(
   name = "berekenWaarde",
   def = function(object) {
     standardGeneric("berekenWaarde")
+  }
+)
+
+#' @export
+setGeneric(
+  name = "geefTheoretischMaximum",
+  def = function(object) {
+    standardGeneric("geefTheoretischMaximum")
   }
 )
