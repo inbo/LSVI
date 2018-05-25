@@ -1,6 +1,6 @@
 #' @title Berekent de LSVI op basis van VoorwaardeID en opgegeven waarden
 #'
-#' @description Deze functie bepaalt de Lokale Staat van Instandhouding op basis van gegevens, die in het juiste formaat moeten aangeleverd worden.  Zie hiervoor de beschrijving bij de parameters ('Arguments') en de tabellen van het voorbeeld.  In principe is enkel de parameter Data_habitat verplicht om op te geven, maar extra datasets zijn uiteraard wel nodig om een resultaat te bekomen.  Welke datasets relevant zijn, is afhankelijk van de opgegeven habitattypes: voor een aantal habitattypes kan een tabel met observaties en hun bedekking of aanwezigheid (=parameter 'Data_soortenKenmerken') volstaan, voor bossen zijn bv. bijkomend gegevens nodig over dood hout.
+#' @description Deze functie bepaalt de Lokale Staat van Instandhouding en biotische indices op basis van gegevens, die in het juiste formaat moeten aangeleverd worden.  Zie hiervoor de beschrijving bij de parameters ('Arguments') en de tabellen van het voorbeeld.  In principe is enkel de parameter Data_habitat verplicht om op te geven, maar extra datasets zijn uiteraard wel nodig om een resultaat te bekomen.  Welke datasets relevant zijn, is afhankelijk van de opgegeven habitattypes: voor een aantal habitattypes kan een tabel met observaties en hun bedekking of aanwezigheid (=parameter 'Data_soortenKenmerken') volstaan, voor bossen zijn bv. bijkomend gegevens nodig over dood hout. De biotische indices zijn afgeleid van het verschil tussen een geobserveerde waarde en de referentiewaarde voor elke indicator. Deze verschillen werden herschaald tussen -1 en +1, waarbij een positieve en negatieve waarde overeenkomt met respectievelijk een gunstige en ongunstige score. Deze verschilscores per indicator worden geaggregeerd, eerst voor de indicatoren die tot eenzelfde criterium behoren, vervolgens worden deze geaggregeerde scores verder geaggregeerd om tot een globale index te komen. Er worden drie verschillende globale indices berekend waarbij de naamgeving aangeeft welk aggregatie achtereenvolgens gebruikt werd: index_min_min, index_harm_min en index_harm_harm. Een naam met "min" duidt op minimum van de scores als aggregatie; bij "harm" werd het harmonisch gemiddelde berekend.
 #'
 #' @inheritParams selecteerIndicatoren
 #' @param Versie De versie van het LSVI-rapport op basis waarvan de berekening gemaakt wordt, bv. "Versie 2.0" of "Versie 3".  Bij de default "alle" wordt de LSVI volgens de verschillende versies berekend.
@@ -11,7 +11,7 @@
 #' @param LIJST Dataframe met lijst die weergeeft hoe de vertaling moet gebeuren van categorische variabelen naar numerieke waarden (en omgekeerd).  Default worden deze waarden uit de databank met LSVI-indicatoren gehaald d.m.v. de functie vertaalInvoerInterval().  Aangeraden wordt om deze default te gebruiken (dus parameter niet expliciet invullen), of deze waar nodig aan te vullen met eigen schalen.  Omdat er ook een omzetting moet gebeuren voor grenswaarden uit de databank, kan het niet doorgeven van een gedeelte van deze lijst problemen geven.
 #'
 #'
-#' @return Deze functie genereert de resultaten in de vorm van een list met 3 tabellen: een eerste met de beoordelingen per criterium en kwaliteitsniveau, een tweede met de beoordelingen per indicator en kwaliteitsniveau, en een derde met de detailgegevens inclusief meetwaarden.
+#' @return Deze functie genereert de resultaten in de vorm van een list met 4 tabellen: een eerste met de beoordelingen per kwaliteitsniveau, een tweede met de beoordelingen per criterium en kwaliteitsniveau, een derde met de beoordelingen per indicator en kwaliteitsniveau, en een vierde met de detailgegevens inclusief meetwaarden.
 #'
 #' @examples
 #' library(LSVI)
@@ -135,7 +135,7 @@ berekenLSVIbasis <-
         Invoervereisten[
           , c("Rijnr", "TypeVariabele", "Referentiewaarde",
               "Eenheid", "Invoertype")
-        ],
+          ],
         LIJST,
         ConnectieLSVIhabitats
       ) %>%
@@ -204,8 +204,8 @@ berekenLSVIbasis <-
         vertaalIntervalUitvoer(
           BerekendResultaat[
             , c("Rijnr", "Type", "WaardeMin", "WaardeMax",
-              "Eenheid.vw", "Invoertype.vw")
-          ],
+                "Eenheid.vw", "Invoertype.vw")
+            ],
           LIJST,
           ConnectieLSVIhabitats
         ),
@@ -223,7 +223,15 @@ berekenLSVIbasis <-
       berekenStatus(
         Resultaat[
           , c("Rijnr", "RefMin", "RefMax", "Operator", "WaardeMin", "WaardeMax")
-        ]
+          ]
+      )
+
+    Verschilscores <-
+      berekenVerschilscores(
+        Resultaat[
+          , c("Rijnr", "RefMin", "RefMax", "Operator", "WaardeMin",
+              "WaardeMax", "TheoretischMaximum")
+          ]
       )
 
     Resultaat <- Resultaat %>%
@@ -231,12 +239,16 @@ berekenLSVIbasis <-
         Statusberekening,
         by = c("Rijnr")
       ) %>%
+      left_join(
+        Verschilscores,
+        by = c("Rijnr")
+      ) %>%
       mutate(
         Rijnr = NULL,
         ExtraBewerking = NULL,
-        RefMin = NULL,
+        RefMin = NULL,#in geval van categorische referentiewaarde (bv HB)
         RefMax = NULL,
-        WaardeMin = NULL,
+        WaardeMin = NULL,#is geval van categorische waarde (bv HB)
         WaardeMax = NULL
       ) %>%
       rename(
@@ -276,7 +288,13 @@ berekenLSVIbasis <-
             unique(.data$Combinatie),
             .data$VoorwaardeID,
             .data$Status_voorwaarde
-          )
+          ),
+        # voorwaarden EN wordt min(verschillen) OF wordt max(verschillen)
+        Verschilscore = combinerenVerschilscore(
+          unique(.data$Combinatie),
+          .data$VoorwaardeID,
+          .data$Verschilscore
+        )
       ) %>%
       ungroup()
 
@@ -290,12 +308,40 @@ berekenLSVIbasis <-
         .data$Kwaliteitsniveau
       ) %>%
       summarise(
-        Status_criterium = as.logical(all(.data$Status_indicator))
+        Status_criterium = as.logical(all(.data$Status_indicator)),
+        #minimum van de scores tussen -1 en +1
+        Index_min_criterium = min(Verschilscore),
+        #harmonisch gemiddelde van de verschilscores
+        #de verschilscores worden tijdelijk herschaald naar 0 tot 1 range
+        Index_harm_criterium = mean(((Verschilscore + 1) * 2) ^ -1) ^ -1 *
+          2 - 1
+      ) %>%
+      ungroup()
+
+    #resultaten op globaal niveau
+    Resultaat_globaal <- Resultaat_criterium %>%
+      group_by(
+        .data$ID,
+        .data$Habitattype,
+        .data$Versie,
+        .data$Kwaliteitsniveau
+      ) %>%
+      summarise(
+        Status = as.logical(all(.data$Status_criterium)),
+        #meest conservatieve index: one-out-all-out is resultaat van
+        #Index_min_min < 0
+        Index_min_min = min(Index_min_criterium),
+        #iets minder conservatieve index
+        Index_min_harm = min(Index_harm_criterium),
+        # nog minder conservatieve index
+        Index_harm_harm = mean(((Index_harm_criterium + 1) * 2) ^ -1) ^ -1 *
+          2 - 1
       ) %>%
       ungroup()
 
     return(
       list(
+        Resultaat_globaal = Resultaat_globaal,
         Resultaat_criterium = as.data.frame(Resultaat_criterium),
         Resultaat_indicator = Resultaat_indicator,
         Resultaat_detail = Resultaat
