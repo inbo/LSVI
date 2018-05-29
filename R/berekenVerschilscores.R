@@ -29,25 +29,21 @@ berekenVerschilscores <-
 
 
     Verschiltabel <- Statustabel %>%
-      mutate(# harmonisch gemiddelde
-        Ref = 2 * .data$RefMin * .data$RefMax / (.data$RefMin + .data$RefMax ),
-        Waarde = 2 * .data$WaardeMin * .data$WaardeMax /
-          (.data$WaardeMin + .data$WaardeMax),
+      mutate(# rekenkundig gemiddelde van min en max
+        Ref = (.data$RefMin + .data$RefMax) / 2,
+        Waarde = (.data$WaardeMin + .data$WaardeMax) / 2,
         # negatieve indicatoren * -1
         Teken = ifelse(.data$Operator %in% c("<=", "<"), -1, 1),
-        BereikGunstig = case_when(
-          .data$Operator == "<=" ~ .data$Ref,
-          .data$Operator == "<" ~ .data$Ref,
-          .data$Operator == ">=" ~ .data$TheoretischMaximum - .data$Ref,
-          .data$Operator == ">" ~ .data$TheoretischMaximum - .data$Ref,
-          TRUE ~ NA # dus overblijvend geval "=" krijgt NA
-        ),
+        BereikGunstig = ifelse(.data$Operator %in% c("<=", "<"),
+                               .data$Ref,
+                               .data$TheoretischMaximum - .data$Ref),
         BereikOngunstig = .data$TheoretischMaximum - .data$BereikGunstig,
         Verschil = (.data$Waarde - .data$Ref) * .data$Teken,
         Verschilscore = case_when(
-          is.na(.data$Verschil) ~ ifelse(data$Waarde == .data$Ref, 1, -1),
-          .data$Verschil > 0 ~ .data$Verschil / .data$BereikGunstig,
-          .data$Verschil <= 0 ~ .data$Verschil / .data$BereikOngunstig
+          is.na(.data$Verschil) ~ ifelse(.data$Waarde == .data$Ref, 1, -1),
+          # gewijzigd naar >= 0 (bereik gunstig is inclusief de grenswaarde zelf)
+          .data$Verschil >= 0 ~ .data$Verschil / .data$BereikGunstig,
+          .data$Verschil < 0 ~ .data$Verschil / .data$BereikOngunstig
         )
       ) %>%
       select(
