@@ -26,7 +26,7 @@ combinerenVerschilscore <-
 
     assert_that(is.character(Formule))
     assert_that(all(sapply(VoorwaardeID, is.numeric)))
-    assert_that(all(sapply(Verschilscore, is.logical)))
+    assert_that(all(sapply(Verschilscore, is.numeric)))
     assert_that(length(VoorwaardeID) == length(Verschilscore))
     #nog testen of Formule bestaat uit EN, OF, haakjes en VoorwaardeID's (en evt. andere tekens die logische berekening toelaten)
 
