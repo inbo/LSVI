@@ -39,7 +39,7 @@ combinerenVerschilscore <-
     for (i in seq_along(VoorwaardeID)) {
       Formule <- gsub(VoorwaardeID[i], Verschilscore[i], Formule)
     }
-    Resultaat <- as.numeric(evals(Formule)[[1]]$result)
+    Resultaat <- as.numeric(evals(Formule, env = new.env())[[1]]$result)
 
     return(Resultaat)
   }
