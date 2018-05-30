@@ -41,7 +41,7 @@ berekenVerschilscores <-
         Verschil = (.data$Waarde - .data$Ref) * .data$Teken,
         Verschilscore = case_when(
           is.na(.data$Verschil) ~ ifelse(.data$Waarde == .data$Ref, 1, -1),
-          # gewijzigd naar >= 0 (bereik gunstig is inclusief de grenswaarde zelf)
+          #gewijzigd naar >= 0 (bereik gunstig is inclusief de grenswaarde zelf)
           .data$Verschil >= 0 ~ .data$Verschil / .data$BereikGunstig,
           .data$Verschil < 0 ~ .data$Verschil / .data$BereikOngunstig
         )

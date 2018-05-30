@@ -28,7 +28,8 @@ combinerenVerschilscore <-
     assert_that(all(sapply(VoorwaardeID, is.numeric)))
     assert_that(all(sapply(Verschilscore, is.numeric)))
     assert_that(length(VoorwaardeID) == length(Verschilscore))
-    #nog testen of Formule bestaat uit EN, OF, haakjes en VoorwaardeID's (en evt. andere tekens die logische berekening toelaten)
+    #nog testen of Formule bestaat uit EN, OF, haakjes en VoorwaardeID's
+    #(en evt. andere tekens die logische berekening toelaten)
 
     # infix functions voor max en min
     `%max%` <- function(a, b) max(a, b)

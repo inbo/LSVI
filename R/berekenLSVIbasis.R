@@ -246,9 +246,9 @@ berekenLSVIbasis <-
       mutate(
         Rijnr = NULL,
         ExtraBewerking = NULL,
-        RefMin = NULL,#in geval van categorische referentiewaarde (bv HB)
+        RefMin = NULL, #in geval van categorische referentiewaarde (bv HB)
         RefMax = NULL,
-        WaardeMin = NULL,#is geval van categorische waarde (bv HB)
+        WaardeMin = NULL, #is geval van categorische waarde (bv HB)
         WaardeMax = NULL
       ) %>%
       rename(
@@ -273,7 +273,8 @@ berekenLSVIbasis <-
     Resultaat_indicator <- Resultaat %>%
       group_by(
         .data$ID,
-        .data$Habitattype,   #en hier zouden extra gegevens uit Data_habitat moeten toegevoegd worden
+        .data$Habitattype,   #en hier zouden extra gegevens uit Data_habitat
+                             #moeten toegevoegd worden
         .data$Versie,
         .data$Habitattype.y,
         .data$Criterium,
@@ -313,7 +314,7 @@ berekenLSVIbasis <-
         Index_min_criterium = min(Verschilscore),
         #harmonisch gemiddelde van de verschilscores
         #de verschilscores worden tijdelijk herschaald naar 0 tot 1 range
-        Index_harm_criterium = mean(((Verschilscore + 1) * 2) ^ -1) ^ -1 *
+        Index_harm_criterium = mean( ( (Verschilscore + 1) * 2) ^ -1) ^ -1 *
           2 - 1
       ) %>%
       ungroup()
@@ -334,7 +335,7 @@ berekenLSVIbasis <-
         #iets minder conservatieve index
         Index_min_harm = min(Index_harm_criterium),
         # nog minder conservatieve index
-        Index_harm_harm = mean(((Index_harm_criterium + 1) * 2) ^ -1) ^ -1 *
+        Index_harm_harm = mean( ( (Index_harm_criterium + 1) * 2) ^ -1) ^ -1 *
           2 - 1
       ) %>%
       ungroup()
