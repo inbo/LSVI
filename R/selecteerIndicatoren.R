@@ -143,8 +143,7 @@ selecteerIndicatoren <-
             Habitatselectie.Habitatsubtype, %s
             Criterium.Naam AS Criterium, Indicator.Naam AS Indicator,
             Indicator_habitat.Id AS Indicator_habitatID,
-            Indicator_habitat.SoortengroepID,
-            Indicator_habitat.NiveauSoortenlijstFiche,
+            Indicator_habitat.TaxongroepId,
             IndicatortabellenKoppeling.Indicator_beoordelingID
         FROM (((Indicator_habitat
         INNER JOIN Habitatselectie
