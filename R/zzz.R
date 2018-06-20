@@ -11,7 +11,7 @@
       dbPool(
         drv = odbc(),
         Driver = "SQL Server",
-        Database = "D0122_00_LSVIHabitatTypes",
+        Database = "D0122_02_LSVIHabitatTypes",
         Server = "INBO-SQL07-PRD.inbo.be",
         Trusted_Connection = "TRUE"
       ),
