@@ -263,8 +263,8 @@ geefInvoervereisten <- function(Versie = "alle",
             LijstItem.Ondergrens AS Invoerondergrens,
             LijstItem.Gemiddelde AS Invoergemiddelde,
             Lijstitem.Bovengrens AS Invoerbovengrens,
-            Voorwaarde.SoortengroepID,
-            Soortengroep.Omschrijving AS SoortengroepNaam,
+            Voorwaarde.TaxongroepID AS SoortengroepID,
+            Taxongroep.Omschrijving AS SoortengroepNaam,
             Studiegroep.Naam AS Studiegroepnaam,
             Studiegroep.LijstNaam as Studielijstnaam,
             StudieItem.Waarde As Studiewaarde,
@@ -284,8 +284,8 @@ geefInvoervereisten <- function(Versie = "alle",
             SubLijstItem.Ondergrens AS SubInvoerondergrens,
             SubLijstItem.Gemiddelde AS SubInvoergemiddelde,
             SubLijstitem.Bovengrens AS SubInvoerbovengrens
-            FROM (((((Voorwaarde LEFT JOIN Soortengroep
-                       ON Voorwaarde.SoortengroepID = Soortengroep.Id)
+            FROM (((((Voorwaarde LEFT JOIN Taxongroep
+                       ON Voorwaarde.TaxongroepID = Taxongroep.Id)
             LEFT JOIN (AnalyseVariabele
               LEFT JOIN TypeVariabele
                        ON AnalyseVariabele.TypeVariabeleID = TypeVariabele.Id)
