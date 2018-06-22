@@ -40,6 +40,7 @@ Collate:
     'geefSoortenlijst.R'
     'geefSoortenlijstInvoerniveau.R'
     'geefSoortenlijstSoortniveau.R'
+    'geefSoortenlijstVoorIDs.R'
     'geefUniekeWaarden.R'
     'geefVersieInfo.R'
     'geefVertaallijst.R'
