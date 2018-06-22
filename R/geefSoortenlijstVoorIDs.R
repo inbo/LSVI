@@ -23,7 +23,7 @@
 #'
 geefSoortenlijstVoorIDs <-
   function(Soortengroeplijst,
-           Soortenlijsttype = c("LSVIfiche", "Soortniveau", "alle"),
+           Soortenlijsttype = c("LSVIfiche", "alle"),
            ConnectieLSVIhabitats = ConnectiePool){
 
     assert_that(

@@ -5,12 +5,12 @@
 \title{Genereert soorten(groep)lijst(en) LSVI op basis van SoortengroepID}
 \usage{
 geefSoortenlijstVoorIDs(Soortengroeplijst, Soortenlijsttype = c("LSVIfiche",
-  "Soortniveau", "alle"), ConnectieLSVIhabitats = ConnectiePool)
+  "alle"), ConnectieLSVIhabitats = ConnectiePool)
 }
 \arguments{
 \item{Soortengroeplijst}{string waarin de SoortengroepID's na elkaar weergegeven worden, gescheiden door een komma.  Eventueel mag dit ook een vector zijn van SoortengroepID's.}
 
-\item{Soortenlijsttype}{"LSVIfiche" betekent dat de soortenlijst van de habitatfiche wordt overgenomen, "Soortniveau" betekent dat alle soorten worden weergegeven die in de groepen vallen die aan de parameters voldoen (bv. alle soorten bomen en struiken als dit in LSVI-fiche vermeld is), "alle" betekent dat alle soorten en alle taxonomische en morfologische groepen worden weergegeven die volledig in de groepen vallen die aan de parameters voldoen (dus gelijkaardig als Soortniveau, maar dan uitgebreid naar hogere taxonomische en morfologische groepen).}
+\item{Soortenlijsttype}{"LSVIfiche" betekent dat de soortenlijst van de habitatfiche wordt overgenomen, "alle" betekent dat alle soorten en alle taxonomische groepen worden weergegeven die volledig in de groepen vallen die aan de parameters voldoen.}
 
 \item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
 }
