@@ -90,6 +90,28 @@ invoercontroleData_soortenKenmerken <-
       stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Eenheid komen overeen met waarden vermeld in de databank.") #nolint
     }
 
+    assert_that(has_name(Data_soortenKenmerken, "Vegetatielaag"))
+    if (!is.character(Data_soortenKenmerken$Vegetatielaag)) {
+      Data_soortenKenmerken$Vegetatielaag <-
+        as.character(tolower(Data_soortenKenmerken$Vegetatielaag))
+    }
+    GeldigeWaarden <-
+      c(
+        geefUniekeWaarden(
+          "StudieItem",
+          "Waarde",
+          ConnectieLSVIhabitats
+        )
+      )
+    if (
+      !all(
+        Data_soortenKenmerken$Vegetatielaag %in% GeldigeWaarden
+      )
+    ) {
+      stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Vegetatielaag komen overeen met waarden vermeld in de databank.") #nolint
+    }
+
+
 
     #○mzettingen naar een bruikbare dataframe
     Kenmerken <- Data_soortenKenmerken #naamsverandering is omdat code verplaatst is
