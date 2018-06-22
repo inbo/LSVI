@@ -76,6 +76,7 @@ geefSoortenlijstVoorIDs <-
           Tx.NbnTaxonVersionKey,
       	Tx.FloraNaamWetenschappelijk,
       	Tx.FloraNaamNederlands,
+        Tx.NbnNaam,
       	Tx.TaxonTypeId
         FROM Taxon Tx
       UNION ALL
@@ -84,6 +85,7 @@ geefSoortenlijstVoorIDs <-
       	Tx2.NbnTaxonVersionKey,
       	Tx2.FloraNaamWetenschappelijk,
       	Tx2.FloraNaamNederlands,
+        Tx2.NbnNaam,
       	Tx2.TaxonTypeId
         FROM Taxonlijn 
           INNER JOIN TaxonTaxon AS TxTx
