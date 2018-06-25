@@ -1,14 +1,14 @@
 #' @title Genereert soorten(groep)lijst(en) LSVI op basis van SoortengroepID
 #'
-#' @description Deze functie genereert soortenlijsten (met wetenschappelijke en Nederlandse namen) uit de databank met de criteria en indicatoren voor de bepaling van de Lokale Staat van Instandhouding.  Het is in feite een hulpfunctie die voor verschillende andere functies gebruikt wordt en die de complexe zoekfunctie in de tabellen met soorten uitvoert op basis van een opgegeven SoortengroepID (en in die zin iets minder gebruiksvriendelijk is).  Voor een selectie van soortenlijsten op basis van specifieke parameters is de functie geefSoortenlijst() een beter alternatief.
+#' @description Deze functie genereert soortenlijsten (met wetenschappelijke en Nederlandse namen) uit de databank met de criteria en indicatoren voor de bepaling van de Lokale Staat van Instandhouding.  Het is in feite een hulpfunctie die voor verschillende andere functies gebruikt wordt en die de complexe zoekfunctie in de tabellen met soorten uitvoert op basis van een opgegeven TaxongroepId (en in die zin iets minder gebruiksvriendelijk is).  Voor een selectie van soortenlijsten op basis van specifieke parameters is de functie geefSoortenlijst() een beter alternatief.
 #' 
-#' Deze functie geeft standaard voor de gespecifieerde soortengroepen per soortengroep een lijst van alle taxa zoals ze in de LSVI-habitatfiche vermeld zijn (genusniveau, soortniveau, subsoort,...).  Op basis van de parameter soortenlijsttype kan ook gekozen worden om een volledige lijst te geven van deze taxa en alle taxa die hieronder vallen (en opgenomen zijn in de onderliggende databank).
+#' Deze functie geeft standaard voor de gespecifieerde taxongroepen per groep een lijst van alle taxa zoals ze in de LSVI-habitatfiche vermeld zijn (genusniveau, soortniveau, subsoort,...).  Op basis van de parameter soortenlijsttype kan ook gekozen worden om een volledige lijst te geven van deze taxa en alle taxa die hieronder vallen (en opgenomen zijn in de onderliggende databank).
 #'
 #' @inheritParams selecteerIndicatoren
 #' @inheritParams geefSoortenlijst
-#' @param Soortengroeplijst string waarin de SoortengroepID's na elkaar weergegeven worden, gescheiden door een komma.  Eventueel mag dit ook een vector zijn van SoortengroepID's.
+#' @param Taxongroeplijst string waarin de TaxongroepId's na elkaar weergegeven worden, gescheiden door een komma.  Eventueel mag dit ook een vector zijn van TaxongroepId's.
 #'
-#' @return Deze functie geeft een tabel met velden SoortengroepID, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van soorten binnen eenzelfde indicator).  WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort bevat enkel genusnaam en soortnaam (zonder auteursnaam).
+#' @return Deze functie geeft een tabel met velden TaxongroepId, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van taxons binnen eenzelfde indicator).  WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort geeft de verkorte naam zonder auteursnaam.
 #' 
 #' @examples
 #' geefSoortenlijstVoorIDs("98,227,484,552,726")
@@ -22,8 +22,8 @@
 #'
 #'
 geefSoortenlijstVoorIDs <-
-  function(Soortengroeplijst,
-           Soortenlijsttype = c("LSVIfiche", "alle"),
+  function(Taxongroeplijst,
+           Taxonlijsttype = c("LSVIfiche", "alle"),
            ConnectieLSVIhabitats = ConnectiePool){
 
     assert_that(
@@ -31,16 +31,16 @@ geefSoortenlijstVoorIDs <-
         inherits(ConnectieLSVIhabitats, "Pool"),
       msg = "Er is geen connectie met de databank met de LSVI-indicatoren"
     )
-    assert_that(is.character(Soortengroeplijst))
-    if (!is.string(Soortengroeplijst)) {
-      Soortengroeplijst <- paste(Soortengroeplijst, collapse = ",")
+    assert_that(is.character(Taxongroeplijst))
+    if (!is.string(Taxongroeplijst)) {
+      Taxongroeplijst <- paste(Taxongroeplijst, collapse = ",")
     }
-    assert_that(is.string(Soortengroeplijst))
-    assert_that(noNA(Soortengroeplijst))
-    if (!grepl("^([[:digit:]]+,)*[[:digit:]]+$", Soortengroeplijst)) {
-      stop("Soortengroeplijst bestaat niet uit een reeks getallen gescheiden door een komma") #nolint
+    assert_that(is.string(Taxongroeplijst))
+    assert_that(noNA(Taxongroeplijst))
+    if (!grepl("^([[:digit:]]+,)*[[:digit:]]+$", Taxongroeplijst)) {
+      stop("Taxongroeplijst bestaat niet uit een reeks getallen gescheiden door een komma") #nolint
     }
-    match.arg(Soortenlijsttype)
+    match.arg(Taxonlijsttype)
 
     QueryGroepen <-
       sprintf(
@@ -63,7 +63,7 @@ geefSoortenlijstVoorIDs <-
         	ON TgTg.TaxongroepChildId = Tg2.Id
           WHERE TgTg.TaxongroepChildId > 0
         )",
-        Soortengroeplijst
+        Taxongroeplijst
       )
 
     QueryTaxa <-
@@ -136,14 +136,14 @@ geefSoortenlijstVoorIDs <-
       ORDER BY Groepen.TaxongroepId, Groepen.TaxonsubgroepId,
         Taxonlijn.TaxonId;"
     
-    if (Soortenlijsttype[1] == "LSVIfiche") {
+    if (Taxonlijsttype[1] == "LSVIfiche") {
       Soortenlijst <-
         dbGetQuery(
           ConnectieLSVIhabitats,
           paste(QueryGroepen, QueryLSVIfiche, sep = "")
         )
 
-    } else if (Soortenlijsttype[1] == "alle") {
+    } else if (Taxonlijsttype[1] == "alle") {
       Soortenlijst <-
         dbGetQuery(
           ConnectieLSVIhabitats,

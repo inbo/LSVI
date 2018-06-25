@@ -2,18 +2,18 @@
 #'
 #' @description Deze functie genereert soortenlijsten (met wetenschappelijke en Nederlandse namen) die gebruikt worden voor de bepaling van de Lokale Staat van Instandhouding van de opgegeven parameters.  In feite genereert ze een tabel met velden Versie, Habitattype, Habitatsubtype, Criterium, Indicator, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam waarin de gespecificeerde parameters uitgeselecteerd zijn en waar voor andere parameters alle waarden uit de databank weergegeven zijn.
 #'
-#' Er zijn 2 opties: de soorten weergeven zoals in de habitatfiches (op soortniveau, genusniveau of hoger niveau, zoals het in de habitatfiches vermeld is) of alle soorten op soortniveau weergeven en dus bij soortengroepen alle mogelijke soorten van deze groep weergeven.  Deze opties kunnen opgegeven worden in de parameter Soortenlijsttype.
+#' Er zijn 2 opties: de taxa weergeven zoals in de habitatfiches (op soortniveau, genusniveau of hoger niveau, zoals het in de habitatfiches vermeld is) of alle taxa op lagere niveaus ook weergeven en dus bij soortengroepen alle mogelijke soorten van deze groep weergeven.  Deze opties kunnen opgegeven worden in de parameter Soortenlijsttype.
 #'
 #' @template Zoekparameters
 #'
 #' @inheritParams selecteerIndicatoren
-#' @param Soortenlijsttype "LSVIfiche" betekent dat de soortenlijst van de habitatfiche wordt overgenomen, "alle" betekent dat alle soorten en alle taxonomische groepen worden weergegeven die volledig in de groepen vallen die aan de parameters voldoen.
+#' @param Taxonlijsttype "LSVIfiche" betekent dat de taxonlijst van de habitatfiche wordt overgenomen, "alle" betekent dat alle soorten en alle taxonomische groepen worden weergegeven die volledig in de groepen vallen die aan de parameters voldoen.
 #'
-#' @return Deze functie geeft een tabel met velden Versie, Habitattype, Habitatsubtype, Criterium, Indicator, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van soorten binnen eenzelfde indicator).  WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort bevat enkel genusnaam en soortnaam (zonder auteursnaam).
+#' @return Deze functie geeft een tabel met velden Versie, Habitattype, Habitatsubtype, Criterium, Indicator, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van taxa binnen eenzelfde indicator).  WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort geeft de verkorte naam zonder auteursnaam.
 #'
 #' @examples
-#' geefSoortenlijst(Habitattype = "4010", Soortenlijsttype = "LSVIfiche")
-#' geefSoortenlijst(Habitattype = "4010", Soortenlijsttype = "alle")
+#' geefSoortenlijst(Habitattype = "4010", Taxonlijsttype = "LSVIfiche")
+#' geefSoortenlijst(Habitattype = "4010", Taxonlijsttype = "alle")
 #'
 #' @export
 #'
@@ -27,7 +27,7 @@ geefSoortenlijst <-
            Habitattype = "alle",
            Criterium = "alle",
            Indicator = "alle",
-           Soortenlijsttype = c("LSVIfiche", "alle"),
+           Taxonlijsttype = c("LSVIfiche", "alle"),
            ConnectieLSVIhabitats = ConnectiePool){
 
     assert_that(
@@ -35,7 +35,7 @@ geefSoortenlijst <-
         inherits(ConnectieLSVIhabitats, "Pool"),
       msg = "Er is geen connectie met de databank met de LSVI-indicatoren"
     )
-    match.arg(Soortenlijsttype)
+    match.arg(Taxonlijsttype)
 
     Selectiegegevens <-
       selecteerIndicatoren(
@@ -58,8 +58,8 @@ geefSoortenlijst <-
     
     Soortenlijst <-
       geefSoortenlijstVoorIDs(
-        Soortengroeplijst = SoortengroepIDs$SoortengroepIDs,
-        Soortenlijsttype = Soortenlijsttype,
+        Taxongroeplijst = SoortengroepIDs$SoortengroepIDs,
+        Taxonlijsttype = Taxonlijsttype,
         ConnectieLSVIhabitats
       )
 
