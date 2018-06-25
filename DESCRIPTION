@@ -23,9 +23,9 @@ Imports:
     testthat,
     tidyr,
     utils,
-    rlang
+    rlang,
+    xtable
 Suggests:
-    xtable,
     knitr
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr
