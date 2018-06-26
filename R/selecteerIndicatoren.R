@@ -12,7 +12,7 @@
 #' @param Indicator De indicator waarvoor de gegevens uit de databank gehaald worden.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Indicator", "Naam").
 #' @param HabitatnamenToevoegen Moeten de namen van de habitattypen en habitatsubtypen toegevoegd worden als extra kolommen?  (Bij FALSE worden enkel de habitatcodes toegevoegd, niet de volledige namen.)
 #'
-#' @return Deze functie geeft een tabel met velden Versie, Habitattype, Habitatsubtype, Criterium, Indicator, Indicator_habitatID, SoortengroepID en NiveauSoortenlijstFiche.
+#' @return Deze functie geeft een tabel met velden Versie, Habitattype, Habitatsubtype, Criterium, Indicator, Indicator_habitatID, TaxongroepId en Indicator_beoordelingID.
 #'
 #' @examples
 #' selecteerIndicatoren(Versie = "Versie 3", Habitattype = "4010")

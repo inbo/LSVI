@@ -1,4 +1,4 @@
-#' @title Genereert soorten(groep)lijst(en) LSVI op basis van SoortengroepID
+#' @title Genereert soorten(groep)lijst(en) LSVI op basis van TaxongroepID
 #'
 #' @description Deze functie genereert soortenlijsten (met wetenschappelijke en Nederlandse namen) uit de databank met de criteria en indicatoren voor de bepaling van de Lokale Staat van Instandhouding.  Het is in feite een hulpfunctie die voor verschillende andere functies gebruikt wordt en die de complexe zoekfunctie in de tabellen met soorten uitvoert op basis van een opgegeven TaxongroepId (en in die zin iets minder gebruiksvriendelijk is).  Voor een selectie van soortenlijsten op basis van specifieke parameters is de functie geefSoortenlijst() een beter alternatief.
 #' 

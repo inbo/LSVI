@@ -2,7 +2,7 @@
 % Please edit documentation in R/geefSoortenlijstVoorIDs.R
 \name{geefSoortenlijstVoorIDs}
 \alias{geefSoortenlijstVoorIDs}
-\title{Genereert soorten(groep)lijst(en) LSVI op basis van SoortengroepID}
+\title{Genereert soorten(groep)lijst(en) LSVI op basis van TaxongroepID}
 \usage{
 geefSoortenlijstVoorIDs(Taxongroeplijst, Taxonlijsttype = c("LSVIfiche",
   "alle"), ConnectieLSVIhabitats = ConnectiePool)
