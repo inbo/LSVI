@@ -55,12 +55,12 @@ geefSoortenlijstVoorIDs <-
         UNION ALL
           SELECT Groepen.TaxongroepId,
             Tg2.Id AS TaxonsubgroepId,
-        	Tg2.Omschrijving
-          FROM Groepen 
+          Tg2.Omschrijving
+          FROM Groepen
             INNER JOIN TaxongroepTaxongroep AS TgTg
             ON Groepen.TaxonsubgroepId = TgTg.TaxongroepParentId
-        	INNER JOIN Taxongroep Tg2
-        	ON TgTg.TaxongroepChildId = Tg2.Id
+          INNER JOIN Taxongroep Tg2
+          ON TgTg.TaxongroepChildId = Tg2.Id
           WHERE TgTg.TaxongroepChildId > 0
         )",
         Taxongroeplijst
@@ -74,27 +74,27 @@ geefSoortenlijstVoorIDs <-
         SELECT Tx.Id AS TaxonId,
           Tx.Id AS SubTaxonId,
           Tx.NbnTaxonVersionKey,
-      	Tx.FloraNaamWetenschappelijk,
-      	Tx.FloraNaamNederlands,
+        Tx.FloraNaamWetenschappelijk,
+        Tx.FloraNaamNederlands,
         Tx.NbnNaam,
-      	Tx.TaxonTypeId
+        Tx.TaxonTypeId
         FROM Taxon Tx
       UNION ALL
         SELECT Taxonlijn.TaxonId,
           Tx2.Id AS SubTaxonId,
-      	Tx2.NbnTaxonVersionKey,
-      	Tx2.FloraNaamWetenschappelijk,
-      	Tx2.FloraNaamNederlands,
+        Tx2.NbnTaxonVersionKey,
+        Tx2.FloraNaamWetenschappelijk,
+        Tx2.FloraNaamNederlands,
         Tx2.NbnNaam,
-      	Tx2.TaxonTypeId
-        FROM Taxonlijn 
+        Tx2.TaxonTypeId
+        FROM Taxonlijn
           INNER JOIN TaxonTaxon AS TxTx
           ON Taxonlijn.SubTaxonId = TxTx.TaxonParentId
-      	INNER JOIN Taxon Tx2
-      	ON TxTx.TaxonChildId = Tx2.Id
+        INNER JOIN Taxon Tx2
+        ON TxTx.TaxonChildId = Tx2.Id
         WHERE TxTx.TaxonChildId > 0
       )"
-    
+
     QueryLSVIfiche <-
       "
       SELECT Groepen.TaxongroepId,
@@ -106,14 +106,14 @@ geefSoortenlijstVoorIDs <-
         Taxon.FloraNaamNederlands As NedNaam,
         Taxon.NbnNaam AS WetNaamKort,
         TaxonType.Naam AS TaxonType
-      FROM Groepen 
-        INNER JOIN TaxongroepTaxon TgT 
+      FROM Groepen
+        INNER JOIN TaxongroepTaxon TgT
         on Groepen.TaxongroepId = TgT.TaxongroepId
         INNER JOIN Taxon
         ON TgT.TaxonId = Taxon.Id
         INNER JOIN TaxonType
         ON Taxon.TaxonTypeId = TaxonType.Id;"
-    
+
     QueryAlleTaxa <-
       "
       SELECT Groepen.TaxongroepId,
@@ -126,8 +126,8 @@ geefSoortenlijstVoorIDs <-
         Taxonlijn.FloraNaamNederlands As NedNaam,
         Taxonlijn.NbnNaam AS WetNaamKort,
         TaxonType.Naam AS TaxonType
-      FROM Groepen 
-        INNER JOIN TaxongroepTaxon TgT 
+      FROM Groepen
+        INNER JOIN TaxongroepTaxon TgT
         on Groepen.TaxongroepId = TgT.TaxongroepId
         INNER JOIN Taxonlijn
         ON TgT.TaxonId = Taxonlijn.TaxonId
@@ -135,7 +135,7 @@ geefSoortenlijstVoorIDs <-
         ON Taxonlijn.TaxonTypeId = TaxonType.Id
       ORDER BY Groepen.TaxongroepId, Groepen.TaxonsubgroepId,
         Taxonlijn.TaxonId;"
-    
+
     if (Taxonlijsttype[1] == "LSVIfiche") {
       Soortenlijst <-
         dbGetQuery(

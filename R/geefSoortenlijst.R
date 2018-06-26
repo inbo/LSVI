@@ -51,11 +51,11 @@ geefSoortenlijst <-
       distinct() %>%
       filter(!is.na(.data$TaxongroepId)) %>%
       summarise(SoortengroepIDs = paste(.data$TaxongroepId, collapse = ","))
-    
+
     if (SoortengroepIDs$SoortengroepIDs == "") {
       stop("Voor de opgegeven argumenten is er geen soortenlijst")
     }
-    
+
     Soortenlijst <-
       geefSoortenlijstVoorIDs(
         Taxongroeplijst = SoortengroepIDs$SoortengroepIDs,

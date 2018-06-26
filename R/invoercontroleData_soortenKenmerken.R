@@ -105,7 +105,7 @@ invoercontroleData_soortenKenmerken <-
 
     Taxonlijst <-
       dbGetQuery(ConnectieLSVIhabitats, QuerySoorten)
-    
+
     #onderstaande code mag weg zodra Gert deze Canonicalname toegevoegd heeft aan de databank
     Taxonlijst <- Taxonlijst %>%
       mutate(
