@@ -263,8 +263,8 @@ geefInvoervereisten <- function(Versie = "alle",
             LijstItem.Ondergrens AS Invoerondergrens,
             LijstItem.Gemiddelde AS Invoergemiddelde,
             Lijstitem.Bovengrens AS Invoerbovengrens,
-            Voorwaarde.SoortengroepID,
-            Soortengroep.Omschrijving AS SoortengroepNaam,
+            Voorwaarde.TaxongroepId,
+            Taxongroep.Omschrijving AS TaxongroepNaam,
             Studiegroep.Naam AS Studiegroepnaam,
             Studiegroep.LijstNaam as Studielijstnaam,
             StudieItem.Waarde As Studiewaarde,
@@ -284,8 +284,8 @@ geefInvoervereisten <- function(Versie = "alle",
             SubLijstItem.Ondergrens AS SubInvoerondergrens,
             SubLijstItem.Gemiddelde AS SubInvoergemiddelde,
             SubLijstitem.Bovengrens AS SubInvoerbovengrens
-            FROM (((((Voorwaarde LEFT JOIN Soortengroep
-                       ON Voorwaarde.SoortengroepID = Soortengroep.Id)
+            FROM (((((Voorwaarde LEFT JOIN Taxongroep
+                       ON Voorwaarde.TaxongroepID = Taxongroep.Id)
             LEFT JOIN (AnalyseVariabele
               LEFT JOIN TypeVariabele
                        ON AnalyseVariabele.TypeVariabeleID = TypeVariabele.Id)
@@ -326,7 +326,7 @@ geefInvoervereisten <- function(Versie = "alle",
         .data$Operator, .data$AnalyseVariabele,
         .data$Eenheid, .data$TypeVariabele,
         .data$Invoertype,
-        .data$SoortengroepID, .data$SoortengroepNaam,
+        .data$TaxongroepId, .data$TaxongroepNaam,
         .data$Studiegroepnaam, .data$Studielijstnaam,
         .data$SubAnalyseVariabele, .data$SubEenheid,
         .data$TypeSubVariabele, .data$SubReferentiewaarde,
@@ -347,7 +347,7 @@ geefInvoervereisten <- function(Versie = "alle",
         .data$Operator, .data$AnalyseVariabele,
         .data$Eenheid, .data$TypeVariabele,
         .data$Invoertype, .data$Invoerwaarde,
-        .data$SoortengroepID, .data$SoortengroepNaam,
+        .data$TaxongroepId, .data$TaxongroepNaam,
         .data$Studiegroepnaam, .data$Studielijstnaam,
         .data$Studiewaarde,
         .data$SubAnalyseVariabele, .data$SubEenheid,

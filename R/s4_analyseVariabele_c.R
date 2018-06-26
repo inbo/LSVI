@@ -28,7 +28,7 @@ analyseVariabele_c <-
     queryVoorwaarde <-
       sprintf(
         "SELECT AV.VariabeleNaam AS TypeAnalyseVariabele,
-        Voorwaarde.SoortengroepId,
+        Voorwaarde.TaxongroepId,
         Voorwaarde.StudiegroepId,
         SAV.VariabeleNaam AS SubAnalyseVariabele,
         SAV.Eenheid,
@@ -60,14 +60,11 @@ analyseVariabele_c <-
       setKenmerken(AnalyseObject) <- Kenmerken
     }
 
-    if (!is.na(VoorwaardeInfo$SoortengroepId)) {
+    if (!is.na(VoorwaardeInfo$TaxongroepId)) {
       Soortengroep <-
-        geefSoortenlijstInvoerniveau(
-          data.frame(
-            Niveau = 1,
-            SoortengroepIDs = as.character(VoorwaardeInfo$SoortengroepId),
-            stringsAsFactors = FALSE
-          ),
+        geefSoortenlijstVoorIDs(
+          Taxongroeplijst = as.character(VoorwaardeInfo$TaxongroepId),
+          Taxonlijsttype = "alle",
           ConnectieLSVIhabitats = ConnectieLSVIhabitats
         ) %>%
         mutate(
@@ -75,27 +72,12 @@ analyseVariabele_c <-
             tolower(.data$NBNTaxonVersionKey)
         ) %>%
         select(
-          .data$SoortengroepID,
-          .data$SoortensubgroepID,
+          .data$TaxongroepID,
+          .data$TaxonsubgroepID,
           .data$NBNTaxonVersionKey,
           .data$Taxontype
         )
       setSoortengroep(AnalyseObject) <- Soortengroep
-
-      if (!all(is.na(Soortengroep$SoortensubgroepID))) {
-        Subsoorten <- Soortengroep %>%
-          filter(!is.na(.data$SoortensubgroepID)) %>%
-          summarise(
-            SoortensubgroepIDs =
-              paste(.data$SoortensubgroepID, collapse = ",")
-          )
-        Subsoortengroep <-
-          geefSoortenlijstSoortniveau(
-            Subsoorten$SoortensubgroepIDs,
-            ConnectieLSVIhabitats = ConnectieLSVIhabitats
-          )
-        setSoortensubgroep(AnalyseObject) <- Subsoortengroep
-      }
     }
 
     if (!is.na(VoorwaardeInfo$StudiegroepId)) {

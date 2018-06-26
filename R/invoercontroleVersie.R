@@ -20,7 +20,10 @@ invoercontroleVersie <- function(Versie, ConnectieLSVIhabitats) {
     stop(
       sprintf(
         "Versie moet een van de volgende waarden zijn: %s",
-        geefUniekeWaarden("Versie", "VersieLSVI", ConnectieLSVIhabitats)
+        paste(
+          geefUniekeWaarden("Versie", "VersieLSVI", ConnectieLSVIhabitats),
+          collapse = ", "
+        )
       )
     )
   }

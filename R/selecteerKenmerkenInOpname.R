@@ -42,7 +42,7 @@ selecteerKenmerkenInOpname <-
           Soortengroep,
           by = c("Kenmerk" = "NBNTaxonVersionKey")
         )
-      #Hier moet nog toegevoegd worden dat subsoorten opgehaald worden als de soorten zelf niet in de kenmerkenlijst staan (zie berekenAantalSoorten en selecteerSoortenInOpname)
+      #Hier moet nog toegevoegd worden dat ofwel de soorten, ofwel de subsoorten gewist moeten worden al naargelang de soorten zelf in de kenmerkenlijst staan (zie berekenAantalSoorten en selecteerSoortenInOpname)
 
     }
 
