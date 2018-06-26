@@ -9,6 +9,7 @@
 #' @importFrom DBI dbGetQuery
 #' @importFrom dplyr %>% filter mutate select left_join bind_rows rename
 #' @importFrom rlang .data
+#' @importFrom rgbif parsenames
 #'
 #' @export
 #'
@@ -94,70 +95,41 @@ invoercontroleData_soortenKenmerken <-
     #○mzettingen naar een bruikbare dataframe
     Kenmerken <- Data_soortenKenmerken #naamsverandering is omdat code verplaatst is
 
-    #Voorlopig worden enkel soorten gekoppeld, maar er zouden ook genera, ondersoorten, varieteiten,... gekoppeld moeten worden.  Zodra de db hiervoor in orde is: Taxontype.Naam AS Taxontype opslaan en hierop selecteren om de lijst te formatteren;
     QuerySoorten <-
-      "SELECT WetNaam, NedNaam, NBNTaxonVersionKey, TaxonTypeId
-      FROM Soort WHERE NBNTaxonVersionKey IS NOT NULL"
+      "SELECT TaxonSynoniem.FloraNaamNederlands AS NedNaam,
+          TaxonSynoniem.NbnNaam AS WetNaamKort,
+          Taxon.NBNTaxonVersionKey, Taxon.TaxonTypeId
+      FROM TaxonSynoniem INNER JOIN Taxon
+        ON TaxonSynoniem.TaxonId = Taxon.Id
+      WHERE Taxon.NBNTaxonVersionKey IS NOT NULL"
 
     Taxonlijst <-
       dbGetQuery(ConnectieLSVIhabitats, QuerySoorten)
-
-    Soortenlijst <- Taxonlijst %>%
-      filter(is.na(.data$TaxonTypeId)) %>%  #Taxontype == "Soort"
+    
+    #onderstaande code mag weg zodra Gert deze Canonicalname toegevoegd heeft aan de databank
+    Taxonlijst <- Taxonlijst %>%
       mutate(
-        WetNaam =
-          gsub(
-            pattern = "^(.*?) (.*?)( .*|$)",
-            replacement = "\\1 \\2",
-            x = .data$WetNaam
-          ),
-        WetNaam =
-          gsub(
-            pattern = " species",
-            replacement = "",
-            x = .data$WetNaam
-          )
-      )
-
-    #ophalen lijst voor genera.  Idee is om deze te koppelen aan de soortenlijst, zodra de NBNkeys beschikbaar zijn
-    Generalijst <-
-      dbGetQuery(
-        ConnectieLSVIhabitats,
-        "SELECT WetNaam, Naam AS NedNaam FROM Soortengroep
-        WHERE SoortengroeptypeId = '1'"
-      ) %>%
-      mutate(
-        TaxonType = "Genus"
+        Canonicalname = parsenames(.data$WetNaamKort)$canonicalnamewithmarker
       )
 
     KenmerkenSoort <- Kenmerken %>%
       filter(tolower(.data$TypeKenmerk) == "soort_latijn") %>%
       mutate(
-        Kenmerk =
-          gsub(
-            pattern = "^(.*?) (.*?)( .*|$)",
-            replacement = "\\1 \\2",
-            x = .data$Kenmerk
-          ),
-        Kenmerk =
-          gsub(
-            pattern = " species",
-            replacement = "",
-            x = .data$Kenmerk
-          )
+        Canonicalname =
+          parsenames(.data$Kenmerk)$canonicalnamewithmarker
       ) %>%
       left_join(
-        Soortenlijst %>%
+        Taxonlijst %>%
           select(
-            .data$WetNaam, .data$NBNTaxonVersionKey
+            .data$Canonicalname, .data$NBNTaxonVersionKey
           ),
-        by = c("Kenmerk" = "WetNaam")
+        by = c("Canonicalname")
       ) %>%
       bind_rows(
         Kenmerken %>%
           filter(tolower(.data$TypeKenmerk) == "soort_nl") %>%
           left_join(
-            Soortenlijst %>%
+            Taxonlijst %>%
               select(
                 .data$NedNaam, .data$NBNTaxonVersionKey
               ),

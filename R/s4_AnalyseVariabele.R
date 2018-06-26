@@ -13,7 +13,6 @@ setClass(
     representation(
       VoorwaardeID = "numeric",
       Soortengroep = "data.frame",
-      Soortensubgroep = "data.frame",
       Studiegroep = "data.frame",
       SubAnalyseVariabele = "character",
       SubRefMin = "numeric",
@@ -142,40 +141,6 @@ setReplaceMethod(
   signature = "AnalyseVariabele",
   definition = function(object, value) {
     object@Soortengroep <- value
-    validObject(object)
-    return(object)
-  }
-)
-
-#' @export
-setGeneric(
-  name = "getSoortensubgroep",
-  def = function(object) {
-    standardGeneric("getSoortensubgroep")
-  }
-)
-
-setMethod(
-  f = "getSoortensubgroep",
-  signature = "AnalyseVariabele",
-  definition = function(object) {
-    return(object@Soortensubgroep)
-  }
-)
-
-#' @export
-setGeneric(
-  name = "setSoortensubgroep<-",
-  def = function(object, value) {
-    standardGeneric("setSoortensubgroep<-")
-  }
-)
-
-setReplaceMethod(
-  f = "setSoortensubgroep",
-  signature = "AnalyseVariabele",
-  definition = function(object, value) {
-    object@Soortensubgroep <- value
     validObject(object)
     return(object)
   }

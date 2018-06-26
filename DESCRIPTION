@@ -24,7 +24,8 @@ Imports:
     tidyr,
     utils,
     rlang,
-    xtable
+    xtable,
+    rgbif
 Suggests:
     knitr
 RoxygenNote: 6.0.1
@@ -52,10 +53,10 @@ Collate:
     'maakHabitatfiches.R'
     'maakLSVIrapport.R'
     's4_AnalyseVariabele.R'
+    's4_aandeel.R'
     's4_aantal.R'
     's4_analyseVariabele_c.R'
     's4_bedekking.R'
-    's4_aandeel.R'
     'selecteerIndicatoren.R'
     'selecteerKenmerkenInOpname.R'
     'selecteerSoortenInOpname.R'
