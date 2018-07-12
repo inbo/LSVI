@@ -1,11 +1,11 @@
 #' @title Controle van de ingevoerde opname
 #'
-#' @description Deze hulpfunctie voor de s4-klassen 'aantal' en 'bedekking' zoekt soorten of kenmerken uit de voorwaarde in de opname en maakt een lijstje van de soorten die voldoen en in de opname voorkomen.  Op basis hiervan kunnen de s4-klassen het totale aantal of de bedekking berekenen.
+#' @description Deze hulpfunctie voor de s4-klassen 'aantal' en 'bedekking' selecteert soorten of kenmerken uit een opname die niet tot de soortgroep of studiegroep van een bepaalde voorwaarde behoren.  Op basis hiervan kan de s4-klassen maxBedekkingExcl berkend worden (bv. dominantie van een soort: maximale bedekking van soorten in een opname exclusief de sleutelsoorten).
 #'
 #'
 #' @param Kenmerken dataframe met alle opgegeven kenmerken, met velden Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
-#' @param Soortengroep dataframe met de soortenlijst die uit Kenmerken gehaald moet worden
-#' @param Studiegroep dataframe met de lijst kenmerken die uit Kenmerken gehaald moet worden
+#' @param Soortengroep dataframe met de soortenlijst die uit Kenmerken gedeselecteerd moet worden
+#' @param Studiegroep dataframe met de lijst kenmerken die uit Kenmerken gedeselecteerd moet worden
 #' @param SubAnalyseVariabele heeft waarde 'bedekking' als er een subvoorwaarde is voor de bedekking van de geselecteerde soorten of kenmerken
 #' @param SubRefMin minimumwaarde van de grenswaarde voor de bedekking
 #' @param SubRefMax maximumwaarde van de grenswaarde voor de bedekking
@@ -20,7 +20,7 @@
 #' @importFrom rlang .data
 #'
 #'
-selecteerKenmerkenInOpname <-
+deselecteerKenmerkenInOpname <-
   function(
     Kenmerken,
     Soortengroep,
@@ -38,7 +38,7 @@ selecteerKenmerkenInOpname <-
     if (length(Soortengroep) > 0) {
       Resultaat <- Kenmerken %>%
         filter(tolower(.data$TypeKenmerk) == "soort_nbn") %>%
-        inner_join(
+        anti_join(
           Soortengroep,
           by = c("Kenmerk" = "NbnTaxonVersionKey")
         )
@@ -50,7 +50,7 @@ selecteerKenmerkenInOpname <-
 
       Resultaat <- Kenmerken %>%
         filter(.data$TypeKenmerk == "studiegroep") %>%
-        inner_join(
+        anti_join(
           Studiegroep,
           by = c("Kenmerk" = "Waarde")
         )
