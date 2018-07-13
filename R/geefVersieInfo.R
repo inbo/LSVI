@@ -12,6 +12,7 @@
 #' @export
 #'
 #' @importFrom DBI dbGetQuery
+#' @importFrom assertthat assert_that
 #'
 #'
 geefVersieInfo <-
@@ -23,7 +24,8 @@ geefVersieInfo <-
     msg = "Er is geen connectie met de databank met de LSVI-indicatoren"
   )
 
-  query <- "SELECT VersieLSVI, Referentie, Beschrijving,
+  query <- "SELECT VersieLSVI, cast(Referentie AS nvarchar(40)) AS Referentie,
+  cast(Beschrijving AS nvarchar (120)) AS Beschrijving,
   Kwaliteitsniveau1, Kwaliteitsniveau2 FROM Versie"
 
   Versie <- dbGetQuery(ConnectieLSVIhabitats, query)

@@ -23,9 +23,10 @@ Imports:
     testthat,
     tidyr,
     utils,
-    rlang
-Suggests:
+    rlang,
     xtable,
+    rgbif
+Suggests:
     knitr
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr
@@ -40,8 +41,7 @@ Collate:
     'geefInfoHabitatfiche.R'
     'geefInvoervereisten.R'
     'geefSoortenlijst.R'
-    'geefSoortenlijstInvoerniveau.R'
-    'geefSoortenlijstSoortniveau.R'
+    'geefSoortenlijstVoorIDs.R'
     'geefUniekeWaarden.R'
     'geefVersieInfo.R'
     'geefVertaallijst.R'
@@ -59,7 +59,6 @@ Collate:
     's4_bedekking.R'
     'selecteerIndicatoren.R'
     'selecteerKenmerkenInOpname.R'
-    'selecteerSoortenInOpname.R'
     'vertaalIntervalUitvoer.R'
     'vertaalInvoerInterval.R'
     'zzz.R'

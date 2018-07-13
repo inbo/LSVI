@@ -65,7 +65,7 @@ geefInfoHabitatfiche <-
       cast(Indicator_habitat.Maatregelen AS nvarchar(510)) AS Maatregelen,
       cast(Indicator_habitat.Opmerkingen AS nvarchar(830)) AS Opmerkingen,
       cast(Indicator_habitat.Referenties AS nvarchar(260)) AS Referenties,
-      Indicator_habitat.SoortengroepID
+      Indicator_habitat.TaxongroepId
       FROM Indicator_habitat
       WHERE Indicator_habitat.Id in ('%s')",
       Indicator_hIDs
@@ -127,7 +127,7 @@ geefInfoHabitatfiche <-
                 do.call(paste, c(L, list(sep = sep)))))
     }
 
-    if (!all(is.na(Habitatkarakteristieken$SoortengroepID))) {
+    if (!all(is.na(Habitatkarakteristieken$TaxongroepId))) {
       Soortenlijst <-
         geefSoortenlijst(
           Versie = Versie,
@@ -135,7 +135,7 @@ geefInfoHabitatfiche <-
           Habitattype = Habitattype,
           Criterium = Criterium,
           Indicator = Indicator,
-          Soortenlijsttype = "LSVIfiche",
+          Taxonlijsttype = "LSVIfiche",
           ConnectieLSVIhabitats = ConnectieLSVIhabitats
         ) %>%
         filter(!is.na(.data$WetNaamKort) | !is.na(.data$NedNaam)) %>%
@@ -177,7 +177,7 @@ geefInfoHabitatfiche <-
 
       Soortenlijst <- Soortenlijst %>%
         group_by(
-          .data$SoortengroepID,
+          .data$TaxongroepId,
           .data$Criterium,
           .data$Indicator,
           .dots = OmschrijvingKolommen
@@ -211,7 +211,7 @@ geefInfoHabitatfiche <-
         if (i < laatste_i) {
           Soortenlijst <- Soortenlijst %>%
             group_by(
-              .data$SoortengroepID,
+              .data$TaxongroepId,
               .data$Criterium,
               .data$Indicator,
               .dots = OmschrijvingKolommen
@@ -224,7 +224,7 @@ geefInfoHabitatfiche <-
         } else {
           Soortenlijst <- Soortenlijst %>%
             group_by(
-              .data$SoortengroepID,
+              .data$TaxongroepId,
               .data$Criterium,
               .data$Indicator
             ) %>%
@@ -240,16 +240,16 @@ geefInfoHabitatfiche <-
       Habitatfiche <- Selectiegegevens %>%
         left_join(
           Habitatkarakteristieken %>%
-            mutate(SoortengroepID = NULL),
+            mutate(TaxongroepId = NULL),
           by = c("Indicator_habitatID" = "Indicator_habitatID")
         ) %>%
         left_join(
           Soortenlijst %>%
             select(
-              .data$SoortengroepID,
+              .data$TaxongroepId,
               .data$Soortenlijst
               ),
-          by = c("SoortengroepID" = "SoortengroepID")
+          by = c("TaxongroepId" = "TaxongroepId")
         ) %>%
         mutate(
           Beschrijving =

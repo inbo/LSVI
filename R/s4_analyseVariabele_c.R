@@ -1,15 +1,15 @@
 #' Constructor van s4-classe AnalyseVariabele
-#' 
+#'
 #' Een constructor is een gebruiksvriendelijke functie die een s4-klasse aanmaakt, zodat een gebruiker niet rechtstreeks geconfronteerd wordt met het aanmaken van een object voor een s4-klasse.  In dit geval worden alle als parameter toegevoegde gegevens netjes in het object gestoken, alsook extra info die uit de databank gehaald wordt.  Een deel van de validatie gebeurt in de s4-klasse AnalyseVariabele zelf.
-#' 
+#'
 #' @inheritParams berekenVoorwaarde
-#' 
+#'
 #' @importFrom assertthat assert_that
 #' @importFrom DBI dbGetQuery
 #' @importFrom methods new
 #' @importFrom dplyr %>% mutate select filter summarise
 #' @importFrom rlang .data
-#' 
+#'
 #' @export
 
 analyseVariabele_c <-
@@ -28,7 +28,7 @@ analyseVariabele_c <-
     queryVoorwaarde <-
       sprintf(
         "SELECT AV.VariabeleNaam AS TypeAnalyseVariabele,
-        Voorwaarde.SoortengroepId,
+        Voorwaarde.TaxongroepId,
         Voorwaarde.StudiegroepId,
         SAV.VariabeleNaam AS SubAnalyseVariabele,
         SAV.Eenheid,
@@ -60,42 +60,24 @@ analyseVariabele_c <-
       setKenmerken(AnalyseObject) <- Kenmerken
     }
 
-    if (!is.na(VoorwaardeInfo$SoortengroepId)) {
+    if (!is.na(VoorwaardeInfo$TaxongroepId)) {
       Soortengroep <-
-        geefSoortenlijstInvoerniveau(
-          data.frame(
-            Niveau = 1,
-            SoortengroepIDs = as.character(VoorwaardeInfo$SoortengroepId),
-            stringsAsFactors = FALSE
-          ),
+        geefSoortenlijstVoorIDs(
+          Taxongroeplijst = as.character(VoorwaardeInfo$TaxongroepId),
+          Taxonlijsttype = "alle",
           ConnectieLSVIhabitats = ConnectieLSVIhabitats
         ) %>%
         mutate(
-          NBNTaxonVersionKey =
-            tolower(.data$NBNTaxonVersionKey)
+          NbnTaxonVersionKey =
+            tolower(.data$NbnTaxonVersionKey)
         ) %>%
         select(
-          .data$SoortengroepID,
-          .data$SoortensubgroepID,
-          .data$NBNTaxonVersionKey,
-          .data$Taxontype
+          .data$TaxongroepId,
+          .data$TaxonsubgroepId,
+          .data$NbnTaxonVersionKey,
+          .data$TaxonType
         )
       setSoortengroep(AnalyseObject) <- Soortengroep
-
-      if (!all(is.na(Soortengroep$SoortensubgroepID))) {
-        Subsoorten <- Soortengroep %>%
-          filter(!is.na(.data$SoortensubgroepID)) %>%
-          summarise(
-            SoortensubgroepIDs =
-              paste(.data$SoortensubgroepID, collapse = ",")
-          )
-        Subsoortengroep <-
-          geefSoortenlijstSoortniveau(
-            Subsoorten$SoortensubgroepIDs,
-            ConnectieLSVIhabitats = ConnectieLSVIhabitats
-          )
-        setSoortensubgroep(AnalyseObject) <- Subsoortengroep
-      }
     }
 
     if (!is.na(VoorwaardeInfo$StudiegroepId)) {
