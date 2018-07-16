@@ -349,6 +349,64 @@ describe("test databank", {
     )
   })
 
+  it(
+    "AnalyseVariabele aantal heeft telkens een SoortengroepId of StudiegroepId"
+    , {
+    skip_on_cran()
+    ConnectieLSVIhabitats <-
+      connecteerMetLSVIdb()
+    AV <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        "SELECT AnalyseVariabele.Id, AnalyseVariabele.VariabeleNaam,
+        TypeVariabele.Naam as TypeVariabele
+        FROM AnalyseVariabele INNER JOIN TypeVariabele
+        ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
+        WHERE AnalyseVariabele.VariabeleNaam = 'aantal'"
+      )
+    Refwaarden <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        sprintf(
+          "SELECT TaxongroepId, StudiegroepId FROM Voorwaarde
+          WHERE AnalyseVariabeleId in ('%s')",
+          paste(AV$Id, collapse = "','")
+        )
+      )
+    expect_true(
+      all(!is.na(Refwaarden$TaxongroepId) | !is.na(Refwaarden$StudiegroepId))
+    )
+  })
+
+  it(
+    "AnalyseVariabele bedekking heeft telkens een SoortengroepId of StudiegroepId" #nolint
+    , {
+      skip_on_cran()
+      ConnectieLSVIhabitats <-
+        connecteerMetLSVIdb()
+      AV <-
+        dbGetQuery(
+          ConnectieLSVIhabitats,
+          "SELECT AnalyseVariabele.Id, AnalyseVariabele.VariabeleNaam,
+        TypeVariabele.Naam as TypeVariabele
+        FROM AnalyseVariabele INNER JOIN TypeVariabele
+        ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
+        WHERE AnalyseVariabele.VariabeleNaam = 'bedekking'"
+        )
+      Refwaarden <-
+        dbGetQuery(
+          ConnectieLSVIhabitats,
+          sprintf(
+            "SELECT TaxongroepId, StudiegroepId FROM Voorwaarde
+          WHERE AnalyseVariabeleId in ('%s')",
+            paste(AV$Id, collapse = "','")
+          )
+        )
+      expect_true(
+        all(!is.na(Refwaarden$TaxongroepId) | !is.na(Refwaarden$StudiegroepId))
+      )
+    })
+
 })
 
 
