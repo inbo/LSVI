@@ -407,6 +407,77 @@ describe("test databank", {
       )
     })
 
+  it("TypeVariabele Vrije tekst is nergens gebruikt", {
+      skip_on_cran()
+      ConnectieLSVIhabitats <-
+        connecteerMetLSVIdb()
+      AV <-
+        dbGetQuery(
+          ConnectieLSVIhabitats,
+          "SELECT Voorwaarde.Id, AnalyseVariabele.VariabeleNaam,
+        TypeVariabele.Naam as TypeVariabele
+        FROM Voorwaarde INNER JOIN AnalyseVariabele
+          ON Voorwaarde.AnalyseVariabeleId = AnalyseVariabele.Id
+        INNER JOIN TypeVariabele
+          ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
+        WHERE TypeVariabele.Naam = 'Vrije tekst'"
+        )
+      expect_equal(
+        nrow(AV),
+        0
+      )
+    })
+
+  it("Voor elke categorische variabele is een Invoermasker opgegeven", {
+    skip_on_cran()
+    ConnectieLSVIhabitats <-
+      connecteerMetLSVIdb()
+    AV <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        "SELECT Voorwaarde.Id, Voorwaarde.InvoermaskerId,
+        AnalyseVariabele.VariabeleNaam,
+        TypeVariabele.Naam as TypeVariabele
+        FROM Voorwaarde INNER JOIN AnalyseVariabele
+          ON Voorwaarde.AnalyseVariabeleId = AnalyseVariabele.Id
+        INNER JOIN TypeVariabele
+          ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
+        WHERE TypeVariabele.Naam = 'Categorie'"
+      )
+    expect_true(
+      all(!is.na(AV$InvoermaskerId))
+    )
+  })
+
+  it("De subanalysevariabele is overal correct ingevoerd (enkel bedekking)", {
+    skip_on_cran()
+    ConnectieLSVIhabitats <-
+      connecteerMetLSVIdb()
+    AV <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        "SELECT Voorwaarde.Id, Voorwaarde.SubInvoermaskerId,
+        AnalyseVariabele.VariabeleNaam,
+        TypeVariabele.Naam as TypeVariabele
+        FROM Voorwaarde INNER JOIN AnalyseVariabele
+        ON Voorwaarde.SubAnalyseVariabeleId = AnalyseVariabele.Id
+        INNER JOIN TypeVariabele
+        ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
+        WHERE TypeVariabele.Naam = 'Categorie'"
+      )
+    expect_true(
+      all(AV$VariabeleNaam == "bedekking")
+    )
+    expect_true(
+      all(AV$TypeVariabele %in% c("Categorie", "Percentage"))
+    )
+    AV_cat <- AV %>%
+      filter(TypeVariabele == "Categorie")
+    expect_true(
+      all(!is.na(AV_cat$SubInvoermaskerId))
+    )
+  })
+
 })
 
 
