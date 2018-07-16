@@ -451,12 +451,12 @@ describe("berekenLSVIbasis", {
             Kenmerk =
               ifelse(
                 .data$Kenmerk == "Calluna vulgaris",
-                "INBSYS0000014446",
+                "NBNSYS0000003902",
                 .data$Kenmerk
               ),
             TypeKenmerk =
               ifelse(
-                .data$Kenmerk == "INBSYS0000014446",
+                .data$Kenmerk == "NBNSYS0000003902",
                 "soort_nbn",
                 .data$TypeKenmerk
               )
