@@ -29,7 +29,7 @@ setMethod(
 
 setMethod(
   f = "geefTheoretischMaximum",
-  signature = "bedekking",
+  signature = "meting",
   definition = function(object) {
     return(NA)
   }
