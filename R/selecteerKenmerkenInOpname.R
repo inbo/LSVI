@@ -83,9 +83,6 @@ selecteerKenmerkenInOpname <-
           Operator = SubOperator,
           Rijnr = row_number(.data$Kenmerk)
         )
-    }
-
-
 
       SubStatusberekening <-
         berekenStatus(
