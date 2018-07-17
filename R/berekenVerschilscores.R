@@ -26,6 +26,15 @@ berekenVerschilscores <-
     assert_that(has_name(Statustabel, "WaardeMin"))
     assert_that(has_name(Statustabel, "WaardeMax"))
     assert_that(has_name(Statustabel, "TheoretischMaximum"))
+    assert_that(has_name(Statustabel, "AnalyseVariabele"))
+
+    if (Statustabel$AnalyseVariabele == "aantal" &
+        Statustabel$RefMin == 1 &
+        Statustabel$RefMax == 1 &
+        Statustabel$TheoretischMaximum == 1) {
+      Statustabel$RefMin == 0.5
+      Statustabel$RefMax == 0.5
+    }
 
 
     Verschiltabel <- Statustabel %>%

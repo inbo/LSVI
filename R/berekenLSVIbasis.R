@@ -230,7 +230,7 @@ berekenLSVIbasis <-
       berekenVerschilscores(
         Resultaat[
           , c("Rijnr", "RefMin", "RefMax", "Operator", "WaardeMin",
-              "WaardeMax", "TheoretischMaximum")
+              "WaardeMax", "TheoretischMaximum", "AnalyseVariabele")
           ]
       )
 
