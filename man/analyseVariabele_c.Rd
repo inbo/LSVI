@@ -9,7 +9,7 @@ analyseVariabele_c(VoorwaardeID, Kenmerken, ConnectieLSVIhabitats, LIJST)
 \arguments{
 \item{VoorwaardeID}{ID-nummer (uit LSVI-indicatorendatabank) van de voorwaarde die moet berekend worden}
 
-\item{Kenmerken}{Dataframe met soorten of kenmerken en hun bedekking voor 1 opname met minimum de velden ID, Kenmerk, TypeKenmerk, Waarde, Type, Invoertype en Eenheid (data identiek aan Data_soortenKenmerken in berekenLSVIbasis)}
+\item{Kenmerken}{Dataframe met soorten of kenmerken en hun bedekking voor 1 opname met minimum de velden ID, Vegetatielaag, Kenmerk, TypeKenmerk, Waarde, Type, Invoertype en Eenheid (data identiek aan Data_soortenKenmerken in berekenLSVIbasis)}
 
 \item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
 
