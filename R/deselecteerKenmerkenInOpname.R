@@ -16,7 +16,7 @@
 #'
 #' @export
 #'
-#' @importFrom dplyr %>% filter left_join inner_join mutate distinct
+#' @importFrom dplyr %>% filter anti_join left_join mutate distinct
 #' @importFrom rlang .data
 #'
 #'
