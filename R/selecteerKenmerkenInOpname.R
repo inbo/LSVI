@@ -36,28 +36,34 @@ selecteerKenmerkenInOpname <-
     }
 
     if (length(Soortengroep) > 0) {
-      Resultaat <- Kenmerken %>%
-        filter(tolower(.data$TypeKenmerk) == "soort_nbn") %>%
-        inner_join(
-          Soortengroep,
-          by = c("Kenmerk" = "NbnTaxonVersionKey")
-        )
+      if (length(Studiegroep) > 0) {
+        Resultaat <- Kenmerken %>%
+          filter(tolower(.data$TypeKenmerk) == "soort_nbn",
+                 .data$Vegetatielaag %in% Studiegroep) %>%
+          inner_join(
+            Soortengroep,
+            by = c("Kenmerk" = "NbnTaxonVersionKey")
+          )
+      } else {
+        Resultaat <- Kenmerken %>%
+          filter(tolower(.data$TypeKenmerk) == "soort_nbn") %>%
+          inner_join(
+            Soortengroep,
+            by = c("Kenmerk" = "NbnTaxonVersionKey")
+          )
+      }
       #Hier moet nog toegevoegd worden dat ofwel de soorten, ofwel de subsoorten gewist moeten worden al naargelang de soorten zelf in de kenmerkenlijst staan (zie berekenAantalSoorten en selecteerSoortenInOpname)
+
 
     }
 
-    if (length(Studiegroep) > 0) {
-      if (exists("Resultaat")) {
-        Resultaat <- Resultaat %>%
-          filter(.data$Vegetatielaag %in% Studiegroep)
-      } else {
-        Resultaat <- Kenmerken %>%
-          filter(.data$TypeKenmerk == "studiegroep") %>%
-          inner_join(
-            Studiegroep,
-            by = c("Kenmerk" = "Waarde")
-          )
-      }
+    if (length(Studiegroep) > 0 & !(length(Soortengroep) > 0)) {
+      Resultaat <- Kenmerken %>%
+        filter(.data$TypeKenmerk == "studiegroep") %>%
+        inner_join(
+          Studiegroep,
+          by = c("Kenmerk" = "Waarde")
+        )
     }
 
     if (!exists("Resultaat")) {
@@ -95,7 +101,7 @@ selecteerKenmerkenInOpname <-
               "WaardeMin",
               "WaardeMax"
             )
-          ]
+            ]
         )
 
       Resultaat <- Resultaat %>%
@@ -120,6 +126,7 @@ selecteerKenmerkenInOpname <-
         )
       )
     }
+
 
     return(Resultaat)
   }
