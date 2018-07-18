@@ -2,7 +2,7 @@
 #'
 #' @description Deze functie, die bedoeld is als hulpfunctie voor de hoofdfunctie berekenLSVIbasis, berekent de verschilscores van de records van een opgegeven 'statustabel' met velden Rijnr, RefMin, RefMax, Operator, WaardeMin, WaardeMax en TheoretischMaximum. De verschilscores hebben een waarde tussen -1 en +1 en geven negatieve of positieve afwijking ten opzichte van de referentiewaarde.
 #'
-#' @param Statustabel Dataframe met velden Rijnr, RefMin, RefMax, Operator, WaardeMin, WaardeMax en TheoretischMaximum.
+#' @param Statustabel Dataframe met velden Rijnr, RefMin, RefMax, Operator, WaardeMin, WaardeMax, TheoretischMaximum en TypeVariabele.
 #'
 #'
 #' @return Deze functie geeft een tabel terug met velden Rijnr en Verschilscore
@@ -26,16 +26,15 @@ berekenVerschilscores <-
     assert_that(has_name(Statustabel, "WaardeMin"))
     assert_that(has_name(Statustabel, "WaardeMax"))
     assert_that(has_name(Statustabel, "TheoretischMaximum"))
-    assert_that(has_name(Statustabel, "AnalyseVariabele"))
+    assert_that(has_name(Statustabel, "TypeVariabele"))
 
-    if (Statustabel$AnalyseVariabele == "aantal" &
-        Statustabel$RefMin == 1 &
-        Statustabel$RefMax == 1 &
-        Statustabel$TheoretischMaximum == 1) {
-      Statustabel$RefMin == 0.5
-      Statustabel$RefMax == 0.5
-    }
-
+    Statustabel$RefMin <- as.double(Statustabel$RefMin)
+    Statustabel$RefMax <- as.double(Statustabel$RefMax)
+    Statustabel[Statustabel$TypeVariabele == "Geheel getal" &
+                  Statustabel$RefMin == 1 &
+                  Statustabel$RefMax == 1 &
+                  Statustabel$TheoretischMaximum == 1,
+                c("RefMin", "RefMax")] <- c(0.5, 0.5)
 
     Verschiltabel <- Statustabel %>%
       mutate(# rekenkundig gemiddelde van min en max
