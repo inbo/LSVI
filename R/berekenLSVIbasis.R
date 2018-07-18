@@ -230,7 +230,7 @@ berekenLSVIbasis <-
       berekenVerschilscores(
         Resultaat[
           , c("Rijnr", "RefMin", "RefMax", "Operator", "WaardeMin",
-              "WaardeMax", "TheoretischMaximum", "AnalyseVariabele")
+              "WaardeMax", "TheoretischMaximum", "TypeVariabele")
           ]
       )
 
@@ -314,7 +314,7 @@ berekenLSVIbasis <-
         Index_min_criterium = min(Verschilscore),
         #harmonisch gemiddelde van de verschilscores
         #de verschilscores worden tijdelijk herschaald naar 0 tot 1 range
-        Index_harm_criterium = mean( ( (Verschilscore + 1) * 2) ^ -1) ^ -1 *
+        Index_harm_criterium = mean( ( (Verschilscore + 1) / 2) ^ -1) ^ -1 *
           2 - 1
       ) %>%
       ungroup()
