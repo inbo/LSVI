@@ -7,7 +7,7 @@
 berekenVerschilscores(Statustabel)
 }
 \arguments{
-\item{Statustabel}{Dataframe met velden Rijnr, RefMin, RefMax, Operator, WaardeMin, WaardeMax en TheoretischMaximum.}
+\item{Statustabel}{Dataframe met velden Rijnr, RefMin, RefMax, Operator, WaardeMin, WaardeMax, TheoretischMaximum en TypeVariabele.}
 }
 \value{
 Deze functie geeft een tabel terug met velden Rijnr en Verschilscore
