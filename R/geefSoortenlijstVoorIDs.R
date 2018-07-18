@@ -108,7 +108,7 @@ geefSoortenlijstVoorIDs <-
         TaxonType.Naam AS TaxonType
       FROM Groepen
         INNER JOIN TaxongroepTaxon TgT
-        on Groepen.TaxongroepId = TgT.TaxongroepId
+        on Groepen.TaxonsubgroepId = TgT.TaxongroepId
         INNER JOIN Taxon
         ON TgT.TaxonId = Taxon.Id
         INNER JOIN TaxonType
@@ -128,7 +128,7 @@ geefSoortenlijstVoorIDs <-
         TaxonType.Naam AS TaxonType
       FROM Groepen
         INNER JOIN TaxongroepTaxon TgT
-        on Groepen.TaxongroepId = TgT.TaxongroepId
+        on Groepen.TaxonsubgroepId = TgT.TaxongroepId
         INNER JOIN Taxonlijn
         ON TgT.TaxonId = Taxonlijn.TaxonId
         INNER JOIN TaxonType
