@@ -178,25 +178,46 @@ describe("berekenLSVIbasis", {
         Data_soortenKenmerken
       ),
       list(
-        Resultaat[[1]] %>%
+        Resultaat_criterium =
+          Resultaat[["Resultaat_criterium"]] %>%
           mutate(
             Status_criterium =
               ifelse(
                 .data$Criterium == "Verstoring" & .data$ID == "Ts2036",
                 NA,
                 .data$Status_criterium
+              ),
+            Index_min_criterium =
+              ifelse(
+                .data$Criterium == "Verstoring" & .data$ID == "Ts2036",
+                NA,
+                .data$Index_min_criterium
+              ),
+            Index_harm_criterium =
+              ifelse(
+                .data$Criterium == "Verstoring" & .data$ID == "Ts2036",
+                NA,
+                .data$Index_harm_criterium
               )
           ),
-        Resultaat[[2]] %>%
+        Resultaat_indicator =
+          Resultaat[["Resultaat_indicator"]] %>%
           mutate(
             Status_indicator =
               ifelse(
                 .data$Indicator == "verbossing" & .data$ID == "Ts2036",
                 NA,
                 .data$Status_indicator
+              ),
+            Verschilscore =
+              ifelse(
+                .data$Indicator == "verbossing" & .data$ID == "Ts2036",
+                NA,
+                .data$Verschilscore
               )
           ),
-        Resultaat[[3]] %>%
+        Resultaat_detail =
+          Resultaat[["Resultaat_detail"]] %>%
           mutate(
             Waarde = ifelse(.data$Waarde == "7,5", NA, .data$Waarde),
             Status_voorwaarde =
@@ -204,8 +225,15 @@ describe("berekenLSVIbasis", {
                 .data$Indicator == "verbossing" & .data$ID == "Ts2036",
                 NA,
                 .data$Status_voorwaarde
+              ),
+            Verschilscore =
+              ifelse(
+                .data$Indicator == "verbossing" & .data$ID == "Ts2036",
+                NA,
+                .data$Verschilscore
               )
-          )
+          ),
+        Resultaat_globaal = Resultaat[["Resultaat_globaal"]]
       )
     )
     expect_warning(
@@ -249,13 +277,15 @@ describe("berekenLSVIbasis", {
         Data_soortenKenmerken
       ),
       list(
-        Resultaat[[1]],
-        Resultaat[[2]],
-        Resultaat[[3]] %>%
+        Resultaat_criterium = Resultaat[["Resultaat_criterium"]],
+        Resultaat_indicator = Resultaat[["Resultaat_indicator"]],
+        Resultaat_detail =
+          Resultaat[["Resultaat_detail"]] %>%
           mutate(
             Waarde =
               ifelse(.data$Waarde == "f", "F", .data$Waarde)
-          )))
+          ),
+        Resultaat_globaal = Resultaat[["Resultaat_globaal"]]))
     expect_equal(
       berekenLSVIbasis(
         Versie = "Versie 3",
@@ -269,16 +299,30 @@ describe("berekenLSVIbasis", {
         Data_soortenKenmerken
       ),
       list(
-        Resultaat[[1]] %>%
+        Resultaat_criterium =
+          Resultaat[["Resultaat_criterium"]] %>%
           mutate(
             Status_criterium =
               ifelse(
                 .data$Criterium == "Verstoring" & .data$ID == "Ts2036",
                 NA,
                 .data$Status_criterium
+              ),
+            Index_min_criterium =
+              ifelse(
+                .data$Criterium == "Verstoring" & .data$ID == "Ts2036",
+                NA,
+                .data$Index_min_criterium
+              ),
+            Index_harm_criterium =
+              ifelse(
+                .data$Criterium == "Verstoring" & .data$ID == "Ts2036",
+                NA,
+                .data$Index_harm_criterium
               )
           ),
-        Resultaat[[2]] %>%
+        Resultaat_indicator =
+          Resultaat[["Resultaat_indicator"]] %>%
           mutate(
             Status_indicator =
               ifelse(
@@ -286,14 +330,27 @@ describe("berekenLSVIbasis", {
                 NA,
                 .data$Status_indicator
               ),
+            Verschilscore =
+              ifelse(
+                .data$Indicator == "vergrassing" & .data$ID == "Ts2036",
+                NA,
+                .data$Verschilscore
+              ),
             Status_indicator =
               ifelse(
                 .data$Indicator == "dwergstruiken" & .data$ID == "JR0216",
                 NA,
                 .data$Status_indicator
+              ),
+            Verschilscore =
+              ifelse(
+                .data$Indicator == "dwergstruiken" & .data$ID == "JR0216",
+                NA,
+                .data$Verschilscore
               )
           ),
-        Resultaat[[3]] %>%
+        Resultaat_detail =
+          Resultaat[["Resultaat_detail"]] %>%
           mutate(
             Status_voorwaarde =
               ifelse(
@@ -307,6 +364,12 @@ describe("berekenLSVIbasis", {
                 NA,
                 .data$Waarde
               ),
+            Verschilscore =
+              ifelse(
+                .data$Waarde == "f" & .data$ID == "Ts2036",
+                NA,
+                .data$Verschilscore
+              ),
             Status_voorwaarde =
               ifelse(
                 .data$Waarde == "f" & .data$ID == "JR0216",
@@ -318,8 +381,15 @@ describe("berekenLSVIbasis", {
                 .data$Waarde == "f" & .data$ID == "JR0216",
                 NA,
                 .data$Waarde
+              ),
+            Verschilscore =
+              ifelse(
+                .data$Waarde == "f" & .data$ID == "JR0216",
+                NA,
+                .data$Verschilscore
               )
-          )
+          ),
+        Resultaat_globaal = Resultaat[["Resultaat_globaal"]]
       )
     )
   })
@@ -536,9 +606,18 @@ describe("berekenLSVIbasis", {
           )
       ),
       list(
-        Resultaat[[1]],
-        Resultaat[[2]],
-        Resultaat[[3]] %>%
+        Resultaat_criterium = Resultaat[["Resultaat_criterium"]],
+        Resultaat_indicator = Resultaat[["Resultaat_indicator"]] %>%
+          mutate(
+            Verschilscore =
+              ifelse(
+                .data$Criterium == "Structuur" & ID == "Ts2036" &
+                  Indicator == "ouderdomsstructuur Struikheide",
+                0.5,
+                .data$Verschilscore
+              )
+          ),
+        Resultaat_detail = Resultaat[["Resultaat_detail"]] %>%
           mutate(
             Waarde =
               ifelse(
@@ -553,8 +632,23 @@ describe("berekenLSVIbasis", {
                   Referentiewaarde == "2",
                 "3 - 4",
                 .data$Waarde
+              ),
+            Verschilscore =
+              ifelse(
+                .data$Criterium == "Structuur" & ID == "Ts2036" &
+                  Referentiewaarde == "1",
+                0.5,
+                .data$Verschilscore
+              ),
+            Verschilscore =
+              ifelse(
+                .data$Criterium == "Structuur" & ID == "Ts2036" &
+                  Referentiewaarde == "2",
+                0.75,
+                .data$Verschilscore
               )
-          )
+          ),
+        Resultaat_globaal = Resultaat[["Resultaat_globaal"]]
       )
     )
   })
