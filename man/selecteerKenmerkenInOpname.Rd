@@ -8,7 +8,7 @@ selecteerKenmerkenInOpname(Kenmerken, Soortengroep, Studiegroep,
   SubAnalyseVariabele, SubRefMin, SubRefMax, SubOperator)
 }
 \arguments{
-\item{Kenmerken}{dataframe met alle opgegeven kenmerken, met velden Kenmerk, TypeKenmerk, WaardeMin en WaardeMax}
+\item{Kenmerken}{dataframe met alle opgegeven kenmerken, met velden Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax}
 
 \item{Soortengroep}{dataframe met de soortenlijst die uit Kenmerken gehaald moet worden}
 

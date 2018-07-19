@@ -1,11 +1,11 @@
 #' S4-klasse die de totale bedekking van de soorten berekent
-#' 
+#'
 #' Deze klasse Bedekking staat in voor de berekening van waarden voor TypeVariabele Bedekking op basis van opgegeven kenmerken.  Ze is een nakomeling van de klasse AnalyseVariabele.
-#' 
-#' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
-#' 
+#'
+#' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
+#'
 #' @importFrom methods setClass setMethod
-#' 
+#'
 #' @include s4_AnalyseVariabele.R
 setClass(
   Class = "bedekking",

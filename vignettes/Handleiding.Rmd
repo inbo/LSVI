@@ -64,7 +64,7 @@ Het package kan als volgt geïnstalleerd worden: <!-- werkt waarschijnlijk pas a
 devtools::install_github("inbo/LSVI", build_vignettes = TRUE)
 ```
 
-Om de functies uit het package te kunnen gebruiken, moet een connectie gemaakt kunnen worden met de databank 'D0122_00_LSVIHabitatTypes' die op server 'INBO-SQL07-PRD.inbo.be' staat en alle informatie in verband met de LSVI-indicatoren bevat (zie 'Doelstellingen en inhoud package' > 'Inhoud package').  Dit betekent dat gebruikers die niet op het INBO-netwerk werken, een kopie van deze databank nodig hebben en de locatie en naam van deze databank telkens moeten specifiëren in de functie connecteerMetLSVIdb().  (Dit is een voorlopige oplossing: zodra deze databank in orde is, zal ze geïntegreerd worden in het package zelf, waardoor iedereen de functies uit het package zal kunnen gebruiken.)
+Om de functies uit het package te kunnen gebruiken, moet een connectie gemaakt kunnen worden met de databank `D0122_00_LSVIHabitatTypes` die op server `INBO-SQL07-PRD.inbo.be` staat en alle informatie in verband met de LSVI-indicatoren bevat (zie 'Doelstellingen en inhoud package' > 'Inhoud package').  Dit betekent dat gebruikers die niet op het INBO-netwerk werken, een kopie van deze databank nodig hebben en de locatie en naam van deze databank telkens moeten specifiëren in de functie `connecteerMetLSVIdb()`.  (Dit is een voorlopige oplossing: zodra deze databank in orde is, zal ze geïntegreerd worden in het package zelf, waardoor iedereen de functies uit het package zal kunnen gebruiken.)
 
 #Gebruik basisfuncties
 
@@ -74,11 +74,11 @@ Om de functies uit het package te kunnen gebruiken, moet een connectie gemaakt k
 
 ###Packages en documentatie
 
-Om in R packages te kunnen gebruiken, moeten deze telkens (na elke herstart van de R-console) eerst ingeladen worden met de functie 'library()'.  Om de functies in verband met de LSVI te gebruiken, voer je dus eerst het commando 'library(LSVI)' in.  Dit kan wel enkel met reeds geïnstalleerde packages, die in het venster rechtsonder onder de tab Packages vermeld zijn.  Andere packages moet je eerst eenmalig installeren (via de knop Install of het commando install.packages("naam_nieuw_package")).
+Om in R packages te kunnen gebruiken, moeten deze telkens (na elke herstart van de R-console) eerst ingeladen worden met de functie `library()`.  Om de functies in verband met de LSVI te gebruiken, voer je dus eerst het commando `library(LSVI)` in.  Dit kan wel enkel met reeds geïnstalleerde packages, die in het venster rechtsonder onder de tab Packages vermeld zijn.  Andere packages moet je eerst eenmalig installeren (via de knop Install of het commando `install.packages("naam_nieuw_package")`).
 
-Als je in de lijst met packages onder de tab Packages op een packagenaam klikt, krijg je de documentatie van het package: eventuele handleidingen (onder de link 'User guides, package vignettes and other documentation') en een klikbare lijst met alle functies die in het package beschikbaar zijn.
+Als je in de lijst met packages onder de tab Packages op een packagenaam klikt, krijg je de documentatie van het package: eventuele handleidingen (onder de link `User guides, package vignettes and other documentation`) en een klikbare lijst met alle functies die in het package beschikbaar zijn.
 
-Zodra een package ingeladen is, kan je deze documentatie van functies ook opvragen door een '?' te typen, gevolgd door de naam van de functie, bijvoorbeeld:
+Zodra een package ingeladen is, kan je deze documentatie van functies ook opvragen door een `?` te typen, gevolgd door de naam van de functie, bijvoorbeeld:
 
 ```{r eval = FALSE}
 ?maakLSVIrapport
@@ -90,7 +90,7 @@ Deze documentatie geeft aan wat de functie doet en hoe je de functie moet gebrui
 - Usage: geeft de argumenten weer en de defaultwaarden die voor deze argumenten meegegeven worden (zie ook Arguments)
 - Arguments: de argumenten die je met de functie kan of moet meegeven.  Hiermee bepaal je dus zelf welke uitvoer je wil, door bijvoorbeeld te kiezen voor een bepaalde versie of bepaald habitattype.  Of bij berekenfuncties geef je hier een tabel mee met de veldobservaties waarop de berekening uitgevoerd moet worden.  Voor deze argumenten moet je een waarde meegeven als er geen waarde vermeld is onder Usage, in het andere geval mag je een waarde meegeven (als je dit niet doet, wordt de onder Usage vermelde defaultwaarde gebruikt).
 - Value: wat de functie teruggeeft.  Dit is voor het LSVI-package vaak een tabel met gegevens, in bovenstaand voorbeeld wordt een document gegenereerd dat automatisch opgeslagen wordt in de map waarin je op dat moment werkt.
-- Examples: een of meerdere voorbeelden die tonen hoe je de functie kan gebruiken.  Als het package LSVI ingeladen is (dus na intypen van 'library(LSVI)'), kan je deze voorbeelden kopiëren en uittesten.  Door de argumenten aan te passen (of toe te voegen of te wissen), kan je op een gemakkelijke manier je eigen script maken.
+- Examples: een of meerdere voorbeelden die tonen hoe je de functie kan gebruiken.  Als het package LSVI ingeladen is (dus na intypen van `library(LSVI)`), kan je deze voorbeelden kopiëren en uittesten.  Door de argumenten aan te passen (of toe te voegen of te wissen), kan je op een gemakkelijke manier je eigen script maken.
 
 _(Leeswijzer: info over het gebruik van de functies in het LSVI-package staat onder 'Basis van LSVI-package'.  Wat hier volgt, is wat met de gegenereerde gegevens gedaan kan worden.  We raden daarom aan om eerst 'Basis van LSVI-package' te lezen.)_
 
@@ -98,14 +98,14 @@ _(Leeswijzer: info over het gebruik van de functies in het LSVI-package staat on
 
 Vaak genereert een functie gegevens in de vorm van een tabel.  Hoe kan je hier nu mee verdergaan?  
 
-We illustreren dit a.d.h.v de functie geefSoortenlijst().  Als we deze functie op zich gebruiken zoals in de documentatie is weergegeven (eerste voorbeeld), dan wordt de uitvoer weergegeven in de R-console:
+We illustreren dit a.d.h.v de functie `geefSoortenlijst()`.  Als we deze functie op zich gebruiken zoals in de documentatie is weergegeven (eerste voorbeeld), dan wordt de uitvoer weergegeven in de R-console:
 
 ```{r}
 library(LSVI)
 geefSoortenlijst(Habitattype = "4010", Taxonlijsttype = "LSVIfiche")
 ```
 
-Omdat de tabel te breed is, wordt deze opgesplitst in 4 delen, die onder elkaar weergegeven worden.  Deze tabel wordt ook enkel weergegeven, niet opgeslagen, en op deze manier kunnen we er achteraf geen bewerkingen mee doen.  Beter is om de tabel toe te kennen aan een variabele, we geven hier die variabele de naam 'soortenlijst4010':
+Omdat de tabel te breed is, wordt deze opgesplitst in 4 delen, die onder elkaar weergegeven worden.  Deze tabel wordt ook enkel weergegeven, niet opgeslagen, en op deze manier kunnen we er achteraf geen bewerkingen mee doen.  Beter is om de tabel toe te kennen aan een variabele, we geven hier die variabele de naam `soortenlijst4010`:
 
 ```{r}
 soortenlijst4010 <- geefSoortenlijst(Habitattype = "4010", Taxonlijsttype = "LSVIfiche")
@@ -115,14 +115,14 @@ Als je dit commando in je eigen console runt, verschijnt deze variabele in het v
 
 In R kan je deze variabele tonen door de variabelenaam in te typen (dan krijg je dezelfde uitvoer van de tabel in 4 delen).  Je kan er ook allerlei bewerkingen mee uitvoeren (sorteren, selecteren,...), maar daarvoor verwijzen we naar een basiscursus van R.
 
-Wat we hier wel tonen, is hoe deze tabel opgeslagen kan worden, zodat hij achteraf in Excel geopend kan worden.  Dit kan met de functie 'write_delim()' uit het package 'readr'.  Om deze tabel met naam 'soortenlijst4010.csv' op te slaan in de map R op de C-schijf, gebruiken we volgende commando's:
+Wat we hier wel tonen, is hoe deze tabel opgeslagen kan worden, zodat hij achteraf in Excel geopend kan worden.  Dit kan met de functie 'write_delim()' uit het package 'readr'.  Om deze tabel met naam `soortenlijst4010.csv` op te slaan in de map R op de C-schijf, gebruiken we volgende commando's:
 
 ```{r eval=FALSE}
 library(readr)
 write_delim(soortenlijst4010, "C:/R/soortenlijst4010.csv", delim = ";")
 ```
 
-We hebben hier het absolute path (C:/R) weergegeven, een andere mogelijkheid is om het path relatief ten opzichte van de 'working directory' weer te geven.  Dit is de map waarin je aan 't werken bent.  Je kan deze working directory zelf bepalen door het commando 'setwd("C:/.../mijn_werkmap")'.  Als je in een project werkt waarin je al je scripts opslaat (aan te raden), dan is de root van dit project automatisch je working directory.
+We hebben hier het absolute path (`C:/R`) weergegeven, een andere mogelijkheid is om het path relatief ten opzichte van de 'working directory' weer te geven.  Dit is de map waarin je aan 't werken bent.  Je kan deze working directory zelf bepalen door het commando `setwd("C:/.../mijn_werkmap")`.  Als je in een project werkt waarin je al je scripts opslaat (aan te raden), dan is de root van dit project automatisch je working directory.
 
 'delim' geeft aan dat het scheidingsteken tussen de tabellen een ; is.  Hier kan je ook een ander teken kiezen, maar dan moet je de gegevens in Excel nog manueel in kolommen zetten via Gegevens -> Tekst naar kolommen.
 
@@ -135,13 +135,13 @@ library(readr)
 Dataset <- read_delim("Gegevens.csv", delim = ";")
 ```
 
-Je steekt dus de gegevens uit je bestand 'Gegevens.csv' in de variabele 'Dataset'.  (Het laden van de library readr is enkel nodig als je dit nog niet eerder gedaan hebt.)
+Je steekt dus de gegevens uit je bestand `Gegevens.csv` in de variabele `Dataset`.  (Het laden van de library readr is enkel nodig als je dit nog niet eerder gedaan hebt.)
 
 Gegevens kunnen ook rechtstreeks vanuit een databank ingelezen worden, en ze kunnen in R naar het gewenste formaat omgezet worden.  Een volledige uitleg hierover zou ons echter te ver leiden.  Toch interesse om hier meer over te leren?  Neem dan contact op met een collega van BMK.
 
 ###Wat met een list van tabellen?
 
-De functie berekenLSVIbasis() geeft gegevens terug in de vorm van een list van 3 tabellen.
+De functie `berekenLSVIbasis()` geeft gegevens terug in de vorm van een lijst van 4 tabellen.
 
 ```{r}
 #Eerst worden wat voorbeeldgegevens opgehaald uit het package:
@@ -171,8 +171,6 @@ berekenLSVIbasis(
 )
 ```
 
-De uitvoer bestaat uit 3 tabellen onder elkaar, aangeduid met [[1]], [[2]] en [[3]].
-
 We gaan weer beginnen met de uitvoer in een variabele ('resultaat') te steken om er bewerkingen op te kunnen uitvoeren:
 
 ```{r}
@@ -184,12 +182,13 @@ resultaat <-
   )
 ```
 
-Nu kunnen we de afzonderlijke tabellen als volgt uit de variabele Resultaat halen:
+Nu kunnen we de afzonderlijke tabellen als volgt uit het object `resultaat` halen (je kan met `$` of met `[[]]` werken:
 
 ```{r}
-resultaat[[1]]
-resultaat[[2]]
-resultaat[[3]]
+resultaat$Resultaat_globaal # resultaat[["Resultaat_globaal"]]
+resultaat$Resultaat_criterium
+resultaat$Resultaat_indicator
+resultaat$Resultaat_detail
 ```
 
 Met deze tabellen kan verder gewerkt worden zoals hierboven beschreven is ('Wat met gegenereerde gegevens in tabelvorm?') 
@@ -199,10 +198,10 @@ Met deze tabellen kan verder gewerkt worden zoals hierboven beschreven is ('Wat 
 
 De functies kunnen min of meer in groepen ingedeeld worden op basis van het eerste deel van hun naam:
 
-- maakXXX: deze functies genereren een bestand (.html) waarin de informatie uit de databank in een rapportageformaat weergegeven wordt
-- geefXXX: deze functies genereren een tabel met informatie uit de databank
-- berekenXXX: deze functies voeren berekeningen uit m.b.t. de LSVI op basis van opgegeven veldgegevens
-- andere (selecteerXXX, vertaalXXX en connecteerXXX): hulpfuncties die eventueel relevant kunnen zijn voor gevorderde R-gebruikers
+- `maakXXX`: deze functies genereren een bestand (.html) waarin de informatie uit de databank in een rapportageformaat weergegeven wordt
+- `geefXXX`: deze functies genereren een tabel met informatie uit de databank
+- `berekenXXX`: deze functies voeren berekeningen uit m.b.t. de LSVI op basis van opgegeven veldgegevens
+- andere (`selecteerXXX`, `vertaalXXX` en `connecteerXXX`): hulpfuncties die eventueel relevant kunnen zijn voor gevorderde R-gebruikers
 
 Voor de functies van voornamelijk de eerste twee groepen zijn er een aantal argumenten die facultatief meegegeven kunnen worden: Versie, Habitatgroep, Habitattype, Criterium en Indicator.  Door hiervoor waarden op te geven, kunnen de relevante gegevens uit de databank geselecteerd worden.  Voor de argumenten waarvoor geen specifieke waarden opgegeven zijn, wordt de default 'alle' gebruikt, waardoor alle beschikbare gegevens voor dat argument uit de databank gehaald worden.
 

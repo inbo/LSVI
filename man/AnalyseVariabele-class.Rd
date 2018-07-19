@@ -10,6 +10,6 @@ Deze virtuele klasse Waarde geeft de mogelijkheid om een aantal klassen en metho
 \section{Slots}{
 
 \describe{
-\item{\code{Kenmerken}}{dataframe met alle opgegeven kenmerken, met velden Kenmerk, TypeKenmerk, WaardeMin en WaardeMax}
+\item{\code{Kenmerken}}{dataframe met alle opgegeven kenmerken, met velden Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax}
 }}
 

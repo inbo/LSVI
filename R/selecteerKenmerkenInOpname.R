@@ -3,7 +3,7 @@
 #' @description Deze hulpfunctie voor de s4-klassen 'aantal' en 'bedekking' zoekt soorten of kenmerken uit de voorwaarde in de opname en maakt een lijstje van de soorten die voldoen en in de opname voorkomen.  Op basis hiervan kunnen de s4-klassen het totale aantal of de bedekking berekenen.
 #'
 #'
-#' @param Kenmerken dataframe met alle opgegeven kenmerken, met velden Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
+#' @param Kenmerken dataframe met alle opgegeven kenmerken, met velden Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
 #' @param Soortengroep dataframe met de soortenlijst die uit Kenmerken gehaald moet worden
 #' @param Studiegroep dataframe met de lijst kenmerken die uit Kenmerken gehaald moet worden
 #' @param SubAnalyseVariabele heeft waarde 'bedekking' als er een subvoorwaarde is voor de bedekking van de geselecteerde soorten of kenmerken
@@ -36,18 +36,28 @@ selecteerKenmerkenInOpname <-
     }
 
     if (length(Soortengroep) > 0) {
-      Resultaat <- Kenmerken %>%
-        filter(tolower(.data$TypeKenmerk) == "soort_nbn") %>%
-        inner_join(
-          Soortengroep,
-          by = c("Kenmerk" = "NbnTaxonVersionKey")
-        )
+      if (length(Studiegroep) > 0) {
+        Resultaat <- Kenmerken %>%
+          filter(tolower(.data$TypeKenmerk) == "soort_nbn",
+                 .data$Vegetatielaag %in% Studiegroep) %>%
+          inner_join(
+            Soortengroep,
+            by = c("Kenmerk" = "NbnTaxonVersionKey")
+          )
+      } else {
+        Resultaat <- Kenmerken %>%
+          filter(tolower(.data$TypeKenmerk) == "soort_nbn") %>%
+          inner_join(
+            Soortengroep,
+            by = c("Kenmerk" = "NbnTaxonVersionKey")
+          )
+      }
       #Hier moet nog toegevoegd worden dat ofwel de soorten, ofwel de subsoorten gewist moeten worden al naargelang de soorten zelf in de kenmerkenlijst staan (zie berekenAantalSoorten en selecteerSoortenInOpname)
+
 
     }
 
-    if (length(Studiegroep) > 0) {
-
+    if (length(Studiegroep) > 0 & !(length(Soortengroep) > 0)) {
       Resultaat <- Kenmerken %>%
         filter(.data$TypeKenmerk == "studiegroep") %>%
         inner_join(
@@ -91,7 +101,7 @@ selecteerKenmerkenInOpname <-
               "WaardeMin",
               "WaardeMax"
             )
-          ]
+            ]
         )
 
       Resultaat <- Resultaat %>%
@@ -116,6 +126,7 @@ selecteerKenmerkenInOpname <-
         )
       )
     }
+
 
     return(Resultaat)
   }
