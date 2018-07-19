@@ -119,7 +119,7 @@ invoercontroleData_soortenKenmerken <-
 
     QuerySoorten <-
       "SELECT TaxonSynoniem.FloraNaamNederlands AS NedNaam,
-          TaxonSynoniem.NbnNaam AS WetNaamKort,
+          TaxonSynoniem.GbifCanonicalNameWithMarker AS Canonicalname,
           Taxon.NBNTaxonVersionKey, Taxon.TaxonTypeId
       FROM TaxonSynoniem INNER JOIN Taxon
         ON TaxonSynoniem.TaxonId = Taxon.Id
@@ -127,12 +127,6 @@ invoercontroleData_soortenKenmerken <-
 
     Taxonlijst <-
       dbGetQuery(ConnectieLSVIhabitats, QuerySoorten)
-
-    #onderstaande code mag weg zodra Gert deze Canonicalname toegevoegd heeft aan de databank
-    Taxonlijst <- Taxonlijst %>%
-      mutate(
-        Canonicalname = parsenames(.data$WetNaamKort)$canonicalnamewithmarker
-      )
 
     KenmerkenSoort <- Kenmerken %>%
       filter(tolower(.data$TypeKenmerk) == "soort_latijn") %>%
