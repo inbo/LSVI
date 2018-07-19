@@ -1,9 +1,9 @@
 #' @title Berekent de LSVI op basis van VoorwaardeID en opgegeven waarden
 #'
 #' @description Deze functie bepaalt de Lokale Staat van Instandhouding en biotische indices op basis van gegevens, die in het juiste formaat moeten aangeleverd worden.  Zie hiervoor de beschrijving bij de parameters ('Arguments') en de tabellen van het voorbeeld.  In principe is enkel de parameter Data_habitat verplicht om op te geven, maar extra datasets zijn uiteraard wel nodig om een resultaat te bekomen.  Welke datasets relevant zijn, is afhankelijk van de opgegeven habitattypes: voor een aantal habitattypes kan een tabel met observaties en hun bedekking of aanwezigheid (=parameter 'Data_soortenKenmerken') volstaan, voor bossen zijn bv. bijkomend gegevens nodig over dood hout.
-#' 
+#'
 #' De Lokale Staat van Instandhouding wordt weergegeven in de kolom 'Status' met als mogelijke waarden TRUE (= gunstig) en FALSE (= ongunstig).
-#' 
+#'
 #' De biotische indices zijn afgeleid van het verschil tussen een geobserveerde waarde en de referentiewaarde voor elke indicator. Deze verschillen werden herschaald tussen +1 en -1, waarbij een positieve en negatieve waarde overeenkomt met respectievelijk een gunstige en ongunstige score. Deze verschilscores per indicator worden geaggregeerd, eerst voor de indicatoren die tot eenzelfde criterium behoren, vervolgens worden deze geaggregeerde scores verder geaggregeerd om tot een globale index te komen. Er worden drie verschillende globale indices berekend waarbij de naamgeving aangeeft welk aggregatie achtereenvolgens gebruikt werd: index_min_min, index_harm_min en index_harm_harm. Een naam met "min" duidt op minimum van de scores als aggregatie; bij "harm" werd het harmonisch gemiddelde berekend.
 #'
 #' @inheritParams selecteerIndicatoren
@@ -334,7 +334,7 @@ berekenLSVIbasis <-
       summarise(
         Status = as.logical(all(.data$Status_criterium)),
         #meest conservatieve index: one-out-all-out is resultaat van
-        #Index_min_min < 0
+        #Index_min_min < 0 #nolint
         Index_min_min = min(Index_min_criterium),
         #iets minder conservatieve index
         Index_min_harm = min(Index_harm_criterium),
@@ -346,10 +346,10 @@ berekenLSVIbasis <-
 
     return(
       list(
-        Resultaat_globaal = Resultaat_globaal,
         Resultaat_criterium = as.data.frame(Resultaat_criterium),
         Resultaat_indicator = Resultaat_indicator,
-        Resultaat_detail = Resultaat
+        Resultaat_detail = Resultaat,
+        Resultaat_globaal = Resultaat_globaal
       )
     )
   }
