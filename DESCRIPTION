@@ -33,7 +33,9 @@ VignetteBuilder: knitr
 Collate: 
     'berekenLSVIbasis.R'
     'berekenStatus.R'
+    'berekenVerschilscores.R'
     'berekenVoorwaarde.R'
+    'combinerenVerschilscore.R'
     'combinerenVoorwaarden.R'
     'connecteerMetLSVIdb.R'
     'deselecteerKenmerkenInOpname.R'
