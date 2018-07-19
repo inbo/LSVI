@@ -38,7 +38,7 @@ invoercontroleData_soortenKenmerken <-
         tolower(Data_soortenKenmerken$TypeKenmerk) %in%
           c("studiegroep", "soort_nbn", "soort_latijn", "soort_nl", "doodhout")
       ),
-      msg = "TypeKenmerk moet een van de volgende waarden zijn: studiegroep, soort_nbn, soort_latijn, soort_nl" #nolint
+      msg = "TypeKenmerk moet een van de volgende waarden zijn: studiegroep, soort_nbn, soort_latijn, soort_nl, doodhout" #nolint
     )
     assert_that(has_name(Data_soortenKenmerken, "Waarde"))
     assert_that(has_name(Data_soortenKenmerken, "Type"))
