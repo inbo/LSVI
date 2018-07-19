@@ -40,13 +40,6 @@ describe("test databank", {
             "maxBedekkingExcl", "meting")
       )
     )
-    expect_true(
-      all(
-        !is.na(
-          dbGetQuery(ConnectieLSVIhabitats, "SELECT Bovengrens FROM LijstItem")
-        )
-      )
-    )
   })
 
   it("AnalyseVariabele aantal bevat enkel gehele getallen", {
