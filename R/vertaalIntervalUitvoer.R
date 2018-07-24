@@ -115,7 +115,12 @@ vertaalIntervalUitvoer <-
         ) %>%
         ungroup() %>%
         mutate(
-          #Waarde = as.character(.data$Waarde),
+          Waarde =
+            ifelse(
+              is.na(.data$Waarde) & .data$Gem == 0,
+              "0",
+              .data$Waarde
+            ),
           Gem = NULL
         )
 
