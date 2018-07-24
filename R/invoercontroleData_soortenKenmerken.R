@@ -102,7 +102,8 @@ invoercontroleData_soortenKenmerken <-
           "StudieItem",
           "Waarde",
           ConnectieLSVIhabitats
-        )
+        ),
+        NA
       )
     if (
       !all(
