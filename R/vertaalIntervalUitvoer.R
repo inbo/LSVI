@@ -96,6 +96,7 @@ vertaalIntervalUitvoer <-
           breaks = c(Lijstdetail$Ondergrens, max(Lijstdetail$Bovengrens)),
           labels = Lijstdetail$Waarde
         )
+      Waarde <- as.character(Waarde)
       return(Waarde)
     }
 
@@ -105,10 +106,16 @@ vertaalIntervalUitvoer <-
           Invoertype = tolower(.data$Invoertype)
         ) %>%
         mutate(
-          Gem = (.data$Min + .data$Max) / 2,
+          Gem = (.data$Min + .data$Max) / 2
+        ) %>%
+        group_by(.data$Invoertype) %>%
+        mutate(
           Waarde =
-            omzetfunctie(.data$Gem, .data$Invoertype),
-          Waarde = as.character(.data$Waarde),
+            omzetfunctie(.data$Gem, .data$Invoertype)
+        ) %>%
+        ungroup() %>%
+        mutate(
+          #Waarde = as.character(.data$Waarde),
           Gem = NULL
         )
 

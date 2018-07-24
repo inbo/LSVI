@@ -219,7 +219,8 @@ berekenLSVIbasis <-
     Resultaat <- Resultaat %>%
       filter(!is.na(.data$Waarde) | !is.na(.data$Type)) %>%
       mutate(
-        AfkomstWaarde = "observatie"
+        AfkomstWaarde = "observatie",
+        Waarde = as.character(.data$Waarde)
       ) %>%
       bind_rows(BerekendResultaat)
 
