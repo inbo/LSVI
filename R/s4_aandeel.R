@@ -39,3 +39,11 @@ setMethod(
     return(Totaal)
   }
 )
+
+setMethod(
+  f = "geefTheoretischMaximum",
+  signature = "aandeel",
+  definition = function(object) {
+    return(100)
+  }
+)
