@@ -34,7 +34,7 @@ setMethod(
       return(NA)
     }
 
-     Totaal <- sum(Resultaat$Waarde)
+     Totaal <- sum(mean(c(Resultaat$WaardeMin, Resultaat$WaardeMax)))
 
     return(Totaal)
   }
