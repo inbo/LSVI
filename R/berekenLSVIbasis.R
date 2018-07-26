@@ -164,12 +164,16 @@ berekenLSVIbasis <-
       left_join(
         Invoervereisten,
         by = c("Habitattype" = "Habitatsubtype")) %>%
+      mutate(
+        Voorwaarde.lower = tolower(.data$Voorwaarde)
+      ) %>%
       left_join(
         Data_voorwaarden,
-        by = c("ID", "Criterium", "Indicator", "Voorwaarde"),
+        by = c("ID", "Criterium", "Indicator", "Voorwaarde.lower" = "Voorwaarde"),
         suffix = c("", ".vw")
       ) %>%
       mutate(
+        Voorwaarde.lower = NULL,
         Rijnr = row_number(.data$ID)
       )
 
