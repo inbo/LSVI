@@ -31,7 +31,8 @@ Data_voorwaarden <-
       ID = "1", Criterium = "Vegetatie",
       Indicator = "sleutelsoorten van de kruidlaag",
       Voorwaarde = "aandeel sleutelsoorten kruidlaag", Waarde = "20",
-      Type = "Geheel getal"
+      Type = "Geheel getal",
+      stringsAsFactors = FALSE
     )
   )
 Data_soortenKenmerken <-
@@ -55,8 +56,97 @@ Data_soortenKenmerken <-
 load(system.file("vbdata/Resultaat_test_bos.Rdata", package = "LSVI"))
 
 describe("berekenLSVIbasis vegetatielaag", {
-  it("nog in te vullen", {
+  it("de vegetatielagen worden correct geselecteerd", {
     skip_on_cran()
+    expect_equal(
+      berekenLSVIbasis(
+        Versie = "Versie 3", Kwaliteitsniveau = "1", 
+        Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
+        Data_soortenKenmerken = Data_soortenKenmerken
+      ),
+      Resultaat
+    )
+    expect_equal(
+      berekenLSVIbasis(
+        Versie = "Versie 3", Kwaliteitsniveau = "1", 
+        Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
+        Data_soortenKenmerken =
+          Data_soortenKenmerken %>%
+            mutate(
+              Vegetatielaag =
+                ifelse(
+                  Vegetatielaag == "struiklaag",
+                  "boomlaag",
+                  Vegetatielaag
+                )
+            )
+      ),
+      Resultaat
+    )
+    BerekendRes <-
+      berekenLSVIbasis(
+          Versie = "Versie 3", Kwaliteitsniveau = "1", 
+          Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
+          Data_soortenKenmerken =
+            Data_soortenKenmerken %>%
+            mutate(
+              Vegetatielaag =
+                ifelse(
+                  Vegetatielaag == "struiklaag",
+                  "kruidlaag",
+                  Vegetatielaag
+                )
+            )
+        )
+    stopifnot(
+      all.equal(
+        BerekendRes[["Resultaat_criterium"]],
+        Resultaat[["Resultaat_criterium"]]
+      )
+    )
+    stopifnot(
+      all.equal(
+        BerekendRes[["Resultaat_indicator"]],
+        Resultaat[["Resultaat_indicator"]] %>%
+          mutate(
+            Verschilscore =
+              ifelse(
+                .data$Indicator ==
+                  "sleutelsoorten van de boom- en struiklaag",
+                -0.5714285714,
+                .data$Verschilscore
+              )
+          )
+      )
+    )
+    stopifnot(
+      all.equal(
+        BerekendRes[["Resultaat_detail"]],
+        Resultaat[["Resultaat_detail"]] %>%
+          mutate(
+            Waarde =
+              ifelse(
+                .data$Voorwaarde ==
+                  "grondvlak sleutelsoorten boom- en struiklaag",
+                "0.3",
+                .data$Waarde
+              ),
+            Verschilscore =
+              ifelse(
+                .data$Voorwaarde ==
+                  "grondvlak sleutelsoorten boom- en struiklaag",
+                -0.5714285714,
+                .data$Verschilscore
+              )
+          )
+      )
+    )
+    stopifnot(
+      all.equal(
+        BerekendRes[["Resultaat_globaal"]],
+        Resultaat[["Resultaat_globaal"]]
+      )
+    )
   })
 
 
