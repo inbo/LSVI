@@ -47,13 +47,15 @@ describe("berekenLSVIbasis", {
     ConnectieLSVIhabitats <-
       connecteerMetLSVIdb()
     expect_equal(
-      berekenLSVIbasis(
-        ConnectieLSVIhabitats = ConnectieLSVIhabitats,
-        Versie = "Versie 3",
-        Kwaliteitsniveau = "1",
-        Data_habitat,
-        Data_voorwaarden,
-        Data_soortenKenmerken
+      idsWissen(
+        berekenLSVIbasis(
+          ConnectieLSVIhabitats = ConnectieLSVIhabitats,
+          Versie = "Versie 3",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden,
+          Data_soortenKenmerken
+        )
       ),
       Resultaat
     )
@@ -62,12 +64,14 @@ describe("berekenLSVIbasis", {
   it("parameter versie heeft correct formaat", {
     skip_on_cran()
     expect_equal(
-      berekenLSVIbasis(
-        Versie = "Versie 3",
-        Kwaliteitsniveau = "1",
-        Data_habitat,
-        Data_voorwaarden,
-        Data_soortenKenmerken
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 3",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden,
+          Data_soortenKenmerken
+        )
       ),
       Resultaat
     )
@@ -86,22 +90,26 @@ describe("berekenLSVIbasis", {
   it("parameter kwaliteitsniveau heeft correct formaat", {
     skip_on_cran()
     expect_equal(
-      berekenLSVIbasis(
-        Versie = "Versie 3",
-        Kwaliteitsniveau = "1",
-        Data_habitat,
-        Data_voorwaarden,
-        Data_soortenKenmerken
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 3",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden,
+          Data_soortenKenmerken
+        )
       ),
       Resultaat
     )
     expect_equal(
-      berekenLSVIbasis(
-        Versie = "Versie 3",
-        Kwaliteitsniveau = 1,
-        Data_habitat,
-        Data_voorwaarden,
-        Data_soortenKenmerken
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 3",
+          Kwaliteitsniveau = 1,
+          Data_habitat,
+          Data_voorwaarden,
+          Data_soortenKenmerken
+        )
       ),
       Resultaat
     )
@@ -168,16 +176,18 @@ describe("berekenLSVIbasis", {
       "Niet alle opgegeven percentages zijn positieve waarden"
     )
     expect_equal(
-      berekenLSVIbasis(
-        Versie = "Versie 3",
-        Kwaliteitsniveau = "1",
-        Data_habitat,
-        Data_voorwaarden %>%
-          mutate(
-            Waarde =
-              ifelse(.data$Waarde == "7,5", NA, .data$Waarde)
-          ),
-        Data_soortenKenmerken
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 3",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden %>%
+            mutate(
+              Waarde =
+                ifelse(.data$Waarde == "7,5", NA, .data$Waarde)
+            ),
+          Data_soortenKenmerken
+        )
       ),
       list(
         Resultaat_criterium =
@@ -267,16 +277,18 @@ describe("berekenLSVIbasis", {
       "Niet voor elke opgegeven categorische variabele is er een numerieke waarde opgenomen in de databank"   #nolint
     )
     expect_equal(
-      berekenLSVIbasis(
-        Versie = "Versie 3",
-        Kwaliteitsniveau = "1",
-        Data_habitat,
-        Data_voorwaarden %>%
-          mutate(
-            Waarde =
-              ifelse(.data$Waarde == "f", "F", .data$Waarde)
-          ),
-        Data_soortenKenmerken
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 3",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden %>%
+            mutate(
+              Waarde =
+                ifelse(.data$Waarde == "f", "F", .data$Waarde)
+            ),
+          Data_soortenKenmerken
+        )
       ),
       list(
         Resultaat_criterium = Resultaat[["Resultaat_criterium"]],
@@ -289,16 +301,18 @@ describe("berekenLSVIbasis", {
           ),
         Resultaat_globaal = Resultaat[["Resultaat_globaal"]]))
     expect_equal(
-      berekenLSVIbasis(
-        Versie = "Versie 3",
-        Kwaliteitsniveau = "1",
-        Data_habitat,
-        Data_voorwaarden %>%
-          mutate(
-            Waarde =
-              ifelse(.data$Waarde == "f", NA, .data$Waarde)
-          ),
-        Data_soortenKenmerken
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 3",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden %>%
+            mutate(
+              Waarde =
+                ifelse(.data$Waarde == "f", NA, .data$Waarde)
+            ),
+          Data_soortenKenmerken
+        )
       ),
       list(
         Resultaat_criterium =
@@ -471,26 +485,28 @@ describe("berekenLSVIbasis", {
       "Volgende soortnamen zijn niet teruggevonden in de databank"
     )
     expect_equal(
-      berekenLSVIbasis(
-        Versie = "Versie 3",
-        Kwaliteitsniveau = "1",
-        Data_habitat,
-        Data_voorwaarden,
-        Data_soortenKenmerken %>%
-          mutate(
-            Kenmerk =
-              ifelse(
-                .data$Kenmerk == "Calluna vulgaris",
-                "Struikhei",
-                .data$Kenmerk
-              ),
-            TypeKenmerk =
-              ifelse(
-                .data$Kenmerk == "Struikhei",
-                "soort_nl",
-                .data$TypeKenmerk
-              )
-          )
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 3",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden,
+          Data_soortenKenmerken %>%
+            mutate(
+              Kenmerk =
+                ifelse(
+                  .data$Kenmerk == "Calluna vulgaris",
+                  "Struikhei",
+                  .data$Kenmerk
+                ),
+              TypeKenmerk =
+                ifelse(
+                  .data$Kenmerk == "Struikhei",
+                  "soort_nl",
+                  .data$TypeKenmerk
+                )
+            )
+        )
       ),
       Resultaat
     )
@@ -513,26 +529,28 @@ describe("berekenLSVIbasis", {
       "Volgende soortnamen zijn niet teruggevonden in de databank"
     )
     expect_equal(
-      berekenLSVIbasis(
-        Versie = "Versie 3",
-        Kwaliteitsniveau = "1",
-        Data_habitat,
-        Data_voorwaarden,
-        Data_soortenKenmerken %>%
-          mutate(
-            Kenmerk =
-              ifelse(
-                .data$Kenmerk == "Calluna vulgaris",
-                "NBNSYS0000003902",
-                .data$Kenmerk
-              ),
-            TypeKenmerk =
-              ifelse(
-                .data$Kenmerk == "NBNSYS0000003902",
-                "soort_nbn",
-                .data$TypeKenmerk
-              )
-          )
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 3",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden,
+          Data_soortenKenmerken %>%
+            mutate(
+              Kenmerk =
+                ifelse(
+                  .data$Kenmerk == "Calluna vulgaris",
+                  "NBNSYS0000003902",
+                  .data$Kenmerk
+                ),
+              TypeKenmerk =
+                ifelse(
+                  .data$Kenmerk == "NBNSYS0000003902",
+                  "soort_nbn",
+                  .data$TypeKenmerk
+                )
+            )
+        )
       ),
       Resultaat
     )
@@ -586,26 +604,28 @@ describe("berekenLSVIbasis", {
       "Voor sommige soorten of kenmerken is enkel aan- of afwezigheid opgegeven, geen bedekking,"  #nolint
     )
     expect_equal(
-      berekenLSVIbasis(
-        Versie = "Versie 3",
-        Kwaliteitsniveau = "1",
-        Data_habitat,
-        Data_voorwaarden,
-        Data_soortenKenmerken %>%
-          mutate(
-            Waarde =
-              ifelse(
-                .data$Waarde == "0" & ID == "Ts2036",
-                "1",
-                .data$Waarde
-              ),
-            Type =
-              ifelse(
-                .data$Type == "Percentage" & ID == "Ts2036",
-                "Ja/nee",
-                .data$Type
-              )
-          )
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 3",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden,
+          Data_soortenKenmerken %>%
+            mutate(
+              Waarde =
+                ifelse(
+                  .data$Waarde == "0" & ID == "Ts2036",
+                  "1",
+                  .data$Waarde
+                ),
+              Type =
+                ifelse(
+                  .data$Type == "Percentage" & ID == "Ts2036",
+                  "Ja/nee",
+                  .data$Type
+                )
+            )
+        )
       ),
       list(
         Resultaat_criterium = Resultaat[["Resultaat_criterium"]],
