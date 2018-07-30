@@ -44,10 +44,12 @@ Data_soortenKenmerken <-
     )
 
 # Resultaat <-
-#   berekenLSVIbasis(
-#     Versie = "Versie 3",
-#     Kwaliteitsniveau = "1", Data_habitat,
-#     Data_voorwaarden, Data_soortenKenmerken
+#   idsWissen(
+#     berekenLSVIbasis(
+#       Versie = "Versie 3",
+#       Kwaliteitsniveau = "1", Data_habitat,
+#       Data_voorwaarden, Data_soortenKenmerken
+#     )
 #   )
 # 
 # save(Resultaat, file = "inst/vbdata/Resultaat_test_bos.Rdata")
@@ -59,45 +61,51 @@ describe("berekenLSVIbasis vegetatielaag", {
   it("de vegetatielagen worden correct geselecteerd", {
     skip_on_cran()
     expect_equal(
-      berekenLSVIbasis(
-        Versie = "Versie 3", Kwaliteitsniveau = "1", 
-        Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
-        Data_soortenKenmerken = Data_soortenKenmerken
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 3", Kwaliteitsniveau = "1", 
+          Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
+          Data_soortenKenmerken = Data_soortenKenmerken
+        )
       ),
       Resultaat
     )
     expect_equal(
-      berekenLSVIbasis(
-        Versie = "Versie 3", Kwaliteitsniveau = "1", 
-        Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
-        Data_soortenKenmerken =
-          Data_soortenKenmerken %>%
-            mutate(
-              Vegetatielaag =
-                ifelse(
-                  Vegetatielaag == "struiklaag",
-                  "boomlaag",
-                  Vegetatielaag
-                )
-            )
-      ),
-      Resultaat
-    )
-    BerekendRes <-
-      berekenLSVIbasis(
+      idsWissen(
+        berekenLSVIbasis(
           Versie = "Versie 3", Kwaliteitsniveau = "1", 
           Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
           Data_soortenKenmerken =
             Data_soortenKenmerken %>%
-            mutate(
-              Vegetatielaag =
-                ifelse(
-                  Vegetatielaag == "struiklaag",
-                  "kruidlaag",
-                  Vegetatielaag
-                )
-            )
+              mutate(
+                Vegetatielaag =
+                  ifelse(
+                    Vegetatielaag == "struiklaag",
+                    "boomlaag",
+                    Vegetatielaag
+                  )
+              )
         )
+      ),
+      Resultaat
+    )
+    BerekendRes <-
+      idsWissen(
+        berekenLSVIbasis(
+            Versie = "Versie 3", Kwaliteitsniveau = "1", 
+            Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
+            Data_soortenKenmerken =
+              Data_soortenKenmerken %>%
+              mutate(
+                Vegetatielaag =
+                  ifelse(
+                    Vegetatielaag == "struiklaag",
+                    "kruidlaag",
+                    Vegetatielaag
+                  )
+              )
+          )
+      )
     stopifnot(
       all.equal(
         BerekendRes[["Resultaat_criterium"]],
