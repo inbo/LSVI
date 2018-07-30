@@ -169,7 +169,8 @@ berekenLSVIbasis <-
       ) %>%
       left_join(
         Data_voorwaarden,
-        by = c("ID", "Criterium", "Indicator", "Voorwaarde.lower" = "Voorwaarde"),
+        by =
+          c("ID", "Criterium", "Indicator", "Voorwaarde.lower" = "Voorwaarde"),
         suffix = c("", ".vw")
       ) %>%
       mutate(

@@ -18,7 +18,7 @@ Data_voorwaarden <-
           col_character(), col_character(), col_character(), col_character()
         )
     ) %>%
-  mutate(  #idee is om onderstaande code te wissen zodra de rekenmodule hiervoor aangepast is
+  mutate(  #idee is om onderstaande code te wissen zodra de databank/rekenmodule hiervoor aangepast is
     Eenheid =
       ifelse(
         .data$Eenheid == "ha",
@@ -63,7 +63,7 @@ describe("berekenLSVIbasis vegetatielaag", {
     expect_equal(
       idsWissen(
         berekenLSVIbasis(
-          Versie = "Versie 3", Kwaliteitsniveau = "1", 
+          Versie = "Versie 3", Kwaliteitsniveau = "1",
           Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
           Data_soortenKenmerken = Data_soortenKenmerken
         )
@@ -73,7 +73,7 @@ describe("berekenLSVIbasis vegetatielaag", {
     expect_equal(
       idsWissen(
         berekenLSVIbasis(
-          Versie = "Versie 3", Kwaliteitsniveau = "1", 
+          Versie = "Versie 3", Kwaliteitsniveau = "1",
           Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
           Data_soortenKenmerken =
             Data_soortenKenmerken %>%
@@ -92,7 +92,7 @@ describe("berekenLSVIbasis vegetatielaag", {
     BerekendRes <-
       idsWissen(
         berekenLSVIbasis(
-            Versie = "Versie 3", Kwaliteitsniveau = "1", 
+            Versie = "Versie 3", Kwaliteitsniveau = "1",
             Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
             Data_soortenKenmerken =
               Data_soortenKenmerken %>%
@@ -155,6 +155,10 @@ describe("berekenLSVIbasis vegetatielaag", {
         Resultaat[["Resultaat_globaal"]]
       )
     )
+  })
+
+  it("s4-klasse bedekkingLaag werkt correct", {
+    skip_on_cran()
   })
 
 

@@ -42,6 +42,7 @@ invoercontroleData_voorwaarden <-
           x
           Encoding(x) <- "latin1"
           z <- tolower(x)
+          return(z)
         }
       )
     }
