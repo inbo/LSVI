@@ -38,7 +38,7 @@ invoercontroleData_soortenKenmerken <-
         tolower(Data_soortenKenmerken$TypeKenmerk) %in%
           c("studiegroep", "soort_nbn", "soort_latijn", "soort_nl", "doodhout")
       ),
-      msg = "TypeKenmerk moet een van de volgende waarden zijn: studiegroep, soort_nbn, soort_latijn, soort_nl" #nolint
+      msg = "TypeKenmerk moet een van de volgende waarden zijn: studiegroep, soort_nbn, soort_latijn, soort_nl, doodhout" #nolint
     )
     assert_that(has_name(Data_soortenKenmerken, "Waarde"))
     assert_that(has_name(Data_soortenKenmerken, "Type"))
@@ -102,7 +102,8 @@ invoercontroleData_soortenKenmerken <-
           "StudieItem",
           "Waarde",
           ConnectieLSVIhabitats
-        )
+        ),
+        NA
       )
     if (
       !all(
@@ -119,7 +120,7 @@ invoercontroleData_soortenKenmerken <-
 
     QuerySoorten <-
       "SELECT TaxonSynoniem.FloraNaamNederlands AS NedNaam,
-          TaxonSynoniem.NbnNaam AS WetNaamKort,
+          TaxonSynoniem.GbifCanonicalNameWithMarker AS Canonicalname,
           Taxon.NBNTaxonVersionKey, Taxon.TaxonTypeId
       FROM TaxonSynoniem INNER JOIN Taxon
         ON TaxonSynoniem.TaxonId = Taxon.Id
@@ -127,12 +128,6 @@ invoercontroleData_soortenKenmerken <-
 
     Taxonlijst <-
       dbGetQuery(ConnectieLSVIhabitats, QuerySoorten)
-
-    #onderstaande code mag weg zodra Gert deze Canonicalname toegevoegd heeft aan de databank
-    Taxonlijst <- Taxonlijst %>%
-      mutate(
-        Canonicalname = parsenames(.data$WetNaamKort)$canonicalnamewithmarker
-      )
 
     KenmerkenSoort <- Kenmerken %>%
       filter(tolower(.data$TypeKenmerk) == "soort_latijn") %>%

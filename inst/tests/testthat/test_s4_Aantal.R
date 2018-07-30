@@ -10,7 +10,7 @@ describe("s4_Aantal", {
       numeric(0)
     )
     expect_equal(
-      nrow(new(Class = "aantal")@Soortensubgroep),
+      nrow(new(Class = "aantal")@Soortengroep),
       0
     )
     expect_identical(
@@ -91,7 +91,7 @@ describe("s4_Aantal", {
             ),
           Soortengroep =
             data.frame(
-              NBNTaxonVersionKey = c("A1", "B1", "C1", "E1"),
+              NbnTaxonVersionKey = c("A1", "B1", "C1", "E1"),
               stringsAsFactors = FALSE
             )
         )
@@ -111,7 +111,7 @@ describe("s4_Aantal", {
             ),
           Soortengroep =
             data.frame(
-              NBNTaxonVersionKey = c("A1", "B1", "C1", "E1"),
+              NbnTaxonVersionKey = c("A1", "B1", "C1", "E1"),
               stringsAsFactors = FALSE
             )
         )
@@ -131,7 +131,7 @@ describe("s4_Aantal", {
             ),
           Soortengroep =
             data.frame(
-              NBNTaxonVersionKey = c("A1", "B1", "C1", "E1"),
+              NbnTaxonVersionKey = c("A1", "B1", "C1", "E1"),
               stringsAsFactors = FALSE
             )
         )
@@ -151,7 +151,7 @@ describe("s4_Aantal", {
             ),
           Soortengroep =
             data.frame(
-              NBNTaxonVersionKey = character(0),
+              NbnTaxonVersionKey = character(0),
               stringsAsFactors = FALSE
             )
         )
@@ -173,7 +173,7 @@ describe("s4_Aantal", {
             ),
           Soortengroep =
             data.frame(
-              NBNTaxonVersionKey = c("A1", "B1", "C1", "E1"),
+              NbnTaxonVersionKey = c("A1", "B1", "C1", "E1"),
               stringsAsFactors = FALSE
             ),
           SubAnalyseVariabele = "bedekking",

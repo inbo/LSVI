@@ -35,11 +35,27 @@ invoercontroleData_voorwaarden <-
     if (!is.character(Data_voorwaarden$Voorwaarde)) {
       Data_voorwaarden$Voorwaarde <- as.character(Data_voorwaarden$Voorwaarde)
     }
-    Data_voorwaarden$Voorwaarde <- tolower(Data_voorwaarden$Voorwaarde)
+    uitbreidingTolower <- function(x) {
+      tryCatch(
+        tolower(x),
+        error = function(e) {
+          x
+          Encoding(x) <- "latin1"
+          z <- tolower(x)
+          return(z)
+        }
+      )
+    }
+    Data_voorwaarden$Voorwaarde <-
+      uitbreidingTolower(Data_voorwaarden$Voorwaarde)
+    Geldigewaarden <-
+      tolower(
+        geefUniekeWaarden("Voorwaarde", "VoorwaardeNaam", ConnectieLSVIhabitats)
+      )
     if (
       !all(
         Data_voorwaarden$Voorwaarde %in%
-        geefUniekeWaarden("Voorwaarde", "VoorwaardeNaam", ConnectieLSVIhabitats)
+          Geldigewaarden
       )
     ) {
       stop("Niet alle waarden vermeld onder Data_voorwaarden$Voorwaarde komen overeen met waarden vermeld in de databank.") #nolint

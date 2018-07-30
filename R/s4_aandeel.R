@@ -34,8 +34,16 @@ setMethod(
       return(NA)
     }
 
-     Totaal <- sum(Resultaat$Waarde)
+     Totaal <- sum(mean(c(Resultaat$WaardeMin, Resultaat$WaardeMax)))
 
     return(Totaal)
+  }
+)
+
+setMethod(
+  f = "geefTheoretischMaximum",
+  signature = "aandeel",
+  definition = function(object) {
+    return(100)
   }
 )

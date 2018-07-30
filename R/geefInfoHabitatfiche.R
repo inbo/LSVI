@@ -60,7 +60,7 @@ geefInfoHabitatfiche <-
     query_habitatfiche <- sprintf(
       "SELECT Indicator_habitat.Id AS Indicator_habitatID,
       cast(Indicator_habitat.Beschrijving AS nvarchar(1050)) AS Beschrijving,
-      cast(Indicator_habitat.Beschrijving_naSoorten AS nvarchar(150))
+      cast(Indicator_habitat.Beschrijving_naSoorten AS nvarchar(200))
         AS Beschrijving_naSoorten,
       cast(Indicator_habitat.Maatregelen AS nvarchar(510)) AS Maatregelen,
       cast(Indicator_habitat.Opmerkingen AS nvarchar(830)) AS Opmerkingen,

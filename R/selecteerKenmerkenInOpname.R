@@ -39,7 +39,7 @@ selecteerKenmerkenInOpname <-
       if (length(Studiegroep) > 0) {
         Resultaat <- Kenmerken %>%
           filter(tolower(.data$TypeKenmerk) == "soort_nbn",
-                 .data$Vegetatielaag %in% Studiegroep) %>%
+                 .data$Vegetatielaag %in% Studiegroep$Waarde) %>%
           inner_join(
             Soortengroep,
             by = c("Kenmerk" = "NbnTaxonVersionKey")

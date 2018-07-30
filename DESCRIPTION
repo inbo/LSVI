@@ -51,6 +51,7 @@ Collate:
     'invoercontroleData_voorwaarden.R'
     'invoercontroleKwaliteitsniveau.R'
     'invoercontroleVersie.R'
+    'logDatabankfouten.R'
     'maakHabitatfiches.R'
     'maakLSVIrapport.R'
     's4_AnalyseVariabele.R'
