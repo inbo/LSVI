@@ -17,10 +17,12 @@ Data_soortenKenmerken <-
     )
 
 # Resultaat <-
-#   berekenLSVIbasis(
-#     Versie = "Versie 3",
-#     Kwaliteitsniveau = "1", Data_habitat,
-#     Data_voorwaarden, Data_soortenKenmerken
+#   idsWissen(
+#     berekenLSVIbasis(
+#       Versie = "Versie 3",
+#       Kwaliteitsniveau = "1", Data_habitat,
+#       Data_voorwaarden, Data_soortenKenmerken
+#     )
 #   )
 # 
 # save(Resultaat, file = "inst/vbdata/Resultaat_test.Rdata")
