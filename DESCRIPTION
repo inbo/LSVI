@@ -59,6 +59,7 @@ Collate:
     's4_aantal.R'
     's4_analyseVariabele_c.R'
     's4_bedekking.R'
+    's4_bedekkingLaag.R'
     's4_maxBedekking.R'
     's4_maxBedekkingExcl.R'
     's4_meting.R'
