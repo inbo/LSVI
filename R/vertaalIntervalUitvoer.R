@@ -132,17 +132,17 @@ vertaalIntervalUitvoer <-
     Resultaat <- Resultaat %>%
       bind_rows(
         Dataset %>%
-          filter(!tolower(.data$Type) == "categorie") %>%
+          filter(tolower(.data$Type) != "categorie") %>%
           mutate(
             Min =
               ifelse(
-                .data$Type == "percentage",
+                tolower(.data$Type) == "percentage",
                 .data$Min * 100,
                 .data$Min
               ),
             Max =
               ifelse(
-                .data$Type == "percentage",
+                tolower(.data$Type) == "percentage",
                 .data$Max * 100,
                 .data$Max
               ),
