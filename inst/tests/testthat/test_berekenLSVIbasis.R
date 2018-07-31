@@ -572,9 +572,6 @@ describe("berekenLSVIbasis", {
       ),
       "Volgende NBNTaxonVersionKeys zijn niet teruggevonden in de databank"
     )
-    #nog testen: "Niet alle te evalueren soorten zijn opgenomen onder Data_soorten\\$Soort_Latijn, er wordt van uitgegaan dat de niet opgenomen soorten niet waargenomen zijn"
-    #nog extra tests toevoegen voor genera en habitatsubtypes als de ontwikkeling hiervoor op punt staat
-
   })
 
   it("afhandeling van Ja/nee in Data_soortenKenmerken is correct", {
@@ -668,6 +665,127 @@ describe("berekenLSVIbasis", {
                   Referentiewaarde == "2",
                 0.75,
                 .data$Verschilscore
+              )
+          ),
+        Resultaat_globaal = Resultaat[["Resultaat_globaal"]]
+      )
+    )
+  })
+  
+  it("De afhandeling van taxa en subtaxa gebeurt correct", {
+    skip_on_cran()
+    expect_equal(
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 3",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden %>%
+            filter(
+              !(.data$ID == "JR0216" & .data$Indicator == "verruiging")
+            ),
+          Data_soortenKenmerken %>%
+            bind_rows(
+              data.frame(
+                ID = "JR0216",
+                Kenmerk = "Rubus",
+                TypeKenmerk = "soort_Latijn",
+                Waarde = "35",
+                Type = "Percentage",
+                Eenheid = "%",
+                stringsAsFactors = FALSE
+              )
+            )
+        )
+      ),
+      list(
+        Resultaat_criterium = Resultaat[["Resultaat_criterium"]],
+        Resultaat_indicator = Resultaat[["Resultaat_indicator"]],
+        Resultaat_detail = Resultaat[["Resultaat_detail"]] %>%
+          mutate(
+            AfkomstWaarde =
+              ifelse(
+                .data$ID == "JR0216" & .data$Indicator == "verruiging",
+                "berekend",
+                .data$AfkomstWaarde
+              )
+          ),
+        Resultaat_globaal = Resultaat[["Resultaat_globaal"]]
+      )
+    )
+    expect_equal(
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 3",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden %>%
+            filter(
+              !(.data$ID == "JR0216" & .data$Indicator == "verruiging")
+            ),
+          Data_soortenKenmerken %>%
+            bind_rows(
+              data.frame(
+                ID = "JR0216",
+                Kenmerk = "Rubus fruticosus",
+                TypeKenmerk = "soort_Latijn",
+                Waarde = "35",
+                Type = "Percentage",
+                Eenheid = "%",
+                stringsAsFactors = FALSE
+              )
+            )
+        )
+      ),
+      list(
+        Resultaat_criterium = Resultaat[["Resultaat_criterium"]],
+        Resultaat_indicator = Resultaat[["Resultaat_indicator"]],
+        Resultaat_detail = Resultaat[["Resultaat_detail"]] %>%
+          mutate(
+            AfkomstWaarde =
+              ifelse(
+                .data$ID == "JR0216" & .data$Indicator == "verruiging",
+                "berekend",
+                .data$AfkomstWaarde
+              )
+          ),
+        Resultaat_globaal = Resultaat[["Resultaat_globaal"]]
+      )
+    )
+    expect_equal(
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 3",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden %>%
+            filter(
+              !(.data$ID == "JR0216" & .data$Indicator == "verruiging")
+            ),
+          Data_soortenKenmerken %>%
+            bind_rows(
+              data.frame(
+                ID = "JR0216",
+                Kenmerk = c("Rubus", "Rubus fruticosus"),
+                TypeKenmerk = "soort_Latijn",
+                Waarde = "35",
+                Type = "Percentage",
+                Eenheid = "%",
+                stringsAsFactors = FALSE
+              )
+            )
+        )
+      ),
+      list(
+        Resultaat_criterium = Resultaat[["Resultaat_criterium"]],
+        Resultaat_indicator = Resultaat[["Resultaat_indicator"]],
+        Resultaat_detail = Resultaat[["Resultaat_detail"]] %>%
+          mutate(
+            AfkomstWaarde =
+              ifelse(
+                .data$ID == "JR0216" & .data$Indicator == "verruiging",
+                "berekend",
+                .data$AfkomstWaarde
               )
           ),
         Resultaat_globaal = Resultaat[["Resultaat_globaal"]]
