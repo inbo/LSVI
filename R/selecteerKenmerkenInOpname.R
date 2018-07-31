@@ -16,7 +16,7 @@
 #'
 #' @export
 #'
-#' @importFrom dplyr %>% filter left_join inner_join mutate distinct
+#' @importFrom dplyr %>% filter left_join inner_join mutate distinct group_by do ungroup
 #' @importFrom rlang .data
 #'
 #'
@@ -52,9 +52,21 @@ selecteerKenmerkenInOpname <-
             by = c("Kenmerk" = "NbnTaxonVersionKey")
           )
       }
-      #Hier moet nog toegevoegd worden dat ofwel de soorten, ofwel de subsoorten gewist moeten worden al naargelang de soorten zelf in de kenmerkenlijst staan (zie berekenAantalSoorten en selecteerSoortenInOpname)
+      #Als het hogere taxonniveau in de opname zit, wordt het lagere gewist
+      kiesTaxonOfSubtaxons <-
+        function(Dataset) {
+          TaxonData <- Dataset %>%
+            filter(.data$TaxonId == .data$SubTaxonId)
+          if (nrow(TaxonData < 1)) {
+            return(Dataset)
+          }
+          return(TaxonData)
+        }
 
-
+      Resultaat %>%
+        group_by(.data$TaxonId) %>%
+        do(kiesTaxonOfSubtaxons(.)) %>%
+        ungroup()
     }
 
     if (length(Studiegroep) > 0 & !(length(Soortengroep) > 0)) {
