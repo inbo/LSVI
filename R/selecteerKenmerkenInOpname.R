@@ -57,13 +57,13 @@ selecteerKenmerkenInOpname <-
         function(Dataset) {
           TaxonData <- Dataset %>%
             filter(.data$TaxonId == .data$SubTaxonId)
-          if (nrow(TaxonData < 1)) {
+          if (nrow(TaxonData) < 1) {
             return(Dataset)
           }
           return(TaxonData)
         }
 
-      Resultaat %>%
+      Resultaat <- Resultaat %>%
         group_by(.data$TaxonId) %>%
         do(kiesTaxonOfSubtaxons(.)) %>%
         ungroup()
