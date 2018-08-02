@@ -46,7 +46,7 @@ describe("berekenLSVIbasis vegetatielaag", {
                col_character(), col_character(), col_character(),
                col_character(), col_character())
       )
-    
+
     # Resultaat <-
     #   idsWissen(
     #     berekenLSVIbasis(
@@ -55,10 +55,10 @@ describe("berekenLSVIbasis vegetatielaag", {
     #       Data_voorwaarden, Data_soortenKenmerken
     #     )
     #   )
-    # 
+    #
     # save(Resultaat, file = "inst/vbdata/Resultaat_test_bos.Rdata")
     # load("inst/vbdata/Resultaat_test_bos.Rdata")
-    
+
     load(system.file("vbdata/Resultaat_test_bos.Rdata", package = "LSVI"))
     expect_equal(
       idsWissen(

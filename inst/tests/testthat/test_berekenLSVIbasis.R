@@ -671,7 +671,7 @@ describe("berekenLSVIbasis", {
       )
     )
   })
-  
+
   it("De afhandeling van taxa en subtaxa gebeurt correct", {
     skip_on_cran()
     expect_equal(

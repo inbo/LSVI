@@ -42,8 +42,6 @@ deselecteerKenmerkenInOpname <-
           Soortengroep,
           by = c("Kenmerk" = "NbnTaxonVersionKey")
         )
-      #Hier moet nog toegevoegd worden dat ofwel de soorten, ofwel de subsoorten gewist moeten worden al naargelang de soorten zelf in de kenmerkenlijst staan (zie berekenAantalSoorten en selecteerSoortenInOpname)
-
     }
 
     if (length(Studiegroep) > 0) {

@@ -25,7 +25,7 @@ setMethod(
         .data$Kenmerk %in% object@Studiegroep$Waarde,
         !is.na(.data$WaardeMax)
       )
-    
+
     if (nrow(Test) > 0) {
       object@Soortengroep <- data.frame()
       berekenWaarde(as(object, "bedekking"))
