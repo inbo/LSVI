@@ -50,6 +50,7 @@ berekenLSVIbasis <-
         ID = character(),
         Criterium = character(),
         Indicator = character(),
+        Voorwaarde = character(),
         WaardeMin = double(),
         WaardeMax = double(),
         stringsAsFactors = FALSE
@@ -84,6 +85,7 @@ berekenLSVIbasis <-
       assert_that(has_name(Data_voorwaarden, "ID"))
       assert_that(has_name(Data_voorwaarden, "Criterium"))
       assert_that(has_name(Data_voorwaarden, "Indicator"))
+      assert_that(has_name(Data_voorwaarden, "Voorwaarde"))
       assert_that(has_name(Data_voorwaarden, "WaardeMin"))
       assert_that(has_name(Data_voorwaarden, "WaardeMax"))
     }
