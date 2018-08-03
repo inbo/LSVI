@@ -83,7 +83,8 @@ geefInvoervereisten <- function(Versie = "alle",
       .data$Habitattype,
       .data$Habitatsubtype,
       .data$Indicator_beoordelingID
-    )
+    ) %>%
+    distinct()
 
   Indicator_beoordelingIDs <-
     paste(
