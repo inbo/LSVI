@@ -159,7 +159,7 @@ describe("berekenLSVIbasis", {
           ),
         Data_soortenKenmerken
     ),
-      "Niet alle opgegeven percentages zijn numerieke waarden." #nolint
+      "Niet alle opgegeven getallen en percentages zijn numerieke waarden." #nolint
     )
     expect_error(
       berekenLSVIbasis(
@@ -173,7 +173,7 @@ describe("berekenLSVIbasis", {
           ),
         Data_soortenKenmerken
       ),
-      "Niet alle opgegeven percentages zijn positieve waarden"
+      "Niet alle opgegeven getallen en percentages zijn positieve waarden"
     )
     expect_equal(
       idsWissen(
@@ -409,6 +409,134 @@ describe("berekenLSVIbasis", {
       )
     )
   })
+  
+  it("parameter kwaliteitsniveau heeft correct formaat", {
+    skip_on_cran()
+    expect_equal(
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 3",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden,
+          Data_soortenKenmerken
+        )
+      ),
+      Resultaat
+    )
+    expect_equal(
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 3",
+          Kwaliteitsniveau = 1,
+          Data_habitat,
+          Data_voorwaarden,
+          Data_soortenKenmerken
+        )
+      ),
+      Resultaat
+    )
+    expect_error(
+      berekenLSVIbasis(
+        Versie = "Versie 3",
+        Kwaliteitsniveau = "streefwaarde",
+        Data_habitat,
+        Data_voorwaarden,
+        Data_soortenKenmerken
+      ),
+      "Kwaliteitsniveau moet een van de volgende waarden zijn"
+    )
+  })
+  
+  it("dataframe Data_habitat heeft correct formaat", {
+    skip_on_cran()
+    expect_error(
+      berekenLSVIbasis(
+        Versie = "Versie 3",
+        Kwaliteitsniveau = "1",
+        Data_habitat %>%
+          bind_rows(
+            data.frame(
+              ID = "fouttest",
+              Habitattype = "onbestaand",
+              stringsAsFactors = FALSE
+            )
+          ),
+        Data_voorwaarden,
+        Data_soortenKenmerken
+      )
+    )
+  })
+
+  it("een interval wordt correct omgezet", {
+    skip_on_cran()
+    expect_equal(
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 3",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden %>%
+            mutate(
+              Type =
+                ifelse(.data$Waarde == "f", "Percentage", .data$Type),
+              Invoertype =
+                ifelse(.data$Waarde == "f", NA, .data$Invoertype),
+              Waarde =
+                ifelse(.data$Waarde == "f", "5-10", .data$Waarde)
+            ),
+          Data_soortenKenmerken
+        )
+      ),
+      list(
+        Resultaat_criterium = Resultaat[["Resultaat_criterium"]],
+        Resultaat_indicator = Resultaat[["Resultaat_indicator"]],
+        Resultaat_detail =
+          Resultaat[["Resultaat_detail"]] %>%
+          mutate(
+            TypeWaarde =
+              ifelse(.data$Waarde == "f", "Percentage", .data$TypeWaarde),
+            InvoertypeWaarde =
+              ifelse(.data$Waarde == "f", NA, .data$InvoertypeWaarde),
+            Waarde =
+              ifelse(.data$Waarde == "f", "5-10", .data$Waarde)
+          ),
+        Resultaat_globaal = Resultaat[["Resultaat_globaal"]])
+    )
+    expect_equal(
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 3",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden %>%
+            mutate(
+              Type =
+                ifelse(.data$Waarde == "f", "Percentage", .data$Type),
+              Invoertype =
+                ifelse(.data$Waarde == "f", NA, .data$Invoertype),
+              Waarde =
+                ifelse(.data$Waarde == "f", "5 - 10", .data$Waarde)
+            ),
+          Data_soortenKenmerken
+        )
+      ),
+      list(
+        Resultaat_criterium = Resultaat[["Resultaat_criterium"]],
+        Resultaat_indicator = Resultaat[["Resultaat_indicator"]],
+        Resultaat_detail =
+          Resultaat[["Resultaat_detail"]] %>%
+          mutate(
+            TypeWaarde =
+              ifelse(.data$Waarde == "f", "Percentage", .data$TypeWaarde),
+            InvoertypeWaarde =
+              ifelse(.data$Waarde == "f", NA, .data$InvoertypeWaarde),
+            Waarde =
+              ifelse(.data$Waarde == "f", "5 - 10", .data$Waarde)
+          ),
+        Resultaat_globaal = Resultaat[["Resultaat_globaal"]])
+    )
+  })
 
   it("dataframe Data_soortenKenmerken heeft correct formaat", {
     skip_on_cran()
@@ -464,7 +592,7 @@ describe("berekenLSVIbasis", {
               )
           )
       ),
-      "Niet alle opgegeven percentages zijn numerieke waarden."
+      "Niet alle opgegeven getallen en percentages zijn numerieke waarden."
     )
     expect_warning(
       berekenLSVIbasis(
