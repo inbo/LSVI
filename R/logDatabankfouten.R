@@ -68,8 +68,9 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = ConnectiePool) {
   OnbekendeAV <- Invoervereisten %>%
     filter(
       !.data$AnalyseVariabele %in%
-        c("aantal", "aandeel", "bedekking", "maxBedekking", "maxBedekkingExcl",
-          "meting")
+        c("aantal", "aandeel", "bedekking", "bedekkingLaag", "maxBedekking",
+          "maxBedekkingExcl"),
+      !grepl("^meting", .data$AnalyseVariabele)
     )
   TypeAantalNietGeheelGetal <- Invoervereisten %>%
     filter(
