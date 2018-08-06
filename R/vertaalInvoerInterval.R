@@ -11,6 +11,7 @@
 #' 
 #' @importFrom assertthat assert_that has_name
 #' @importFrom dplyr %>% left_join mutate select filter bind_rows as.tbl
+#' @importFrom stringr str_split_fixed
 #' @importFrom rlang .data
 #' 
 
@@ -102,49 +103,62 @@ vertaalInvoerInterval <-
       }
     }
 
+    waardeNaarGetal <- function(x) {
+      y <-
+        tryCatch(
+          as.numeric(gsub(",", ".", x)),
+          warning = function(w) {
+            if (grepl("NAs introduced by coercion", w)) {
+              stop("Niet alle opgegeven getallen en percentages zijn numerieke waarden") #nolint
+            } else {
+              as.numeric(gsub(",", ".", x))
+            }
+          }
+        )
+      return(y)
+    }
+
+    DatasetNumeriek <- Dataset %>%
+      filter(
+        tolower(.data$Type) %in%
+          c("percentage", "geheel getal", "decimaal getal")
+      ) %>%
+      mutate(
+        Min =
+          ifelse(
+            grepl("-", .data$Waarde),
+            str_split_fixed(.data$Waarde, "-", 2)[, 1],
+            .data$Waarde
+          ),
+        Max =
+          ifelse(
+            grepl("-", .data$Waarde),
+            str_split_fixed(.data$Waarde, "-", 2)[, 2],
+            .data$Waarde
+          ),
+        Min =
+          ifelse(
+            tolower(.data$Type) == "percentage",
+            waardeNaarGetal(.data$Min) / 100,
+            waardeNaarGetal(.data$Min)
+          ),
+        Max =
+          ifelse(
+            tolower(.data$Type) == "percentage",
+            waardeNaarGetal(.data$Max) / 100,
+            waardeNaarGetal(.data$Max)
+          ),
+        Min =
+          ifelse(
+            is.na(.data$Min) & !is.na(.data$Max),
+            stop("Niet alle opgegeven getallen en percentages zijn positieve waarden"), #nolint
+            .data$Min
+          )
+      )
+
     Resultaat <- Resultaat %>%
       bind_rows(
-        Dataset %>%
-          filter(tolower(.data$Type) == "percentage") %>%
-          mutate(
-            Min =
-              tryCatch(
-                as.numeric(gsub(",", ".", .data$Waarde)) / 100,
-                warning = function(w) {
-                  if (grepl("NAs introduced by coercion", w)) {
-                    stop("Niet alle opgegeven percentages zijn numerieke waarden") #nolint
-                  } else {
-                    as.numeric(gsub(",", ".", .data$Waarde)) / 100
-                  }
-                }
-              ),
-            Max =
-              ifelse(
-                .data$Min >= 0,
-                .data$Min,
-                stop("Niet alle opgegeven percentages zijn positieve waarden")
-              )
-          )
-      ) %>%
-      bind_rows(
-        Dataset %>%
-          filter(
-            tolower(.data$Type) %in% c("geheel getal", "decimaal getal")
-          ) %>%
-          mutate(
-            Min =
-              tryCatch(
-                as.numeric(gsub(",", ".", .data$Waarde)),
-                warning = function(w) {
-                  if (grepl("NAs introduced by coercion", w)) {
-                    stop("Niet alle opgegeven getallen zijn numerieke waarden")
-                  } else {
-                    as.numeric(gsub(",", ".", .data$Waarde))
-                  }
-                }
-              ),
-            Max = .data$Min
-          )
+        DatasetNumeriek
       ) %>%
       bind_rows(
         Dataset %>%

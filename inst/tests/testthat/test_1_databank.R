@@ -35,7 +35,7 @@ describe("test databank", {
         dbGetQuery(
           ConnectieLSVIhabitats,
           "SELECT VariabeleNaam FROM AnalyseVariabele"
-        ) %in% 
+        ) %in%
           c("aandeel", "aantal", "bedekking", "maxBedekking",
             "maxBedekkingExcl", "meting")
       )
@@ -472,5 +472,3 @@ describe("test databank", {
   })
 
 })
-
-

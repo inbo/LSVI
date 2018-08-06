@@ -6,9 +6,10 @@
 \usage{
 berekenLSVIbasis(Versie = "alle", Kwaliteitsniveau = "alle", Data_habitat,
   Data_voorwaarden = data.frame(ID = character(), Criterium = character(),
-  Indicator = character(), WaardeMin = double(), WaardeMax = double(),
-  stringsAsFactors = FALSE), Data_soortenKenmerken = data.frame(ID =
-  character()), ConnectieLSVIhabitats = ConnectiePool,
+  Indicator = character(), Voorwaarde = character(), WaardeMin = double(),
+  WaardeMax = double(), stringsAsFactors = FALSE),
+  Data_soortenKenmerken = data.frame(ID = character()),
+  ConnectieLSVIhabitats = ConnectiePool,
   LIJST = geefVertaallijst(ConnectieLSVIhabitats))
 }
 \arguments{

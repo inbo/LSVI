@@ -74,6 +74,8 @@ analyseVariabele_c <-
         select(
           .data$TaxongroepId,
           .data$TaxonsubgroepId,
+          .data$TaxonId,
+          .data$SubTaxonId,
           .data$NbnTaxonVersionKey,
           .data$TaxonType
         )

@@ -63,8 +63,9 @@ invoercontroleData_soortenKenmerken <-
         as.character(Data_soortenKenmerken$Invoertype)
     }
     if (!all(is.na(Data_soortenKenmerken$Invoertype) |
-             Data_soortenKenmerken$Invoertype %in%
-             geefUniekeWaarden("Lijst", "Naam", ConnectieLSVIhabitats))) {
+             tolower(Data_soortenKenmerken$Invoertype) %in%
+             tolower(
+               geefUniekeWaarden("Lijst", "Naam", ConnectieLSVIhabitats)))) {
       stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Invoertype komen overeen met waarden vermeld in de databank.") #nolint
     }
     assert_that(has_name(Data_soortenKenmerken, "Eenheid"))

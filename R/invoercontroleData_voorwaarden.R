@@ -80,8 +80,9 @@ invoercontroleData_voorwaarden <-
       Data_voorwaarden$Invoertype <- as.character(Data_voorwaarden$Invoertype)
     }
     if (!all(is.na(Data_voorwaarden$Invoertype) |
-             Data_voorwaarden$Invoertype %in%
-             geefUniekeWaarden("Lijst", "Naam", ConnectieLSVIhabitats))) {
+             tolower(Data_voorwaarden$Invoertype) %in%
+             tolower(
+               geefUniekeWaarden("Lijst", "Naam", ConnectieLSVIhabitats)))) {
       stop("Niet alle waarden vermeld onder Data_voorwaarden$Invoertype komen overeen met waarden vermeld in de databank.") #nolint
     }
     assert_that(has_name(Data_voorwaarden, "Eenheid"))
