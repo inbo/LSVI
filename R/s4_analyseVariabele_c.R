@@ -49,6 +49,14 @@ analyseVariabele_c <-
       dbGetQuery(
         ConnectieLSVIhabitats,
         queryVoorwaarde
+      ) %>%
+      mutate(
+        TypeAnalyseVariabele =
+          ifelse(
+            grepl("meting", .data$TypeAnalyseVariabele),
+            "meting",
+            .data$TypeAnalyseVariabele
+          )
       )
 
     AnalyseObject <-
