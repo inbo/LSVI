@@ -57,7 +57,7 @@ berekenStatus <-
       Dataset %>%
         mutate(
           Status =
-            .data$WaardeMin > .data$RefMin & .data$WaardeMax < .data$RefMin
+            .data$WaardeMin >= .data$RefMin & .data$WaardeMax <= .data$RefMin
         ) %>%
         select(
           .data$Rijnr,
