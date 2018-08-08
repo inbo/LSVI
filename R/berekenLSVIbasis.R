@@ -138,7 +138,8 @@ berekenLSVIbasis <-
 
     IntervalVereisten <-
       vertaalInvoerInterval(
-        Invoervereisten[
+        (Invoervereisten %>%
+          filter(!.data$Referentiewaarde %in% Invoervereisten$Voorwaarde))[
           , c("Rijnr", "TypeVariabele", "Referentiewaarde",
               "Eenheid", "Invoertype")
           ],
@@ -231,6 +232,73 @@ berekenLSVIbasis <-
       ) %>%
       bind_rows(BerekendResultaat)
 
+    combinerenDubbeleVoorwaarden <- function(x) {
+      #we gaan ervan uit dat een combinatie van meerdere voorwaarden
+      #gecombineerd met AND en OR niet samen voorkomen met een complexe
+      #voorwaarde bestaande uit de vergelijking van meerdere operatoren.
+      #Indien wel, dan moet dit hier voorzien worden!
+      Test <- x %>%
+        filter(grepl("AND", .data$Combinatie) | grepl("OR", .data$Combinatie))
+      if (nrow(Test) > 0) {
+        warning(
+          sprintf(
+            "De rekenmodule is niet aangepast aan de complexe situatie in de databank die voorkomt bij BeoordelingID = %s.  Meld het probleem aan de beheerder van dit package en geef hierbij minstens deze foutmelding door", #nolint
+            x$BeoordelingID
+          )
+        )
+      }
+
+      y <- x %>%
+        mutate(
+          BeginVoorwaarde = str_split_fixed(.data$Combinatie, " ", 2)[1]
+        ) %>%
+        filter(
+          as.numeric(.data$BeginVoorwaarde) == .data$VoorwaardeID
+        )
+      x <- x %>%
+        filter(.data$Voorwaarde == y$Referentiewaarde)
+      y <- y %>%
+        mutate(
+          TypeVariabele = x$Type,
+          Invoertype = x$Invoertype.vw,
+          RefMin = x$WaardeMin,
+          RefMax = x$WaardeMax,
+          Referentiewaarde = x$Waarde,
+          Eenheid = x$Eenheid.vw,
+          Combinatie = .data$BeginVoorwaarde,
+          AfkomstWaarde =
+            ifelse(
+              .data$AfkomstWaarde == x$AfkomstWaarde,
+              .data$AfkomstWaarde,
+              paste(.data$AfkomstWaarde, x$AfkomstWaarde, sep = ", ")
+            ),
+          BeginVoorwaarde = NULL
+        )
+    }
+
+    DubbeleVoorwaarden <- Resultaat %>%
+      filter(.data$Referentiewaarde %in% Invoervereisten$Voorwaarde) %>%
+      group_by(
+        .data$ID,
+        .data$Habitattype,
+        .data$Versie,
+        .data$Habitattype.y,
+        .data$Criterium,
+        .data$Indicator,
+        .data$Beoordeling,
+        .data$Kwaliteitsniveau,
+        .data$BeoordelingID,
+        .data$ExtraBewerking
+      ) %>%
+      do(
+        combinerenDubbeleVoorwaarden(.)
+      ) %>%
+      ungroup()
+    
+    Resultaat <- Resultaat %>%
+      filter(!.data$Referentiewaarde %in% Invoervereisten$Voorwaarde) %>%
+      bind_rows(DubbeleVoorwaarden)
+    
     Statusberekening <-
       berekenStatus(
         Resultaat[
@@ -302,7 +370,7 @@ berekenLSVIbasis <-
             .data$VoorwaardeID,
             .data$Status_voorwaarde
           ),
-        # voorwaarden EN wordt min(verschillen) OF wordt max(verschillen)
+        # voorwaarden AND wordt min(verschillen) OR wordt max(verschillen)
         Verschilscore = combinerenVerschilscore(
           unique(.data$Combinatie),
           .data$VoorwaardeID,

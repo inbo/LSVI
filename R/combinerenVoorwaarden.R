@@ -30,8 +30,8 @@ combinerenVoorwaarden <-
     assert_that(length(VoorwaardeID) == length(Status))
     #nog testen of Formule bestaat uit EN, OF, haakjes en VoorwaardeID's (en evt. andere tekens die logische berekening toelaten)
 
-    Formule <- gsub(" EN ", " & ", Formule)
-    Formule <- gsub(" OF ", " | ", Formule)
+    Formule <- gsub(" AND ", " & ", Formule)
+    Formule <- gsub(" OR ", " | ", Formule)
     for (i in seq_along(VoorwaardeID)) {
       Formule <- gsub(VoorwaardeID[i], Status[i], Formule)
     }
