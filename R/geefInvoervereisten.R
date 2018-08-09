@@ -196,12 +196,13 @@ geefInvoervereisten <- function(Versie = "alle",
             ifelse(
               (Record$Combinatie != "" & !is.na(Record$ChildID1)) |
                 (Record$Combinatie != "" & !is.na(Record$ChildID2)),
-              ifelse(Record$BewerkingAND, " EN ", " OF "), ""
+              paste(" ", Record$BewerkingOperator, " ", sep = ""),
+              ""
             ),
             ifelse(is.na(Record$ChildID1), "",
                    paste("(", RecFunctie(Record$ChildID1), ")", sep = "")),
             ifelse(!is.na(Record$ChildID1) & !is.na(Record$ChildID2),
-                   ifelse(Record$BewerkingAND, " EN ", " OF "), ""),
+                   paste(" ", Record$BewerkingOperator, " ", sep = ""), ""),
             ifelse(is.na(Record$ChildID2), "",
                    paste("(", RecFunctie(Record$ChildID2), ")", sep = "")),
             sep = "")[1]
