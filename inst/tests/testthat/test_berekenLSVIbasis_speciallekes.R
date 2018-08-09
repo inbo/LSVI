@@ -44,7 +44,9 @@ describe("twee voorwaarden vergelijken", {
         InvoertypeWaarde = as.character(NA),
         EenheidWaarde = "%",
         AfkomstWaarde = "observatie",
+        TheoretischMaximum = 100,
         Status_voorwaarde = TRUE,
+        Verschilscore = 0.5,
         stringsAsFactors = FALSE
       )
     expect_equal(
@@ -64,9 +66,30 @@ describe("twee voorwaarden vergelijken", {
         AfkomstWaarde = "berekend"
       )
     Resultaat2 <-
-      Resultaat2[shuffle_columns(names(Resultaat2), "AfkomstWaarde before EenheidWaarde")]
+      Resultaat2[
+        shuffle_columns(names(Resultaat2),"AfkomstWaarde before EenheidWaarde")
+      ]
     Resultaat2 <-
-      Resultaat2[shuffle_columns(names(Resultaat2), "AfkomstWaarde before InvoertypeWaarde")]
+      Resultaat2[
+        shuffle_columns(
+          names(Resultaat2),
+          "AfkomstWaarde before InvoertypeWaarde"
+        )
+      ]
+    Resultaat2 <-
+      Resultaat2[
+        shuffle_columns(
+          names(Resultaat2),
+          "TheoretischMaximum before EenheidWaarde"
+        )
+      ]
+    Resultaat2 <-
+      Resultaat2[
+        shuffle_columns(
+          names(Resultaat2),
+          "TheoretischMaximum before InvoertypeWaarde"
+        )
+      ]
     expect_equal(
       idsWissen(
         berekenLSVIbasis(

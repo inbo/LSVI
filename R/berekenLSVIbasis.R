@@ -304,7 +304,15 @@ berekenLSVIbasis <-
 
     Resultaat <- Resultaat %>%
       filter(!.data$Referentiewaarde %in% Invoervereisten$Voorwaarde) %>%
-      bind_rows(DubbeleVoorwaarden)
+      bind_rows(DubbeleVoorwaarden) %>%
+      mutate(
+        TheoretischMaximum =
+          ifelse(
+            is.na(.data$TheoretischMaximum) & .data$Eenheid == "%",
+            100,
+            .data$TheoretischMaximum
+          )
+      )
 
     Statusberekening <-
       berekenStatus(
