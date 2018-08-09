@@ -67,7 +67,7 @@ describe("twee voorwaarden vergelijken", {
       )
     Resultaat2 <-
       Resultaat2[
-        shuffle_columns(names(Resultaat2),"AfkomstWaarde before EenheidWaarde")
+        shuffle_columns(names(Resultaat2), "AfkomstWaarde before EenheidWaarde")
       ]
     Resultaat2 <-
       Resultaat2[

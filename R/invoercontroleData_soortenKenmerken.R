@@ -122,7 +122,7 @@ invoercontroleData_soortenKenmerken <-
 
 
     #○mzettingen naar een bruikbare dataframe
-    Kenmerken <- Data_soortenKenmerken #naamsverandering is omdat code verplaatst is
+    Kenmerken <- Data_soortenKenmerken    # naamsverandering!
 
     QuerySoorten <-
       "SELECT TaxonSynoniem.FloraNaamNederlands AS NedNaam,

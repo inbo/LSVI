@@ -56,8 +56,8 @@ describe("berekenLSVIbasis vegetatielaag", {
     #     )
     #   )
     #
-    # save(Resultaat, file = "inst/vbdata/Resultaat_test_bos.Rdata")
-    # load("inst/vbdata/Resultaat_test_bos.Rdata")
+    # save(Resultaat, file = "inst/vbdata/Resultaat_test_bos.Rdata")  nolint
+    # load("inst/vbdata/Resultaat_test_bos.Rdata")  nolint
 
     load(system.file("vbdata/Resultaat_test_bos.Rdata", package = "LSVI"))
     expect_equal(

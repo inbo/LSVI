@@ -431,7 +431,7 @@ berekenLSVIbasis <-
         Index_min_harm = min(.data$Index_harm_criterium),
         # nog minder conservatieve index
         Index_harm_harm =
-          mean(((.data$Index_harm_criterium + 1) / 2) ^ -1) ^ -1 *
+          mean( ( (.data$Index_harm_criterium + 1) / 2) ^ -1) ^ -1 *
           2 - 1
       ) %>%
       ungroup()

@@ -25,8 +25,8 @@ Data_soortenKenmerken <-
 #     )
 #   )
 # 
-# save(Resultaat, file = "inst/vbdata/Resultaat_test.Rdata")
-# load("inst/vbdata/Resultaat_test.Rdata")
+# save(Resultaat, file = "inst/vbdata/Resultaat_test.Rdata")  nolint
+# load("inst/vbdata/Resultaat_test.Rdata")  nolint
 
 load(system.file("vbdata/Resultaat_test.Rdata", package = "LSVI"))
 
@@ -409,7 +409,7 @@ describe("berekenLSVIbasis", {
       )
     )
   })
-  
+
   it("parameter kwaliteitsniveau heeft correct formaat", {
     skip_on_cran()
     expect_equal(
@@ -447,7 +447,7 @@ describe("berekenLSVIbasis", {
       "Kwaliteitsniveau moet een van de volgende waarden zijn"
     )
   })
-  
+
   it("dataframe Data_habitat heeft correct formaat", {
     skip_on_cran()
     expect_error(
