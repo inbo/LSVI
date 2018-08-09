@@ -23,6 +23,9 @@ invoercontroleData_soortenKenmerken <-
 
     assert_that(inherits(Data_soortenKenmerken, "data.frame"))
     assert_that(has_name(Data_soortenKenmerken, "ID"))
+    if (!is.character(Data_soortenKenmerken$ID)) {
+      Data_soortenKenmerken$ID <- as.character(Data_soortenKenmerken$ID)
+    }
     assert_that(has_name(Data_soortenKenmerken, "Kenmerk"))
     if (!is.character(Data_soortenKenmerken$Kenmerk)) {
       Data_soortenKenmerken$Kenmerk <-
@@ -99,16 +102,18 @@ invoercontroleData_soortenKenmerken <-
     }
     GeldigeWaarden <-
       c(
-        geefUniekeWaarden(
-          "StudieItem",
-          "Waarde",
-          ConnectieLSVIhabitats
+        tolower(
+          geefUniekeWaarden(
+            "StudieItem",
+            "Waarde",
+            ConnectieLSVIhabitats
+          )
         ),
         NA
       )
     if (
       !all(
-        Data_soortenKenmerken$Vegetatielaag %in% GeldigeWaarden
+        tolower(Data_soortenKenmerken$Vegetatielaag) %in% GeldigeWaarden
       )
     ) {
       stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Vegetatielaag komen overeen met waarden vermeld in de databank.") #nolint

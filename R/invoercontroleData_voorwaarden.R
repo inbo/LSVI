@@ -15,6 +15,9 @@ invoercontroleData_voorwaarden <-
   function(Data_voorwaarden, ConnectieLSVIhabitats, LIJST) {
     assert_that(inherits(Data_voorwaarden, "data.frame"))
     assert_that(has_name(Data_voorwaarden, "ID"))
+    if (!is.character(Data_voorwaarden$ID)) {
+      Data_voorwaarden$ID <- as.character(Data_voorwaarden$ID)
+    }
     assert_that(has_name(Data_voorwaarden, "Criterium"))
     if (!is.character(Data_voorwaarden$Criterium)) {
       Data_voorwaarden$Criterium <- as.character(Data_voorwaarden$Criterium)

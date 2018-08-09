@@ -51,6 +51,8 @@ berekenLSVIbasis <-
         Criterium = character(),
         Indicator = character(),
         Voorwaarde = character(),
+        Waarde = character(),
+        Type = character(),
         WaardeMin = double(),
         WaardeMax = double(),
         stringsAsFactors = FALSE
@@ -83,6 +85,9 @@ berekenLSVIbasis <-
         )
     } else {
       assert_that(has_name(Data_voorwaarden, "ID"))
+      if (!is.character(Data_voorwaarden$ID)) {
+        Data_voorwaarden$ID <- as.character(Data_voorwaarden$ID)
+      }
       assert_that(has_name(Data_voorwaarden, "Criterium"))
       assert_that(has_name(Data_voorwaarden, "Indicator"))
       assert_that(has_name(Data_voorwaarden, "Voorwaarde"))
@@ -227,8 +232,8 @@ berekenLSVIbasis <-
     Resultaat <- Resultaat %>%
       filter(!is.na(.data$Waarde) | !is.na(.data$Type)) %>%
       mutate(
-        AfkomstWaarde = "observatie",
-        Waarde = as.character(.data$Waarde)
+        Waarde = as.character(.data$Waarde),
+        AfkomstWaarde = "observatie"
       ) %>%
       bind_rows(BerekendResultaat)
 
@@ -259,13 +264,14 @@ berekenLSVIbasis <-
         filter(.data$Voorwaarde == y$Referentiewaarde)
       y <- y %>%
         mutate(
+          Voorwaarde =
+            paste(.data$Voorwaarde, .data$Operator, x$Voorwaarde),
           TypeVariabele = x$Type,
           Invoertype = x$Invoertype.vw,
           RefMin = x$WaardeMin,
           RefMax = x$WaardeMax,
           Referentiewaarde = x$Waarde,
           Eenheid = x$Eenheid.vw,
-          Combinatie = .data$BeginVoorwaarde,
           AfkomstWaarde =
             ifelse(
               .data$AfkomstWaarde == x$AfkomstWaarde,
@@ -288,17 +294,18 @@ berekenLSVIbasis <-
         .data$Beoordeling,
         .data$Kwaliteitsniveau,
         .data$BeoordelingID,
+        .data$Combinatie,
         .data$ExtraBewerking
       ) %>%
       do(
         combinerenDubbeleVoorwaarden(.)
       ) %>%
       ungroup()
-    
+
     Resultaat <- Resultaat %>%
       filter(!.data$Referentiewaarde %in% Invoervereisten$Voorwaarde) %>%
       bind_rows(DubbeleVoorwaarden)
-    
+
     Statusberekening <-
       berekenStatus(
         Resultaat[

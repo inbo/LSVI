@@ -1,3 +1,5 @@
+#'@importFrom dplyr %>% mutate
+
 idsWissen <- function(Resultaat) {
   Resultaat <-
     list(
@@ -14,4 +16,5 @@ idsWissen <- function(Resultaat) {
         ),
       Resultaat_globaal = Resultaat[["Resultaat_globaal"]]
     )
+  return(Resultaat)
 }
