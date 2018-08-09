@@ -426,11 +426,12 @@ berekenLSVIbasis <-
         Status = as.logical(all(.data$Status_criterium)),
         #meest conservatieve index: one-out-all-out is resultaat van
         #Index_min_min < 0 #nolint
-        Index_min_min = min(Index_min_criterium),
+        Index_min_min = min(.data$Index_min_criterium),
         #iets minder conservatieve index
-        Index_min_harm = min(Index_harm_criterium),
+        Index_min_harm = min(.data$Index_harm_criterium),
         # nog minder conservatieve index
-        Index_harm_harm = mean( ( (Index_harm_criterium + 1) / 2) ^ -1) ^ -1 *
+        Index_harm_harm =
+          mean(((.data$Index_harm_criterium + 1) / 2) ^ -1) ^ -1 *
           2 - 1
       ) %>%
       ungroup()
