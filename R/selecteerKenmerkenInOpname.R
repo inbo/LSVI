@@ -38,8 +38,10 @@ selecteerKenmerkenInOpname <-
     if (length(Soortengroep) > 0) {
       if (length(Studiegroep) > 0) {
         Resultaat <- Kenmerken %>%
-          filter(tolower(.data$TypeKenmerk) == "soort_nbn",
-                 .data$Vegetatielaag %in% Studiegroep$Waarde) %>%
+          filter(
+            tolower(.data$TypeKenmerk) == "soort_nbn",
+            tolower(.data$Vegetatielaag) %in% tolower(Studiegroep$Waarde)
+          ) %>%
           inner_join(
             Soortengroep,
             by = c("Kenmerk" = "NbnTaxonVersionKey")
@@ -72,8 +74,14 @@ selecteerKenmerkenInOpname <-
     if (length(Studiegroep) > 0 & !(length(Soortengroep) > 0)) {
       Resultaat <- Kenmerken %>%
         filter(.data$TypeKenmerk == "studiegroep") %>%
+        mutate(
+          Kenmerk = tolower(.data$Kenmerk)
+        ) %>%
         inner_join(
-          Studiegroep,
+          Studiegroep %>%
+            mutate(
+              Waarde = tolower(.data$Waarde)
+            ),
           by = c("Kenmerk" = "Waarde")
         )
     }

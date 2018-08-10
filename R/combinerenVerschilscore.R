@@ -35,8 +35,8 @@ combinerenVerschilscore <-
     `%max%` <- function(a, b) max(a, b)
     `%min%` <- function(a, b) min(a, b)
 
-    Formule <- gsub(" EN ", " %min% ", Formule)
-    Formule <- gsub(" OF ", " %max% ", Formule)
+    Formule <- gsub(" AND ", " %min% ", Formule)
+    Formule <- gsub(" OR ", " %max% ", Formule)
     for (i in seq_along(VoorwaardeID)) {
       Formule <- gsub(VoorwaardeID[i], Verschilscore[i], Formule)
     }

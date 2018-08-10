@@ -1,3 +1,5 @@
+#'@importFrom dplyr %>% mutate
+
 idsWissen <- function(Resultaat) {
   Resultaat <-
     list(
@@ -8,10 +10,9 @@ idsWissen <- function(Resultaat) {
         mutate(
           BeoordelingID = NULL,
           Combinatie = NULL,
-          VoorwaardeID = NULL,
-          TheoretischMaximum = NULL, #tijdelijk, tot issue #64 opgelost is, daarna dit en volgende var verwijderen
-          Verschilscore = NULL
+          VoorwaardeID = NULL
         ),
       Resultaat_globaal = Resultaat[["Resultaat_globaal"]]
     )
+  return(Resultaat)
 }

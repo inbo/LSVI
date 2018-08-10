@@ -15,6 +15,9 @@ invoercontroleData_voorwaarden <-
   function(Data_voorwaarden, ConnectieLSVIhabitats, LIJST) {
     assert_that(inherits(Data_voorwaarden, "data.frame"))
     assert_that(has_name(Data_voorwaarden, "ID"))
+    if (!is.character(Data_voorwaarden$ID)) {
+      Data_voorwaarden$ID <- as.character(Data_voorwaarden$ID)
+    }
     assert_that(has_name(Data_voorwaarden, "Criterium"))
     if (!is.character(Data_voorwaarden$Criterium)) {
       Data_voorwaarden$Criterium <- as.character(Data_voorwaarden$Criterium)
@@ -60,8 +63,7 @@ invoercontroleData_voorwaarden <-
     ) {
       stop("Niet alle waarden vermeld onder Data_voorwaarden$Voorwaarde komen overeen met waarden vermeld in de databank.") #nolint
     }
-    #misschien best ook testen dat die indicator-criterium-combinatie in de databank voorkomt?  En of deze voor dat habitattype voorkomt, maar dat best verderop doen
-    #Voorwaarde ook verplichten?  Anders wel testen of het ok is als het aanwezig is.
+    #misschien best ook testen dat die indicator-criterium-voorwaarde-combinatie in de databank voorkomt?  En of deze voor dat habitattype voorkomt, maar dat best verderop doen
     assert_that(has_name(Data_voorwaarden, "Waarde"))
     assert_that(has_name(Data_voorwaarden, "Type"))
     if (!is.character(Data_voorwaarden$Type)) {

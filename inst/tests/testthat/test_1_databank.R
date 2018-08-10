@@ -30,14 +30,16 @@ describe("test databank", {
     skip_on_cran()
     ConnectieLSVIhabitats <-
       connecteerMetLSVIdb()
+    AV <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        "SELECT DISTINCT(VariabeleNaam) FROM AnalyseVariabele"
+      ) %>%
+      filter(!grepl("^meting", .data$VariabeleNaam))
     expect_true(
-      all(
-        dbGetQuery(
-          ConnectieLSVIhabitats,
-          "SELECT VariabeleNaam FROM AnalyseVariabele"
-        ) %in%
-          c("aandeel", "aantal", "bedekking", "maxBedekking",
-            "maxBedekkingExcl", "meting")
+      all(AV$VariabeleNaam %in%
+            c("aandeel", "aantal", "bedekking", "bedekkingLaag", "maxBedekking",
+            "maxBedekkingExcl")
       )
     )
   })
@@ -114,11 +116,13 @@ describe("test databank", {
       dbGetQuery(
         ConnectieLSVIhabitats,
         sprintf(
-          "SELECT Referentiewaarde FROM Voorwaarde
+          "SELECT VoorwaardeNaam, Referentiewaarde FROM Voorwaarde
           WHERE AnalyseVariabeleId = '%s'",
           (AV %>% filter(TypeVariabele == "Percentage"))$Id
         )
       )
+    RefwaardenPerc <- RefwaardenPerc %>%
+      filter(!.data$Referentiewaarde %in% RefwaardenPerc$VoorwaardeNaam)
     expect_true(
       all(as.numeric(RefwaardenPerc$Referentiewaarde) <= 100)
     )
@@ -135,7 +139,7 @@ describe("test databank", {
       nrow(FouteWaarden),
       0
     )
-    skip_if_not(nrow(AV_ok == 2), "Geen categorische var voor bedekking")
+    skip_if_not(nrow(AV_ok) == 2, "Geen categorische var voor bedekking")
     RefwaardenCat <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -197,7 +201,7 @@ describe("test databank", {
       nrow(FouteWaarden),
       0
     )
-    skip_if_not(nrow(AV_ok == 2), "Geen categorische var voor aandeel")
+    skip_if_not(nrow(AV_ok) == 2, "Geen categorische var voor aandeel")
     RefwaardenCat <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -259,7 +263,7 @@ describe("test databank", {
       nrow(FouteWaarden),
       0
     )
-    skip_if_not(nrow(AV_ok == 2), "Geen categorische var voor maxBedekking")
+    skip_if_not(nrow(AV_ok) == 2, "Geen categorische var voor maxBedekking")
     RefwaardenCat <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -322,7 +326,7 @@ describe("test databank", {
       nrow(FouteWaarden),
       0
     )
-    skip_if_not(nrow(AV_ok == 2), "Geen categorische var voor maxBedekkingExcl")
+    skip_if_not(nrow(AV_ok) == 2, "Geen categorische var voor maxBedekkingExcl")
     RefwaardenCat <-
       dbGetQuery(
         ConnectieLSVIhabitats,

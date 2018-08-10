@@ -90,14 +90,20 @@ vertaalIntervalUitvoer <-
     omzetfunctie <- function(Waarde, Invoertype) {
       Lijstdetail <- LIJST %>%
         filter(.data$Naam == Invoertype)
-      Waarde <-
+      WaardeSchaal <-
         cut(
           Waarde,
           breaks = c(Lijstdetail$Ondergrens, max(Lijstdetail$Bovengrens)),
           labels = Lijstdetail$Waarde
         )
-      Waarde <- as.character(Waarde)
-      return(Waarde)
+      WaardeSchaal <- as.character(WaardeSchaal)
+      WaardeSchaal <-
+        ifelse(
+          is.na(WaardeSchaal) & Waarde == 0,
+          "Afwezig",
+          WaardeSchaal
+        )
+      return(WaardeSchaal)
     }
 
     if (nrow(Resultaat) > 0) {
@@ -111,7 +117,7 @@ vertaalIntervalUitvoer <-
         group_by(.data$Invoertype) %>%
         mutate(
           Waarde =
-            omzetfunctie(.data$Gem, .data$Invoertype)
+            omzetfunctie(.data$Gem, unique(.data$Invoertype))
         ) %>%
         ungroup() %>%
         mutate(

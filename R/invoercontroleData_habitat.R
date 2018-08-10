@@ -12,6 +12,9 @@
 invoercontroleData_habitat <- function(Data_habitat, ConnectieLSVIhabitats) {
   assert_that(inherits(Data_habitat, "data.frame"))
   assert_that(has_name(Data_habitat, "ID"))
+  if (!is.character(Data_habitat$ID)) {
+    Data_habitat$ID <- as.character(Data_habitat$ID)
+  }
   assert_that(has_name(Data_habitat, "Habitattype"))
   if (!is.character(Data_habitat$Habitattype)) {
     Data_habitat$Habitattype <- as.character(Data_habitat$Habitattype)

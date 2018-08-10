@@ -92,6 +92,8 @@ describe("s4_Aantal", {
           Soortengroep =
             data.frame(
               NbnTaxonVersionKey = c("A1", "B1", "C1", "E1"),
+              TaxonId = 1,
+              SubTaxonId = 2,
               stringsAsFactors = FALSE
             )
         )
@@ -112,6 +114,8 @@ describe("s4_Aantal", {
           Soortengroep =
             data.frame(
               NbnTaxonVersionKey = c("A1", "B1", "C1", "E1"),
+              TaxonId = 1,
+              SubTaxonId = 2,
               stringsAsFactors = FALSE
             )
         )
@@ -132,6 +136,8 @@ describe("s4_Aantal", {
           Soortengroep =
             data.frame(
               NbnTaxonVersionKey = c("A1", "B1", "C1", "E1"),
+              TaxonId = 1,
+              SubTaxonId = 2,
               stringsAsFactors = FALSE
             )
         )
@@ -152,6 +158,8 @@ describe("s4_Aantal", {
           Soortengroep =
             data.frame(
               NbnTaxonVersionKey = character(0),
+              TaxonId = numeric(0),
+              SubTaxonId = numeric(0),
               stringsAsFactors = FALSE
             )
         )
@@ -174,6 +182,8 @@ describe("s4_Aantal", {
           Soortengroep =
             data.frame(
               NbnTaxonVersionKey = c("A1", "B1", "C1", "E1"),
+              TaxonId = 1,
+              SubTaxonId = 2,
               stringsAsFactors = FALSE
             ),
           SubAnalyseVariabele = "bedekking",

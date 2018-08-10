@@ -51,6 +51,8 @@ berekenLSVIbasis <-
         Criterium = character(),
         Indicator = character(),
         Voorwaarde = character(),
+        Waarde = character(),
+        Type = character(),
         WaardeMin = double(),
         WaardeMax = double(),
         stringsAsFactors = FALSE
@@ -83,6 +85,9 @@ berekenLSVIbasis <-
         )
     } else {
       assert_that(has_name(Data_voorwaarden, "ID"))
+      if (!is.character(Data_voorwaarden$ID)) {
+        Data_voorwaarden$ID <- as.character(Data_voorwaarden$ID)
+      }
       assert_that(has_name(Data_voorwaarden, "Criterium"))
       assert_that(has_name(Data_voorwaarden, "Indicator"))
       assert_that(has_name(Data_voorwaarden, "Voorwaarde"))
@@ -138,7 +143,8 @@ berekenLSVIbasis <-
 
     IntervalVereisten <-
       vertaalInvoerInterval(
-        Invoervereisten[
+        (Invoervereisten %>%
+          filter(!.data$Referentiewaarde %in% Invoervereisten$Voorwaarde))[
           , c("Rijnr", "TypeVariabele", "Referentiewaarde",
               "Eenheid", "Invoertype")
           ],
@@ -226,10 +232,87 @@ berekenLSVIbasis <-
     Resultaat <- Resultaat %>%
       filter(!is.na(.data$Waarde) | !is.na(.data$Type)) %>%
       mutate(
-        AfkomstWaarde = "observatie",
-        Waarde = as.character(.data$Waarde)
+        Waarde = as.character(.data$Waarde),
+        AfkomstWaarde = "observatie"
       ) %>%
       bind_rows(BerekendResultaat)
+
+    combinerenDubbeleVoorwaarden <- function(x) {
+      #we gaan ervan uit dat een combinatie van meerdere voorwaarden
+      #gecombineerd met AND en OR niet samen voorkomen met een complexe
+      #voorwaarde bestaande uit de vergelijking van meerdere operatoren.
+      #Indien wel, dan moet dit hier voorzien worden!
+      Test <- x %>%
+        filter(grepl("AND", .data$Combinatie) | grepl("OR", .data$Combinatie))
+      if (nrow(Test) > 0) {
+        warning(
+          sprintf(
+            "De rekenmodule is niet aangepast aan de complexe situatie in de databank die voorkomt bij BeoordelingID = %s.  Meld het probleem aan de beheerder van dit package en geef hierbij minstens deze foutmelding door", #nolint
+            x$BeoordelingID
+          )
+        )
+      }
+
+      y <- x %>%
+        mutate(
+          BeginVoorwaarde = str_split_fixed(.data$Combinatie, " ", 2)[1]
+        ) %>%
+        filter(
+          as.numeric(.data$BeginVoorwaarde) == .data$VoorwaardeID
+        )
+      x <- x %>%
+        filter(.data$Voorwaarde == y$Referentiewaarde)
+      y <- y %>%
+        mutate(
+          Voorwaarde =
+            paste(.data$Voorwaarde, .data$Operator, x$Voorwaarde),
+          TypeVariabele = x$Type,
+          Invoertype = x$Invoertype.vw,
+          RefMin = x$WaardeMin,
+          RefMax = x$WaardeMax,
+          Referentiewaarde = x$Waarde,
+          Eenheid = x$Eenheid.vw,
+          AfkomstWaarde =
+            ifelse(
+              .data$AfkomstWaarde == x$AfkomstWaarde,
+              .data$AfkomstWaarde,
+              paste(.data$AfkomstWaarde, x$AfkomstWaarde, sep = ", ")
+            ),
+          BeginVoorwaarde = NULL
+        )
+    }
+
+    DubbeleVoorwaarden <- Resultaat %>%
+      filter(.data$Referentiewaarde %in% Invoervereisten$Voorwaarde) %>%
+      group_by(
+        .data$ID,
+        .data$Habitattype,
+        .data$Versie,
+        .data$Habitattype.y,
+        .data$Criterium,
+        .data$Indicator,
+        .data$Beoordeling,
+        .data$Kwaliteitsniveau,
+        .data$BeoordelingID,
+        .data$Combinatie,
+        .data$ExtraBewerking
+      ) %>%
+      do(
+        combinerenDubbeleVoorwaarden(.)
+      ) %>%
+      ungroup()
+
+    Resultaat <- Resultaat %>%
+      filter(!.data$Referentiewaarde %in% Invoervereisten$Voorwaarde) %>%
+      bind_rows(DubbeleVoorwaarden) %>%
+      mutate(
+        TheoretischMaximum =
+          ifelse(
+            is.na(.data$TheoretischMaximum) & .data$Eenheid == "%",
+            100,
+            .data$TheoretischMaximum
+          )
+      )
 
     Statusberekening <-
       berekenStatus(
@@ -302,7 +385,7 @@ berekenLSVIbasis <-
             .data$VoorwaardeID,
             .data$Status_voorwaarde
           ),
-        # voorwaarden EN wordt min(verschillen) OF wordt max(verschillen)
+        # voorwaarden AND wordt min(verschillen) OR wordt max(verschillen)
         Verschilscore = combinerenVerschilscore(
           unique(.data$Combinatie),
           .data$VoorwaardeID,
@@ -323,11 +406,11 @@ berekenLSVIbasis <-
       summarise(
         Status_criterium = as.logical(all(.data$Status_indicator)),
         #minimum van de scores tussen -1 en +1
-        Index_min_criterium = min(Verschilscore),
+        Index_min_criterium = min(.data$Verschilscore),
         #harmonisch gemiddelde van de verschilscores
         #de verschilscores worden tijdelijk herschaald naar 0 tot 1 range
-        Index_harm_criterium = mean( ( (Verschilscore + 1) / 2) ^ -1) ^ -1 *
-          2 - 1
+        Index_harm_criterium =
+          mean( ( (.data$Verschilscore + 1) / 2) ^ -1) ^ -1 * 2 - 1
       ) %>%
       ungroup()
 
@@ -343,11 +426,12 @@ berekenLSVIbasis <-
         Status = as.logical(all(.data$Status_criterium)),
         #meest conservatieve index: one-out-all-out is resultaat van
         #Index_min_min < 0 #nolint
-        Index_min_min = min(Index_min_criterium),
+        Index_min_min = min(.data$Index_min_criterium),
         #iets minder conservatieve index
-        Index_min_harm = min(Index_harm_criterium),
+        Index_min_harm = min(.data$Index_harm_criterium),
         # nog minder conservatieve index
-        Index_harm_harm = mean( ( (Index_harm_criterium + 1) / 2) ^ -1) ^ -1 *
+        Index_harm_harm =
+          mean( ( (.data$Index_harm_criterium + 1) / 2) ^ -1) ^ -1 *
           2 - 1
       ) %>%
       ungroup()

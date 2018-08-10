@@ -34,14 +34,6 @@ setMethod(
       return(NA)
     }
 
-    # Resultaat <- Resultaat %>%
-    #   mutate(
-    #     Gemiddelde =
-    #       (.data$WaardeMin + .data$WaardeMax) / 2
-    #   )
-
-    #onderstaande is om te testen of het concept werkt, berekening moet nog aangepast worden!!!
-
     #Als er meer NA's zijn in WaardeMax dan in WaardeMin, wil dit zeggen dat
     #er aan-/afwezigheden opgegeven zijn in plaats van bedekkingen
     #In dat geval berekenen we geen bedekking en geven we een warning
@@ -55,9 +47,6 @@ setMethod(
       BedekkingMax <-
         (1.0 - prod( (1.0 - Resultaat$WaardeMax), na.rm = TRUE))
     }
-
-    # BedekkingMin <- BedekkingGem * 0.9
-    # BedekkingMax <- BedekkingGem * 1.1
 
     return(c(BedekkingMin, BedekkingMax))
   }

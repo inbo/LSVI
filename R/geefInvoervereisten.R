@@ -141,7 +141,7 @@ geefInvoervereisten <- function(Versie = "alle",
             CombinerenVoorwaarden1.VoorwaardeID2,
             CombinerenVoorwaarden1.ChildID1,
             CombinerenVoorwaarden1.ChildID2,
-            CombinerenVoorwaarden1.BewerkingAND
+            CombinerenVoorwaarden1.BewerkingOperator
             FROM CombinerenVoorwaarden AS CombinerenVoorwaarden1
             WHERE CombinerenVoorwaarden1.BeoordelingID in ('%s')
             UNION ALL
@@ -151,7 +151,7 @@ geefInvoervereisten <- function(Versie = "alle",
             CombinerenVoorwaarden2.VoorwaardeID2,
             CombinerenVoorwaarden2.ChildID1,
             CombinerenVoorwaarden2.ChildID2,
-            CombinerenVoorwaarden2.BewerkingAND
+            CombinerenVoorwaarden2.BewerkingOperator
             FROM CombinerenVoorwaarden AS CombinerenVoorwaarden2
             INNER JOIN voorwaardencombinatie
             ON CombinerenVoorwaarden2.Id = voorwaardencombinatie.ChildID1
@@ -162,7 +162,7 @@ geefInvoervereisten <- function(Versie = "alle",
             CombinerenVoorwaarden3.VoorwaardeID2,
             CombinerenVoorwaarden3.ChildID1,
             CombinerenVoorwaarden3.ChildID2,
-            CombinerenVoorwaarden3.BewerkingAND
+            CombinerenVoorwaarden3.BewerkingOperator
             FROM CombinerenVoorwaarden AS CombinerenVoorwaarden3
             INNER JOIN voorwaardencombinatie
             ON CombinerenVoorwaarden3.Id = voorwaardencombinatie.ChildID2
@@ -180,10 +180,8 @@ geefInvoervereisten <- function(Versie = "alle",
           ifelse(
             is.na(.data$VoorwaardeID2),
             .data$VoorwaardeID1,
-            ifelse(
-              .data$BewerkingAND,
-              paste(.data$VoorwaardeID1, .data$VoorwaardeID2, sep = " EN "),
-              paste(.data$VoorwaardeID1, .data$VoorwaardeID2, sep = " OF ")
+            paste(
+              .data$VoorwaardeID1, .data$BewerkingOperator, .data$VoorwaardeID2
             )
           )
         )
@@ -198,12 +196,13 @@ geefInvoervereisten <- function(Versie = "alle",
             ifelse(
               (Record$Combinatie != "" & !is.na(Record$ChildID1)) |
                 (Record$Combinatie != "" & !is.na(Record$ChildID2)),
-              ifelse(Record$BewerkingAND, " EN ", " OF "), ""
+              paste(" ", Record$BewerkingOperator, " ", sep = ""),
+              ""
             ),
             ifelse(is.na(Record$ChildID1), "",
                    paste("(", RecFunctie(Record$ChildID1), ")", sep = "")),
             ifelse(!is.na(Record$ChildID1) & !is.na(Record$ChildID2),
-                   ifelse(Record$BewerkingAND, " EN ", " OF "), ""),
+                   paste(" ", Record$BewerkingOperator, " ", sep = ""), ""),
             ifelse(is.na(Record$ChildID2), "",
                    paste("(", RecFunctie(Record$ChildID2), ")", sep = "")),
             sep = "")[1]
