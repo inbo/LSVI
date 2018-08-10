@@ -22,7 +22,7 @@ setMethod(
     Test <- object@Kenmerken %>%
       filter(
         .data$TypeKenmerk == "studiegroep",
-        .data$Kenmerk %in% object@Studiegroep$Waarde,
+        tolower(.data$Kenmerk) %in% tolower(object@Studiegroep$Waarde),
         !is.na(.data$WaardeMax)
       )
 

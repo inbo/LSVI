@@ -55,9 +55,9 @@ describe("berekenLSVIbasis vegetatielaag", {
     #       Data_voorwaarden, Data_soortenKenmerken
     #     )
     #   )
-    #
-    # save(Resultaat, file = "inst/vbdata/Resultaat_test_bos.Rdata")  nolint
-    # load("inst/vbdata/Resultaat_test_bos.Rdata")  nolint
+    # 
+    # save(Resultaat, file = "inst/vbdata/Resultaat_test_bos.Rdata")  #nolint
+    # load("inst/vbdata/Resultaat_test_bos.Rdata")  #nolint
 
     load(system.file("vbdata/Resultaat_test_bos.Rdata", package = "LSVI"))
     expect_equal(
@@ -101,7 +101,7 @@ describe("berekenLSVIbasis vegetatielaag", {
                   ifelse(
                     Vegetatielaag == "struiklaag",
                     "kruidlaag",
-                    Vegetatielaag
+                    .data$Vegetatielaag
                   )
               )
           )
@@ -207,15 +207,35 @@ describe("berekenLSVIbasis vegetatielaag", {
           stringsAsFactors = FALSE
         )
       )
-    expect_equal(
+    Test <-
       idsWissen(
         berekenLSVIbasis(
           Versie = "Versie 3", Kwaliteitsniveau = "1",
           Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
           Data_soortenKenmerken = Data_soortenKenmerken1
         )
-      ),
-      Resultaat
+      )
+    ResultaatBerekening <-
+      Resultaat[["Resultaat_detail"]] %>%
+      mutate(
+        AfkomstWaarde =
+          ifelse(
+            .data$Indicator == "verbossing",
+            "berekend",
+            .data$AfkomstWaarde
+          ),
+        Waarde =
+          ifelse(
+            .data$Waarde == "7,5",
+            "7.5",
+            .data$Waarde
+          )
+      )
+    stopifnot(
+      all.equal(
+        Test[["Resultaat_detail"]],
+        ResultaatBerekening
+      )
     )
     Data_soortenKenmerken2 <- Data_soortenKenmerken %>%
       bind_rows(
@@ -230,15 +250,19 @@ describe("berekenLSVIbasis vegetatielaag", {
           stringsAsFactors = FALSE
         )
       )
-    expect_equal(
+    Test2 <-
       idsWissen(
         berekenLSVIbasis(
           Versie = "Versie 3", Kwaliteitsniveau = "1",
           Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
           Data_soortenKenmerken = Data_soortenKenmerken2
         )
-      ),
-      Resultaat
+      )
+    stopifnot(
+      all.equal(
+        Test2[["Resultaat_detail"]],
+        ResultaatBerekening
+      )
     )
   })
 
