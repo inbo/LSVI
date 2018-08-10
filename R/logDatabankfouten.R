@@ -36,7 +36,8 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = ConnectiePool) {
       FROM AnalyseVariabele INNER JOIN Voorwaarde
       On AnalyseVariabele.Id = Voorwaarde.AnalyseVariabeleId
       WHERE NOT VariabeleNaam in ('aantal', 'aandeel', 'bedekking',
-        'maxBedekking', 'maxBedekkingExcl','meting')"
+        'maxBedekking', 'maxBedekkingExcl', 'bedekkingLaag')
+      AND NOT VariabeleNaam LIKE 'meting%'"
     )
 
   Fouten <-
