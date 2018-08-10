@@ -4,7 +4,7 @@
 #'
 #' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
 #'
-#' @importFrom methods setClass setMethod
+#' @importFrom methods setClass setMethod as
 #'
 #' @include s4_bedekking.R
 setClass(

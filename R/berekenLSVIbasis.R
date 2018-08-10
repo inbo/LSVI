@@ -406,11 +406,11 @@ berekenLSVIbasis <-
       summarise(
         Status_criterium = as.logical(all(.data$Status_indicator)),
         #minimum van de scores tussen -1 en +1
-        Index_min_criterium = min(Verschilscore),
+        Index_min_criterium = min(.data$Verschilscore),
         #harmonisch gemiddelde van de verschilscores
         #de verschilscores worden tijdelijk herschaald naar 0 tot 1 range
-        Index_harm_criterium = mean( ( (Verschilscore + 1) / 2) ^ -1) ^ -1 *
-          2 - 1
+        Index_harm_criterium =
+          mean( ( (.data$Verschilscore + 1) / 2) ^ -1) ^ -1 * 2 - 1
       ) %>%
       ungroup()
 
