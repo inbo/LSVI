@@ -145,7 +145,8 @@ invoercontroleData_soortenKenmerken <-
         Taxonlijst %>%
           select(
             .data$Canonicalname, .data$NBNTaxonVersionKey
-          ),
+          ) %>%
+          distinct(),
         by = c("Canonicalname")
       ) %>%
       bind_rows(
@@ -155,7 +156,8 @@ invoercontroleData_soortenKenmerken <-
             Taxonlijst %>%
               select(
                 .data$NedNaam, .data$NBNTaxonVersionKey
-              ),
+              ) %>%
+              distinct(),
             by = c("Kenmerk" = "NedNaam")
           )
       )
