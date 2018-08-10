@@ -144,7 +144,8 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = ConnectiePool) {
     bind_rows(
       Invoervereisten %>%
         filter(
-          .data$TypeVariabele == "Percentage"
+          .data$TypeVariabele == "Percentage",
+          !.data$Referentiewaarde %in% unique(Invoervereisten$Voorwaarde)
         ) %>%
         filter(
           as.numeric(.data$Referentiewaarde) > 100
