@@ -36,8 +36,9 @@ berekenVerschilscores <-
     #geval aanwezigheid specifieke sleutelsoort?
     #afh van hoe ingevoerd in databank, mag misschien weg
     Statustabel[Statustabel$TypeVariabele == "Geheel getal" &
-                Statustabel$RefMin == 1 &
+                  Statustabel$RefMin == 1 &
                   Statustabel$RefMax == 1 &
+                  !is.na(Statustabel$RefMax) &
                   Statustabel$TheoretischMaximum == 1,
                 c("RefMin", "RefMax")] <- c(0.5, 0.5)
 
