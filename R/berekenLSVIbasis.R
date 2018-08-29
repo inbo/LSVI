@@ -344,7 +344,10 @@ berekenLSVIbasis <-
         RefMin = NULL, #in geval van categorische referentiewaarde (bv HB)
         RefMax = NULL,
         WaardeMin = NULL, #is geval van categorische waarde (bv HB)
-        WaardeMax = NULL
+        WaardeMax = NULL,
+        TheoretischMaximum = ifelse(.data$Type == "Percentage",
+                                .data$TheoretischMaximum * 100,
+                                .data$TheoretischMaximum)
       ) %>%
       rename(
         TypeRefwaarde = .data$TypeVariabele,
