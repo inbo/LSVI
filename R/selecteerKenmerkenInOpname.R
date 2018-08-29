@@ -125,20 +125,20 @@ selecteerKenmerkenInOpname <-
             ]
         )
 
-      if(nrow(Resultaat) > 0){
+      if (nrow(Resultaat) > 0) {
 
         Resultaat <- Resultaat %>%
-        left_join(
-          SubStatusberekening,
-          by = c("Rijnr")
-        ) %>%
-        mutate(
-          Rijnr = NULL
-        ) %>%
-        filter(
-          .data$Status == TRUE
-        ) %>%
-        distinct()
+          left_join(
+            SubStatusberekening,
+            by = c("Rijnr")
+          ) %>%
+          mutate(
+            Rijnr = NULL
+          ) %>%
+          filter(
+            .data$Status == TRUE
+          ) %>%
+          distinct()
 
       }
 
