@@ -29,12 +29,17 @@ describe("berekenLSVIbasis 2330_bu versie 3", {
           Data_habitat,
           Data_voorwaarden,
           Data_soortenKenmerken
-        ) %>%
+        )
+
+    resultaat_berekend_vw <- resultaat_berekend[[3]] %>%
       select(Habitattype, Versie, Criterium, Indicator, Voorwaarde, Waarde)
 
     expect_equal(
-      resultaat_berekend,
-      Resultaat
+      resultaat_berekend_vw
+        ,
+      Resultaat %>%
+        select(Habitattype, Versie, Criterium, Indicator, Voorwaarde, Waarde) %>%
+        mutate(Waarde = as.character(Waarde))
     )
   })
 })
