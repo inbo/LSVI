@@ -33,6 +33,12 @@ berekenVerschilscores <-
     #geval ja/nee
     Statustabel[Statustabel$TypeVariabele == "Ja/nee",
                 c("RefMin", "RefMax")] <- c(0.5, 0.5)
+    Statustabel[Statustabel$TypeVariabele == "Ja/nee" &
+                  is.na(Statustabel$WaardeMax),
+                c("WaardeMax")] <-
+      Statustabel[Statustabel$TypeVariabele == "Ja/nee" &
+                    is.na(Statustabel$WaardeMax),
+                  c("WaardeMin")]
     #geval aanwezigheid specifieke sleutelsoort?
     #afh van hoe ingevoerd in databank, mag misschien weg
     Statustabel[Statustabel$TypeVariabele == "Geheel getal" &
