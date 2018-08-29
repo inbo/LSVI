@@ -102,6 +102,7 @@ selecteerKenmerkenInOpname <-
 
     if (!identical(SubAnalyseVariabele, character(0)) &
         SubAnalyseVariabele == "bedekking") {
+
       Resultaat <- Resultaat %>%
         mutate(
           RefMin = SubRefMin,
@@ -124,7 +125,9 @@ selecteerKenmerkenInOpname <-
             ]
         )
 
-      Resultaat <- Resultaat %>%
+      if(nrow(Resultaat) > 0){
+
+        Resultaat <- Resultaat %>%
         left_join(
           SubStatusberekening,
           by = c("Rijnr")
@@ -136,6 +139,8 @@ selecteerKenmerkenInOpname <-
           .data$Status == TRUE
         ) %>%
         distinct()
+
+      }
 
     } else {
       stop(
