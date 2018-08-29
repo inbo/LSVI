@@ -30,10 +30,23 @@ berekenVerschilscores <-
 
     Statustabel$RefMin <- as.double(Statustabel$RefMin)
     Statustabel$RefMax <- as.double(Statustabel$RefMax)
+    #geval ja/nee
+    Statustabel[Statustabel$TypeVariabele == "Ja/nee",
+                c("RefMin", "RefMax")] <- c(0.5, 0.5)
+    Statustabel[Statustabel$TypeVariabele == "Ja/nee" &
+                  is.na(Statustabel$WaardeMax),
+                c("WaardeMax")] <-
+      Statustabel[Statustabel$TypeVariabele == "Ja/nee" &
+                    is.na(Statustabel$WaardeMax),
+                  c("WaardeMin")]
+    #geval aanwezigheid specifieke sleutelsoort?
+    #afh van hoe ingevoerd in databank, mag misschien weg
     Statustabel[Statustabel$TypeVariabele == "Geheel getal" &
                   Statustabel$RefMin == 1 &
                   Statustabel$RefMax == 1 &
-                  Statustabel$TheoretischMaximum == 1,
+                  !is.na(Statustabel$RefMax) &
+                  Statustabel$TheoretischMaximum == 1 &
+                  !(is.na(Statustabel$TheoretischMaximum)),
                 c("RefMin", "RefMax")] <- c(0.5, 0.5)
 
     Verschiltabel <- Statustabel %>%

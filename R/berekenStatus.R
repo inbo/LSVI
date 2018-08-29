@@ -57,7 +57,22 @@ berekenStatus <-
       Dataset %>%
         mutate(
           Status =
-            .data$WaardeMin >= .data$RefMin & .data$WaardeMax <= .data$RefMin
+            ifelse(
+              is.na(.data$WaardeMin) == is.na(.data$WaardeMax) &
+                is.na(.data$RefMin) == is.na(.data$RefMax),
+              .data$WaardeMin >= .data$RefMin & .data$WaardeMax <= .data$RefMax,
+              ifelse(
+                is.na(.data$WaardeMax),
+                ifelse(
+                  is.na(.data$RefMax),
+                  .data$WaardeMin == .data$RefMin,
+                  .data$WaardeMin >= .data$RefMin &
+                    .data$WaardeMin <= .data$RefMax
+                ),
+                .data$WaardeMin == .data$RefMin &
+                  .data$WaardeMax == .data$RefMin
+              )
+            )
         ) %>%
         select(
           .data$Rijnr,
