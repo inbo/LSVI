@@ -309,7 +309,7 @@ berekenLSVIbasis <-
         TheoretischMaximum =
           ifelse(
             is.na(.data$TheoretischMaximum) & .data$Eenheid == "%",
-            100,
+            1,
             .data$TheoretischMaximum
           )
       )
