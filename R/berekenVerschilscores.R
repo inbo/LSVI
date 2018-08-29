@@ -39,7 +39,8 @@ berekenVerschilscores <-
                   Statustabel$RefMin == 1 &
                   Statustabel$RefMax == 1 &
                   !is.na(Statustabel$RefMax) &
-                  Statustabel$TheoretischMaximum == 1,
+                  Statustabel$TheoretischMaximum == 1 &
+                  !(is.na(Statustabel$TheoretischMaximum)),
                 c("RefMin", "RefMax")] <- c(0.5, 0.5)
 
     Verschiltabel <- Statustabel %>%
