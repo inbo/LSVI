@@ -25,8 +25,8 @@ Data_soortenKenmerken <-
 #     )
 #   )
 # 
-# save(Resultaat, file = "inst/vbdata/Resultaat_test.Rdata")  nolint
-# load("inst/vbdata/Resultaat_test.Rdata")  nolint
+# save(Resultaat, file = "inst/vbdata/Resultaat_test.Rdata")  #nolint
+# load("inst/vbdata/Resultaat_test.Rdata")  #nolint
 
 load(system.file("vbdata/Resultaat_test.Rdata", package = "LSVI"))
 
@@ -498,6 +498,11 @@ describe("berekenLSVIbasis", {
               ifelse(.data$Waarde == "f", "Percentage", .data$TypeWaarde),
             InvoertypeWaarde =
               ifelse(.data$Waarde == "f", NA, .data$InvoertypeWaarde),
+            TheoretischMaximum =
+              ifelse(
+                .data$Waarde == "f" & .data$TypeRefwaarde == "Percentage",
+                100, .data$TheoretischMaximum
+              ),
             Waarde =
               ifelse(.data$Waarde == "f", "5-10", .data$Waarde)
           ),
@@ -531,6 +536,11 @@ describe("berekenLSVIbasis", {
               ifelse(.data$Waarde == "f", "Percentage", .data$TypeWaarde),
             InvoertypeWaarde =
               ifelse(.data$Waarde == "f", NA, .data$InvoertypeWaarde),
+            TheoretischMaximum =
+              ifelse(
+                .data$Waarde == "f" & .data$TypeRefwaarde == "Percentage",
+                100, .data$TheoretischMaximum
+              ),
             Waarde =
               ifelse(.data$Waarde == "f", "5 - 10", .data$Waarde)
           ),
