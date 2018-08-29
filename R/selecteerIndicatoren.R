@@ -51,7 +51,10 @@ selecteerIndicatoren <-
       stop(
         sprintf(
           "Habitatgroep moet een van de volgende waarden zijn: %s",
-          geefUniekeWaarden("Habitatgroep", "Naam", ConnectieLSVIhabitats)
+          paste(
+            geefUniekeWaarden("Habitatgroep", "Naam", ConnectieLSVIhabitats),
+            collapse = ", "
+          )
         )
       )
     }
@@ -86,7 +89,10 @@ selecteerIndicatoren <-
       stop(
         sprintf(
           "Criterium moet een van de volgende waarden zijn: %s",
-          geefUniekeWaarden("Criterium", "Naam", ConnectieLSVIhabitats)
+          paste(
+            geefUniekeWaarden("Criterium", "Naam", ConnectieLSVIhabitats),
+            collapse = ", "
+          )
         )
       )
     }
@@ -99,7 +105,10 @@ selecteerIndicatoren <-
       stop(
         sprintf(
           "Indicator moet een van de volgende waarden zijn: %s",
-          geefUniekeWaarden("Indicator", "Naam", ConnectieLSVIhabitats)
+          paste(
+            geefUniekeWaarden("Indicator", "Naam", ConnectieLSVIhabitats),
+            collapse = ", "
+          )
         )
       )
     }
