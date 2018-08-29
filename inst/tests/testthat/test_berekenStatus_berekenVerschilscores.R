@@ -20,11 +20,11 @@ describe("berekeningen gebeuren correct", {
       )
     )
   })
-  
+
   it("invoerwaarde 'ja/nee' wordt correct behandeld", {
     Testdata <-
       data.frame(
-        Rijnr = 1, RefMin = 1, RefMax = NA, Operator = "<=",
+        Rijnr = 1, RefMin = 1, RefMax = NA, Operator = ">=",
         WaardeMin = 1,
         WaardeMax = 1, TheoretischMaximum = 1, TypeVariabele = "Ja/nee",
         stringsAsFactors = FALSE)
@@ -35,15 +35,15 @@ describe("berekeningen gebeuren correct", {
     stopifnot(
       all.equal(
         berekenVerschilscores(Testdata),
-        data.frame(Rijnr = 1, Verschilscore = -1)
+        data.frame(Rijnr = 1, Verschilscore = 1)
       )
     )
   })
-  
+
   it("referentiewaarde 'ja/nee' wordt correct behandeld", {
     Testdata <-
       data.frame(
-        Rijnr = 1, RefMin = 1, RefMax = NA, Operator = "<=",
+        Rijnr = 1, RefMin = 1, RefMax = NA, Operator = ">=",
         WaardeMin = 1,
         WaardeMax = NA, TheoretischMaximum = 1, TypeVariabele = "Ja/nee",
         stringsAsFactors = FALSE)
