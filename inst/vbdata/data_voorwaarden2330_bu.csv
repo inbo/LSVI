@@ -1,0 +1,6 @@
+"";"Habitattype";"Criterium";"Indicator";"Voorwaarde";"ID";"Waarde";"Type";"Invoertype";"Eenheid"
+"1";"2330";"Structuur";"korstmosvegetaties";"bedekking korstmosvegetaties";55058;"62.5";"Percentage";NA;"%"
+"2";"2330";"Structuur";"horizontale structuur";"aantal ontwikkelingsstadia";55058;"3";"Geheel getal";NA;NA
+"3";"2330";"Verstoring";"verbossing";"bedekking verbossing";55058;"25";"Percentage";NA;"%"
+"4";"2330";"Structuur";"horizontale structuur";"bedekking open vegetaties";55058;"100";"Percentage";NA;"%"
+"5";"2330";"Structuur";"naakte bodem";"bedekking open zand";55058;"0";"Percentage";NA;"%"
