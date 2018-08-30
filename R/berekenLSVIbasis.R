@@ -4,7 +4,7 @@
 #'
 #' De Lokale Staat van Instandhouding wordt weergegeven in de kolom 'Status' met als mogelijke waarden TRUE (= gunstig) en FALSE (= ongunstig).
 #'
-#' De biotische indices zijn afgeleid van het verschil tussen een geobserveerde waarde en de referentiewaarde voor elke indicator. Deze verschillen werden herschaald tussen +1 en -1, waarbij een positieve en negatieve waarde overeenkomt met respectievelijk een gunstige en ongunstige score. Deze verschilscores per indicator worden geaggregeerd, eerst voor de indicatoren die tot eenzelfde criterium behoren, vervolgens worden deze geaggregeerde scores verder geaggregeerd om tot een globale index te komen. Er worden drie verschillende globale indices berekend waarbij de naamgeving aangeeft welk aggregatie achtereenvolgens gebruikt werd: index_min_min, index_harm_min en index_harm_harm. Een naam met "min" duidt op minimum van de scores als aggregatie; bij "harm" werd het harmonisch gemiddelde berekend.
+#' De biotische indices zijn afgeleid van het verschil tussen een geobserveerde waarde en de referentiewaarde voor elke indicator. Deze verschillen werden herschaald tussen +1 en -1, waarbij een positieve en negatieve waarde overeenkomt met respectievelijk een gunstige en ongunstige score. Deze verschilscores per indicator worden geaggregeerd, eerst voor de indicatoren die tot eenzelfde criterium behoren, vervolgens worden deze geaggregeerde scores verder geaggregeerd om tot een globale index te komen. Er worden drie verschillende globale indices berekend waarbij de naamgeving aangeeft welk aggregatie achtereenvolgens gebruikt werd: index_min_min, index_min_harm en index_harm_harm. Een naam met "min" duidt op minimum van de scores als aggregatie; bij "harm" werd het harmonisch gemiddelde berekend.
 #'
 #' @inheritParams selecteerIndicatoren
 #' @param Versie De versie van het LSVI-rapport op basis waarvan de berekening gemaakt wordt, bv. "Versie 2.0" of "Versie 3".  Bij de default "alle" wordt de LSVI volgens de verschillende versies berekend.
@@ -434,7 +434,8 @@ berekenLSVIbasis <-
         #Index_min_min < 0 #nolint
         Index_min_min = min(.data$Index_min_criterium, na.rm = na.rm),
         #iets minder conservatieve index
-        Index_min_harm = min(.data$Index_harm_criterium, na.rm = na.rm),
+        Index_min_harm = mean(((.data$Index_min_criterium + 1) / 2) ^ -1,
+                              na.rm = na.rm) ^ -1 * 2 - 1,
         # nog minder conservatieve index
         Index_harm_harm =
           mean(((.data$Index_harm_criterium + 1) / 2) ^ -1,
