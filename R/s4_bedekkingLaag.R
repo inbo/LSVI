@@ -30,7 +30,6 @@ setMethod(
       object@Soortengroep <- data.frame()
       berekenWaarde(as(object, "bedekking"))
     } else {
-      object@Studiegroep <- data.frame()
       berekenWaarde(as(object, "bedekking"))
     }
   }
