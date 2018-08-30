@@ -109,7 +109,21 @@ describe("berekenLSVIbasis vegetatielaag", {
     stopifnot(
       all.equal(
         BerekendRes[["Resultaat_criterium"]],
-        Resultaat[["Resultaat_criterium"]]
+        Resultaat[["Resultaat_criterium"]] %>%
+          mutate(
+            Index_min_criterium =
+              ifelse(
+                .data$Criterium == "Vegetatie",
+                -0.5714285714,
+                .data$Index_min_criterium
+              ),
+            Index_harm_criterium =
+              ifelse(
+                .data$Criterium == "Vegetatie",
+                -0.33664729,
+                .data$Index_harm_criterium
+              )
+          )
       )
     )
     stopifnot(
@@ -136,7 +150,7 @@ describe("berekenLSVIbasis vegetatielaag", {
               ifelse(
                 .data$Voorwaarde ==
                   "grondvlak sleutelsoorten boom- en struiklaag",
-                "0.3",
+                "30",
                 .data$Waarde
               ),
             Verschilscore =

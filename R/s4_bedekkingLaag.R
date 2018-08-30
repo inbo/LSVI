@@ -40,6 +40,6 @@ setMethod(
   f = "geefTheoretischMaximum",
   signature = "bedekkingLaag",
   definition = function(object) {
-    return(100)
+    return(1)
   }
 )
