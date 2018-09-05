@@ -105,7 +105,7 @@ library(LSVI)
 geefSoortenlijst(Habitattype = "4010", Taxonlijsttype = "LSVIfiche")
 ```
 
-Omdat de tabel te breed is, wordt deze opgesplitst in 4 delen, die onder elkaar weergegeven worden.  Deze tabel wordt ook enkel weergegeven, niet opgeslagen, en op deze manier kunnen we er achteraf geen bewerkingen mee doen.  Beter is om de tabel toe te kennen aan een variabele, we geven hier die variabele de naam `soortenlijst4010`:
+Omdat de tabel te breed is, wordt deze opgesplitst in 5 delen, die onder elkaar weergegeven worden.  Deze tabel wordt ook enkel weergegeven, niet opgeslagen, en op deze manier kunnen we er achteraf geen bewerkingen mee doen.  Beter is om de tabel toe te kennen aan een variabele, we geven hier die variabele de naam `soortenlijst4010`:
 
 ```{r}
 soortenlijst4010 <- geefSoortenlijst(Habitattype = "4010", Taxonlijsttype = "LSVIfiche")
@@ -135,7 +135,7 @@ library(readr)
 Dataset <- read_delim("Gegevens.csv", delim = ";")
 ```
 
-Je steekt dus de gegevens uit je bestand `Gegevens.csv` in de variabele `Dataset`.  (Het laden van de library readr is enkel nodig als je dit nog niet eerder gedaan hebt.)
+Je steekt dus de gegevens uit je bestand `Gegevens.csv` in de variabele `Dataset`.  (Het laden van de library readr is enkel nodig als je dit nog niet eerder gedaan hebt sinds je R opgestart hebt.)
 
 Gegevens kunnen ook rechtstreeks vanuit een databank ingelezen worden, en ze kunnen in R naar het gewenste formaat omgezet worden.  Een volledige uitleg hierover zou ons echter te ver leiden.  Toch interesse om hier meer over te leren?  Neem dan contact op met een collega van BMK.
 
@@ -182,10 +182,10 @@ resultaat <-
   )
 ```
 
-Nu kunnen we de afzonderlijke tabellen als volgt uit het object `resultaat` halen (je kan met `$` of met `[[]]` werken:
+Nu kunnen we de afzonderlijke tabellen als volgt uit het object `resultaat` halen (je kan met `$` of met `[[]]` werken):
 
 ```{r}
-resultaat$Resultaat_globaal # resultaat[["Resultaat_globaal"]]
+resultaat$Resultaat_globaal  #ofwel: resultaat[["Resultaat_globaal"]]
 resultaat$Resultaat_criterium
 resultaat$Resultaat_indicator
 resultaat$Resultaat_detail
