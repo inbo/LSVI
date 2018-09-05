@@ -278,6 +278,33 @@ describe("berekenLSVIbasis vegetatielaag", {
         ResultaatBerekening
       )
     )
+    Data_soortenKenmerken3 <- Data_soortenKenmerken %>%
+      bind_rows(
+        data.frame(
+          ID = c("JR0216", "Ts2036"),
+          Kenmerk = "Quercus robur",
+          TypeKenmerk = "soort_Latijn",
+          Waarde = c("35", "7,5"),
+          Type = "Percentage",
+          Eenheid = "%",
+          Vegetatielaag = "boomlaag",
+          stringsAsFactors = FALSE
+        )
+      )
+    Test3 <-
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 3", Kwaliteitsniveau = "1",
+          Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
+          Data_soortenKenmerken = Data_soortenKenmerken3
+        )
+      )
+    stopifnot(
+      all.equal(
+        Test2[["Resultaat_detail"]],
+        ResultaatBerekening
+      )
+    )
   })
 
 
