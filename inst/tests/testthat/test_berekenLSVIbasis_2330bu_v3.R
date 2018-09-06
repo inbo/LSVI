@@ -10,13 +10,16 @@ Data_habitat <-
       col_types = list(col_character(), col_character(), col_character())
     )
 Data_voorwaarden <-
-    read_csv2(system.file("vbdata/data_voorwaarden2330_bu.csv", package = "LSVI"))
+    read_csv2(
+      system.file("vbdata/data_voorwaarden2330_bu.csv", package = "LSVI")
+    )
 Data_soortenKenmerken <-
     read_csv2(
       system.file("vbdata/data_soortenKenmerken2330_bu.csv", package = "LSVI")
     )
 
-Resultaat <- read_csv2(system.file("vbdata/resultaat2330_bu.csv", package = "LSVI"))
+Resultaat <-
+  read_csv2(system.file("vbdata/resultaat2330_bu.csv", package = "LSVI"))
 
 describe("berekenLSVIbasis 2330_bu versie 3", {
 
@@ -38,9 +41,10 @@ describe("berekenLSVIbasis 2330_bu versie 3", {
       resultaat_berekend_vw
         ,
       Resultaat %>%
-        select(Habitattype, Versie, Criterium, Indicator, Voorwaarde, Waarde) %>%
+        select(
+          Habitattype, Versie, Criterium, Indicator, Voorwaarde, Waarde
+        ) %>%
         mutate(Waarde = as.character(Waarde))
     )
   })
 })
-

@@ -55,7 +55,7 @@ describe("berekenLSVIbasis vegetatielaag", {
     #       Data_voorwaarden, Data_soortenKenmerken
     #     )
     #   )
-    # 
+    #
     # save(Resultaat, file = "inst/vbdata/Resultaat_test_bos.Rdata")  #nolint
     # load("inst/vbdata/Resultaat_test_bos.Rdata")  #nolint
 
