@@ -210,6 +210,17 @@ invoercontroleData_soortenKenmerken <-
         Rijnr = row_number(.data$Kenmerk)
       )
 
+    VegLaagAfwezig <- Kenmerken %>%
+      filter(
+        tolower(.data$TypeKenmerk) == "soort_nbn",
+        is.na(.data$Vegetatielaag)
+      )
+    if (nrow(VegLaagAfwezig) > 0) {
+      warning(
+        "Bij Data_soortenKenmerken is niet voor alle soorten de kolom Vegetatielaag ingevuld"  #nolint
+      )
+    }
+
     VertaaldeKenmerken <-
       vertaalInvoerInterval(
         Kenmerken[
