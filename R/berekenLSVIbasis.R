@@ -61,7 +61,8 @@ berekenLSVIbasis <-
     Data_soortenKenmerken = data.frame(ID = character()),
     ConnectieLSVIhabitats = ConnectiePool,
     LIJST = geefVertaallijst(ConnectieLSVIhabitats),
-    na.rm = FALSE
+    na.rm = FALSE,
+    Oppervlakte_opname = FALSE
   ){
 
     #controle invoer
@@ -77,6 +78,10 @@ berekenLSVIbasis <-
 
     Data_habitat <-
       invoercontroleData_habitat(Data_habitat, ConnectieLSVIhabitats)
+
+    if (isTRUE(Oppervlakte_opname)) {
+      assert_that(has_name(Data_habitat, "Opp_m2"))
+    }
 
     if (nrow(Data_voorwaarden) > 0) {
       Data_voorwaarden <-
@@ -239,9 +244,34 @@ berekenLSVIbasis <-
       ) %>%
       bind_rows(BerekendResultaat)
 
-    #herberekening refwaarden in geval Oppervlakte_opname = TRUE
+    if (isTRUE(Oppervlakte_opname)) {
+      #herberekening refwaarden in geval Oppervlakte_opname = TRUE
+      zvalues <- read_csv(system.file(
+        "extdata/zvalues.csv", package = "LSVI"))
 
-    #Waarde voor TheoretischMaximum vervangen in geval Oppervlakte_opname = TRUE
+      Resultaat <- Resultaat %>%
+        left_join(zvalues, by = "Habitattype") %>%
+        mutate(
+          #igv geen zvalue, zvalue = 0, dus geen correctie
+          zvalues = ifelse(is.na(zvalues), 0, zvalues),
+          #igv opp_m2 NA is, ook geen correctie berekenen door opp_m2 = 5000
+          RefMin = ceiling(
+          .data$RefMin * (ifelse(is.na(.data$Opp_m2),
+                                       5000,
+                                       .data$Opp_m2) / 5000) ^ .data$zvalues),
+          RefMax = .data$RefMin) %>%
+        select(-.data$zvalues)
+
+      #Waarde voor TheoretischMaximum vervangen
+      #in geval Oppervlakte_opname = TRUE
+      Resultaat <- Resultaat %>%
+        mutate(TheoretischMaximum = ifelse(
+          grepl(pattern = "aantal.*sleutelsoorten",
+                x = .data$Voorwaarde,
+                ignore.case = TRUE),
+          .data$RefMin * 2,
+          .data$TheoretischMaximum))
+    }
 
 
 
