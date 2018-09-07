@@ -253,7 +253,7 @@ berekenLSVIbasis <-
         left_join(zvalues, by = "Habitattype") %>%
         mutate(
           #igv geen zvalue, zvalue = 0, dus geen correctie
-          zvalues = ifelse(is.na(zvalues), 0, zvalues),
+          zvalues = ifelse(is.na(.data$zvalues), 0, .data$zvalues),
           #igv opp_m2 NA is, ook geen correctie berekenen door opp_m2 = 5000
           RefMin = ceiling(
           .data$RefMin * (ifelse(is.na(.data$Opp_m2),

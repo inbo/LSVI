@@ -67,7 +67,7 @@ berekenVerschilscores <-
           .data$Verschil < 0 ~ .data$Verschil / .data$BereikOngunstig
         ),
         # plaffonering voor geval dat door correctie oppervlakte-afh score > 1
-        Verschilscore = ifelse(Verschilscore > 1, 1, Verschilscore)
+        Verschilscore = ifelse(.data$Verschilscore > 1, 1, .data$Verschilscore)
       ) %>%
       select(
         .data$Rijnr,
