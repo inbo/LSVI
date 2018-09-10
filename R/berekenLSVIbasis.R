@@ -255,10 +255,15 @@ berekenLSVIbasis <-
           #igv geen zvalue, zvalue = 0, dus geen correctie
           zvalues = ifelse(is.na(.data$zvalues), 0, .data$zvalues),
           #igv opp_m2 NA is, ook geen correctie berekenen door opp_m2 = 5000
-          RefMin = ceiling(
-          .data$RefMin * (ifelse(is.na(.data$Opp_m2),
-                                       5000,
-                                       .data$Opp_m2) / 5000) ^ .data$zvalues),
+          RefMin = ifelse(
+            grepl(pattern = "aantal.*sleutelsoorten",
+                  x = .data$Voorwaarde,
+                  ignore.case = TRUE),
+            ceiling(
+              .data$RefMin * (ifelse(is.na(.data$Opp_m2),
+                                     5000,
+                                     .data$Opp_m2) / 5000) ^ .data$zvalues),
+            .data$RefMin) %>%
           RefMax = .data$RefMin) %>%
         select(-.data$zvalues)
 
