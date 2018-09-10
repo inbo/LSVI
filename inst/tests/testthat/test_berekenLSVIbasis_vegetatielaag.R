@@ -410,7 +410,7 @@ describe("berekenLSVIbasis vegetatielaag", {
       )
     stopifnot(
       all.equal(
-        Test2[["Resultaat_detail"]],
+        Test3[["Resultaat_detail"]],
         ResultaatBerekening
       )
     )
