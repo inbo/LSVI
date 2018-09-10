@@ -4,7 +4,11 @@ idsWissen <- function(Resultaat) {
   Resultaat <-
     list(
       Resultaat_criterium = Resultaat[["Resultaat_criterium"]],
-      Resultaat_indicator = Resultaat[["Resultaat_indicator"]],
+      Resultaat_indicator =
+        Resultaat[["Resultaat_indicator"]] %>%
+        mutate(
+          BeoordelingID = NULL
+        ),
       Resultaat_detail =
         Resultaat[["Resultaat_detail"]] %>%
         mutate(
