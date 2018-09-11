@@ -263,7 +263,7 @@ berekenLSVIbasis <-
               .data$RefMin * (ifelse(is.na(.data$Opp_m2),
                                      5000,
                                      .data$Opp_m2) / 5000) ^ .data$zvalues),
-            .data$RefMin) %>%
+            .data$RefMin),
           RefMax = .data$RefMin) %>%
         select(-.data$zvalues)
 
