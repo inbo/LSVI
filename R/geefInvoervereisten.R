@@ -108,6 +108,7 @@ geefInvoervereisten <- function(Versie = "alle",
             Criterium.Naam AS Criterium, Indicator.Naam AS Indicator,
             Beoordeling.Beoordeling_letterlijk AS Beoordeling,
             Beoordeling.Kwaliteitsniveau,
+            Indicator_beoordeling.Belang,
             Beoordeling.Id as BeoordelingID
             FROM
               (Indicator_beoordeling LEFT JOIN Beoordeling
