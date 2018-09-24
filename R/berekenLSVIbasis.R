@@ -125,6 +125,7 @@ berekenLSVIbasis <-
         .data$Indicator,
         .data$Beoordeling,
         .data$Kwaliteitsniveau,
+        .data$Belang,
         .data$BeoordelingID,
         .data$Combinatie,
         .data$VoorwaardeID,
