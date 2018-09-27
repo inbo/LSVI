@@ -171,6 +171,119 @@ describe("berekenLSVIbasis vegetatielaag", {
     )
   })
 
+  it("de functie geeft een warning of error als een vegetatielaag ontbreekt", {
+    skip_on_cran()
+    Data_habitat <-
+      read_csv2(
+        system.file("vbdata/Test9190habitat.csv", package = "LSVI"),
+        col_types = list(col_character(), col_character())
+      )
+    Data_voorwaarden <-
+      read_csv2(
+        system.file("vbdata/Test9190voorwaarden.csv", package = "LSVI"),
+        col_types =
+          list(
+            col_character(), col_character(), col_character(), col_character(),
+            col_character(), col_character(), col_character(), col_character()
+          )
+      ) %>%
+      mutate(  #idee is om onderstaande code te wissen zodra de databank/rekenmodule hiervoor aangepast is
+        Eenheid =
+          ifelse(
+            .data$Eenheid == "ha",
+            NA,
+            .data$Eenheid
+          )
+      ) %>%
+      bind_rows(
+        data.frame(
+          ID = "1", Criterium = "Vegetatie",
+          Indicator = "sleutelsoorten van de kruidlaag",
+          Voorwaarde = "aandeel sleutelsoorten kruidlaag", Waarde = "20",
+          Type = "Geheel getal",
+          stringsAsFactors = FALSE
+        )
+      )
+    Data_soortenKenmerken <-
+      read_csv2(
+        system.file("vbdata/Test9190soortenKenmerken.csv", package = "LSVI"),
+        col_types =
+          list(col_character(), col_character(), col_character(),
+               col_character(), col_character(), col_character(),
+               col_character(), col_character())
+      ) %>%
+      mutate(
+        Vegetatielaag =
+          ifelse(
+            .data$Vegetatielaag == "struiklaag",
+            NA,
+            .data$Vegetatielaag
+          )
+      )
+    expect_error(
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 3", Kwaliteitsniveau = "1",
+          Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
+          Data_soortenKenmerken = Data_soortenKenmerken
+        )
+      ),
+      "Bij Data_soortenKenmerken is niet voor alle soorten de kolom Vegetatielaag ingevuld"  #nolint
+    )
+
+    Data_habitat <-
+      read_csv2(
+        system.file("vbdata/opname4030habitat.csv", package = "LSVI"),
+        col_types = list(col_character(), col_character(), col_character())
+      )
+    Data_voorwaarden <-
+      read_csv2(
+        system.file("vbdata/opname4030voorwaarden.csv", package = "LSVI"),
+        col_types =
+          list(
+            col_character(), col_character(), col_character(), col_character(),
+            col_character(), col_character(), col_character(), col_character()
+          )
+      )
+    Data_soortenKenmerken <-
+      read_csv2(
+        system.file("vbdata/opname4030soortenKenmerken.csv", package = "LSVI"),
+        col_types =
+          list(col_character(), col_character(), col_character(),
+               col_character(), col_character(), col_character(),
+               col_character(), col_character())
+      ) %>%
+      mutate(
+        Vegetatielaag =
+          ifelse(
+            .data$Kenmerk == "Festuca filiformis",
+            NA,
+            .data$Vegetatielaag
+          )
+      )
+    load(system.file("vbdata/Resultaat_test.Rdata", package = "LSVI"))
+    expect_warning(
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 3", Kwaliteitsniveau = "1",
+          Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
+          Data_soortenKenmerken = Data_soortenKenmerken
+        )
+      ),
+      "Bij Data_soortenKenmerken is niet voor alle soorten de kolom Vegetatielaag ingevuld"  #nolint
+    )
+    expect_equal(
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 3", Kwaliteitsniveau = "1",
+          Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
+          Data_soortenKenmerken = Data_soortenKenmerken
+        )
+      ),
+      Resultaat
+    )
+  })
+
   it("s4-klasse bedekkingLaag werkt correct", {
     skip_on_cran()
     Data_habitat <-
@@ -264,19 +377,15 @@ describe("berekenLSVIbasis vegetatielaag", {
           stringsAsFactors = FALSE
         )
       )
-    Test2 <-
+    expect_error(
       idsWissen(
         berekenLSVIbasis(
           Versie = "Versie 3", Kwaliteitsniveau = "1",
           Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
           Data_soortenKenmerken = Data_soortenKenmerken2
         )
-      )
-    stopifnot(
-      all.equal(
-        Test2[["Resultaat_detail"]],
-        ResultaatBerekening
-      )
+      ),
+      "Bij Data_soortenKenmerken is niet voor alle soorten de kolom Vegetatielaag ingevuld"  #nolint
     )
     Data_soortenKenmerken3 <- Data_soortenKenmerken %>%
       bind_rows(
@@ -301,7 +410,7 @@ describe("berekenLSVIbasis vegetatielaag", {
       )
     stopifnot(
       all.equal(
-        Test2[["Resultaat_detail"]],
+        Test3[["Resultaat_detail"]],
         ResultaatBerekening
       )
     )
