@@ -11,7 +11,7 @@ describe("twee voorwaarden vergelijken", {
     Data_voorwaarden <-
       data.frame(
         ID = 1, Criterium = "Verstoring", Indicator = "overgang naar rbbzil",
-        Voorwaarde = c("som bedekking grasachtigen uit het zilverschoonver",
+        Voorwaarde = c("bedekking grasachtigen rbbzil",
                        "som van de bedekking sleutelsoorten"),
         Waarde = c(10, 20), Type = "Percentage", Invoertype = NA, Eenheid = "%",
         stringsAsFactors = FALSE)
@@ -33,7 +33,7 @@ describe("twee voorwaarden vergelijken", {
           "som van de bedekking grasachtigen uit het zilverschoonverbond <= som van de bedekking sleutelsoorten", #nolint
         Kwaliteitsniveau = 1,
         Voorwaarde =
-          "som bedekking grasachtigen uit het zilverschoonver <= som van de bedekking sleutelsoorten", #nolint
+          "bedekking grasachtigen rbbzil <= som van de bedekking sleutelsoorten", #nolint
         Referentiewaarde = "20",
         Operator = "<=",
         EenheidRefwaarde = "%",

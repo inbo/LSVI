@@ -9,15 +9,15 @@ geefInfoHabitatfiche(Versie = "alle", Habitatgroep = "alle",
   Stijl = c("Rmd", "tekst"), ConnectieLSVIhabitats = ConnectiePool)
 }
 \arguments{
-\item{Versie}{De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".  Bij de default "alle" worden de gegevens voor de verschillende versies gegeven.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Versie", "VersieLSVI") of geefVersieInfo(ConnectieLSVIhabitats).}
+\item{Versie}{De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".  Bij de default "alle" worden de gegevens voor de verschillende versies gegeven.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden("Versie", "VersieLSVI") of geefVersieInfo().}
 
 \item{Habitatgroep}{Parameter waarmee alle habitats van een bepaalde habitatgroep kunnen geselecteerd worden, bv. "Bossen", "Heiden", "(Half-)natuurlijke graslanden", "Zoete en brakke wateren",...   en "alle" (=default).  Deze waarde moet niet gespecifieerd worden als een bepaald habitat(sub)type geselecteerd wordt.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden("Habitatgroep", "Naam").}
 
-\item{Habitattype}{Parameter waarmee een habitattype of habitatsubtype kan geselecteerd worden.  Als dit een habitattype betreft met meerdere subtypes, zullen de gegevens van alle subtypes van dit habitattype weergegeven worden.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Habitattype", "Code").  Er is voor deze parameter ook de mogelijkheid om een vector van meerdere habitat(sub)typen op te geven.}
+\item{Habitattype}{Parameter waarmee een habitattype of habitatsubtype kan geselecteerd worden.  Als dit een habitattype betreft met meerdere subtypes, zullen de gegevens van alle subtypes van dit habitattype weergegeven worden.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden("Habitattype", "Code").  Er is voor deze parameter ook de mogelijkheid om een vector van meerdere habitat(sub)typen op te geven.}
 
 \item{Criterium}{Het LSVI-criterium waarvoor de gegevens geselecteerd worden: "Vegetatie", "Structuur", "Verstoring" of "alle".}
 
-\item{Indicator}{De indicator waarvoor de gegevens uit de databank gehaald worden.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Indicator", "Naam").}
+\item{Indicator}{De indicator waarvoor de gegevens uit de databank gehaald worden.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden("Indicator", "Naam").}
 
 \item{Stijl}{Keuze uit "Rmd" en "tekst".  Bij Rmd (default) worden soortgroepnamen voorafgegaan en gevolgd door "__" en Latijnse namen van soorten door "_", waardoor deze bij gebruik van RMarkdown worden omgezet naar resp. vet en italics.  Bij tekst worden deze underscores weggelaten.}
 
