@@ -13,6 +13,7 @@
 #' @param Data_voorwaarden Gegevens over de opgemeten indicatoren in de vorm van een data.frame met velden ID, Criterium, Indicator, Voorwaarde, Waarde, Type, Invoertype en Eenheid, waarbij ID de groeperende variabele voor een opname is die ook bij Data_habitat opgegeven is.  Criterium, Indicator en Voorwaarde moeten overeenkomen met de waarde in de databank (op te zoeken via de functie geefInvoervereisten()).  Waarde is de waarde die voor die voorwaarde geobserveerd of gemeten is en Type het soort variabele (zie geefUniekeWaarden("TypeVariabele", "Naam") voor de mogelijke waarden).  Ingeval van een categorische variabele moet bij Invoertype de naam van de lijst opgegeven worden waaruit deze waarde komt (bv. welke schaal gebruikt is, zie geefUniekeWaarden("Lijst", "Naam") voor alle mogelijkheden).
 #' @param Data_soortenKenmerken Gegevens van soorten en kenmerken en hun bedekking (m.a.w. enkel kenmerken waarvan een bedekking gemeten is, horen in deze tabel).  Deze dataframe moet de velden ID, Vegetatielaag, Kenmerk, TypeKenmerk, Waarde, Type, Invoertype en Eenheid bevatten, waarbij ID de groeperende variabele voor een opname is die ook bij Data_habitat opgegeven is.  Kenmerk bevat een soortnaam of een naam die voorkomt in de lijst gegenereerd door geefUniekeWaarden("StudieItem", "Waarde") en TypeKenmerk geeft een beschrijving voor dat kenmerk: 'studiegroep', 'soort_Latijn', 'soort_NL' of 'soort_NBN'.  Waarde is de geobserveerde bedekking en Type het soort variabele dat voor de bedekking gebruikt is (zie geefUniekeWaarden("TypeVariabele", "Naam") voor de mogelijke waarden).  Ingeval van een categorische variabele moet bij Invoertype de naam van de lijst opgegeven worden welke schaal gebruikt is (zie geefUniekeWaarden("Lijst", "Naam") voor alle mogelijkheden).
 #' @param LIJST Dataframe met lijst die weergeeft hoe de vertaling moet gebeuren van categorische variabelen naar numerieke waarden (en omgekeerd).  Default worden deze waarden uit de databank met LSVI-indicatoren gehaald d.m.v. de functie vertaalInvoerInterval().  Aangeraden wordt om deze default te gebruiken (dus parameter niet expliciet invullen), of deze waar nodig aan te vullen met eigen schalen.  Omdat er ook een omzetting moet gebeuren voor grenswaarden uit de databank, kan het niet doorgeven van een gedeelte van deze lijst problemen geven.
+#' @param Aggregatiemethode Keuze van de methode om tot één beoordeling per criterium of per habitatvlek/meetpunt te komen. Er zijn twee opties: (1) "RapportageHR": de beoordeling is gunstig als meer dan 50% van de indicatoren gunstig zijn EN als geen enkele zeer belangrijke indicator ongunstig is; (2) "1-out-all-out": de beoordeling is gunstig als alle indicatoren gunstig zijn. "1-out-all-out" is default.
 #' @param na.rm Hier geeft je aan hoe de berekening moet omgaan met NA waarden. Default is FALSE. Dit betekent dat NA waarden niet worden verwijderd. Hierdoor zal de indexberekening resulteren in een NA zodra één van de indicatoren NA is. Voor de berekening van de status zal dit enkel resulteren in een NA indien minstens één van de indicatoren NA is en minstens één van de indicatoren status TRUE (= gunstig) heeft. Indien na.rm = TRUE worden eventuele NA waarden verwijderd zodat status en de indices een resultaat hebben. Doordat deze dan mogelijk niet op de volledige set van indicatoren gebaseerd zijn, moet hiermee rekening gehouden worden afhankelijk van de context waarvoor de resultaten gebruikt worden.
 #'
 #' @return Deze functie genereert de resultaten in de vorm van een list met 4 tabellen: een eerste met de beoordelingen per kwaliteitsniveau, een tweede met de beoordelingen per criterium en kwaliteitsniveau, een derde met de beoordelingen per indicator en kwaliteitsniveau, en een vierde met de detailgegevens inclusief meetwaarden.
@@ -58,6 +59,7 @@ berekenLSVIbasis <-
         stringsAsFactors = FALSE
       ),
     Data_soortenKenmerken = data.frame(ID = character()),
+    Aggregatiemethode = "1-out-all-out",
     ConnectieLSVIhabitats = ConnectiePool,
     LIJST = geefVertaallijst(ConnectieLSVIhabitats),
     na.rm = FALSE
@@ -106,6 +108,19 @@ berekenLSVIbasis <-
     } else {
       assert_that(has_name(Data_soortenKenmerken, "ID"))
     }
+
+     assert_that(is.string(Aggregatiemethode))
+    if (
+      !(Aggregatiemethode %in%
+      c("RapportageHR", "1-out-all-out")
+      )
+    ) {
+    stop(
+      sprintf(
+        "Aggregatiemethode moet een van de volgende waarden zijn: 'RapportageHR' of '1-out-all-out'",
+      )
+    )
+  }
 
 
 
@@ -380,6 +395,7 @@ berekenLSVIbasis <-
         .data$Criterium,
         .data$Indicator,
         .data$Beoordeling,
+        .data$Belang,
         .data$Kwaliteitsniveau,
         .data$BeoordelingID
       ) %>%
@@ -409,8 +425,13 @@ berekenLSVIbasis <-
         .data$Kwaliteitsniveau
       ) %>%
       summarise(
-        Status_criterium = as.logical(all(.data$Status_indicator,
-                                          na.rm = na.rm)),
+        Status_criterium = ifelse(Aggregatiemethode == "1-out-all-out",
+                                  as.logical(all(.data$Status_indicator,
+                                          na.rm = na.rm)
+                                          ),
+                                  ifelse(Aggregatiemethode == "RapportageHR",
+                                         (sum(.data$Status_indicator, na.rm = na.rm) > sum(!is.na(.data$Status_indicator))/2.0) & (sum((.data$Status_indicator == FALSE) * (.data$Belang == "zb"), na.rm = na.rm) == 0),
+                                         NA)),
         #minimum van de scores tussen -1 en +1
         Index_min_criterium = min(.data$Verschilscore, na.rm = na.rm),
         #harmonisch gemiddelde van de verschilscores
@@ -422,7 +443,7 @@ berekenLSVIbasis <-
       ungroup()
 
     #resultaten op globaal niveau
-    Resultaat_globaal <- Resultaat_criterium %>%
+    Resultaat_globaal_Index <- Resultaat_criterium %>%
       group_by(
         .data$ID,
         .data$Habitattype,
@@ -430,9 +451,6 @@ berekenLSVIbasis <-
         .data$Kwaliteitsniveau
       ) %>%
       summarise(
-        Status = as.logical(all(.data$Status_criterium, na.rm = na.rm)),
-        #meest conservatieve index: one-out-all-out is resultaat van
-        #Index_min_min < 0 #nolint
         Index_min_min = min(.data$Index_min_criterium, na.rm = na.rm),
         #iets minder conservatieve index
         Index_min_harm = mean(((.data$Index_min_criterium + 1) / 2) ^ -1,
@@ -443,6 +461,29 @@ berekenLSVIbasis <-
                 na.rm = na.rm) ^ -1 * 2 - 1
       ) %>%
       ungroup()
+
+    Resultaat_globaal_Status <- Resultaat_indicator %>%
+      group_by(
+        .data$ID,
+        .data$Habitattype,
+        .data$Versie,
+        .data$Kwaliteitsniveau
+      ) %>%
+      summarise(
+        Status = ifelse(Aggregatiemethode == "1-out-all-out",
+                                  as.logical(all(.data$Status_indicator,
+                                          na.rm = na.rm)
+                                          ),
+                                  ifelse(Aggregatiemethode == "RapportageHR",
+                                         (sum(.data$Status_indicator, na.rm = na.rm) > sum(!is.na(.data$Status_indicator))/2.0) & (sum((.data$Status_indicator == FALSE) * (.data$Belang == "zb"), na.rm = na.rm) == 0),
+                                         NA))
+
+      ) %>%
+      ungroup()
+
+    Resultaat_globaal <- Resultaat_globaal_Status %>%
+      left_join(Resultaat_globaal_Index,
+                by = c("ID", "Habitattype", "Versie", "Kwaliteitsniveau"))
 
     return(
       list(
