@@ -32,6 +32,7 @@ describe("twee voorwaarden vergelijken", {
         Beoordeling =
           "som van de bedekking grasachtigen uit het zilverschoonverbond <= som van de bedekking sleutelsoorten", #nolint
         Kwaliteitsniveau = 1,
+        Belang = "zb",
         Voorwaarde =
           "bedekking grasachtigen rbbzil <= som van de bedekking sleutelsoorten", #nolint
         Referentiewaarde = "20",
