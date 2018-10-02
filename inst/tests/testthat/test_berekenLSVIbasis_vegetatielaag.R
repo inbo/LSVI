@@ -114,13 +114,13 @@ describe("berekenLSVIbasis vegetatielaag", {
             Index_min_criterium =
               ifelse(
                 .data$Criterium == "Vegetatie",
-                -0.5714285714,
+                -0.61904762,
                 .data$Index_min_criterium
               ),
             Index_harm_criterium =
               ifelse(
                 .data$Criterium == "Vegetatie",
-                -0.33664729,
+                -0.39515897,
                 .data$Index_harm_criterium
               )
           )
@@ -135,7 +135,7 @@ describe("berekenLSVIbasis vegetatielaag", {
               ifelse(
                 .data$Indicator ==
                   "sleutelsoorten van de boom- en struiklaag",
-                -0.5714285714,
+                -0.61904762,
                 .data$Verschilscore
               )
           )
@@ -150,14 +150,14 @@ describe("berekenLSVIbasis vegetatielaag", {
               ifelse(
                 .data$Voorwaarde ==
                   "grondvlak sleutelsoorten boom- en struiklaag",
-                "30",
+                "26.6666666666667",
                 .data$Waarde
               ),
             Verschilscore =
               ifelse(
                 .data$Voorwaarde ==
                   "grondvlak sleutelsoorten boom- en struiklaag",
-                -0.5714285714,
+                -0.61904762,
                 .data$Verschilscore
               )
           )

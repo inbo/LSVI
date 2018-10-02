@@ -1,6 +1,8 @@
 box: inbobmk/rstable
 build:
   steps:
+    - script:
+        code: Rscript -e "install.packages(c('odbc','rgbif'))"
     - inbobmk/r-check
     - inbobmk/r-coverage
     - inbobmk/r-lint

@@ -39,6 +39,7 @@
 #' @importFrom tidyr unnest
 #' @importFrom assertthat assert_that has_name
 #' @importFrom rlang .data
+#' @importFrom stringr str_split_fixed
 #'
 #'
 berekenLSVIbasis <-
