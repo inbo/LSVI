@@ -38,11 +38,20 @@ combinerenVerschilscore <-
     Formule <- gsub(" AND ", " %min% ", Formule)
     Formule <- gsub(" OR ", " %max% ", Formule)
     for (i in seq_along(VoorwaardeID)) {
-      Formule <- gsub(VoorwaardeID[i], Verschilscore[i], Formule)
+      Formule <-
+        gsub(
+          paste0("(^|\\D)", VoorwaardeID[i], "(\\D|$)"),
+          paste0("ID", VoorwaardeID[i], "ID"),
+          Formule
+        )
+    }
+    for (i in seq_along(VoorwaardeID)) {
+      Formule <-
+        gsub(paste0("ID", VoorwaardeID[i], "ID"), Verschilscore[i], Formule)
     }
     Resultaat <- evals(Formule, env = new.env())[[1]]$result
 
-    if(!is.null(Resultaat)){
+    if (!is.null(Resultaat)) {
       Resultaat <- as.numeric(Resultaat)
     } else {
       Resultaat = NA
