@@ -6,12 +6,12 @@
 #'
 #' @importFrom methods setClass setMethod
 #'
-#' @include s4_AnalyseVariabele.R
+#' @include s4_bedekking.R
 setClass(
   Class = "aandeelKruidlaag",
   representation =
     representation(),
-  contains = "AnalyseVariabele"
+  contains = "bedekking"
 )
 
 setMethod(
@@ -19,9 +19,38 @@ setMethod(
   signature = "aandeelKruidlaag",
   definition = function(object) {
 
-    Resultaat <- berekenWaarde(as(object, "bedekking"))/berekenWaarde(as(object, "bedekkingLaag")) * 100
+    # bedekking sleutelsoorten
+    teller <- berekenWaarde(as(object, "bedekking"))
 
-    return(Resultaat)
+    #bedekking vegetatielaag
+    vegetatielaag <- object@Kenmerken %>%
+      filter(
+        .data$TypeKenmerk == "studiegroep",
+        tolower(.data$Kenmerk) %in% tolower(object@Studiegroep$Waarde),
+        !is.na(.data$WaardeMax)
+      )
+
+    if(nrow(vegetatielaag) > 0){
+
+      #indien bedekking vegetatielaag is meegegeven wordt deze als noemer gebruikt
+      resultaat <- c(teller[1]/vegetatielaag$WaardeMax, teller[2]/vegetatielaag$WaardeMin)
+
+    } else{
+      #indien bedekking vegetatielaag niet is meegegeven wordt deze berekend op basis van alle soorten in kruidlaag
+      soorten_vegetatielaag <- object@Kenmerken %>%
+        filter(
+          .data$Vegetatielaag  %in% tolower(object@Studiegroep$Waarde))
+
+      BedekkingMin <-
+        (1.0 - prod( (1.0 - soorten_vegetatielaag$WaardeMin), na.rm = TRUE))
+      BedekkingMax <-
+        (1.0 - prod( (1.0 - soorten_vegetatielaag$WaardeMax), na.rm = TRUE))
+
+      resultaat <- c(teller[1]/BedekkingMax, teller[2]/BedekkingMin)
+
+    }
+
+    return(resultaat)
   }
 )
 
@@ -29,6 +58,6 @@ setMethod(
   f = "geefTheoretischMaximum",
   signature = "aandeelKruidlaag",
   definition = function(object) {
-    return(100)
+    return(1)
   }
 )
