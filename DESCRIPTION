@@ -29,7 +29,7 @@ Imports:
     xtable
 Suggests:
     knitr
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0.9000
 VignetteBuilder: knitr
 Collate: 
     'berekenLSVIbasis.R'
@@ -57,9 +57,11 @@ Collate:
     'maakLSVIrapport.R'
     's4_AnalyseVariabele.R'
     's4_aandeel.R'
+    's4_bedekking.R'
+    's4_aandeelKruidlaag.R'
+    's4_aandeelVegetatielaag.R'
     's4_aantal.R'
     's4_analyseVariabele_c.R'
-    's4_bedekking.R'
     's4_bedekkingLaag.R'
     's4_maxBedekking.R'
     's4_maxBedekkingExcl.R'
