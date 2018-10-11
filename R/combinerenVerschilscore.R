@@ -42,10 +42,10 @@ combinerenVerschilscore <-
     }
     Resultaat <- evals(Formule, env = new.env())[[1]]$result
 
-    if(!is.null(Resultaat)){
+    if (!is.null(Resultaat)) {
       Resultaat <- as.numeric(Resultaat)
     } else {
-      Resultaat = NA
+      Resultaat <- NA
     }
 
     return(Resultaat)

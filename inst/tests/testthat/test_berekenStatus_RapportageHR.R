@@ -22,7 +22,7 @@ Data_soortenKenmerken <-
 #       Versie = "Versie 3",
 #       Kwaliteitsniveau = "1", Data_habitat,
 #       Data_voorwaarden, Data_soortenKenmerken,
-#       Aggregatiemethode = "RapportageHR"
+#       Aggregatiemethode = "RapportageHR"        #nolint
 #     )
 #   )
 #
@@ -51,3 +51,4 @@ describe("bereken status criterium en globaal volgens Rapportage HR", {
       Resultaat_RapportageHR
     )
   })
+})
