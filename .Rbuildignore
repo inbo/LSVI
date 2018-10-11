@@ -3,6 +3,6 @@
 ^man-roxygen$
 ^\.lintr$
 ^data$
-^\.wercker.yml$
+^\wercker.yml$
 ^inst/databanktoestanden$
 ^inst/oudecode$
