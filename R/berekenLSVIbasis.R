@@ -117,9 +117,7 @@ berekenLSVIbasis <-
       )
     ) {
     stop(
-      sprintf(
-        "Aggregatiemethode moet een van de volgende waarden zijn: 'RapportageHR' of '1-out-all-out'",
-      )
+      "Aggregatiemethode moet een van de volgende waarden zijn: 'RapportageHR' of '1-out-all-out'"   #nolint
     )
   }
 
