@@ -94,7 +94,7 @@ selecteerKenmerkenInOpname <-
     if (identical(SubAnalyseVariabele, character(0))) {
       Resultaat <- Resultaat %>%
         filter(
-          .data$WaardeMax > 0
+          .data$WaardeMin > 0
         ) %>%
         distinct()
 
