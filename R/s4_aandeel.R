@@ -19,7 +19,7 @@ setMethod(
   signature = "aandeel",
   definition = function(object) {
 
-    Resultaat <-
+    sleutelsoorten <-
       selecteerKenmerkenInOpname(
         object@Kenmerken,
         object@Soortengroep,
@@ -28,15 +28,27 @@ setMethod(
         object@SubRefMin,
         object@SubRefMax,
         object@SubOperator
-      )
+      ) %>%
+      filter(.data$Eenheid %in% c("Grondvlak_ha", "Volume_ha"))
 
-    if (length(Resultaat) == 1 & all(is.na(Resultaat))) {
+    alle_soorten <- object@Kenmerken %>%
+      filter(.data$Eenheid %in% c("Grondvlak_ha", "Volume_ha"))
+
+
+    if (nrow(alle_soorten) == 0) {
       return(NA)
+    } else{
+      teller_min <- sum(sleutelsoorten$WaardeMin, na.rm = TRUE)
+      teller_max <- sum(sleutelsoorten$WaardeMax, na.rm = TRUE)
+      noemer_min <- sum(alle_soorten$WaardeMin, na.rm = TRUE)
+      noemer_max <- sum(alle_soorten$WaardeMax, na.rm = TRUE)
+
+      aandeel_min <- min(teller_min/noemer_max, 1)
+      aandeel_max <- min(teller_max/noemer_min, 1)
+      resultaat <- c(aandeel_min, aandeel_max)
+      return(resultaat)
+
     }
-
-     Totaal <- sum(mean(c(Resultaat$WaardeMin, Resultaat$WaardeMax)))
-
-    return(Totaal)
   }
 )
 
@@ -44,6 +56,6 @@ setMethod(
   f = "geefTheoretischMaximum",
   signature = "aandeel",
   definition = function(object) {
-    return(100)
+    return(1)
   }
 )
