@@ -24,7 +24,7 @@ Data_soortenKenmerken <-
 #       Data_voorwaarden, Data_soortenKenmerken
 #     )
 #   )
-# 
+#
 # save(Resultaat, file = "inst/vbdata/Resultaat_test.Rdata")  #nolint
 # load("inst/vbdata/Resultaat_test.Rdata")  #nolint
 
@@ -300,8 +300,8 @@ describe("berekenLSVIbasis", {
               ifelse(.data$Waarde == "f", "F", .data$Waarde)
           ),
         Resultaat_globaal = Resultaat[["Resultaat_globaal"]]))
-    expect_equal(
-      idsWissen(
+
+    Resultaat_NA <- idsWissen(
         berekenLSVIbasis(
           Versie = "Versie 3",
           Kwaliteitsniveau = "1",
@@ -312,102 +312,35 @@ describe("berekenLSVIbasis", {
                 ifelse(.data$Waarde == "f", NA, .data$Waarde)
             ),
           Data_soortenKenmerken
-        )
-      ),
-      list(
-        Resultaat_criterium =
-          Resultaat[["Resultaat_criterium"]] %>%
-          mutate(
-            Status_criterium =
-              ifelse(
-                .data$Criterium == "Verstoring" & .data$ID == "Ts2036",
-                NA,
-                .data$Status_criterium
-              ),
-            Index_min_criterium =
-              ifelse(
-                .data$Criterium == "Verstoring" & .data$ID == "Ts2036",
-                NA,
-                .data$Index_min_criterium
-              ),
-            Index_harm_criterium =
-              ifelse(
-                .data$Criterium == "Verstoring" & .data$ID == "Ts2036",
-                NA,
-                .data$Index_harm_criterium
-              )
-          ),
-        Resultaat_indicator =
-          Resultaat[["Resultaat_indicator"]] %>%
-          mutate(
-            Status_indicator =
-              ifelse(
-                .data$Indicator == "vergrassing" & .data$ID == "Ts2036",
-                NA,
-                .data$Status_indicator
-              ),
-            Verschilscore =
-              ifelse(
-                .data$Indicator == "vergrassing" & .data$ID == "Ts2036",
-                NA,
-                .data$Verschilscore
-              ),
-            Status_indicator =
-              ifelse(
-                .data$Indicator == "dwergstruiken" & .data$ID == "JR0216",
-                NA,
-                .data$Status_indicator
-              ),
-            Verschilscore =
-              ifelse(
-                .data$Indicator == "dwergstruiken" & .data$ID == "JR0216",
-                NA,
-                .data$Verschilscore
-              )
-          ),
-        Resultaat_detail =
-          Resultaat[["Resultaat_detail"]] %>%
-          mutate(
-            Status_voorwaarde =
-              ifelse(
-                .data$Waarde == "f" & .data$ID == "Ts2036",
-                NA,
-                .data$Status_voorwaarde
-              ),
-            Waarde =
-              ifelse(
-                .data$Waarde == "f" & .data$ID == "Ts2036",
-                NA,
-                .data$Waarde
-              ),
-            Verschilscore =
-              ifelse(
-                .data$Waarde == "f" & .data$ID == "Ts2036",
-                NA,
-                .data$Verschilscore
-              ),
-            Status_voorwaarde =
-              ifelse(
-                .data$Waarde == "f" & .data$ID == "JR0216",
-                NA,
-                .data$Status_voorwaarde
-              ),
-            Waarde =
-              ifelse(
-                .data$Waarde == "f" & .data$ID == "JR0216",
-                NA,
-                .data$Waarde
-              ),
-            Verschilscore =
-              ifelse(
-                .data$Waarde == "f" & .data$ID == "JR0216",
-                NA,
-                .data$Verschilscore
-              )
-          ),
-        Resultaat_globaal = Resultaat[["Resultaat_globaal"]]
+        ))
+
+    Indicator_vergrassing <- Resultaat_NA[["Resultaat_indicator"]] %>%
+      filter(.data$Indicator == "vergrassing" & .data$ID == "Ts2036") %>%
+      select(Indicator, Status_indicator)
+
+    Criterium_verstoring <- Resultaat_NA[["Resultaat_criterium"]] %>%
+      filter(.data$Criterium == "Verstoring" & .data$ID == "Ts2036") %>%
+      select(Criterium, Status_criterium)
+
+    Status_globaal <- Resultaat_NA[["Resultaat_globaal"]] %>%
+      filter( .data$ID == "Ts2036")
+
+    expect_equal(
+      Indicator_vergrassing$Status_indicator,
+      NA
       )
-    )
+
+    expect_equal(
+      Criterium_verstoring$Status_criterium,
+      NA
+      )
+
+    expect_equal(
+      Status_globaal$Status,
+      FALSE
+      )
+
+
   })
 
   it("parameter kwaliteitsniveau heeft correct formaat", {
