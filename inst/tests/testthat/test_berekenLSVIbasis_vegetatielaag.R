@@ -264,7 +264,7 @@ describe("berekenLSVIbasis vegetatielaag", {
             .data$Vegetatielaag
           )
       )
-    load(system.file("vbdata/Resultaat_test.Rdata", package = "LSVI"))
+    load(system.file("vbdata/Resultaat_test4030.Rdata", package = "LSVI"))
     expect_warning(
       idsWissen(
         berekenLSVIbasis(
@@ -311,7 +311,7 @@ describe("berekenLSVIbasis vegetatielaag", {
                col_character(), col_character(), col_character(),
                col_character(), col_character())
       )
-    load(system.file("vbdata/Resultaat_test.Rdata", package = "LSVI"))
+    load(system.file("vbdata/Resultaat_test4030.Rdata", package = "LSVI"))
     expect_equal(
       idsWissen(
         berekenLSVIbasis(

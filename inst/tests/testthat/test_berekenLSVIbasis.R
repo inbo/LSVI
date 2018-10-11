@@ -25,10 +25,10 @@ Data_soortenKenmerken <-
 #     )
 #   )
 #
-# save(Resultaat, file = "inst/vbdata/Resultaat_test.Rdata")  #nolint
+# save(Resultaat, file = "inst/vbdata/Resultaat_test4030.Rdata")  #nolint
 # load("inst/vbdata/Resultaat_test.Rdata")  #nolint
 
-load(system.file("vbdata/Resultaat_test.Rdata", package = "LSVI"))
+load(system.file("vbdata/Resultaat_test4030.Rdata", package = "LSVI"))
 
 describe("berekenLSVIbasis", {
   it("ConnectieLSVIhabitats is een open DBI-connectie", {
