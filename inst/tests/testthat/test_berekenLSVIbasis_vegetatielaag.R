@@ -114,13 +114,13 @@ describe("berekenLSVIbasis vegetatielaag", {
             Index_min_criterium =
               ifelse(
                 .data$Criterium == "Vegetatie",
-                -0.61904762,
+                0.105691057,
                 .data$Index_min_criterium
               ),
             Index_harm_criterium =
               ifelse(
                 .data$Criterium == "Vegetatie",
-                -0.39515897,
+                0.26098179,
                 .data$Index_harm_criterium
               )
           )
@@ -135,7 +135,7 @@ describe("berekenLSVIbasis vegetatielaag", {
               ifelse(
                 .data$Indicator ==
                   "sleutelsoorten van de boom- en struiklaag",
-                -0.61904762,
+                0.105691057,
                 .data$Verschilscore
               )
           )
@@ -150,14 +150,14 @@ describe("berekenLSVIbasis vegetatielaag", {
               ifelse(
                 .data$Voorwaarde ==
                   "grondvlak sleutelsoorten boom- en struiklaag",
-                "26.6666666666667",
+                "73.1707317073171",
                 .data$Waarde
               ),
             Verschilscore =
               ifelse(
                 .data$Voorwaarde ==
                   "grondvlak sleutelsoorten boom- en struiklaag",
-                -0.61904762,
+                0.105691057,
                 .data$Verschilscore
               )
           )
@@ -261,7 +261,7 @@ describe("berekenLSVIbasis vegetatielaag", {
             .data$Vegetatielaag
           )
       )
-    load(system.file("vbdata/Resultaat_test.Rdata", package = "LSVI"))
+    load(system.file("vbdata/Resultaat_test4030.Rdata", package = "LSVI"))
     expect_warning(
       idsWissen(
         berekenLSVIbasis(
@@ -308,7 +308,7 @@ describe("berekenLSVIbasis vegetatielaag", {
                col_character(), col_character(), col_character(),
                col_character(), col_character())
       )
-    load(system.file("vbdata/Resultaat_test.Rdata", package = "LSVI"))
+    load(system.file("vbdata/Resultaat_test4030.Rdata", package = "LSVI"))
     expect_equal(
       idsWissen(
         berekenLSVIbasis(

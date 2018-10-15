@@ -50,8 +50,7 @@ invoercontroleData_soortenKenmerken <-
         as.character(Data_soortenKenmerken$Type)
     }
     if (
-      !all(Data_soortenKenmerken$Type %in%
-           geefUniekeWaarden(
+      !all(Data_soortenKenmerken$Type %in% geefUniekeWaarden(
              "TypeVariabele",
              "Naam",
              ConnectieLSVIhabitats
@@ -84,7 +83,8 @@ invoercontroleData_soortenKenmerken <-
           ConnectieLSVIhabitats
         ),
         "Volume_ha",
-        "Aantal_ha"
+        "Aantal_ha",
+        "Grondvlak_ha"
       )
 
     if (

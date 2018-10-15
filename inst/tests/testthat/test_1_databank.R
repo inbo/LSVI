@@ -38,8 +38,8 @@ describe("test databank", {
       filter(!grepl("^meting", .data$VariabeleNaam))
     expect_true(
       all(AV$VariabeleNaam %in%
-            c("aandeel", "aantal", "bedekking", "bedekkingLaag", "maxBedekking",
-            "maxBedekkingExcl")
+            c("aandeel", "aandeelKruidlaag", "aantal", "bedekking",
+              "bedekkingLaag", "maxBedekking", "maxBedekkingExcl")
       )
     )
   })
@@ -159,7 +159,7 @@ describe("test databank", {
     )
   })
 
-  it("AnalyseVariabele aandeel bevat percentages en categorische var", {
+  it("AnalyseVariabele aandeel bevat percentages", {
     skip_on_cran()
     ConnectieLSVIhabitats <-
       connecteerMetLSVIdb()
@@ -173,9 +173,9 @@ describe("test databank", {
         WHERE AnalyseVariabele.VariabeleNaam = 'aandeel'"
       )
     AV_ok <- AV %>%
-      filter(TypeVariabele %in% c("Percentage", "Categorie"))
+      filter(TypeVariabele %in% c("Percentage"))
     AV_leeg <- AV %>%
-      filter(!TypeVariabele %in% c("Percentage", "Categorie"))
+      filter(!TypeVariabele %in% c("Percentage"))
     RefwaardenPerc <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -201,23 +201,49 @@ describe("test databank", {
       nrow(FouteWaarden),
       0
     )
-    skip_if_not(nrow(AV_ok) == 2, "Geen categorische var voor aandeel")
-    RefwaardenCat <-
+  })
+
+  it("AnalyseVariabele aandeelKruidlaag bevat percentages", {
+    skip_on_cran()
+    ConnectieLSVIhabitats <-
+      connecteerMetLSVIdb()
+    AV <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        "SELECT AnalyseVariabele.Id, AnalyseVariabele.VariabeleNaam,
+        TypeVariabele.Naam as TypeVariabele
+        FROM AnalyseVariabele INNER JOIN TypeVariabele
+        ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
+        WHERE AnalyseVariabele.VariabeleNaam = 'aandeelKruidlaag'"
+      )
+    AV_ok <- AV %>%
+      filter(TypeVariabele %in% c("Percentage"))
+    AV_leeg <- AV %>%
+      filter(!TypeVariabele %in% c("Percentage"))
+    RefwaardenPerc <-
       dbGetQuery(
         ConnectieLSVIhabitats,
         sprintf(
           "SELECT Referentiewaarde FROM Voorwaarde
           WHERE AnalyseVariabeleId = '%s'",
-          (AV %>% filter(TypeVariabele == "Categorie"))$Id
+          (AV %>% filter(TypeVariabele == "Percentage"))$Id
         )
       )
-    LijstItems <-
+    expect_true(
+      all(as.numeric(RefwaardenPerc$Referentiewaarde) <= 100)
+    )
+    FouteWaarden <-
       dbGetQuery(
         ConnectieLSVIhabitats,
-        "SELECT Waarde FROM LijstItem"
+        sprintf(
+          "SELECT Id, Referentiewaarde FROM Voorwaarde
+          WHERE AnalyseVariabeleId in ('%s')",
+          paste(AV_leeg$Id, collapse = "','")
+        )
       )
-    expect_true(
-      all(RefwaardenCat$Referentiewaarde %in% LijstItems$Waarde)
+    expect_equal(
+      nrow(FouteWaarden),
+      0
     )
   })
 

@@ -33,7 +33,8 @@ combinerenVoorwaarden <-
     Formule <- gsub(" AND ", " & ", Formule)
     Formule <- gsub(" OR ", " | ", Formule)
     for (i in seq_along(VoorwaardeID)) {
-      Formule <- gsub(VoorwaardeID[i], Status[i], Formule)
+      Formule <-
+        gsub(paste0("(^|\\D)", VoorwaardeID[i], "(\\D|$)"), Status[i], Formule)
     }
     Resultaat <- as.logical(evals(Formule)[[1]]$result)
 
