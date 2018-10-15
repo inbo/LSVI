@@ -117,9 +117,7 @@ berekenLSVIbasis <-
       )
     ) {
     stop(
-      sprintf(
-        "Aggregatiemethode moet een van de volgende waarden zijn: 'RapportageHR' of '1-out-all-out'",
-      )
+      "Aggregatiemethode moet een van de volgende waarden zijn: 'RapportageHR' of '1-out-all-out'"   #nolint
     )
   }
 
@@ -426,13 +424,24 @@ berekenLSVIbasis <-
         .data$Kwaliteitsniveau
       ) %>%
       summarise(
-        Status_criterium = ifelse(Aggregatiemethode == "1-out-all-out",
-                                  as.logical(all(.data$Status_indicator,
-                                          na.rm = na.rm)
-                                          ),
-                                  ifelse(Aggregatiemethode == "RapportageHR",
-                                         (sum(.data$Status_indicator, na.rm = na.rm) > sum(!is.na(.data$Status_indicator))/2.0) & (sum((.data$Status_indicator == FALSE) * (.data$Belang == "zb"), na.rm = na.rm) == 0),
-                                         NA)),
+        Status_criterium =
+          ifelse(
+            Aggregatiemethode == "1-out-all-out",
+            as.logical(all(.data$Status_indicator, na.rm = na.rm)),
+            ifelse(
+              Aggregatiemethode == "RapportageHR",
+              (
+                sum(.data$Status_indicator, na.rm = na.rm) >
+                  sum(!is.na(.data$Status_indicator)) / 2.0
+              ) & (
+                sum(
+                  (.data$Status_indicator == FALSE) * (.data$Belang == "zb"),
+                  na.rm = na.rm
+                ) == 0
+              ),
+              NA
+            )
+          ),
         #minimum van de scores tussen -1 en +1
         Index_min_criterium = min(.data$Verschilscore, na.rm = na.rm),
         #harmonisch gemiddelde van de verschilscores
@@ -471,14 +480,24 @@ berekenLSVIbasis <-
         .data$Kwaliteitsniveau
       ) %>%
       summarise(
-        Status = ifelse(Aggregatiemethode == "1-out-all-out",
-                                  as.logical(all(.data$Status_indicator,
-                                          na.rm = na.rm)
-                                          ),
-                                  ifelse(Aggregatiemethode == "RapportageHR",
-                                         (sum(.data$Status_indicator, na.rm = na.rm) > sum(!is.na(.data$Status_indicator))/2.0) & (sum((.data$Status_indicator == FALSE) * (.data$Belang == "zb"), na.rm = na.rm) == 0),
-                                         NA))
-
+        Status =
+          ifelse(
+            Aggregatiemethode == "1-out-all-out",
+            as.logical(all(.data$Status_indicator, na.rm = na.rm)),
+            ifelse(
+              Aggregatiemethode == "RapportageHR",
+              (
+                sum(.data$Status_indicator, na.rm = na.rm) >
+                  sum(!is.na(.data$Status_indicator))/2.0
+              ) & (
+                sum(
+                  (.data$Status_indicator == FALSE) * (.data$Belang == "zb"),
+                  na.rm = na.rm
+                ) == 0
+              ),
+              NA
+            )
+          )
       ) %>%
       ungroup()
 

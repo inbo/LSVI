@@ -54,7 +54,7 @@ combinerenVerschilscore <-
     if (!is.null(Resultaat)) {
       Resultaat <- as.numeric(Resultaat)
     } else {
-      Resultaat = NA
+      Resultaat <- NA
     }
 
     return(Resultaat)

@@ -120,8 +120,7 @@ invoercontroleData_soortenKenmerken <-
     }
 
 
-
-    #○mzettingen naar een bruikbare dataframe
+    # Omzettingen naar een bruikbare dataframe
     Kenmerken <- Data_soortenKenmerken    # naamsverandering!
 
     QuerySoorten <-
