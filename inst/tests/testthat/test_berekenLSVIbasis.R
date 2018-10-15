@@ -864,6 +864,186 @@ describe("berekenLSVIbasis", {
     )
   })
 
+  it("Een beoordeling op indicatorniveau wordt correct afgehandeld", {
+    skip_on_cran()
+    expect_equal(
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 3",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden %>%
+            mutate(
+              Voorwaarde =
+                ifelse(
+                  .data$Indicator == "invasieve exoten",
+                  NA,
+                  .data$Voorwaarde
+                ),
+              Waarde =
+                ifelse(
+                  .data$Indicator == "invasieve exoten",
+                  "TRUE",
+                  .data$Waarde
+                ),
+              Type =
+                ifelse(
+                  .data$Indicator == "invasieve exoten",
+                  NA,
+                  .data$Type
+                ),
+              Eenheid =
+                ifelse(
+                  .data$Indicator == "invasieve exoten",
+                  NA,
+                  .data$Eenheid
+                )
+            ),
+          Data_soortenKenmerken
+        )
+      ),
+      list(
+        Resultaat_criterium = Resultaat[["Resultaat_criterium"]],
+        Resultaat_indicator = Resultaat[["Resultaat_indicator"]] %>%
+          mutate(
+            Verschilscore =
+              ifelse(
+                .data$Indicator == "invasieve exoten",
+                NA,
+                .data$Verschilscore
+              )
+          ),
+        Resultaat_detail = Resultaat[["Resultaat_detail"]] %>%
+          mutate(
+            Voorwaarde =
+              ifelse(
+                .data$Indicator == "invasieve exoten",
+                NA,
+                .data$Voorwaarde
+              ),
+            Referentiewaarde =
+              ifelse(
+                .data$Indicator == "invasieve exoten",
+                NA,
+                .data$Referentiewaarde
+              ),
+            Operator =
+              ifelse(
+                .data$Indicator == "invasieve exoten",
+                NA,
+                .data$Operator
+              ),
+            EenheidRefwaarde =
+              ifelse(
+                .data$Indicator == "invasieve exoten",
+                NA,
+                .data$EenheidRefwaarde
+              ),
+            TypeRefwaarde =
+              ifelse(
+                .data$Indicator == "invasieve exoten",
+                NA,
+                .data$TypeRefwaarde
+              ),
+            Waarde =
+              ifelse(
+                .data$Indicator == "invasieve exoten",
+                NA,
+                .data$Waarde
+              ),
+            TypeWaarde =
+              ifelse(
+                .data$Indicator == "invasieve exoten",
+                NA,
+                .data$TypeWaarde
+              ),
+            EenheidWaarde =
+              ifelse(
+                .data$Indicator == "invasieve exoten",
+                NA,
+                .data$EenheidWaarde
+              ),
+            afkomstWaarde =
+              ifelse(
+                .data$Indicator == "invasieve exoten",
+                "inschatting indicator",
+                .data$afkomstWaarde
+              ),
+            TheoretischMaximum =
+              ifelse(
+                .data$Indicator == "invasieve exoten",
+                NA,
+                .data$TheoretischMaximum
+              ),
+            Verschilscore =
+              ifelse(
+                .data$Indicator == "invasieve exoten",
+                NA,
+                .data$Verschilscore
+              )
+          ),
+        Resultaat_globaal = Resultaat[["Resultaat_globaal"]]
+      )
+    )
+    expect_equal(
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 3",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden %>%
+            bind_rows(
+              data.frame(
+                ID = c("JR0216", "Ts2036"),
+                Criterium = "Vegetatie",
+                Indicator = "sleutelsoorten",
+                Waarde = "TRUE",
+                stringsAsFactors = FALSE
+              )
+            ),
+          Data_soortenKenmerken
+        )
+      ),
+      list(
+        Resultaat_criterium = Resultaat[["Resultaat_criterium"]],
+        Resultaat_indicator = Resultaat[["Resultaat_indicator"]] %>%
+          mutate(
+            Verschilscore =
+              ifelse(
+                .data$Indicator == "sleutelsoorten",
+                NA,
+                .data$Verschilscore
+              )
+          ),
+        Resultaat_detail = Resultaat[["Resultaat_detail"]] %>%
+          filter(.data$Indicator != "sleutelsoorten") %>%
+          bind_rows(
+            data.frame(
+              ID = c("JR0216", "Ts2036"),
+              Habitattype = "4030",
+              'Kwaliteit van onderzoek sleutelsoorten' =
+                c(
+                  "Zeer goed (Zeker geen soorten over het hoofd gezien)",
+                  "Matig?(Waarschijnlijk soorten over het hoofd gezien)"
+                ),
+              Versie = "Versie 3",
+              Habitattype.y = "4030",
+              Criterium = "Vegetatie",
+              Indicator = "sleutelsoorten",
+              Beoordeling =
+                "Struikhei + minimaal 1 andere sleutelsoort aanwezig",
+              Kwaliteitsniveau = 1,
+              Belang = "b",
+              afkomstWaarde = "inschatting indicator",
+              Status_voorwaarde = TRUE,
+              stringsAsFactors = FALSE
+            )
+          ),
+        Resultaat_globaal = Resultaat[["Resultaat_globaal"]]
+      )
+    )
+  })
+
 })
 
 
