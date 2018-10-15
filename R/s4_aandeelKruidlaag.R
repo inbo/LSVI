@@ -1,6 +1,6 @@
-#' S4-klasse die aandeelVegetatielaag bedekking soorten binnen een vegetatielaag berekend
+#' S4-klasse die aandeel bedekking soorten binnen de kruidlaag berekend
 #'
-#' Deze klasse AandeelVegetatielaag staat in voor de berekening van waarden voor TypeVariabele AandeelVegetatielaag op basis van opgegeven kenmerken.  Ze is een nakomeling van de klasse AnalyseVariabele.
+#' Deze klasse AandeelKruidlaag staat in voor de berekening van waarden voor TypeVariabele AandeelKruidlaag op basis van opgegeven kenmerken.  Ze is een nakomeling van de klasse bedekking.
 #'
 #' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
 #'
