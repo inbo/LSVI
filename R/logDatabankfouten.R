@@ -35,8 +35,8 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = ConnectiePool) {
       "SELECT distinct(VariabeleNaam)
       FROM AnalyseVariabele INNER JOIN Voorwaarde
       On AnalyseVariabele.Id = Voorwaarde.AnalyseVariabeleId
-      WHERE NOT VariabeleNaam in ('aantal', 'aandeel', 'bedekking',
-        'maxBedekking', 'maxBedekkingExcl', 'bedekkingLaag')
+      WHERE NOT VariabeleNaam in ('aantal', 'aandeel', 'aandeelKruidlaag',
+        'bedekking', 'maxBedekking', 'maxBedekkingExcl', 'bedekkingLaag')
       AND NOT VariabeleNaam LIKE 'meting%'"
     )
 
@@ -69,8 +69,8 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = ConnectiePool) {
   OnbekendeAV <- Invoervereisten %>%
     filter(
       !.data$AnalyseVariabele %in%
-        c("aantal", "aandeel", "bedekking", "bedekkingLaag", "maxBedekking",
-          "maxBedekkingExcl"),
+        c("aantal", "aandeel", "aandeelKruidlaag", "bedekking", "bedekkingLaag",
+          "maxBedekking", "maxBedekkingExcl"),
       !grepl("^meting", .data$AnalyseVariabele)
     )
   TypeAantalNietGeheelGetal <- Invoervereisten %>%
@@ -81,8 +81,14 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = ConnectiePool) {
   TypeBedekkingFout <- Invoervereisten %>%
     filter(
       .data$AnalyseVariabele %in%
-        c("aandeel", "bedekking", "maxBedekking", "maxBedekkingExcl"),
+        c("bedekking", "maxBedekking", "maxBedekkingExcl"),
       !.data$TypeVariabele %in% c("Percentage", "Categorie")
+    )
+  TypeAandeelFout <- Invoervereisten %>%
+    filter(
+      .data$AnalyseVariabele %in%
+        c("aandeel", "aandeelKruidlaag"),
+      !.data$TypeVariabele %in% c("Percentage")
     )
   LijstItems <-
     dbGetQuery(
@@ -106,6 +112,13 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = ConnectiePool) {
         mutate(
           Probleem =
             "TypeVariabele moet een percentage of categorie zijn (bedekking)"
+        )
+    ) %>%
+    bind_rows(
+      TypeAandeelFout %>%
+        mutate(
+          Probleem =
+            "TypeVariabele moet een percentage zijn (aandeel)"
         )
     ) %>%
     bind_rows(
