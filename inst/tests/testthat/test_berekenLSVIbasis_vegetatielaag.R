@@ -89,89 +89,86 @@ describe("berekenLSVIbasis vegetatielaag", {
       ),
       Resultaat
     )
-
-    # Onderstaande test is zinloos: sleutelsoorten boom - en struiklaag worden op basis van grondvlak berekend en niet op basis van bedekking
-
-    # BerekendRes <-
-    #   idsWissen(
-    #     berekenLSVIbasis(
-    #         Versie = "Versie 3", Kwaliteitsniveau = "1",
-    #         Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
-    #         Data_soortenKenmerken =
-    #           Data_soortenKenmerken %>%
-    #           mutate(
-    #             Vegetatielaag =
-    #               ifelse(
-    #                 Vegetatielaag == "struiklaag",
-    #                 "kruidlaag",
-    #                 .data$Vegetatielaag
-    #               )
-    #           )
-    #       )
-    #   )
-    # stopifnot(
-    #   all.equal(
-    #     BerekendRes[["Resultaat_criterium"]],
-    #     Resultaat[["Resultaat_criterium"]] %>%
-    #       mutate(
-    #         Index_min_criterium =
-    #           ifelse(
-    #             .data$Criterium == "Vegetatie",
-    #             -0.61904762,
-    #             .data$Index_min_criterium
-    #           ),
-    #         Index_harm_criterium =
-    #           ifelse(
-    #             .data$Criterium == "Vegetatie",
-    #             -0.39515897,
-    #             .data$Index_harm_criterium
-    #           )
-    #       )
-    #   )
-    # )
-    # stopifnot(
-    #   all.equal(
-    #     BerekendRes[["Resultaat_indicator"]],
-    #     Resultaat[["Resultaat_indicator"]] %>%
-    #       mutate(
-    #         Verschilscore =
-    #           ifelse(
-    #             .data$Indicator ==
-    #               "sleutelsoorten van de boom- en struiklaag",
-    #             -0.61904762,
-    #             .data$Verschilscore
-    #           )
-    #       )
-    #   )
-    # )
-    # stopifnot(
-    #   all.equal(
-    #     BerekendRes[["Resultaat_detail"]],
-    #     Resultaat[["Resultaat_detail"]] %>%
-    #       mutate(
-    #         Waarde =
-    #           ifelse(
-    #             .data$Voorwaarde ==
-    #               "grondvlak sleutelsoorten boom- en struiklaag",
-    #             "26.6666666666667",
-    #             .data$Waarde
-    #           ),
-    #         Verschilscore =
-    #           ifelse(
-    #             .data$Voorwaarde ==
-    #               "grondvlak sleutelsoorten boom- en struiklaag",
-    #             -0.61904762,
-    #             .data$Verschilscore
-    #           )
-    #       )
-    #   )
-    # )
-    # stopifnot(
-    #   all.equal(
-    #     BerekendRes[["Resultaat_globaal"]],
-    #     Resultaat[["Resultaat_globaal"]]
-    #   )
-    # )
+    BerekendRes <-
+      idsWissen(
+        berekenLSVIbasis(
+            Versie = "Versie 3", Kwaliteitsniveau = "1",
+            Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
+            Data_soortenKenmerken =
+              Data_soortenKenmerken %>%
+              mutate(
+                Vegetatielaag =
+                  ifelse(
+                    Vegetatielaag == "struiklaag",
+                    "kruidlaag",
+                    .data$Vegetatielaag
+                  )
+              )
+          )
+      )
+    stopifnot(
+      all.equal(
+        BerekendRes[["Resultaat_criterium"]],
+        Resultaat[["Resultaat_criterium"]] %>%
+          mutate(
+            Index_min_criterium =
+              ifelse(
+                .data$Criterium == "Vegetatie",
+                0.105691057,
+                .data$Index_min_criterium
+              ),
+            Index_harm_criterium =
+              ifelse(
+                .data$Criterium == "Vegetatie",
+                0.26098179,
+                .data$Index_harm_criterium
+              )
+          )
+      )
+    )
+    stopifnot(
+      all.equal(
+        BerekendRes[["Resultaat_indicator"]],
+        Resultaat[["Resultaat_indicator"]] %>%
+          mutate(
+            Verschilscore =
+              ifelse(
+                .data$Indicator ==
+                  "sleutelsoorten van de boom- en struiklaag",
+                0.105691057,
+                .data$Verschilscore
+              )
+          )
+      )
+    )
+    stopifnot(
+      all.equal(
+        BerekendRes[["Resultaat_detail"]],
+        Resultaat[["Resultaat_detail"]] %>%
+          mutate(
+            Waarde =
+              ifelse(
+                .data$Voorwaarde ==
+                  "grondvlak sleutelsoorten boom- en struiklaag",
+                "73.1707317073171",
+                .data$Waarde
+              ),
+            Verschilscore =
+              ifelse(
+                .data$Voorwaarde ==
+                  "grondvlak sleutelsoorten boom- en struiklaag",
+                0.105691057,
+                .data$Verschilscore
+              )
+          )
+      )
+    )
+    stopifnot(
+      all.equal(
+        BerekendRes[["Resultaat_globaal"]],
+        Resultaat[["Resultaat_globaal"]]
+      )
+    )
   })
 
   it("de functie geeft een warning of error als een vegetatielaag ontbreekt", {
