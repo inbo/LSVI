@@ -903,7 +903,21 @@ describe("berekenLSVIbasis", {
         )
       ),
       list(
-        Resultaat_criterium = Resultaat[["Resultaat_criterium"]],
+        Resultaat_criterium = Resultaat[["Resultaat_criterium"]] %>%
+          mutate(
+            Index_min_criterium =
+              ifelse(
+                .data$Criterium == "Verstoring",
+                NA,
+                .data$Index_min_criterium
+              ),
+            Index_harm_criterium =
+              ifelse(
+                .data$Criterium == "Verstoring",
+                NA,
+                .data$Index_harm_criterium
+              )
+          ),
         Resultaat_indicator = Resultaat[["Resultaat_indicator"]] %>%
           mutate(
             Verschilscore =
@@ -948,7 +962,7 @@ describe("berekenLSVIbasis", {
             Waarde =
               ifelse(
                 .data$Indicator == "invasieve exoten",
-                NA,
+                "TRUE",
                 .data$Waarde
               ),
             TypeWaarde =
@@ -963,17 +977,23 @@ describe("berekenLSVIbasis", {
                 NA,
                 .data$EenheidWaarde
               ),
-            afkomstWaarde =
+            AfkomstWaarde =
               ifelse(
                 .data$Indicator == "invasieve exoten",
-                "inschatting indicator",
-                .data$afkomstWaarde
+                "beoordeling indicator",
+                .data$AfkomstWaarde
               ),
             TheoretischMaximum =
               ifelse(
                 .data$Indicator == "invasieve exoten",
                 NA,
                 .data$TheoretischMaximum
+              ),
+            Status_voorwaarde =
+              ifelse(
+                .data$Indicator == "invasieve exoten",
+                NA,
+                .data$Status_voorwaarde
               ),
             Verschilscore =
               ifelse(
@@ -1005,7 +1025,21 @@ describe("berekenLSVIbasis", {
         )
       ),
       list(
-        Resultaat_criterium = Resultaat[["Resultaat_criterium"]],
+        Resultaat_criterium = Resultaat[["Resultaat_criterium"]] %>%
+          mutate(
+            Index_min_criterium =
+              ifelse(
+                .data$Criterium == "Vegetatie",
+                NA,
+                .data$Index_min_criterium
+              ),
+            Index_harm_criterium =
+              ifelse(
+                .data$Criterium == "Vegetatie",
+                NA,
+                .data$Index_harm_criterium
+              )
+          ),
         Resultaat_indicator = Resultaat[["Resultaat_indicator"]] %>%
           mutate(
             Verschilscore =
@@ -1014,14 +1048,15 @@ describe("berekenLSVIbasis", {
                 NA,
                 .data$Verschilscore
               )
-          ),
+          ) %>%
+          distinct(),
         Resultaat_detail = Resultaat[["Resultaat_detail"]] %>%
           filter(.data$Indicator != "sleutelsoorten") %>%
           bind_rows(
             data.frame(
               ID = c("JR0216", "Ts2036"),
               Habitattype = "4030",
-              'Kwaliteit van onderzoek sleutelsoorten' =
+              "kwaliteit van onderzoek sleutelsoorten" =
                 c(
                   "Zeer goed (Zeker geen soorten over het hoofd gezien)",
                   "Matig?(Waarschijnlijk soorten over het hoofd gezien)"
@@ -1032,12 +1067,20 @@ describe("berekenLSVIbasis", {
               Indicator = "sleutelsoorten",
               Beoordeling =
                 "Struikhei + minimaal 1 andere sleutelsoort aanwezig",
-              Kwaliteitsniveau = 1,
+              Kwaliteitsniveau = as.integer(1),
               Belang = "b",
-              afkomstWaarde = "inschatting indicator",
-              Status_voorwaarde = TRUE,
-              stringsAsFactors = FALSE
+              AfkomstWaarde = "beoordeling indicator",
+              Waarde = "TRUE",
+              stringsAsFactors = FALSE,
+              check.names = FALSE
             )
+          ) %>%
+          arrange(
+            .data$ID,
+            .data$Habitattype,
+            .data$Versie,
+            .data$Criterium,
+            .data$Indicator
           ),
         Resultaat_globaal = Resultaat[["Resultaat_globaal"]]
       )

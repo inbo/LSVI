@@ -35,7 +35,7 @@
 #'
 #' @export
 #'
-#' @importFrom dplyr %>% select distinct filter mutate row_number rename left_join summarise group_by ungroup rowwise bind_rows arrange
+#' @importFrom dplyr %>% select distinct filter mutate row_number rename left_join summarise group_by ungroup rowwise bind_rows arrange transmute
 #' @importFrom tidyr unnest
 #' @importFrom assertthat assert_that has_name
 #' @importFrom rlang .data
@@ -87,16 +87,30 @@ berekenLSVIbasis <-
           ConnectieLSVIhabitats,
           LIJST
         )
+      Data_voorwaarden_NA <- Data_voorwaarden[[1]]
+      Data_voorwaarden_nietNA <- Data_voorwaarden[[2]]
     } else {
-      assert_that(has_name(Data_voorwaarden, "ID"))
-      if (!is.character(Data_voorwaarden$ID)) {
-        Data_voorwaarden$ID <- as.character(Data_voorwaarden$ID)
+      Data_voorwaarden_NA <-
+        data.frame(
+          ID = character(),
+          Criterium = character(),
+          Indicator = character(),
+          Waarde = character(),
+          stringsAsFactors = FALSE
+        )
+      Data_voorwaarden_nietNA <- Data_voorwaarden
+    }
+      
+    if (nrow(Data_voorwaarden_nietNA) == 0) {
+      assert_that(has_name(Data_voorwaarden_nietNA, "ID"))
+      if (!is.character(Data_voorwaarden_nietNA$ID)) {
+        Data_voorwaarden_nietNA$ID <- as.character(Data_voorwaarden_nietNA$ID)
       }
-      assert_that(has_name(Data_voorwaarden, "Criterium"))
-      assert_that(has_name(Data_voorwaarden, "Indicator"))
-      assert_that(has_name(Data_voorwaarden, "Voorwaarde"))
-      assert_that(has_name(Data_voorwaarden, "WaardeMin"))
-      assert_that(has_name(Data_voorwaarden, "WaardeMax"))
+      assert_that(has_name(Data_voorwaarden_nietNA, "Criterium"))
+      assert_that(has_name(Data_voorwaarden_nietNA, "Indicator"))
+      assert_that(has_name(Data_voorwaarden_nietNA, "Voorwaarde"))
+      assert_that(has_name(Data_voorwaarden_nietNA, "WaardeMin"))
+      assert_that(has_name(Data_voorwaarden_nietNA, "WaardeMax"))
     }
 
     if (nrow(Data_soortenKenmerken) > 0) {
@@ -110,7 +124,7 @@ berekenLSVIbasis <-
       assert_that(has_name(Data_soortenKenmerken, "ID"))
     }
 
-     assert_that(is.string(Aggregatiemethode))
+    assert_that(is.string(Aggregatiemethode))
     if (
       !(Aggregatiemethode %in%
       c("RapportageHR", "1-out-all-out")
@@ -182,17 +196,48 @@ berekenLSVIbasis <-
       )
 
 
-    #voorwaardegegevens koppelen aan info uit de databank
+    #indicatorgegevens koppelen aan info uit de databank
     Resultaat <-
       Data_habitat %>%
       left_join(
         Invoervereisten,
         by = c("Habitattype" = "Habitatsubtype")) %>%
+      left_join(
+        Data_voorwaarden_NA %>%
+          select(
+            .data$ID, .data$Criterium, .data$Indicator, .data$Waarde
+          ),
+        by = c("ID", "Criterium", "Indicator"),
+        suffix = c("", ".ind")
+      )
+    Resultaat_opname_indicator <- Resultaat %>%
+      filter(!is.na(.data$Waarde)) %>%
       mutate(
+        AfkomstWaarde = "beoordeling indicator",
+        Combinatie = NULL,
+        VoorwaardeID = NULL,
+        Voorwaarde = NULL,
+        ExtraBewerking = NULL,
+        Referentiewaarde = NULL,
+        Operator = NULL,
+        Eenheid = NULL,
+        TypeVariabele = NULL,
+        Invoertype = NULL,
+        RefMin = NULL,
+        RefMax = NULL
+      ) %>%
+      distinct()
+
+    #voorwaardegegevens koppelen aan info uit de databank
+    Resultaat <-
+      Resultaat %>%
+      filter(is.na(.data$Waarde)) %>%
+      mutate(
+        Waarde = NULL,
         Voorwaarde.lower = tolower(.data$Voorwaarde)
       ) %>%
       left_join(
-        Data_voorwaarden,
+        Data_voorwaarden_nietNA,
         by =
           c("ID", "Criterium", "Indicator", "Voorwaarde.lower" = "Voorwaarde"),
         suffix = c("", ".vw")
@@ -373,7 +418,11 @@ berekenLSVIbasis <-
         TypeWaarde = .data$Type,
         EenheidWaarde = .data$Eenheid.vw,
         InvoertypeWaarde = .data$Invoertype.vw
-      ) %>%
+      )
+
+    #voor de uitvoer de gegevens van de geobserveerde indicatoren toevoegen
+    Resultaat_detail <- Resultaat %>%
+      bind_rows(Resultaat_opname_indicator) %>%
       arrange(
         .data$ID,
         .data$Habitattype,
@@ -381,7 +430,6 @@ berekenLSVIbasis <-
         .data$Criterium,
         .data$Indicator
       )
-
 
     #resultaten op niveau van indicator afleiden
     Resultaat_indicator <- Resultaat %>%
@@ -412,7 +460,31 @@ berekenLSVIbasis <-
           .data$Verschilscore
         )
       ) %>%
-      ungroup()
+      ungroup() %>%
+      bind_rows(
+        Resultaat_opname_indicator %>%
+          transmute(
+            .data$ID,
+            .data$Habitattype,   #en hier zouden extra gegevens uit Data_habitat
+                                  #moeten toegevoegd worden
+            .data$Versie,
+            .data$Habitattype.y,
+            .data$Criterium,
+            .data$Indicator,
+            .data$Beoordeling,
+            .data$Belang,
+            .data$Kwaliteitsniveau,
+            .data$BeoordelingID,
+            Status_indicator = as.logical(.data$Waarde),
+          )
+      ) %>%
+      arrange(
+        .data$ID,
+        .data$Habitattype,
+        .data$Versie,
+        .data$Criterium,
+        .data$Indicator
+      )
 
     #resultaten op niveau van criterium afleiden
     Resultaat_criterium <- Resultaat_indicator %>%
@@ -509,7 +581,7 @@ berekenLSVIbasis <-
       list(
         Resultaat_criterium = as.data.frame(Resultaat_criterium),
         Resultaat_indicator = Resultaat_indicator,
-        Resultaat_detail = Resultaat,
+        Resultaat_detail = Resultaat_detail,
         Resultaat_globaal = Resultaat_globaal
       )
     )
