@@ -68,6 +68,8 @@ invoercontroleData_voorwaarden <-
     assert_that(has_name(Data_voorwaarden, "Type"))
     if (!is.character(Data_voorwaarden$Type)) {
       Data_voorwaarden$Type <- as.character(Data_voorwaarden$Type)
+    if (!is.character(Data_voorwaarden$Waarde)) {
+      Data_voorwaarden$Waarde <- as.character(Data_voorwaarden$Waarde)
     }
     if (
       !all(

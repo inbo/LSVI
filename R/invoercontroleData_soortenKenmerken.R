@@ -44,6 +44,10 @@ invoercontroleData_soortenKenmerken <-
       msg = "TypeKenmerk moet een van de volgende waarden zijn: studiegroep, soort_nbn, soort_latijn, soort_nl, doodhout" #nolint
     )
     assert_that(has_name(Data_soortenKenmerken, "Waarde"))
+    if (!is.character(Data_soortenKenmerken$Waarde)) {
+      Data_soortenKenmerken$Waarde <-
+        as.character(Data_soortenKenmerken$Waarde)
+    }
     assert_that(has_name(Data_soortenKenmerken, "Type"))
     if (!is.character(Data_soortenKenmerken$Type)) {
       Data_soortenKenmerken$Type <-
