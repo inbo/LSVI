@@ -16,30 +16,14 @@ Data_soortenKenmerken <-
       system.file("vbdata/opname4030soortenKenmerken.csv", package = "LSVI")
     )
 
-# Resultaat_RapportageHR <-
-#   idsWissen(
-#     berekenLSVIbasis(
-#       Versie = "Versie 3",
-#       Kwaliteitsniveau = "1", Data_habitat,
-#       Data_voorwaarden, Data_soortenKenmerken,
-#       Aggregatiemethode = "RapportageHR"        #nolint
-#     )
-#   )
-#
-# save(Resultaat_RapportageHR, file = "inst/vbdata/Resultaat_RapportageHR_test.Rdata")  #nolint
-# load("inst/vbdata/Resultaat_RapportageHR_test.Rdata")  #nolint
-
-load(system.file("vbdata/Resultaat_RapportageHR_test.Rdata", package = "LSVI"))
+load(system.file("vbdata/Resultaat_test4030.Rdata", package = "LSVI"))
 
 describe("bereken status criterium en globaal volgens Rapportage HR", {
   it("Status Rapportage HR correct berekend", {
     skip_on_cran()
-    ConnectieLSVIhabitats <-
-      connecteerMetLSVIdb()
     expect_equal(
       idsWissen(
         berekenLSVIbasis(
-          ConnectieLSVIhabitats = ConnectieLSVIhabitats,
           Versie = "Versie 3",
           Kwaliteitsniveau = "1",
           Data_habitat,
@@ -48,7 +32,19 @@ describe("bereken status criterium en globaal volgens Rapportage HR", {
           Aggregatiemethode = "RapportageHR"
         )
       ),
-      Resultaat_RapportageHR
+      list(
+        Resultaat_criterium = Resultaat[["Resultaat_criterium"]] %>%
+          mutate(
+            Aggregatiemethode = "RapportageHR"
+          ),
+        Resultaat_indicator = Resultaat[["Resultaat_indicator"]],
+        Resultaat_detail = Resultaat[["Resultaat_detail"]],
+        Resultaat_globaal = Resultaat[["Resultaat_globaal"]] %>%
+          mutate(
+            Status = ifelse(.data$ID == "Ts2036", TRUE, .data$Status),
+            Aggregatiemethode = "RapportageHR"
+          )
+      )
     )
   })
 })
