@@ -18,21 +18,6 @@ Data_soortenKenmerken <-
       system.file("vbdata/datasoortenKenmerken9130.csv", package = "LSVI")
     )
 
-# Resultaat_RapportageHR <-
-#   idsWissen(
-#     berekenLSVIbasis(
-#       Versie = "Versie 3",
-#       Kwaliteitsniveau = "1", Data_habitat,
-#       Data_voorwaarden, Data_soortenKenmerken,
-#       Aggregatiemethode = "RapportageHR"        #nolint
-#     )
-#   )
-#
-# save(Resultaat_RapportageHR, file = "inst/vbdata/Resultaat_RapportageHR_test.Rdata")  #nolint
-# load("inst/vbdata/Resultaat_RapportageHR_test.Rdata")  #nolint
-
-#load(system.file("vbdata/Resultaat_RapportageHR_test.Rdata", package = "LSVI"))
-
 describe("nakijken of er onderscheid gemaakt worden tussen bedekking en grondvlak bij boomsoorten", {
   it("Correcte berekening invasieve exoten boom- en struiklaag op basis van bedekking en sleutelsoorten boomlaag op basis van grondvlak", {
     skip_on_cran()
