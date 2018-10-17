@@ -514,6 +514,7 @@ berekenLSVIbasis <-
               NA
             )
           ),
+        Aggregatiemethode = Aggregatiemethode,
         #minimum van de scores tussen -1 en +1
         Index_min_criterium = min(.data$Verschilscore, na.rm = na.rm),
         #harmonisch gemiddelde van de verschilscores
@@ -569,7 +570,8 @@ berekenLSVIbasis <-
               ),
               NA
             )
-          )
+          ),
+        Aggregatiemethode = Aggregatiemethode
       ) %>%
       ungroup()
 

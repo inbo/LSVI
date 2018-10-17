@@ -26,7 +26,7 @@ Data_soortenKenmerken <-
 #   )
 #
 # save(Resultaat, file = "inst/vbdata/Resultaat_test4030.Rdata")  #nolint
-# load("inst/vbdata/Resultaat_test.Rdata")  #nolint
+# load("inst/vbdata/Resultaat_test4030.Rdata")  #nolint
 
 load(system.file("vbdata/Resultaat_test4030.Rdata", package = "LSVI"))
 
