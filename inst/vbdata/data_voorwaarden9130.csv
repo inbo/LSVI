@@ -1,0 +1,6 @@
+"ID";"Habitattype";"Habitatsubtype";"AnalyseVariabele";"Voorwaarde";"Waarde";"Type";"Invoertype";"Eenheid";"Criterium";"Indicator"
+"4945";9130;"9130";"volumeAandeelDoodHout";"aandeel dood hout";"1.55473973707218";"Percentage";NA;"%";"Structuur";"aandeel dood hout"
+"4945";9130;"9130";"dikDoodHoutStaand_ha";"aantal exemplaren dik dood hout per ha";"0";"Decimaal getal";NA;NA;"Structuur";"hoeveelheid dik dood hout"
+"4945";9130;"9130";"bosconstantie";"bosconstantie";"101";"Geheel getal";NA;NA;"Structuur";"bosconstantie"
+"4945";9130;"9130";"MSA";"MSA";"59.6435767866738";"Decimaal getal";NA;NA;"Structuur";"minimum structuurareaal"
+"4945";9130;"9130";"natuurlijke_mozaiekstructuur";"natuurlijke mozaïekstructuur";"1";"Ja/nee";NA;NA;"Structuur";"horizontale structuur - natuurlijke mozaiekstructuur"

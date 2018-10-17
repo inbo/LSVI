@@ -19,6 +19,9 @@ setMethod(
   signature = "maxBedekkingExcl",
   definition = function(object) {
 
+    object@Kenmerken <- object@Kenmerken %>%
+      filter(is.na(.data$Eenheid) | (!.data$Eenheid %in% c("Grondvlak_ha", "Volume_ha")))
+
     Resultaat <-
       deselecteerKenmerkenInOpname(
         object@Kenmerken,
@@ -38,13 +41,18 @@ setMethod(
     #er aan-/afwezigheden opgegeven zijn in plaats van bedekkingen
     #In dat geval berekenen we geen bedekking en geven we een warning
     if (sum(is.na(Resultaat$WaardeMin)) < sum(is.na(Resultaat$WaardeMax))) {
-      BedekkingMin <- NA
-      BedekkingMax <- NA
+      MaxBedekkingMin <- NA
+      MaxBedekkingMax <- NA
       warning("De bedekking is niet berekend voor indicatoren waarbij voor sommige soorten of kenmerken enkel aan- of afwezigheid opgegeven is") #nolint
-    } else {
-      MaxBedekkingMin <- max(Resultaat$WaardeMin)
+    } else if (nrow(Resultaat) > 0){
 
+      MaxBedekkingMin <- max(Resultaat$WaardeMin)
       MaxBedekkingMax <- max(Resultaat$WaardeMax)
+
+    } else if (nrow(Resultaat) == 0){
+
+      MaxBedekkingMin <- 0
+      MaxBedekkingMax <- 0
 
     }
 
