@@ -33,12 +33,16 @@ describe("bereken status criterium en globaal volgens Rapportage HR", {
         )
       ),
       list(
-        Resultaat_criterium = Resultaat[["Resultaat_criterium"]],
+        Resultaat_criterium = Resultaat[["Resultaat_criterium"]] %>%
+          mutate(
+            Aggregatiemethode = "RapportageHR"
+          ),
         Resultaat_indicator = Resultaat[["Resultaat_indicator"]],
         Resultaat_detail = Resultaat[["Resultaat_detail"]],
         Resultaat_globaal = Resultaat[["Resultaat_globaal"]] %>%
           mutate(
-            Status = ifelse(.data$ID == "Ts2036", TRUE, .data$Status)
+            Status = ifelse(.data$ID == "Ts2036", TRUE, .data$Status),
+            Aggregatiemethode = "RapportageHR"
           )
       )
     )
