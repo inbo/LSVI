@@ -101,7 +101,8 @@ geefSoortenlijst <-
       SoortenlijstSelectie <- SoortenlijstSelectie %>%
         select(
           .data$Versie, .data$Habitattype, .data$Habitatsubtype,
-          .data$Criterium, .data$Indicator, .data$Omschrijving,
+          .data$Criterium, .data$Indicator, .data$TaxongroepId,
+          .data$Omschrijving,
           .data$NbnTaxonVersionKey, .data$WetNaam, .data$NedNaam,
           .data$WetNaamKort, .data$TaxonType
         ) %>%
