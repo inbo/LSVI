@@ -19,6 +19,10 @@ setMethod(
   signature = "bedekking",
   definition = function(object) {
 
+
+    object@Kenmerken <- object@Kenmerken %>%
+      filter(is.na(.data$Eenheid) | (!.data$Eenheid %in% c("Grondvlak_ha", "Volume_ha")))
+
     Resultaat <-
       selecteerKenmerkenInOpname(
         object@Kenmerken,
