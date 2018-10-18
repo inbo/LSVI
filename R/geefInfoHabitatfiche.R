@@ -135,6 +135,7 @@ geefInfoHabitatfiche <-
           Habitattype = Habitattype,
           Criterium = Criterium,
           Indicator = Indicator,
+          Taxonlijstniveau = "indicator",
           Taxonlijsttype = "LSVIfiche",
           ConnectieLSVIhabitats = ConnectieLSVIhabitats
         ) %>%
