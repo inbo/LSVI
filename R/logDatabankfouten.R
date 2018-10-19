@@ -36,7 +36,8 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = ConnectiePool) {
       FROM AnalyseVariabele INNER JOIN Voorwaarde
       On AnalyseVariabele.Id = Voorwaarde.AnalyseVariabeleId
       WHERE NOT VariabeleNaam in ('aantal', 'aandeel', 'aandeelKruidlaag',
-        'bedekking', 'maxBedekking', 'maxBedekkingExcl', 'bedekkingLaag')
+        'bedekking', 'maxBedekking', 'maxBedekkingExcl', 'bedekkingLaag',
+        'aandeelSom', 'aandeelExcl')
       AND NOT VariabeleNaam LIKE 'meting%'"
     )
 
@@ -70,7 +71,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = ConnectiePool) {
     filter(
       !.data$AnalyseVariabele %in%
         c("aantal", "aandeel", "aandeelKruidlaag", "bedekking", "bedekkingLaag",
-          "maxBedekking", "maxBedekkingExcl"),
+          "maxBedekking", "maxBedekkingExcl", 'aandeelSom', 'aandeelExcl'),
       !grepl("^meting", .data$AnalyseVariabele)
     )
   TypeAantalNietGeheelGetal <- Invoervereisten %>%
@@ -87,7 +88,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = ConnectiePool) {
   TypeAandeelFout <- Invoervereisten %>%
     filter(
       .data$AnalyseVariabele %in%
-        c("aandeel", "aandeelKruidlaag"),
+        c("aandeel", "aandeelKruidlaag", 'aandeelSom', 'aandeelExcl'),
       !.data$TypeVariabele %in% c("Percentage")
     )
   LijstItems <-
