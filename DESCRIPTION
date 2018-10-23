@@ -39,6 +39,7 @@ Collate:
     'combinerenVerschilscore.R'
     'combinerenVoorwaarden.R'
     'connecteerMetLSVIdb.R'
+    'connecteerMetLSVIlite.R'
     'deselecteerKenmerkenInOpname.R'
     'geefInfoHabitatfiche.R'
     'geefInvoervereisten.R'
