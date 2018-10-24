@@ -4,6 +4,7 @@
 #' 
 #' @importFrom pool dbPool
 #' @importFrom odbc odbc
+#' @importFrom RSQLite SQLite
 #' 
 .onLoad <- function(libname, pkgname) {
   tryCatch(
@@ -17,6 +18,18 @@
       ),
     error = function(e) {
       warning("Er kan geen connectie gelegd worden met de databank.  Voorzie bij elke functie zelf een link naar een databank met indicatoren voor elk habitattype.") #nolint
+      tryCatch(
+        ConnectiePool <<-
+          dbPool(
+            drv = SQLite(),
+            dbname =
+              system.file("data/LSVIHabitatTypes.sqlite", package = "LSVI"),
+            encoding = "UTF-8"
+          ),
+        error = function(e) {
+          warning("Er gaat iets mis met de connectie naar de databank in het package.  Neem contact op met de beheerder van het package als dit probleem zich blijft voordoen.")  #nolint
+        }
+      )
     }
   )
 }
