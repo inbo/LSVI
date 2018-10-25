@@ -47,7 +47,7 @@ Data_soortenKenmerken <-
 
 #En hier gebeurt de berekening zelf:
 berekenLSVIbasis(
-  Versie = "Versie 3",
+  Versie = "Versie 2.0",
   Kwaliteitsniveau = "1", Data_habitat,
   Data_voorwaarden, Data_soortenKenmerken
 )
@@ -55,7 +55,7 @@ berekenLSVIbasis(
 ## ------------------------------------------------------------------------
 resultaat <-
   berekenLSVIbasis(
-    Versie = "Versie 3",
+    Versie = "Versie 2.0",
     Kwaliteitsniveau = "1", Data_habitat,
     Data_voorwaarden, Data_soortenKenmerken
   )
