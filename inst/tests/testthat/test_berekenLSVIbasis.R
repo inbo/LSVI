@@ -28,7 +28,20 @@ Data_soortenKenmerken <-
 # save(Resultaat, file = "inst/vbdata/Resultaat_test4030.Rdata")  #nolint
 # load("inst/vbdata/Resultaat_test4030.Rdata")  #nolint
 
+# Resultaatv2 <-
+#   idsWissen(
+#     berekenLSVIbasis(
+#       Versie = "Versie 2.0",
+#       Kwaliteitsniveau = "1", Data_habitat,
+#       Data_voorwaarden, Data_soortenKenmerken
+#     )
+#   )
+# 
+# save(Resultaat, file = "inst/vbdata/Resultaat_test4030v2.Rdata")  #nolint
+# load("inst/vbdata/Resultaat_test4030v2.Rdata")  #nolint
+
 load(system.file("vbdata/Resultaat_test4030.Rdata", package = "LSVI"))
+load(system.file("vbdata/Resultaat_test4030v2.Rdata", package = "LSVI"))
 
 describe("berekenLSVIbasis", {
   it("ConnectieLSVIhabitats is een open DBI-connectie", {
@@ -36,7 +49,7 @@ describe("berekenLSVIbasis", {
     expect_error(
       berekenLSVIbasis(
         ConnectieLSVIhabitats = "geenConnectie",
-        Versie = "Versie 3",
+        Versie = "Versie 2.0",
         Kwaliteitsniveau = "1",
         Data_habitat,
         Data_voorwaarden,
@@ -45,12 +58,12 @@ describe("berekenLSVIbasis", {
       "Er is geen connectie met de databank met de LSVI-indicatoren"
     )
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIdb()
+      connecteerMetLSVIlite()
     expect_equal(
       idsWissen(
         berekenLSVIbasis(
           ConnectieLSVIhabitats = ConnectieLSVIhabitats,
-          Versie = "Versie 3",
+          Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_voorwaarden,
