@@ -136,18 +136,18 @@ invoercontroleData_soortenKenmerken <-
       QuerySoorten <-
         "SELECT TaxonSynoniem.FloraNaamNederlands AS NedNaam,
             TaxonSynoniem.GbifCanonicalNameWithMarker AS Canonicalname,
-            Taxon.NBNTaxonVersionKey, Taxon.TaxonTypeId
+            Taxon.NbnTaxonVersionKey AS NBNTaxonVersionKey, Taxon.TaxonTypeId
         FROM TaxonSynoniem INNER JOIN Taxon
           ON TaxonSynoniem.TaxonId = Taxon.Id
-        WHERE Taxon.NBNTaxonVersionKey IS NOT NULL"
+        WHERE Taxon.NbnTaxonVersionKey IS NOT NULL"
     } else {
       QuerySoorten <-
         "SELECT TaxonSynoniem.FloraNaamNederlands AS NedNaam,
             TaxonSynoniem.CanonicalNameWithMarker AS Canonicalname,
-            Taxon.NBNTaxonVersionKey, Taxon.TaxonTypeId
+            Taxon.NbnTaxonVersionKey AS NBNTaxonVersionKey, Taxon.TaxonTypeId
         FROM TaxonSynoniem INNER JOIN Taxon
           ON TaxonSynoniem.TaxonId = Taxon.Id
-        WHERE Taxon.NBNTaxonVersionKey IS NOT NULL"
+        WHERE Taxon.NbnTaxonVersionKey IS NOT NULL"
     }
 
     Taxonlijst <-

@@ -112,11 +112,11 @@ geefInvoervereisten <- function(Versie = "alle",
             Beoordeling.Id as BeoordelingID
             FROM
               (Indicator_beoordeling LEFT JOIN Beoordeling
-              ON Indicator_beoordeling.Id = Beoordeling.Indicator_beoordelingID)
+              ON Indicator_beoordeling.Id = Beoordeling.Indicator_beoordelingId)
             LEFT JOIN
               (Indicator INNER JOIN Criterium
-                ON Indicator.CriteriumID = Criterium.Id)
-            ON Indicator_beoordeling.IndicatorID = Indicator.Id
+                ON Indicator.CriteriumId = Criterium.Id)
+            ON Indicator_beoordeling.IndicatorId = Indicator.Id
             WHERE Indicator_beoordeling.Id in ('%s') %s",
             Indicator_beoordelingIDs, query_selectKwaliteitsniveau)
 
@@ -132,43 +132,11 @@ geefInvoervereisten <- function(Versie = "alle",
     )
 
   query_combinerenVoorwaarden <-
-    sprintf("
-            WITH voorwaardencombinatie
-            AS
-            (
-            SELECT CombinerenVoorwaarden1.Id,
-            CombinerenVoorwaarden1.BeoordelingID,
-            CombinerenVoorwaarden1.VoorwaardeID1,
-            CombinerenVoorwaarden1.VoorwaardeID2,
-            CombinerenVoorwaarden1.ChildID1,
-            CombinerenVoorwaarden1.ChildID2,
-            CombinerenVoorwaarden1.BewerkingOperator
-            FROM CombinerenVoorwaarden AS CombinerenVoorwaarden1
-            WHERE CombinerenVoorwaarden1.BeoordelingID in ('%s')
-            UNION ALL
-            SELECT CombinerenVoorwaarden2.Id,
-            CombinerenVoorwaarden2.BeoordelingID,
-            CombinerenVoorwaarden2.VoorwaardeID1,
-            CombinerenVoorwaarden2.VoorwaardeID2,
-            CombinerenVoorwaarden2.ChildID1,
-            CombinerenVoorwaarden2.ChildID2,
-            CombinerenVoorwaarden2.BewerkingOperator
-            FROM CombinerenVoorwaarden AS CombinerenVoorwaarden2
-            INNER JOIN voorwaardencombinatie
-            ON CombinerenVoorwaarden2.Id = voorwaardencombinatie.ChildID1
-            UNION ALL
-            SELECT CombinerenVoorwaarden3.Id,
-            CombinerenVoorwaarden3.BeoordelingID,
-            CombinerenVoorwaarden3.VoorwaardeID1,
-            CombinerenVoorwaarden3.VoorwaardeID2,
-            CombinerenVoorwaarden3.ChildID1,
-            CombinerenVoorwaarden3.ChildID2,
-            CombinerenVoorwaarden3.BewerkingOperator
-            FROM CombinerenVoorwaarden AS CombinerenVoorwaarden3
-            INNER JOIN voorwaardencombinatie
-            ON CombinerenVoorwaarden3.Id = voorwaardencombinatie.ChildID2
-            )
-            Select * FROM voorwaardencombinatie",
+    sprintf("SELECT CV.Id, CV.BeoordelingId AS BeoordelingID,
+              CV.VoorwaardeID1, CV.VoorwaardeID2,
+              CV.ChildID1, CV.ChildID2, CV.BewerkingOperator
+            FROM CombinerenVoorwaarden CV
+            WHERE CV.BeoordelingId in ('%s')",
               BeoordelingIDs)
 
   Voorwaarden <-

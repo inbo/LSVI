@@ -22,6 +22,7 @@ Imports:
     rgbif,
     rlang,
     rmarkdown,
+    RSQLite,
     stringr,
     testthat,
     tidyr,

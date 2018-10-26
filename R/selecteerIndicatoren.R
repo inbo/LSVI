@@ -153,7 +153,8 @@ selecteerIndicatoren <-
             Criterium.Naam AS Criterium, Indicator.Naam AS Indicator,
             Indicator_habitat.Id AS Indicator_habitatID,
             Indicator_habitat.TaxongroepId,
-            IndicatortabellenKoppeling.Indicator_beoordelingID
+            IndicatortabellenKoppeling.Indicator_beoordelingId
+              AS Indicator_beoordelingID
         FROM (((Indicator_habitat
         INNER JOIN Habitatselectie
         ON Indicator_habitat.HabitattypeID = Habitatselectie.HabitattypeId)
