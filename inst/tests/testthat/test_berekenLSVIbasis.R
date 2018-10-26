@@ -24,7 +24,7 @@ Data_soortenKenmerken <-
 #       Data_voorwaarden, Data_soortenKenmerken
 #     )
 #   )
-#
+# 
 # save(Resultaat, file = "inst/vbdata/Resultaat_test4030.Rdata")  #nolint
 # load("inst/vbdata/Resultaat_test4030.Rdata")  #nolint
 
@@ -37,7 +37,7 @@ Data_soortenKenmerken <-
 #     )
 #   )
 # 
-# save(Resultaat, file = "inst/vbdata/Resultaat_test4030v2.Rdata")  #nolint
+# save(Resultaatv2, file = "inst/vbdata/Resultaat_test4030v2.Rdata")  #nolint
 # load("inst/vbdata/Resultaat_test4030v2.Rdata")  #nolint
 
 load(system.file("vbdata/Resultaat_test4030.Rdata", package = "LSVI"))
@@ -70,23 +70,22 @@ describe("berekenLSVIbasis", {
           Data_soortenKenmerken
         )
       ),
-      Resultaat
+      Resultaatv2
     )
   })
 
   it("parameter versie heeft correct formaat", {
-    skip_on_cran()
     expect_equal(
       idsWissen(
         berekenLSVIbasis(
-          Versie = "Versie 3",
+          Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_voorwaarden,
           Data_soortenKenmerken
         )
       ),
-      Resultaat
+      Resultaatv2
     )
     expect_error(
       berekenLSVIbasis(
@@ -101,34 +100,33 @@ describe("berekenLSVIbasis", {
   })
 
   it("parameter kwaliteitsniveau heeft correct formaat", {
-    skip_on_cran()
     expect_equal(
       idsWissen(
         berekenLSVIbasis(
-          Versie = "Versie 3",
+          Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_voorwaarden,
           Data_soortenKenmerken
         )
       ),
-      Resultaat
+      Resultaatv2
     )
     expect_equal(
       idsWissen(
         berekenLSVIbasis(
-          Versie = "Versie 3",
+          Versie = "Versie 2.0",
           Kwaliteitsniveau = 1,
           Data_habitat,
           Data_voorwaarden,
           Data_soortenKenmerken
         )
       ),
-      Resultaat
+      Resultaatv2
     )
     expect_error(
       berekenLSVIbasis(
-        Versie = "Versie 3",
+        Versie = "Versie 2.0",
         Kwaliteitsniveau = "streefwaarde",
         Data_habitat,
         Data_voorwaarden,
@@ -139,10 +137,9 @@ describe("berekenLSVIbasis", {
   })
 
   it("dataframe Data_habitat heeft correct formaat", {
-    skip_on_cran()
     expect_error(
       berekenLSVIbasis(
-        Versie = "Versie 3",
+        Versie = "Versie 2.0",
         Kwaliteitsniveau = "1",
         Data_habitat %>%
           bind_rows(
@@ -159,10 +156,9 @@ describe("berekenLSVIbasis", {
   })
 
   it("dataframe Data_voorwaarden heeft correct formaat", {
-    skip_on_cran()
     expect_error(
       berekenLSVIbasis(
-        Versie = "Versie 3",
+        Versie = "Versie 2.0",
         Kwaliteitsniveau = "1",
         Data_habitat,
         Data_voorwaarden %>%
@@ -176,7 +172,7 @@ describe("berekenLSVIbasis", {
     )
     expect_error(
       berekenLSVIbasis(
-        Versie = "Versie 3",
+        Versie = "Versie 2.0",
         Kwaliteitsniveau = "1",
         Data_habitat,
         Data_voorwaarden %>%
@@ -191,7 +187,7 @@ describe("berekenLSVIbasis", {
     expect_equal(
       idsWissen(
         berekenLSVIbasis(
-          Versie = "Versie 3",
+          Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_voorwaarden %>%
@@ -204,7 +200,7 @@ describe("berekenLSVIbasis", {
       ),
       list(
         Resultaat_criterium =
-          Resultaat[["Resultaat_criterium"]] %>%
+          Resultaatv2[["Resultaat_criterium"]] %>%
           mutate(
             Status_criterium =
               ifelse(
@@ -226,7 +222,7 @@ describe("berekenLSVIbasis", {
               )
           ),
         Resultaat_indicator =
-          Resultaat[["Resultaat_indicator"]] %>%
+          Resultaatv2[["Resultaat_indicator"]] %>%
           mutate(
             Status_indicator =
               ifelse(
@@ -242,7 +238,7 @@ describe("berekenLSVIbasis", {
               )
           ),
         Resultaat_detail =
-          Resultaat[["Resultaat_detail"]] %>%
+          Resultaatv2[["Resultaat_detail"]] %>%
           mutate(
             Waarde = ifelse(.data$Waarde == "7,5", NA, .data$Waarde),
             Status_voorwaarde =
@@ -258,12 +254,12 @@ describe("berekenLSVIbasis", {
                 .data$Verschilscore
               )
           ),
-        Resultaat_globaal = Resultaat[["Resultaat_globaal"]]
+        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]]
       )
     )
     expect_warning(
       berekenLSVIbasis(
-        Versie = "Versie 3",
+        Versie = "Versie 2.0",
         Kwaliteitsniveau = "1",
         Data_habitat,
         Data_voorwaarden %>%
@@ -277,7 +273,7 @@ describe("berekenLSVIbasis", {
     )
     expect_warning(
       berekenLSVIbasis(
-        Versie = "Versie 3",
+        Versie = "Versie 2.0",
         Kwaliteitsniveau = "1",
         Data_habitat,
         Data_voorwaarden %>%
@@ -292,7 +288,7 @@ describe("berekenLSVIbasis", {
     expect_equal(
       idsWissen(
         berekenLSVIbasis(
-          Versie = "Versie 3",
+          Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_voorwaarden %>%
@@ -304,19 +300,19 @@ describe("berekenLSVIbasis", {
         )
       ),
       list(
-        Resultaat_criterium = Resultaat[["Resultaat_criterium"]],
-        Resultaat_indicator = Resultaat[["Resultaat_indicator"]],
+        Resultaat_criterium = Resultaatv2[["Resultaat_criterium"]],
+        Resultaat_indicator = Resultaatv2[["Resultaat_indicator"]],
         Resultaat_detail =
-          Resultaat[["Resultaat_detail"]] %>%
+          Resultaatv2[["Resultaat_detail"]] %>%
           mutate(
             Waarde =
               ifelse(.data$Waarde == "f", "F", .data$Waarde)
           ),
-        Resultaat_globaal = Resultaat[["Resultaat_globaal"]]))
-
-    Resultaat_NA <- idsWissen(
+        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]]))
+    expect_equal(
+      idsWissen(
         berekenLSVIbasis(
-          Versie = "Versie 3",
+          Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_voorwaarden %>%
@@ -325,80 +321,35 @@ describe("berekenLSVIbasis", {
                 ifelse(.data$Waarde == "f", NA, .data$Waarde)
             ),
           Data_soortenKenmerken
-        ))
-
-    Indicator_vergrassing <- Resultaat_NA[["Resultaat_indicator"]] %>%
-      filter(.data$Indicator == "vergrassing" & .data$ID == "Ts2036") %>%
-      select(Indicator, Status_indicator)
-
-    Criterium_verstoring <- Resultaat_NA[["Resultaat_criterium"]] %>%
-      filter(.data$Criterium == "Verstoring" & .data$ID == "Ts2036") %>%
-      select(Criterium, Status_criterium)
-
-    Status_globaal <- Resultaat_NA[["Resultaat_globaal"]] %>%
-      filter( .data$ID == "Ts2036")
-
-    expect_equal(
-      Indicator_vergrassing$Status_indicator,
-      NA
-      )
-
-    expect_equal(
-      Criterium_verstoring$Status_criterium,
-      NA
-      )
-
-    expect_equal(
-      Status_globaal$Status,
-      FALSE
-      )
-
-
-  })
-
-  it("parameter kwaliteitsniveau heeft correct formaat", {
-    skip_on_cran()
-    expect_equal(
-      idsWissen(
-        berekenLSVIbasis(
-          Versie = "Versie 3",
-          Kwaliteitsniveau = "1",
-          Data_habitat,
-          Data_voorwaarden,
-          Data_soortenKenmerken
         )
       ),
-      Resultaat
-    )
-    expect_equal(
-      idsWissen(
-        berekenLSVIbasis(
-          Versie = "Versie 3",
-          Kwaliteitsniveau = 1,
-          Data_habitat,
-          Data_voorwaarden,
-          Data_soortenKenmerken
-        )
-      ),
-      Resultaat
-    )
-    expect_error(
-      berekenLSVIbasis(
-        Versie = "Versie 3",
-        Kwaliteitsniveau = "streefwaarde",
-        Data_habitat,
-        Data_voorwaarden,
-        Data_soortenKenmerken
-      ),
-      "Kwaliteitsniveau moet een van de volgende waarden zijn"
-    )
+      list(
+        Resultaat_criterium = Resultaatv2[["Resultaat_criterium"]],
+        Resultaat_indicator = Resultaatv2[["Resultaat_indicator"]] %>%
+          mutate(
+            Status_indicator =
+              ifelse(
+                .data$Indicator == "dwergstruiken" & .data$ID == "JR0216",
+                NA,
+                .data$Status_indicator
+              )
+          ),
+        Resultaat_detail =
+          Resultaatv2[["Resultaat_detail"]] %>%
+          mutate(
+            Status_voorwaarde =
+              ifelse(.data$Waarde == "f", NA, .data$Status_voorwaarde),
+            Waarde =
+              ifelse(.data$Waarde == "f", NA, .data$Waarde)
+          ),
+        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]]))
   })
+
 
   it("dataframe Data_habitat heeft correct formaat", {
-    skip_on_cran()
     expect_error(
       berekenLSVIbasis(
-        Versie = "Versie 3",
+        Versie = "Versie 2.0",
         Kwaliteitsniveau = "1",
         Data_habitat %>%
           bind_rows(
@@ -415,11 +366,10 @@ describe("berekenLSVIbasis", {
   })
 
   it("een interval wordt correct omgezet", {
-    skip_on_cran()
     expect_equal(
       idsWissen(
         berekenLSVIbasis(
-          Versie = "Versie 3",
+          Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_voorwaarden %>%
@@ -435,10 +385,10 @@ describe("berekenLSVIbasis", {
         )
       ),
       list(
-        Resultaat_criterium = Resultaat[["Resultaat_criterium"]],
-        Resultaat_indicator = Resultaat[["Resultaat_indicator"]],
+        Resultaat_criterium = Resultaatv2[["Resultaat_criterium"]],
+        Resultaat_indicator = Resultaatv2[["Resultaat_indicator"]],
         Resultaat_detail =
-          Resultaat[["Resultaat_detail"]] %>%
+          Resultaatv2[["Resultaat_detail"]] %>%
           mutate(
             TypeWaarde =
               ifelse(.data$Waarde == "f", "Percentage", .data$TypeWaarde),
@@ -452,12 +402,12 @@ describe("berekenLSVIbasis", {
             Waarde =
               ifelse(.data$Waarde == "f", "5-10", .data$Waarde)
           ),
-        Resultaat_globaal = Resultaat[["Resultaat_globaal"]])
+        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]])
     )
     expect_equal(
       idsWissen(
         berekenLSVIbasis(
-          Versie = "Versie 3",
+          Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_voorwaarden %>%
@@ -473,10 +423,10 @@ describe("berekenLSVIbasis", {
         )
       ),
       list(
-        Resultaat_criterium = Resultaat[["Resultaat_criterium"]],
-        Resultaat_indicator = Resultaat[["Resultaat_indicator"]],
+        Resultaat_criterium = Resultaatv2[["Resultaat_criterium"]],
+        Resultaat_indicator = Resultaatv2[["Resultaat_indicator"]],
         Resultaat_detail =
-          Resultaat[["Resultaat_detail"]] %>%
+          Resultaatv2[["Resultaat_detail"]] %>%
           mutate(
             TypeWaarde =
               ifelse(.data$Waarde == "f", "Percentage", .data$TypeWaarde),
@@ -490,15 +440,14 @@ describe("berekenLSVIbasis", {
             Waarde =
               ifelse(.data$Waarde == "f", "5 - 10", .data$Waarde)
           ),
-        Resultaat_globaal = Resultaat[["Resultaat_globaal"]])
+        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]])
     )
   })
 
   it("dataframe Data_soortenKenmerken heeft correct formaat", {
-    skip_on_cran()
     expect_warning(
       berekenLSVIbasis(
-        Versie = "Versie 3",
+        Versie = "Versie 2.0",
         Kwaliteitsniveau = "1",
         Data_habitat,
         Data_voorwaarden,
@@ -516,7 +465,7 @@ describe("berekenLSVIbasis", {
     )
     expect_warning(
       berekenLSVIbasis(
-        Versie = "Versie 3",
+        Versie = "Versie 2.0",
         Kwaliteitsniveau = "1",
         Data_habitat,
         Data_voorwaarden,
@@ -534,7 +483,7 @@ describe("berekenLSVIbasis", {
     )
     expect_error(
       berekenLSVIbasis(
-        Versie = "Versie 3",
+        Versie = "Versie 2.0",
         Kwaliteitsniveau = "1",
         Data_habitat,
         Data_voorwaarden,
@@ -552,7 +501,7 @@ describe("berekenLSVIbasis", {
     )
     expect_warning(
       berekenLSVIbasis(
-        Versie = "Versie 3",
+        Versie = "Versie 2.0",
         Kwaliteitsniveau = "1",
         Data_habitat,
         Data_voorwaarden,
@@ -571,7 +520,7 @@ describe("berekenLSVIbasis", {
     expect_equal(
       idsWissen(
         berekenLSVIbasis(
-          Versie = "Versie 3",
+          Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_voorwaarden,
@@ -592,11 +541,11 @@ describe("berekenLSVIbasis", {
             )
         )
       ),
-      Resultaat
+      Resultaatv2
     )
     expect_warning(
       berekenLSVIbasis(
-        Versie = "Versie 3",
+        Versie = "Versie 2.0",
         Kwaliteitsniveau = "1",
         Data_habitat,
         Data_voorwaarden,
@@ -615,7 +564,7 @@ describe("berekenLSVIbasis", {
     expect_equal(
       idsWissen(
         berekenLSVIbasis(
-          Versie = "Versie 3",
+          Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_voorwaarden,
@@ -636,11 +585,11 @@ describe("berekenLSVIbasis", {
             )
         )
       ),
-      Resultaat
+      Resultaatv2
     )
     expect_warning(
       berekenLSVIbasis(
-        Versie = "Versie 3",
+        Versie = "Versie 2.0",
         Kwaliteitsniveau = "1",
         Data_habitat,
         Data_voorwaarden,
@@ -757,11 +706,10 @@ describe("berekenLSVIbasis", {
   })
 
   it("De afhandeling van taxa en subtaxa gebeurt correct", {
-    skip_on_cran()
     expect_equal(
       idsWissen(
         berekenLSVIbasis(
-          Versie = "Versie 3",
+          Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_voorwaarden %>%
@@ -777,15 +725,16 @@ describe("berekenLSVIbasis", {
                 Waarde = "35",
                 Type = "Percentage",
                 Eenheid = "%",
+                Vegetatielaag = "kruidlaag",
                 stringsAsFactors = FALSE
               )
             )
         )
       ),
       list(
-        Resultaat_criterium = Resultaat[["Resultaat_criterium"]],
-        Resultaat_indicator = Resultaat[["Resultaat_indicator"]],
-        Resultaat_detail = Resultaat[["Resultaat_detail"]] %>%
+        Resultaat_criterium = Resultaatv2[["Resultaat_criterium"]],
+        Resultaat_indicator = Resultaatv2[["Resultaat_indicator"]],
+        Resultaat_detail = Resultaatv2[["Resultaat_detail"]] %>%
           mutate(
             AfkomstWaarde =
               ifelse(
@@ -794,13 +743,13 @@ describe("berekenLSVIbasis", {
                 .data$AfkomstWaarde
               )
           ),
-        Resultaat_globaal = Resultaat[["Resultaat_globaal"]]
+        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]]
       )
     )
     expect_equal(
       idsWissen(
         berekenLSVIbasis(
-          Versie = "Versie 3",
+          Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_voorwaarden %>%
@@ -816,15 +765,16 @@ describe("berekenLSVIbasis", {
                 Waarde = "35",
                 Type = "Percentage",
                 Eenheid = "%",
+                Vegetatielaag = "kruidlaag",
                 stringsAsFactors = FALSE
               )
             )
         )
       ),
       list(
-        Resultaat_criterium = Resultaat[["Resultaat_criterium"]],
-        Resultaat_indicator = Resultaat[["Resultaat_indicator"]],
-        Resultaat_detail = Resultaat[["Resultaat_detail"]] %>%
+        Resultaat_criterium = Resultaatv2[["Resultaat_criterium"]],
+        Resultaat_indicator = Resultaatv2[["Resultaat_indicator"]],
+        Resultaat_detail = Resultaatv2[["Resultaat_detail"]] %>%
           mutate(
             AfkomstWaarde =
               ifelse(
@@ -833,13 +783,13 @@ describe("berekenLSVIbasis", {
                 .data$AfkomstWaarde
               )
           ),
-        Resultaat_globaal = Resultaat[["Resultaat_globaal"]]
+        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]]
       )
     )
     expect_equal(
       idsWissen(
         berekenLSVIbasis(
-          Versie = "Versie 3",
+          Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_voorwaarden %>%
@@ -855,15 +805,16 @@ describe("berekenLSVIbasis", {
                 Waarde = "35",
                 Type = "Percentage",
                 Eenheid = "%",
+                Vegetatielaag = "kruidlaag",
                 stringsAsFactors = FALSE
               )
             )
         )
       ),
       list(
-        Resultaat_criterium = Resultaat[["Resultaat_criterium"]],
-        Resultaat_indicator = Resultaat[["Resultaat_indicator"]],
-        Resultaat_detail = Resultaat[["Resultaat_detail"]] %>%
+        Resultaat_criterium = Resultaatv2[["Resultaat_criterium"]],
+        Resultaat_indicator = Resultaatv2[["Resultaat_indicator"]],
+        Resultaat_detail = Resultaatv2[["Resultaat_detail"]] %>%
           mutate(
             AfkomstWaarde =
               ifelse(
@@ -872,7 +823,7 @@ describe("berekenLSVIbasis", {
                 .data$AfkomstWaarde
               )
           ),
-        Resultaat_globaal = Resultaat[["Resultaat_globaal"]]
+        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]]
       )
     )
   })
