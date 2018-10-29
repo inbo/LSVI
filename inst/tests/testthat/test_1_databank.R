@@ -5,9 +5,8 @@ library(dplyr)
 
 describe("test databank", {
   it("Lijstitems hebben een ondergrens en bovengrens", {
-    skip_on_cran()
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIdb()
+      connecteerMetLSVIlite()
     expect_true(
       all(
         !is.na(
@@ -27,9 +26,8 @@ describe("test databank", {
   it(
     "In de databank zitten enkel AnalyseVariabelen waarvoor code ontwikkeld is"
     , {
-    skip_on_cran()
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIdb()
+      connecteerMetLSVIlite()
     AV <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -45,9 +43,8 @@ describe("test databank", {
   })
 
   it("AnalyseVariabele aantal bevat enkel gehele getallen", {
-    skip_on_cran()
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIdb()
+      connecteerMetLSVIlite()
     AV <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -96,9 +93,8 @@ describe("test databank", {
   })
 
   it("AnalyseVariabele bedekking bevat percentages en categorische var", {
-    skip_on_cran()
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIdb()
+      connecteerMetLSVIlite()
     AV <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -160,9 +156,8 @@ describe("test databank", {
   })
 
   it("AnalyseVariabele aandeel bevat percentages", {
-    skip_on_cran()
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIdb()
+      connecteerMetLSVIlite()
     AV <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -204,9 +199,8 @@ describe("test databank", {
   })
 
   it("AnalyseVariabele aandeelKruidlaag bevat percentages", {
-    skip_on_cran()
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIdb()
+      connecteerMetLSVIlite()
     AV <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -248,9 +242,8 @@ describe("test databank", {
   })
 
   it("AnalyseVariabele maxBedekking bevat percentages en categorische var", {
-    skip_on_cran()
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIdb()
+      connecteerMetLSVIlite()
     AV <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -311,9 +304,8 @@ describe("test databank", {
 
   it("AnalyseVariabele maxBedekkingExcl bevat percentages en categorische var"
      , {
-    skip_on_cran()
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIdb()
+      connecteerMetLSVIlite()
     AV <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -375,9 +367,8 @@ describe("test databank", {
   it(
     "AnalyseVariabele aantal heeft telkens een SoortengroepId of StudiegroepId"
     , {
-    skip_on_cran()
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIdb()
+      connecteerMetLSVIlite()
     AV <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -404,9 +395,8 @@ describe("test databank", {
   it(
     "AnalyseVariabele bedekking heeft telkens een SoortengroepId of StudiegroepId" #nolint
     , {
-      skip_on_cran()
       ConnectieLSVIhabitats <-
-        connecteerMetLSVIdb()
+        connecteerMetLSVIlite()
       AV <-
         dbGetQuery(
           ConnectieLSVIhabitats,
@@ -431,9 +421,8 @@ describe("test databank", {
     })
 
   it("TypeVariabele Vrije tekst is nergens gebruikt", {
-      skip_on_cran()
       ConnectieLSVIhabitats <-
-        connecteerMetLSVIdb()
+        connecteerMetLSVIlite()
       AV <-
         dbGetQuery(
           ConnectieLSVIhabitats,
@@ -452,9 +441,8 @@ describe("test databank", {
     })
 
   it("Voor elke categorische variabele is een Invoermasker opgegeven", {
-    skip_on_cran()
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIdb()
+      connecteerMetLSVIlite()
     AV <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -473,9 +461,8 @@ describe("test databank", {
   })
 
   it("De subanalysevariabele is overal correct ingevoerd (enkel bedekking)", {
-    skip_on_cran()
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIdb()
+      connecteerMetLSVIlite()
     AV <-
       dbGetQuery(
         ConnectieLSVIhabitats,

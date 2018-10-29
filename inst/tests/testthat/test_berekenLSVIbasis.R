@@ -45,7 +45,6 @@ load(system.file("vbdata/Resultaat_test4030v2.Rdata", package = "LSVI"))
 
 describe("berekenLSVIbasis", {
   it("ConnectieLSVIhabitats is een open DBI-connectie", {
-    skip_on_cran()
     expect_error(
       berekenLSVIbasis(
         ConnectieLSVIhabitats = "geenConnectie",
