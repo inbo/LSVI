@@ -30,18 +30,18 @@ soortenlijst4010 <- geefSoortenlijst(Habitattype = "4010", Taxonlijsttype = "LSV
 library(readr)
 Data_habitat <-
   read_delim(
-    system.file("vbdata/opname4030habitat.csv", package = "LSVI"),
+    system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
     delim = ";",
     col_types = list(col_character(), col_character(), col_character())
   )
 Data_voorwaarden <-
   read_delim(
-    system.file("vbdata/opname4030voorwaarden.csv", package = "LSVI"),
+    system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI"),
     delim = ";"
   )
 Data_soortenKenmerken <-
   read_delim(
-    system.file("vbdata/opname4030soortenKenmerken.csv", package = "LSVI"),
+    system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI"),
     delim = ";"
   )
 
