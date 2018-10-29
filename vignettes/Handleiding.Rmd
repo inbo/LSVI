@@ -102,13 +102,13 @@ We illustreren dit a.d.h.v de functie `geefSoortenlijst()`.  Als we deze functie
 
 ```{r}
 library(LSVI)
-geefSoortenlijst(Habitattype = "4010", Taxonlijsttype = "LSVIfiche")
+geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "LSVIfiche")
 ```
 
 Omdat de tabel te breed is, wordt deze opgesplitst in 5 delen, die onder elkaar weergegeven worden.  Deze tabel wordt ook enkel weergegeven, niet opgeslagen, en op deze manier kunnen we er achteraf geen bewerkingen mee doen.  Beter is om de tabel toe te kennen aan een variabele, we geven hier die variabele de naam `soortenlijst4010`:
 
 ```{r}
-soortenlijst4010 <- geefSoortenlijst(Habitattype = "4010", Taxonlijsttype = "LSVIfiche")
+soortenlijst4030 <- geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "LSVIfiche")
 ```
 
 Als je dit commando in je eigen console runt, verschijnt deze variabele in het venster rechtsboven onder de tab Environment (dat een overzicht geeft van alle variabelen).  Bij tabellen kan je deze variabele bekijken door erop te klikken.
@@ -119,7 +119,7 @@ Wat we hier wel tonen, is hoe deze tabel opgeslagen kan worden, zodat hij achter
 
 ```{r eval=FALSE}
 library(readr)
-write_delim(soortenlijst4010, "C:/R/soortenlijst4010.csv", delim = ";")
+write_delim(soortenlijst4030, "C:/R/soortenlijst4030.csv", delim = ";")
 ```
 
 We hebben hier het absolute path (`C:/R`) weergegeven, een andere mogelijkheid is om het path relatief ten opzichte van de 'working directory' weer te geven.  Dit is de map waarin je aan 't werken bent.  Je kan deze working directory zelf bepalen door het commando `setwd("C:/.../mijn_werkmap")`.  Als je in een project werkt waarin je al je scripts opslaat (aan te raden), dan is de root van dit project automatisch je working directory.

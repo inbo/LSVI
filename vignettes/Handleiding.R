@@ -12,14 +12,14 @@ packageDescription(pkg = "LSVI")
 
 ## ------------------------------------------------------------------------
 library(LSVI)
-geefSoortenlijst(Habitattype = "4010", Taxonlijsttype = "LSVIfiche")
+geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "LSVIfiche")
 
 ## ------------------------------------------------------------------------
-soortenlijst4010 <- geefSoortenlijst(Habitattype = "4010", Taxonlijsttype = "LSVIfiche")
+soortenlijst4030 <- geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "LSVIfiche")
 
 ## ----eval=FALSE----------------------------------------------------------
 #  library(readr)
-#  write_delim(soortenlijst4010, "C:/R/soortenlijst4010.csv", delim = ";")
+#  write_delim(soortenlijst4030, "C:/R/soortenlijst4030.csv", delim = ";")
 
 ## ----eval=FALSE----------------------------------------------------------
 #  library(readr)
