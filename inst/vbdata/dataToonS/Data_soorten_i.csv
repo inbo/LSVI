@@ -1,0 +1,17 @@
+"";"X";"ID";"Criterium";"Indicator";"Voorwaarde";"Waarde";"Gemiddelde";"Ondergrens";"Bovengrens";"Type";"Invoertype";"Eenheid"
+"2278";2278;201800002;"Structuur";"hoeveelheid dik dood hout";"aantal exemplaren dik dood hout per ha";"4";"4";"3";"1000";"Decimaal getal";NA;NA
+"6075";6075;201800002;"Structuur";"aandeel dood hout";"aandeel dood hout";"25";"25";"20";"30";"Percentage";NA;"%"
+"12635";12635;201800002;"Verstoring";"verruiging";"bedekking verruiging sublijst 1";"65";"65";"60";"70";"Percentage";NA;"%"
+"12870";12870;201800002;"Verstoring";"verruiging";"bedekking verruiging totaal";"65";"65";"60";"70";"Percentage";NA;"%"
+"16008";16008;201800002;"Verstoring";"verruiging";"bedekking verruiging sublijst 3";"0";"0";"0";"0";"Percentage";NA;"%"
+"20435";20435;201800002;"Verstoring";"invasieve exoten";"bedekking invasieve exoten kruidlaag";"0";"0";"0";"0";"Percentage";NA;"%"
+"21027";21027;201800002;"Verstoring";"invasieve exoten";"bedekking invasieve exoten boom- en struiklaag";"0";"0";"0";"0";"Percentage";NA;"%"
+"25197";25197;201800002;"Verstoring";"verruiging";"bedekking verruiging sublijst 2";"1";"1";"0";"5";"Percentage";NA;"%"
+"25385";25385;201800002;"Vegetatie";"sleutelsoorten van de kruidlaag";"bedekking sleutelsoorten kruidlaag";"1";"1";"0";"5";"Percentage";NA;"%"
+"33834";33834;201800002;"Structuur";"minimum structuurareaal";"MSA";"0.613315312985";"0.613315312985";"0.613315312985";"0.613315312985";"Decimaal getal";NA;NA
+"33958";33958;201800002;"Structuur";"bosconstantie";"bosconstantie";"200";"200";"200";"200";"Geheel getal";NA;NA
+"33972";33972;201800002;"Structuur";"minimum structuurareaal";"MSA";"9.9";"9.9";"9.9";"9.9";"Decimaal getal";NA;NA
+"33975";33975;201800002;"Vegetatie";"sleutelsoorten van de kruidlaag";"aandeel sleutelsoorten kruidlaag";"0";"0";"0";"0";"Percentage";NA;"%"
+"36845";36845;201800002;"Structuur";"horizontale structuur - natuurlijke mozaiekstructuur";"schaalgrootte ingrepen (ha)";"0.15";"0.15";"0";"0.3";"Decimaal getal";NA;NA
+"37937";37937;201800002;"Structuur";"horizontale structuur - natuurlijke mozaiekstructuur";"natuurlijke mozaïekstructuur";"1";"1";"1";"1";"Ja/nee";NA;NA
+"39798";39798;201800002;"Vegetatie";"sleutelsoorten van de boom- en struiklaag";"grondvlak sleutelsoorten boom- en struiklaag";"95";"95";"90";"100";"Percentage";NA;NA
