@@ -23,7 +23,7 @@
           dbPool(
             drv = SQLite(),
             dbname =
-              system.file("data/LSVIHabitatTypes.sqlite", package = "LSVI"),
+              system.file("databank/LSVIHabitatTypes.sqlite", package = "LSVI"),
             encoding = "UTF-8"
           ),
         error = function(e) {

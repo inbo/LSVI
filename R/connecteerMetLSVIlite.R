@@ -22,7 +22,8 @@ connecteerMetLSVIlite <- function(){
   ConnectieLSVIhabitats <-
     dbConnect(
       drv = SQLite(),
-      dbname = system.file("data/LSVIHabitatTypes.sqlite", package = "LSVI"),
+      dbname =
+        system.file("databank/LSVIHabitatTypes.sqlite", package = "LSVI"),
       encoding = "UTF-8"
     )
 
