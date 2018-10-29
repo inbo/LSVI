@@ -9,7 +9,7 @@
 #' @export
 #' 
 #' @importFrom DBI dbGetQuery
-#' @importFrom dplyr %>% bind_rows filter mutate
+#' @importFrom dplyr %>% bind_rows filter mutate transmute
 
 logDatabankfouten <- function(ConnectieLSVIhabitats = ConnectiePool) {
 
@@ -20,6 +20,12 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = ConnectiePool) {
       FROM Lijst INNER JOIN LijstItem
       ON Lijst.Id = LijstItem.LijstId
       WHERE LijstItem.Ondergrens is NULL"
+    ) %>%
+    transmute(
+      Item =
+        paste("Schaal: ", .data$Lijstnaam, "; Waarde: ",
+              .data$Waarde, sep = ""),
+      Categorie = "Ondergrens ontbreekt"
     )
   BovengrensOntbreekt <-
     dbGetQuery(
@@ -28,6 +34,12 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = ConnectiePool) {
       FROM Lijst INNER JOIN LijstItem
       ON Lijst.Id = LijstItem.LijstId
       WHERE LijstItem.Bovengrens is NULL"
+    ) %>%
+    transmute(
+      Item =
+        paste("Schaal: ", .data$Lijstnaam, "; Waarde: ",
+              .data$Waarde, sep = ""),
+      Categorie = "Bovengrens ontbreekt"
     )
   OnbekendeAV <-
     dbGetQuery(
@@ -38,34 +50,23 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = ConnectiePool) {
       WHERE NOT VariabeleNaam in ('aantal', 'aandeel', 'aandeelKruidlaag',
         'bedekking', 'maxBedekking', 'maxBedekkingExcl', 'bedekkingLaag')
       AND NOT VariabeleNaam LIKE 'meting%'"
+    ) %>%
+    transmute(
+      Item = .data$VariabeleNaam,
+      Categorie = "AnalyseVariabele waarvoor geen code ontwikkeld is"
     )
 
   Fouten <-
-    data.frame(
-      Categorie = "Ondergrens ontbreekt",
-      Item =
-        paste("Schaal: ", OndergrensOntbreekt$Lijstnaam, "; Waarde: ",
-              OndergrensOntbreekt$Waarde, sep = ""),
-      stringsAsFactors = FALSE
+    OndergrensOntbreekt %>%
+    bind_rows(
+      BovengrensOntbreekt
     ) %>%
     bind_rows(
-      data.frame(
-        Categorie = "Bovengrens ontbreekt",
-        Item =
-          paste("Schaal: ", BovengrensOntbreekt$Lijstnaam, "; Waarde: ",
-                BovengrensOntbreekt$Waarde, sep = ""),
-        stringsAsFactors = FALSE
-      )
-    ) %>%
-    bind_rows(
-      data.frame(
-        Categorie = "AnalyseVariabele waarvoor geen code ontwikkeld is",
-        Item = OnbekendeAV$VariabeleNaam,
-        stringsAsFactors = FALSE
-      )
+      OnbekendeAV
     )
 
-  Invoervereisten <- geefInvoervereisten()
+  Invoervereisten <-
+    geefInvoervereisten(ConnectieLSVIhabitats = ConnectieLSVIhabitats)
   OnbekendeAV <- Invoervereisten %>%
     filter(
       !.data$AnalyseVariabele %in%
