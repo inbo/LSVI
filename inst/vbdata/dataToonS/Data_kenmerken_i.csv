@@ -1,14 +1,12 @@
-"";"X";"ID";"Kenmerk";"TypeKenmerk";"Waarde";"Type";"Invoertype";"Eenheid";"Vegetatielaag";"Waarde_vertaling";"Schaal_vertaling"
-"8753";8753;201800002;"Alnus glutinosa";"Soort_Latijn";"1";"Ja/nee";NA;NA;"boomlaag";NA;NA
-"8754";8754;201800002;"Crataegus monogyna";"Soort_Latijn";"1";"Ja/nee";NA;NA;"struiklaag";NA;NA
-"8755";8755;201800002;"Ribes rubrum";"Soort_Latijn";"1";"Ja/nee";NA;NA;"kruidlaag";NA;NA
-"8756";8756;201800002;"Acer pseudoplatanus";"Soort_Latijn";"1";"Ja/nee";NA;NA;"boomlaag";NA;NA
-"8757";8757;201800002;"Cornus sanguinea";"Soort_Latijn";"1";"Ja/nee";NA;NA;"struiklaag";NA;NA
-"18852";18852;201800002;"Anemone nemorosa";"Soort_Latijn";"1";"Ja/nee";NA;NA;"kruidlaag";NA;NA
-"18853";18853;201800002;"Caltha palustris";"Soort_Latijn";"1";"Ja/nee";NA;NA;"kruidlaag";NA;NA
-"18854";18854;201800002;"Arum maculatum";"Soort_Latijn";"1";"Ja/nee";NA;NA;"kruidlaag";NA;NA
-"18855";18855;201800002;"Rumex sanguineus";"Soort_Latijn";"1";"Ja/nee";NA;NA;"kruidlaag";NA;NA
-"18856";18856;201800002;"Cardamine pratensis";"Soort_Latijn";"1";"Ja/nee";NA;NA;"kruidlaag";NA;NA
-"18857";18857;201800002;"Adoxa moschatellina";"Soort_Latijn";"1";"Ja/nee";NA;NA;"kruidlaag";NA;NA
-"18858";18858;201800002;"Primula elatior";"Soort_Latijn";"1";"Ja/nee";NA;NA;"kruidlaag";NA;NA
-"18859";18859;201800002;"Deschampsia cespitosa";"Soort_Latijn";"1";"Ja/nee";NA;NA;"kruidlaag";NA;NA
+"";"X";"ID";"Criterium";"Indicator";"Voorwaarde";"Waarde";"Gemiddelde";"Ondergrens";"Bovengrens";"Type";"Invoertype";"Eenheid"
+"1";2278;201800002;"Structuur";"hoeveelheid dik dood hout";"aantal exemplaren dik dood hout per ha";"4";"4";"3";"1000";"Decimaal getal";NA;NA
+"2";6075;201800002;"Structuur";"aandeel dood hout";"aandeel dood hout";"25";"25";"20";"30";"Percentage";NA;"%"
+"3";12870;201800002;"Verstoring";"verruiging";"bedekking verruiging";"65";"65";"60";"70";"Percentage";NA;"%"
+"4";21027;201800002;"Verstoring";"invasieve exoten";"bedekking invasieve exoten";"0";"0";"0";"0";"Percentage";NA;"%"
+"5";33834;201800002;"Structuur";"minimum structuurareaal";"MSA";"0.613315312985";"0.613315312985";"0.613315312985";"0.613315312985";"Decimaal getal";NA;NA
+"6";33958;201800002;"Structuur";"bosconstantie";"bosconstantie";"200";"200";"200";"200";"Geheel getal";NA;NA
+"7";33972;201800002;"Structuur";"minimum structuurareaal";"MSA";"9.9";"9.9";"9.9";"9.9";"Decimaal getal";NA;NA
+"8";33975;201800002;"Vegetatie";"sleutelsoorten van de kruidlaag";"aandeel sleutelsoorten kruidlaag";"0";"0";"0";"0";"Percentage";NA;"%"
+"9";36845;201800002;"Structuur";"horizontale structuur - natuurlijke mozaiekstructuur";"schaalgrootte ingrepen (ha)";"0.15";"0.15";"0";"0.3";"Decimaal getal";NA;NA
+"10";37937;201800002;"Structuur";"horizontale structuur - natuurlijke mozaiekstructuur";"natuurlijke mozaïekstructuur";"1";"1";"1";"1";"Ja/nee";NA;NA
+"11";39798;201800002;"Vegetatie";"sleutelsoorten van de boom- en struiklaag";"grondvlak sleutelsoorten boom- en struiklaag";"95";"95";"90";"100";"Percentage";NA;NA
