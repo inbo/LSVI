@@ -25,12 +25,12 @@ describe("twee voorwaarden vergelijken", {
       data.frame(
         ID = "1",
         Habitattype = "1330_hpr",
-        Versie = "Versie 3",
+        Versie = "Versie 2.0",
         Habitattype.y = "1330",
         Criterium = "Verstoring",
         Indicator = "overgang naar rbbzil",
         Beoordeling =
-          "som van de bedekking grasachtigen uit het zilverschoonverbond <= som van de bedekking sleutelsoorten", #nolint
+          "B: som van de bedekking grasachtigen uit het zilverschoonverbond <= som van de bedekking sleutelsoorten", #nolint
         Kwaliteitsniveau = 1,
         Belang = "zb",
         Voorwaarde =
@@ -53,7 +53,7 @@ describe("twee voorwaarden vergelijken", {
     expect_equal(
       idsWissen(
         berekenLSVIbasis(
-          Versie = "Versie 3",
+          Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_voorwaarden
@@ -94,7 +94,7 @@ describe("twee voorwaarden vergelijken", {
     expect_equal(
       idsWissen(
         berekenLSVIbasis(
-          Versie = "Versie 3",
+          Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_soortenKenmerken = Data_soortenKenmerken
