@@ -112,21 +112,21 @@ selecteerKenmerkenInOpname <-
           Rijnr = row_number(.data$Kenmerk)
         )
 
-      SubStatusberekening <-
-        berekenStatus(
-          Resultaat[
-            , c(
-              "Rijnr",
-              "RefMin",
-              "RefMax",
-              "Operator",
-              "WaardeMin",
-              "WaardeMax"
-            )
-            ]
-        )
-
       if (nrow(Resultaat) > 0) {
+
+        SubStatusberekening <-
+          berekenStatus(
+            Resultaat[
+              , c(
+                "Rijnr",
+                "RefMin",
+                "RefMax",
+                "Operator",
+                "WaardeMin",
+                "WaardeMax"
+              )
+              ]
+          )
 
         Resultaat <- Resultaat %>%
           left_join(
