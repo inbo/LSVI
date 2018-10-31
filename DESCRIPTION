@@ -11,12 +11,12 @@ Encoding: UTF-8
 Imports:
     assertthat,
     DBI,
+    plyr,
     dplyr,
     lazyeval,
     methods,
     odbc,
     pander,
-    plyr,
     pool,
     readr,
     rgbif,
