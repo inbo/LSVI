@@ -11,10 +11,11 @@
 #' @export
 #'
 #' @importFrom assertthat assert_that has_name
-#' @importFrom dplyr %>% mutate select group_by do
 #' @importFrom plyr .
+#' @importFrom dplyr %>% mutate select group_by do
 #' @importFrom tidyr unnest
 #' @importFrom rlang .data
+#' @importFrom pander evals
 #'
 #'
 berekenStatus <-
