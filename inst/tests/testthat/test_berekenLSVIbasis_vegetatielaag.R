@@ -291,21 +291,36 @@ describe("berekenLSVIbasis vegetatielaag", {
   it("s4-klasse bedekkingLaag werkt correct", {
     Data_habitat <-
       read_csv2(
-        system.file("vbdata/opname4030habitat.csv", package = "LSVI"),
+        system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
         col_types = list(col_character(), col_character(), col_character())
       )
-    Data_voorwaarden <-
-      read_csv2(
-        system.file("vbdata/opname4030voorwaarden.csv", package = "LSVI"),
-        col_types =
-          list(
-            col_character(), col_character(), col_character(), col_character(),
-            col_character(), col_character(), col_character(), col_character()
-          )
-      )
+    if (
+      class(ConnectiePool$.__enclos_env__$private$createObject())[1] ==
+      "SQLiteConnection"
+    ) {
+      Data_voorwaarden <-
+        read_csv2(
+          system.file("vbdata/Opname4030voorwaardenv2.csv", package = "LSVI"),
+          col_types =
+            list(
+              col_character(), col_character(), col_character(), col_character(),
+              col_character(), col_character(), col_character(), col_character()
+            )
+        )
+    } else {
+      Data_voorwaarden <-
+        read_csv2(
+          system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI"),
+          col_types =
+            list(
+              col_character(), col_character(), col_character(), col_character(),
+              col_character(), col_character(), col_character(), col_character()
+            )
+        )
+    }
     Data_soortenKenmerken <-
       read_csv2(
-        system.file("vbdata/opname4030soortenKenmerken.csv", package = "LSVI"),
+        system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI"),
         col_types =
           list(col_character(), col_character(), col_character(),
                col_character(), col_character(), col_character(),
