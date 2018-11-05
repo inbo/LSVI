@@ -6,14 +6,14 @@ library(rlang)
 
 Data_habitat <-
     read_csv2(
-      system.file("vbdata/opname4030habitat.csv", package = "LSVI"),
+      system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
       col_types = list(col_character(), col_character(), col_character())
     )
 Data_voorwaarden <-
-    read_csv2(system.file("vbdata/opname4030voorwaarden.csv", package = "LSVI"))
+    read_csv2(system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI"))
 Data_soortenKenmerken <-
     read_csv2(
-      system.file("vbdata/opname4030soortenKenmerken.csv", package = "LSVI")
+      system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI")
     )
 
 # Resultaat <-
