@@ -110,7 +110,7 @@ berekenLSVIbasis <-
       assert_that(has_name(Data_soortenKenmerken, "ID"))
     }
 
-     assert_that(is.string(Aggregatiemethode))
+    assert_that(is.string(Aggregatiemethode))
     if (
       !(Aggregatiemethode %in%
       c("RapportageHR", "1-out-all-out")
@@ -509,7 +509,7 @@ berekenLSVIbasis <-
 
     return(
       list(
-        Resultaat_criterium = as.data.frame(Resultaat_criterium),
+        Resultaat_criterium = Resultaat_criterium,
         Resultaat_indicator = Resultaat_indicator,
         Resultaat_detail = Resultaat,
         Resultaat_globaal = Resultaat_globaal
