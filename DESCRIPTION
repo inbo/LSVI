@@ -74,3 +74,4 @@ Collate:
     'sluitConnectiePool.R'
     'vertaalIntervalUitvoer.R'
     'vertaalInvoerInterval.R'
+    'zzz.R'
