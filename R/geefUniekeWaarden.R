@@ -11,7 +11,7 @@
 #' @return Deze functie geeft een vector bestaande uit "alle" en de verschillende waarden uit de gespecifieerde tabel.
 #' 
 #' @examples
-#' maakConnectiePool
+#' maakConnectiePool()
 #' geefUniekeWaarden("Habitatgroep","Naam")
 #'
 #' @export

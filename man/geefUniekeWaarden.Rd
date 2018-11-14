@@ -20,7 +20,7 @@ Deze functie geeft een vector bestaande uit "alle" en de verschillende waarden u
 Deze functie geeft een vector met alle verschillende waarden die een gespecifieerd veld van een gespecifieerde tabel in de databank met LSVI-indicatoren staan, voorafgegaan door de (toegevoegde) waarde "alle".  Deze functie wordt in verschillende functies van het package gebruikt om de invoer van parameters te controleren (waar de mogelijke invoer bestaat uit 'alle' of een item uit het veld).
 }
 \examples{
-maakConnectiePool
+maakConnectiePool()
 geefUniekeWaarden("Habitatgroep","Naam")
 
 }
