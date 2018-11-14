@@ -26,5 +26,6 @@ Deze functie geeft standaard voor de gespecifieerde taxongroepen per groep een l
 maakConnectiePool()
 geefSoortenlijstVoorIDs("434,88,565")
 geefSoortenlijstVoorIDs("434,88,565","alle")
+sluitConnectiePool()
 
 }

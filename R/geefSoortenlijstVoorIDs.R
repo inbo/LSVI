@@ -14,6 +14,7 @@
 #' maakConnectiePool()
 #' geefSoortenlijstVoorIDs("434,88,565")
 #' geefSoortenlijstVoorIDs("434,88,565","alle")
+#' sluitConnectiePool()
 #'
 #' @export
 #'

@@ -9,6 +9,7 @@
 #' @examples
 #' maakConnectiePool()
 #' geefVersieInfo()
+#' sluitConnectiePool()
 #'
 #' @export
 #'

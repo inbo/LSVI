@@ -24,12 +24,9 @@ Deze functie maakt een Environment-object aan dat de connecties regelt met de be
 Deze functie maakt een connectiepool met de LSVI-indicatorendatabank, wat nodig is om de functies te kunnen gebruiken.  Deze connectiepool moet eenmalig aangemaakt worden, en functies zullen automatisch deze connectiepool gebruiken om te connecteren met de databank.  Alternatief is om een connectie aan te maken met de functie connecteerMetLSVIdb() en deze bij elke functie mee te geven.  Voorlopig verwijst deze connectiepool naar een databank binnen INBO, waardoor gebruikers buiten INBO een kopie van de databank nodig hebben om met dit package te kunnen werken, en eventueel een aangepaste versie van deze functie.  Op termijn zal deze databank geïntegreerd worden in het package, waardoor ze overal zou moeten werken.
 }
 \examples{
-# deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
-# een connectie gelegd kan worden met de SQL Server-databank binnen INBO
-\dontrun{
 library(LSVI)
 maakConnectiePool()
 geefVersieInfo()
-}
+sluitConnectiePool()
 
 }

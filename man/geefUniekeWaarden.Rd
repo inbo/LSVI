@@ -22,5 +22,6 @@ Deze functie geeft een vector met alle verschillende waarden die een gespecifiee
 \examples{
 maakConnectiePool()
 geefUniekeWaarden("Habitatgroep","Naam")
+sluitConnectiePool()
 
 }

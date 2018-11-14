@@ -18,6 +18,7 @@
 #' maakConnectiePool()
 #' selecteerIndicatoren(Versie = "Versie 2.0", Habitattype = "4030")
 #' selecteerIndicatoren(Versie = "Versie 2.0", Habitatgroep = "Heiden")
+#' sluitConnectiePool()
 #'
 #' @export
 #'

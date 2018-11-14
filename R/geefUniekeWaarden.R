@@ -13,6 +13,7 @@
 #' @examples
 #' maakConnectiePool()
 #' geefUniekeWaarden("Habitatgroep","Naam")
+#' sluitConnectiePool()
 #'
 #' @export
 #'

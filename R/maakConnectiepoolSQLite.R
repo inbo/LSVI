@@ -8,6 +8,7 @@
 #' library(LSVI)
 #' maakConnectiepoolSQLite()
 #' geefVersieInfo()
+#' sluitConnectiePool()
 #'
 #' @export
 #'

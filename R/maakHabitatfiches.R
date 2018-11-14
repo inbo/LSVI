@@ -17,6 +17,7 @@
 #' \dontrun{
 #' maakConnectiePool()
 #' maakHabitatfiches(Versie = "Versie 2.0", Habitattype = "4030")
+#' sluitConnectiePool()
 #' }
 #'
 #' @export

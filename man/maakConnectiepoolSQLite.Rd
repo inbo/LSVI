@@ -16,5 +16,6 @@ Deze functie maakt een connectiepool met de in het package geïntegreerde databa
 library(LSVI)
 maakConnectiepoolSQLite()
 geefVersieInfo()
+sluitConnectiePool()
 
 }

@@ -35,5 +35,6 @@ De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten
 library(LSVI)
 maakConnectiePool()
 geefInfoHabitatfiche(Versie = "Versie 2.0", Habitattype = "4030")
+sluitConnectiePool()
 
 }
