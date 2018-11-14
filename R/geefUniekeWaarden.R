@@ -10,7 +10,8 @@
 #'
 #' @return Deze functie geeft een vector bestaande uit "alle" en de verschillende waarden uit de gespecifieerde tabel.
 #' 
-#' @examples 
+#' @examples
+#' maakConnectiePool
 #' geefUniekeWaarden("Habitatgroep","Naam")
 #'
 #' @export

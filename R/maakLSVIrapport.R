@@ -16,6 +16,7 @@
 #' # bij het testen van het package). Maar de voorbeelden werken en mogen zeker
 #' # uitgetest worden.
 #' \dontrun{
+#' maakConnectiePool()
 #' maakLSVIrapport(
 #'   Bestandsnaam = "LSVIrapport_heiden_versie3.html",
 #'   Versie = "Versie 2.0", Habitatgroep = "Heiden"

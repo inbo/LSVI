@@ -2,6 +2,7 @@ context("test speciale gevallen")
 
 library(dplyr)
 
+maakConnectiePool()
 describe("twee voorwaarden vergelijken", {
   it("vergelijking wordt correct uitgevoerd", {
     Data_habitat <-
@@ -105,3 +106,5 @@ describe("twee voorwaarden vergelijken", {
     )
   })
 })
+
+sluitConnectiePool()

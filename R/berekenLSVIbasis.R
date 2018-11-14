@@ -20,6 +20,7 @@
 #'
 #' @examples
 #' library(LSVI)
+#' maakConnectiePool()
 #' library(readr)
 #' Data_habitat <-
 #'     read_csv2(system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),

@@ -17,6 +17,8 @@
 #' @return Deze functie geeft een tabel met de hierboven beschreven informatie uit de databank.
 #'
 #' @examples
+#' library(LSVI)
+#' maakConnectiePool()
 #' geefInvoervereisten(
 #'   Versie = "Versie 2.0",
 #'   Habitattype = "4030",

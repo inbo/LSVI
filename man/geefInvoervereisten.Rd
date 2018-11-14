@@ -39,6 +39,8 @@ Waar nodig, wordt een soortengroep of studiegroep opgegeven.  Een studiegroep is
 Ingeval van de AnalyseVariabele aantal kan er ook een SubAnalyseVariabele vermeld zijn, meestal 'bedekking', die aangeeft aan welke voorwaarde elke soort of klasse afzonderlijk moet voldoen.  Aan deze SubAnalysevariabele zijn dezelfde velden gekoppeld als aan AnalyseVariabele, nl. SubReferentiewaarde, SubOperator, SubEenheid, TypeSubVariabele, SubInvoertype en SubInvoerwaarde.  Bijvoorbeeld, bij de voorwaarde 'minimum 5 soorten minimum talrijk aanwezig' zal de AnalyseVariabele 'aantal' zijn, de Referentiewaarde '5', de Operator '>=', TypeVariabele 'Geheel getal', SubAnalysevariabele 'bedekking', SubReferentiewaarde 'T', SubOperator '>=', TypeSubVariabele 'Categorie' en SubInvoertype 'Beheermonitoringsschaal 2017'.
 }
 \examples{
+library(LSVI)
+maakConnectiePool()
 geefInvoervereisten(
   Versie = "Versie 2.0",
   Habitattype = "4030",

@@ -10,6 +10,8 @@
 #' @return Deze functie genereert een tabel met alle gegevens die nodig zijn om de tabellen habitatkarakteristieken en beoordelingsmatrix uit de LSVI-rapporten te genereren.
 #'
 #' @examples
+#' library(LSVI)
+#' maakConnectiePool()
 #' geefInfoHabitatfiche(Versie = "Versie 2.0", Habitattype = "4030")
 #'
 #' @export

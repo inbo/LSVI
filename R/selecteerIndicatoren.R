@@ -15,6 +15,7 @@
 #' @return Deze functie geeft een tabel met velden Versie, Habitattype, Habitatsubtype, Criterium, Indicator, Indicator_habitatID, TaxongroepId en Indicator_beoordelingID.
 #'
 #' @examples
+#' maakConnectiePool()
 #' selecteerIndicatoren(Versie = "Versie 2.0", Habitattype = "4030")
 #' selecteerIndicatoren(Versie = "Versie 2.0", Habitatgroep = "Heiden")
 #'

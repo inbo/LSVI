@@ -4,6 +4,7 @@ library(readr)
 library(dplyr)
 library(rlang)
 
+maakConnectiePool()
 Data_habitat <-
     read_csv2(
       system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
@@ -845,5 +846,5 @@ describe("berekenLSVIbasis", {
 
 })
 
-
+sluitConnectiePool()
 #werking childID nog testen!

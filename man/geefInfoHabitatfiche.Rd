@@ -32,6 +32,8 @@ Deze functie geeft de inhoud van de tabellen habitatkarakteristieken en beoordel
 De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten als string opgegeven worden.  Default is telkens 'alle', waarbij de soortenlijsten voor alle mogelijke waarden van die parameter weergegeven worden (m.a.w. er is geen selectie voor deze parameter).
 }
 \examples{
+library(LSVI)
+maakConnectiePool()
 geefInfoHabitatfiche(Versie = "Versie 2.0", Habitattype = "4030")
 
 }

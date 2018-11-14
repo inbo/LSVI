@@ -16,6 +16,7 @@ Deze functie geeft de tabel Versie uit de databank.
 Deze functie geeft een overzicht van alle versies die er zijn voor de berekening van de de Lokale Staat van Instandhouding, met naast de opsomming van de versies en de referenties een overzicht van de 2 kwaliteitsniveaus of types van beoordelingscriteria die in deze versie gedefinieerd zijn.
 }
 \examples{
+maakConnectiePool()
 geefVersieInfo()
 
 }

@@ -3,6 +3,7 @@ context("test berekeningen op basis van bedekking en grondvlak")
 library(readr)
 library(dplyr)
 library(rlang)
+maakConnectiePool()
 
 Data_habitat <-
     read_csv2(
@@ -57,3 +58,5 @@ describe("nakijken of er onderscheid gemaakt worden tussen bedekking en grondvla
 
   })
 })
+
+sluitConnectiePool()

@@ -5,13 +5,7 @@ library(dplyr)
 library(rlang)
 library(stringr)
 
-ConnectiePool <<-
-  pool::dbPool(
-    drv = RSQLite::SQLite(),
-    dbname =
-      system.file("databank/LSVIHabitatTypes.sqlite", package = "LSVI"),
-    encoding = "UTF-8"
-  )
+maakConnectiepoolSQLite()
 
 describe("berekenLSVIbasis vegetatielaag", {
   it("de vegetatielagen worden correct geselecteerd", {
@@ -577,3 +571,5 @@ describe("berekenLSVIbasis vegetatielaag", {
     )
   })
 })
+
+sluitConnectiePool()

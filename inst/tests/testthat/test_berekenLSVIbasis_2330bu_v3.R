@@ -4,6 +4,7 @@ library(readr)
 library(dplyr)
 library(rlang)
 
+maakConnectiePool()
 Data_habitat <-
     read_csv2(
       system.file("vbdata/data_habitat2330_bu.csv", package = "LSVI"),
@@ -52,3 +53,4 @@ describe("berekenLSVIbasis 2330_bu versie 3", {
     )
   })
 })
+sluitConnectiePool()

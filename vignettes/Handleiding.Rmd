@@ -58,13 +58,13 @@ packageDescription(pkg = "LSVI")
 
 #Installatie van het package
 
-Het package kan als volgt geïnstalleerd worden: <!-- werkt waarschijnlijk pas als er iets in de master zit -->
+Het package kan als volgt geïnstalleerd worden: <!-- aanpassen als er iets in de master zit -->
 
 ```{r eval = FALSE}
-devtools::install_github("inbo/LSVI", build_vignettes = TRUE)
+devtools::install_github("inbo/LSVI@develop", build_vignettes = TRUE)
 ```
 
-Om de functies uit het package te kunnen gebruiken, moet een connectie gemaakt kunnen worden met de databank `D0122_00_LSVIHabitatTypes` die op server `INBO-SQL07-PRD.inbo.be` staat en alle informatie in verband met de LSVI-indicatoren bevat (zie 'Doelstellingen en inhoud package' > 'Inhoud package').  Dit betekent dat gebruikers die niet op het INBO-netwerk werken, een kopie van deze databank nodig hebben en de locatie en naam van deze databank telkens moeten specifiëren in de functie `connecteerMetLSVIdb()`.  (Dit is een voorlopige oplossing: zodra deze databank in orde is, zal ze geïntegreerd worden in het package zelf, waardoor iedereen de functies uit het package zal kunnen gebruiken.)
+Om de functies uit het package te kunnen gebruiken, moet een connectie gemaakt worden met de databank `D0122_00_LSVIHabitatTypes` die op server `INBO-SQL07-PRD.inbo.be` staat en alle informatie in verband met de LSVI-indicatoren bevat (zie 'Doelstellingen en inhoud package' > 'Inhoud package' voor achtergrondinformatie en 'Gebruik basisfuncties' > 'Basis van LSVI-package' voor hoe die connectie gelegd kan worden).  Dit betekent dat gebruikers die niet op het INBO-netwerk werken, een kopie van deze databank nodig hebben en de locatie en naam van deze databank telkens moeten specifiëren in de functie `connecteerMetLSVIdb()`.  (Dit is een voorlopige oplossing: zodra deze databank in orde is, zal ze geïntegreerd worden in het package zelf, waardoor iedereen de functies uit het package zal kunnen gebruiken.)
 
 #Gebruik basisfuncties
 
@@ -102,6 +102,7 @@ We illustreren dit a.d.h.v de functie `geefSoortenlijst()`.  Als we deze functie
 
 ```{r}
 library(LSVI)
+maakConnectiePool()
 geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "LSVIfiche")
 ```
 
@@ -195,6 +196,36 @@ Met deze tabellen kan verder gewerkt worden zoals hierboven beschreven is ('Wat 
 
 
 ##Basis van LSVI-package
+
+###Connecteren met de databank
+
+Om de functies van het LSVI-package te gebruiken, heb je een connectie nodig met de databank met informatie uit LSVI-rapporten (zie 'Doelstellingen en inhoud package' > 'Inhoud package').  Deze connectie kan op 2 manieren gelegd worden:
+- Na het laden van het package eenmalig een pool van connecties aanmaken door de functie `maakConnectiePool()` te runnen.  De gegenereerde ConnectiePool zal in de achtergrond verbinding leggen met de databank telkens wanneer dit nodig is, extra connecties aanleggen als dit nodig is, overbodig geworden connecties verwijderen,... en je moet niet telkens de connectie als parameter vermelden bij elke functie die je gebruikt.  Met andere woorden: nadat je die ConnectiePool aangemaakt hebt, moet je je verder niet meer bezighouden met die connectie.  Is er toch een functie die vereist dat je een connectie meegeeft?  Dan kan je simpelweg `ConnectiePool` als argument meegeven.  Als je geen functies meer nodig hebt uit het LSVI-package, kan je deze ConnectiePool sluiten met `sluitConnectiePool()` en eventueel het object verwijderen.
+```{r eval=FALSE}
+library(LSVI)
+maakConnectiePool()
+#Nu kan je alle functies gebruiken zonder expliciet het argument ConnectieLSVIhabitats op te geven, bv.
+geefVersieInfo()
+geefSoortenlijst(Habitattype = "4030")
+
+#En als je geen functies meer nodig hebt uit het LSVI-package, kan je de ConnectiePool afsluiten en verwijderen:
+sluitConnectiePool()
+rm(ConnectiePool)
+```
+- Een connectie met de databank maken met de functie `connecteerMetLSVIdb()` en deze connectie voor elke functie meegeven bij de parameter ConnectieLSVIhabitats.  Hier moet je dus wel zelf een connectie leggen telkens als dit nodig zijn.
+```{r eval=FALSE}
+library(LSVI)
+Connectie <- connecteerMetLSVIdb()
+#Nu moet je bij elke functie opnieuw deze connectie meegeven
+geefVersieInfo(ConnectieLSVIhabitats = Connectie)
+geefSoortenlijst(Habitattype = "4030", ConnectieLSVIhabitats = Connectie)
+
+#De connectie sluiten kan met dbDisconnect uit het DBI-package:
+library(DBI)
+dbDisconnect(Connectie)
+```
+
+###Gebruik van de functies zelf
 
 De functies kunnen min of meer in groepen ingedeeld worden op basis van het eerste deel van hun naam:
 

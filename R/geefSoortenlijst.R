@@ -15,6 +15,7 @@
 #' @return Deze functie geeft een tabel met velden Versie, Habitattype, Habitatsubtype, Criterium, Indicator, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van taxa binnen eenzelfde indicator).  WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort geeft de verkorte naam zonder auteursnaam.
 #'
 #' @examples
+#' maakConnectiePool()
 #' geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "LSVIfiche")
 #' geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "alle")
 #'

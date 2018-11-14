@@ -7,6 +7,7 @@
 #' @return Deze functie geeft de tabel Versie uit de databank.
 #'
 #' @examples
+#' maakConnectiePool()
 #' geefVersieInfo()
 #'
 #' @export
