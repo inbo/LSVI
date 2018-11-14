@@ -20,7 +20,11 @@ Data_soortenKenmerken <-
 
 describe("nakijken of er onderscheid gemaakt worden tussen bedekking en grondvlak bij boomsoorten", {
   it("Correcte berekening invasieve exoten boom- en struiklaag op basis van bedekking en sleutelsoorten boomlaag op basis van grondvlak", {
-    skip_on_cran()
+    skip_if_not(
+      class(ConnectiePool$.__enclos_env__$private$createObject())[1] ==
+        "Microsoft SQL Server",
+      "SQL Server niet beschikbaar"
+    )
     ConnectieLSVIhabitats <-
       connecteerMetLSVIdb()
 

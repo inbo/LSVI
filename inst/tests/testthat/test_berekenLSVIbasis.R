@@ -619,7 +619,11 @@ describe("berekenLSVIbasis", {
   })
 
   it("afhandeling van Ja/nee in Data_soortenKenmerken is correct", {
-    skip_on_cran()
+    skip_if_not(
+      class(ConnectiePool$.__enclos_env__$private$createObject())[1] ==
+        "Microsoft SQL Server",
+      "SQL Server niet beschikbaar"
+    )
     expect_warning(
       berekenLSVIbasis(
         Versie = "Versie 3",
