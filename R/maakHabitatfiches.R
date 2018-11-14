@@ -15,7 +15,7 @@
 #' # bij het testen van het package). Maar het voorbeeld werkt en mag zeker
 #' # uitgetest worden.
 #' \dontrun{
-#' maakHabitatfiches(Versie = "Versie 3", Habitattype = "4010")
+#' maakHabitatfiches(Versie = "Versie 2.0", Habitattype = "4030")
 #' }
 #'
 #' @export

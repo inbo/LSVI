@@ -15,8 +15,8 @@
 #' @return Deze functie geeft een tabel met velden Versie, Habitattype, Habitatsubtype, Criterium, Indicator, Indicator_habitatID, TaxongroepId en Indicator_beoordelingID.
 #'
 #' @examples
-#' selecteerIndicatoren(Versie = "Versie 3", Habitattype = "4010")
-#' selecteerIndicatoren(Versie = "Versie 3", Habitatgroep = "Heiden")
+#' selecteerIndicatoren(Versie = "Versie 2.0", Habitattype = "4030")
+#' selecteerIndicatoren(Versie = "Versie 2.0", Habitatgroep = "Heiden")
 #'
 #' @export
 #'

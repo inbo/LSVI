@@ -18,7 +18,7 @@
 #'
 #' @examples
 #' geefInvoervereisten(
-#'   Versie = "Versie 3",
+#'   Versie = "Versie 2.0",
 #'   Habitattype = "4030",
 #'   Kwaliteitsniveau = "1"
 #' )

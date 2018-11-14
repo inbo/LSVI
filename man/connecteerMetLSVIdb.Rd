@@ -24,9 +24,13 @@ Deze functie geeft een open odbc-connectie naar de gespecifieerde databank.
 Deze functie maakt een connectie met de databank met LSVI-indicatorendatabank, wat nodig is om de functies te kunnen gebruiken.  Voorlopig verwijst deze naar een databank binnen INBO, waardoor gebruikers buiten INBO een kopie van de databank nodig hebben om met dit package te kunnen werken, en eventueel een aangepaste versie van deze functie.  Op termijn zal deze databank geïntegreerd worden in het package, waardoor ze overal zou moeten werken.  (Deze functie is zodanig ingebouwd in de code dat ze niet expliciet opgegeven moet worden door de gebruiker, tenzij deze een andere databank wil opgeven.)
 }
 \examples{
+# deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
+# een connectie gelegd kan worden met de SQL Server-databank binnen INBO
+\dontrun{
 library(DBI)
 ConnectieLSVIhabitats <- connecteerMetLSVIdb()
 dbGetQuery(ConnectieLSVIhabitats, "SELECT VersieLSVI, Referentie FROM Versie")
 dbDisconnect(ConnectieLSVIhabitats)
+}
 
 }

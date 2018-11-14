@@ -11,8 +11,8 @@
 #' @return Deze functie geeft een tabel met velden TaxongroepId, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van taxons binnen eenzelfde indicator).  WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort geeft de verkorte naam zonder auteursnaam.
 #' 
 #' @examples
-#' geefSoortenlijstVoorIDs("98,227,484,552,726")
-#' geefSoortenlijstVoorIDs("98,227,484,552,726","alle")
+#' geefSoortenlijstVoorIDs("434,88,565")
+#' geefSoortenlijstVoorIDs("434,88,565","alle")
 #'
 #' @export
 #'

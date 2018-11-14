@@ -22,13 +22,13 @@
 #' library(LSVI)
 #' library(readr)
 #' Data_habitat <-
-#'     read_csv2(system.file("vbdata/opname4030habitat.csv", package = "LSVI"),
+#'     read_csv2(system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
 #'               col_types = list(col_character(), col_character(),col_character()))
 #' Data_voorwaarden <-
-#'     read_csv2(system.file("vbdata/opname4030voorwaarden.csv", package = "LSVI"))
+#'     read_csv2(system.file("vbdata/Opname4030voorwaardenv2.csv", package = "LSVI"))
 #' Data_soortenKenmerken <-
-#'     read_csv2(system.file("vbdata/opname4030soortenKenmerken.csv", package = "LSVI"))
-#' berekenLSVIbasis(Versie = "Versie 3",
+#'     read_csv2(system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI"))
+#' berekenLSVIbasis(Versie = "Versie 2.0",
 #'                  Kwaliteitsniveau = "1", Data_habitat,
 #'                  Data_voorwaarden, Data_soortenKenmerken)
 #'

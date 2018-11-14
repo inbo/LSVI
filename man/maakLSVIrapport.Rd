@@ -37,11 +37,11 @@ De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten
 \dontrun{
 maakLSVIrapport(
   Bestandsnaam = "LSVIrapport_heiden_versie3.html",
-  Versie = "Versie 3", Habitatgroep = "Heiden"
+  Versie = "Versie 2.0", Habitatgroep = "Heiden"
 )
 maakLSVIrapport(
-  Bestandsnaam = "LSVIrapport_4010.html",
-  Habitattype = "4010"
+  Bestandsnaam = "LSVIrapport_4030.html",
+  Habitattype = "4030"
 )
 }
 
