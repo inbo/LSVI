@@ -71,7 +71,6 @@ Collate:
     's4_meting.R'
     'selecteerIndicatoren.R'
     'selecteerKenmerkenInOpname.R'
-    'sluitConnectiePool.R'
     'vertaalIntervalUitvoer.R'
     'vertaalInvoerInterval.R'
     'zzz.R'

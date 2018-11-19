@@ -59,4 +59,5 @@ describe("nakijken of er onderscheid gemaakt worden tussen bedekking en grondvla
   })
 })
 
-sluitConnectiePool()
+library(pool)
+poolClose(ConnectiePool)

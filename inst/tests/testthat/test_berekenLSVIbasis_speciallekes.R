@@ -107,4 +107,5 @@ describe("twee voorwaarden vergelijken", {
   })
 })
 
-sluitConnectiePool()
+library(pool)
+poolClose(ConnectiePool)

@@ -18,7 +18,8 @@
 #' maakConnectiePool()
 #' geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "LSVIfiche")
 #' geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "alle")
-#' sluitConnectiePool()
+#' library(pool)
+#' poolClose(ConnectiePool)
 #'
 #' @export
 #'

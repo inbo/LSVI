@@ -43,6 +43,7 @@ De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten
 maakConnectiePool()
 geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "LSVIfiche")
 geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "alle")
-sluitConnectiePool()
+library(pool)
+poolClose(ConnectiePool)
 
 }

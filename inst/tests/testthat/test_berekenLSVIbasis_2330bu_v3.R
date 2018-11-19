@@ -53,4 +53,5 @@ describe("berekenLSVIbasis 2330_bu versie 3", {
     )
   })
 })
-sluitConnectiePool()
+library(pool)
+poolClose(ConnectiePool)

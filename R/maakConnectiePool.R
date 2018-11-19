@@ -9,7 +9,8 @@
 #' library(LSVI)
 #' maakConnectiePool()
 #' geefVersieInfo()
-#' sluitConnectiePool()
+#' library(pool)
+#' poolClose(ConnectiePool)
 #'
 #' @export
 #'

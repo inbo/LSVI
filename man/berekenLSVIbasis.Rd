@@ -56,7 +56,5 @@ Data_soortenKenmerken <-
 berekenLSVIbasis(Versie = "Versie 2.0",
                  Kwaliteitsniveau = "1", Data_habitat,
                  Data_voorwaarden, Data_soortenKenmerken)
-sluitConnectiePool()
-
 
 }

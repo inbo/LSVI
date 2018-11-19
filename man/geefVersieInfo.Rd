@@ -18,6 +18,7 @@ Deze functie geeft een overzicht van alle versies die er zijn voor de berekening
 \examples{
 maakConnectiePool()
 geefVersieInfo()
-sluitConnectiePool()
+library(pool)
+poolClose(ConnectiePool)
 
 }

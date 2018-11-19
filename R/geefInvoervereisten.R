@@ -24,7 +24,8 @@
 #'   Habitattype = "4030",
 #'   Kwaliteitsniveau = "1"
 #' )
-#' sluitConnectiePool()
+#' library(pool)
+#' poolClose(ConnectiePool)
 #'
 #' @export
 #'

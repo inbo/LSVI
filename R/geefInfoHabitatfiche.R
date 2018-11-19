@@ -13,7 +13,8 @@
 #' library(LSVI)
 #' maakConnectiePool()
 #' geefInfoHabitatfiche(Versie = "Versie 2.0", Habitattype = "4030")
-#' sluitConnectiePool()
+#' library(pool)
+#' poolClose(ConnectiePool)
 #'
 #' @export
 #'

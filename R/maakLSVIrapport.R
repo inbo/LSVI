@@ -25,7 +25,8 @@
 #'   Bestandsnaam = "LSVIrapport_4030.html",
 #'   Habitattype = "4030"
 #' )
-#' sluitConnectiePool()
+#' library(pool)
+#' poolClose(ConnectiePool)
 #' }
 #' 
 #'

@@ -21,7 +21,7 @@ Technische hulpfunctie die in een formule de ID's vervangt door opgegeven logisc
 }
 \examples{
 combinerenVerschilscore(
-  "(720 EN 721) OF 15",
+  "(720 AND 721) OR 15",
   c(720, 721, 15),
   c(0.5, -0.3, 0.8)
 )

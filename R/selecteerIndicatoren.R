@@ -18,9 +18,10 @@
 #' maakConnectiePool()
 #' selecteerIndicatoren(Versie = "Versie 2.0", Habitattype = "4030")
 #' selecteerIndicatoren(Versie = "Versie 2.0", Habitatgroep = "Heiden")
-#' sluitConnectiePool()
 #'
 #' @export
+#' library(pool)
+#' poolClose(ConnectiePool)
 #'
 #' @importFrom DBI dbGetQuery
 #' @importFrom assertthat assert_that is.string

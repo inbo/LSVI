@@ -572,4 +572,5 @@ describe("berekenLSVIbasis vegetatielaag", {
   })
 })
 
-sluitConnectiePool()
+library(pool)
+poolClose(ConnectiePool)

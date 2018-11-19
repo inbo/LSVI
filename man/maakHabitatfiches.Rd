@@ -35,7 +35,8 @@ De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten
 \dontrun{
 maakConnectiePool()
 maakHabitatfiches(Versie = "Versie 2.0", Habitattype = "4030")
-sluitConnectiePool()
+library(pool)
+poolClose(ConnectiePool)
 }
 
 }

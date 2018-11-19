@@ -846,5 +846,6 @@ describe("berekenLSVIbasis", {
 
 })
 
-sluitConnectiePool()
+library(pool)
+poolClose(ConnectiePool)
 #werking childID nog testen!

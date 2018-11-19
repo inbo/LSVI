@@ -49,4 +49,5 @@ describe("bereken status criterium en globaal volgens Rapportage HR", {
   })
 })
 
-sluitConnectiePool()
+library(pool)
+poolClose(ConnectiePool)

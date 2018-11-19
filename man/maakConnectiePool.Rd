@@ -27,6 +27,7 @@ Deze functie maakt een connectiepool met de LSVI-indicatorendatabank, wat nodig 
 library(LSVI)
 maakConnectiePool()
 geefVersieInfo()
-sluitConnectiePool()
+library(pool)
+poolClose(ConnectiePool)
 
 }
