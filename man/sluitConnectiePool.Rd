@@ -15,7 +15,7 @@ Deze functie zorgt ervoor dat een door de functie maakConnectiePool() aangemaakt
 \examples{
 library(LSVI)
 maakConnectiePool()
-geefVersieInfo()
+geefSoortenlijst(Habitattype = "4030")
 sluitConnectiePool()
 
 }

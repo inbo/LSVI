@@ -7,7 +7,7 @@
 #' @examples
 #' library(LSVI)
 #' maakConnectiePool()
-#' geefVersieInfo()
+#' geefSoortenlijst(Habitattype = "4030")
 #' sluitConnectiePool()
 #'
 #' @export
