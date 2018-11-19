@@ -3,6 +3,7 @@ context("test bereken Status Rapportage HR")
 library(readr)
 library(dplyr)
 library(rlang)
+maakConnectiePool()
 
 Data_habitat <-
     read_csv2(
@@ -47,3 +48,6 @@ describe("bereken status criterium en globaal volgens Rapportage HR", {
     )
   })
 })
+
+library(pool)
+poolClose(ConnectiePool)

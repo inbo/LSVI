@@ -15,7 +15,10 @@
 #' # bij het testen van het package). Maar het voorbeeld werkt en mag zeker
 #' # uitgetest worden.
 #' \dontrun{
+#' maakConnectiePool()
 #' maakHabitatfiches(Versie = "Versie 2.0", Habitattype = "4030")
+#' library(pool)
+#' poolClose(ConnectiePool)
 #' }
 #'
 #' @export

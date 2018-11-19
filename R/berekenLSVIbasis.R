@@ -19,7 +19,11 @@
 #' @return Deze functie genereert de resultaten in de vorm van een list met 4 tabellen: een eerste met de beoordelingen per kwaliteitsniveau, een tweede met de beoordelingen per criterium en kwaliteitsniveau, een derde met de beoordelingen per indicator en kwaliteitsniveau, en een vierde met de detailgegevens inclusief meetwaarden.
 #'
 #' @examples
+#' # deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
+#' # een connectie gelegd kan worden met de SQL Server-databank binnen INBO
+#' \dontrun{
 #' library(LSVI)
+#' maakConnectiePool()
 #' library(readr)
 #' Data_habitat <-
 #'     read_csv2(system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
@@ -31,7 +35,7 @@
 #' berekenLSVIbasis(Versie = "Versie 2.0",
 #'                  Kwaliteitsniveau = "1", Data_habitat,
 #'                  Data_voorwaarden, Data_soortenKenmerken)
-#'
+#' }
 #'
 #' @export
 #'

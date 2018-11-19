@@ -5,13 +5,14 @@ knitr::opts_chunk$set(echo = TRUE)
 packageDescription(pkg = "LSVI")
 
 ## ----eval = FALSE--------------------------------------------------------
-#  devtools::install_github("inbo/LSVI", build_vignettes = TRUE)
+#  devtools::install_github("inbo/LSVI@develop", build_vignettes = TRUE)
 
 ## ----eval = FALSE--------------------------------------------------------
 #  ?maakLSVIrapport
 
 ## ------------------------------------------------------------------------
 library(LSVI)
+maakConnectiePool()
 geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "LSVIfiche")
 
 ## ------------------------------------------------------------------------
@@ -65,4 +66,27 @@ resultaat$Resultaat_globaal  #ofwel: resultaat[["Resultaat_globaal"]]
 resultaat$Resultaat_criterium
 resultaat$Resultaat_indicator
 resultaat$Resultaat_detail
+
+## ----eval=FALSE----------------------------------------------------------
+#  library(LSVI)
+#  maakConnectiePool()
+#  #Nu kan je alle functies gebruiken zonder expliciet het argument ConnectieLSVIhabitats op te geven, bv.
+#  geefVersieInfo()
+#  geefSoortenlijst(Habitattype = "4030")
+#  
+#  #En als je geen functies meer nodig hebt uit het LSVI-package, kan je de ConnectiePool afsluiten en verwijderen:
+#  library(pool)
+#  poolClose(ConnectiePool)
+#  rm(ConnectiePool)
+
+## ----eval=FALSE----------------------------------------------------------
+#  library(LSVI)
+#  Connectie <- connecteerMetLSVIdb()
+#  #Nu moet je bij elke functie opnieuw deze connectie meegeven
+#  geefVersieInfo(ConnectieLSVIhabitats = Connectie)
+#  geefSoortenlijst(Habitattype = "4030", ConnectieLSVIhabitats = Connectie)
+#  
+#  #De connectie sluiten kan met dbDisconnect uit het DBI-package:
+#  library(DBI)
+#  dbDisconnect(Connectie)
 

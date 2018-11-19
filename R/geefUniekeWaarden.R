@@ -10,8 +10,15 @@
 #'
 #' @return Deze functie geeft een vector bestaande uit "alle" en de verschillende waarden uit de gespecifieerde tabel.
 #' 
-#' @examples 
+#' @examples
+#' # deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
+#' # een connectie gelegd kan worden met de SQL Server-databank binnen INBO
+#' \dontrun{
+#' maakConnectiePool()
 #' geefUniekeWaarden("Habitatgroep","Naam")
+#' library(pool)
+#' poolClose(ConnectiePool)
+#' }
 #'
 #' @export
 #'

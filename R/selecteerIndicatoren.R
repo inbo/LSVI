@@ -14,11 +14,19 @@
 #'
 #' @return Deze functie geeft een tabel met velden Versie, Habitattype, Habitatsubtype, Criterium, Indicator, Indicator_habitatID, TaxongroepId en Indicator_beoordelingID.
 #'
+#' @export
+#'
 #' @examples
+#' # deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
+#' # een connectie gelegd kan worden met de SQL Server-databank binnen INBO
+#' \dontrun{
+#' library(LSVI)
+#' maakConnectiePool()
 #' selecteerIndicatoren(Versie = "Versie 2.0", Habitattype = "4030")
 #' selecteerIndicatoren(Versie = "Versie 2.0", Habitatgroep = "Heiden")
-#'
-#' @export
+#' library(pool)
+#' poolClose(ConnectiePool)
+#' }
 #'
 #' @importFrom DBI dbGetQuery
 #' @importFrom assertthat assert_that is.string

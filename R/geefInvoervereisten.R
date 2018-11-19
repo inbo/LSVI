@@ -17,11 +17,19 @@
 #' @return Deze functie geeft een tabel met de hierboven beschreven informatie uit de databank.
 #'
 #' @examples
+#' # deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
+#' # een connectie gelegd kan worden met de SQL Server-databank binnen INBO
+#' \dontrun{
+#' library(LSVI)
+#' maakConnectiePool()
 #' geefInvoervereisten(
 #'   Versie = "Versie 2.0",
 #'   Habitattype = "4030",
 #'   Kwaliteitsniveau = "1"
 #' )
+#' library(pool)
+#' poolClose(ConnectiePool)
+#' }
 #'
 #' @export
 #'
