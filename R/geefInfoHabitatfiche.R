@@ -10,11 +10,15 @@
 #' @return Deze functie genereert een tabel met alle gegevens die nodig zijn om de tabellen habitatkarakteristieken en beoordelingsmatrix uit de LSVI-rapporten te genereren.
 #'
 #' @examples
+#' # deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
+#' # een connectie gelegd kan worden met de SQL Server-databank binnen INBO
+#' \dontrun{
 #' library(LSVI)
 #' maakConnectiePool()
 #' geefInfoHabitatfiche(Versie = "Versie 2.0", Habitattype = "4030")
 #' library(pool)
 #' poolClose(ConnectiePool)
+#' }
 #'
 #' @export
 #'

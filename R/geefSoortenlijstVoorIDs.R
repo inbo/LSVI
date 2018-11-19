@@ -11,11 +11,15 @@
 #' @return Deze functie geeft een tabel met velden TaxongroepId, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van taxons binnen eenzelfde indicator).  WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort geeft de verkorte naam zonder auteursnaam.
 #' 
 #' @examples
+#' # deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
+#' # een connectie gelegd kan worden met de SQL Server-databank binnen INBO
+#' \dontrun{
 #' maakConnectiePool()
 #' geefSoortenlijstVoorIDs("434,88,565")
 #' geefSoortenlijstVoorIDs("434,88,565","alle")
 #' library(pool)
 #' poolClose(ConnectiePool)
+#' }
 #'
 #' @export
 #'

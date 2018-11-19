@@ -32,10 +32,15 @@ Deze hulpfunctie selecteert de indicatoren die gebruikt worden voor de bepaling 
 De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten als string opgegeven worden.  Default is telkens 'alle', waarbij de soortenlijsten voor alle mogelijke waarden van die parameter weergegeven worden (m.a.w. er is geen selectie voor deze parameter).
 }
 \examples{
+# deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
+# een connectie gelegd kan worden met de SQL Server-databank binnen INBO
+\dontrun{
+library(LSVI)
 maakConnectiePool()
 selecteerIndicatoren(Versie = "Versie 2.0", Habitattype = "4030")
 selecteerIndicatoren(Versie = "Versie 2.0", Habitatgroep = "Heiden")
 library(pool)
 poolClose(ConnectiePool)
+}
 
 }

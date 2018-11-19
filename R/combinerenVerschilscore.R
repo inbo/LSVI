@@ -9,13 +9,11 @@
 #' @return gecombineerde verschilscore waarbij EN gecombineerd wordt via het minimum van beide verschilscores en OF gecombineerd wordt via het maximum van beide verschilscores
 #'
 #' @examples
-#' \dontrun{
 #' combinerenVerschilscore(
 #'   "(720 AND 721) OR 15",
 #'   c(720, 721, 15),
 #'   c(0.5, -0.3, 0.8)
 #' )
-#' }
 #'
 #' @export
 #'

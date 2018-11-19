@@ -6,11 +6,15 @@
 #' @return Deze functie maakt een Environment-object aan dat de connecties regelt met de betreffende databank.
 #'
 #' @examples
+#' # deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
+#' # een connectie gelegd kan worden met de SQL Server-databank binnen INBO
+#' \dontrun{
 #' library(LSVI)
 #' maakConnectiePool()
 #' geefVersieInfo()
 #' library(pool)
 #' poolClose(ConnectiePool)
+#' }
 #'
 #' @export
 #'

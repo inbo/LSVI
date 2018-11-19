@@ -9,13 +9,11 @@
 #' @return logische waarde TRUE/FALSE die de uitkomst van de Formule is (gecombineerd met VoorwaardeID en Status)
 #' 
 #' @examples
-#' \dontrun{
 #' combinerenVoorwaarden(
 #'   "(720 AND 721) OR 15",
 #'   c(720, 721, 15),
 #'   c(TRUE, FALSE, TRUE)
 #' )
-#' }
 #' 
 #' @export
 #' 
