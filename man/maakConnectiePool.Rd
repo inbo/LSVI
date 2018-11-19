@@ -13,7 +13,7 @@ maakConnectiePool(Server = "INBO-SQL07-PRD.inbo.be",
 
 \item{Databank}{de naam van de databank die aangeroepen wordt (standaard "D0122_00_LSVIHabitatTypes")}
 
-\item{Gebruiker}{gebruiker van de databank, standaard "pc-eigenaar" waarbij de login en wachtwoord gebruikt wordt waarmee ingelogd is op de pc, andere opties zijn "lezer" waarbij een gebruiker met leesrechten aangemaakt wordt (dit kan enkel als dit geïnstalleerd is op je pc) of een eigen gebruikersnaam en wachtwoord ingeven}
+\item{Gebruiker}{gebruiker van de databank, standaard "pc-eigenaar" waarbij de login en wachtwoord gebruikt wordt waarmee ingelogd is op de pc, andere opties zijn "lezer" waarbij een gebruiker met leesrechten aangemaakt wordt (dit kan enkel als er een login-file is toegevoegd op je pc) of een eigen gebruikersnaam en wachtwoord ingeven}
 
 \item{Wachtwoord}{wachtwoord van de gebruiker van de databank, standaard de tekst "geen", moet niet ingevuld worden als Gebruiker "pc-eigenaar" is}
 }
@@ -21,7 +21,7 @@ maakConnectiePool(Server = "INBO-SQL07-PRD.inbo.be",
 Deze functie maakt een Environment-object aan dat de connecties regelt met de betreffende databank.
 }
 \description{
-Deze functie maakt een connectiepool met de LSVI-indicatorendatabank, wat nodig is om de functies te kunnen gebruiken.  Deze connectiepool moet eenmalig aangemaakt worden, en functies zullen automatisch deze connectiepool gebruiken om te connecteren met de databank.  Alternatief is om een connectie aan te maken met de functie connecteerMetLSVIdb() en deze bij elke functie mee te geven.  Voorlopig verwijst deze connectiepool naar een databank binnen INBO, waardoor gebruikers buiten INBO een kopie van de databank nodig hebben om met dit package te kunnen werken, en eventueel een aangepaste versie van deze functie.  Op termijn zal deze databank geïntegreerd worden in het package, waardoor ze overal zou moeten werken.
+Deze functie maakt een connectiepool met de LSVI-indicatorendatabank, wat nodig is om de functies te kunnen gebruiken.  Deze connectiepool moet eenmalig aangemaakt worden, en functies zullen automatisch deze connectiepool gebruiken om te connecteren met de databank.  Alternatief is om een connectie aan te maken met de functie connecteerMetLSVIdb() en deze bij elke functie mee te geven.  Voorlopig verwijst deze connectiepool naar een databank binnen INBO, waardoor gebruikers buiten INBO een kopie van de databank nodig hebben om met dit package te kunnen werken, en eventueel een aangepaste versie van deze functie.  Op termijn zal deze databank toegevoegd worden aan het package, waardoor ze overal zou moeten werken.
 }
 \examples{
 library(LSVI)
