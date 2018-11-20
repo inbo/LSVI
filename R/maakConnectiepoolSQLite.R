@@ -19,13 +19,16 @@
 
 maakConnectiepoolSQLite <- function(){
   tryCatch(
-    ConnectiePool <<-
+    assign(
+      "ConnectiePool",
       dbPool(
         drv = SQLite(),
         dbname =
           system.file("databank/LSVIHabitatTypes.sqlite", package = "LSVI"),
         encoding = "UTF-8"
       ),
+      envir = .GlobalEnv
+    ),
     error = function(e) {
       warning("Het lukt niet om een connectie te leggen naar de databank in het package.  Neem contact op met de beheerder van het package als dit probleem zich blijft voordoen.")  #nolint
     }

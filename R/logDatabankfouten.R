@@ -11,8 +11,18 @@
 #' @importFrom DBI dbGetQuery
 #' @importFrom dplyr %>% bind_rows filter mutate transmute
 
-logDatabankfouten <- function(ConnectieLSVIhabitats = ConnectiePool) {
+logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
 
+  if (is.null(ConnectieLSVIhabitats)) {
+    if (exists("ConnectiePool")) {
+      ConnectieLSVIhabitats <- get("ConnectiePool", envir = .GlobalEnv)
+    }
+  }
+  assert_that(
+    inherits(ConnectieLSVIhabitats, "DBIConnection") |
+      inherits(ConnectieLSVIhabitats, "Pool"),
+    msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
+  )
   OndergrensOntbreekt <-
     dbGetQuery(
       ConnectieLSVIhabitats,

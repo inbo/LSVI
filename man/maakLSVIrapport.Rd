@@ -6,7 +6,7 @@
 \usage{
 maakLSVIrapport(Bestandsnaam = "LSVIrapport.html", Versie = "alle",
   Habitatgroep = "alle", Habitattype = "alle",
-  ConnectieLSVIhabitats = ConnectiePool, verbose = TRUE)
+  ConnectieLSVIhabitats = NULL, verbose = TRUE)
 }
 \arguments{
 \item{Bestandsnaam}{Een naam voor het html-bestand dat gegenereerd wordt, bestaande uit een string die eindigt op '.html'}

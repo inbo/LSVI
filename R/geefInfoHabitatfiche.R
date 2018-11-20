@@ -36,13 +36,18 @@ geefInfoHabitatfiche <-
            Criterium = "alle",
            Indicator = "alle",
            Stijl = c("Rmd", "tekst"),
-           ConnectieLSVIhabitats = ConnectiePool){
+           ConnectieLSVIhabitats = NULL){
 
     match.arg(Stijl)
+    if (is.null(ConnectieLSVIhabitats)) {
+      if (exists("ConnectiePool")) {
+        ConnectieLSVIhabitats <- get("ConnectiePool", envir = .GlobalEnv)
+      }
+    }
     assert_that(
       inherits(ConnectieLSVIhabitats, "DBIConnection") |
         inherits(ConnectieLSVIhabitats, "Pool"),
-      msg = "Er is geen connectie met de databank met de LSVI-indicatoren"
+      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
     )
 
     Selectiegegevens <-

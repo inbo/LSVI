@@ -34,7 +34,8 @@ maakConnectiePool <-
     
   if (Gebruiker == "pc-eigenaar") {
     tryCatch(
-      ConnectiePool <<-
+      assign(
+        "ConnectiePool",
         dbPool(
           drv = odbc(),
           Driver = "SQL Server",
@@ -42,6 +43,8 @@ maakConnectiePool <-
           Server = Server,
           Trusted_Connection = "TRUE"
         ),
+        envir = .GlobalEnv
+      ),
       error = function(e) {
         warning("Het lukt niet om een connectie te leggen naar de SQL Server-databank op INBO.  Neem contact op met de beheerder van het package als dit probleem zich blijft voordoen.")  #nolint
         maakConnectiepoolSQLite()

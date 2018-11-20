@@ -10,8 +10,7 @@ berekenLSVIbasis(Versie = "alle", Kwaliteitsniveau = "alle",
   = character(), Type = character(), WaardeMin = double(), WaardeMax =
   double(), stringsAsFactors = FALSE),
   Data_soortenKenmerken = data.frame(ID = character()),
-  Aggregatiemethode = "1-out-all-out",
-  ConnectieLSVIhabitats = ConnectiePool,
+  Aggregatiemethode = "1-out-all-out", ConnectieLSVIhabitats = NULL,
   LIJST = geefVertaallijst(ConnectieLSVIhabitats), na.rm = FALSE)
 }
 \arguments{

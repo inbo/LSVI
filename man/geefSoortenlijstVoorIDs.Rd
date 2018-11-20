@@ -5,7 +5,7 @@
 \title{Genereert soorten(groep)lijst(en) LSVI op basis van TaxongroepID}
 \usage{
 geefSoortenlijstVoorIDs(Taxongroeplijst, Taxonlijsttype = c("LSVIfiche",
-  "alle"), ConnectieLSVIhabitats = ConnectiePool)
+  "alle"), ConnectieLSVIhabitats = NULL)
 }
 \arguments{
 \item{Taxongroeplijst}{string waarin de TaxongroepId's na elkaar weergegeven worden, gescheiden door een komma.  Eventueel mag dit ook een vector zijn van TaxongroepId's.}

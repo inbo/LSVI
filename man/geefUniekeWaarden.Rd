@@ -4,8 +4,7 @@
 \alias{geefUniekeWaarden}
 \title{Geef alle unieke waarden van een veld uit de databank met de LSVI-indicatoren voorafgegaan door "alle"}
 \usage{
-geefUniekeWaarden(Tabelnaam, Veldnaam,
-  ConnectieLSVIhabitats = ConnectiePool)
+geefUniekeWaarden(Tabelnaam, Veldnaam, ConnectieLSVIhabitats = NULL)
 }
 \arguments{
 \item{Tabelnaam}{De naam van de tabel waarin het veld zich bevindt (String)}
