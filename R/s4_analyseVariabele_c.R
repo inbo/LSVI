@@ -10,7 +10,6 @@
 #' @importFrom dplyr %>% mutate select filter summarise
 #' @importFrom rlang .data
 #'
-#' @export
 
 analyseVariabele_c <-
   function(
