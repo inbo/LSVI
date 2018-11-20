@@ -8,6 +8,7 @@ packageDescription(pkg = "LSVI")
 #  devtools::install_github("inbo/LSVI@develop", build_vignettes = TRUE)
 
 ## ----eval = FALSE--------------------------------------------------------
+#  library(LSVI)
 #  ?maakLSVIrapport
 
 ## ------------------------------------------------------------------------

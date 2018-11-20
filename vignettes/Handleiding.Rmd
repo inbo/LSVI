@@ -81,6 +81,7 @@ Als je in de lijst met packages onder de tab Packages op een packagenaam klikt, 
 Zodra een package ingeladen is, kan je deze documentatie van functies ook opvragen door een `?` te typen, gevolgd door de naam van de functie, bijvoorbeeld:
 
 ```{r eval = FALSE}
+library(LSVI)
 ?maakLSVIrapport
 ```
 
