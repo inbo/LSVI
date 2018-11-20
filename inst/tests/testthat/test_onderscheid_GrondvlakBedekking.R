@@ -11,16 +11,23 @@ Data_habitat <-
       col_types = list(col_character(), col_character(), col_character())
     )
 Data_voorwaarden <-
-    read_csv2(system.file("vbdata/data_voorwaarden9130.csv", package = "LSVI"),
-              col_types = list(col_character(), col_character(), col_character(), col_character(), col_character(), col_character(), col_character(), col_logical(), col_character(), col_character(), col_character()))
+    read_csv2(
+      system.file("vbdata/data_voorwaarden9130.csv", package = "LSVI"),
+      col_types =
+        list(
+          col_character(), col_character(), col_character(), col_character(),
+          col_character(), col_character(), col_character(), col_logical(),
+          col_character(), col_character(), col_character()
+        )
+    )
 
 Data_soortenKenmerken <-
     read_csv2(
       system.file("vbdata/datasoortenKenmerken9130.csv", package = "LSVI")
     )
 
-describe("nakijken of er onderscheid gemaakt worden tussen bedekking en grondvlak bij boomsoorten", {
-  it("Correcte berekening invasieve exoten boom- en struiklaag op basis van bedekking en sleutelsoorten boomlaag op basis van grondvlak", {
+describe("nakijken of er onderscheid gemaakt worden tussen bedekking en grondvlak bij boomsoorten", {#nolint
+  it("Correcte berekening invasieve exoten boom- en struiklaag op basis van bedekking en sleutelsoorten boomlaag op basis van grondvlak", {#nolint
     skip_if_not(
       class(ConnectiePool$.__enclos_env__$private$createObject())[1] ==
         "Microsoft SQL Server",

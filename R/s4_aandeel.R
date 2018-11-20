@@ -43,8 +43,8 @@ setMethod(
       noemer_min <- sum(alle_soorten$WaardeMin, na.rm = TRUE)
       noemer_max <- sum(alle_soorten$WaardeMax, na.rm = TRUE)
 
-      aandeel_min <- min(teller_min/noemer_max, 1)
-      aandeel_max <- min(teller_max/noemer_min, 1)
+      aandeel_min <- min(teller_min / noemer_max, 1)
+      aandeel_max <- min(teller_max / noemer_min, 1)
       resultaat <- c(aandeel_min, aandeel_max)
       return(resultaat)
 

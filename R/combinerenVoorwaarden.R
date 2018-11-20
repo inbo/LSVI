@@ -28,7 +28,8 @@ combinerenVoorwaarden <-
     assert_that(all(sapply(VoorwaardeID, is.numeric)))
     assert_that(all(sapply(Status, is.logical)))
     assert_that(length(VoorwaardeID) == length(Status))
-    #nog testen of Formule bestaat uit EN, OF, haakjes en VoorwaardeID's (en evt. andere tekens die logische berekening toelaten)
+    #nog testen of Formule bestaat uit EN, OF, haakjes en VoorwaardeID's
+    #(en evt. andere tekens die logische berekening toelaten)
 
     Formule <- gsub(" AND ", " & ", Formule)
     Formule <- gsub(" OR ", " | ", Formule)

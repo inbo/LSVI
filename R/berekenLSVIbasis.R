@@ -457,8 +457,12 @@ berekenLSVIbasis <-
         #harmonisch gemiddelde van de verschilscores
         #de verschilscores worden tijdelijk herschaald naar 0 tot 1 range
         Index_harm_criterium =
-          mean(((.data$Verschilscore + 1) / 2) ^ -1,
-                na.rm = na.rm) ^ -1 * 2 - 1
+          mean(
+            (
+              (.data$Verschilscore + 1) / 2
+            ) ^ -1,
+            na.rm = na.rm
+          ) ^ -1 * 2 - 1
       ) %>%
       ungroup()
 
@@ -473,12 +477,21 @@ berekenLSVIbasis <-
       summarise(
         Index_min_min = min(.data$Index_min_criterium, na.rm = na.rm),
         #iets minder conservatieve index
-        Index_min_harm = mean(((.data$Index_min_criterium + 1) / 2) ^ -1,
-                              na.rm = na.rm) ^ -1 * 2 - 1,
+        Index_min_harm =
+          mean(
+            (
+              (.data$Index_min_criterium + 1) / 2
+            ) ^ -1,
+            na.rm = na.rm
+          ) ^ -1 * 2 - 1,
         # nog minder conservatieve index
         Index_harm_harm =
-          mean(((.data$Index_harm_criterium + 1) / 2) ^ -1,
-                na.rm = na.rm) ^ -1 * 2 - 1
+          mean(
+            (
+              (.data$Index_harm_criterium + 1) / 2
+            ) ^ -1,
+            na.rm = na.rm
+          ) ^ -1 * 2 - 1
       ) %>%
       ungroup()
 
@@ -498,7 +511,7 @@ berekenLSVIbasis <-
               Aggregatiemethode == "RapportageHR",
               (
                 sum(.data$Status_indicator, na.rm = na.rm) >
-                  sum(!is.na(.data$Status_indicator))/2.0
+                  sum(!is.na(.data$Status_indicator)) / 2.0
               ) & (
                 sum(
                   (.data$Status_indicator == FALSE) * (.data$Belang == "zb"),

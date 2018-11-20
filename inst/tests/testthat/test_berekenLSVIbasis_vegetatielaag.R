@@ -52,25 +52,23 @@ describe("berekenLSVIbasis vegetatielaag", {
     #       Data_voorwaarden, Data_soortenKenmerken
     #     )
     #   )
-    # 
     # write.csv2(
     #   Resultaatv2[["Resultaat_criterium"]],
-    #   file = "inst/vbdata/Resultaat_test_bosv2/Resultaat_criterium.csv"
+    #   file = "inst/vbdata/Resultaat_test_bosv2/Resultaat_criterium.csv"  #nolint
     # )
     # write.csv2(
     #   Resultaatv2[["Resultaat_indicator"]],
-    #   file = "inst/vbdata/Resultaat_test_bosv2/Resultaat_indicator.csv"
+    #   file = "inst/vbdata/Resultaat_test_bosv2/Resultaat_indicator.csv"  #nolint
     # )
     # write.csv2(
     #   Resultaatv2[["Resultaat_detail"]],
-    #   file = "inst/vbdata/Resultaat_test_bosv2/Resultaat_detail.csv"
+    #   file = "inst/vbdata/Resultaat_test_bosv2/Resultaat_detail.csv"  #nolint
     # )
     # write.csv2(
     #   Resultaatv2[["Resultaat_globaal"]],
-    #   file = "inst/vbdata/Resultaat_test_bosv2/Resultaat_globaal.csv"
+    #   file = "inst/vbdata/Resultaat_test_bosv2/Resultaat_globaal.csv"  #nolint
     # )
 
-    #load(system.file("vbdata/Resultaat_test_bosv2/Resultaat_criterium.csv", package = "LSVI"))
     Resultaatv2 <-
       list(
         Resultaat_criterium =
@@ -440,8 +438,9 @@ describe("berekenLSVIbasis vegetatielaag", {
           system.file("vbdata/Opname4030voorwaardenv2.csv", package = "LSVI"),
           col_types =
             list(
-              col_character(), col_character(), col_character(), col_character(),
-              col_character(), col_character(), col_character(), col_character()
+              col_character(), col_character(), col_character(),
+              col_character(), col_character(), col_character(),
+              col_character(), col_character()
             )
         )
     } else {
@@ -450,8 +449,9 @@ describe("berekenLSVIbasis vegetatielaag", {
           system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI"),
           col_types =
             list(
-              col_character(), col_character(), col_character(), col_character(),
-              col_character(), col_character(), col_character(), col_character()
+              col_character(), col_character(), col_character(),
+              col_character(), col_character(), col_character(),
+              col_character(), col_character()
             )
         )
     }

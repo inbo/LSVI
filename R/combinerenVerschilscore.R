@@ -32,8 +32,14 @@ combinerenVerschilscore <-
     #(en evt. andere tekens die logische berekening toelaten)
 
     # infix functions voor max en min
-    `%max%` <- function(a, b) max(a, b)
-    `%min%` <- function(a, b) min(a, b)
+    assign(
+      "%max%",
+      function(a, b) max(a, b)
+    )
+    assign(
+      "%min%",
+      function(a, b) min(a, b)
+    )
 
     Formule <- gsub(" AND ", " %min% ", Formule)
     Formule <- gsub(" OR ", " %max% ", Formule)

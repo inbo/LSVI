@@ -79,7 +79,7 @@ geefSoortenlijst <-
           .data$Kwaliteitsniveau, .data$Voorwaarde, .data$TaxongroepId
         )
     }
-  
+
     SoortengroepIDs <- Selectiegegevens %>%
       select(.data$TaxongroepId) %>%
       distinct() %>%
@@ -89,21 +89,21 @@ geefSoortenlijst <-
     if (SoortengroepIDs$SoortengroepIDs == "") {
       stop("Voor de opgegeven argumenten is er geen soortenlijst")
     }
-  
+
     Soortenlijst <-
       geefSoortenlijstVoorIDs(
         Taxongroeplijst = SoortengroepIDs$SoortengroepIDs,
         Taxonlijsttype = Taxonlijsttype,
         ConnectieLSVIhabitats
       )
-  
+
     #soortgegevens aan selectiegegevens plakken
     SoortenlijstSelectie <- Selectiegegevens %>%
       left_join(
         Soortenlijst,
         by = ("TaxongroepId")
       )
-    
+
     if (Taxonlijstniveau[1] == "voorwaarde") {
       SoortenlijstSelectie <- SoortenlijstSelectie %>%
         select(

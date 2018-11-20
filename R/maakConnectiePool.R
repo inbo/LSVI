@@ -31,7 +31,7 @@ maakConnectiePool <-
   assert_that(is.string(Databank))
   assert_that(is.string(Gebruiker))
   assert_that(is.string(Wachtwoord))
-    
+
   if (Gebruiker == "pc-eigenaar") {
     tryCatch(
       assign(
