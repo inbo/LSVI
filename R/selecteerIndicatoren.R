@@ -27,6 +27,10 @@
 #' library(pool)
 #' poolClose(ConnectiePool)
 #' }
+#' # Onderstaande code maakt geen deel uit van het voorbeeld,
+#' # maar om de voorbeelden van het package te kunnen testen op juistheid,
+#' # moet er minstens 1 grafiek in een van de voorbeelden voorkomen.
+#' plot(1, 1)
 #'
 #' @importFrom DBI dbGetQuery
 #' @importFrom assertthat assert_that is.string
