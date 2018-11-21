@@ -14,11 +14,19 @@
 #'
 #' @return Deze functie geeft een tabel met velden Versie, Habitattype, Habitatsubtype, Criterium, Indicator, Indicator_habitatID, TaxongroepId en Indicator_beoordelingID.
 #'
-#' @examples
-#' selecteerIndicatoren(Versie = "Versie 3", Habitattype = "4010")
-#' selecteerIndicatoren(Versie = "Versie 3", Habitatgroep = "Heiden")
-#'
 #' @export
+#'
+#' @examples
+#' # deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
+#' # een connectie gelegd kan worden met de SQL Server-databank binnen INBO
+#' \dontrun{
+#' library(LSVI)
+#' maakConnectiePool()
+#' selecteerIndicatoren(Versie = "Versie 2.0", Habitattype = "4030")
+#' selecteerIndicatoren(Versie = "Versie 2.0", Habitatgroep = "Heiden")
+#' library(pool)
+#' poolClose(ConnectiePool)
+#' }
 #'
 #' @importFrom DBI dbGetQuery
 #' @importFrom assertthat assert_that is.string
@@ -33,12 +41,17 @@ selecteerIndicatoren <-
            Criterium = "alle",
            Indicator = "alle",
            HabitatnamenToevoegen = FALSE,
-           ConnectieLSVIhabitats = ConnectiePool){
+           ConnectieLSVIhabitats = NULL){
 
+    if (is.null(ConnectieLSVIhabitats)) {
+      if (exists("ConnectiePool")) {
+        ConnectieLSVIhabitats <- get("ConnectiePool", envir = .GlobalEnv)
+      }
+    }
     assert_that(
       inherits(ConnectieLSVIhabitats, "DBIConnection") |
         inherits(ConnectieLSVIhabitats, "Pool"),
-      msg = "Er is geen connectie met de databank met de LSVI-indicatoren"
+      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
     )
 
     invoercontroleVersie(Versie, ConnectieLSVIhabitats)
@@ -153,7 +166,8 @@ selecteerIndicatoren <-
             Criterium.Naam AS Criterium, Indicator.Naam AS Indicator,
             Indicator_habitat.Id AS Indicator_habitatID,
             Indicator_habitat.TaxongroepId,
-            IndicatortabellenKoppeling.Indicator_beoordelingID
+            IndicatortabellenKoppeling.Indicator_beoordelingId
+              AS Indicator_beoordelingID
         FROM (((Indicator_habitat
         INNER JOIN Habitatselectie
         ON Indicator_habitat.HabitattypeID = Habitatselectie.HabitattypeId)

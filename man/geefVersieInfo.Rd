@@ -4,7 +4,7 @@
 \alias{geefVersieInfo}
 \title{Geeft informatie over de verschillende versies voor de berekening van de LSVI}
 \usage{
-geefVersieInfo(ConnectieLSVIhabitats = ConnectiePool)
+geefVersieInfo(ConnectieLSVIhabitats = NULL)
 }
 \arguments{
 \item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
@@ -16,6 +16,13 @@ Deze functie geeft de tabel Versie uit de databank.
 Deze functie geeft een overzicht van alle versies die er zijn voor de berekening van de de Lokale Staat van Instandhouding, met naast de opsomming van de versies en de referenties een overzicht van de 2 kwaliteitsniveaus of types van beoordelingscriteria die in deze versie gedefinieerd zijn.
 }
 \examples{
+# deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
+# een connectie gelegd kan worden met de SQL Server-databank binnen INBO
+\dontrun{
+maakConnectiePool()
 geefVersieInfo()
+library(pool)
+poolClose(ConnectiePool)
+}
 
 }

@@ -6,7 +6,7 @@
 \usage{
 geefInfoHabitatfiche(Versie = "alle", Habitatgroep = "alle",
   Habitattype = "alle", Criterium = "alle", Indicator = "alle",
-  Stijl = c("Rmd", "tekst"), ConnectieLSVIhabitats = ConnectiePool)
+  Stijl = c("Rmd", "tekst"), ConnectieLSVIhabitats = NULL)
 }
 \arguments{
 \item{Versie}{De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".  Bij de default "alle" worden de gegevens voor de verschillende versies gegeven.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden("Versie", "VersieLSVI") of geefVersieInfo().}
@@ -32,6 +32,14 @@ Deze functie geeft de inhoud van de tabellen habitatkarakteristieken en beoordel
 De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten als string opgegeven worden.  Default is telkens 'alle', waarbij de soortenlijsten voor alle mogelijke waarden van die parameter weergegeven worden (m.a.w. er is geen selectie voor deze parameter).
 }
 \examples{
-geefInfoHabitatfiche(Versie = "Versie 3", Habitattype = "4030")
+# deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
+# een connectie gelegd kan worden met de SQL Server-databank binnen INBO
+\dontrun{
+library(LSVI)
+maakConnectiePool()
+geefInfoHabitatfiche(Versie = "Versie 2.0", Habitattype = "4030")
+library(pool)
+poolClose(ConnectiePool)
+}
 
 }

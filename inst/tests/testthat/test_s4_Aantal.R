@@ -197,7 +197,4 @@ describe("s4_Aantal", {
       2
     )
   })
-
-  #nog toevoegen als het opzoeken van soorten in subniveaus opgelost is: de aggregatie van bedekkingen gebeurt correct
-
 })
