@@ -20,7 +20,10 @@ setMethod(
   definition = function(object) {
 
     object@Kenmerken <- object@Kenmerken %>%
-      filter(is.na(.data$Eenheid) | (!.data$Eenheid %in% c("Grondvlak_ha", "Volume_ha")))
+      filter(
+        is.na(.data$Eenheid) |
+          (!.data$Eenheid %in% c("Grondvlak_ha", "Volume_ha"))
+      )
 
     Resultaat <-
       deselecteerKenmerkenInOpname(

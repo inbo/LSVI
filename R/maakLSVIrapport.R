@@ -16,14 +16,17 @@
 #' # bij het testen van het package). Maar de voorbeelden werken en mogen zeker
 #' # uitgetest worden.
 #' \dontrun{
+#' maakConnectiePool()
 #' maakLSVIrapport(
 #'   Bestandsnaam = "LSVIrapport_heiden_versie3.html",
-#'   Versie = "Versie 3", Habitatgroep = "Heiden"
+#'   Versie = "Versie 2.0", Habitatgroep = "Heiden"
 #' )
 #' maakLSVIrapport(
-#'   Bestandsnaam = "LSVIrapport_4010.html",
-#'   Habitattype = "4010"
+#'   Bestandsnaam = "LSVIrapport_4030.html",
+#'   Habitattype = "4030"
 #' )
+#' library(pool)
+#' poolClose(ConnectiePool)
 #' }
 #' 
 #'
@@ -39,13 +42,18 @@ maakLSVIrapport <-
            Versie = "alle",
            Habitatgroep = "alle",
            Habitattype= "alle",
-           ConnectieLSVIhabitats = ConnectiePool,
+           ConnectieLSVIhabitats = NULL,
            verbose = TRUE){
 
+    if (is.null(ConnectieLSVIhabitats)) {
+      if (exists("ConnectiePool")) {
+        ConnectieLSVIhabitats <- get("ConnectiePool", envir = .GlobalEnv)
+      }
+    }
     assert_that(
       inherits(ConnectieLSVIhabitats, "DBIConnection") |
         inherits(ConnectieLSVIhabitats, "Pool"),
-      msg = "Er is geen connectie met de databank met de LSVI-indicatoren"
+      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
     )
     assert_that(is.flag(verbose))
     assert_that(noNA(verbose))

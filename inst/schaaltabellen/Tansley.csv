@@ -1,9 +1,0 @@
-"Voluit","Afgekort","Ondergrens","GemBedekking","Bovengrens"
-"afwezig",NA,0,0,1e-07
-"sporadisch","s",1e-07,0.06,0.12
-"zeldzaam","r",0.12,0.185,0.25
-"occasioneel","o",0.25,0.625,1
-"frequent","f",1,3,5
-"abundant","a",5,15,25
-"codominant","cd",25,37.5,50
-"dominant","d",50,75,100

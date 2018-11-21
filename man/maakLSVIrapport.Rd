@@ -6,7 +6,7 @@
 \usage{
 maakLSVIrapport(Bestandsnaam = "LSVIrapport.html", Versie = "alle",
   Habitatgroep = "alle", Habitattype = "alle",
-  ConnectieLSVIhabitats = ConnectiePool, verbose = TRUE)
+  ConnectieLSVIhabitats = NULL, verbose = TRUE)
 }
 \arguments{
 \item{Bestandsnaam}{Een naam voor het html-bestand dat gegenereerd wordt, bestaande uit een string die eindigt op '.html'}
@@ -35,14 +35,17 @@ De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten
 # bij het testen van het package). Maar de voorbeelden werken en mogen zeker
 # uitgetest worden.
 \dontrun{
+maakConnectiePool()
 maakLSVIrapport(
   Bestandsnaam = "LSVIrapport_heiden_versie3.html",
-  Versie = "Versie 3", Habitatgroep = "Heiden"
+  Versie = "Versie 2.0", Habitatgroep = "Heiden"
 )
 maakLSVIrapport(
-  Bestandsnaam = "LSVIrapport_4010.html",
-  Habitattype = "4010"
+  Bestandsnaam = "LSVIrapport_4030.html",
+  Habitattype = "4030"
 )
+library(pool)
+poolClose(ConnectiePool)
 }
 
 

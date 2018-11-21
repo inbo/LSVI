@@ -11,8 +11,15 @@
 #' @return Deze functie geeft een tabel met velden TaxongroepId, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van taxons binnen eenzelfde indicator).  WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort geeft de verkorte naam zonder auteursnaam.
 #' 
 #' @examples
-#' geefSoortenlijstVoorIDs("98,227,484,552,726")
-#' geefSoortenlijstVoorIDs("98,227,484,552,726","alle")
+#' # deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
+#' # een connectie gelegd kan worden met de SQL Server-databank binnen INBO
+#' \dontrun{
+#' maakConnectiePool()
+#' geefSoortenlijstVoorIDs("434,88,565")
+#' geefSoortenlijstVoorIDs("434,88,565","alle")
+#' library(pool)
+#' poolClose(ConnectiePool)
+#' }
 #'
 #' @export
 #'
@@ -24,12 +31,17 @@
 geefSoortenlijstVoorIDs <-
   function(Taxongroeplijst,
            Taxonlijsttype = c("LSVIfiche", "alle"),
-           ConnectieLSVIhabitats = ConnectiePool){
+           ConnectieLSVIhabitats = NULL){
 
+    if (is.null(ConnectieLSVIhabitats)) {
+      if (exists("ConnectiePool")) {
+        ConnectieLSVIhabitats <- get("ConnectiePool", envir = .GlobalEnv)
+      }
+    }
     assert_that(
       inherits(ConnectieLSVIhabitats, "DBIConnection") |
         inherits(ConnectieLSVIhabitats, "Pool"),
-      msg = "Er is geen connectie met de databank met de LSVI-indicatoren"
+      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
     )
     assert_that(is.character(Taxongroeplijst))
     if (!is.string(Taxongroeplijst)) {

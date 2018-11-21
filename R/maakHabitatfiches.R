@@ -15,7 +15,10 @@
 #' # bij het testen van het package). Maar het voorbeeld werkt en mag zeker
 #' # uitgetest worden.
 #' \dontrun{
-#' maakHabitatfiches(Versie = "Versie 3", Habitattype = "4010")
+#' maakConnectiePool()
+#' maakHabitatfiches(Versie = "Versie 2.0", Habitattype = "4030")
+#' library(pool)
+#' poolClose(ConnectiePool)
 #' }
 #'
 #' @export
@@ -28,13 +31,18 @@ maakHabitatfiches <-
   function(Versie = "alle",
            Habitatgroep = "alle",
            Habitattype = "alle",
-           ConnectieLSVIhabitats = ConnectiePool,
+           ConnectieLSVIhabitats = NULL,
            verbose = TRUE){
 
+    if (is.null(ConnectieLSVIhabitats)) {
+      if (exists("ConnectiePool")) {
+        ConnectieLSVIhabitats <- get("ConnectiePool", envir = .GlobalEnv)
+      }
+    }
     assert_that(
       inherits(ConnectieLSVIhabitats, "DBIConnection") |
         inherits(ConnectieLSVIhabitats, "Pool"),
-      msg = "Er is geen connectie met de databank met de LSVI-indicatoren"
+      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
     )
     assert_that(is.flag(verbose))
     assert_that(noNA(verbose))

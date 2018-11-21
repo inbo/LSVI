@@ -10,7 +10,15 @@
 #' @return Deze functie genereert een tabel met alle gegevens die nodig zijn om de tabellen habitatkarakteristieken en beoordelingsmatrix uit de LSVI-rapporten te genereren.
 #'
 #' @examples
-#' geefInfoHabitatfiche(Versie = "Versie 3", Habitattype = "4030")
+#' # deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
+#' # een connectie gelegd kan worden met de SQL Server-databank binnen INBO
+#' \dontrun{
+#' library(LSVI)
+#' maakConnectiePool()
+#' geefInfoHabitatfiche(Versie = "Versie 2.0", Habitattype = "4030")
+#' library(pool)
+#' poolClose(ConnectiePool)
+#' }
 #'
 #' @export
 #'
@@ -28,13 +36,18 @@ geefInfoHabitatfiche <-
            Criterium = "alle",
            Indicator = "alle",
            Stijl = c("Rmd", "tekst"),
-           ConnectieLSVIhabitats = ConnectiePool){
+           ConnectieLSVIhabitats = NULL){
 
     match.arg(Stijl)
+    if (is.null(ConnectieLSVIhabitats)) {
+      if (exists("ConnectiePool")) {
+        ConnectieLSVIhabitats <- get("ConnectiePool", envir = .GlobalEnv)
+      }
+    }
     assert_that(
       inherits(ConnectieLSVIhabitats, "DBIConnection") |
         inherits(ConnectieLSVIhabitats, "Pool"),
-      msg = "Er is geen connectie met de databank met de LSVI-indicatoren"
+      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
     )
 
     Selectiegegevens <-

@@ -15,6 +15,7 @@
 #' @importFrom plyr .
 #' @importFrom tidyr unnest
 #' @importFrom rlang .data
+#' @importFrom pander evals
 #'
 #'
 berekenStatus <-

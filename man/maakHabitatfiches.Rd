@@ -5,8 +5,7 @@
 \title{Genereert habitatfiche(s) van LSVI op basis van de opgegeven parameters}
 \usage{
 maakHabitatfiches(Versie = "alle", Habitatgroep = "alle",
-  Habitattype = "alle", ConnectieLSVIhabitats = ConnectiePool,
-  verbose = TRUE)
+  Habitattype = "alle", ConnectieLSVIhabitats = NULL, verbose = TRUE)
 }
 \arguments{
 \item{Versie}{De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".  Bij de default "alle" worden de gegevens voor de verschillende versies gegeven.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden("Versie", "VersieLSVI") of geefVersieInfo().}
@@ -33,7 +32,10 @@ De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten
 # bij het testen van het package). Maar het voorbeeld werkt en mag zeker
 # uitgetest worden.
 \dontrun{
-maakHabitatfiches(Versie = "Versie 3", Habitattype = "4010")
+maakConnectiePool()
+maakHabitatfiches(Versie = "Versie 2.0", Habitattype = "4030")
+library(pool)
+poolClose(ConnectiePool)
 }
 
 }

@@ -3,28 +3,28 @@ context("test bereken Status Rapportage HR")
 library(readr)
 library(dplyr)
 library(rlang)
+maakConnectiePool()
 
 Data_habitat <-
     read_csv2(
-      system.file("vbdata/opname4030habitat.csv", package = "LSVI"),
+      system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
       col_types = list(col_character(), col_character(), col_character())
     )
 Data_voorwaarden <-
-    read_csv2(system.file("vbdata/opname4030voorwaarden.csv", package = "LSVI"))
+    read_csv2(system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI"))
 Data_soortenKenmerken <-
     read_csv2(
-      system.file("vbdata/opname4030soortenKenmerken.csv", package = "LSVI")
+      system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI")
     )
 
-load(system.file("vbdata/Resultaat_test4030.Rdata", package = "LSVI"))
+load(system.file("vbdata/Resultaat_test4030v2.Rdata", package = "LSVI"))
 
 describe("bereken status criterium en globaal volgens Rapportage HR", {
   it("Status Rapportage HR correct berekend", {
-    skip_on_cran()
     expect_equal(
       idsWissen(
         berekenLSVIbasis(
-          Versie = "Versie 3",
+          Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_voorwaarden,
@@ -33,13 +33,13 @@ describe("bereken status criterium en globaal volgens Rapportage HR", {
         )
       ),
       list(
-        Resultaat_criterium = Resultaat[["Resultaat_criterium"]] %>%
+        Resultaat_criterium = Resultaatv2[["Resultaat_criterium"]] %>%
           mutate(
             Aggregatiemethode = "RapportageHR"
           ),
-        Resultaat_indicator = Resultaat[["Resultaat_indicator"]],
-        Resultaat_detail = Resultaat[["Resultaat_detail"]],
-        Resultaat_globaal = Resultaat[["Resultaat_globaal"]] %>%
+        Resultaat_indicator = Resultaatv2[["Resultaat_indicator"]],
+        Resultaat_detail = Resultaatv2[["Resultaat_detail"]],
+        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]] %>%
           mutate(
             Status = ifelse(.data$ID == "Ts2036", TRUE, .data$Status),
             Aggregatiemethode = "RapportageHR"
@@ -48,3 +48,6 @@ describe("bereken status criterium en globaal volgens Rapportage HR", {
     )
   })
 })
+
+library(pool)
+poolClose(ConnectiePool)

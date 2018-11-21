@@ -4,4 +4,4 @@ ID;Criterium;Indicator;Voorwaarde;Waarde;Type;Invoertype;Eenheid
 1;Structuur;hoeveelheid dik dood hout;aantal exemplaren dik dood hout per ha;1;Decimaal getal;;
 1;Structuur;bosconstantie;bosconstantie;90;Geheel getal;;
 1;Structuur;horizontale structuur - natuurlijke mozaiekstructuur;schaalgrootte ingrepen (ha);0,2;Decimaal getal;;ha
-1;Structuur;horizontale structuur - natuurlijke mozaiekstructuur;natuurlijke mozaïekstructuur;1;Ja/nee;;
+1;Structuur;horizontale structuur - natuurlijke mozaiekstructuur;natuurlijke mozaÃ¯ekstructuur;1;Ja/nee;;

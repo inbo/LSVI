@@ -1,8 +1,11 @@
-box: inbobmk/rstable
+box: rocker/verse
 build:
   steps:
     - script:
-        code: Rscript -e "install.packages(c('odbc','rgbif'))"
+        code: |
+          apt-get update
+          apt-get install -y libgeos-dev
+          Rscript -e "install.packages(c('odbc', 'pool', 'rgbif', 'pander'))"
     - inbobmk/r-check
     - inbobmk/r-coverage
     - inbobmk/r-lint

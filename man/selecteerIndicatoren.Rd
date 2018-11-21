@@ -6,7 +6,7 @@
 \usage{
 selecteerIndicatoren(Versie = "alle", Habitatgroep = "alle",
   Habitattype = "alle", Criterium = "alle", Indicator = "alle",
-  HabitatnamenToevoegen = FALSE, ConnectieLSVIhabitats = ConnectiePool)
+  HabitatnamenToevoegen = FALSE, ConnectieLSVIhabitats = NULL)
 }
 \arguments{
 \item{Versie}{De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".  Bij de default "alle" worden de gegevens voor de verschillende versies gegeven.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden("Versie", "VersieLSVI") of geefVersieInfo().}
@@ -32,7 +32,15 @@ Deze hulpfunctie selecteert de indicatoren die gebruikt worden voor de bepaling 
 De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten als string opgegeven worden.  Default is telkens 'alle', waarbij de soortenlijsten voor alle mogelijke waarden van die parameter weergegeven worden (m.a.w. er is geen selectie voor deze parameter).
 }
 \examples{
-selecteerIndicatoren(Versie = "Versie 3", Habitattype = "4010")
-selecteerIndicatoren(Versie = "Versie 3", Habitatgroep = "Heiden")
+# deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
+# een connectie gelegd kan worden met de SQL Server-databank binnen INBO
+\dontrun{
+library(LSVI)
+maakConnectiePool()
+selecteerIndicatoren(Versie = "Versie 2.0", Habitattype = "4030")
+selecteerIndicatoren(Versie = "Versie 2.0", Habitatgroep = "Heiden")
+library(pool)
+poolClose(ConnectiePool)
+}
 
 }
