@@ -82,7 +82,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
     filter(
       !.data$AnalyseVariabele %in%
         c("aantal", "aandeel", "aandeelKruidlaag", "bedekking", "bedekkingLaag",
-          "maxBedekking", "maxBedekkingExcl", 'aandeelSom', 'aandeelExcl'),
+          "maxBedekking", "maxBedekkingExcl", "aandeelSom", "aandeelExcl"),
       !grepl("^meting", .data$AnalyseVariabele)
     )
   TypeAantalNietGeheelGetal <- Invoervereisten %>%
@@ -99,7 +99,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
   TypeAandeelFout <- Invoervereisten %>%
     filter(
       .data$AnalyseVariabele %in%
-        c("aandeel", "aandeelKruidlaag", 'aandeelSom', 'aandeelExcl'),
+        c("aandeel", "aandeelKruidlaag", "aandeelSom", "aandeelExcl"),
       !.data$TypeVariabele %in% c("Percentage")
     )
   LijstItems <-

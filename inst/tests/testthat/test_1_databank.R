@@ -36,7 +36,7 @@ describe("test databank", {
       filter(!grepl("^meting", .data$VariabeleNaam))
     expect_true(
       all(AV$VariabeleNaam %in%
-            c("aandeel", 'aandeelExcl', "aandeelKruidlaag", 'aandeelSom',
+            c("aandeel", "aandeelExcl", "aandeelKruidlaag", "aandeelSom",
               "aantal", "bedekking", "bedekkingLaag", "maxBedekking",
               "maxBedekkingExcl")
       )
