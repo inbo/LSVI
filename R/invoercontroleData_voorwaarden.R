@@ -63,7 +63,9 @@ invoercontroleData_voorwaarden <-
     ) {
       stop("Niet alle waarden vermeld onder Data_voorwaarden$Voorwaarde komen overeen met waarden vermeld in de databank.") #nolint
     }
-    #misschien best ook testen dat die indicator-criterium-voorwaarde-combinatie in de databank voorkomt?  En of deze voor dat habitattype voorkomt, maar dat best verderop doen
+    #misschien best ook testen dat die indicator-criterium-voorwaarde-combinatie
+    #in de databank voorkomt?  En of deze voor dat habitattype voorkomt,
+    #maar dat best verderop doen
     assert_that(has_name(Data_voorwaarden, "Waarde"))
     assert_that(has_name(Data_voorwaarden, "Type"))
     if (!is.character(Data_voorwaarden$Type)) {

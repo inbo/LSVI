@@ -5,20 +5,28 @@
 #' @template Zoekparameters
 #'
 #' @param ConnectieLSVIhabitats Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.
-#' @param Versie De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".  Bij de default "alle" worden de gegevens voor de verschillende versies gegeven.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Versie", "VersieLSVI") of geefVersieInfo(ConnectieLSVIhabitats).
+#' @param Versie De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".  Bij de default "alle" worden de gegevens voor de verschillende versies gegeven.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden("Versie", "VersieLSVI") of geefVersieInfo().
 #' @param Habitatgroep Parameter waarmee alle habitats van een bepaalde habitatgroep kunnen geselecteerd worden, bv. "Bossen", "Heiden", "(Half-)natuurlijke graslanden", "Zoete en brakke wateren",...   en "alle" (=default).  Deze waarde moet niet gespecifieerd worden als een bepaald habitat(sub)type geselecteerd wordt.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden("Habitatgroep", "Naam").
-#' @param Habitattype Parameter waarmee een habitattype of habitatsubtype kan geselecteerd worden.  Als dit een habitattype betreft met meerdere subtypes, zullen de gegevens van alle subtypes van dit habitattype weergegeven worden.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Habitattype", "Code").  Er is voor deze parameter ook de mogelijkheid om een vector van meerdere habitat(sub)typen op te geven.
+#' @param Habitattype Parameter waarmee een habitattype of habitatsubtype kan geselecteerd worden.  Als dit een habitattype betreft met meerdere subtypes, zullen de gegevens van alle subtypes van dit habitattype weergegeven worden.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden("Habitattype", "Code").  Er is voor deze parameter ook de mogelijkheid om een vector van meerdere habitat(sub)typen op te geven.
 #' @param Criterium Het LSVI-criterium waarvoor de gegevens geselecteerd worden: "Vegetatie", "Structuur", "Verstoring" of "alle".
-#' @param Indicator De indicator waarvoor de gegevens uit de databank gehaald worden.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden(ConnectieLSVIhabitats, "Indicator", "Naam").
+#' @param Indicator De indicator waarvoor de gegevens uit de databank gehaald worden.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden("Indicator", "Naam").
 #' @param HabitatnamenToevoegen Moeten de namen van de habitattypen en habitatsubtypen toegevoegd worden als extra kolommen?  (Bij FALSE worden enkel de habitatcodes toegevoegd, niet de volledige namen.)
 #'
 #' @return Deze functie geeft een tabel met velden Versie, Habitattype, Habitatsubtype, Criterium, Indicator, Indicator_habitatID, TaxongroepId en Indicator_beoordelingID.
 #'
-#' @examples
-#' selecteerIndicatoren(Versie = "Versie 3", Habitattype = "4010")
-#' selecteerIndicatoren(Versie = "Versie 3", Habitatgroep = "Heiden")
-#'
 #' @export
+#'
+#' @examples
+#' # deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
+#' # een connectie gelegd kan worden met de SQL Server-databank binnen INBO
+#' \dontrun{
+#' library(LSVI)
+#' maakConnectiePool()
+#' selecteerIndicatoren(Versie = "Versie 2.0", Habitattype = "4030")
+#' selecteerIndicatoren(Versie = "Versie 2.0", Habitatgroep = "Heiden")
+#' library(pool)
+#' poolClose(ConnectiePool)
+#' }
 #'
 #' @importFrom DBI dbGetQuery
 #' @importFrom assertthat assert_that is.string
@@ -33,12 +41,17 @@ selecteerIndicatoren <-
            Criterium = "alle",
            Indicator = "alle",
            HabitatnamenToevoegen = FALSE,
-           ConnectieLSVIhabitats = ConnectiePool){
+           ConnectieLSVIhabitats = NULL){
 
+    if (is.null(ConnectieLSVIhabitats)) {
+      if (exists("ConnectiePool")) {
+        ConnectieLSVIhabitats <- get("ConnectiePool", envir = .GlobalEnv)
+      }
+    }
     assert_that(
       inherits(ConnectieLSVIhabitats, "DBIConnection") |
         inherits(ConnectieLSVIhabitats, "Pool"),
-      msg = "Er is geen connectie met de databank met de LSVI-indicatoren"
+      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
     )
 
     invoercontroleVersie(Versie, ConnectieLSVIhabitats)
@@ -153,7 +166,8 @@ selecteerIndicatoren <-
             Criterium.Naam AS Criterium, Indicator.Naam AS Indicator,
             Indicator_habitat.Id AS Indicator_habitatID,
             Indicator_habitat.TaxongroepId,
-            IndicatortabellenKoppeling.Indicator_beoordelingID
+            IndicatortabellenKoppeling.Indicator_beoordelingId
+              AS Indicator_beoordelingID
         FROM (((Indicator_habitat
         INNER JOIN Habitatselectie
         ON Indicator_habitat.HabitattypeID = Habitatselectie.HabitattypeId)

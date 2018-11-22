@@ -50,8 +50,7 @@ invoercontroleData_soortenKenmerken <-
         as.character(Data_soortenKenmerken$Type)
     }
     if (
-      !all(Data_soortenKenmerken$Type %in%
-           geefUniekeWaarden(
+      !all(Data_soortenKenmerken$Type %in% geefUniekeWaarden(
              "TypeVariabele",
              "Naam",
              ConnectieLSVIhabitats
@@ -84,7 +83,8 @@ invoercontroleData_soortenKenmerken <-
           ConnectieLSVIhabitats
         ),
         "Volume_ha",
-        "Aantal_ha"
+        "Aantal_ha",
+        "Grondvlak_ha"
       )
 
     if (
@@ -120,17 +120,35 @@ invoercontroleData_soortenKenmerken <-
     }
 
 
-
-    #○mzettingen naar een bruikbare dataframe
+    # Omzettingen naar een bruikbare dataframe
     Kenmerken <- Data_soortenKenmerken    # naamsverandering!
 
-    QuerySoorten <-
-      "SELECT TaxonSynoniem.FloraNaamNederlands AS NedNaam,
-          TaxonSynoniem.GbifCanonicalNameWithMarker AS Canonicalname,
-          Taxon.NBNTaxonVersionKey, Taxon.TaxonTypeId
-      FROM TaxonSynoniem INNER JOIN Taxon
-        ON TaxonSynoniem.TaxonId = Taxon.Id
-      WHERE Taxon.NBNTaxonVersionKey IS NOT NULL"
+    # Om naamsverandering in databank van GbifCanonicalNameWithMarker naar
+    # CanonicalNameWithMarker op te vangen
+    if (class(ConnectieLSVIhabitats)[1] == "Pool") {
+      Klasse <-
+        class(ConnectieLSVIhabitats$.__enclos_env__$private$createObject())[1]
+    } else {
+      Klasse <- class(ConnectieLSVIhabitats)[1]
+    }
+
+    if (Klasse == "Microsoft SQL Server") {
+      QuerySoorten <-
+        "SELECT TaxonSynoniem.FloraNaamNederlands AS NedNaam,
+            TaxonSynoniem.GbifCanonicalNameWithMarker AS Canonicalname,
+            Taxon.NbnTaxonVersionKey AS NBNTaxonVersionKey, Taxon.TaxonTypeId
+        FROM TaxonSynoniem INNER JOIN Taxon
+          ON TaxonSynoniem.TaxonId = Taxon.Id
+        WHERE Taxon.NbnTaxonVersionKey IS NOT NULL"
+    } else {
+      QuerySoorten <-
+        "SELECT TaxonSynoniem.FloraNaamNederlands AS NedNaam,
+            TaxonSynoniem.CanonicalNameWithMarker AS Canonicalname,
+            Taxon.NbnTaxonVersionKey AS NBNTaxonVersionKey, Taxon.TaxonTypeId
+        FROM TaxonSynoniem INNER JOIN Taxon
+          ON TaxonSynoniem.TaxonId = Taxon.Id
+        WHERE Taxon.NbnTaxonVersionKey IS NOT NULL"
+    }
 
     Taxonlijst <-
       dbGetQuery(ConnectieLSVIhabitats, QuerySoorten)
@@ -209,6 +227,17 @@ invoercontroleData_soortenKenmerken <-
       mutate(
         Rijnr = row_number(.data$Kenmerk)
       )
+
+    VegLaagAfwezig <- Kenmerken %>%
+      filter(
+        tolower(.data$TypeKenmerk) == "soort_nbn",
+        is.na(.data$Vegetatielaag)
+      )
+    if (nrow(VegLaagAfwezig) > 0) {
+      warning(
+        "Bij Data_soortenKenmerken is niet voor alle soorten de kolom Vegetatielaag ingevuld"  #nolint
+      )
+    }
 
     VertaaldeKenmerken <-
       vertaalInvoerInterval(

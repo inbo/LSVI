@@ -4,7 +4,7 @@
 \alias{logDatabankfouten}
 \title{Lijst alle nog op te lossen databankfouten op}
 \usage{
-logDatabankfouten(ConnectieLSVIhabitats = ConnectiePool)
+logDatabankfouten(ConnectieLSVIhabitats = NULL)
 }
 \arguments{
 \item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}

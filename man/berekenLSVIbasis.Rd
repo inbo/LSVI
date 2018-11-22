@@ -4,6 +4,7 @@
 \alias{berekenLSVIbasis}
 \title{Berekent de LSVI op basis van VoorwaardeID en opgegeven waarden}
 \usage{
+<<<<<<< HEAD
 berekenLSVIbasis(Versie = "alle", Kwaliteitsniveau = "alle", Data_habitat,
   Data_voorwaarden = data.frame(ID = character(), Criterium = character(),
   Indicator = character(), Voorwaarde = character(), Waarde = character(), Type
@@ -12,6 +13,16 @@ berekenLSVIbasis(Versie = "alle", Kwaliteitsniveau = "alle", Data_habitat,
   ConnectieLSVIhabitats = ConnectiePool,
   LIJST = geefVertaallijst(ConnectieLSVIhabitats), na.rm = FALSE,
   Oppervlakte_opname = FALSE)
+=======
+berekenLSVIbasis(Versie = "alle", Kwaliteitsniveau = "alle",
+  Data_habitat, Data_voorwaarden = data.frame(ID = character(), Criterium
+  = character(), Indicator = character(), Voorwaarde = character(), Waarde
+  = character(), Type = character(), WaardeMin = double(), WaardeMax =
+  double(), stringsAsFactors = FALSE),
+  Data_soortenKenmerken = data.frame(ID = character()),
+  Aggregatiemethode = "1-out-all-out", ConnectieLSVIhabitats = NULL,
+  LIJST = geefVertaallijst(ConnectieLSVIhabitats), na.rm = FALSE)
+>>>>>>> develop
 }
 \arguments{
 \item{Versie}{De versie van het LSVI-rapport op basis waarvan de berekening gemaakt wordt, bv. "Versie 2.0" of "Versie 3".  Bij de default "alle" wordt de LSVI volgens de verschillende versies berekend.}
@@ -23,6 +34,8 @@ berekenLSVIbasis(Versie = "alle", Kwaliteitsniveau = "alle", Data_habitat,
 \item{Data_voorwaarden}{Gegevens over de opgemeten indicatoren in de vorm van een data.frame met velden ID, Criterium, Indicator, Voorwaarde, Waarde, Type, Invoertype en Eenheid, waarbij ID de groeperende variabele voor een opname is die ook bij Data_habitat opgegeven is.  Criterium, Indicator en Voorwaarde moeten overeenkomen met de waarde in de databank (op te zoeken via de functie geefInvoervereisten()).  Waarde is de waarde die voor die voorwaarde geobserveerd of gemeten is en Type het soort variabele (zie geefUniekeWaarden("TypeVariabele", "Naam") voor de mogelijke waarden).  Ingeval van een categorische variabele moet bij Invoertype de naam van de lijst opgegeven worden waaruit deze waarde komt (bv. welke schaal gebruikt is, zie geefUniekeWaarden("Lijst", "Naam") voor alle mogelijkheden).}
 
 \item{Data_soortenKenmerken}{Gegevens van soorten en kenmerken en hun bedekking (m.a.w. enkel kenmerken waarvan een bedekking gemeten is, horen in deze tabel).  Deze dataframe moet de velden ID, Vegetatielaag, Kenmerk, TypeKenmerk, Waarde, Type, Invoertype en Eenheid bevatten, waarbij ID de groeperende variabele voor een opname is die ook bij Data_habitat opgegeven is.  Kenmerk bevat een soortnaam of een naam die voorkomt in de lijst gegenereerd door geefUniekeWaarden("StudieItem", "Waarde") en TypeKenmerk geeft een beschrijving voor dat kenmerk: 'studiegroep', 'soort_Latijn', 'soort_NL' of 'soort_NBN'.  Waarde is de geobserveerde bedekking en Type het soort variabele dat voor de bedekking gebruikt is (zie geefUniekeWaarden("TypeVariabele", "Naam") voor de mogelijke waarden).  Ingeval van een categorische variabele moet bij Invoertype de naam van de lijst opgegeven worden welke schaal gebruikt is (zie geefUniekeWaarden("Lijst", "Naam") voor alle mogelijkheden).}
+
+\item{Aggregatiemethode}{Keuze van de methode om tot één beoordeling per criterium of per habitatvlek of meetpunt te komen. Er zijn twee opties: (1) "RapportageHR": de beoordeling is gunstig als meer dan 50 procent van de indicatoren gunstig zijn EN als geen enkele zeer belangrijke indicator ongunstig is; (2) "1-out-all-out": de beoordeling is gunstig als alle indicatoren gunstig zijn. "1-out-all-out" is default.}
 
 \item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
 
@@ -43,18 +56,22 @@ De Lokale Staat van Instandhouding wordt weergegeven in de kolom 'Status' met al
 De biotische indices zijn afgeleid van het verschil tussen een geobserveerde waarde en de referentiewaarde voor elke indicator. Deze verschillen werden herschaald tussen +1 en -1, waarbij een positieve en negatieve waarde overeenkomt met respectievelijk een gunstige en ongunstige score. Deze verschilscores per indicator worden geaggregeerd, eerst voor de indicatoren die tot eenzelfde criterium behoren, vervolgens worden deze geaggregeerde scores verder geaggregeerd om tot een globale index te komen. Er worden drie verschillende globale indices berekend waarbij de naamgeving aangeeft welk aggregatie achtereenvolgens gebruikt werd: index_min_min, index_min_harm en index_harm_harm. Een naam met "min" duidt op minimum van de scores als aggregatie; bij "harm" werd het harmonisch gemiddelde berekend.
 }
 \examples{
+# deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
+# een connectie gelegd kan worden met de SQL Server-databank binnen INBO
+\dontrun{
 library(LSVI)
+maakConnectiePool()
 library(readr)
 Data_habitat <-
-    read_csv2(system.file("vbdata/opname4030habitat.csv", package = "LSVI"),
+    read_csv2(system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
               col_types = list(col_character(), col_character(),col_character()))
 Data_voorwaarden <-
-    read_csv2(system.file("vbdata/opname4030voorwaarden.csv", package = "LSVI"))
+    read_csv2(system.file("vbdata/Opname4030voorwaardenv2.csv", package = "LSVI"))
 Data_soortenKenmerken <-
-    read_csv2(system.file("vbdata/opname4030soortenKenmerken.csv", package = "LSVI"))
-berekenLSVIbasis(Versie = "Versie 3",
+    read_csv2(system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI"))
+berekenLSVIbasis(Versie = "Versie 2.0",
                  Kwaliteitsniveau = "1", Data_habitat,
                  Data_voorwaarden, Data_soortenKenmerken)
-
+}
 
 }

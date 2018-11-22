@@ -5,9 +5,8 @@ library(dplyr)
 
 describe("test databank", {
   it("Lijstitems hebben een ondergrens en bovengrens", {
-    skip_on_cran()
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIdb()
+      connecteerMetLSVIlite()
     expect_true(
       all(
         !is.na(
@@ -27,9 +26,8 @@ describe("test databank", {
   it(
     "In de databank zitten enkel AnalyseVariabelen waarvoor code ontwikkeld is"
     , {
-    skip_on_cran()
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIdb()
+      connecteerMetLSVIlite()
     AV <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -38,16 +36,15 @@ describe("test databank", {
       filter(!grepl("^meting", .data$VariabeleNaam))
     expect_true(
       all(AV$VariabeleNaam %in%
-            c("aandeel", "aantal", "bedekking", "bedekkingLaag", "maxBedekking",
-            "maxBedekkingExcl")
+            c("aandeel", "aandeelKruidlaag", "aantal", "bedekking",
+              "bedekkingLaag", "maxBedekking", "maxBedekkingExcl")
       )
     )
   })
 
   it("AnalyseVariabele aantal bevat enkel gehele getallen", {
-    skip_on_cran()
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIdb()
+      connecteerMetLSVIlite()
     AV <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -57,6 +54,7 @@ describe("test databank", {
         ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
         WHERE AnalyseVariabele.VariabeleNaam = 'aantal'"
       )
+    skip_if_not(nrow(AV) > 0, "aantal komt niet voor")
     AV_ok <- AV %>%
       filter(TypeVariabele == "Geheel getal")
     AV_leeg <- AV %>%
@@ -96,9 +94,8 @@ describe("test databank", {
   })
 
   it("AnalyseVariabele bedekking bevat percentages en categorische var", {
-    skip_on_cran()
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIdb()
+      connecteerMetLSVIlite()
     AV <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -108,6 +105,7 @@ describe("test databank", {
         ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
         WHERE AnalyseVariabele.VariabeleNaam = 'bedekking'"
       )
+    skip_if_not(nrow(AV) > 0, "bedekking komt niet voor")
     AV_ok <- AV %>%
       filter(TypeVariabele %in% c("Percentage", "Categorie"))
     AV_leeg <- AV %>%
@@ -159,10 +157,9 @@ describe("test databank", {
     )
   })
 
-  it("AnalyseVariabele aandeel bevat percentages en categorische var", {
-    skip_on_cran()
+  it("AnalyseVariabele aandeel bevat percentages", {
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIdb()
+      connecteerMetLSVIlite()
     AV <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -172,10 +169,11 @@ describe("test databank", {
         ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
         WHERE AnalyseVariabele.VariabeleNaam = 'aandeel'"
       )
+    skip_if_not(nrow(AV) > 0, "aandeel komt niet voor")
     AV_ok <- AV %>%
-      filter(TypeVariabele %in% c("Percentage", "Categorie"))
+      filter(TypeVariabele %in% c("Percentage"))
     AV_leeg <- AV %>%
-      filter(!TypeVariabele %in% c("Percentage", "Categorie"))
+      filter(!TypeVariabele %in% c("Percentage"))
     RefwaardenPerc <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -201,30 +199,55 @@ describe("test databank", {
       nrow(FouteWaarden),
       0
     )
-    skip_if_not(nrow(AV_ok) == 2, "Geen categorische var voor aandeel")
-    RefwaardenCat <-
+  })
+
+  it("AnalyseVariabele aandeelKruidlaag bevat percentages", {
+    ConnectieLSVIhabitats <-
+      connecteerMetLSVIlite()
+    AV <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        "SELECT AnalyseVariabele.Id, AnalyseVariabele.VariabeleNaam,
+        TypeVariabele.Naam as TypeVariabele
+        FROM AnalyseVariabele INNER JOIN TypeVariabele
+        ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
+        WHERE AnalyseVariabele.VariabeleNaam = 'aandeelKruidlaag'"
+      )
+    skip_if_not(nrow(AV) > 0, "aandeelKruidlaag komt niet voor")
+    AV_ok <- AV %>%
+      filter(TypeVariabele %in% c("Percentage"))
+    AV_leeg <- AV %>%
+      filter(!TypeVariabele %in% c("Percentage"))
+    RefwaardenPerc <-
       dbGetQuery(
         ConnectieLSVIhabitats,
         sprintf(
           "SELECT Referentiewaarde FROM Voorwaarde
           WHERE AnalyseVariabeleId = '%s'",
-          (AV %>% filter(TypeVariabele == "Categorie"))$Id
+          (AV %>% filter(TypeVariabele == "Percentage"))$Id
         )
       )
-    LijstItems <-
+    expect_true(
+      all(as.numeric(RefwaardenPerc$Referentiewaarde) <= 100)
+    )
+    FouteWaarden <-
       dbGetQuery(
         ConnectieLSVIhabitats,
-        "SELECT Waarde FROM LijstItem"
+        sprintf(
+          "SELECT Id, Referentiewaarde FROM Voorwaarde
+          WHERE AnalyseVariabeleId in ('%s')",
+          paste(AV_leeg$Id, collapse = "','")
+        )
       )
-    expect_true(
-      all(RefwaardenCat$Referentiewaarde %in% LijstItems$Waarde)
+    expect_equal(
+      nrow(FouteWaarden),
+      0
     )
   })
 
   it("AnalyseVariabele maxBedekking bevat percentages en categorische var", {
-    skip_on_cran()
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIdb()
+      connecteerMetLSVIlite()
     AV <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -234,6 +257,7 @@ describe("test databank", {
         ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
         WHERE AnalyseVariabele.VariabeleNaam = 'maxBedekking'"
       )
+    skip_if_not(nrow(AV) > 0, "maxBedekking komt niet voor")
     AV_ok <- AV %>%
       filter(TypeVariabele %in% c("Percentage", "Categorie"))
     AV_leeg <- AV %>%
@@ -285,9 +309,8 @@ describe("test databank", {
 
   it("AnalyseVariabele maxBedekkingExcl bevat percentages en categorische var"
      , {
-    skip_on_cran()
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIdb()
+      connecteerMetLSVIlite()
     AV <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -297,6 +320,7 @@ describe("test databank", {
         ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
         WHERE AnalyseVariabele.VariabeleNaam = 'maxBedekkingExcl'"
       )
+    skip_if_not(nrow(AV) > 0, "maxBedekkingExcl komt niet voor")
     AV_ok <- AV %>%
       filter(TypeVariabele %in% c("Percentage", "Categorie"))
     AV_leeg <- AV %>%
@@ -349,9 +373,8 @@ describe("test databank", {
   it(
     "AnalyseVariabele aantal heeft telkens een SoortengroepId of StudiegroepId"
     , {
-    skip_on_cran()
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIdb()
+      connecteerMetLSVIlite()
     AV <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -361,6 +384,7 @@ describe("test databank", {
         ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
         WHERE AnalyseVariabele.VariabeleNaam = 'aantal'"
       )
+    skip_if_not(nrow(AV) > 0, "aantal komt niet voor")
     Refwaarden <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -378,9 +402,8 @@ describe("test databank", {
   it(
     "AnalyseVariabele bedekking heeft telkens een SoortengroepId of StudiegroepId" #nolint
     , {
-      skip_on_cran()
       ConnectieLSVIhabitats <-
-        connecteerMetLSVIdb()
+        connecteerMetLSVIlite()
       AV <-
         dbGetQuery(
           ConnectieLSVIhabitats,
@@ -390,6 +413,7 @@ describe("test databank", {
         ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
         WHERE AnalyseVariabele.VariabeleNaam = 'bedekking'"
         )
+      skip_if_not(nrow(AV) > 0, "bedekking komt niet voor")
       Refwaarden <-
         dbGetQuery(
           ConnectieLSVIhabitats,
@@ -405,9 +429,8 @@ describe("test databank", {
     })
 
   it("TypeVariabele Vrije tekst is nergens gebruikt", {
-      skip_on_cran()
       ConnectieLSVIhabitats <-
-        connecteerMetLSVIdb()
+        connecteerMetLSVIlite()
       AV <-
         dbGetQuery(
           ConnectieLSVIhabitats,
@@ -426,9 +449,8 @@ describe("test databank", {
     })
 
   it("Voor elke categorische variabele is een Invoermasker opgegeven", {
-    skip_on_cran()
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIdb()
+      connecteerMetLSVIlite()
     AV <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -447,9 +469,8 @@ describe("test databank", {
   })
 
   it("De subanalysevariabele is overal correct ingevoerd (enkel bedekking)", {
-    skip_on_cran()
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIdb()
+      connecteerMetLSVIlite()
     AV <-
       dbGetQuery(
         ConnectieLSVIhabitats,

@@ -2,6 +2,7 @@ context("test speciale gevallen")
 
 library(dplyr)
 
+maakConnectiePool()
 describe("twee voorwaarden vergelijken", {
   it("vergelijking wordt correct uitgevoerd", {
     Data_habitat <-
@@ -11,7 +12,7 @@ describe("twee voorwaarden vergelijken", {
     Data_voorwaarden <-
       data.frame(
         ID = 1, Criterium = "Verstoring", Indicator = "overgang naar rbbzil",
-        Voorwaarde = c("som bedekking grasachtigen uit het zilverschoonver",
+        Voorwaarde = c("bedekking grasachtigen rbbzil",
                        "som van de bedekking sleutelsoorten"),
         Waarde = c(10, 20), Type = "Percentage", Invoertype = NA, Eenheid = "%",
         stringsAsFactors = FALSE)
@@ -25,15 +26,16 @@ describe("twee voorwaarden vergelijken", {
       data.frame(
         ID = "1",
         Habitattype = "1330_hpr",
-        Versie = "Versie 3",
+        Versie = "Versie 2.0",
         Habitattype.y = "1330",
         Criterium = "Verstoring",
         Indicator = "overgang naar rbbzil",
         Beoordeling =
-          "som van de bedekking grasachtigen uit het zilverschoonverbond <= som van de bedekking sleutelsoorten", #nolint
+          "B: som van de bedekking grasachtigen uit het zilverschoonverbond <= som van de bedekking sleutelsoorten", #nolint
         Kwaliteitsniveau = 1,
+        Belang = "zb",
         Voorwaarde =
-          "som bedekking grasachtigen uit het zilverschoonver <= som van de bedekking sleutelsoorten", #nolint
+          "bedekking grasachtigen rbbzil <= som van de bedekking sleutelsoorten", #nolint
         Referentiewaarde = "20",
         Operator = "<=",
         EenheidRefwaarde = "%",
@@ -52,7 +54,7 @@ describe("twee voorwaarden vergelijken", {
     expect_equal(
       idsWissen(
         berekenLSVIbasis(
-          Versie = "Versie 3",
+          Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_voorwaarden
@@ -93,7 +95,7 @@ describe("twee voorwaarden vergelijken", {
     expect_equal(
       idsWissen(
         berekenLSVIbasis(
-          Versie = "Versie 3",
+          Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_soortenKenmerken = Data_soortenKenmerken
@@ -104,3 +106,6 @@ describe("twee voorwaarden vergelijken", {
     )
   })
 })
+
+library(pool)
+poolClose(ConnectiePool)

@@ -86,6 +86,7 @@ describe("s4_Aantal", {
             data.frame(
               Kenmerk = c("A1", "B2", "C1", "D3", "E1"),
               TypeKenmerk = "soort_nbn",
+              WaardeMin = NA,
               WaardeMax = 1,
               stringsAsFactors = FALSE
             ),
@@ -108,6 +109,7 @@ describe("s4_Aantal", {
             data.frame(
               Kenmerk = c("A1", "B2", "C1", "D3", "E1"),
               TypeKenmerk = "soort_nbn",
+              WaardeMin = NA,
               WaardeMax = c(1, 1, 1, 1, 0),
               stringsAsFactors = FALSE
             ),
@@ -195,7 +197,4 @@ describe("s4_Aantal", {
       2
     )
   })
-
-  #nog toevoegen als het opzoeken van soorten in subniveaus opgelost is: de aggregatie van bedekkingen gebeurt correct
-
 })

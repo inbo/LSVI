@@ -9,10 +9,20 @@
 #' @export
 #' 
 #' @importFrom DBI dbGetQuery
-#' @importFrom dplyr %>% bind_rows filter mutate
+#' @importFrom dplyr %>% bind_rows filter mutate transmute
 
-logDatabankfouten <- function(ConnectieLSVIhabitats = ConnectiePool) {
+logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
 
+  if (is.null(ConnectieLSVIhabitats)) {
+    if (exists("ConnectiePool")) {
+      ConnectieLSVIhabitats <- get("ConnectiePool", envir = .GlobalEnv)
+    }
+  }
+  assert_that(
+    inherits(ConnectieLSVIhabitats, "DBIConnection") |
+      inherits(ConnectieLSVIhabitats, "Pool"),
+    msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
+  )
   OndergrensOntbreekt <-
     dbGetQuery(
       ConnectieLSVIhabitats,
@@ -20,6 +30,12 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = ConnectiePool) {
       FROM Lijst INNER JOIN LijstItem
       ON Lijst.Id = LijstItem.LijstId
       WHERE LijstItem.Ondergrens is NULL"
+    ) %>%
+    transmute(
+      Item =
+        paste("Schaal: ", .data$Lijstnaam, "; Waarde: ",
+              .data$Waarde, sep = ""),
+      Categorie = "Ondergrens ontbreekt"
     )
   BovengrensOntbreekt <-
     dbGetQuery(
@@ -28,6 +44,12 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = ConnectiePool) {
       FROM Lijst INNER JOIN LijstItem
       ON Lijst.Id = LijstItem.LijstId
       WHERE LijstItem.Bovengrens is NULL"
+    ) %>%
+    transmute(
+      Item =
+        paste("Schaal: ", .data$Lijstnaam, "; Waarde: ",
+              .data$Waarde, sep = ""),
+      Categorie = "Bovengrens ontbreekt"
     )
   OnbekendeAV <-
     dbGetQuery(
@@ -35,42 +57,31 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = ConnectiePool) {
       "SELECT distinct(VariabeleNaam)
       FROM AnalyseVariabele INNER JOIN Voorwaarde
       On AnalyseVariabele.Id = Voorwaarde.AnalyseVariabeleId
-      WHERE NOT VariabeleNaam in ('aantal', 'aandeel', 'bedekking',
-        'maxBedekking', 'maxBedekkingExcl', 'bedekkingLaag')
+      WHERE NOT VariabeleNaam in ('aantal', 'aandeel', 'aandeelKruidlaag',
+        'bedekking', 'maxBedekking', 'maxBedekkingExcl', 'bedekkingLaag')
       AND NOT VariabeleNaam LIKE 'meting%'"
+    ) %>%
+    transmute(
+      Item = .data$VariabeleNaam,
+      Categorie = "AnalyseVariabele waarvoor geen code ontwikkeld is"
     )
 
   Fouten <-
-    data.frame(
-      Categorie = "Ondergrens ontbreekt",
-      Item =
-        paste("Schaal: ", OndergrensOntbreekt$Lijstnaam, "; Waarde: ",
-              OndergrensOntbreekt$Waarde, sep = ""),
-      stringsAsFactors = FALSE
+    OndergrensOntbreekt %>%
+    bind_rows(
+      BovengrensOntbreekt
     ) %>%
     bind_rows(
-      data.frame(
-        Categorie = "Bovengrens ontbreekt",
-        Item =
-          paste("Schaal: ", BovengrensOntbreekt$Lijstnaam, "; Waarde: ",
-                BovengrensOntbreekt$Waarde, sep = ""),
-        stringsAsFactors = FALSE
-      )
-    ) %>%
-    bind_rows(
-      data.frame(
-        Categorie = "AnalyseVariabele waarvoor geen code ontwikkeld is",
-        Item = OnbekendeAV$VariabeleNaam,
-        stringsAsFactors = FALSE
-      )
+      OnbekendeAV
     )
 
-  Invoervereisten <- geefInvoervereisten()
+  Invoervereisten <-
+    geefInvoervereisten(ConnectieLSVIhabitats = ConnectieLSVIhabitats)
   OnbekendeAV <- Invoervereisten %>%
     filter(
       !.data$AnalyseVariabele %in%
-        c("aantal", "aandeel", "bedekking", "bedekkingLaag", "maxBedekking",
-          "maxBedekkingExcl"),
+        c("aantal", "aandeel", "aandeelKruidlaag", "bedekking", "bedekkingLaag",
+          "maxBedekking", "maxBedekkingExcl"),
       !grepl("^meting", .data$AnalyseVariabele)
     )
   TypeAantalNietGeheelGetal <- Invoervereisten %>%
@@ -81,8 +92,14 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = ConnectiePool) {
   TypeBedekkingFout <- Invoervereisten %>%
     filter(
       .data$AnalyseVariabele %in%
-        c("aandeel", "bedekking", "maxBedekking", "maxBedekkingExcl"),
+        c("bedekking", "maxBedekking", "maxBedekkingExcl"),
       !.data$TypeVariabele %in% c("Percentage", "Categorie")
+    )
+  TypeAandeelFout <- Invoervereisten %>%
+    filter(
+      .data$AnalyseVariabele %in%
+        c("aandeel", "aandeelKruidlaag"),
+      !.data$TypeVariabele %in% c("Percentage")
     )
   LijstItems <-
     dbGetQuery(
@@ -106,6 +123,13 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = ConnectiePool) {
         mutate(
           Probleem =
             "TypeVariabele moet een percentage of categorie zijn (bedekking)"
+        )
+    ) %>%
+    bind_rows(
+      TypeAandeelFout %>%
+        mutate(
+          Probleem =
+            "TypeVariabele moet een percentage zijn (aandeel)"
         )
     ) %>%
     bind_rows(

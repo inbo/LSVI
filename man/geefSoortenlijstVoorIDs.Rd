@@ -5,7 +5,7 @@
 \title{Genereert soorten(groep)lijst(en) LSVI op basis van TaxongroepID}
 \usage{
 geefSoortenlijstVoorIDs(Taxongroeplijst, Taxonlijsttype = c("LSVIfiche",
-  "alle"), ConnectieLSVIhabitats = ConnectiePool)
+  "alle"), ConnectieLSVIhabitats = NULL)
 }
 \arguments{
 \item{Taxongroeplijst}{string waarin de TaxongroepId's na elkaar weergegeven worden, gescheiden door een komma.  Eventueel mag dit ook een vector zijn van TaxongroepId's.}
@@ -23,7 +23,14 @@ Deze functie genereert soortenlijsten (met wetenschappelijke en Nederlandse name
 Deze functie geeft standaard voor de gespecifieerde taxongroepen per groep een lijst van alle taxa zoals ze in de LSVI-habitatfiche vermeld zijn (genusniveau, soortniveau, subsoort,...).  Op basis van de parameter soortenlijsttype kan ook gekozen worden om een volledige lijst te geven van deze taxa en alle taxa die hieronder vallen (en opgenomen zijn in de onderliggende databank).
 }
 \examples{
-geefSoortenlijstVoorIDs("98,227,484,552,726")
-geefSoortenlijstVoorIDs("98,227,484,552,726","alle")
+# deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
+# een connectie gelegd kan worden met de SQL Server-databank binnen INBO
+\dontrun{
+maakConnectiePool()
+geefSoortenlijstVoorIDs("434,88,565")
+geefSoortenlijstVoorIDs("434,88,565","alle")
+library(pool)
+poolClose(ConnectiePool)
+}
 
 }

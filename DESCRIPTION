@@ -1,27 +1,28 @@
 Package: LSVI
 Title: Rekenmodule Lokale Staat Van Instandhouding
-Version: 0.0.0.9000
-Authors@R: c(person("Els", "Lommelen", email = "els.lommelen@inbo.be", role = c("aut", "cre")), person("Toon", "Westra", email = "toon.westra@inbo.be", role = c("aut")), person(family = "Research Institute for Nature and Forest (INBO)", email = "info@inbo.be", role = "cph"))
+Version: 0.0.0.9001
+Authors@R: c(person("Els", "Lommelen", email = "els.lommelen@inbo.be", role = c("aut", "cre")), person("Toon", "Westra", email = "toon.westra@inbo.be", role = c("aut")), person("Research Institute for Nature and Forest (INBO)", email = "info@inbo.be", role = "cph"))
 Description: Het package LSVI bundelt een aantal functies in verband met het ophalen van informatie over en het berekenen van de Lokale Staat Van Instandhouding (LSVI) van habitattypes.
 Depends:
-    R (>= 3.3.0)
+    R (>= 3.4.0)
 License: GPL-3
 LazyData: true
 Encoding: UTF-8
 Imports:
     assertthat,
     DBI,
+    plyr,
     dplyr,
     lazyeval,
     methods,
     odbc,
     pander,
-    plyr,
     pool,
     readr,
     rgbif,
     rlang,
     rmarkdown,
+    RSQLite,
     stringr,
     testthat,
     tidyr,
@@ -29,7 +30,7 @@ Imports:
     xtable
 Suggests:
     knitr
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0.9000
 VignetteBuilder: knitr
 Collate: 
     'berekenLSVIbasis.R'
@@ -39,6 +40,7 @@ Collate:
     'combinerenVerschilscore.R'
     'combinerenVoorwaarden.R'
     'connecteerMetLSVIdb.R'
+    'connecteerMetLSVIlite.R'
     'deselecteerKenmerkenInOpname.R'
     'geefInfoHabitatfiche.R'
     'geefInvoervereisten.R'
@@ -53,13 +55,16 @@ Collate:
     'invoercontroleKwaliteitsniveau.R'
     'invoercontroleVersie.R'
     'logDatabankfouten.R'
+    'maakConnectiePool.R'
+    'maakConnectiepoolSQLite.R'
     'maakHabitatfiches.R'
     'maakLSVIrapport.R'
     's4_AnalyseVariabele.R'
     's4_aandeel.R'
+    's4_bedekking.R'
+    's4_aandeelKruidlaag.R'
     's4_aantal.R'
     's4_analyseVariabele_c.R'
-    's4_bedekking.R'
     's4_bedekkingLaag.R'
     's4_maxBedekking.R'
     's4_maxBedekkingExcl.R'

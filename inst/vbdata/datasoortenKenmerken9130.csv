@@ -1,0 +1,29 @@
+"ID";"Kenmerk";"Waarde";"Vegetatielaag";"TypeKenmerk";"Type";"Invoertype";"Eenheid"
+"4945";"Hyacinthoides non-scripta (L.) Chouard ex Rothm.";1;"kruidlaag";"soort_latijn";"Percentage";NA;"%"
+"4945";"Acer pseudoplatanus L.";4;"kruidlaag";"soort_latijn";"Percentage";NA;"%"
+"4945";"Ilex aquifolium L.";1;"kruidlaag";"soort_latijn";"Percentage";NA;"%"
+"4945";"Rubus fruticosus groep";1;"kruidlaag";"soort_latijn";"Percentage";NA;"%"
+"4945";"Castanea sativa Mill.";1;"kruidlaag";"soort_latijn";"Percentage";NA;"%"
+"4945";"Corylus avellana L.";0,25;"kruidlaag";"soort_latijn";"Percentage";NA;"%"
+"4945";"Carex pilulifera L.";1;"kruidlaag";"soort_latijn";"Percentage";NA;"%"
+"4945";"Fagus sylvatica L.";1;"kruidlaag";"soort_latijn";"Percentage";NA;"%"
+"4945";"Ilex aquifolium L.";0,25;"struiklaag";"soort_latijn";"Percentage";NA;"%"
+"4945";"Quercus rubra L.";0,25;"struiklaag";"soort_latijn";"Percentage";NA;"%"
+"4945";"Quercus robur L.";0,25;"struiklaag";"soort_latijn";"Percentage";NA;"%"
+"4945";"Fagus sylvatica L.";62,5;"boomlaag";"soort_latijn";"Percentage";NA;"%"
+"4945";"Pinus nigra Arnold subsp. laricio Maire";18,75;"boomlaag";"soort_latijn";"Percentage";NA;"%"
+"4945";"Populus deltoides Marshall";37,5;"boomlaag";"soort_latijn";"Percentage";NA;"%"
+"4945";"groeiklasse 2";1;NA;"studiegroep";"Ja/nee";NA;NA
+"4945";"groeiklasse 3";0;NA;"studiegroep";"Ja/nee";NA;NA
+"4945";"groeiklasse 4";1;NA;"studiegroep";"Ja/nee";NA;NA
+"4945";"groeiklasse 5";1;NA;"studiegroep";"Ja/nee";NA;NA
+"4945";"groeiklasse 6";1;NA;"studiegroep";"Ja/nee";NA;NA
+"4945";"groeiklasse 7";1;NA;"studiegroep";"Ja/nee";NA;NA
+"4945";"Kruidlaag";8,75;NA;"studiegroep";"Percentage";NA;"%"
+"4945";"Struiklaag";2,5;NA;"studiegroep";"Percentage";NA;"%"
+"4945";"Boomlaag";87,5;NA;"studiegroep";"Percentage";NA;"%"
+"4945";"Kruidlaag (incl. moslaag)";11,25;NA;"studiegroep";"Percentage";NA;"%"
+"4945";"Castanea sativa Mill.";1,53232654273906;"boomlaag";"soort_latijn";"Decimaal getal";NA;"Grondvlak_ha"
+"4945";"Fagus sylvatica L.";29,2911146534744;"boomlaag";"soort_latijn";"Decimaal getal";NA;"Grondvlak_ha"
+"4945";"Pinus nigra";9,15744923115583;"boomlaag";"soort_latijn";"Decimaal getal";NA;"Grondvlak_ha"
+"4945";"Quercus rubra L.";8,67179553301833;"boomlaag";"soort_latijn";"Decimaal getal";NA;"Grondvlak_ha"
