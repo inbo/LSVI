@@ -83,6 +83,15 @@ invoercontroleData_voorwaarden <-
 
     if (nrow(Data_voorwaarden_nietNA) > 0) {
       assert_that(has_name(Data_voorwaarden_nietNA, "Type"))
+      Data_voorwaarden_nietNA <- Data_voorwaarden_nietNA %>%
+        mutate(
+          Type =
+            ifelse(
+              is.na(.data$Type) & is.na(.data$Waarde),
+              "Geheel getal",
+              .data$Type
+            )
+        )
       if (!is.character(Data_voorwaarden_nietNA$Type)) {
         Data_voorwaarden_nietNA$Type <- as.character(Data_voorwaarden_nietNA$Type)
       }
