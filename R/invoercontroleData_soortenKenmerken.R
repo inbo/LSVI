@@ -127,13 +127,32 @@ invoercontroleData_soortenKenmerken <-
     # Omzettingen naar een bruikbare dataframe
     Kenmerken <- Data_soortenKenmerken    # naamsverandering!
 
-    QuerySoorten <-
-      "SELECT TaxonSynoniem.FloraNaamNederlands AS NedNaam,
-          TaxonSynoniem.GbifCanonicalNameWithMarker AS Canonicalname,
-          Taxon.NBNTaxonVersionKey, Taxon.TaxonTypeId
-      FROM TaxonSynoniem INNER JOIN Taxon
-        ON TaxonSynoniem.TaxonId = Taxon.Id
-      WHERE Taxon.NBNTaxonVersionKey IS NOT NULL"
+    # Om naamsverandering in databank van GbifCanonicalNameWithMarker naar
+    # CanonicalNameWithMarker op te vangen
+    if (class(ConnectieLSVIhabitats)[1] == "Pool") {
+      Klasse <-
+        class(ConnectieLSVIhabitats$.__enclos_env__$private$createObject())[1]
+    } else {
+      Klasse <- class(ConnectieLSVIhabitats)[1]
+    }
+
+    if (Klasse == "Microsoft SQL Server") {
+      QuerySoorten <-
+        "SELECT TaxonSynoniem.FloraNaamNederlands AS NedNaam,
+            TaxonSynoniem.GbifCanonicalNameWithMarker AS Canonicalname,
+            Taxon.NbnTaxonVersionKey AS NBNTaxonVersionKey, Taxon.TaxonTypeId
+        FROM TaxonSynoniem INNER JOIN Taxon
+          ON TaxonSynoniem.TaxonId = Taxon.Id
+        WHERE Taxon.NbnTaxonVersionKey IS NOT NULL"
+    } else {
+      QuerySoorten <-
+        "SELECT TaxonSynoniem.FloraNaamNederlands AS NedNaam,
+            TaxonSynoniem.CanonicalNameWithMarker AS Canonicalname,
+            Taxon.NbnTaxonVersionKey AS NBNTaxonVersionKey, Taxon.TaxonTypeId
+        FROM TaxonSynoniem INNER JOIN Taxon
+          ON TaxonSynoniem.TaxonId = Taxon.Id
+        WHERE Taxon.NbnTaxonVersionKey IS NOT NULL"
+    }
 
     Taxonlijst <-
       dbGetQuery(ConnectieLSVIhabitats, QuerySoorten)

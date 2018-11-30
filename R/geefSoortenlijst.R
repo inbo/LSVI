@@ -15,8 +15,15 @@
 #' @return Deze functie geeft een tabel met velden Versie, Habitattype, Habitatsubtype, Criterium, Indicator, evt. Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een groep van taxa binnen eenzelfde indicator).  WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort geeft de verkorte naam zonder auteursnaam.
 #'
 #' @examples
-#' geefSoortenlijst(Habitattype = "4010", Taxonlijsttype = "LSVIfiche")
-#' geefSoortenlijst(Habitattype = "4010", Taxonlijsttype = "alle")
+#' # deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
+#' # een connectie gelegd kan worden met de SQL Server-databank binnen INBO
+#' \dontrun{
+#' maakConnectiePool()
+#' geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "LSVIfiche")
+#' geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "alle")
+#' library(pool)
+#' poolClose(ConnectiePool)
+#' }
 #'
 #' @export
 #'
@@ -33,12 +40,17 @@ geefSoortenlijst <-
            Taxonlijstniveau =
              c("habitattype", "criterium", "indicator", "voorwaarde"),
            Taxonlijsttype = c("LSVIfiche", "alle"),
-           ConnectieLSVIhabitats = ConnectiePool){
+           ConnectieLSVIhabitats = NULL){
 
+    if (is.null(ConnectieLSVIhabitats)) {
+      if (exists("ConnectiePool")) {
+        ConnectieLSVIhabitats <- get("ConnectiePool", envir = .GlobalEnv)
+      }
+    }
     assert_that(
       inherits(ConnectieLSVIhabitats, "DBIConnection") |
         inherits(ConnectieLSVIhabitats, "Pool"),
-      msg = "Er is geen connectie met de databank met de LSVI-indicatoren"
+      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
     )
     match.arg(Taxonlijstniveau)
     match.arg(Taxonlijsttype)
@@ -67,7 +79,7 @@ geefSoortenlijst <-
           .data$Kwaliteitsniveau, .data$Voorwaarde, .data$TaxongroepId
         )
     }
-  
+
     SoortengroepIDs <- Selectiegegevens %>%
       select(.data$TaxongroepId) %>%
       distinct() %>%
@@ -77,21 +89,21 @@ geefSoortenlijst <-
     if (SoortengroepIDs$SoortengroepIDs == "") {
       stop("Voor de opgegeven argumenten is er geen soortenlijst")
     }
-  
+
     Soortenlijst <-
       geefSoortenlijstVoorIDs(
         Taxongroeplijst = SoortengroepIDs$SoortengroepIDs,
         Taxonlijsttype = Taxonlijsttype,
         ConnectieLSVIhabitats
       )
-  
+
     #soortgegevens aan selectiegegevens plakken
     SoortenlijstSelectie <- Selectiegegevens %>%
       left_join(
         Soortenlijst,
         by = ("TaxongroepId")
       )
-    
+
     if (Taxonlijstniveau[1] == "voorwaarde") {
       SoortenlijstSelectie <- SoortenlijstSelectie %>%
         select(

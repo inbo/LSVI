@@ -58,13 +58,13 @@ packageDescription(pkg = "LSVI")
 
 #Installatie van het package
 
-Het package kan als volgt geïnstalleerd worden: <!-- werkt waarschijnlijk pas als er iets in de master zit -->
+Het package kan als volgt geïnstalleerd worden: <!-- aanpassen als er iets in de master zit -->
 
 ```{r eval = FALSE}
-devtools::install_github("inbo/LSVI", build_vignettes = TRUE)
+devtools::install_github("inbo/LSVI@develop", build_vignettes = TRUE)
 ```
 
-Om de functies uit het package te kunnen gebruiken, moet een connectie gemaakt kunnen worden met de databank `D0122_00_LSVIHabitatTypes` die op server `INBO-SQL07-PRD.inbo.be` staat en alle informatie in verband met de LSVI-indicatoren bevat (zie 'Doelstellingen en inhoud package' > 'Inhoud package').  Dit betekent dat gebruikers die niet op het INBO-netwerk werken, een kopie van deze databank nodig hebben en de locatie en naam van deze databank telkens moeten specifiëren in de functie `connecteerMetLSVIdb()`.  (Dit is een voorlopige oplossing: zodra deze databank in orde is, zal ze geïntegreerd worden in het package zelf, waardoor iedereen de functies uit het package zal kunnen gebruiken.)
+Om de functies uit het package te kunnen gebruiken, moet een connectie gemaakt worden met de databank `D0122_00_LSVIHabitatTypes` die op server `INBO-SQL07-PRD.inbo.be` staat en alle informatie in verband met de LSVI-indicatoren bevat (zie 'Doelstellingen en inhoud package' > 'Inhoud package' voor achtergrondinformatie en 'Gebruik basisfuncties' > 'Basis van LSVI-package' voor hoe die connectie gelegd kan worden).  Dit betekent dat gebruikers die niet op het INBO-netwerk werken, een kopie van deze databank nodig hebben en de locatie en naam van deze databank telkens moeten specifiëren in de functie `connecteerMetLSVIdb()`.  (Dit is een voorlopige oplossing: zodra deze databank in orde is, zal ze geïntegreerd worden in het package zelf, waardoor iedereen de functies uit het package zal kunnen gebruiken.)
 
 #Gebruik basisfuncties
 
@@ -81,6 +81,7 @@ Als je in de lijst met packages onder de tab Packages op een packagenaam klikt, 
 Zodra een package ingeladen is, kan je deze documentatie van functies ook opvragen door een `?` te typen, gevolgd door de naam van de functie, bijvoorbeeld:
 
 ```{r eval = FALSE}
+library(LSVI)
 ?maakLSVIrapport
 ```
 
@@ -102,13 +103,14 @@ We illustreren dit a.d.h.v de functie `geefSoortenlijst()`.  Als we deze functie
 
 ```{r}
 library(LSVI)
-geefSoortenlijst(Habitattype = "4010", Taxonlijsttype = "LSVIfiche")
+maakConnectiePool()
+geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "LSVIfiche")
 ```
 
 Omdat de tabel te breed is, wordt deze opgesplitst in 5 delen, die onder elkaar weergegeven worden.  Deze tabel wordt ook enkel weergegeven, niet opgeslagen, en op deze manier kunnen we er achteraf geen bewerkingen mee doen.  Beter is om de tabel toe te kennen aan een variabele, we geven hier die variabele de naam `soortenlijst4010`:
 
 ```{r}
-soortenlijst4010 <- geefSoortenlijst(Habitattype = "4010", Taxonlijsttype = "LSVIfiche")
+soortenlijst4030 <- geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "LSVIfiche")
 ```
 
 Als je dit commando in je eigen console runt, verschijnt deze variabele in het venster rechtsboven onder de tab Environment (dat een overzicht geeft van alle variabelen).  Bij tabellen kan je deze variabele bekijken door erop te klikken.
@@ -119,7 +121,7 @@ Wat we hier wel tonen, is hoe deze tabel opgeslagen kan worden, zodat hij achter
 
 ```{r eval=FALSE}
 library(readr)
-write_delim(soortenlijst4010, "C:/R/soortenlijst4010.csv", delim = ";")
+write_delim(soortenlijst4030, "C:/R/soortenlijst4030.csv", delim = ";")
 ```
 
 We hebben hier het absolute path (`C:/R`) weergegeven, een andere mogelijkheid is om het path relatief ten opzichte van de 'working directory' weer te geven.  Dit is de map waarin je aan 't werken bent.  Je kan deze working directory zelf bepalen door het commando `setwd("C:/.../mijn_werkmap")`.  Als je in een project werkt waarin je al je scripts opslaat (aan te raden), dan is de root van dit project automatisch je working directory.
@@ -148,24 +150,24 @@ De functie `berekenLSVIbasis()` geeft gegevens terug in de vorm van een lijst va
 library(readr)
 Data_habitat <-
   read_delim(
-    system.file("vbdata/opname4030habitat.csv", package = "LSVI"),
+    system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
     delim = ";",
     col_types = list(col_character(), col_character(), col_character())
   )
 Data_voorwaarden <-
   read_delim(
-    system.file("vbdata/opname4030voorwaarden.csv", package = "LSVI"),
+    system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI"),
     delim = ";"
   )
 Data_soortenKenmerken <-
   read_delim(
-    system.file("vbdata/opname4030soortenKenmerken.csv", package = "LSVI"),
+    system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI"),
     delim = ";"
   )
 
 #En hier gebeurt de berekening zelf:
 berekenLSVIbasis(
-  Versie = "Versie 3",
+  Versie = "Versie 2.0",
   Kwaliteitsniveau = "1", Data_habitat,
   Data_voorwaarden, Data_soortenKenmerken
 )
@@ -176,7 +178,7 @@ We gaan weer beginnen met de uitvoer in een variabele ('resultaat') te steken om
 ```{r}
 resultaat <-
   berekenLSVIbasis(
-    Versie = "Versie 3",
+    Versie = "Versie 2.0",
     Kwaliteitsniveau = "1", Data_habitat,
     Data_voorwaarden, Data_soortenKenmerken
   )
@@ -195,6 +197,38 @@ Met deze tabellen kan verder gewerkt worden zoals hierboven beschreven is ('Wat 
 
 
 ##Basis van LSVI-package
+
+###Connecteren met de databank
+
+Om de functies van het LSVI-package te gebruiken, heb je een connectie nodig met de databank met informatie uit LSVI-rapporten (zie 'Doelstellingen en inhoud package' > 'Inhoud package').  Deze connectie kan op 2 manieren gelegd worden:
+
+- Na het laden van het package eenmalig een pool van connecties aanmaken door de functie `maakConnectiePool()` te runnen.  De gegenereerde ConnectiePool zal in de achtergrond verbinding leggen met de databank telkens wanneer dit nodig is, extra connecties aanleggen als dit nodig is, overbodig geworden connecties verwijderen,... en je moet niet telkens de connectie als parameter vermelden bij elke functie die je gebruikt.  Met andere woorden: nadat je die ConnectiePool aangemaakt hebt, moet je je verder niet meer bezighouden met die connectie.  Is er toch een functie die vereist dat je een connectie meegeeft?  Dan kan je simpelweg `ConnectiePool` als argument meegeven.  Als je geen functies meer nodig hebt uit het LSVI-package, kan je deze ConnectiePool sluiten met `poolClose()` uit het package `pool` en eventueel het object verwijderen.
+```{r eval=FALSE}
+library(LSVI)
+maakConnectiePool()
+#Nu kan je alle functies gebruiken zonder expliciet het argument ConnectieLSVIhabitats op te geven, bv.
+geefVersieInfo()
+geefSoortenlijst(Habitattype = "4030")
+
+#En als je geen functies meer nodig hebt uit het LSVI-package, kan je de ConnectiePool afsluiten en verwijderen:
+library(pool)
+poolClose(ConnectiePool)
+rm(ConnectiePool)
+```
+- Een connectie met de databank maken met de functie `connecteerMetLSVIdb()` en deze connectie voor elke functie meegeven bij de parameter ConnectieLSVIhabitats.  Hier moet je dus wel zelf een connectie leggen telkens als dit nodig zijn.
+```{r eval=FALSE}
+library(LSVI)
+Connectie <- connecteerMetLSVIdb()
+#Nu moet je bij elke functie opnieuw deze connectie meegeven
+geefVersieInfo(ConnectieLSVIhabitats = Connectie)
+geefSoortenlijst(Habitattype = "4030", ConnectieLSVIhabitats = Connectie)
+
+#De connectie sluiten kan met dbDisconnect uit het DBI-package:
+library(DBI)
+dbDisconnect(Connectie)
+```
+
+###Gebruik van de functies zelf
 
 De functies kunnen min of meer in groepen ingedeeld worden op basis van het eerste deel van hun naam:
 

@@ -19,19 +19,23 @@
 #' @return Deze functie genereert de resultaten in de vorm van een list met 4 tabellen: een eerste met de beoordelingen per kwaliteitsniveau, een tweede met de beoordelingen per criterium en kwaliteitsniveau, een derde met de beoordelingen per indicator en kwaliteitsniveau, en een vierde met de detailgegevens inclusief meetwaarden.
 #'
 #' @examples
+#' # deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
+#' # een connectie gelegd kan worden met de SQL Server-databank binnen INBO
+#' \dontrun{
 #' library(LSVI)
+#' maakConnectiePool()
 #' library(readr)
 #' Data_habitat <-
-#'     read_csv2(system.file("vbdata/opname4030habitat.csv", package = "LSVI"),
+#'     read_csv2(system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
 #'               col_types = list(col_character(), col_character(),col_character()))
 #' Data_voorwaarden <-
-#'     read_csv2(system.file("vbdata/opname4030voorwaarden.csv", package = "LSVI"))
+#'     read_csv2(system.file("vbdata/Opname4030voorwaardenv2.csv", package = "LSVI"))
 #' Data_soortenKenmerken <-
-#'     read_csv2(system.file("vbdata/opname4030soortenKenmerken.csv", package = "LSVI"))
-#' berekenLSVIbasis(Versie = "Versie 3",
+#'     read_csv2(system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI"))
+#' berekenLSVIbasis(Versie = "Versie 2.0",
 #'                  Kwaliteitsniveau = "1", Data_habitat,
 #'                  Data_voorwaarden, Data_soortenKenmerken)
-#'
+#' }
 #'
 #' @export
 #'
@@ -61,16 +65,21 @@ berekenLSVIbasis <-
       ),
     Data_soortenKenmerken = data.frame(ID = character()),
     Aggregatiemethode = "1-out-all-out",
-    ConnectieLSVIhabitats = ConnectiePool,
+    ConnectieLSVIhabitats = NULL,
     LIJST = geefVertaallijst(ConnectieLSVIhabitats),
     na.rm = FALSE
   ){
 
     #controle invoer
+    if (is.null(ConnectieLSVIhabitats)) {
+      if (exists("ConnectiePool")) {
+        ConnectieLSVIhabitats <- get("ConnectiePool", envir = .GlobalEnv)
+      }
+    }
     assert_that(
       inherits(ConnectieLSVIhabitats, "DBIConnection") |
         inherits(ConnectieLSVIhabitats, "Pool"),
-      msg = "Er is geen connectie met de databank met de LSVI-indicatoren"
+      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
     )
 
     invoercontroleVersie(Versie, ConnectieLSVIhabitats)
@@ -100,7 +109,7 @@ berekenLSVIbasis <-
         )
       Data_voorwaarden_nietNA <- Data_voorwaarden
     }
-      
+
     if (nrow(Data_voorwaarden_nietNA) == 0) {
       assert_that(has_name(Data_voorwaarden_nietNA, "ID"))
       if (!is.character(Data_voorwaarden_nietNA$ID)) {
@@ -520,8 +529,12 @@ berekenLSVIbasis <-
         #harmonisch gemiddelde van de verschilscores
         #de verschilscores worden tijdelijk herschaald naar 0 tot 1 range
         Index_harm_criterium =
-          mean(((.data$Verschilscore + 1) / 2) ^ -1,
-                na.rm = na.rm) ^ -1 * 2 - 1
+          mean(
+            (
+              (.data$Verschilscore + 1) / 2
+            ) ^ -1,
+            na.rm = na.rm
+          ) ^ -1 * 2 - 1
       ) %>%
       ungroup()
 
@@ -536,12 +549,21 @@ berekenLSVIbasis <-
       summarise(
         Index_min_min = min(.data$Index_min_criterium, na.rm = na.rm),
         #iets minder conservatieve index
-        Index_min_harm = mean(((.data$Index_min_criterium + 1) / 2) ^ -1,
-                              na.rm = na.rm) ^ -1 * 2 - 1,
+        Index_min_harm =
+          mean(
+            (
+              (.data$Index_min_criterium + 1) / 2
+            ) ^ -1,
+            na.rm = na.rm
+          ) ^ -1 * 2 - 1,
         # nog minder conservatieve index
         Index_harm_harm =
-          mean(((.data$Index_harm_criterium + 1) / 2) ^ -1,
-                na.rm = na.rm) ^ -1 * 2 - 1
+          mean(
+            (
+              (.data$Index_harm_criterium + 1) / 2
+            ) ^ -1,
+            na.rm = na.rm
+          ) ^ -1 * 2 - 1
       ) %>%
       ungroup()
 
@@ -561,7 +583,7 @@ berekenLSVIbasis <-
               Aggregatiemethode == "RapportageHR",
               (
                 sum(.data$Status_indicator, na.rm = na.rm) >
-                  sum(!is.na(.data$Status_indicator))/2.0
+                  sum(!is.na(.data$Status_indicator)) / 2.0
               ) & (
                 sum(
                   (.data$Status_indicator == FALSE) * (.data$Belang == "zb"),
@@ -581,7 +603,7 @@ berekenLSVIbasis <-
 
     return(
       list(
-        Resultaat_criterium = as.data.frame(Resultaat_criterium),
+        Resultaat_criterium = Resultaat_criterium,
         Resultaat_indicator = Resultaat_indicator,
         Resultaat_detail = Resultaat_detail,
         Resultaat_globaal = Resultaat_globaal

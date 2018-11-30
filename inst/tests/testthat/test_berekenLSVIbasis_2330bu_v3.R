@@ -4,6 +4,7 @@ library(readr)
 library(dplyr)
 library(rlang)
 
+maakConnectiePool()
 Data_habitat <-
     read_csv2(
       system.file("vbdata/data_habitat2330_bu.csv", package = "LSVI"),
@@ -24,7 +25,11 @@ Resultaat <-
 describe("berekenLSVIbasis 2330_bu versie 3", {
 
   it("waarden van voorwaarden correct berekend", {
-    skip_on_cran()
+    skip_if_not(
+      class(ConnectiePool$.__enclos_env__$private$createObject())[1] ==
+        "Microsoft SQL Server",
+      "SQL Server niet beschikbaar"
+    )
 
     resultaat_berekend <- berekenLSVIbasis(
           Versie = "Versie 3",
@@ -48,3 +53,5 @@ describe("berekenLSVIbasis 2330_bu versie 3", {
     )
   })
 })
+library(pool)
+poolClose(ConnectiePool)

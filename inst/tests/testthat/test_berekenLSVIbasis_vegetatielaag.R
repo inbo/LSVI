@@ -3,10 +3,12 @@ context("test berekenLSVIbasis vegetatielaag")
 library(readr)
 library(dplyr)
 library(rlang)
+library(stringr)
+
+maakConnectiepoolSQLite()
 
 describe("berekenLSVIbasis vegetatielaag", {
   it("de vegetatielagen worden correct geselecteerd", {
-    skip_on_cran()
     Data_habitat <-
       read_csv2(
         system.file("vbdata/Test9190habitat.csv", package = "LSVI"),
@@ -20,23 +22,6 @@ describe("berekenLSVIbasis vegetatielaag", {
             col_character(), col_character(), col_character(), col_character(),
             col_character(), col_character(), col_character(), col_character()
           )
-      ) %>%
-      mutate(  #idee is om onderstaande code te wissen zodra de databank/rekenmodule hiervoor aangepast is
-        Eenheid =
-          ifelse(
-            .data$Eenheid == "ha",
-            NA,
-            .data$Eenheid
-          )
-      ) %>%
-      bind_rows(
-        data.frame(
-          ID = "1", Criterium = "Vegetatie",
-          Indicator = "sleutelsoorten van de kruidlaag",
-          Voorwaarde = "aandeel sleutelsoorten kruidlaag", Waarde = "20",
-          Type = "Geheel getal",
-          stringsAsFactors = FALSE
-        )
       )
     Data_soortenKenmerken <-
       read_csv2(
@@ -59,40 +44,184 @@ describe("berekenLSVIbasis vegetatielaag", {
     # save(Resultaat, file = "inst/vbdata/Resultaat_test_bos.Rdata")  #nolint
     # load("inst/vbdata/Resultaat_test_bos.Rdata")  #nolint
 
-    load(system.file("vbdata/Resultaat_test_bos.Rdata", package = "LSVI"))
-    expect_equal(
-      idsWissen(
-        berekenLSVIbasis(
-          Versie = "Versie 3", Kwaliteitsniveau = "1",
-          Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
-          Data_soortenKenmerken = Data_soortenKenmerken
-        )
-      ),
-      Resultaat
-    )
-    expect_equal(
-      idsWissen(
-        berekenLSVIbasis(
-          Versie = "Versie 3", Kwaliteitsniveau = "1",
-          Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
-          Data_soortenKenmerken =
-            Data_soortenKenmerken %>%
-              mutate(
-                Vegetatielaag =
-                  ifelse(
-                    Vegetatielaag == "struiklaag",
-                    "boomlaag",
-                    Vegetatielaag
-                  )
+    # Resultaatv2 <-
+    #   idsWissen(
+    #     berekenLSVIbasis(
+    #       Versie = "Versie 2.0",
+    #       Kwaliteitsniveau = "1", Data_habitat,
+    #       Data_voorwaarden, Data_soortenKenmerken
+    #     )
+    #   )
+    # write.csv2(
+    #   Resultaatv2[["Resultaat_criterium"]],
+    #   file = "inst/vbdata/Resultaat_test_bosv2/Resultaat_criterium.csv"  #nolint
+    # )
+    # write.csv2(
+    #   Resultaatv2[["Resultaat_indicator"]],
+    #   file = "inst/vbdata/Resultaat_test_bosv2/Resultaat_indicator.csv"  #nolint
+    # )
+    # write.csv2(
+    #   Resultaatv2[["Resultaat_detail"]],
+    #   file = "inst/vbdata/Resultaat_test_bosv2/Resultaat_detail.csv"  #nolint
+    # )
+    # write.csv2(
+    #   Resultaatv2[["Resultaat_globaal"]],
+    #   file = "inst/vbdata/Resultaat_test_bosv2/Resultaat_globaal.csv"  #nolint
+    # )
+
+    Resultaatv2 <-
+      list(
+        Resultaat_criterium =
+          read_csv2(
+            system.file(
+              "vbdata/Resultaat_test_bosv2/Resultaat_criterium.csv",
+              package = "LSVI"
+            ),
+            col_types =
+              list(
+                col_character(), col_character(), col_character(),
+                col_character(), col_character(), col_integer(), col_logical(),
+                col_character(), col_double(), col_double()
               )
-        )
-      ),
-      Resultaat
-    )
+          ) %>%
+          select(-.data$X1) %>%
+          mutate(
+            ID = as.character(.data$ID),
+            Habitattype = as.character(.data$Habitattype)
+          ),
+        Resultaat_indicator =
+          read_csv2(
+            system.file(
+              "vbdata/Resultaat_test_bosv2/Resultaat_indicator.csv",
+              package = "LSVI"
+            ),
+            col_types =
+              list(
+                col_character(), col_character(), col_character(),
+                col_character(), col_character(), col_character(),
+                col_character(), col_character(), col_character(),
+                col_integer(), col_logical(), col_double()
+              )
+          ) %>%
+          select(-.data$X1),
+        Resultaat_detail =
+          read_csv2(
+            system.file(
+              "vbdata/Resultaat_test_bosv2/Resultaat_detail.csv",
+              package = "LSVI"
+            ),
+            col_types =
+              list(
+                col_character(), col_character(), col_character(),
+                col_character(), col_character(), col_character(),
+                col_character(), col_character(), col_integer(),
+                col_character(), col_character(), col_character(),
+                col_character(), col_character(), col_character(),
+                col_character(), col_character(), col_character(),
+                col_character(), col_character(), col_character(), col_double(),
+                col_logical(), col_double()
+              )
+          ) %>%
+          select(-.data$X1),
+        Resultaat_globaal =
+          read_csv2(
+            system.file(
+              "vbdata/Resultaat_test_bosv2/Resultaat_globaal.csv",
+              package = "LSVI"
+            ),
+            col_types =
+              list(
+                col_character(), col_character(), col_character(),
+                col_character(), col_integer(), col_logical(),
+                col_character(), col_double(), col_double(), col_double()
+              )
+          ) %>%
+          select(-.data$X1)
+      )
+    attr(Resultaatv2[["Resultaat_criterium"]], "spec") <- NULL
+    attr(Resultaatv2[["Resultaat_indicator"]], "spec") <- NULL
+    attr(Resultaatv2[["Resultaat_detail"]], "spec") <- NULL
+    attr(Resultaatv2[["Resultaat_globaal"]], "spec") <- NULL
+
     BerekendRes <-
       idsWissen(
         berekenLSVIbasis(
-            Versie = "Versie 3", Kwaliteitsniveau = "1",
+          Versie = "Versie 2.0", Kwaliteitsniveau = "1",
+          Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
+          Data_soortenKenmerken = Data_soortenKenmerken
+        )
+      )
+    stopifnot(
+      all.equal(
+        as.data.frame(BerekendRes[["Resultaat_criterium"]]),
+        as.data.frame(Resultaatv2[["Resultaat_criterium"]])
+      )
+    )
+    stopifnot(
+      all.equal(
+        as.data.frame(BerekendRes[["Resultaat_indicator"]]),
+        as.data.frame(Resultaatv2[["Resultaat_indicator"]])
+      )
+    )
+    stopifnot(
+      all.equal(
+        as.data.frame(BerekendRes[["Resultaat_detail"]]),
+        as.data.frame(Resultaatv2[["Resultaat_detail"]])
+      )
+    )
+    stopifnot(
+      all.equal(
+        as.data.frame(BerekendRes[["Resultaat_globaal"]]),
+        as.data.frame(Resultaatv2[["Resultaat_globaal"]])
+      )
+    )
+
+    BerekendRes2 <-
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 2.0", Kwaliteitsniveau = "1",
+          Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
+          Data_soortenKenmerken =
+            Data_soortenKenmerken %>%
+            mutate(
+              Vegetatielaag =
+                ifelse(
+                  Vegetatielaag == "struiklaag",
+                  "boomlaag",
+                  Vegetatielaag
+                )
+            )
+        )
+      )
+    stopifnot(
+      all.equal(
+        as.data.frame(BerekendRes2[["Resultaat_criterium"]]),
+        as.data.frame(Resultaatv2[["Resultaat_criterium"]])
+      )
+    )
+    stopifnot(
+      all.equal(
+        as.data.frame(BerekendRes[["Resultaat_indicator"]]),
+        as.data.frame(Resultaatv2[["Resultaat_indicator"]])
+      )
+    )
+    stopifnot(
+      all.equal(
+        as.data.frame(BerekendRes2[["Resultaat_detail"]]),
+        as.data.frame(Resultaatv2[["Resultaat_detail"]])
+      )
+    )
+    stopifnot(
+      all.equal(
+        as.data.frame(BerekendRes2[["Resultaat_globaal"]]),
+        as.data.frame(Resultaatv2[["Resultaat_globaal"]])
+      )
+    )
+
+    BerekendRes3 <-
+      idsWissen(
+        berekenLSVIbasis(
+            Versie = "Versie 2.0", Kwaliteitsniveau = "1",
             Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
             Data_soortenKenmerken =
               Data_soortenKenmerken %>%
@@ -108,19 +237,19 @@ describe("berekenLSVIbasis vegetatielaag", {
       )
     stopifnot(
       all.equal(
-        BerekendRes[["Resultaat_criterium"]],
-        Resultaat[["Resultaat_criterium"]] %>%
+        BerekendRes3[["Resultaat_criterium"]],
+        Resultaatv2[["Resultaat_criterium"]] %>%
           mutate(
             Index_min_criterium =
               ifelse(
                 .data$Criterium == "Vegetatie",
-                0.105691057,
+                -0.842220185,
                 .data$Index_min_criterium
               ),
             Index_harm_criterium =
               ifelse(
                 .data$Criterium == "Vegetatie",
-                0.26098179,
+                -0.723846855,
                 .data$Index_harm_criterium
               )
           )
@@ -128,8 +257,8 @@ describe("berekenLSVIbasis vegetatielaag", {
     )
     stopifnot(
       all.equal(
-        BerekendRes[["Resultaat_indicator"]],
-        Resultaat[["Resultaat_indicator"]] %>%
+        BerekendRes3[["Resultaat_indicator"]],
+        Resultaatv2[["Resultaat_indicator"]] %>%
           mutate(
             Verschilscore =
               ifelse(
@@ -137,14 +266,21 @@ describe("berekenLSVIbasis vegetatielaag", {
                   "sleutelsoorten van de boom- en struiklaag",
                 0.105691057,
                 .data$Verschilscore
+              ),
+            Verschilscore =
+              ifelse(
+                .data$Indicator ==
+                  "sleutelsoorten van de kruidlaag",
+                -0.84222018,
+                .data$Verschilscore
               )
           )
       )
     )
     stopifnot(
       all.equal(
-        BerekendRes[["Resultaat_detail"]],
-        Resultaat[["Resultaat_detail"]] %>%
+        BerekendRes3[["Resultaat_detail"]],
+        Resultaatv2[["Resultaat_detail"]] %>%
           mutate(
             Waarde =
               ifelse(
@@ -153,11 +289,32 @@ describe("berekenLSVIbasis vegetatielaag", {
                 "73.1707317073171",
                 .data$Waarde
               ),
+            Waarde =
+              ifelse(
+                .data$Voorwaarde ==
+                  "aandeel sleutelsoorten kruidlaag",
+                "4.73339441538505",
+                .data$Waarde
+              ),
+            Status_voorwaarde =
+              ifelse(
+                .data$Voorwaarde ==
+                  "aandeel sleutelsoorten kruidlaag",
+                FALSE,
+                .data$Status_voorwaarde
+              ),
             Verschilscore =
               ifelse(
                 .data$Voorwaarde ==
                   "grondvlak sleutelsoorten boom- en struiklaag",
                 0.105691057,
+                .data$Verschilscore
+              ),
+            Verschilscore =
+              ifelse(
+                .data$Voorwaarde ==
+                  "aandeel sleutelsoorten kruidlaag",
+                -0.8422202,
                 .data$Verschilscore
               )
           )
@@ -165,14 +322,13 @@ describe("berekenLSVIbasis vegetatielaag", {
     )
     stopifnot(
       all.equal(
-        BerekendRes[["Resultaat_globaal"]],
-        Resultaat[["Resultaat_globaal"]]
+        BerekendRes3[["Resultaat_globaal"]],
+        Resultaatv2[["Resultaat_globaal"]]
       )
     )
   })
 
   it("de functie geeft een warning of error als een vegetatielaag ontbreekt", {
-    skip_on_cran()
     Data_habitat <-
       read_csv2(
         system.file("vbdata/Test9190habitat.csv", package = "LSVI"),
@@ -186,23 +342,6 @@ describe("berekenLSVIbasis vegetatielaag", {
             col_character(), col_character(), col_character(), col_character(),
             col_character(), col_character(), col_character(), col_character()
           )
-      ) %>%
-      mutate(  #idee is om onderstaande code te wissen zodra de databank/rekenmodule hiervoor aangepast is
-        Eenheid =
-          ifelse(
-            .data$Eenheid == "ha",
-            NA,
-            .data$Eenheid
-          )
-      ) %>%
-      bind_rows(
-        data.frame(
-          ID = "1", Criterium = "Vegetatie",
-          Indicator = "sleutelsoorten van de kruidlaag",
-          Voorwaarde = "aandeel sleutelsoorten kruidlaag", Waarde = "20",
-          Type = "Geheel getal",
-          stringsAsFactors = FALSE
-        )
       )
     Data_soortenKenmerken <-
       read_csv2(
@@ -223,7 +362,7 @@ describe("berekenLSVIbasis vegetatielaag", {
     expect_error(
       idsWissen(
         berekenLSVIbasis(
-          Versie = "Versie 3", Kwaliteitsniveau = "1",
+          Versie = "Versie 2.0", Kwaliteitsniveau = "1",
           Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
           Data_soortenKenmerken = Data_soortenKenmerken
         )
@@ -233,12 +372,12 @@ describe("berekenLSVIbasis vegetatielaag", {
 
     Data_habitat <-
       read_csv2(
-        system.file("vbdata/opname4030habitat.csv", package = "LSVI"),
+        system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
         col_types = list(col_character(), col_character(), col_character())
       )
     Data_voorwaarden <-
       read_csv2(
-        system.file("vbdata/opname4030voorwaarden.csv", package = "LSVI"),
+        system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI"),
         col_types =
           list(
             col_character(), col_character(), col_character(), col_character(),
@@ -247,7 +386,7 @@ describe("berekenLSVIbasis vegetatielaag", {
       )
     Data_soortenKenmerken <-
       read_csv2(
-        system.file("vbdata/opname4030soortenKenmerken.csv", package = "LSVI"),
+        system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI"),
         col_types =
           list(col_character(), col_character(), col_character(),
                col_character(), col_character(), col_character(),
@@ -261,11 +400,11 @@ describe("berekenLSVIbasis vegetatielaag", {
             .data$Vegetatielaag
           )
       )
-    load(system.file("vbdata/Resultaat_test4030.Rdata", package = "LSVI"))
+    load(system.file("vbdata/Resultaat_test4030v2.Rdata", package = "LSVI"))
     expect_warning(
       idsWissen(
         berekenLSVIbasis(
-          Versie = "Versie 3", Kwaliteitsniveau = "1",
+          Versie = "Versie 2.0", Kwaliteitsniveau = "1",
           Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
           Data_soortenKenmerken = Data_soortenKenmerken
         )
@@ -275,49 +414,65 @@ describe("berekenLSVIbasis vegetatielaag", {
     expect_equal(
       idsWissen(
         berekenLSVIbasis(
-          Versie = "Versie 3", Kwaliteitsniveau = "1",
+          Versie = "Versie 2.0", Kwaliteitsniveau = "1",
           Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
           Data_soortenKenmerken = Data_soortenKenmerken
         )
       ),
-      Resultaat
+      Resultaatv2
     )
   })
 
   it("s4-klasse bedekkingLaag werkt correct", {
-    skip_on_cran()
     Data_habitat <-
       read_csv2(
-        system.file("vbdata/opname4030habitat.csv", package = "LSVI"),
+        system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
         col_types = list(col_character(), col_character(), col_character())
       )
-    Data_voorwaarden <-
-      read_csv2(
-        system.file("vbdata/opname4030voorwaarden.csv", package = "LSVI"),
-        col_types =
-          list(
-            col_character(), col_character(), col_character(), col_character(),
-            col_character(), col_character(), col_character(), col_character()
-          )
-      )
+    if (
+      class(ConnectiePool$.__enclos_env__$private$createObject())[1] ==
+      "SQLiteConnection"
+    ) {
+      Data_voorwaarden <-
+        read_csv2(
+          system.file("vbdata/Opname4030voorwaardenv2.csv", package = "LSVI"),
+          col_types =
+            list(
+              col_character(), col_character(), col_character(),
+              col_character(), col_character(), col_character(),
+              col_character(), col_character()
+            )
+        )
+    } else {
+      Data_voorwaarden <-
+        read_csv2(
+          system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI"),
+          col_types =
+            list(
+              col_character(), col_character(), col_character(),
+              col_character(), col_character(), col_character(),
+              col_character(), col_character()
+            )
+        )
+    }
     Data_soortenKenmerken <-
       read_csv2(
-        system.file("vbdata/opname4030soortenKenmerken.csv", package = "LSVI"),
+        system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI"),
         col_types =
           list(col_character(), col_character(), col_character(),
                col_character(), col_character(), col_character(),
                col_character(), col_character())
       )
-    load(system.file("vbdata/Resultaat_test4030.Rdata", package = "LSVI"))
+    load(system.file("vbdata/Resultaat_test4030v2.Rdata", package = "LSVI"))
     expect_equal(
       idsWissen(
         berekenLSVIbasis(
-          Versie = "Versie 3", Kwaliteitsniveau = "1",
+          Versie = "Versie 2.0", Kwaliteitsniveau = "1",
           Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
           Data_soortenKenmerken = Data_soortenKenmerken
         )
       ),
-      Resultaat
+      Resultaatv2
     )
     Data_voorwaarden <- Data_voorwaarden %>%
       filter(.data$Voorwaarde != "bedekking verbossing")
@@ -337,13 +492,13 @@ describe("berekenLSVIbasis vegetatielaag", {
     Test <-
       idsWissen(
         berekenLSVIbasis(
-          Versie = "Versie 3", Kwaliteitsniveau = "1",
+          Versie = "Versie 2.0", Kwaliteitsniveau = "1",
           Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
           Data_soortenKenmerken = Data_soortenKenmerken1
         )
       )
     ResultaatBerekening <-
-      Resultaat[["Resultaat_detail"]] %>%
+      Resultaatv2[["Resultaat_detail"]] %>%
       mutate(
         AfkomstWaarde =
           ifelse(
@@ -380,7 +535,7 @@ describe("berekenLSVIbasis vegetatielaag", {
     expect_error(
       idsWissen(
         berekenLSVIbasis(
-          Versie = "Versie 3", Kwaliteitsniveau = "1",
+          Versie = "Versie 2.0", Kwaliteitsniveau = "1",
           Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
           Data_soortenKenmerken = Data_soortenKenmerken2
         )
@@ -403,7 +558,7 @@ describe("berekenLSVIbasis vegetatielaag", {
     Test3 <-
       idsWissen(
         berekenLSVIbasis(
-          Versie = "Versie 3", Kwaliteitsniveau = "1",
+          Versie = "Versie 2.0", Kwaliteitsniveau = "1",
           Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
           Data_soortenKenmerken = Data_soortenKenmerken3
         )
@@ -415,6 +570,7 @@ describe("berekenLSVIbasis vegetatielaag", {
       )
     )
   })
-
-
 })
+
+library(pool)
+poolClose(ConnectiePool)
