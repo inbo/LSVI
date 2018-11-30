@@ -9,6 +9,6 @@
 "8";"1";"9190";"Versie 2.0";"9190";"Vegetatie";"sleutelsoorten van de boom- en struiklaag";"B: >= 70 en < 90% grondvlak, of >= 90% met slechts 1 soort die minstens 10% inneemt (b.v. homogene beuken-of eikenbestanden)";"b";1;TRUE;0,91869918699187
 "9";"1";"9190";"Versie 2.0";"9190";"Vegetatie";"sleutelsoorten van de kruidlaag";"B: 30-70% bedekking en >3 soorten of >= 30% bedekking en 4-6 soorten";"b";1;FALSE;0
 "10";"1";"9190";"Versie 2.0";"9190";"Verstoring";"invasieve exoten";"B: < 10 %";"b";1;TRUE;1
-"11";"1";"9190";"Versie 2.0";"9190";"Verstoring";"ruderalisering";"B: < 10%";"zb";1;TRUE;0,5
+"11";"1";"9190";"Versie 2.0";"9190";"Verstoring";"ruderalisering";"B: < 10%";"zb";1;TRUE;0,309999999999999
 "12";"1";"9190";"Versie 2.0";"9190";"Verstoring";"vergrassing";"B: <= 30%";"zb";1;TRUE;-7,93016446160826e-17
 "13";"1";"9190";"Versie 2.0";"9190";"Verstoring";"verruiging";"B: 10-30%";"zb";1;TRUE;1
