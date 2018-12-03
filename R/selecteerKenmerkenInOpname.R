@@ -74,7 +74,7 @@ selecteerKenmerkenInOpname <-
 
     if (length(Studiegroep) > 0 & !(length(Soortengroep) > 0)) {
       Resultaat <- Kenmerken %>%
-        filter(.data$TypeKenmerk == "studiegroep") %>%
+        filter(tolower(.data$TypeKenmerk) == "studiegroep") %>%
         mutate(
           Kenmerk = tolower(.data$Kenmerk)
         ) %>%
