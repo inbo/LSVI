@@ -33,6 +33,9 @@ Suggests:
 RoxygenNote: 6.1.0.9000
 VignetteBuilder: knitr
 Collate: 
+    's4_AnalyseVariabele.R'
+    's4_bedekking.R'
+    'bedekkingSom.R'
     'berekenLSVIbasis.R'
     'berekenStatus.R'
     'berekenVerschilscores.R'
@@ -59,9 +62,7 @@ Collate:
     'maakConnectiepoolSQLite.R'
     'maakHabitatfiches.R'
     'maakLSVIrapport.R'
-    's4_AnalyseVariabele.R'
     's4_aandeel.R'
-    's4_bedekking.R'
     's4_aandeelKruidlaag.R'
     's4_aantal.R'
     's4_analyseVariabele_c.R'

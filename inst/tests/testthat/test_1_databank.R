@@ -36,7 +36,7 @@ describe("test databank", {
       filter(!grepl("^meting", .data$VariabeleNaam))
     expect_true(
       all(AV$VariabeleNaam %in%
-            c("aandeel", "aandeelExcl", "aandeelKruidlaag", "aandeelSom",
+            c("aandeel", "aandeelExcl", "aandeelKruidlaag", "bedekkingSom",
               "aantal", "bedekking", "bedekkingLaag", "maxBedekking",
               "maxBedekkingExcl")
       )
@@ -278,7 +278,7 @@ describe("test databank", {
     )
   })
 
-  it("AnalyseVariabele aandeelSom bevat percentages", {
+  it("AnalyseVariabele bedekkingSom bevat percentages", {
     skip_on_cran()
     ConnectieLSVIhabitats <-
       connecteerMetLSVIdb()
@@ -289,7 +289,7 @@ describe("test databank", {
         TypeVariabele.Naam as TypeVariabele
         FROM AnalyseVariabele INNER JOIN TypeVariabele
         ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
-        WHERE AnalyseVariabele.VariabeleNaam = 'aandeelSom'"
+        WHERE AnalyseVariabele.VariabeleNaam = 'bedekkingSom'"
       )
     AV_ok <- AV %>%
       filter(TypeVariabele %in% c("Percentage"))
