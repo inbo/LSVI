@@ -12,6 +12,6 @@
 "11";"1";"9190";"Versie 2.0";"9190";"Vegetatie";"sleutelsoorten van de kruidlaag";"B: 30-70% bedekking en >3 soorten of >= 30% bedekking en 4-6 soorten";1;"b";"aandeel sleutelsoorten kruidlaag";"30";">=";"%";"Percentage";NA;"86.637084034866";"Percentage";NA;"%";"berekend";100;TRUE;0,809101200498086
 "12";"1";"9190";"Versie 2.0";"9190";"Vegetatie";"sleutelsoorten van de kruidlaag";"B: 30-70% bedekking en >3 soorten of >= 30% bedekking en 4-6 soorten";1;"b";"aantal sleutelsoorten kruidlaag";"3";">";NA;"Geheel getal";NA;"3";"Geheel getal";NA;NA;"berekend";12;FALSE;0
 "13";"1";"9190";"Versie 2.0";"9190";"Verstoring";"invasieve exoten";"B: < 10 %";1;"b";"bedekking invasieve exoten";"10";"<";"%";"Percentage";NA;"0";"Percentage";NA;"%";"berekend";100;TRUE;1
-"14";"1";"9190";"Versie 2.0";"9190";"Verstoring";"ruderalisering";"B: < 10%";1;"zb";"bedekking ruderalisering";"10";"<";"%";"Percentage";NA;"5";"Percentage";NA;"%";"berekend";100;TRUE;0,5
+"14";"1";"9190";"Versie 2.0";"9190";"Verstoring";"ruderalisering";"B: < 10%";1;"zb";"bedekking ruderalisering";"10";"<";"%";"Percentage";NA;"6.90000000000001";"Percentage";NA;"%";"berekend";100;TRUE;0,309999999999999
 "15";"1";"9190";"Versie 2.0";"9190";"Verstoring";"vergrassing";"B: <= 30%";1;"zb";"bedekking vergrassing";"30";"<=";"%";"Percentage";NA;"30";"Percentage";NA;"%";"berekend";100;TRUE;-7,93016446160826e-17
 "16";"1";"9190";"Versie 2.0";"9190";"Verstoring";"verruiging";"B: 10-30%";1;"zb";"bedekking verruiging";"30";"<=";"%";"Percentage";NA;"0";"Percentage";NA;"%";"berekend";100;TRUE;1

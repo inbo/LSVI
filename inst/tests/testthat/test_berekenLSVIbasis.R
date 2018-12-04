@@ -844,6 +844,379 @@ describe("berekenLSVIbasis", {
     )
   })
 
+  it("Een beoordeling op indicatorniveau wordt correct afgehandeld", {
+    expect_equal(
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 2.0",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden %>%
+            mutate(
+              Voorwaarde =
+                ifelse(
+                  .data$Indicator == "vergrassing/verruiging",
+                  NA,
+                  .data$Voorwaarde
+                ),
+              Waarde =
+                ifelse(
+                  .data$Indicator == "vergrassing/verruiging",
+                  "TRUE",
+                  .data$Waarde
+                ),
+              Type =
+                ifelse(
+                  .data$Indicator == "vergrassing/verruiging",
+                  NA,
+                  .data$Type
+                ),
+              Eenheid =
+                ifelse(
+                  .data$Indicator == "vergrassing/verruiging",
+                  NA,
+                  .data$Eenheid
+                )
+            ),
+          Data_soortenKenmerken
+        )
+      ),
+      list(
+        Resultaat_criterium = Resultaatv2[["Resultaat_criterium"]] %>%
+          mutate(
+            Index_min_criterium =
+              ifelse(
+                .data$Criterium == "Verstoring",
+                NA,
+                .data$Index_min_criterium
+              ),
+            Index_harm_criterium =
+              ifelse(
+                .data$Criterium == "Verstoring",
+                NA,
+                .data$Index_harm_criterium
+              )
+          ),
+        Resultaat_indicator = Resultaatv2[["Resultaat_indicator"]] %>%
+          mutate(
+            Verschilscore =
+              ifelse(
+                .data$Indicator == "vergrassing/verruiging",
+                NA,
+                .data$Verschilscore
+              )
+          ),
+        Resultaat_detail = Resultaatv2[["Resultaat_detail"]] %>%
+          mutate(
+            Voorwaarde =
+              ifelse(
+                .data$Indicator == "vergrassing/verruiging",
+                NA,
+                .data$Voorwaarde
+              ),
+            Referentiewaarde =
+              ifelse(
+                .data$Indicator == "vergrassing/verruiging",
+                NA,
+                .data$Referentiewaarde
+              ),
+            Operator =
+              ifelse(
+                .data$Indicator == "vergrassing/verruiging",
+                NA,
+                .data$Operator
+              ),
+            EenheidRefwaarde =
+              ifelse(
+                .data$Indicator == "vergrassing/verruiging",
+                NA,
+                .data$EenheidRefwaarde
+              ),
+            TypeRefwaarde =
+              ifelse(
+                .data$Indicator == "vergrassing/verruiging",
+                NA,
+                .data$TypeRefwaarde
+              ),
+            Waarde =
+              ifelse(
+                .data$Indicator == "vergrassing/verruiging",
+                "TRUE",
+                .data$Waarde
+              ),
+            TypeWaarde =
+              ifelse(
+                .data$Indicator == "vergrassing/verruiging",
+                NA,
+                .data$TypeWaarde
+              ),
+            InvoertypeWaarde =
+              ifelse(
+                .data$Indicator == "vergrassing/verruiging",
+                NA,
+                .data$InvoertypeWaarde
+              ),
+            EenheidWaarde =
+              ifelse(
+                .data$Indicator == "vergrassing/verruiging",
+                NA,
+                .data$EenheidWaarde
+              ),
+            AfkomstWaarde =
+              ifelse(
+                .data$Indicator == "vergrassing/verruiging",
+                "beoordeling indicator",
+                .data$AfkomstWaarde
+              ),
+            TheoretischMaximum =
+              ifelse(
+                .data$Indicator == "vergrassing/verruiging",
+                NA,
+                .data$TheoretischMaximum
+              ),
+            Status_voorwaarde =
+              ifelse(
+                .data$Indicator == "vergrassing/verruiging",
+                NA,
+                .data$Status_voorwaarde
+              ),
+            Verschilscore =
+              ifelse(
+                .data$Indicator == "vergrassing/verruiging",
+                NA,
+                .data$Verschilscore
+              )
+          ),
+        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]]
+      )
+    )
+    expect_equal(
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 2.0",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden %>%
+            mutate(
+              Voorwaarde =
+                ifelse(
+                  .data$Indicator == "vergrassing/verruiging",
+                  NA,
+                  .data$Voorwaarde
+                ),
+              Waarde =
+                ifelse(
+                  .data$Indicator == "vergrassing/verruiging",
+                  "TRUE",
+                  .data$Waarde
+                ),
+              Type =
+                ifelse(
+                  .data$Indicator == "vergrassing/verruiging",
+                  "TRUE/FALSE",
+                  .data$Type
+                ),
+              Eenheid =
+                ifelse(
+                  .data$Indicator == "vergrassing/verruiging",
+                  NA,
+                  .data$Eenheid
+                )
+            ),
+          Data_soortenKenmerken
+        )
+      ),
+      list(
+        Resultaat_criterium = Resultaatv2[["Resultaat_criterium"]] %>%
+          mutate(
+            Index_min_criterium =
+              ifelse(
+                .data$Criterium == "Verstoring",
+                NA,
+                .data$Index_min_criterium
+              ),
+            Index_harm_criterium =
+              ifelse(
+                .data$Criterium == "Verstoring",
+                NA,
+                .data$Index_harm_criterium
+              )
+          ),
+        Resultaat_indicator = Resultaatv2[["Resultaat_indicator"]] %>%
+          mutate(
+            Verschilscore =
+              ifelse(
+                .data$Indicator == "vergrassing/verruiging",
+                NA,
+                .data$Verschilscore
+              )
+          ),
+        Resultaat_detail = Resultaatv2[["Resultaat_detail"]] %>%
+          mutate(
+            Voorwaarde =
+              ifelse(
+                .data$Indicator == "vergrassing/verruiging",
+                NA,
+                .data$Voorwaarde
+              ),
+            Referentiewaarde =
+              ifelse(
+                .data$Indicator == "vergrassing/verruiging",
+                NA,
+                .data$Referentiewaarde
+              ),
+            Operator =
+              ifelse(
+                .data$Indicator == "vergrassing/verruiging",
+                NA,
+                .data$Operator
+              ),
+            EenheidRefwaarde =
+              ifelse(
+                .data$Indicator == "vergrassing/verruiging",
+                NA,
+                .data$EenheidRefwaarde
+              ),
+            TypeRefwaarde =
+              ifelse(
+                .data$Indicator == "vergrassing/verruiging",
+                NA,
+                .data$TypeRefwaarde
+              ),
+            Waarde =
+              ifelse(
+                .data$Indicator == "vergrassing/verruiging",
+                "TRUE",
+                .data$Waarde
+              ),
+            TypeWaarde =
+              ifelse(
+                .data$Indicator == "vergrassing/verruiging",
+                NA,
+                .data$TypeWaarde
+              ),
+            InvoertypeWaarde =
+              ifelse(
+                .data$Indicator == "vergrassing/verruiging",
+                NA,
+                .data$InvoertypeWaarde
+              ),
+            EenheidWaarde =
+              ifelse(
+                .data$Indicator == "vergrassing/verruiging",
+                NA,
+                .data$EenheidWaarde
+              ),
+            AfkomstWaarde =
+              ifelse(
+                .data$Indicator == "vergrassing/verruiging",
+                "beoordeling indicator",
+                .data$AfkomstWaarde
+              ),
+            TheoretischMaximum =
+              ifelse(
+                .data$Indicator == "vergrassing/verruiging",
+                NA,
+                .data$TheoretischMaximum
+              ),
+            Status_voorwaarde =
+              ifelse(
+                .data$Indicator == "vergrassing/verruiging",
+                NA,
+                .data$Status_voorwaarde
+              ),
+            Verschilscore =
+              ifelse(
+                .data$Indicator == "vergrassing/verruiging",
+                NA,
+                .data$Verschilscore
+              )
+          ),
+        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]]
+      )
+    )
+    expect_equal(
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 2.0",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden %>%
+            bind_rows(
+              data.frame(
+                ID = c("JR0216", "Ts2036"),
+                Criterium = "Vegetatie",
+                Indicator = "sleutelsoorten",
+                Waarde = "FALSE",
+                stringsAsFactors = FALSE
+              )
+            ),
+          Data_soortenKenmerken
+        )
+      ),
+      list(
+        Resultaat_criterium = Resultaatv2[["Resultaat_criterium"]] %>%
+          mutate(
+            Index_min_criterium =
+              ifelse(
+                .data$Criterium == "Vegetatie",
+                NA,
+                .data$Index_min_criterium
+              ),
+            Index_harm_criterium =
+              ifelse(
+                .data$Criterium == "Vegetatie",
+                NA,
+                .data$Index_harm_criterium
+              )
+          ),
+        Resultaat_indicator = Resultaatv2[["Resultaat_indicator"]] %>%
+          mutate(
+            Verschilscore =
+              ifelse(
+                .data$Indicator == "sleutelsoorten",
+                NA,
+                .data$Verschilscore
+              )
+          ) %>%
+          distinct(),
+        Resultaat_detail = Resultaatv2[["Resultaat_detail"]] %>%
+          filter(.data$Indicator != "sleutelsoorten") %>%
+          bind_rows(
+            data.frame(
+              ID = c("JR0216", "Ts2036"),
+              Habitattype = "4030",
+              "kwaliteit van onderzoek sleutelsoorten" =
+                c(
+                  "Zeer goed (Zeker geen soorten over het hoofd gezien)",
+                  "Matig?(Waarschijnlijk soorten over het hoofd gezien)"
+                ),
+              Versie = "Versie 2.0",
+              Habitattype.y = "4030",
+              Criterium = "Vegetatie",
+              Indicator = "sleutelsoorten",
+              Beoordeling =
+                "B: Struikhei + 1",
+              Kwaliteitsniveau = as.integer(1),
+              Belang = "b",
+              AfkomstWaarde = "beoordeling indicator",
+              Waarde = "FALSE",
+              stringsAsFactors = FALSE,
+              check.names = FALSE
+            )
+          ) %>%
+          arrange(
+            .data$ID,
+            .data$Habitattype,
+            .data$Versie,
+            .data$Criterium,
+            .data$Indicator
+          ),
+        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]]
+      )
+    )
+  })
+
 })
 
 library(pool)
