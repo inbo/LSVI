@@ -262,7 +262,7 @@ berekenLSVIbasis <-
       mutate(
         TheoretischMaximum = NA
       )
-    
+
     if (nrow(BerekendResultaat) > 0) {
       BerekendResultaat <- BerekendResultaat %>%
         rowwise() %>%
@@ -290,7 +290,7 @@ berekenLSVIbasis <-
           AfkomstWaarde = "berekend",
           Waarde = NULL
         )
-  
+
       BerekendResultaat <-
         BerekendResultaat %>%
         left_join(
@@ -305,7 +305,6 @@ berekenLSVIbasis <-
           by = c("Rijnr")
         )
     }
-      
 
     Resultaat <- Resultaat %>%
       filter(!is.na(.data$Waarde) | !is.na(.data$Type)) %>%
