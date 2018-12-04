@@ -59,7 +59,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
       On AnalyseVariabele.Id = Voorwaarde.AnalyseVariabeleId
       WHERE NOT VariabeleNaam in ('aantal', 'aandeel', 'aandeelKruidlaag',
         'bedekking', 'maxBedekking', 'maxBedekkingExcl', 'bedekkingLaag',
-        'bedekkingSom', 'aandeelExcl')
+        'bedekkingSom', 'bedekkingExcl')
       AND NOT VariabeleNaam LIKE 'meting%'"
     ) %>%
     transmute(
@@ -82,7 +82,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
     filter(
       !.data$AnalyseVariabele %in%
         c("aantal", "aandeel", "aandeelKruidlaag", "bedekking", "bedekkingLaag",
-          "maxBedekking", "maxBedekkingExcl", "bedekkingSom", "aandeelExcl"),
+          "maxBedekking", "maxBedekkingExcl", "bedekkingSom", "bedekkingExcl"),
       !grepl("^meting", .data$AnalyseVariabele)
     )
   TypeAantalNietGeheelGetal <- Invoervereisten %>%
@@ -99,7 +99,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
   TypeAandeelFout <- Invoervereisten %>%
     filter(
       .data$AnalyseVariabele %in%
-        c("aandeel", "aandeelKruidlaag", "bedekkingSom", "aandeelExcl"),
+        c("aandeel", "aandeelKruidlaag", "bedekkingSom", "bedekkingExcl"),
       !.data$TypeVariabele %in% c("Percentage")
     )
   LijstItems <-
