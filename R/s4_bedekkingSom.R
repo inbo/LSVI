@@ -26,7 +26,7 @@ setMethod(
     objectKenmerken <- object
     objectKenmerken@Soortengroep <- data.frame()
     bedekkingKenmerken <- berekenWaarde(as(objectKenmerken, "bedekking"))
-    
+
     return(bedekkingSoorten + bedekkingKenmerken)
   }
 )
