@@ -65,6 +65,7 @@ Collate:
     's4_aandeelKruidlaag.R'
     's4_aantal.R'
     's4_analyseVariabele_c.R'
+    's4_bedekkingExcl.R'
     's4_bedekkingLaag.R'
     's4_bedekkingSom.R'
     's4_maxBedekking.R'
