@@ -37,9 +37,14 @@ combinerenVoorwaarden <-
 
     Formule <- gsub(" AND ", " & ", Formule)
     Formule <- gsub(" OR ", " | ", Formule)
-    for (i in seq_along(VoorwaardeID)) {
+    while (grepl("[[:digit:]]", Formule)) {
+      getal <- gsub(".*?([[:digit:]]+).*", "\\1", Formule)
       Formule <-
-        gsub(paste0("(^|\\D)", VoorwaardeID[i], "(\\D|$)"), Status[i], Formule)
+        gsub(
+          "(.*?)([[:digit:]]+)(.*)",
+          paste0("\\1", factor(getal, VoorwaardeID, Status), "\\3"),
+          Formule
+        )
     }
     Resultaat <- as.logical(evals(Formule)[[1]]$result)
 
