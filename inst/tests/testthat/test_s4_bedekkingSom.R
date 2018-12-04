@@ -33,28 +33,5 @@ describe("s4_BedekkingSom", {
       ),
       c(1.5, 2)
     )
-    expect_equal(
-      berekenWaarde(
-        new(
-          Class = "aantal",
-          Kenmerken =
-            data.frame(
-              Kenmerk = c("A1", "B2", "C1", "D3", "E1"),
-              TypeKenmerk = "soort_nbn",
-              WaardeMin = NA,
-              WaardeMax = c(1, 1, 1, 1, 0),
-              stringsAsFactors = FALSE
-            ),
-          Soortengroep =
-            data.frame(
-              NbnTaxonVersionKey = c("A1", "B1", "C1", "E1"),
-              TaxonId = 1,
-              SubTaxonId = 2,
-              stringsAsFactors = FALSE
-            )
-        )
-      ),
-      2
-    )
   })
 })
