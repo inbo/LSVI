@@ -51,8 +51,10 @@ setMethod(
         )$Rijnummers
 
       KenmerkenMax <- Kenmerken
-      KenmerkenMax[Problemen, ]$WaardeMin <- 1
-      KenmerkenMax[Problemen, ]$WaardeMax <- 1
+      if (length(Problemen) > 0) {
+        KenmerkenMax[Problemen, ]$WaardeMin <- 1
+        KenmerkenMax[Problemen, ]$WaardeMax <- 1
+      }
       ResultaatMax <-
         selecteerKenmerkenInOpname(
           KenmerkenMax,
@@ -69,8 +71,10 @@ setMethod(
       AantalMax <- nrow(ResultaatMax)
 
       KenmerkenMin <- Kenmerken
-      KenmerkenMin[Problemen, ]$WaardeMin <- 0
-      KenmerkenMin[Problemen, ]$WaardeMax <- 0
+      if (length(Problemen) > 0) {
+        KenmerkenMin[Problemen, ]$WaardeMin <- 0
+        KenmerkenMin[Problemen, ]$WaardeMax <- 0
+      }
       ResultaatMin <-
         selecteerKenmerkenInOpname(
           KenmerkenMin,

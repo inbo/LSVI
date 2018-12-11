@@ -259,45 +259,52 @@ berekenLSVIbasis <-
     #niet opgegeven voorwaarden berekenen
     BerekendResultaat <- Resultaat %>%
       filter(is.na(.data$Waarde) & is.na(.data$Type)) %>%
-      rowwise() %>%
       mutate(
-        Berekening =
-          list(
-            berekenVoorwaarde(
-              .data$ID,
-              .data$VoorwaardeID,
-              Data_soortenKenmerken,
-              ConnectieLSVIhabitats,
-              LIJST
-            )
-          ),
-        WaardeMin = unlist(.data$Berekening)["Min"],
-        WaardeMax = unlist(.data$Berekening)["Max"],
-        TheoretischMaximum = unlist(.data$Berekening)["TheoretischMaximum"],
-        Berekening = NULL
-      ) %>%
-      ungroup() %>%
-      mutate(
-        Type = .data$TypeVariabele,
-        Invoertype.vw = .data$Invoertype,
-        Eenheid.vw = .data$Eenheid,
-        AfkomstWaarde = "berekend",
-        Waarde = NULL
+        TheoretischMaximum = NA
       )
 
-    BerekendResultaat <-
-      BerekendResultaat %>%
-      left_join(
-        vertaalIntervalUitvoer(
-          BerekendResultaat[
-            , c("Rijnr", "Type", "WaardeMin", "WaardeMax",
-                "Eenheid.vw", "Invoertype.vw")
-            ],
-          LIJST,
-          ConnectieLSVIhabitats
-        ),
-        by = c("Rijnr")
-      )
+    if (nrow(BerekendResultaat) > 0) {
+      BerekendResultaat <- BerekendResultaat %>%
+        rowwise() %>%
+        mutate(
+          Berekening =
+            list(
+              berekenVoorwaarde(
+                .data$ID,
+                .data$VoorwaardeID,
+                Data_soortenKenmerken,
+                ConnectieLSVIhabitats,
+                LIJST
+              )
+            ),
+          WaardeMin = unlist(.data$Berekening)["Min"],
+          WaardeMax = unlist(.data$Berekening)["Max"],
+          TheoretischMaximum = unlist(.data$Berekening)["TheoretischMaximum"],
+          Berekening = NULL
+        ) %>%
+        ungroup() %>%
+        mutate(
+          Type = .data$TypeVariabele,
+          Invoertype.vw = .data$Invoertype,
+          Eenheid.vw = .data$Eenheid,
+          AfkomstWaarde = "berekend",
+          Waarde = NULL
+        )
+
+      BerekendResultaat <-
+        BerekendResultaat %>%
+        left_join(
+          vertaalIntervalUitvoer(
+            BerekendResultaat[
+              , c("Rijnr", "Type", "WaardeMin", "WaardeMax",
+                  "Eenheid.vw", "Invoertype.vw")
+              ],
+            LIJST,
+            ConnectieLSVIhabitats
+          ),
+          by = c("Rijnr")
+        )
+    }
 
     Resultaat <- Resultaat %>%
       filter(!is.na(.data$Waarde) | !is.na(.data$Type)) %>%
