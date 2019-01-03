@@ -388,6 +388,13 @@ berekenLSVIbasis <-
             is.na(.data$TheoretischMaximum) & .data$Eenheid == "%",
             1,
             .data$TheoretischMaximum
+          ),
+        TheoretischMaximum =
+          ifelse(
+            is.na(.data$TheoretischMaximum) &
+              tolower(.data$TypeVariabele) == "categorie",
+            1,
+            .data$TheoretischMaximum
           )
       )
 
