@@ -688,55 +688,36 @@ describe("berekenLSVIbasis", {
       "SQL Server niet beschikbaar"
     )
     expect_warning(
-      berekenLSVIbasis(
-        Versie = "Versie 3",
-        Kwaliteitsniveau = "1",
-        Data_habitat,
-        Data_voorwaarden,
-        Data_soortenKenmerken %>%
-          mutate(
-            Waarde =
-              ifelse(
-                .data$Waarde == "0" & ID == "Ts2036",
-                "1",
-                .data$Waarde
-              ),
-            Type =
-              ifelse(
-                .data$Type == "Percentage" & ID == "Ts2036",
-                "Ja/nee",
-                .data$Type
+      BerekendRes <-
+        idsWissen(
+          berekenLSVIbasis(
+            Versie = "Versie 3",
+            Kwaliteitsniveau = "1",
+            Data_habitat,
+            Data_voorwaarden,
+            Data_soortenKenmerken %>%
+              mutate(
+                Waarde =
+                  ifelse(
+                    .data$Waarde == "0" & ID == "Ts2036",
+                    "1",
+                    .data$Waarde
+                  ),
+                Type =
+                  ifelse(
+                    .data$Type == "Percentage" & ID == "Ts2036",
+                    "Ja/nee",
+                    .data$Type
+                  )
               )
-          )
+            )
       ),
       "Voor sommige soorten of kenmerken is enkel aan- of afwezigheid opgegeven, geen bedekking,"  #nolint
     )
-    expect_equal(
-      idsWissen(
-        berekenLSVIbasis(
-          Versie = "Versie 3",
-          Kwaliteitsniveau = "1",
-          Data_habitat,
-          Data_voorwaarden,
-          Data_soortenKenmerken %>%
-            mutate(
-              Waarde =
-                ifelse(
-                  .data$Waarde == "0" & ID == "Ts2036",
-                  "1",
-                  .data$Waarde
-                ),
-              Type =
-                ifelse(
-                  .data$Type == "Percentage" & ID == "Ts2036",
-                  "Ja/nee",
-                  .data$Type
-                )
-            )
-        )
-      ),
-      list(
-        Resultaat_criterium = Resultaat[["Resultaat_criterium"]] %>%
+    stopifnot(
+      all.equal(
+        BerekendRes[["Resultaat_criterium"]],
+        Resultaat[["Resultaat_criterium"]] %>%
           mutate(
             Index_harm_criterium =
               ifelse(
@@ -744,8 +725,13 @@ describe("berekenLSVIbasis", {
                 -0.1428571429,
                 .data$Index_harm_criterium
               )
-          ),
-        Resultaat_indicator = Resultaat[["Resultaat_indicator"]] %>%
+          )
+      )
+    )
+    stopifnot(
+      all.equal(
+        BerekendRes[["Resultaat_indicator"]],
+        Resultaat[["Resultaat_indicator"]] %>%
           mutate(
             Verschilscore =
               ifelse(
@@ -754,8 +740,13 @@ describe("berekenLSVIbasis", {
                 0.5,
                 .data$Verschilscore
               )
-          ),
-        Resultaat_detail = Resultaat[["Resultaat_detail"]] %>%
+          )
+      )
+    )
+    stopifnot(
+      all.equal(
+        BerekendRes[["Resultaat_detail"]],
+        Resultaat[["Resultaat_detail"]] %>%
           mutate(
             Waarde =
               ifelse(
@@ -785,8 +776,13 @@ describe("berekenLSVIbasis", {
                 0.75,
                 .data$Verschilscore
               )
-          ),
-        Resultaat_globaal = Resultaat[["Resultaat_globaal"]] %>%
+          )
+      )
+    )
+    stopifnot(
+      all.equal(
+        BerekendRes[["Resultaat_globaal"]],
+        Resultaat[["Resultaat_globaal"]] %>%
           mutate(
             Index_harm_harm =
               ifelse(
