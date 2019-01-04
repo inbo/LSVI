@@ -24,18 +24,18 @@ describe("berekeningen gebeuren correct", {
   it("invoerwaarde 'ja/nee' wordt correct behandeld", {
     Testdata <-
       data.frame(
-        Rijnr = 1, RefMin = 1, RefMax = NA, Operator = ">=",
-        WaardeMin = 1,
-        WaardeMax = 1, TheoretischMaximum = 1, TypeVariabele = "Ja/nee",
+        Rijnr = c(1, 2), RefMin = 1, RefMax = NA, Operator = ">=",
+        WaardeMin = c(1, 0),
+        WaardeMax = c(1, 0), TheoretischMaximum = 1, TypeVariabele = "Ja/nee",
         stringsAsFactors = FALSE)
     expect_equal(
       berekenStatus(Testdata),
-      tibble(Rijnr = 1, Status = TRUE)
+      tibble(Rijnr = c(1, 2), Status = c(TRUE, FALSE))
     )
     stopifnot(
       all.equal(
         berekenVerschilscores(Testdata),
-        data.frame(Rijnr = 1, Verschilscore = 1)
+        data.frame(Rijnr = c(1, 2), Verschilscore = c(1, -1))
       )
     )
   })
@@ -43,18 +43,18 @@ describe("berekeningen gebeuren correct", {
   it("referentiewaarde 'ja/nee' wordt correct behandeld", {
     Testdata <-
       data.frame(
-        Rijnr = 1, RefMin = 1, RefMax = NA, Operator = ">=",
-        WaardeMin = 1,
+        Rijnr = 1:2, RefMin = 1, RefMax = NA, Operator = ">=",
+        WaardeMin = c(1, 0),
         WaardeMax = NA, TheoretischMaximum = 1, TypeVariabele = "Ja/nee",
         stringsAsFactors = FALSE)
     expect_equal(
       berekenStatus(Testdata),
-      tibble(Rijnr = 1, Status = TRUE)
+      tibble(Rijnr = 1:2, Status = c(TRUE, FALSE))
     )
     stopifnot(
       all.equal(
         berekenVerschilscores(Testdata),
-        data.frame(Rijnr = 1, Verschilscore = 1)
+        data.frame(Rijnr = 1:2, Verschilscore = c(1, -1))
       )
     )
   })
@@ -62,18 +62,49 @@ describe("berekeningen gebeuren correct", {
   it("referentiewaarde 'ja/nee' wordt correct behandeld met operator =", {
     Testdata <-
       data.frame(
-        Rijnr = 1, RefMin = 1, RefMax = NA, Operator = "=",
-        WaardeMin = 1,
+        Rijnr = c(1, 2), RefMin = 1, RefMax = NA, Operator = "=",
+        WaardeMin = c(1, 0),
         WaardeMax = NA, TheoretischMaximum = 1, TypeVariabele = "Ja/nee",
         stringsAsFactors = FALSE)
     expect_equal(
       berekenStatus(Testdata),
-      tibble(Rijnr = 1, Status = TRUE)
+      tibble(Rijnr = c(1, 2), Status = c(TRUE, FALSE))
     )
     stopifnot(
       all.equal(
         berekenVerschilscores(Testdata),
-        data.frame(Rijnr = 1, Verschilscore = 1)
+        data.frame(Rijnr = c(1, 2), Verschilscore = c(1, -1))
+      )
+    )
+    Testdata2 <- Testdata %>%
+      mutate(RefMin = 0)
+    expect_equal(
+      berekenStatus(Testdata2),
+      tibble(Rijnr = c(1, 2), Status = c(FALSE, TRUE))
+    )
+    stopifnot(
+      all.equal(
+        berekenVerschilscores(Testdata2),
+        data.frame(Rijnr = c(1, 2), Verschilscore = c(-1, 1))
+      )
+    )
+  })
+
+  it("correcte berekening als TheoretischMaximum niet opgegeven is", {
+    Testdata <-
+      data.frame(
+        Rijnr = c(1, 2), RefMin = 1, RefMax = 1, Operator = "<",
+        WaardeMin = c(0.2, 1.2), WaardeMax = c(0.2, 1.2),
+        TheoretischMaximum = NA, TypeVariabele = "Decimaal getal",
+        stringsAsFactors = FALSE)
+    expect_equal(
+      berekenStatus(Testdata),
+      tibble(Rijnr = c(1, 2), Status = c(TRUE, FALSE))
+    )
+    stopifnot(
+      all.equal(
+        berekenVerschilscores(Testdata),
+        data.frame(Rijnr = c(1, 2), Verschilscore = c(0.8, NA))
       )
     )
   })

@@ -31,8 +31,12 @@ berekenVerschilscores <-
     Statustabel$RefMin <- as.double(Statustabel$RefMin)
     Statustabel$RefMax <- as.double(Statustabel$RefMax)
     #geval ja/nee
-    Statustabel[Statustabel$TypeVariabele == "Ja/nee",
-                c("RefMin", "RefMax")] <- c(0.5, 0.5)
+    if ("Ja/nee" %in% Statustabel$TypeVariabele) {
+      Statustabel[Statustabel$TypeVariabele == "Ja/nee",
+                  c("RefMin", "RefMax")] <-
+        c(Statustabel[Statustabel$TypeVariabele == "Ja/nee", c("RefMin")] - 0.5,
+          Statustabel[Statustabel$TypeVariabele == "Ja/nee", c("RefMin")] - 0.5)
+    }
     Statustabel[Statustabel$TypeVariabele == "Ja/nee" &
                   is.na(Statustabel$WaardeMax),
                 c("WaardeMax")] <-
@@ -55,6 +59,8 @@ berekenVerschilscores <-
         Waarde = (.data$WaardeMin + .data$WaardeMax) / 2,
         # negatieve indicatoren * -1
         Teken = ifelse(.data$Operator %in% c("<=", "<"), -1, 1),
+        Teken = ifelse(.data$Ref > 0, .data$Teken, -.data$Teken),
+        Ref = abs(.data$Ref),
         BereikGunstig = ifelse(.data$Operator %in% c("<=", "<"),
                                .data$Ref,
                                .data$TheoretischMaximum - .data$Ref),
