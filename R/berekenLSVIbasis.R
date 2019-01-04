@@ -395,6 +395,13 @@ berekenLSVIbasis <-
               tolower(.data$TypeVariabele) == "categorie",
             1,
             .data$TheoretischMaximum
+          ),
+        TheoretischMaximum =
+          ifelse(
+            is.na(.data$TheoretischMaximum) &
+              tolower(.data$TypeVariabele) == "ja/nee",
+            1,
+            .data$TheoretischMaximum
           )
       )
 
