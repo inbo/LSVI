@@ -243,6 +243,17 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
           Probleem =
             "De SubAnalyseVariabele moet ingevuld zijn als er een SubReferentiewaarde opgegeven is" #nolint
         )
+    ) %>%
+    bind_rows(
+      Invoervereisten %>%
+        filter(
+          .data$Operator == "=",
+          .data$TypeVariabele != "Ja/nee"
+        ) %>%
+        mutate(
+          Probleem =
+            "De Operator '=' mag niet gebruikt worden, tenzij TypeVariabele 'Ja/nee' is" #nolint
+        )
     )
 
   return(list(Fouten, Voorwaarden))
