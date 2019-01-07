@@ -59,7 +59,10 @@ berekenVerschilscores <-
         Waarde = (.data$WaardeMin + .data$WaardeMax) / 2,
         # negatieve indicatoren * -1
         Teken = ifelse(.data$Operator %in% c("<=", "<"), -1, 1),
-        Teken = ifelse(.data$Ref > 0, .data$Teken, -.data$Teken),
+        Teken =
+          ifelse(
+            .data$Ref <= 0 & .data$Operator == "=", -.data$Teken, .data$Teken
+          ),
         Ref = abs(.data$Ref),
         BereikGunstig = ifelse(.data$Operator %in% c("<=", "<"),
                                .data$Ref,
@@ -69,8 +72,12 @@ berekenVerschilscores <-
         Verschilscore = case_when(
           is.na(.data$Verschil) ~ ifelse(.data$Waarde == .data$Ref, 1, -1),
           #gewijzigd naar >= 0 (bereik gunstig is inclusief de grenswaarde zelf)
-          .data$Verschil >= 0 ~ .data$Verschil / .data$BereikGunstig,
-          .data$Verschil < 0 ~ .data$Verschil / .data$BereikOngunstig
+          .data$Verschil >= 0 & .data$BereikGunstig != 0 ~
+            .data$Verschil / .data$BereikGunstig,
+          .data$Verschil >= 0 & .data$BereikGunstig == 0 ~ 1,
+          .data$Verschil < 0 & .data$BereikOngunstig != 0 ~
+            .data$Verschil / .data$BereikOngunstig,
+          .data$Verschil < 0 & .data$BereikOngunstig == 0 ~ -1
         )
       ) %>%
       select(

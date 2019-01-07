@@ -5,7 +5,7 @@
 "4";"1";"9190";"Versie 2.0";"9190";"Structuur";"horizontale structuur - groeiklassen";"B: '3 of meer groeiklassen aanwezig en klasse 7 afwezig' of 'minder dan 3 groeiklassen aanwezig en klasse 7 aanwezig'";"b";1;FALSE;-1
 "5";"1";"9190";"Versie 2.0";"9190";"Structuur";"horizontale structuur - natuurlijke mozaiekstructuur";"B: mozaïekstructuur met grootte-orde 0,3-1 ha, cfr. femelslagstructuur";"b";1;TRUE;0,8
 "6";"1";"9190";"Versie 2.0";"9190";"Structuur";"minimum structuurareaal";"B: >= MSA";"zb";1;TRUE;NA
-"7";"1";"9190";"Versie 2.0";"9190";"Structuur";"verticale structuur";"B: alle vegetatielagen aanwezig, minstens 1 minder dan abundant";"b";1;TRUE;NA
+"7";"1";"9190";"Versie 2.0";"9190";"Structuur";"verticale structuur";"B: alle vegetatielagen aanwezig, minstens 1 minder dan abundant";"b";1;TRUE;1
 "8";"1";"9190";"Versie 2.0";"9190";"Vegetatie";"sleutelsoorten van de boom- en struiklaag";"B: >= 70 en < 90% grondvlak, of >= 90% met slechts 1 soort die minstens 10% inneemt (b.v. homogene beuken-of eikenbestanden)";"b";1;TRUE;0,91869918699187
 "9";"1";"9190";"Versie 2.0";"9190";"Vegetatie";"sleutelsoorten van de kruidlaag";"B: 30-70% bedekking en >3 soorten of >= 30% bedekking en 4-6 soorten";"b";1;FALSE;0
 "10";"1";"9190";"Versie 2.0";"9190";"Verstoring";"invasieve exoten";"B: < 10 %";"b";1;TRUE;1

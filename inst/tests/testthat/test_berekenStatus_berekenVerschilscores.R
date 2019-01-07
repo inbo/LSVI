@@ -112,9 +112,9 @@ describe("berekeningen gebeuren correct", {
   it("correcte berekening als refwaarde 0 is (bv. exoten moeten afwezig zijn", {
     Testdata <-
       data.frame(
-        Rijnr = c(1, 2), RefMin = 0, RefMax = 0, Operator = "=",
-        WaardeMin = c(0, 5), WaardeMax = c(0, 5),
-        TheoretischMaximum = NA, TypeVariabele = "Percentage",
+        Rijnr = c(1, 2), RefMin = 0, RefMax = 0, Operator = "<=",
+        WaardeMin = c(0, 0.05), WaardeMax = c(0, 0.05),
+        TheoretischMaximum = 1, TypeVariabele = "Percentage",
         stringsAsFactors = FALSE)
     expect_equal(
       berekenStatus(Testdata),
