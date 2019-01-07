@@ -68,6 +68,12 @@ berekenVerschilscores <-
                                .data$Ref,
                                .data$TheoretischMaximum - .data$Ref),
         BereikOngunstig = .data$TheoretischMaximum - .data$BereikGunstig,
+        BereikOngunstig =
+          ifelse(
+            is.na(.data$BereikOngunstig) & !.data$Operator %in% c("<=", "<"),
+            .data$Ref,
+            .data$BereikOngunstig
+          ),
         Verschil = (.data$Waarde - .data$Ref) * .data$Teken,
         Verschilscore = case_when(
           is.na(.data$Verschil) ~ ifelse(.data$Waarde == .data$Ref, 1, -1),

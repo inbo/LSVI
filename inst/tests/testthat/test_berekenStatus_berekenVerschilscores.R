@@ -107,6 +107,22 @@ describe("berekeningen gebeuren correct", {
         data.frame(Rijnr = c(1, 2), Verschilscore = c(0.8, NA))
       )
     )
+    Testdata2 <-
+      data.frame(
+        Rijnr = c(1, 2), RefMin = 1, RefMax = 1, Operator = ">=",
+        WaardeMin = c(0, 1), WaardeMax = c(0, 1),
+        TheoretischMaximum = NA, TypeVariabele = "Decimaal getal",
+        stringsAsFactors = FALSE)
+    expect_equal(
+      berekenStatus(Testdata2),
+      tibble(Rijnr = c(1, 2), Status = c(FALSE, TRUE))
+    )
+    stopifnot(
+      all.equal(
+        berekenVerschilscores(Testdata2),
+        data.frame(Rijnr = c(1, 2), Verschilscore = c(-1, NA))
+      )
+    )
   })
 
   it("correcte berekening als refwaarde 0 is (bv. exoten moeten afwezig zijn", {

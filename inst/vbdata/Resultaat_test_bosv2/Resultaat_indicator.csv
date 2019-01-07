@@ -1,6 +1,6 @@
 "";"ID";"Habitattype";"Versie";"Habitattype.y";"Criterium";"Indicator";"Beoordeling";"Belang";"Kwaliteitsniveau";"Status_indicator";"Verschilscore"
 "1";"1";"9190";"Versie 2.0";"9190";"Structuur";"aandeel dood hout";"B: 4-10%";"b";1;FALSE;-0,25
-"2";"1";"9190";"Versie 2.0";"9190";"Structuur";"bosconstantie";"B: 100-200 jaar";"zb";1;FALSE;NA
+"2";"1";"9190";"Versie 2.0";"9190";"Structuur";"bosconstantie";"B: 100-200 jaar";"zb";1;FALSE;-0,1
 "3";"1";"9190";"Versie 2.0";"9190";"Structuur";"hoeveelheid dik dood hout";"B: 1-3 exemplaren/ha of > 3, maar diameterverdeling lager dan die van de levende bomen";"zb";1;TRUE;NA
 "4";"1";"9190";"Versie 2.0";"9190";"Structuur";"horizontale structuur - groeiklassen";"B: '3 of meer groeiklassen aanwezig en klasse 7 afwezig' of 'minder dan 3 groeiklassen aanwezig en klasse 7 aanwezig'";"b";1;FALSE;-1
 "5";"1";"9190";"Versie 2.0";"9190";"Structuur";"horizontale structuur - natuurlijke mozaiekstructuur";"B: mozaïekstructuur met grootte-orde 0,3-1 ha, cfr. femelslagstructuur";"b";1;TRUE;0,8
