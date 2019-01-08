@@ -496,4 +496,25 @@ describe("test databank", {
     )
   })
 
+  it("Operator '=' is niet gebruikt tenzij bij type 'ja/nee'", {
+    ConnectieLSVIhabitats <-
+      connecteerMetLSVIlite()
+    AV <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        "SELECT Voorwaarde.Id, TypeVariabele.Naam as TypeVariabele,
+          Voorwaarde.Operator
+        FROM Voorwaarde INNER JOIN AnalyseVariabele
+        ON Voorwaarde.SubAnalyseVariabeleId = AnalyseVariabele.Id
+        INNER JOIN TypeVariabele
+        ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
+        WHERE TypeVariabele.Naam != 'Ja/nee'
+        AND Voorwaarde.Operator != '='"
+      )
+    expect_equal(
+      nrow(AV),
+      0
+    )
+  })
+
 })
