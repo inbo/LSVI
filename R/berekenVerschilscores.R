@@ -81,9 +81,7 @@ berekenVerschilscores <-
           .data$Verschil >= 0 & .data$BereikGunstig != 0 ~
             .data$Verschil / .data$BereikGunstig,
           .data$Verschil >= 0 & .data$BereikGunstig == 0 ~ 1,
-          .data$Verschil < 0 & .data$BereikOngunstig != 0 ~
-            .data$Verschil / .data$BereikOngunstig,
-          .data$Verschil < 0 & .data$BereikOngunstig == 0 ~ -1
+          .data$Verschil < 0 ~ .data$Verschil / .data$BereikOngunstig
         )
       ) %>%
       select(
