@@ -6,9 +6,9 @@ Authors@R: c(
   person("Els", "Lommelen", email = "els.lommelen@inbo.be", role = c("aut", "cre")),
   person("Patrik", "Oosterlynck", email = "patrik.oosterlynck@inbo.be", role = c("aut")),
   person("Gert", "Van Spaendonk", email = "gert.vanspaendonk@inbo.be", role = c("aut")),
-  person("Toon", "Westra", email = "toon.westra@inbo.be", role = c("aut")),
-  person("Martine", "Van Hove", email = "martine.vanhove@inbo.be", role = c("aut")),
   person("Hans", "Van Calster", email = "hans.vancalster@inbo.be", role = c("aut")),
+  person("Martine", "Van Hove", email = "martine.vanhove@inbo.be", role = c("aut")),
+  person("Toon", "Westra", email = "toon.westra@inbo.be", role = c("aut")),
   person("An", "Leyssen", email = "an.leyssen@inbo.be", role = c("ctb")),
   person("Toon", "Spanhove", email = "toon.spanhove@inbo.be", role = c("ctb")),
   person("Research Institute for Nature and Forest (INBO)", email = "info@inbo.be", role = "cph"))
