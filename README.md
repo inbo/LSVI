@@ -10,7 +10,7 @@ The package is written in Dutch.
 
 # Installation
 
-Install the development version
+To install the development version, start a new R session and run this code (before loading any packages)
 
 ```r
 # install.package("devtools")
