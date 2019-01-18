@@ -7,3 +7,20 @@
 The `LSVI` package bundles a number of functions to support researchers studying the local conservation status of habitats. Several functions give information on the criteria that are used to determine the local conservation status in Flanders, others allow to calculate the conservation status.
 
 The package is written in Dutch.
+
+# Installation
+
+To install the development version, start a new R session and run this code (before loading any packages)
+
+```r
+# install.package("devtools")
+devtools::install_github("inbo/LSVI@develop", build_vignettes = TRUE)
+```
+
+# Citation
+
+Please use the output of `citation("LSVI")`
+
+# Contributor Code of Conduct
+
+Please note that the 'LSVI' project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By contributing to this project, you agree to abide by its terms.
