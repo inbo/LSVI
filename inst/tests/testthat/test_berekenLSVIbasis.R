@@ -266,7 +266,27 @@ describe("berekenLSVIbasis", {
                 .data$Verschilscore
               )
           ),
-        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]]
+        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]] %>%
+          mutate(
+            Index_min_min =
+              ifelse(
+                .data$ID == "Ts2036",
+                NA,
+                Index_min_min
+              ),
+            Index_min_harm =
+              ifelse(
+                .data$ID == "Ts2036",
+                NA,
+                Index_min_harm
+              ),
+            Index_harm_harm =
+              ifelse(
+                .data$ID == "Ts2036",
+                NA,
+                Index_harm_harm
+              )
+          )
       )
     )
     expect_warning(
@@ -336,7 +356,21 @@ describe("berekenLSVIbasis", {
         )
       ),
       list(
-        Resultaat_criterium = Resultaatv2[["Resultaat_criterium"]],
+        Resultaat_criterium = Resultaatv2[["Resultaat_criterium"]] %>%
+          mutate(
+            Index_min_criterium =
+              ifelse(
+                .data$Criterium == "Structuur" & .data$ID == "JR0216",
+                NA,
+                .data$Index_min_criterium
+              ),
+            Index_harm_criterium =
+              ifelse(
+                .data$Criterium == "Structuur" & .data$ID == "JR0216",
+                NA,
+                .data$Index_harm_criterium
+              )
+          ),
         Resultaat_indicator = Resultaatv2[["Resultaat_indicator"]] %>%
           mutate(
             Status_indicator =
@@ -344,6 +378,12 @@ describe("berekenLSVIbasis", {
                 .data$Indicator == "dwergstruiken" & .data$ID == "JR0216",
                 NA,
                 .data$Status_indicator
+              ),
+            Verschilscore =
+              ifelse(
+                .data$Indicator == "dwergstruiken" & .data$ID == "JR0216",
+                NA,
+                .data$Verschilscore
               )
           ),
         Resultaat_detail =
@@ -352,9 +392,31 @@ describe("berekenLSVIbasis", {
             Status_voorwaarde =
               ifelse(.data$Waarde == "f", NA, .data$Status_voorwaarde),
             Waarde =
-              ifelse(.data$Waarde == "f", NA, .data$Waarde)
+              ifelse(.data$Waarde == "f", NA, .data$Waarde),
+            Verschilscore =
+              ifelse(.data$Waarde == "f", NA, .data$Verschilscore)
           ),
-        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]]))
+        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]] %>%
+          mutate(
+            Index_min_min =
+              ifelse(
+                .data$ID == "JR0216",
+                NA,
+                .data$Index_min_min
+              ),
+            Index_min_harm =
+              ifelse(
+                .data$ID == "JR0216",
+                NA,
+                .data$Index_min_harm
+              ),
+            Index_harm_harm =
+              ifelse(
+                .data$ID == "JR0216",
+                NA,
+                .data$Index_harm_harm
+              )
+          )))
   })
 
 
@@ -408,7 +470,7 @@ describe("berekenLSVIbasis", {
               ifelse(.data$Waarde == "f", NA, .data$InvoertypeWaarde),
             TheoretischMaximum =
               ifelse(
-                .data$Waarde == "f" & .data$TypeRefwaarde == "Percentage",
+                .data$Waarde == "f" & .data$TypeWaarde == "Percentage",
                 100, .data$TheoretischMaximum
               ),
             Waarde =
@@ -446,7 +508,7 @@ describe("berekenLSVIbasis", {
               ifelse(.data$Waarde == "f", NA, .data$InvoertypeWaarde),
             TheoretischMaximum =
               ifelse(
-                .data$Waarde == "f" & .data$TypeRefwaarde == "Percentage",
+                .data$Waarde == "f" & .data$TypeWaarde == "Percentage",
                 100, .data$TheoretischMaximum
               ),
             Waarde =
@@ -626,85 +688,84 @@ describe("berekenLSVIbasis", {
       "SQL Server niet beschikbaar"
     )
     expect_warning(
-      berekenLSVIbasis(
-        Versie = "Versie 3",
-        Kwaliteitsniveau = "1",
-        Data_habitat,
-        Data_voorwaarden,
-        Data_soortenKenmerken %>%
-          mutate(
-            Waarde =
-              ifelse(
-                .data$Waarde == "0" & ID == "Ts2036",
-                "1",
-                .data$Waarde
-              ),
-            Type =
-              ifelse(
-                .data$Type == "Percentage" & ID == "Ts2036",
-                "Ja/nee",
-                .data$Type
+      BerekendRes <-
+        idsWissen(
+          berekenLSVIbasis(
+            Versie = "Versie 3",
+            Kwaliteitsniveau = "1",
+            Data_habitat,
+            Data_voorwaarden,
+            Data_soortenKenmerken %>%
+              mutate(
+                Waarde =
+                  ifelse(
+                    .data$Waarde == "0" & ID == "Ts2036",
+                    "1",
+                    .data$Waarde
+                  ),
+                Type =
+                  ifelse(
+                    .data$Type == "Percentage" & ID == "Ts2036",
+                    "Ja/nee",
+                    .data$Type
+                  )
               )
-          )
+            )
       ),
       "Voor sommige soorten of kenmerken is enkel aan- of afwezigheid opgegeven, geen bedekking,"  #nolint
     )
-    expect_equal(
-      idsWissen(
-        berekenLSVIbasis(
-          Versie = "Versie 3",
-          Kwaliteitsniveau = "1",
-          Data_habitat,
-          Data_voorwaarden,
-          Data_soortenKenmerken %>%
-            mutate(
-              Waarde =
-                ifelse(
-                  .data$Waarde == "0" & ID == "Ts2036",
-                  "1",
-                  .data$Waarde
-                ),
-              Type =
-                ifelse(
-                  .data$Type == "Percentage" & ID == "Ts2036",
-                  "Ja/nee",
-                  .data$Type
-                )
-            )
-        )
-      ),
-      list(
-        Resultaat_criterium = Resultaat[["Resultaat_criterium"]],
-        Resultaat_indicator = Resultaat[["Resultaat_indicator"]] %>%
+    stopifnot(
+      all.equal(
+        BerekendRes[["Resultaat_criterium"]],
+        Resultaat[["Resultaat_criterium"]] %>%
+          mutate(
+            Index_harm_criterium =
+              ifelse(
+                .data$Criterium == "Structuur" & .data$ID == "Ts2036",
+                -0.1428571429,
+                .data$Index_harm_criterium
+              )
+          )
+      )
+    )
+    stopifnot(
+      all.equal(
+        BerekendRes[["Resultaat_indicator"]],
+        Resultaat[["Resultaat_indicator"]] %>%
           mutate(
             Verschilscore =
               ifelse(
-                .data$Criterium == "Structuur" & ID == "Ts2036" &
-                  Indicator == "ouderdomsstructuur Struikheide",
+                .data$Criterium == "Structuur" & .data$ID == "Ts2036" &
+                  .data$Indicator == "ouderdomsstructuur Struikheide",
                 0.5,
                 .data$Verschilscore
               )
-          ),
-        Resultaat_detail = Resultaat[["Resultaat_detail"]] %>%
+          )
+      )
+    )
+    stopifnot(
+      all.equal(
+        BerekendRes[["Resultaat_detail"]],
+        Resultaat[["Resultaat_detail"]] %>%
           mutate(
             Waarde =
               ifelse(
-                .data$Criterium == "Structuur" & ID == "Ts2036" &
-                  Referentiewaarde == "1",
+                .data$Criterium == "Structuur" & .data$ID == "Ts2036" &
+                  .data$Referentiewaarde == "1",
                 "1 - 2",
                 .data$Waarde
               ),
             Waarde =
               ifelse(
-                .data$Criterium == "Structuur" & ID == "Ts2036" &
-                  Referentiewaarde == "2",
+                .data$Criterium == "Structuur" & .data$ID == "Ts2036" &
+                  .data$Referentiewaarde == "2",
                 "3 - 4",
                 .data$Waarde
               ),
             Verschilscore =
               ifelse(
-                .data$Criterium == "Structuur" & ID == "Ts2036" &
-                  Referentiewaarde == "1",
+                .data$Criterium == "Structuur" & .data$ID == "Ts2036" &
+                  .data$Referentiewaarde == "1",
                 0.5,
                 .data$Verschilscore
               ),
@@ -715,8 +776,21 @@ describe("berekenLSVIbasis", {
                 0.75,
                 .data$Verschilscore
               )
-          ),
-        Resultaat_globaal = Resultaat[["Resultaat_globaal"]]
+          )
+      )
+    )
+    stopifnot(
+      all.equal(
+        BerekendRes[["Resultaat_globaal"]],
+        Resultaat[["Resultaat_globaal"]] %>%
+          mutate(
+            Index_harm_harm =
+              ifelse(
+                .data$ID == "Ts2036",
+                0.1313062683,
+                .data$Index_harm_harm
+              )
+          )
       )
     )
   })
@@ -987,7 +1061,12 @@ describe("berekenLSVIbasis", {
                 .data$Verschilscore
               )
           ),
-        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]]
+        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]] %>%
+          mutate(
+            Index_min_min = as.double(NA),
+            Index_min_harm = as.double(NA),
+            Index_harm_harm = as.double(NA)
+          )
       )
     )
     expect_equal(
@@ -1132,7 +1211,12 @@ describe("berekenLSVIbasis", {
                 .data$Verschilscore
               )
           ),
-        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]]
+        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]] %>%
+          mutate(
+            Index_min_min = as.double(NA),
+            Index_min_harm = as.double(NA),
+            Index_harm_harm = as.double(NA)
+          )
       )
     )
     expect_equal(
@@ -1212,7 +1296,12 @@ describe("berekenLSVIbasis", {
             .data$Criterium,
             .data$Indicator
           ),
-        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]]
+        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]] %>%
+          mutate(
+            Index_min_min = as.double(NA),
+            Index_min_harm = as.double(NA),
+            Index_harm_harm = as.double(NA)
+          )
       )
     )
   })

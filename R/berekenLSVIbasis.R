@@ -171,6 +171,7 @@ berekenLSVIbasis <-
         .data$Referentiewaarde,
         .data$Operator,
         .data$Eenheid,
+        .data$AnalyseVariabele, #toegevoegd voor invullen TheoretischMaximum
         .data$TypeVariabele,
         .data$Invoertype
       ) %>%
@@ -230,6 +231,7 @@ berekenLSVIbasis <-
         Referentiewaarde = NULL,
         Operator = NULL,
         Eenheid = NULL,
+        AnalyseVariabele = NULL,
         TypeVariabele = NULL,
         Invoertype = NULL,
         RefMin = NULL,
@@ -388,6 +390,21 @@ berekenLSVIbasis <-
             is.na(.data$TheoretischMaximum) & .data$Eenheid == "%",
             1,
             .data$TheoretischMaximum
+          ),
+        TheoretischMaximum =
+          ifelse(
+            is.na(.data$TheoretischMaximum) &
+              tolower(.data$TypeVariabele) == "categorie" &
+              grepl("bedekking", tolower(.data$AnalyseVariabele)),
+            1,
+            .data$TheoretischMaximum
+          ),
+        TheoretischMaximum =
+          ifelse(
+            is.na(.data$TheoretischMaximum) &
+              tolower(.data$TypeVariabele) == "ja/nee",
+            1,
+            .data$TheoretischMaximum
           )
       )
 
@@ -422,6 +439,7 @@ berekenLSVIbasis <-
         RefMax = NULL,
         WaardeMin = NULL, #is geval van categorische waarde (bv HB)
         WaardeMax = NULL,
+        AnalyseVariabele = NULL,
         TheoretischMaximum = ifelse(.data$Type == "Percentage",
                                 .data$TheoretischMaximum * 100,
                                 .data$TheoretischMaximum)
