@@ -115,7 +115,13 @@ for (Criterium in unique(Beoordelingsfiche$Criterium)) {
   cat("__", Criterium, "__", sep = "")
   Beoordelingsmatrix <- 
     xtable(Beoordelingsfiche[Beoordelingsfiche$Criterium == Criterium,
-                        c("Indicator",c(Versie$Kwaliteitsniveau1,Versie$Kwaliteitsniveau2),"Opmerkingen","Referenties")])
+                        c("Indicator",
+                          if (ncol(Beoordelingsfiche) == 7) {
+                            c(Versie$Kwaliteitsniveau1,Versie$Kwaliteitsniveau2)
+                          } else if (ncol(Beoordelingsfiche) == 6) {
+                            Versie$Kwaliteitsniveau1
+                          },
+                          "Opmerkingen","Referenties")])
   print(Beoordelingsmatrix, type = "html", include.rownames = FALSE)
 }
 
