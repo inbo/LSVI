@@ -72,6 +72,18 @@ Om de functies uit het package te kunnen gebruiken, moet een connectie gemaakt w
 
 (Wat extra uitleg voor diegenen die niet vertrouwd zijn met R.)
 
+###R, RStudio, scripts en projecten
+
+R is de taal die je gebruikt om met je computer te communiceren, RStudio is een programma dat een aantal tools aanbiedt die het je wat gemakkelijker maken: allerhande knopjes waardoor je niet voor elke handeling een commando moet typen, 'spellingscontrole' (voor R), een 'verkenner' waarin je je mappenstructuur kan raadplegen, een lijst van wat er in het geheugen opgeslagen is,...
+
+De communicatie met je computer gebeurt via de 'console'. Als je vaak gelijkaardige opdrachten wil geven aan je computer, kan je alle commando's ingeven in een script en dit opslaan voor later gebruik (aan te maken met het knopje linksboven onder 'File'). Als je je cursor op een commando in het script zet en 'Ctrl'-'ENTER' drukt, wordt dit commando naar de console gekopieerd en uitgevoerd; bij selectie van meerdere commando's wordt de volledige selectie uitgevoerd.
+
+Aan te raden is om scripts en eventueel bijhorende gegevens te bundelen in een 'project'. Dit maak je aan door 'File > New Project > New Directory > New project' te kiezen, een naam geven aan je project ('Directory name') en een map te selecteren om je project in op te slaan. Enkele voordelen:
+
+- nieuw aangemaakte bestanden worden automatisch in deze map opgeslagen, en verwijzingen naar bestanden kunnen gebeuren ten opzichte van de map van je project (dus relatieve paden i.p.v. absolute paden)
+- in een project blijft je 'werkomgeving' behouden: als bij het afsluiten nog een aantal (niet opgeslagen) scripts open stonden, dan zullen deze bij het heropenen van het project nog in dezelfde staat zijn (ook als je tussendoor aan andere R-projecten gewerkt hebt)
+- enkele instellingen moet je niet meer manueel in orde brengen (bv. 'working directory' instellen), waardoor je minder snel met problemen geconfronteerd wordt
+
 ###Packages en documentatie
 
 Om in R packages te kunnen gebruiken, moeten deze telkens (na elke herstart van de R-console) eerst ingeladen worden met de functie `library()`.  Om de functies in verband met de LSVI te gebruiken, voer je dus eerst het commando `library(LSVI)` in.  Dit kan wel enkel met reeds geïnstalleerde packages, die in het venster rechtsonder onder de tab Packages vermeld zijn.  Andere packages moet je eerst eenmalig installeren (via de knop Install of het commando `install.packages("naam_nieuw_package")`).
@@ -107,7 +119,7 @@ maakConnectiePool()
 geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "LSVIfiche")
 ```
 
-Omdat de tabel te breed is, wordt deze opgesplitst in 5 delen, die onder elkaar weergegeven worden.  Deze tabel wordt ook enkel weergegeven, niet opgeslagen, en op deze manier kunnen we er achteraf geen bewerkingen mee doen.  Beter is om de tabel toe te kennen aan een variabele, we geven hier die variabele de naam `soortenlijst4010`:
+Omdat de tabel te breed is, wordt deze opgesplitst in 3 delen, die onder elkaar weergegeven worden.  Deze tabel wordt ook enkel weergegeven, niet opgeslagen, en op deze manier kunnen we er achteraf geen bewerkingen mee doen.  Beter is om de tabel toe te kennen aan een variabele, we geven hier die variabele de naam `soortenlijst4030`:
 
 ```{r}
 soortenlijst4030 <- geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "LSVIfiche")
