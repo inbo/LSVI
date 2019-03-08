@@ -43,7 +43,7 @@
 #' @importFrom tidyr unnest
 #' @importFrom assertthat assert_that has_name
 #' @importFrom rlang .data
-#' @importFrom stringr str_split_fixed
+#' @importFrom stringr str_split_fixed str_c
 #'
 #'
 berekenLSVIbasis <-
@@ -74,6 +74,9 @@ berekenLSVIbasis <-
     if (is.null(ConnectieLSVIhabitats)) {
       if (exists("ConnectiePool")) {
         ConnectieLSVIhabitats <- get("ConnectiePool", envir = .GlobalEnv)
+      }
+      if (!exists("LIJST")) {
+        LIJST <- geefVertaallijst(ConnectieLSVIhabitats)
       }
     }
     assert_that(
@@ -211,7 +214,29 @@ berekenLSVIbasis <-
       Data_habitat %>%
       left_join(
         Invoervereisten,
-        by = c("Habitattype" = "Habitatsubtype")) %>%
+        by = c("Habitattype" = "Habitatsubtype"))
+    Jointest <- Data_voorwaarden_NA %>%
+      anti_join(Resultaat, by = c("ID", "Criterium", "Indicator"))
+    if (nrow(Jointest) > 0) {
+      warning(
+        sprintf(
+          "Volgende records uit Data_voorwaarden kunnen niet gekoppeld worden aan indicatoren uit de databank omdat de criterium-indicator-combinatie niet voorkomt bij de LSVI-regels van het opgegeven habitattype: <%s>", #nolint
+          Jointest %>%
+            summarise(
+              Record =
+                str_c(
+                  .data$ID,
+                  .data$Criterium,
+                  .data$Indicator,
+                  sep = ", ",
+                  collapse = "> <"
+                )
+            )
+        )
+      )
+    }
+    rm(Jointest)
+    Resultaat <- Resultaat %>%
       left_join(
         Data_voorwaarden_NA %>%
           select(
@@ -246,7 +271,31 @@ berekenLSVIbasis <-
       mutate(
         Waarde = NULL,
         Voorwaarde.lower = tolower(.data$Voorwaarde)
-      ) %>%
+      )
+    Jointest <- Data_voorwaarden_nietNA %>%
+      anti_join(Resultaat, by = c("ID", "Criterium", "Indicator", "Voorwaarde" = "Voorwaarde.lower"))
+    if (nrow(Jointest) > 0) {
+      warning(
+        sprintf(
+          "Volgende records uit Data_voorwaarden kunnen niet gekoppeld worden aan indicatoren uit de databank omdat de criterium-indicator-voorwaarde-combinatie niet voorkomt bij de LSVI-regels van het opgegeven habitattype: <%s>", #nolint
+          Jointest %>%
+            summarise(
+              Record =
+                str_c(
+                  .data$ID,
+                  .data$Criterium,
+                  .data$Indicator,
+                  .data$Voorwaarde,
+                  sep = ", ",
+                  collapse = "> <"
+                )
+            )
+        )
+      )
+    }
+    rm(Jointest)
+    Resultaat <-
+      Resultaat %>%
       left_join(
         Data_voorwaarden_nietNA,
         by =

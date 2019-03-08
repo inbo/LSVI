@@ -10,19 +10,19 @@ Data_habitat <-
       system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
       col_types = list(col_character(), col_character(), col_character())
     )
+Data_voorwaarden2 <-
+  read_csv2(
+    system.file("vbdata/Opname4030voorwaardenv2.csv", package = "LSVI")
+  )
+Data_voorwaarden <-
+  read_csv2(
+    system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI")
+  )
 if (
   class(ConnectiePool$.__enclos_env__$private$createObject())[1] ==
   "SQLiteConnection"
 ) {
-  Data_voorwaarden <-
-    read_csv2(
-      system.file("vbdata/Opname4030voorwaardenv2.csv", package = "LSVI")
-    )
-} else {
-  Data_voorwaarden <-
-    read_csv2(
-      system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI")
-    )
+  Data_voorwaarden <- Data_voorwaarden2
 }
 Data_soortenKenmerken <-
     read_csv2(
@@ -417,6 +417,24 @@ describe("berekenLSVIbasis", {
                 .data$Index_harm_harm
               )
           )))
+    expect_warning(
+      berekenLSVIbasis(
+        Versie = "Versie 2.0",
+        Kwaliteitsniveau = "1",
+        Data_habitat,
+        Data_voorwaarden2 %>%
+          mutate(
+            Indicator =
+              ifelse(
+                .data$Indicator == "verbossing",
+                "dwergstruiken",
+                .data$Indicator
+              )
+          ),
+        Data_soortenKenmerken
+      ),
+      "Volgende records uit Data_voorwaarden kunnen niet gekoppeld worden aan indicatoren uit de databank omdat de criterium-indicator-voorwaarde-combinatie niet voorkomt bij de LSVI-regels van het opgegeven habitattype:" #nolint
+    )
   })
 
 
