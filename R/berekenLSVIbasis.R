@@ -273,7 +273,11 @@ berekenLSVIbasis <-
         Voorwaarde.lower = tolower(.data$Voorwaarde)
       )
     Jointest <- Data_voorwaarden_nietNA %>%
-      anti_join(Resultaat, by = c("ID", "Criterium", "Indicator", "Voorwaarde" = "Voorwaarde.lower"))
+      anti_join(
+        Resultaat,
+        by =
+          c("ID", "Criterium", "Indicator", "Voorwaarde" = "Voorwaarde.lower")
+      )
     if (nrow(Jointest) > 0) {
       warning(
         sprintf(
