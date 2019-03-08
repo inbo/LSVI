@@ -19,6 +19,14 @@ devtools::install_github("inbo/LSVI@develop", build_vignettes = TRUE)
 
 To have access to the database (which is a precondition for using the package), one should be logged in as a user on the INBO network (locally or by using VPN).
 
+# Documentation
+
+After installation, a user manual is available by running this code:
+
+```r
+vignette("Handleiding", package = "LSVI")
+```
+
 # Citation
 
 Please use the output of `citation("LSVI")`
