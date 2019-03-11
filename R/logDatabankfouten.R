@@ -10,6 +10,7 @@
 #' 
 #' @importFrom DBI dbGetQuery
 #' @importFrom dplyr %>% bind_rows filter mutate transmute
+#' @importFrom stringr str_detect str_replace_all
 
 logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
 
@@ -253,6 +254,22 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
         mutate(
           Probleem =
             "De Operator '=' mag niet gebruikt worden, tenzij TypeVariabele 'Ja/nee' is" #nolint
+        )
+    ) %>%
+    bind_rows(
+      Invoervereisten %>%
+        mutate(
+          Formuletest = str_replace_all(.data$Combinatie, "\\(", ""),
+          Formuletest = str_replace_all(.data$Formuletest, "\\)", "")
+        ) %>%
+        filter(
+          str_detect(Formuletest, "^(\\d+(( (AND|OR|<=|<|>|>=) \\d+))*)$") ==
+            FALSE
+        ) %>%
+        select(-.data$Formuletest) %>%
+        mutate(
+          Probleem =
+            "De formule voor Combinatie is geen combinatie van AND, OR en voorwaardeID's" #nolint
         )
     )
 
