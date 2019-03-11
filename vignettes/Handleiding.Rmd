@@ -74,15 +74,17 @@ Om de functies uit het package te kunnen gebruiken, moet een connectie gemaakt w
 
 ###R, RStudio, scripts en projecten
 
-R is de taal die je gebruikt om met je computer te communiceren, RStudio is een programma dat een aantal tools aanbiedt die het je wat gemakkelijker maken: allerhande knopjes waardoor je niet voor elke handeling een commando moet typen, 'spellingscontrole' (voor R), een 'verkenner' waarin je je mappenstructuur kan raadplegen, een lijst van wat er in het geheugen opgeslagen is,...
+R is de taal die je gebruikt om met je computer te communiceren, RStudio is een programma dat een aantal tools aanbiedt die het je wat gemakkelijker maken: allerhande knoppen waardoor je niet voor elke handeling een commando moet typen, 'spellingscontrole' (voor R), een 'verkenner' waarin je je mappenstructuur kan raadplegen, een lijst met wat er in het geheugen opgeslagen is,...
 
 De communicatie met je computer gebeurt via de 'console'. Als je vaak gelijkaardige opdrachten wil geven aan je computer, kan je alle commando's ingeven in een script en dit opslaan voor later gebruik (aan te maken met het knopje linksboven onder 'File'). Als je je cursor op een commando in het script zet en 'Ctrl'-'ENTER' drukt, wordt dit commando naar de console gekopieerd en uitgevoerd; bij selectie van meerdere commando's wordt de volledige selectie uitgevoerd.
 
 Aan te raden is om scripts en eventueel bijhorende gegevens te bundelen in een 'project'. Dit maak je aan door 'File > New Project > New Directory > New project' te kiezen, een naam geven aan je project ('Directory name') en een map te selecteren om je project in op te slaan. Enkele voordelen:
 
 - nieuw aangemaakte bestanden worden automatisch in deze map opgeslagen, en verwijzingen naar bestanden kunnen gebeuren ten opzichte van de map van je project (dus relatieve paden i.p.v. absolute paden)
-- in een project blijft je 'werkomgeving' behouden: als bij het afsluiten nog een aantal (niet opgeslagen) scripts open stonden, dan zullen deze bij het heropenen van het project nog in dezelfde staat zijn (ook als je tussendoor aan andere R-projecten gewerkt hebt)
+- in een project blijft je 'werkomgeving' behouden: als bij het afsluiten nog een aantal (niet opgeslagen) scripts open stonden, dan zullen deze bij het heropenen van het project nog in dezelfde staat zijn (bv. geopend en niet opgeslagen), ook als je tussendoor aan andere R-projecten gewerkt hebt
 - enkele instellingen moet je niet meer manueel in orde brengen (bv. 'working directory' instellen), waardoor je minder snel met problemen geconfronteerd wordt
+
+Om scripts gemakkelijk te kunnen hergebruiken met andere waarden, kunnen ze in de vorm van functies geschreven worden.  Die functies kunnen gebundeld worden in een package en beschikbaar gesteld worden voor alle R-gebruikers.
 
 ###Packages en documentatie
 
