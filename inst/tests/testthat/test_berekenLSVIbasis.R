@@ -440,7 +440,10 @@ describe("berekenLSVIbasis", {
   it("functie werkt zonder opgave Data_voorwaarden", {
     Data_soortenKenmerken2 <-
       read_csv2(
-        system.file("vbdata/Opname4030soortenKenmerkenv2tot.csv", package = "LSVI")
+        system.file(
+          "vbdata/Opname4030soortenKenmerkenv2tot.csv",
+          package = "LSVI"
+        )
       )
     Resultaat_berekening <-
       idsWissen(
