@@ -272,6 +272,18 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
             "De formule voor Combinatie is geen combinatie van AND, OR en voorwaardeID's" #nolint
         )
     )
+  
+  Voorwaarden <- Voorwaarden %>%
+    mutate(
+      Probleem =
+        ifelse(
+          .data$Probleem ==
+            "AnalyseVariabele waarvoor geen code ontwikkeld is" &
+            is.na(.data$VoorwaardeID) & .data$Kwaliteitsniveau == 2,
+          "rekenregel van Voorwaarde ontbreekt, beschrijving van ook verwijderen als het de bedoeling is om voorwaarde te verwijderen",
+          .data$Probleem
+        )
+    )
 
   return(list(Fouten, Voorwaarden))
 }
