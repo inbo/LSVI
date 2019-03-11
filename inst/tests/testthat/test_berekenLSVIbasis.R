@@ -437,22 +437,140 @@ describe("berekenLSVIbasis", {
     )
   })
 
-
-  it("dataframe Data_habitat heeft correct formaat", {
-    expect_error(
-      berekenLSVIbasis(
-        Versie = "Versie 2.0",
-        Kwaliteitsniveau = "1",
-        Data_habitat %>%
-          bind_rows(
-            data.frame(
-              ID = "fouttest",
-              Habitattype = "onbestaand",
-              stringsAsFactors = FALSE
-            )
-          ),
-        Data_voorwaarden,
-        Data_soortenKenmerken
+  it("functie werkt zonder opgave Data_voorwaarden", {
+    Data_soortenKenmerken2 <-
+      read_csv2(
+        system.file("vbdata/Opname4030soortenKenmerkenv2tot.csv", package = "LSVI")
+      )
+    Resultaat_berekening <-
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 2.0",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_soortenKenmerken = Data_soortenKenmerken2
+        )
+      )
+    stopifnot(
+      all.equal(
+        Resultaat_berekening[["Resultaat_criterium"]],
+        Resultaatv2[["Resultaat_criterium"]]
+      )
+    )
+    stopifnot(
+      all.equal(
+        Resultaat_berekening[["Resultaat_indicator"]],
+        Resultaatv2[["Resultaat_indicator"]]
+      )
+    )
+    Resultaatv2detail <- Resultaatv2[["Resultaat_detail"]]
+    Resultaatv2detail <-
+      Resultaatv2detail[
+        shuffle_columns(
+          names(Resultaatv2detail),
+          "AfkomstWaarde before EenheidWaarde"
+        )
+      ]
+    Resultaatv2detail <-
+      Resultaatv2detail[
+        shuffle_columns(
+          names(Resultaatv2detail),
+          "AfkomstWaarde before InvoertypeWaarde"
+        )
+      ]
+    Resultaatv2detail <-
+      Resultaatv2detail[
+        shuffle_columns(
+          names(Resultaatv2detail),
+          "TheoretischMaximum before EenheidWaarde"
+        )
+        ]
+    Resultaatv2detail <-
+      Resultaatv2detail[
+        shuffle_columns(
+          names(Resultaatv2detail),
+          "TheoretischMaximum before InvoertypeWaarde"
+        )
+        ]
+    stopifnot(
+      all.equal(
+        Resultaat_berekening[["Resultaat_detail"]],
+        Resultaatv2detail %>%
+          mutate(
+            AfkomstWaarde = "berekend",
+            TypeWaarde =
+              ifelse(
+                .data$Waarde == "o" & .data$Criterium == "Verstoring",
+                "Percentage",
+                .data$TypeWaarde
+              ),
+            InvoertypeWaarde =
+              ifelse(
+                .data$Waarde == "o" & .data$Criterium == "Verstoring",
+                NA,
+                .data$InvoertypeWaarde
+              ),
+            EenheidWaarde =
+              ifelse(
+                .data$Waarde == "o" & .data$Criterium == "Verstoring",
+                "%",
+                .data$EenheidWaarde
+              ),
+            TheoretischMaximum =
+              ifelse(
+                .data$Waarde == "o" & .data$Criterium == "Verstoring",
+                100,
+                .data$TheoretischMaximum
+              ),
+            Waarde =
+              ifelse(
+                .data$Waarde == "o" & .data$Criterium == "Verstoring",
+                "2 - 5",
+                .data$Waarde
+              ),
+            TypeWaarde =
+              ifelse(
+                .data$Waarde == "cd" & .data$Criterium == "Verstoring",
+                "Percentage",
+                .data$TypeWaarde
+              ),
+            InvoertypeWaarde =
+              ifelse(
+                .data$Waarde == "cd" & .data$Criterium == "Verstoring",
+                NA,
+                .data$InvoertypeWaarde
+              ),
+            EenheidWaarde =
+              ifelse(
+                .data$Waarde == "cd" & .data$Criterium == "Verstoring",
+                "%",
+                .data$EenheidWaarde
+              ),
+            TheoretischMaximum =
+              ifelse(
+                .data$Waarde == "cd" & .data$Criterium == "Verstoring",
+                100,
+                .data$TheoretischMaximum
+              ),
+            Waarde =
+              ifelse(
+                .data$Waarde == "cd" & .data$Criterium == "Verstoring",
+                "25 - 50",
+                .data$Waarde
+              ),
+            InvoertypeWaarde =
+              ifelse(
+                .data$InvoertypeWaarde == "Tansley IHD",
+                "TANSLEY IHD",
+                .data$InvoertypeWaarde
+              ),
+            Waarde =
+              ifelse(
+                .data$Waarde == "7,5",
+                "7.5",
+                .data$Waarde
+              )
+          )
       )
     )
   })
@@ -696,6 +814,114 @@ describe("berekenLSVIbasis", {
           )
       ),
       "Volgende NBNTaxonVersionKeys zijn niet teruggevonden in de databank"
+    )
+  })
+
+  it("Berekening gebeurt correct zonder opgave Data_soortenKenmerken", {
+    expect_equal(
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 2.0",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden =
+            Data_voorwaarden2 %>%
+            bind_rows(
+              data.frame(
+                ID = rep(c("JR0216", "Ts2036"), 3),
+                Criterium =
+                  c(
+                    rep("Structuur", 2),
+                    rep("Vegetatie", 4)
+                  ),
+                Indicator =
+                  c(
+                    rep("ouderdomsstructuur Struikheide", 2),
+                    rep("sleutelsoorten", 4)
+                  ),
+                Voorwaarde =
+                  c(
+                    rep("aantal ouderdomsstadia", 2),
+                    rep("aanwezigheid struikheide", 2),
+                    rep("aantal sleutelsoorten", 2)
+                  ),
+                Waarde = c("1", "3", "1", "1", rep("0", 2)),
+                Type = "Geheel getal",
+                Invoertype = NA,
+                Eenheid = NA,
+                stringsAsFactors = FALSE
+              )
+            )
+        )
+      ),
+      list(
+        Resultaat_criterium = Resultaatv2[["Resultaat_criterium"]] %>%
+          mutate(
+            Index_min_criterium =
+              ifelse(
+                .data$Criterium == "Vegetatie",
+                NA,
+                .data$Index_min_criterium
+              ),
+            Index_min_criterium =
+              ifelse(
+                .data$Criterium == "Structuur" & .data$ID == "Ts2036",
+                NA,
+                .data$Index_min_criterium
+              ),
+            Index_harm_criterium =
+              ifelse(
+                is.na(.data$Index_min_criterium),
+                NA,
+                .data$Index_harm_criterium
+              )
+          ),
+        Resultaat_indicator = Resultaatv2[["Resultaat_indicator"]] %>%
+          mutate(
+            Verschilscore =
+              ifelse(
+                .data$Criterium == "Vegetatie",
+                NA,
+                .data$Verschilscore
+              ),
+            Verschilscore =
+              ifelse(
+                .data$Indicator == "ouderdomsstructuur Struikheide" &
+                  .data$ID == "Ts2036",
+                NA,
+                .data$Verschilscore
+              )
+          ),
+        Resultaat_detail =
+          Resultaatv2[["Resultaat_detail"]] %>%
+          mutate(
+            TheoretischMaximum =
+              ifelse(
+                .data$AfkomstWaarde == "berekend",
+                NA,
+                .data$TheoretischMaximum
+              ),
+            Verschilscore =
+              ifelse(
+                .data$Voorwaarde == "aanwezigheid struikheide",
+                NA,
+                .data$Verschilscore
+              ),
+            Verschilscore =
+              ifelse(
+                .data$Waarde == "3",
+                NA,
+                .data$Verschilscore
+              ),
+            AfkomstWaarde = "observatie"
+          ),
+        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]] %>%
+          mutate(
+            Index_min_min = as.numeric(NA),
+            Index_min_harm = as.numeric(NA),
+            Index_harm_harm = as.numeric(NA)
+          )
+      )
     )
   })
 
