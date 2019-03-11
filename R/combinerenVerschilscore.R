@@ -41,7 +41,9 @@ combinerenVerschilscore <-
     )
     if (str_detect(Formuletest, "^(\\d+(( (AND|OR) \\d+))*)$")) {
       assert_that(
-        all(as.integer(str_extract_all(Formule, "\\d+")[[1]]) %in% VoorwaardeID),
+        all(
+          as.integer(str_extract_all(Formule, "\\d+")[[1]]) %in% VoorwaardeID
+        ),
         msg = "Een van de formules onder CombinerenVoorwaarden bevat andere getallen dan de overeenkomstige voorwaardeID's. Meld dit probleem aan de beheerder van het package." #nolint
       )
     }
