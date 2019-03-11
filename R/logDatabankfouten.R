@@ -280,7 +280,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
           .data$Probleem ==
             "AnalyseVariabele waarvoor geen code ontwikkeld is" &
             is.na(.data$VoorwaardeID) & .data$Kwaliteitsniveau == 2,
-          "rekenregel van Voorwaarde ontbreekt, beschrijving van ook verwijderen als het de bedoeling is om voorwaarde te verwijderen",
+          "rekenregel van Voorwaarde ontbreekt, beschrijving van ook verwijderen als het de bedoeling is om voorwaarde te verwijderen", #nolint
           .data$Probleem
         )
     )
