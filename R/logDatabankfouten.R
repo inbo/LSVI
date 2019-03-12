@@ -272,7 +272,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
             "De formule voor Combinatie is geen combinatie van AND, OR en voorwaardeID's" #nolint
         )
     )
-  
+
   Voorwaarden <- Voorwaarden %>%
     mutate(
       Probleem =
