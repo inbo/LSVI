@@ -149,7 +149,7 @@ selecteerIndicatoren <-
       Habitattypen <-
         paste(Habitattype, collapse = "','")
       QueryEinde <-
-        sprintf("CASE 
+        sprintf("CASE
           WHEN Habitatselectie.HabitatsubtypeId =
             Indicator_habitat.HabitattypeID THEN 1
           WHEN Habitatselectie.HabitattypeId = Indicator_habitat.HabitattypeID
