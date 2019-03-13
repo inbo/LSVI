@@ -149,15 +149,11 @@ selecteerIndicatoren <-
       Habitattypen <-
         paste(Habitattype, collapse = "','")
       QueryEinde <-
-        sprintf("CASE
-          WHEN Habitatselectie.HabitatsubtypeId =
-            Indicator_habitat.HabitattypeID THEN 1
-          WHEN Habitatselectie.HabitattypeId = Indicator_habitat.HabitattypeID
-            THEN 1
-          ELSE 0
-            END = 1
-        WHERE (Habitatselectie.Habitattype in ('%s') OR
-          Habitatselectie.Habitatsubtype in ('%s'))",
+        sprintf(
+          "(Habitatselectie.HabitatsubtypeId = Indicator_habitat.HabitattypeID
+            OR Habitatselectie.HabitattypeId = Indicator_habitat.HabitattypeID)
+          WHERE (Habitatselectie.Habitattype in ('%s') OR
+            Habitatselectie.Habitatsubtype in ('%s'))",
         Habitattypen, Habitattypen)
     }
 
