@@ -263,8 +263,9 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
           Formuletest = str_replace_all(.data$Formuletest, "\\)", "")
         ) %>%
         filter(
-          str_detect(.data$Formuletest, "^(\\d+(( (AND|OR|<=|<|>|>=) \\d+))*)$") ==
-            FALSE
+          str_detect(
+            .data$Formuletest, "^(\\d+(( (AND|OR|<=|<|>|>=) \\d+))*)$"
+          ) == FALSE
         ) %>%
         select(-.data$Formuletest) %>%
         mutate(
