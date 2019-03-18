@@ -18,6 +18,7 @@
 #'
 #' @importFrom dplyr %>% filter left_join inner_join mutate distinct group_by do ungroup
 #' @importFrom rlang .data
+#' @importFrom stringr str_c
 #'
 #'
 selecteerKenmerkenInOpname <-
@@ -61,6 +62,15 @@ selecteerKenmerkenInOpname <-
           TaxonData <- Dataset %>%
             filter(.data$TaxonId == .data$SubTaxonId)
           if (nrow(TaxonData) < 1) {
+            Dataset <- Dataset %>%
+              group_by(.data$TaxonId) %>%
+              summarise(
+                Kenmerk = str_c(.data$Kenmerk, collapse = " & "),
+                TypeKenmerk = unique(.data$TypeKenmerk),
+                WaardeMax = 1.0 - prod( (1.0 - .data$WaardeMax), na.rm = TRUE),
+                WaardeMin = 1.0 - prod( (1.0 - .data$WaardeMin), na.rm = TRUE),
+                SubTaxonId = mean(.data$TaxonId)
+              )
             return(Dataset)
           }
           return(TaxonData)

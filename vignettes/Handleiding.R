@@ -38,7 +38,7 @@ Data_habitat <-
   )
 Data_voorwaarden <-
   read_delim(
-    system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI"),
+    system.file("vbdata/Opname4030voorwaardenv2.csv", package = "LSVI"),
     delim = ";"
   )
 Data_soortenKenmerken <-

@@ -1,0 +1,18 @@
+ID;Kenmerk;TypeKenmerk;Waarde;Type;Invoertype;Eenheid;Vegetatielaag
+JR0216;Pioniersstadium;studiegroep;f;Categorie;Tansley IHD;;kruidlaag
+Ts2036;Pioniersstadium;studiegroep;f;Categorie;Tansley IHD;;kruidlaag
+JR0216;Ontwikkelingsstadium;studiegroep;0;Percentage;;%;kruidlaag
+Ts2036;Ontwikkelingsstadium;studiegroep;cd;Categorie;Tansley IHD;;kruidlaag
+JR0216;Climaxstadium;studiegroep;0;Percentage;;%;kruidlaag
+Ts2036;Climaxstadium;studiegroep;a;Categorie;Tansley IHD;;kruidlaag
+JR0216;Degeneratiestadium;studiegroep;0;Percentage;;%;kruidlaag
+Ts2036;Degeneratiestadium;studiegroep;0;Percentage;;%;kruidlaag
+JR0216;Carex pilulifera;Soort_Latijn;1;Ja/nee;;;kruidlaag
+JR0216;Calluna vulgaris;Soort_Latijn;f;Categorie;Tansley IHD;;kruidlaag
+Ts2036;Carex pilulifera;Soort_Latijn;1;Ja/nee;;;kruidlaag
+Ts2036;Calluna vulgaris;Soort_Latijn;cd;Categorie;Tansley IHD;;kruidlaag
+Ts2036;Festuca filiformis;Soort_Latijn;1;Ja/nee;;;kruidlaag
+Ts2036;Deschampsia flexuosa;Soort_Latijn;cd;Categorie;Tansley IHD;;kruidlaag
+JR0216;Rubus;Soort_Latijn;o;Categorie;Tansley IHD;;kruidlaag
+JR0216;Quercus robur;Soort_Latijn;35;Percentage;;%;boomlaag
+Ts2036;Quercus robur;Soort_Latijn;7,5;Percentage;;%;boomlaag

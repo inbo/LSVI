@@ -21,8 +21,8 @@ describe("s4_Aandeel", {
           Soortengroep =
             data.frame(
               NbnTaxonVersionKey = c("A1", "B1", "C1", "E1"),
-              TaxonId = 1,
-              SubTaxonId = 2,
+              TaxonId = 1:4,
+              SubTaxonId = 1:4,
               stringsAsFactors = FALSE
             )
         )
@@ -45,8 +45,8 @@ describe("s4_Aandeel", {
           Soortengroep =
             data.frame(
               NbnTaxonVersionKey = c("A1", "B1", "C1", "E1"),
-              TaxonId = 1,
-              SubTaxonId = 2,
+              TaxonId = 1:4,
+              SubTaxonId = 1:4,
               stringsAsFactors = FALSE
             )
         )
@@ -71,8 +71,8 @@ describe("s4_Aandeel", {
             Soortengroep =
               data.frame(
                 NbnTaxonVersionKey = c("A1", "B1", "C1", "E1"),
-                TaxonId = 1,
-                SubTaxonId = 2,
+                TaxonId = 1:4,
+                SubTaxonId = 1:4,
                 stringsAsFactors = FALSE
               )
           )

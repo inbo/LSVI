@@ -22,6 +22,7 @@
 #' @export
 #' 
 #' @importFrom assertthat assert_that
+#' @importFrom stringr str_replace_all str_detect str_extract_all
 #' @importFrom pander evals
 #' 
 
@@ -32,8 +33,20 @@ combinerenVoorwaarden <-
     assert_that(all(sapply(VoorwaardeID, is.numeric)))
     assert_that(all(sapply(Status, is.logical)))
     assert_that(length(VoorwaardeID) == length(Status))
-    #nog testen of Formule bestaat uit EN, OF, haakjes en VoorwaardeID's
-    #(en evt. andere tekens die logische berekening toelaten)
+    Formuletest <- str_replace_all(Formule, "\\(", "")
+    Formuletest <- str_replace_all(Formuletest, "\\)", "")
+    assert_that(
+      str_detect(Formuletest, "^(\\d+(( (AND|OR|<=|<|>|>=) \\d+))*)$"),
+      msg = "Een van de formules onder CombinerenVoorwaarden bevat andere tekens dan getallen en operatoren. Meld dit probleem aan de beheerder van het package." #nolint
+    )
+    if (str_detect(Formuletest, "^(\\d+(( (AND|OR) \\d+))*)$")) {
+      assert_that(
+        all(
+          as.integer(str_extract_all(Formule, "\\d+")[[1]]) %in% VoorwaardeID
+        ),
+        msg = "Een van de formules onder CombinerenVoorwaarden bevat andere getallen dan de overeenkomstige voorwaardeID's. Meld dit probleem aan de beheerder van het package." #nolint
+      )
+    }
 
     Formule <- gsub(" AND ", " & ", Formule)
     Formule <- gsub(" OR ", " | ", Formule)
