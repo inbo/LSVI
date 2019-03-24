@@ -132,6 +132,7 @@ describe("s4_Aantal", {
             data.frame(
               Kenmerk = character(0),
               TypeKenmerk = character(0),
+              WaardeMin = numeric(0),
               WaardeMax = numeric(0),
               stringsAsFactors = FALSE
             ),
@@ -154,6 +155,7 @@ describe("s4_Aantal", {
             data.frame(
               Kenmerk = c("A1", "B2", "C1", "D3", "E1"),
               TypeKenmerk = "soort_nbn",
+              WaardeMin = 1,
               WaardeMax = 1,
               stringsAsFactors = FALSE
             ),
