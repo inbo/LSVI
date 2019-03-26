@@ -180,7 +180,7 @@ describe("berekenLSVIbasis", {
           ),
         Data_soortenKenmerken
     ),
-      "Niet alle opgegeven getallen en percentages zijn numerieke waarden." #nolint
+      "Niet alle opgegeven getallen en percentages zijn numerieke waarden" #nolint
     )
     expect_error(
       berekenLSVIbasis(
@@ -710,7 +710,7 @@ describe("berekenLSVIbasis", {
               )
           )
       ),
-      "Niet alle opgegeven getallen en percentages zijn numerieke waarden."
+      "Niet alle opgegeven getallen en percentages zijn numerieke waarden"
     )
     expect_warning(
       berekenLSVIbasis(
