@@ -131,11 +131,11 @@ Als je dit commando in je eigen console runt, verschijnt deze variabele in het v
 
 In R kan je deze variabele tonen door de variabelenaam in te typen (dan krijg je dezelfde uitvoer van de tabel in 4 delen).  Je kan er ook allerlei bewerkingen mee uitvoeren (sorteren, selecteren,...), maar daarvoor verwijzen we naar een basiscursus van R.
 
-Wat we hier wel tonen, is hoe deze tabel opgeslagen kan worden, zodat hij achteraf in Excel geopend kan worden.  Dit kan met de functie 'write_delim()' uit het package 'readr'.  Om deze tabel met naam `soortenlijst4010.csv` op te slaan in de map R op de C-schijf, gebruiken we volgende commando's:
+Wat we hier wel tonen, is hoe deze tabel opgeslagen kan worden, zodat hij achteraf in Excel geopend kan worden.  Dit kan met de functie 'write_csv2()' uit het package 'readr'.  Om deze tabel met naam `soortenlijst4010.csv` op te slaan in de map R op de C-schijf, gebruiken we volgende commando's:
 
 ```{r eval=FALSE}
 library(readr)
-write_delim(soortenlijst4030, "C:/R/soortenlijst4030.csv", delim = ";")
+write_csv2(soortenlijst4030, "C:/R/soortenlijst4030.csv")
 ```
 
 We hebben hier het absolute path (`C:/R`) weergegeven, een andere mogelijkheid is om het path relatief ten opzichte van de 'working directory' weer te geven.  Dit is de map waarin je aan 't werken bent.  Je kan deze working directory zelf bepalen door het commando `setwd("C:/.../mijn_werkmap")`.  Als je in een project werkt waarin je al je scripts opslaat (aan te raden), dan is de root van dit project automatisch je working directory.
@@ -148,7 +148,7 @@ Als je eigen gegevens wil inlezen in R, is de eenvoudigste methode om deze in ex
 
 ```{r eval=FALSE}
 library(readr)
-Dataset <- read_delim("Gegevens.csv", delim = ";")
+Dataset <- read_csv2("Gegevens.csv")
 ```
 
 Je steekt dus de gegevens uit je bestand `Gegevens.csv` in de variabele `Dataset`.  (Het laden van de library readr is enkel nodig als je dit nog niet eerder gedaan hebt sinds je R opgestart hebt.)
@@ -163,20 +163,17 @@ De functie `berekenLSVIbasis()` geeft gegevens terug in de vorm van een lijst va
 #Eerst worden wat voorbeeldgegevens opgehaald uit het package:
 library(readr)
 Data_habitat <-
-  read_delim(
+  read_csv2(
     system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
-    delim = ";",
     col_types = list(col_character(), col_character(), col_character())
   )
 Data_voorwaarden <-
-  read_delim(
-    system.file("vbdata/Opname4030voorwaardenv2.csv", package = "LSVI"),
-    delim = ";"
+  read_csv2(
+    system.file("vbdata/Opname4030voorwaardenv2.csv", package = "LSVI")
   )
 Data_soortenKenmerken <-
-  read_delim(
-    system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI"),
-    delim = ";"
+  read_csv2(
+    system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI")
   )
 
 #En hier gebeurt de berekening zelf:
