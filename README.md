@@ -13,7 +13,7 @@ The package is written in Dutch.
 To install the development version, start a new R session and run this code (before loading any packages). 
 
 ```r
-# install.package("devtools")
+# install.packages("devtools")
 devtools::install_github("inbo/LSVI@develop", build_vignettes = TRUE)
 ```
 
