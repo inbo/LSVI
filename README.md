@@ -13,8 +13,8 @@ The package is written in Dutch.
 To install the development version, start a new R session and run this code (before loading any packages). 
 
 ```r
-# install.package("devtools")
-devtools::install_github("inbo/LSVI@develop", build_vignettes = TRUE)
+# install.packages("remotes")
+remotes::install_github("inbo/LSVI@develop", build = TRUE, build_opts = c("--no-resave-data", "--no-manual"))
 ```
 
 To have access to the database (which is a precondition for using the package), one should be logged in as a user on the INBO network (locally or by using VPN).
