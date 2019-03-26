@@ -91,3 +91,54 @@ resultaat$Resultaat_detail
 #  library(DBI)
 #  dbDisconnect(Connectie)
 
+## ------------------------------------------------------------------------
+library(LSVI)
+maakConnectiePool()
+geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "LSVIfiche")
+
+## ------------------------------------------------------------------------
+soortenlijst4030 <- geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "LSVIfiche")
+
+## ----eval=FALSE----------------------------------------------------------
+#  library(readr)
+#  write_delim(soortenlijst4030, "C:/R/soortenlijst4030.csv", delim = ";")
+
+## ----eval=FALSE----------------------------------------------------------
+#  library(readr)
+#  Dataset <- read_delim("Gegevens.csv", delim = ";")
+
+## ------------------------------------------------------------------------
+#Eerst worden wat voorbeeldgegevens opgehaald uit het package:
+library(readr)
+Data_habitat <-
+  read_delim(
+    system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
+    delim = ";",
+    col_types = list(col_character(), col_character(), col_character())
+  )
+Data_voorwaarden <-
+  read_delim(
+    system.file("vbdata/Opname4030voorwaardenv2.csv", package = "LSVI"),
+    delim = ";"
+  )
+Data_soortenKenmerken <-
+  read_delim(
+    system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI"),
+    delim = ";"
+  )
+
+#En hier gebeurt de berekening zelf:
+berekenLSVIbasis(
+  Versie = "Versie 2.0",
+  Kwaliteitsniveau = "1", Data_habitat,
+  Data_voorwaarden, Data_soortenKenmerken
+)
+
+## ------------------------------------------------------------------------
+resultaat <-
+  berekenLSVIbasis(
+    Versie = "Versie 2.0",
+    Kwaliteitsniveau = "1", Data_habitat,
+    Data_voorwaarden, Data_soortenKenmerken
+  )
+
