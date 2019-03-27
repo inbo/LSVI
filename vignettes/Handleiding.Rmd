@@ -61,7 +61,8 @@ packageDescription(pkg = "LSVI")
 Het package kan als volgt geïnstalleerd worden: <!-- aanpassen als er iets in de master zit -->
 
 ```{r eval = FALSE}
-devtools::install_github("inbo/LSVI@develop", build_vignettes = TRUE)
+# install.packages("remotes")
+remotes::install_github("inbo/LSVI@develop", build = TRUE, build_opts = c("--no-resave-data", "--no-manual"))
 ```
 
 Om de functies uit het package te kunnen gebruiken, moet een connectie gemaakt worden met de databank `D0122_00_LSVIHabitatTypes` die op server `INBO-SQL07-PRD.inbo.be` staat en alle informatie in verband met de LSVI-indicatoren bevat (zie 'Doelstellingen en inhoud package' > 'Inhoud package' voor achtergrondinformatie en 'Gebruik basisfuncties' > 'Basis van LSVI-package' voor hoe die connectie gelegd kan worden).  Dit betekent dat gebruikers die niet op het INBO-netwerk werken, een kopie van deze databank nodig hebben en de locatie en naam van deze databank telkens moeten specifiëren in de functie `connecteerMetLSVIdb()`.  (Dit is een voorlopige oplossing: zodra deze databank in orde is, zal ze geïntegreerd worden in het package zelf, waardoor iedereen de functies uit het package zal kunnen gebruiken.)
