@@ -19,9 +19,6 @@ Data_soortenKenmerken <-
       system.file("vbdata/data_soortenKenmerken2330_dw.csv", package = "LSVI")
     )
 
-Resultaat <-
-  read_csv2(system.file("vbdata/resultaat2330_dw.csv", package = "LSVI"))
-
 # Resultaat <-
 #   idsWissen(
 #     berekenLSVIbasis(
@@ -34,7 +31,7 @@ Resultaat <-
 # save(Resultaat, file = "inst/vbdata/Resultaat_test2330_dw.Rdata")  #nolint
 # load("inst/vbdata/Resultaat_test2330_dw.Rdata")  #nolint
 
-#load(system.file("vbdata/Resultaat_test2330_dw.Rdata", package = "LSVI"))
+load(system.file("vbdata/Resultaat_test2330_dw.Rdata", package = "LSVI"))
 
 
 describe("eenjarigen + open zand > meerjarigen", {
@@ -54,10 +51,10 @@ describe("eenjarigen + open zand > meerjarigen", {
           Data_soortenKenmerken
         )
       )
-    # expect_equal(
-    #   resultaat_berekend,
-    #   Resultaat
-    # )
+    expect_equal(
+      resultaat_berekend,
+      Resultaat
+    )
   })
   it("berekening op basis van soortenlijst", {
     skip_if_not(
@@ -76,10 +73,60 @@ describe("eenjarigen + open zand > meerjarigen", {
           Data_soortenKenmerken
         )
       )
-    # expect_equal(
-    #   resultaat_berekend,
-    #   Resultaat
-    # )
+    expect_equal(
+      resultaat_berekend,
+      list(
+        Resultaat_criterium = Resultaat[["Resultaat_criterium"]] %>%
+          mutate(
+            Index_min_criterium =
+              ifelse(
+                Criterium == "Structuur",
+                0.7213749,
+                .data$Index_min_criterium
+              ),
+            Index_harm_criterium =
+              ifelse(
+                Criterium == "Structuur",
+                0.7213749,
+                .data$Index_harm_criterium
+              )
+          ),
+        Resultaat_indicator = Resultaat[["Resultaat_indicator"]] %>%
+          mutate(
+            Verschilscore =
+              ifelse(
+                Indicator == "éénjarigen",
+                0.7213749,
+                .data$Verschilscore
+              )
+          ),
+        Resultaat_detail = Resultaat[["Resultaat_detail"]] %>%
+          mutate(
+            Waarde =
+              ifelse(
+                Indicator == "éénjarigen",
+                "68.4 - 76.4",
+                .data$Waarde
+              ),
+            AfkomstWaarde =
+              ifelse(
+                Indicator == "éénjarigen",
+                "berekend",
+                .data$AfkomstWaarde
+              ),
+            Verschilscore =
+              ifelse(
+                Indicator == "éénjarigen",
+                0.7213749,
+                .data$Verschilscore
+              )
+          ),
+        Resultaat_globaal = Resultaat[["Resultaat_globaal"]] %>%
+          mutate(
+            Index_harm_harm = -0.2890692
+          )
+      )
+    )
   })
 })
 library(pool)
