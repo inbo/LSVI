@@ -48,6 +48,9 @@ combinerenVoorwaarden <-
       )
     }
 
+    if (length(Status) == 1) {
+      return(Status)
+    }
     Formule <- gsub(" AND ", " & ", Formule)
     Formule <- gsub(" OR ", " | ", Formule)
     while (grepl("[[:digit:]]", Formule)) {
