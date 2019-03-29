@@ -10,6 +10,7 @@
 #' 
 #' @importFrom DBI dbGetQuery
 #' @importFrom dplyr %>% bind_rows filter mutate transmute
+#' @importFrom stringr str_detect str_replace_all
 
 logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
 
@@ -254,6 +255,35 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
         mutate(
           Probleem =
             "De Operator '=' mag niet gebruikt worden, tenzij TypeVariabele 'Ja/nee' is" #nolint
+        )
+    ) %>%
+    bind_rows(
+      Invoervereisten %>%
+        mutate(
+          Formuletest = str_replace_all(.data$Combinatie, "\\(", ""),
+          Formuletest = str_replace_all(.data$Formuletest, "\\)", "")
+        ) %>%
+        filter(
+          str_detect(
+            .data$Formuletest, "^(\\d+(( (AND|OR|<=|<|>|>=) \\d+))*)$"
+          ) == FALSE
+        ) %>%
+        select(-.data$Formuletest) %>%
+        mutate(
+          Probleem =
+            "De formule voor Combinatie is geen combinatie van AND, OR en voorwaardeID's" #nolint
+        )
+    )
+
+  Voorwaarden <- Voorwaarden %>%
+    mutate(
+      Probleem =
+        ifelse(
+          .data$Probleem ==
+            "AnalyseVariabele waarvoor geen code ontwikkeld is" &
+            is.na(.data$VoorwaardeID) & .data$Kwaliteitsniveau == 2,
+          "rekenregel van Voorwaarde ontbreekt, beschrijving van ook verwijderen als het de bedoeling is om voorwaarde te verwijderen", #nolint
+          .data$Probleem
         )
     )
 

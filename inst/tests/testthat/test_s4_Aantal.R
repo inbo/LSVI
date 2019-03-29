@@ -93,8 +93,8 @@ describe("s4_Aantal", {
           Soortengroep =
             data.frame(
               NbnTaxonVersionKey = c("A1", "B1", "C1", "E1"),
-              TaxonId = 1,
-              SubTaxonId = 2,
+              TaxonId = 1:4,
+              SubTaxonId = 1:4,
               stringsAsFactors = FALSE
             )
         )
@@ -116,8 +116,8 @@ describe("s4_Aantal", {
           Soortengroep =
             data.frame(
               NbnTaxonVersionKey = c("A1", "B1", "C1", "E1"),
-              TaxonId = 1,
-              SubTaxonId = 2,
+              TaxonId = 1:4,
+              SubTaxonId = 1:4,
               stringsAsFactors = FALSE
             )
         )
@@ -132,14 +132,15 @@ describe("s4_Aantal", {
             data.frame(
               Kenmerk = character(0),
               TypeKenmerk = character(0),
+              WaardeMin = numeric(0),
               WaardeMax = numeric(0),
               stringsAsFactors = FALSE
             ),
           Soortengroep =
             data.frame(
               NbnTaxonVersionKey = c("A1", "B1", "C1", "E1"),
-              TaxonId = 1,
-              SubTaxonId = 2,
+              TaxonId = 1:4,
+              SubTaxonId = 1:4,
               stringsAsFactors = FALSE
             )
         )
@@ -154,6 +155,7 @@ describe("s4_Aantal", {
             data.frame(
               Kenmerk = c("A1", "B2", "C1", "D3", "E1"),
               TypeKenmerk = "soort_nbn",
+              WaardeMin = 1,
               WaardeMax = 1,
               stringsAsFactors = FALSE
             ),
@@ -184,8 +186,8 @@ describe("s4_Aantal", {
           Soortengroep =
             data.frame(
               NbnTaxonVersionKey = c("A1", "B1", "C1", "E1"),
-              TaxonId = 1,
-              SubTaxonId = 2,
+              TaxonId = 1:4,
+              SubTaxonId = 1:4,
               stringsAsFactors = FALSE
             ),
           SubAnalyseVariabele = "bedekking",
@@ -195,6 +197,121 @@ describe("s4_Aantal", {
         )
       ),
       2
+    )
+  })
+
+  it("De aggregatie van bedekkingen bij subsoorten gebeurt correct", {
+    expect_equal(
+      berekenWaarde(
+        new(
+          Class = "aantal",
+          Kenmerken =
+            data.frame(
+              Rijnr = 1:4,
+              Kenmerk = c("A1", "B2", "C1", "D1"),
+              TypeKenmerk = "soort_nbn",
+              WaardeMax = c(1, 0.8, 0.6, 0.6),
+              WaardeMin = c(1, 0.8, 0.6, 0.6),
+              stringsAsFactors = FALSE
+            ),
+          Soortengroep =
+            data.frame(
+              NbnTaxonVersionKey = c("A1", "B1", "C1", "D1", "D3", "D4"),
+              TaxonId = c(1:4, 4, 4),
+              SubTaxonId = 1:6,
+              stringsAsFactors = FALSE
+            ),
+          SubAnalyseVariabele = "bedekking",
+          SubRefMin = 0.5,
+          SubRefMax = 0.5,
+          SubOperator = ">="
+        )
+      ),
+      3
+    )
+    expect_equal(
+      berekenWaarde(
+        new(
+          Class = "aantal",
+          Kenmerken =
+            data.frame(
+              Rijnr = 1:4,
+              Kenmerk = c("A1", "B2", "C1", "D3"),
+              TypeKenmerk = "soort_nbn",
+              WaardeMax = c(1, 0.8, 0.6, 0.4),
+              WaardeMin = c(1, 0.8, 0.6, 0.4),
+              stringsAsFactors = FALSE
+            ),
+          Soortengroep =
+            data.frame(
+              NbnTaxonVersionKey = c("A1", "B1", "C1", "D1", "D3", "D4"),
+              TaxonId = c(1:4, 4, 4),
+              SubTaxonId = 1:6,
+              stringsAsFactors = FALSE
+            ),
+          SubAnalyseVariabele = "bedekking",
+          SubRefMin = 0.5,
+          SubRefMax = 0.5,
+          SubOperator = ">="
+        )
+      ),
+      2
+    )
+    expect_equal(
+      berekenWaarde(
+        new(
+          Class = "aantal",
+          Kenmerken =
+            data.frame(
+              Rijnr = 1:4,
+              Kenmerk = c("A1", "B2", "C1", "D3"),
+              TypeKenmerk = "soort_nbn",
+              WaardeMax = c(1, 0.8, 0.6, 0.6),
+              WaardeMin = c(1, 0.8, 0.6, 0.6),
+              stringsAsFactors = FALSE
+            ),
+          Soortengroep =
+            data.frame(
+              NbnTaxonVersionKey = c("A1", "B1", "C1", "D1", "D3", "D4"),
+              TaxonId = c(1:4, 4, 4),
+              SubTaxonId = 1:6,
+              stringsAsFactors = FALSE
+            ),
+          SubAnalyseVariabele = "bedekking",
+          SubRefMin = 0.5,
+          SubRefMax = 0.5,
+          SubOperator = ">="
+        )
+      ),
+      3
+    )
+    expect_equal(
+      berekenWaarde(
+        new(
+          Class = "aantal",
+          Kenmerken =
+            data.frame(
+              Rijnr = 1:5,
+              Kenmerk = c("A1", "B2", "C1", "D3", "D4"),
+              TypeKenmerk = "soort_nbn",
+              WaardeMax = c(1, 0.8, 0.6, 0.4, 0.4),
+              WaardeMin = c(1, 0.8, 0.6, 0.4, 0.4),
+              stringsAsFactors = FALSE
+            ),
+          Soortengroep =
+            data.frame(
+              NbnTaxonVersionKey = c("A1", "B1", "C1", "D1", "D3", "D4"),
+              TaxonId = c(1:4, 4, 4),
+              SubTaxonId = 1:6,
+              stringsAsFactors = FALSE
+            ),
+          SubAnalyseVariabele = "bedekking",
+          SubRefMin = 0.5,
+          SubRefMax = 0.5,
+          SubOperator = ">="
+        )
+      ),
+      3
     )
   })
 })

@@ -97,7 +97,8 @@ geefInvoervereisten <- function(Versie = "alle",
       .data$Habitatsubtype,
       .data$Indicator_beoordelingID
     ) %>%
-    distinct()
+    distinct() %>%
+    filter(!is.na(.data$Indicator_beoordelingID))
 
   Indicator_beoordelingIDs <-
     paste(
