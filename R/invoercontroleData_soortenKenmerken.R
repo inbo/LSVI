@@ -157,11 +157,18 @@ invoercontroleData_soortenKenmerken <-
     Taxonlijst <-
       dbGetQuery(ConnectieLSVIhabitats, QuerySoorten)
 
+    berekenCanonicalname <- function(Soortenlijst) {
+      if (length(Soortenlijst) == 0) {
+        return(as.character("geenSoort"))
+      } else {
+        return(parsenames(Soortenlijst)$canonicalnamewithmarker)
+      }
+    }
+
     KenmerkenSoort <- Kenmerken %>%
-      filter(tolower(.data$TypeKenmerk) == "soort_latijn") %>%
+      filter(tolower(.data$TypeKenmerk) == "soort_nlatijn") %>%
       mutate(
-        Canonicalname =
-          parsenames(.data$Kenmerk)$canonicalnamewithmarker
+        Canonicalname = berekenCanonicalname(.data$Kenmerk)
       ) %>%
       left_join(
         Taxonlijst %>%
