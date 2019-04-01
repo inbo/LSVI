@@ -73,34 +73,44 @@ describe("eenjarigen + open zand > meerjarigen", {
           Data_soortenKenmerken
         )
       )
-    expect_equal(
-      resultaat_berekend,
-      list(
-        Resultaat_criterium = Resultaat[["Resultaat_criterium"]] %>%
+    stopifnot(
+      all.equal(
+        resultaat_berekend[["Resultaat_criterium"]],
+        Resultaat[["Resultaat_criterium"]] %>%
           mutate(
             Index_min_criterium =
               ifelse(
                 Criterium == "Structuur",
-                0.7213749,
+                0.72137490530303,
                 .data$Index_min_criterium
               ),
             Index_harm_criterium =
               ifelse(
                 Criterium == "Structuur",
-                0.7213749,
+                0.72137490530303,
                 .data$Index_harm_criterium
               )
-          ),
-        Resultaat_indicator = Resultaat[["Resultaat_indicator"]] %>%
+          )
+      )
+    )
+    stopifnot(
+      all.equal(
+        resultaat_berekend[["Resultaat_indicator"]],
+        Resultaat[["Resultaat_indicator"]] %>%
           mutate(
             Verschilscore =
               ifelse(
                 Indicator == "éénjarigen",
-                0.7213749,
+                0.72137490530303,
                 .data$Verschilscore
               )
-          ),
-        Resultaat_detail = Resultaat[["Resultaat_detail"]] %>%
+          )
+      )
+    )
+    stopifnot(
+      all.equal(
+        resultaat_berekend[["Resultaat_detail"]],
+        Resultaat[["Resultaat_detail"]] %>%
           mutate(
             Waarde =
               ifelse(
@@ -117,13 +127,19 @@ describe("eenjarigen + open zand > meerjarigen", {
             Verschilscore =
               ifelse(
                 Indicator == "éénjarigen",
-                0.7213749,
+                0.72137490530303,
                 .data$Verschilscore
               )
-          ),
-        Resultaat_globaal = Resultaat[["Resultaat_globaal"]] %>%
+          )
+      )
+    )
+    stopifnot(
+      all.equal(
+        resultaat_berekend[["Resultaat_globaal"]],
+        Resultaat[["Resultaat_globaal"]] %>%
           mutate(
-            Index_harm_harm = -0.2890692
+            Index_min_harm = -0.53630858,
+            Index_harm_harm = -0.289069178869264
           )
       )
     )
