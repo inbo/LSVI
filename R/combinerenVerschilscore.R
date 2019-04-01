@@ -48,6 +48,10 @@ combinerenVerschilscore <-
       )
     }
 
+    if (length(Verschilscore) == 1) {
+      return(Verschilscore)
+    }
+
     # infix functions voor max en min
     assign(
       "%max%",

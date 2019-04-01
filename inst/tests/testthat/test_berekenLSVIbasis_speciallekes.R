@@ -51,7 +51,7 @@ describe("twee voorwaarden vergelijken", {
         Verschilscore = 0.5,
         stringsAsFactors = FALSE
       )
-    expect_equal(
+    Resultaat_berekend <-
       idsWissen(
         berekenLSVIbasis(
           Versie = "Versie 2.0",
@@ -59,9 +59,25 @@ describe("twee voorwaarden vergelijken", {
           Data_habitat,
           Data_voorwaarden
         )
-      )[["Resultaat_detail"]] %>%
+      )
+    expect_equal(
+      Resultaat_berekend[["Resultaat_detail"]] %>%
         filter(.data$Indicator == "overgang naar rbbzil"),
       Resultaat
+    )
+    expect_equal(
+      Resultaat_berekend[["Resultaat_indicator"]] %>%
+        filter(.data$Indicator == "overgang naar rbbzil"),
+      Resultaat %>%
+        select(
+          ID, Habitattype, Versie, Habitattype.y, Criterium, Indicator,
+          Beoordeling, Belang, Kwaliteitsniveau
+        ) %>%
+        mutate(
+          Kwaliteitsniveau = as.integer(Kwaliteitsniveau),
+          Status_indicator = TRUE,
+          Verschilscore = 0.5
+        )
     )
     Resultaat2 <- Resultaat %>%
       mutate(
