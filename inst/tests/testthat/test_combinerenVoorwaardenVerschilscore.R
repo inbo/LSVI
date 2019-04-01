@@ -45,7 +45,7 @@ describe("combineren van verschilscores gebeurt correct", {
       0.8
     )
   })
-  
+
   it("1 voorwaarde wordt correct behandeld", {
     expect_equal(
       combinerenVerschilscore(
@@ -56,7 +56,7 @@ describe("combineren van verschilscores gebeurt correct", {
       0.5
     )
   })
-  
+
   it("vergelijking van voorwaarden wordt correct behandeld", {
     expect_equal(
       combinerenVerschilscore(
