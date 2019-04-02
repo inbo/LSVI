@@ -145,7 +145,7 @@ describe("s4_Aantal", {
             )
         )
       ),
-      0
+      NA
     )
     expect_equal(
       berekenWaarde(

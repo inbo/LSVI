@@ -38,7 +38,14 @@ selecteerKenmerkenInOpname <-
 
     if (length(Soortengroep) > 0) {
       Resultaat <- Kenmerken %>%
-        filter(tolower(.data$TypeKenmerk) == "soort_nbn") %>%
+        filter(tolower(.data$TypeKenmerk) == "soort_nbn")
+      if (nrow(Resultaat) == 0) {
+        warning(
+          "Er is geen enkele soort opgegeven voor de opname, dus er wordt van uitgegaan dat er geen vegetatie-opname gemaakt is en berekeningen op basis van soortenlijsten zullen resulteren in NA (not available). Geef tenminste 1 soort op (evt. met bedekking 0 %) als er toch een opname gemaakt is."  #nolint
+        )
+        return(NA)
+      }
+      Resultaat <- Resultaat %>%
         inner_join(
           Soortengroep,
           by = c("Kenmerk" = "NbnTaxonVersionKey")

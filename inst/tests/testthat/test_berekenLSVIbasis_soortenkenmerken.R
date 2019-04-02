@@ -122,9 +122,9 @@ describe("ontbreken van soorten of kenmerken", {
           mutate(
             Status =
               ifelse(ID == "Ts2036", NA, .data$Status),
-            Index_min_min = NA,
-            Index_min_harm = NA,
-            Index_harm_harm = NA
+            Index_min_min = as.numeric(NA),
+            Index_min_harm = as.numeric(NA),
+            Index_harm_harm = as.numeric(NA)
           )
       )
     )
@@ -144,7 +144,7 @@ describe("ontbreken van soorten of kenmerken", {
             ) %>%
             bind_rows(
               data.frame(
-                ID = c("JR0216", "Rs2036"),
+                ID = c("JR0216", "Ts2036"),
                 Kenmerk = "Madeliefje",
                 TypeKenmerk = "Soort_NL",
                 Waarde = "0",
