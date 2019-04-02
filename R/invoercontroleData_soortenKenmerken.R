@@ -166,7 +166,7 @@ invoercontroleData_soortenKenmerken <-
     }
 
     KenmerkenSoort <- Kenmerken %>%
-      filter(tolower(.data$TypeKenmerk) == "soort_nlatijn") %>%
+      filter(tolower(.data$TypeKenmerk) == "soort_latijn") %>%
       mutate(
         Canonicalname = berekenCanonicalname(.data$Kenmerk)
       ) %>%
