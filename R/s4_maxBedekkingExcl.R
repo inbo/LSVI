@@ -46,13 +46,13 @@ setMethod(
     if (sum(is.na(Resultaat$WaardeMin)) < sum(is.na(Resultaat$WaardeMax))) {
       MaxBedekkingMin <- NA
       MaxBedekkingMax <- NA
-      warning("De bedekking is niet berekend voor indicatoren waarbij voor sommige soorten of kenmerken enkel aan- of afwezigheid opgegeven is") #nolint
-    } else if (nrow(Resultaat) > 0){
+      warning("aan- of afwezigheid bedekking") #nolint
+    } else if (nrow(Resultaat) > 0) {
 
       MaxBedekkingMin <- max(Resultaat$WaardeMin)
       MaxBedekkingMax <- max(Resultaat$WaardeMax)
 
-    } else if (nrow(Resultaat) == 0){
+    } else if (nrow(Resultaat) == 0) {
 
       MaxBedekkingMin <- 0
       MaxBedekkingMax <- 0

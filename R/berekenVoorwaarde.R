@@ -11,6 +11,7 @@
 #'
 #' @importFrom rlang .data
 #' @importFrom dplyr filter
+#' @importFrom stringr str_c
 #'
 #' @export
 
@@ -34,19 +35,36 @@ berekenVoorwaarde <-
         LIJST
       )
 
-    Waarde <- berekenWaarde(AV)
+    #om warnings uit diepere niveaus op te vangen
+    withWarnings <- function(expr) {
+      myWarnings <- NULL
+      wHandler <- function(w) {
+        myWarnings <<- c(myWarnings, list(w))
+        invokeRestart("muffleWarning")
+      }
+      val <- withCallingHandlers(expr, warning = wHandler)
+      list(value = val, warnings = myWarnings)
+    }
+
+    WaardeEnWarnings <- withWarnings(berekenWaarde(AV))
+    Waarde <- as.numeric(WaardeEnWarnings$value)
+    Warnings <- NULL
+    for (i in seq_along(length(WaardeEnWarnings$warnings))) {
+      Warnings <- c(Warnings, WaardeEnWarnings$warnings[[i]]$message)
+    }
 
     if (length(Waarde) == 1) {
       Waarde <- c(Waarde, Waarde)
     }
 
     #Aan de waarde als 3de item het theoretisch maximum van de voorwaarde
-    #toevoegen
+    #toevoegen en als 4de waarde de warnings, gescheiden door ;
     Waarden <-
       list(
         Min = Waarde[1],
         Max = Waarde[2],
-        TheoretischMaximum = geefTheoretischMaximum(AV)
+        TheoretischMaximum = geefTheoretischMaximum(AV),
+        Warnings = str_c(Warnings, collapse = ";")
       )
 
     return(Waarden)

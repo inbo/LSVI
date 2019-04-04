@@ -941,7 +941,8 @@ describe("berekenLSVIbasis", {
             Versie = "Versie 3",
             Kwaliteitsniveau = "1",
             Data_habitat,
-            Data_voorwaarden,
+            Data_voorwaarden %>%
+              filter(.data$Indicator != "vergrassing/verruiging"),
             Data_soortenKenmerken %>%
               mutate(
                 Waarde =
@@ -959,7 +960,7 @@ describe("berekenLSVIbasis", {
               )
             )
       ),
-      "Voor sommige soorten of kenmerken is enkel aan- of afwezigheid opgegeven, geen bedekking,"  #nolint
+      "Voor sommige soorten of kenmerken uit opname(n) Ts2036 is enkel aan- of afwezigheid opgegeven, geen bedekking. Hierdoor kon het aantal soorten dat aan een welbepaalde voorwaarde voldoet (bv. minimum een welbepaalde bedekking heeft), niet met zekerheid bepaald worden. In dit geval is het resultaat als een range weergegeven."  #nolint
     )
     stopifnot(
       all.equal(
