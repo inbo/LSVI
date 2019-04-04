@@ -408,6 +408,17 @@ berekenLSVIbasis <-
             )
           )
         }
+        WarningMeting <- RecordsMetWarnings %>%
+          filter(grepl("meting onbekend", .data$Warnings))
+        if (nrow(WarningMeting) > 0) {
+          warning(
+            sprintf(
+              "De waarde voor de voorwaarde(n) met VoorwaardeID %s kunnen niet berekend worden voor opname(n) %s. Geef de waarde voor deze voorwaarde rechtstreeks in als input van de functie 'berekenLSVIBasis' via 'Data_voorwaarden'",  #nolint
+              str_c(unique(WarningMeting$VoorwaardeID), collapse = ", "),
+              str_c(unique(WarningMeting$ID), collapse = ", ")
+            )
+          )
+        }
       }
 
       BerekendResultaat <-
