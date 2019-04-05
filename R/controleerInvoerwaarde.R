@@ -5,6 +5,7 @@
 #' @param Beschrijving Hoe de invoerwaarde beschreven moet worden in de error
 #' @param Invoerwaarden De waarden die de gebruiker ingevoerd heeft
 #' @inheritParams geefUniekeWaarden
+#' @param Tolower default (als TRUE) wordt tolower() uitgevoerd op de invoerwaarden en databankwaarden vooraleer de vergelijking uitgevoerd wordt, FALSE zorgt dat dit niet uitgevoerd wordt, maar idealiter worden deze stap voor stap vervangen door Tolower = TRUE
 #'
 #' @return Deze functie geeft geen waarde terug, maar gooit een error als er een foute waarde ingevoerd is
 #'
@@ -14,11 +15,16 @@
 #'
 controleerInvoerwaarde <-
   function(
-    Beschrijving, Invoerwaarden, Tabelnaam, Veldnaam, ConnectieLSVIhabitats
+    Beschrijving, Invoerwaarden, Tabelnaam, Veldnaam, ConnectieLSVIhabitats,
+    Tolower = TRUE
   ){
 
     Databankwaarden <-
       geefUniekeWaarden(Tabelnaam, Veldnaam, ConnectieLSVIhabitats)
+    if (Tolower) {
+      Databankwaarden <- tolower(Databankwaarden)
+      Invoerwaarden <- tolower(Invoerwaarden)
+    }
     FouteInvoer <- Invoerwaarden[!Invoerwaarden %in% Databankwaarden]
     if (length(FouteInvoer) > 0) {
       stop(
