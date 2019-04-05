@@ -16,7 +16,7 @@ invoercontroleVersie <- function(Versie, ConnectieLSVIhabitats) {
   Versie <- str_to_sentence(Versie)
   if (Versie == "Versie 2") Versie <- "Versie 2.0"
   if (Versie == "Versie 3.0") Versie <- "Versie 3"
-  Versie <- ifelse(Versie == "Alle", "alle",Versie)
+  Versie <- ifelse(Versie == "Alle", "alle", Versie)
   controleerInvoerwaarde(
     "Versie", Versie,
     "Versie", "VersieLSVI", ConnectieLSVIhabitats, Tolower = FALSE

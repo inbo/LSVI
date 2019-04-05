@@ -23,34 +23,20 @@ vertaalIntervalUitvoer <-
     assert_that(inherits(Dataset, "data.frame"))
     assert_that(has_name(Dataset, "Rijnr"))
     assert_that(has_name(Dataset, "Type"))
-    GeldigeTypes <-
-      geefUniekeWaarden("TypeVariabele", "Naam", ConnectieLSVIhabitats)
-    GeldigeTypes <- GeldigeTypes[!GeldigeTypes == "alle"]
-    if (!all(tolower(Dataset$Type) %in% tolower(GeldigeTypes))) {
-      stop(
-        "Het opgegeven type is geen geldige waarde. Geef een van de volgende waarden op: ",  #nolint
-        paste(
-          GeldigeTypes,
-          collapse = ", "
-        )
-      )
-    }
+    Dataset$Type <- ifelse(Dataset$Type == "alle", "fouteInvoer", Dataset$Type)
+    controleerInvoerwaarde(
+      "Type", Dataset$Type, "TypeVariabele", "Naam", ConnectieLSVIhabitats
+    )
     assert_that(has_name(Dataset, "Min"))
     assert_that(has_name(Dataset, "Max"))
     assert_that(has_name(Dataset, "Eenheid"))
     assert_that(has_name(Dataset, "Invoertype"))
-    GeldigeTypes <-
-      geefUniekeWaarden("Lijst", "Naam", ConnectieLSVIhabitats)
-    GeldigeTypes <- c(GeldigeTypes[!GeldigeTypes == "alle"], NA)
-    if (!all(tolower(Dataset$Invoertype) %in% tolower(GeldigeTypes))) {
-      stop(
-        "Het opgegeven invoertype is geen geldige waarde. Geef een van de volgende waarden op: ",  #nolint
-        paste(
-          GeldigeTypes,
-          collapse = ", "
-        )
-      )
-    }
+    Dataset$Invoertype <-
+      ifelse(Dataset$Invoertype == "alle", "fouteInvoer", Dataset$Invoertype)
+    controleerInvoerwaarde(
+      "Invoertype", Dataset$Invoertype[!is.na(Dataset$Invoertype)],
+      "Lijst", "Naam", ConnectieLSVIhabitats
+    )
 
     LIJST <- LIJST %>%
       as.tbl() %>%
