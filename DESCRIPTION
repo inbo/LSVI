@@ -55,6 +55,7 @@ Collate:
     'combinerenVoorwaarden.R'
     'connecteerMetLSVIdb.R'
     'connecteerMetLSVIlite.R'
+    'controleerInvoerwaarde.R'
     'deselecteerKenmerkenInOpname.R'
     'geefInfoHabitatfiche.R'
     'geefInvoervereisten.R'
