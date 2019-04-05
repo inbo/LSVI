@@ -10,6 +10,7 @@
 #' @importFrom dplyr %>% filter mutate select left_join bind_rows rename
 #' @importFrom rlang .data
 #' @importFrom rgbif parsenames
+#' @importFrom stringr str_to_sentence
 #'
 #' @export
 #'
@@ -41,7 +42,7 @@ invoercontroleData_soortenKenmerken <-
         tolower(Data_soortenKenmerken$TypeKenmerk) %in%
           c("studiegroep", "soort_nbn", "soort_latijn", "soort_nl", "doodhout")
       ),
-      msg = "TypeKenmerk moet een van de volgende waarden zijn: studiegroep, soort_nbn, soort_latijn, soort_nl, doodhout" #nolint
+      msg = "Data_soortenKenmerken$TypeKenmerk moet een van de volgende waarden zijn: studiegroep, soort_nbn, soort_latijn, soort_nl, doodhout" #nolint
     )
     assert_that(has_name(Data_soortenKenmerken, "Waarde"))
     if (!is.character(Data_soortenKenmerken$Waarde)) {
@@ -53,27 +54,23 @@ invoercontroleData_soortenKenmerken <-
       Data_soortenKenmerken$Type <-
         as.character(Data_soortenKenmerken$Type)
     }
-    if (
-      !all(Data_soortenKenmerken$Type %in% geefUniekeWaarden(
-             "TypeVariabele",
-             "Naam",
-             ConnectieLSVIhabitats
-           )
-      )
-    ) {
-      stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Type komen overeen met waarden vermeld in de databank.") #nolint
-    }
+    Data_soortenKenmerken$Type <- str_to_sentence(Data_soortenKenmerken$Type)
+    controleerInvoerwaarde(
+      "Data_soortenKenmerken$Type", Data_soortenKenmerken$Type,
+      "TypeVariabele", "Naam", ConnectieLSVIhabitats, Tolower = FALSE
+    )
     assert_that(has_name(Data_soortenKenmerken, "Invoertype"))
     if (!is.character(Data_soortenKenmerken$Invoertype)) {
       Data_soortenKenmerken$Invoertype <-
         as.character(Data_soortenKenmerken$Invoertype)
     }
-    if (!all(is.na(Data_soortenKenmerken$Invoertype) |
-             tolower(Data_soortenKenmerken$Invoertype) %in%
-             tolower(
-               geefUniekeWaarden("Lijst", "Naam", ConnectieLSVIhabitats)))) {
-      stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Invoertype komen overeen met waarden vermeld in de databank.") #nolint
-    }
+    controleerInvoerwaarde(
+      "Data_soortenKenmerken$Invoertype",
+      Data_soortenKenmerken$Invoertype[
+        !is.na(Data_soortenKenmerken$Invoertype)
+      ],
+      "Lijst", "Naam", ConnectieLSVIhabitats
+    )
     assert_that(has_name(Data_soortenKenmerken, "Eenheid"))
     if (!is.character(Data_soortenKenmerken$Eenheid)) {
       Data_soortenKenmerken$Eenheid <-
@@ -104,24 +101,13 @@ invoercontroleData_soortenKenmerken <-
       Data_soortenKenmerken$Vegetatielaag <-
         as.character(tolower(Data_soortenKenmerken$Vegetatielaag))
     }
-    GeldigeWaarden <-
-      c(
-        tolower(
-          geefUniekeWaarden(
-            "StudieItem",
-            "Waarde",
-            ConnectieLSVIhabitats
-          )
-        ),
-        NA
-      )
-    if (
-      !all(
-        tolower(Data_soortenKenmerken$Vegetatielaag) %in% GeldigeWaarden
-      )
-    ) {
-      stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Vegetatielaag komen overeen met waarden vermeld in de databank.") #nolint
-    }
+    controleerInvoerwaarde(
+      "Data_soortenKenmerken$Vegetatielaag",
+      Data_soortenKenmerken$Vegetatielaag[
+        !is.na(Data_soortenKenmerken$Vegetatielaag)
+      ],
+      "StudieItem", "Waarde", ConnectieLSVIhabitats
+    )
 
 
     # Omzettingen naar een bruikbare dataframe

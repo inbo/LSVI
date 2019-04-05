@@ -144,7 +144,7 @@ describe("berekenLSVIbasis", {
         Data_voorwaarden,
         Data_soortenKenmerken
       ),
-      "Kwaliteitsniveau moet een van de volgende waarden zijn"
+      "'streefwaarde' ingevoerd in Kwaliteitsniveau komen niet voor in de databank. Voer hier een van volgende waarden in:" #nolint
     )
   })
 

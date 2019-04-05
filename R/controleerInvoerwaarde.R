@@ -25,7 +25,7 @@ controleerInvoerwaarde <-
       Databankwaarden <- tolower(Databankwaarden)
       Invoerwaarden <- tolower(Invoerwaarden)
     }
-    FouteInvoer <- Invoerwaarden[!Invoerwaarden %in% Databankwaarden]
+    FouteInvoer <- unique(Invoerwaarden[!Invoerwaarden %in% Databankwaarden])
     if (length(FouteInvoer) > 0) {
       stop(
         sprintf(

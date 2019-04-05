@@ -7,24 +7,18 @@
 #'
 #' @importFrom assertthat assert_that is.string
 #' @importFrom dplyr %>%
+#' @importFrom stringr str_to_sentence
 #' 
 #' @export
 #'
 invoercontroleVersie <- function(Versie, ConnectieLSVIhabitats) {
   assert_that(is.string(Versie))
-  if (
-    !(Versie %in%
-      geefUniekeWaarden("Versie", "VersieLSVI", ConnectieLSVIhabitats)
-    )
-  ) {
-    stop(
-      sprintf(
-        "Versie moet een van de volgende waarden zijn: %s",
-        paste(
-          geefUniekeWaarden("Versie", "VersieLSVI", ConnectieLSVIhabitats),
-          collapse = ", "
-        )
-      )
-    )
-  }
+  Versie <- str_to_sentence(Versie)
+  if (Versie == "Versie 2") Versie <- "Versie 2.0"
+  if (Versie == "Versie 3.0") Versie <- "Versie 3"
+  Versie <- ifelse(Versie == "Alle", "alle",Versie)
+  controleerInvoerwaarde(
+    "Versie", Versie,
+    "Versie", "VersieLSVI", ConnectieLSVIhabitats, Tolower = FALSE
+  )
 }
