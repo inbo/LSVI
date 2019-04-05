@@ -960,7 +960,7 @@ describe("berekenLSVIbasis", {
               )
             )
       ),
-      "Voor sommige soorten of kenmerken uit opname(n) Ts2036 is enkel aan- of afwezigheid opgegeven, geen bedekking. Hierdoor kon het aantal soorten dat aan een welbepaalde voorwaarde voldoet (bv. minimum een welbepaalde bedekking heeft), niet met zekerheid bepaald worden. In dit geval is het resultaat als een range weergegeven."  #nolint
+      "is enkel aan- of afwezigheid opgegeven, geen bedekking. Hierdoor kon het aantal soorten dat aan een welbepaalde voorwaarde voldoet"  #nolint
     )
     stopifnot(
       all.equal(
