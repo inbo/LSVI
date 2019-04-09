@@ -37,9 +37,11 @@ invoercontroleData_soortenKenmerken <-
       Data_soortenKenmerken$TypeKenmerk <-
         as.character(Data_soortenKenmerken$TypeKenmerk)
     }
+    Data_soortenKenmerken$TypeKenmerk <-
+      tolower(Data_soortenKenmerken$TypeKenmerk)
     assert_that(
       all(
-        tolower(Data_soortenKenmerken$TypeKenmerk) %in%
+        Data_soortenKenmerken$TypeKenmerk %in%
           c("studiegroep", "soort_nbn", "soort_latijn", "soort_nl", "doodhout")
       ),
       msg = "Data_soortenKenmerken$TypeKenmerk moet een van de volgende waarden zijn: studiegroep, soort_nbn, soort_latijn, soort_nl, doodhout" #nolint
@@ -200,7 +202,7 @@ invoercontroleData_soortenKenmerken <-
       warning(
         sprintf(
           "Volgende NBNTaxonVersionKeys zijn niet teruggevonden in de databank: %s.  Check de juistheid hiervan als deze mogelijk relevant zijn voor de berekening.",  #nolint
-          paste(unique(Fouten$Kenmerk))
+          paste(unique(Fouten$Kenmerk), collapse = ", ")
         )
       )
     }
@@ -236,6 +238,44 @@ invoercontroleData_soortenKenmerken <-
       )
     }
 
+    #voor studiegroep de lijstnaam toevoegen
+    Kenmerken <- Kenmerken %>%
+      mutate(
+        Kenmerk =
+          ifelse(
+            .data$TypeKenmerk == "studiegroep",
+            tolower(.data$Kenmerk),
+            .data$Kenmerk
+          ),
+        Kenmerk =
+          ifelse(
+            .data$Kenmerk == "h2s geur",
+            "H2S geur",
+            .data$Kenmerk
+          )
+      )
+    StudiegroepKenmerken <- Kenmerken %>%
+      filter(.data$TypeKenmerk == "studiegroep")
+    controleerInvoerwaarde(
+      "Data_soortenKenmerken$Kenmerk",
+      StudiegroepKenmerken$Kenmerk,
+      "StudieItem", "Waarde", ConnectieLSVIhabitats, Tolower = FALSE
+    )
+    QueryStudiegroepen <-
+      sprintf(
+        "SELECT Studiegroep.LijstNaam, StudieItem.Waarde AS StudieItem
+        FROM Studiegroep INNER JOIN StudieItem
+        ON Studiegroep.Id = StudieItem.StudiegroepId
+        WHERE StudieItem.Waarde in ('%s')",
+        paste(unique(StudiegroepKenmerken$Kenmerk), collapse = "','")
+      )
+    Studielijst <-
+      dbGetQuery(ConnectieLSVIhabitats, QueryStudiegroepen) %>%
+      distinct()
+    Kenmerken <- Kenmerken %>%
+      left_join(Studielijst, by = c("Kenmerk" = "StudieItem"))
+
+    #Waarde omzetten naar interval (om mee te rekenen)
     VertaaldeKenmerken <-
       vertaalInvoerInterval(
         Kenmerken[
@@ -248,7 +288,8 @@ invoercontroleData_soortenKenmerken <-
       rename(
         WaardeMin = .data$Min,
         WaardeMax = .data$Max
-      )
+      ) %>%
+      distinct()
 
     Kenmerken2 <- Kenmerken %>%
       left_join(

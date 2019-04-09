@@ -365,10 +365,23 @@ berekenLSVIbasis <-
         GeenKenmerken <- RecordsMetWarnings %>%
           filter(grepl("geen enkel kenmerk opgegeven", .data$Warnings))
         if (nrow(GeenKenmerken) > 0) {
+          Infotekst <- GeenKenmerken %>%
+            group_by(.data$Warnings) %>%
+            summarise(
+              Tekst =
+                paste(
+                  "Voor opname(n)", paste(unique(.data$ID), collapse = ", "),
+                  "is er", unique(.data$Warnings)
+                )
+            ) %>%
+            ungroup() %>%
+            summarise(
+              Tekst = paste(.data$Tekst, collapse = "; ")
+            )
           warning(
             sprintf(
-              "Deze warning moet nog ingebouwd worden, en hier zou(den) de opnamen en de lijstna(a)m(en) in vermeld moeten worden (doorgegeven vanuit lager niveau)",  #nolint
-              str_c(unique(GeenKenmerken$ID), collapse = ", ")
+              "%s. Er wordt van uitgegaan dat er voor deze studiegroepen geen observaties uitgevoerd zijn en berekeningen op basis van deze studiegroepen zullen resulteren in NA (not available). Geef tenminste 1 kenmerk van deze studiegroep op (evt. met bedekking 0 procent) als deze studiegroep toch bestudeerd is.",  #nolint
+              Infotekst$Tekst
             )
           )
         }

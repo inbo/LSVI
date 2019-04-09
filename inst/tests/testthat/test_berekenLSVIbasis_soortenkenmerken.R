@@ -231,7 +231,7 @@ describe("ontbreken van soorten of kenmerken", {
             TypeKenmerk != "studiegroep"
           )
       ),
-      "Een kenmerk ontbreekt:"  #nolint
+      "JR0216, Ts2036 is er geen enkel kenmerk opgegeven van studielijst ouderdomsstadia. Er wordt van uitgegaan dat er voor deze studiegroepen geen observaties uitgevoerd zijn en berekeningen op basis van deze studiegroepen zullen resulteren in NA"  #nolint
     )
     expect_equal(
       idsWissen(

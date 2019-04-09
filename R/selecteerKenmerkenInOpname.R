@@ -90,6 +90,15 @@ selecteerKenmerkenInOpname <-
     }
 
     if (length(Studiegroep) > 0 & !(length(Soortengroep) > 0)) {
+      if (!unique(Studiegroep$LijstNaam) %in% Kenmerken$LijstNaam) {
+        warning(
+          sprintf(
+            "geen enkel kenmerk opgegeven van studielijst %s",
+            unique(Studiegroep$LijstNaam)
+          )
+        )
+        return(NA)
+      }
       Resultaat <- Kenmerken %>%
         filter(tolower(.data$TypeKenmerk) == "studiegroep") %>%
         mutate(
@@ -100,7 +109,7 @@ selecteerKenmerkenInOpname <-
             mutate(
               Waarde = tolower(.data$Waarde)
             ),
-          by = c("Kenmerk" = "Waarde")
+          by = c("Kenmerk" = "Waarde", "LijstNaam" = "LijstNaam")
         )
     }
 
