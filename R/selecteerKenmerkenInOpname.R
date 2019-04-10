@@ -38,7 +38,14 @@ selecteerKenmerkenInOpname <-
 
     if (length(Soortengroep) > 0) {
       Resultaat <- Kenmerken %>%
-        filter(tolower(.data$TypeKenmerk) == "soort_nbn") %>%
+        filter(tolower(.data$TypeKenmerk) == "soort_nbn")
+      if (nrow(Resultaat) == 0) {
+        warning(
+          "geen enkele soort opgegeven"
+        )
+        return(NA)
+      }
+      Resultaat <- Resultaat %>%
         inner_join(
           Soortengroep,
           by = c("Kenmerk" = "NbnTaxonVersionKey")
@@ -83,6 +90,15 @@ selecteerKenmerkenInOpname <-
     }
 
     if (length(Studiegroep) > 0 & !(length(Soortengroep) > 0)) {
+      if (!unique(Studiegroep$LijstNaam) %in% Kenmerken$LijstNaam) {
+        warning(
+          sprintf(
+            "geen enkel kenmerk opgegeven van studielijst %s",
+            unique(Studiegroep$LijstNaam)
+          )
+        )
+        return(NA)
+      }
       Resultaat <- Kenmerken %>%
         filter(tolower(.data$TypeKenmerk) == "studiegroep") %>%
         mutate(
@@ -93,7 +109,7 @@ selecteerKenmerkenInOpname <-
             mutate(
               Waarde = tolower(.data$Waarde)
             ),
-          by = c("Kenmerk" = "Waarde")
+          by = c("Kenmerk" = "Waarde", "LijstNaam" = "LijstNaam")
         )
     }
 

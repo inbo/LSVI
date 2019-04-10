@@ -16,6 +16,7 @@ describe("s4_BedekkingSom", {
               WaardeMin = c(rep(1, 5), 0.5),
               WaardeMax = 1,
               Eenheid = "%",
+              LijstNaam = "lijst",
               stringsAsFactors = FALSE
             ),
           Soortengroep =
@@ -27,7 +28,8 @@ describe("s4_BedekkingSom", {
             ),
           Studiegroep =
             data.frame(
-              Waarde = "Z"
+              Waarde = "Z",
+              LijstNaam = "lijst"
             )
         )
       ),

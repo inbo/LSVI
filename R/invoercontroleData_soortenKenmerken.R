@@ -10,6 +10,7 @@
 #' @importFrom dplyr %>% filter mutate select left_join bind_rows rename
 #' @importFrom rlang .data
 #' @importFrom rgbif parsenames
+#' @importFrom stringr str_to_sentence
 #'
 #' @export
 #'
@@ -36,12 +37,14 @@ invoercontroleData_soortenKenmerken <-
       Data_soortenKenmerken$TypeKenmerk <-
         as.character(Data_soortenKenmerken$TypeKenmerk)
     }
+    Data_soortenKenmerken$TypeKenmerk <-
+      tolower(Data_soortenKenmerken$TypeKenmerk)
     assert_that(
       all(
-        tolower(Data_soortenKenmerken$TypeKenmerk) %in%
+        Data_soortenKenmerken$TypeKenmerk %in%
           c("studiegroep", "soort_nbn", "soort_latijn", "soort_nl", "doodhout")
       ),
-      msg = "TypeKenmerk moet een van de volgende waarden zijn: studiegroep, soort_nbn, soort_latijn, soort_nl, doodhout" #nolint
+      msg = "Data_soortenKenmerken$TypeKenmerk moet een van de volgende waarden zijn: studiegroep, soort_nbn, soort_latijn, soort_nl, doodhout" #nolint
     )
     assert_that(has_name(Data_soortenKenmerken, "Waarde"))
     if (!is.character(Data_soortenKenmerken$Waarde)) {
@@ -53,27 +56,23 @@ invoercontroleData_soortenKenmerken <-
       Data_soortenKenmerken$Type <-
         as.character(Data_soortenKenmerken$Type)
     }
-    if (
-      !all(Data_soortenKenmerken$Type %in% geefUniekeWaarden(
-             "TypeVariabele",
-             "Naam",
-             ConnectieLSVIhabitats
-           )
-      )
-    ) {
-      stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Type komen overeen met waarden vermeld in de databank.") #nolint
-    }
+    Data_soortenKenmerken$Type <- str_to_sentence(Data_soortenKenmerken$Type)
+    controleerInvoerwaarde(
+      "Data_soortenKenmerken$Type", Data_soortenKenmerken$Type,
+      "TypeVariabele", "Naam", ConnectieLSVIhabitats, Tolower = FALSE
+    )
     assert_that(has_name(Data_soortenKenmerken, "Invoertype"))
     if (!is.character(Data_soortenKenmerken$Invoertype)) {
       Data_soortenKenmerken$Invoertype <-
         as.character(Data_soortenKenmerken$Invoertype)
     }
-    if (!all(is.na(Data_soortenKenmerken$Invoertype) |
-             tolower(Data_soortenKenmerken$Invoertype) %in%
-             tolower(
-               geefUniekeWaarden("Lijst", "Naam", ConnectieLSVIhabitats)))) {
-      stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Invoertype komen overeen met waarden vermeld in de databank.") #nolint
-    }
+    controleerInvoerwaarde(
+      "Data_soortenKenmerken$Invoertype",
+      Data_soortenKenmerken$Invoertype[
+        !is.na(Data_soortenKenmerken$Invoertype)
+      ],
+      "Lijst", "Naam", ConnectieLSVIhabitats
+    )
     assert_that(has_name(Data_soortenKenmerken, "Eenheid"))
     if (!is.character(Data_soortenKenmerken$Eenheid)) {
       Data_soortenKenmerken$Eenheid <-
@@ -104,24 +103,13 @@ invoercontroleData_soortenKenmerken <-
       Data_soortenKenmerken$Vegetatielaag <-
         as.character(tolower(Data_soortenKenmerken$Vegetatielaag))
     }
-    GeldigeWaarden <-
-      c(
-        tolower(
-          geefUniekeWaarden(
-            "StudieItem",
-            "Waarde",
-            ConnectieLSVIhabitats
-          )
-        ),
-        NA
-      )
-    if (
-      !all(
-        tolower(Data_soortenKenmerken$Vegetatielaag) %in% GeldigeWaarden
-      )
-    ) {
-      stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Vegetatielaag komen overeen met waarden vermeld in de databank.") #nolint
-    }
+    controleerInvoerwaarde(
+      "Data_soortenKenmerken$Vegetatielaag",
+      Data_soortenKenmerken$Vegetatielaag[
+        !is.na(Data_soortenKenmerken$Vegetatielaag)
+      ],
+      "StudieItem", "Waarde", ConnectieLSVIhabitats
+    )
 
 
     # Omzettingen naar een bruikbare dataframe
@@ -157,11 +145,18 @@ invoercontroleData_soortenKenmerken <-
     Taxonlijst <-
       dbGetQuery(ConnectieLSVIhabitats, QuerySoorten)
 
+    berekenCanonicalname <- function(Soortenlijst) {
+      if (length(Soortenlijst) == 0) {
+        return(as.character("geenSoort"))
+      } else {
+        return(parsenames(Soortenlijst)$canonicalnamewithmarker)
+      }
+    }
+
     KenmerkenSoort <- Kenmerken %>%
       filter(tolower(.data$TypeKenmerk) == "soort_latijn") %>%
       mutate(
-        Canonicalname =
-          parsenames(.data$Kenmerk)$canonicalnamewithmarker
+        Canonicalname = berekenCanonicalname(.data$Kenmerk)
       ) %>%
       left_join(
         Taxonlijst %>%
@@ -207,7 +202,7 @@ invoercontroleData_soortenKenmerken <-
       warning(
         sprintf(
           "Volgende NBNTaxonVersionKeys zijn niet teruggevonden in de databank: %s.  Check de juistheid hiervan als deze mogelijk relevant zijn voor de berekening.",  #nolint
-          paste(unique(Fouten$Kenmerk))
+          paste(unique(Fouten$Kenmerk), collapse = ", ")
         )
       )
     }
@@ -243,6 +238,44 @@ invoercontroleData_soortenKenmerken <-
       )
     }
 
+    #voor studiegroep de lijstnaam toevoegen
+    Kenmerken <- Kenmerken %>%
+      mutate(
+        Kenmerk =
+          ifelse(
+            .data$TypeKenmerk == "studiegroep",
+            tolower(.data$Kenmerk),
+            .data$Kenmerk
+          ),
+        Kenmerk =
+          ifelse(
+            .data$Kenmerk == "h2s geur",
+            "H2S geur",
+            .data$Kenmerk
+          )
+      )
+    StudiegroepKenmerken <- Kenmerken %>%
+      filter(.data$TypeKenmerk == "studiegroep")
+    controleerInvoerwaarde(
+      "Data_soortenKenmerken$Kenmerk",
+      StudiegroepKenmerken$Kenmerk,
+      "StudieItem", "Waarde", ConnectieLSVIhabitats, Tolower = FALSE
+    )
+    QueryStudiegroepen <-
+      sprintf(
+        "SELECT Studiegroep.LijstNaam, StudieItem.Waarde AS StudieItem
+        FROM Studiegroep INNER JOIN StudieItem
+        ON Studiegroep.Id = StudieItem.StudiegroepId
+        WHERE StudieItem.Waarde in ('%s')",
+        paste(unique(StudiegroepKenmerken$Kenmerk), collapse = "','")
+      )
+    Studielijst <-
+      dbGetQuery(ConnectieLSVIhabitats, QueryStudiegroepen) %>%
+      distinct()
+    Kenmerken <- Kenmerken %>%
+      left_join(Studielijst, by = c("Kenmerk" = "StudieItem"))
+
+    #Waarde omzetten naar interval (om mee te rekenen)
     VertaaldeKenmerken <-
       vertaalInvoerInterval(
         Kenmerken[
@@ -255,7 +288,8 @@ invoercontroleData_soortenKenmerken <-
       rename(
         WaardeMin = .data$Min,
         WaardeMax = .data$Max
-      )
+      ) %>%
+      distinct()
 
     Kenmerken2 <- Kenmerken %>%
       left_join(

@@ -92,7 +92,7 @@ setMethod(
 
       Aantal <- c(AantalMin, AantalMax)
       if (AantalMin != AantalMax) {
-        warning("Voor sommige soorten of kenmerken is enkel aan- of afwezigheid opgegeven, geen bedekking, waardoor het aantal soorten dat aan een welbepaalde voorwaarde voldoet (bv. minimum een welbepaalde bedekking heeft), niet met zekerheid bepaald kan worden.  In deze gevallen is het resultaat als een range weergegeven.") #nolint
+        warning("aan- of afwezigheid aantal")
       }
     } else {
       Resultaat <-

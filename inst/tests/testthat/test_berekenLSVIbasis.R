@@ -144,7 +144,7 @@ describe("berekenLSVIbasis", {
         Data_voorwaarden,
         Data_soortenKenmerken
       ),
-      "Kwaliteitsniveau moet een van de volgende waarden zijn"
+      "'streefwaarde' ingevoerd in Kwaliteitsniveau komen niet voor in de databank. Voer hier een van volgende waarden in:" #nolint
     )
   })
 
@@ -941,7 +941,8 @@ describe("berekenLSVIbasis", {
             Versie = "Versie 3",
             Kwaliteitsniveau = "1",
             Data_habitat,
-            Data_voorwaarden,
+            Data_voorwaarden %>%
+              filter(.data$Indicator != "vergrassing/verruiging"),
             Data_soortenKenmerken %>%
               mutate(
                 Waarde =
@@ -959,7 +960,7 @@ describe("berekenLSVIbasis", {
               )
             )
       ),
-      "Voor sommige soorten of kenmerken is enkel aan- of afwezigheid opgegeven, geen bedekking,"  #nolint
+      "is enkel aan- of afwezigheid opgegeven, geen bedekking. Hierdoor kon het aantal soorten dat aan een welbepaalde voorwaarde voldoet"  #nolint
     )
     stopifnot(
       all.equal(

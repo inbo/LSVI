@@ -332,9 +332,11 @@ berekenLSVIbasis <-
                 LIJST
               )
             ),
-          WaardeMin = unlist(.data$Berekening)["Min"],
-          WaardeMax = unlist(.data$Berekening)["Max"],
-          TheoretischMaximum = unlist(.data$Berekening)["TheoretischMaximum"],
+          WaardeMin = as.numeric(unlist(.data$Berekening)["Min"]),
+          WaardeMax = as.numeric(unlist(.data$Berekening)["Max"]),
+          TheoretischMaximum =
+            as.numeric(unlist(.data$Berekening)["TheoretischMaximum"]),
+          Warnings = unlist(.data$Berekening)["Warnings"],
           Berekening = NULL
         ) %>%
         ungroup() %>%
@@ -346,8 +348,95 @@ berekenLSVIbasis <-
           Waarde = NULL
         )
 
+      #de warnings terug omzetten naar warnings, maar gegroepeerd per onderwerp
+      if (!all(is.na(BerekendResultaat$Warnings))) {
+        RecordsMetWarnings <- BerekendResultaat %>%
+          filter(!is.na(.data$Warnings))
+        GeenSoorten <- RecordsMetWarnings %>%
+          filter(grepl("geen enkele soort opgegeven", .data$Warnings))
+        if (nrow(GeenSoorten) > 0) {
+          warning(
+            sprintf(
+              "Er is geen enkele soort opgegeven voor de opname(n) %s. Er wordt van uitgegaan dat hier geen vegetatie-opname gemaakt is en berekeningen op basis van soortenlijsten zullen resulteren in NA (not available). Geef tenminste 1 soort op (evt. met bedekking 0 procent) als er toch een opname gemaakt is",  #nolint
+              str_c(unique(GeenSoorten$ID), collapse = ", ")
+            )
+          )
+        }
+        GeenKenmerken <- RecordsMetWarnings %>%
+          filter(grepl("geen enkel kenmerk opgegeven", .data$Warnings))
+        if (nrow(GeenKenmerken) > 0) {
+          Infotekst <- GeenKenmerken %>%
+            group_by(.data$Warnings) %>%
+            summarise(
+              Tekst =
+                paste(
+                  "Voor opname(n)", paste(unique(.data$ID), collapse = ", "),
+                  "is er", unique(.data$Warnings)
+                )
+            ) %>%
+            ungroup() %>%
+            summarise(
+              Tekst = paste(.data$Tekst, collapse = "; ")
+            )
+          warning(
+            sprintf(
+              "%s. Er wordt van uitgegaan dat er voor deze studiegroepen geen observaties uitgevoerd zijn en berekeningen op basis van deze studiegroepen zullen resulteren in NA (not available). Geef tenminste 1 kenmerk van deze studiegroep op (evt. met bedekking 0 procent) als deze studiegroep toch bestudeerd is.",  #nolint
+              Infotekst$Tekst
+            )
+          )
+        }
+        AanOfAfwezigheid <- RecordsMetWarnings %>%
+          filter(grepl("aan- of afwezigheid", .data$Warnings))
+        if (nrow(AanOfAfwezigheid) > 0) {
+          if (
+            max(
+              grepl("aan- of afwezigheid bedekking", AanOfAfwezigheid$Warnings)
+            )
+          ) {
+            Tekst <-
+              "kon niet voor alle voorwaarden een bedekking berekend worden."
+          }
+          if (
+            max(
+              grepl("aan- of afwezigheid aantal", AanOfAfwezigheid$Warnings)
+            )
+          ) {
+            if (exists("Tekst")) {
+              Tekst <- str_c(Tekst, "Ook")
+            } else {
+              Tekst <- ""
+            }
+            Tekst <-
+              str_c(
+                Tekst,
+                "kon het aantal soorten dat aan een welbepaalde voorwaarde voldoet (bv. minimum een welbepaalde bedekking heeft), niet met zekerheid bepaald worden. In dit geval is het resultaat als een range weergegeven." #nolint
+              )
+
+          }
+          warning(
+            sprintf(
+              "Voor sommige soorten of kenmerken uit opname(n) %s is enkel aan- of afwezigheid opgegeven, geen bedekking. Hierdoor %s",  #nolint
+              str_c(unique(AanOfAfwezigheid$ID), collapse = ", "),
+              Tekst
+            )
+          )
+        }
+        WarningMeting <- RecordsMetWarnings %>%
+          filter(grepl("meting onbekend", .data$Warnings))
+        if (nrow(WarningMeting) > 0) {
+          warning(
+            sprintf(
+              "De waarde voor de voorwaarde(n) met VoorwaardeID %s kunnen niet berekend worden voor opname(n) %s. Geef de waarde voor deze voorwaarde rechtstreeks in als input van de functie 'berekenLSVIBasis' via 'Data_voorwaarden'",  #nolint
+              str_c(unique(WarningMeting$VoorwaardeID), collapse = ", "),
+              str_c(unique(WarningMeting$ID), collapse = ", ")
+            )
+          )
+        }
+      }
+
       BerekendResultaat <-
         BerekendResultaat %>%
+        select(-.data$Warnings) %>%
         left_join(
           vertaalIntervalUitvoer(
             BerekendResultaat[

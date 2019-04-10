@@ -32,6 +32,7 @@
 #' @importFrom assertthat assert_that is.string
 #' @importFrom dplyr %>% mutate
 #' @importFrom rlang .data
+#' @importFrom stringr str_to_sentence
 #'
 #'
 selecteerIndicatoren <-
@@ -57,74 +58,36 @@ selecteerIndicatoren <-
     invoercontroleVersie(Versie, ConnectieLSVIhabitats)
 
     assert_that(is.string(Habitatgroep))
-    if (
-      !(Habitatgroep %in%
-        geefUniekeWaarden("Habitatgroep", "Naam", ConnectieLSVIhabitats))
-    ) {
-      stop(
-        sprintf(
-          "Habitatgroep moet een van de volgende waarden zijn: %s",
-          paste(
-            geefUniekeWaarden("Habitatgroep", "Naam", ConnectieLSVIhabitats),
-            collapse = ", "
-          )
-        )
-      )
-    }
-
+    Habitatgroep <- str_to_sentence(Habitatgroep)
+    Habitatgroep <- ifelse(Habitatgroep == "Alle", "alle", Habitatgroep)
+    controleerInvoerwaarde(
+      "Habitatgroep", Habitatgroep,
+      "Habitatgroep", "Naam", ConnectieLSVIhabitats, Tolower = FALSE
+    )
 
     if (is.numeric(Habitattype)) {
       Habitattype <- as.character(Habitattype)
     }
     assert_that(is.character(Habitattype))
-    if (
-      !all(Habitattype %in%
-        geefUniekeWaarden("Habitattype", "Code", ConnectieLSVIhabitats))
-    ) {
-      Habitattypen <-
-        paste(
-          geefUniekeWaarden("Habitattype", "Code", ConnectieLSVIhabitats),
-          collapse = ", "
-        )
-      stop(
-        sprintf(
-          "De opgegeven habitattypen mogen enkel de volgende waarden zijn: %s",
-          Habitattypen
-        )
-      )
-    }
+    Habitattype <- tolower(Habitattype)
+    controleerInvoerwaarde(
+      "Habitattype", Habitattype,
+      "Habitattype", "Code", ConnectieLSVIhabitats
+    )
 
     assert_that(is.string(Criterium))
-    if (
-      !(Criterium %in%
-        geefUniekeWaarden("Criterium", "Naam", ConnectieLSVIhabitats))
-    ) {
-      stop(
-        sprintf(
-          "Criterium moet een van de volgende waarden zijn: %s",
-          paste(
-            geefUniekeWaarden("Criterium", "Naam", ConnectieLSVIhabitats),
-            collapse = ", "
-          )
-        )
-      )
-    }
+    Criterium <- str_to_sentence(Criterium)
+    Criterium <- ifelse(Criterium == "Alle", "alle", Criterium)
+    controleerInvoerwaarde(
+      "Criterium", Criterium,
+      "Criterium", "Naam", ConnectieLSVIhabitats, Tolower = FALSE
+    )
 
     assert_that(is.string(Indicator))
-    if (
-      !(Indicator %in%
-        geefUniekeWaarden("Indicator", "Naam", ConnectieLSVIhabitats))
-    ) {
-      stop(
-        sprintf(
-          "Indicator moet een van de volgende waarden zijn: %s",
-          paste(
-            geefUniekeWaarden("Indicator", "Naam", ConnectieLSVIhabitats),
-            collapse = ", "
-          )
-        )
-      )
-    }
+    controleerInvoerwaarde(
+      "Indicator", Indicator,
+      "Indicator", "Naam", ConnectieLSVIhabitats, Tolower = FALSE
+    )
 
     assert_that(is.logical(HabitatnamenToevoegen))
 

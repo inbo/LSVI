@@ -92,9 +92,11 @@ analyseVariabele_c <-
     if (!is.na(VoorwaardeInfo$StudiegroepId)) {
       queryStudiegroep <-
         sprintf(
-          "SELECT StudieItem.Waarde, StudieItem.Volgnummer
-          FROM StudieItem
-          WHERE StudieItem.StudiegroepId  = '%s'",
+          "SELECT StudieItem.Waarde, StudieItem.Volgnummer,
+            Studiegroep.LijstNaam
+          FROM Studiegroep INNER JOIN StudieItem
+          ON Studiegroep.Id = StudieItem.StudiegroepId
+          WHERE Studiegroep.Id  = '%s'",
           VoorwaardeInfo$StudiegroepId
         )
       Studiegroep <-

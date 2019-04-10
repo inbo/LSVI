@@ -47,7 +47,7 @@ setMethod(
     if (sum(is.na(Resultaat$WaardeMin)) < sum(is.na(Resultaat$WaardeMax))) {
       BedekkingMin <- NA
       BedekkingMax <- NA
-      warning("De bedekking is niet berekend voor indicatoren waarbij voor sommige soorten of kenmerken enkel aan- of afwezigheid opgegeven is") #nolint
+      warning("aan- of afwezigheid bedekking")
     } else {
       BedekkingMin <-
         (1.0 - prod( (1.0 - Resultaat$WaardeMin), na.rm = TRUE))
