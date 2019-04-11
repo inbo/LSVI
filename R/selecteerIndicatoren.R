@@ -55,7 +55,7 @@ selecteerIndicatoren <-
       msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
     )
 
-    invoercontroleVersie(Versie, ConnectieLSVIhabitats)
+    Versie <- invoercontroleVersie(Versie, ConnectieLSVIhabitats)
 
     assert_that(is.string(Habitatgroep))
     Habitatgroep <- str_to_sentence(Habitatgroep)

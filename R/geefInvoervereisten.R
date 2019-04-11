@@ -61,11 +61,8 @@ geefInvoervereisten <- function(Versie = "alle",
   )
   match.arg(Weergave)
 
-  Kwaliteitsniveau <- ifelse(Kwaliteitsniveau == 1, "1",
-                             ifelse(Kwaliteitsniveau == 2, "2",
-                                    Kwaliteitsniveau))
-  assert_that(is.string(Kwaliteitsniveau))
-  invoercontroleKwaliteitsniveau(Kwaliteitsniveau, ConnectieLSVIhabitats)
+  Kwaliteitsniveau <-
+    invoercontroleKwaliteitsniveau(Kwaliteitsniveau, ConnectieLSVIhabitats)
 
 
   Selectiewaarden <-

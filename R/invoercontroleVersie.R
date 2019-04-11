@@ -21,4 +21,5 @@ invoercontroleVersie <- function(Versie, ConnectieLSVIhabitats) {
     "Versie", Versie,
     "Versie", "VersieLSVI", ConnectieLSVIhabitats, Tolower = FALSE
   )
+  return(Versie)
 }

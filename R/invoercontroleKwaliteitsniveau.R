@@ -21,4 +21,5 @@ invoercontroleKwaliteitsniveau <-
       "Kwaliteitsniveau", Kwaliteitsniveau,
       "Beoordeling", "Kwaliteitsniveau", ConnectieLSVIhabitats
     )
+    return(Kwaliteitsniveau)
   }
