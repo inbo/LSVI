@@ -138,8 +138,8 @@ describe("eenjarigen + open zand > meerjarigen", {
         resultaat_berekend[["Resultaat_globaal"]],
         Resultaat[["Resultaat_globaal"]] %>%
           mutate(
-            Index_min_harm = -0.53630858,
-            Index_harm_harm = -0.289069178869264
+            Index_min_harm = 0.50290387,
+            Index_harm_harm = 0.51287627
           )
       )
     )
