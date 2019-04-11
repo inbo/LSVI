@@ -85,9 +85,10 @@ berekenLSVIbasis <-
       msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
     )
 
-    invoercontroleVersie(Versie, ConnectieLSVIhabitats)
+    Versie <- invoercontroleVersie(Versie, ConnectieLSVIhabitats)
 
-    invoercontroleKwaliteitsniveau(Kwaliteitsniveau, ConnectieLSVIhabitats)
+    Kwaliteitsniveau <-
+      invoercontroleKwaliteitsniveau(Kwaliteitsniveau, ConnectieLSVIhabitats)
 
     Data_habitat <-
       invoercontroleData_habitat(Data_habitat, ConnectieLSVIhabitats)
