@@ -63,6 +63,31 @@ invoercontroleData_voorwaarden <-
       Data_voorwaarden$Waarde <- as.character(Data_voorwaarden$Waarde)
     }
 
+    Dubbels <- Data_voorwaarden %>%
+      group_by(.data$ID, .data$Criterium, .data$Indicator, .data$Voorwaarde) %>%
+      summarise(Aantal = n()) %>%
+      ungroup() %>%
+      filter(.data$Aantal > 1)
+    if (nrow(Dubbels) > 0) {
+      Tekst <- Dubbels %>%
+        group_by(.data$Voorwaarde) %>%
+        summarise(
+          Opname = paste(.data$ID, collapse = ", ")
+        ) %>%
+        ungroup() %>%
+        mutate(
+          TekstOpname =
+            paste0(
+              "Voor opname(n) ", .data$Opname, " is de voorwaarde '",
+              .data$Voorwaarde, "' meermaals opgegeven", collapse = NULL
+            )
+        ) %>%
+        summarise(
+          Tekst = paste(.data$TekstOpname, collapse = "; ")
+        )
+      stop(Tekst$Tekst)
+    }
+
     Data_voorwaarden_NA <- Data_voorwaarden %>%
       filter(is.na(.data$Voorwaarde))
 

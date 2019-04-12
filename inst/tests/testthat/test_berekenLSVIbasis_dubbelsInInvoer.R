@@ -46,13 +46,13 @@ describe("Data_voorwaarden", {
         Data_voorwaardenDubbel,
         Data_soortenKenmerken
       ),
-      "Voor opname(n) 1 is de voorwaarde 'MSA' meermaals opgegeven."
+      " 1 is de voorwaarde 'msa' meermaals opgegeven"
     )
   })
 })
 
 describe("Data_soortenKenmerken", {
-  it("dubbele invoer geeft een warning en resultaten worden samengenomen", {
+  it("dubbele invoer geeft een error", {
     Data_soortenKenmerkenDubbel <- Data_soortenKenmerken %>%
       bind_rows(
         data.frame(
@@ -69,7 +69,7 @@ describe("Data_soortenKenmerken", {
         Data_voorwaarden,
         Data_soortenKenmerkenDubbel
       ),
-      "Voor opname(n) 1 is de soort 'Gewone vlier' meermaals opgegeven voor dezelfde vegetatielaag en meeteenheid." #nolint
+      "Voor opname(n) 1 is de soort 'Gewone vlier' meermaals opgegeven voor dezelfde vegetatielaag en meeteenheid" #nolint
     )
   })
 })
