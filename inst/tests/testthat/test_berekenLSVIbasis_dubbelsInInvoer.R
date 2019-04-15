@@ -69,7 +69,7 @@ describe("Data_soortenKenmerken", {
         Data_voorwaarden,
         Data_soortenKenmerkenDubbel
       ),
-      "Voor opname(n) 1 is de soort 'Gewone vlier' meermaals opgegeven voor dezelfde vegetatielaag en meeteenheid" #nolint
+      "'Gewone vlier' meermaals opgegeven voor de boomlaag" #nolint
     )
   })
 })
