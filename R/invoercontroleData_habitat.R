@@ -6,6 +6,7 @@
 #' @inheritParams berekenLSVIbasis
 #'
 #' @importFrom assertthat assert_that has_name
+#' @importFrom stringr str_replace
 #' 
 #' @export
 #'
@@ -20,6 +21,8 @@ invoercontroleData_habitat <- function(Data_habitat, ConnectieLSVIhabitats) {
     Data_habitat$Habitattype <- as.character(Data_habitat$Habitattype)
   }
   Data_habitat$Habitattype <- tolower(Data_habitat$Habitattype)
+  Data_habitat$Habitattype <-
+    str_replace(Data_habitat$Habitattype, "91e0", "91E0")
   controleerInvoerwaarde(
     "Data_habitat$Habitattype", Data_habitat$Habitattype,
     "Habitattype", "Code", ConnectieLSVIhabitats
