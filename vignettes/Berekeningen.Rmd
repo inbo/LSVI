@@ -1,0 +1,102 @@
+---
+title: "Technische achtergrond bij de berekeningen"
+author: "Els Lommelen, Toon Westra en Hans Van Calster"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Handleiding LSVI-package}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Inleiding
+
+De functie `berekenLSVIbasis` berekent de Lokale Staat van Instandhouding van habitattypen op basis van opnamen, maar wat gebeurt er eigenlijk onder de motorkap? Dit vignet geeft hier een antwoord op. (Voor inleidende informatie over het gebruik van het package verwijzen we naar het vignet handleiding, en voor het gebruik van de verschillende functies verwijzen we naar de help van de functies in kwestie.)
+
+#De beschikbare gegevens en informatie
+
+De gebruiker voert per opname 3 typen informatie in:
+
+- habitattype (geeft aan volgens welke criteria de LSVI berekend moet worden)
+- waarden voor indicatoren en voorwaarden (facultatief, afhankelijk van beschikbare gegevens)
+- bedekking voor soorten en/of kenmerken (facultatief, afhankelijk van beschikbare gegevens)
+
+De achterliggende databank bevat ook 3 soorten informatie:
+
+- indicatoren en voorwaarden per habitattype (nodig om LSVI te berekenen)
+- rekenregels (op te vragen met de functie `geefInvoervereisten()`)
+- een grenswaarde voor elke voorwaarde
+
+#De algemene workflow
+
+```{r echo=FALSE, fig.cap="Schematische voorstelling van de workflow", out.width="100%"}
+knitr::include_graphics("Workflow.png")
+```
+
+
+Wat de functie `berekenLSVIbasis()` doet na controle van de gebruikersinvoer, is in een notendop:
+
+- voor het door de gebruiker ingegeven habitattype opzoeken in de databank welke indicatoren en voorwaarden berekend moeten worden
+- de door de gebruiker ingegeven indicatoren en voorwaarden hieraan koppelen en zo een aantal waarden invullen
+- voor de waarden die nog niet ingevuld zijn: in de databank de rekenregels opzoeken en voor elke voorwaarde een waarde proberen te berekenen op basis van de door de gebruiker ingegeven bedekkingen voor soorten en kenmerken
+- voor elke voorwaarde de geobserveerde/berekende waarde vergelijken met de grenswaarde in de databank, en op basis hiervan een status gunstig/ongunstig (TRUE/FALSE) bepalen en een verschilscore of distance-to-target berekenen
+- de resultaten aggregeren naar de hogere niveaus (indicator, criterium, opname) en telkens een status en distance-to-target berekenen
+
+In wat volgt, wordt dieper ingegaan op de onderdelen waarin relevante 'berekeningen' gebeuren of die mogelijk vragen zouden kunnen oproepen:
+
+- hoe worden die rekenregels precies uitgevoerd, wat betekent die 'AnalyseVariabele'?
+- hoe werkt dat precies met die soortenlijsten, wat gebeurt er als ik niet exact dezelfde naam opgeef?
+- wat als ik niet dezelfde schaal gebruik als de grenswaarde, hoe gebeurt die omzetting?
+- hoe wordt de status precies bepaald?
+- wat is distance-to-target en hoe wordt het berekend?
+
+#Rekenregels
+
+algemene uitleg: wat is wat,...
+Bv. minstens 4 sleutelsoorten talrijk aanwezig
+-checkt in databank de lijst met sleutelsoorten
+-selecteert deze sleutelsoorten uit opname
+-selecteert de soorten die talrijk aanwezig zijn
+-telt dit aantal soorten
+Bv. bedekking verbossing < 10 %
+-checkt of de gebruiker voor de boomlaag een bedekking ingeschat heeft
+-Indien niet -> bedekking berekend op basis van alle bomen in de opname
+
+
+##Aantal
+
+##Bedekking
+
+##Aandeel
+
+...
+
+#Afhandeling soortenlijsten
+
+Databank bevat:
+-meerdere taxonomische niveaus
+-zowel ‘preferred names’ als ‘junior synonyms’
+-Latijnse en Nederlandse namen
+Herkenning gebeurt op basis van genusnaam + soortnaam + evt. subsoortnaam/variëteit/…
+Als gebruiker een onbekende naam invoert -> waarschuwing
+Anders wordt naam omgezet naar NBNTaxonVersionKey van ‘preferred name’
+Als taxon niet gevonden wordt, wordt gezocht of taxons van lager niveau wel in opname staan
+
+
+#Bedekking en schalen
+
+Gebruiker kan bedekking invoeren
+-als percentage
+-als interval (bv. 20–30)
+-volgens Tansley-schaal of beheermonitoringschaal
+Voor berekening intern omzetting naar interval
+=> ingevoerde waarden moeten niet in dezelfde schaal staan als de opgegeven referentiewaarde van de LSVI-indicator
+Berekende waarden achteraf omgezet naar dezelfde schaal als in LSVI gebruikt is
+
+#Status
+
+#Distance-to-target
