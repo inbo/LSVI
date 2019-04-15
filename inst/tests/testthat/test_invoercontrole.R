@@ -19,7 +19,6 @@ describe("invoercontroleData_habitat", {
       invoercontroleData_habitat(Data_habitat, ConnectiePool),
       Resultaat
     )
-    
   })
 
 })
