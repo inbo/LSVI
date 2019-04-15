@@ -48,6 +48,24 @@ describe("Data_voorwaarden", {
       ),
       " 1 is de voorwaarde 'msa' meermaals opgegeven"
     )
+    Data_voorwaardenDubbel <- Data_voorwaarden %>%
+      bind_rows(
+        data.frame(
+          ID = "1", Criterium = "Structuur",
+          Indicator = "minimum structuurareaal",
+          Waarde = "TRUE", stringsAsFactors = FALSE
+        )
+      )
+    expect_error(
+      berekenLSVIbasis(
+        Versie = "Versie 2.0",
+        Kwaliteitsniveau = "1",
+        Data_habitat,
+        Data_voorwaardenDubbel,
+        Data_soortenKenmerken
+      ),
+      " 1 is de indicator 'minimum structuurareaal' tweemaal opgegeven"
+    )
   })
 })
 
@@ -70,6 +88,24 @@ describe("Data_soortenKenmerken", {
         Data_soortenKenmerkenDubbel
       ),
       "'Gewone vlier' meermaals opgegeven voor de boomlaag" #nolint
+    )
+    Data_soortenKenmerkenDubbel <- Data_soortenKenmerken %>%
+      bind_rows(
+        data.frame(
+          ID = "1", Kenmerk = "Sambucus nigra",
+          TypeKenmerk = "soort_Latijn", Waarde = "2", Type = "Percentage",
+          Eenheid = "%", Vegetatielaag = "boomlaag", stringsAsFactors = FALSE
+        )
+      )
+    expect_error(
+      berekenLSVIbasis(
+        Versie = "Versie 2.0",
+        Kwaliteitsniveau = "1",
+        Data_habitat,
+        Data_voorwaarden,
+        Data_soortenKenmerkenDubbel
+      ),
+      "'Sambucus nigra, Gewone vlier' meermaals opgegeven voor de boomlaag" #nolint
     )
   })
 })
