@@ -27,7 +27,7 @@ invoercontroleData_habitat <- function(Data_habitat, ConnectieLSVIhabitats) {
     str_replace(Data_habitat$Habitattype, "91f0", "91F0")
   controleerInvoerwaarde(
     "Data_habitat$Habitattype", Data_habitat$Habitattype,
-    "Habitattype", "Code", ConnectieLSVIhabitats
+    "Habitattype", "Code", ConnectieLSVIhabitats, Tolower = FALSE
   )
   return(Data_habitat)
 }
