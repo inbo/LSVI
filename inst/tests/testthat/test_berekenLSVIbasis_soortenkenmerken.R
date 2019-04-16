@@ -42,10 +42,10 @@ describe("ontbreken van soorten of kenmerken", {
         Data_voorwaarden,
         Data_soortenKenmerken %>%
           filter(
-            TypeKenmerk != "Soort_Latijn"
+            .data$TypeKenmerk != "Soort_Latijn"
           )
       ),
-      "Er is geen enkele soort opgegeven"  #nolint
+      "Er is geen enkele soort opgegeven"
     )
     expect_equal(
       idsWissen(
@@ -56,7 +56,7 @@ describe("ontbreken van soorten of kenmerken", {
           Data_voorwaarden,
           Data_soortenKenmerken %>%
             filter(
-              TypeKenmerk != "Soort_Latijn"
+              .data$TypeKenmerk != "Soort_Latijn"
             )
         )
       ),
@@ -65,19 +65,19 @@ describe("ontbreken van soorten of kenmerken", {
           mutate(
             Status_criterium =
               ifelse(
-                Criterium == "Vegetatie",
+                .data$Criterium == "Vegetatie",
                 NA,
                 .data$Status_criterium
               ),
             Index_min_criterium =
               ifelse(
-                Criterium == "Vegetatie",
+                .data$Criterium == "Vegetatie",
                 NA,
                 .data$Index_min_criterium
               ),
             Index_harm_criterium =
               ifelse(
-                Criterium == "Vegetatie",
+                .data$Criterium == "Vegetatie",
                 NA,
                 .data$Index_harm_criterium
               )
@@ -86,13 +86,13 @@ describe("ontbreken van soorten of kenmerken", {
           mutate(
             Status_indicator =
               ifelse(
-                Criterium == "Vegetatie",
+                .data$Criterium == "Vegetatie",
                 NA,
                 .data$Status_indicator
               ),
             Verschilscore =
               ifelse(
-                Criterium == "Vegetatie",
+                .data$Criterium == "Vegetatie",
                 NA,
                 .data$Verschilscore
               )
@@ -101,19 +101,19 @@ describe("ontbreken van soorten of kenmerken", {
           mutate(
             Waarde =
               ifelse(
-                Criterium == "Vegetatie",
+                .data$Criterium == "Vegetatie",
                 NA,
                 .data$Waarde
               ),
             Status_voorwaarde =
               ifelse(
-                Criterium == "Vegetatie",
+                .data$Criterium == "Vegetatie",
                 NA,
                 .data$Status_voorwaarde
               ),
             Verschilscore =
               ifelse(
-                Criterium == "Vegetatie",
+                .data$Criterium == "Vegetatie",
                 NA,
                 .data$Verschilscore
               )
@@ -140,7 +140,7 @@ describe("ontbreken van soorten of kenmerken", {
           Data_voorwaarden,
           Data_soortenKenmerken %>%
             filter(
-              TypeKenmerk != "Soort_Latijn"
+              .data$TypeKenmerk != "Soort_Latijn"
             ) %>%
             bind_rows(
               data.frame(
@@ -161,19 +161,19 @@ describe("ontbreken van soorten of kenmerken", {
           mutate(
             Status_criterium =
               ifelse(
-                Criterium == "Vegetatie",
+                .data$Criterium == "Vegetatie",
                 FALSE,
                 .data$Status_criterium
               ),
             Index_min_criterium =
               ifelse(
-                Criterium == "Vegetatie",
+                .data$Criterium == "Vegetatie",
                 -1,
                 .data$Index_min_criterium
               ),
             Index_harm_criterium =
               ifelse(
-                Criterium == "Vegetatie",
+                .data$Criterium == "Vegetatie",
                 -1,
                 .data$Index_harm_criterium
               )
@@ -182,13 +182,13 @@ describe("ontbreken van soorten of kenmerken", {
           mutate(
             Status_indicator =
               ifelse(
-                Criterium == "Vegetatie",
+                .data$Criterium == "Vegetatie",
                 FALSE,
                 .data$Status_indicator
               ),
             Verschilscore =
               ifelse(
-                Criterium == "Vegetatie",
+                .data$Criterium == "Vegetatie",
                 -1,
                 .data$Verschilscore
               )
@@ -197,19 +197,19 @@ describe("ontbreken van soorten of kenmerken", {
           mutate(
             Waarde =
               ifelse(
-                Criterium == "Vegetatie",
+                .data$Criterium == "Vegetatie",
                 0,
                 .data$Waarde
               ),
             Status_voorwaarde =
               ifelse(
-                Criterium == "Vegetatie",
+                .data$Criterium == "Vegetatie",
                 FALSE,
                 .data$Status_voorwaarde
               ),
             Verschilscore =
               ifelse(
-                Criterium == "Vegetatie",
+                .data$Criterium == "Vegetatie",
                 -1,
                 .data$Verschilscore
               )
@@ -228,7 +228,7 @@ describe("ontbreken van soorten of kenmerken", {
         Data_voorwaarden,
         Data_soortenKenmerken %>%
           filter(
-            TypeKenmerk != "studiegroep"
+            .data$TypeKenmerk != "studiegroep"
           )
       ),
       "JR0216, Ts2036 is er geen enkel kenmerk opgegeven van studielijst ouderdomsstadia. Er wordt van uitgegaan dat er voor deze studiegroepen geen observaties uitgevoerd zijn en berekeningen op basis van deze studiegroepen zullen resulteren in NA"  #nolint
@@ -242,7 +242,7 @@ describe("ontbreken van soorten of kenmerken", {
           Data_voorwaarden,
           Data_soortenKenmerken %>%
             filter(
-              TypeKenmerk != "studiegroep"
+              .data$TypeKenmerk != "studiegroep"
             )
         )
       ),
@@ -251,19 +251,19 @@ describe("ontbreken van soorten of kenmerken", {
           mutate(
             Status_criterium =
               ifelse(
-                Criterium == "Structuur" & ID == "Ts2036",
+                .data$Criterium == "Structuur" & ID == "Ts2036",
                 NA,
                 .data$Status_criterium
               ),
             Index_min_criterium =
               ifelse(
-                Criterium == "Structuur",
+                .data$Criterium == "Structuur",
                 NA,
                 .data$Index_min_criterium
               ),
             Index_harm_criterium =
               ifelse(
-                Criterium == "Structuur",
+                .data$Criterium == "Structuur",
                 NA,
                 .data$Index_harm_criterium
               )
@@ -272,13 +272,13 @@ describe("ontbreken van soorten of kenmerken", {
           mutate(
             Status_indicator =
               ifelse(
-                Indicator == "ouderdomsstructuur Struikheide",
+                .data$Indicator == "ouderdomsstructuur Struikheide",
                 NA,
                 .data$Status_indicator
               ),
             Verschilscore =
               ifelse(
-                Indicator == "ouderdomsstructuur Struikheide",
+                .data$Indicator == "ouderdomsstructuur Struikheide",
                 NA,
                 .data$Verschilscore
               )
@@ -287,19 +287,19 @@ describe("ontbreken van soorten of kenmerken", {
           mutate(
             Waarde =
               ifelse(
-                Indicator == "ouderdomsstructuur Struikheide",
+                .data$Indicator == "ouderdomsstructuur Struikheide",
                 NA,
                 .data$Waarde
               ),
             Status_voorwaarde =
               ifelse(
-                Indicator == "ouderdomsstructuur Struikheide",
+                .data$Indicator == "ouderdomsstructuur Struikheide",
                 NA,
                 .data$Status_voorwaarde
               ),
             Verschilscore =
               ifelse(
-                Indicator == "ouderdomsstructuur Struikheide",
+                .data$Indicator == "ouderdomsstructuur Struikheide",
                 NA,
                 .data$Verschilscore
               )
@@ -324,7 +324,7 @@ describe("ontbreken van soorten of kenmerken", {
           Data_voorwaarden,
           Data_soortenKenmerken %>%
             filter(
-              Waarde != "0"
+              .data$Waarde != "0"
             )
         )
       ),

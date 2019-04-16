@@ -207,6 +207,63 @@ invoercontroleData_soortenKenmerken <-
       )
     }
 
+    Dubbels <- KenmerkenSoort %>%
+      group_by(
+        .data$ID, .data$NBNTaxonVersionKey, .data$Vegetatielaag, .data$Eenheid
+      ) %>%
+      summarise(Aantal = n()) %>%
+      ungroup() %>%
+      filter(.data$Aantal > 1)
+    if (nrow(Dubbels) > 0) {
+      Tekst <- Dubbels %>%
+        inner_join(
+          KenmerkenSoort, by = c("ID", "NBNTaxonVersionKey", "Vegetatielaag")
+        ) %>%
+        group_by(.data$ID, .data$Vegetatielaag) %>%
+        summarise(
+          Soorten = paste(unique(.data$Kenmerk), collapse = ", ")
+        ) %>%
+        ungroup() %>%
+        mutate(
+          TekstOpname =
+            paste0(
+              "Voor opname ", .data$ID, " is/zijn de soort(en) '",
+              .data$Soorten, "' meermaals opgegeven voor de ",
+              .data$Vegetatielaag, collapse = NULL
+            )
+        ) %>%
+        summarise(
+          Tekst = paste(.data$TekstOpname, collapse = "; ")
+        )
+      stop(Tekst$Tekst)
+    }
+
+    Dubbels <- Kenmerken %>%
+      filter(.data$TypeKenmerk == "studiegroep") %>%
+      group_by(.data$ID, .data$Kenmerk) %>%
+      summarise(Aantal = n()) %>%
+      ungroup() %>%
+      filter(.data$Aantal > 1)
+    if (nrow(Dubbels) > 0) {
+      Tekst <- Dubbels %>%
+        group_by(.data$ID) %>%
+        summarise(
+          Kenmerk = paste(unique(.data$Kenmerk), collapse = ", ")
+        ) %>%
+        ungroup() %>%
+        mutate(
+          TekstOpname =
+            paste0(
+              "Voor opname ", .data$ID, " is het kenmerk '",
+              .data$Kenmerk, "' meermaals opgegeven", collapse = NULL
+            )
+        ) %>%
+        summarise(
+          Tekst = paste(.data$TekstOpname, collapse = "; ")
+        )
+      stop(Tekst$Tekst)
+    }
+
 
     KenmerkenSoort <- KenmerkenSoort %>%
       mutate(
