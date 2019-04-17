@@ -24,7 +24,7 @@ geefVertaallijst <-
   query <-
     "SELECT Lijst.Naam, LijstItem.Waarde, LijstItem.Volgnummer,
     LijstItem.Omschrijving, LijstItem.Ondergrens,
-    LijstItem.Gemiddelde, LijstItem.Bovengrens
+    LijstItem.Gemiddelde, LijstItem.Bovengrens, LijstItem.Basisschaal
     FROM LijstItem INNER JOIN Lijst ON LijstItem.LijstId = Lijst.Id"
   LIJST <-
     dbGetQuery(ConnectieLSVIhabitats, query) %>%
