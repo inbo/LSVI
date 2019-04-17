@@ -9,7 +9,7 @@ vertaalIntervalUitvoer(Dataset, LIJST, ConnectieLSVIhabitats)
 \arguments{
 \item{Dataset}{dataframe met velden Rijnr, Type, Min, Max, Eenheid en Invoertype}
 
-\item{LIJST}{Dataframe met lijst die weergeeft hoe de vertaling moet gebeuren van categorische variabelen naar numerieke waarden (en omgekeerd).  Default worden deze waarden uit de databank met LSVI-indicatoren gehaald d.m.v. de functie vertaalInvoerInterval().  Aangeraden wordt om deze default te gebruiken (dus parameter niet expliciet invullen), of deze waar nodig aan te vullen met eigen schalen.  Omdat er ook een omzetting moet gebeuren voor grenswaarden uit de databank, kan het niet doorgeven van een gedeelte van deze lijst problemen geven.}
+\item{LIJST}{Dataframe met lijst die weergeeft hoe de vertaling moet gebeuren van numerieke waarden naar categorische variabelen.  Verschillend van andere functies die dezelfde lijst gebruiken, mogen hier geen overlappende categorieen voorkomen binnen eenzelfde schaal.  Om zulke lijst te bekomen, moeten uit de lijst gegenereerd door de functie vertaalInvoerInterval() de records met Basisschaal 1 gefilterd worden.}
 
 \item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
 }

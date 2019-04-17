@@ -63,17 +63,68 @@ invoercontroleData_voorwaarden <-
       Data_voorwaarden$Waarde <- as.character(Data_voorwaarden$Waarde)
     }
 
+    Dubbels <- Data_voorwaarden %>%
+      group_by(.data$ID, .data$Criterium, .data$Indicator, .data$Voorwaarde) %>%
+      summarise(Aantal = n()) %>%
+      ungroup() %>%
+      filter(.data$Aantal > 1)
+    if (nrow(Dubbels) > 0) {
+      Tekst <- Dubbels %>%
+        group_by(.data$Voorwaarde) %>%
+        summarise(
+          Opname = paste(unique(.data$ID), collapse = ", ")
+        ) %>%
+        ungroup() %>%
+        mutate(
+          TekstOpname =
+            paste0(
+              "Voor opname(n) ", .data$Opname, " is de voorwaarde '",
+              .data$Voorwaarde, "' meermaals opgegeven", collapse = NULL
+            )
+        ) %>%
+        summarise(
+          Tekst = paste(.data$TekstOpname, collapse = "; ")
+        )
+      stop(Tekst$Tekst)
+    }
+
     Data_voorwaarden_NA <- Data_voorwaarden %>%
       filter(is.na(.data$Voorwaarde))
+
+    Data_voorwaarden_nietNA <- Data_voorwaarden %>%
+      filter(!is.na(.data$Voorwaarde))
 
     if (nrow(Data_voorwaarden_NA) > 0) {
       if (!all(Data_voorwaarden_NA$Waarde %in% c("TRUE", "FALSE"))) {
         stop("Als je in de tabel Data_voorwaarden de kolom voorwaarde leeg laat, wordt ervan uitgegaan dat je de indicator rechtstreeks ingeschat hebt.  In dit geval mag je in de kolom Waarde enkel 'TRUE' (gunstig) of 'FALSE' (ongunstig) ingeven.  Voor minstens 1 record heb je Voorwaarde leeggelaten en bij Waarde een andere waarde dan TRUE of FALSE opgegeven") #nolint
       }
+      DubbeleIndicatoren <- Data_voorwaarden_NA %>%
+        inner_join(
+          Data_voorwaarden_nietNA,
+          by = c("ID", "Criterium", "Indicator")
+        )
+      if (nrow(DubbeleIndicatoren) > 0) {
+        Tekst <- DubbeleIndicatoren %>%
+          group_by(.data$Indicator) %>%
+          summarise(
+            Opname = paste(unique(.data$ID), collapse = ", ")
+          ) %>%
+          ungroup() %>%
+          mutate(
+            TekstOpname =
+              paste0(
+                "Voor opname(n) ", .data$Opname, " is de indicator '",
+                .data$Indicator,
+                "' tweemaal opgegeven: rechtstreeks ingeschat als indicator (TRUE/FALSE) en door het opgeven van concrete waarden voor een van de voorwaarden", #nolint
+                collapse = NULL
+              )
+          ) %>%
+          summarise(
+            Tekst = paste(.data$TekstOpname, collapse = "; ")
+          )
+        stop(Tekst$Tekst)
+      }
     }
-
-    Data_voorwaarden_nietNA <- Data_voorwaarden %>%
-      filter(!is.na(.data$Voorwaarde))
 
     if (nrow(Data_voorwaarden_nietNA) > 0) {
       assert_that(has_name(Data_voorwaarden_nietNA, "Type"))
