@@ -1,7 +1,19 @@
 Package: LSVI
-Title: Rekenmodule Lokale Staat Van Instandhouding
+Title: Rekenmodule Lokale Staat Van Instandhouding van habitattypen
 Version: 0.0.0.9001
-Authors@R: c(person("Els", "Lommelen", email = "els.lommelen@inbo.be", role = c("aut", "cre")), person("Toon", "Westra", email = "toon.westra@inbo.be", role = c("aut")), person("Research Institute for Nature and Forest (INBO)", email = "info@inbo.be", role = "cph"))
+Date: 2019-01-16
+Authors@R: c(
+  person(
+    "Els", "Lommelen", email = "els.lommelen@inbo.be",
+    comment = c(ORCID = "0000-0002-3481-5684"), role = c("aut", "cre")),
+  person("Patrik", "Oosterlynck", email = "patrik.oosterlynck@inbo.be", role = c("aut")),
+  person("Gert", "Van Spaendonk", email = "gert.vanspaendonk@inbo.be", role = c("aut")),
+  person("Hans", "Van Calster", email = "hans.vancalster@inbo.be", role = c("aut")),
+  person("Martine", "Van Hove", email = "martine.vanhove@inbo.be", role = c("aut")),
+  person("Toon", "Westra", email = "toon.westra@inbo.be", role = c("aut")),
+  person("An", "Leyssen", email = "an.leyssen@inbo.be", role = c("ctb")),
+  person("Toon", "Spanhove", email = "toon.spanhove@inbo.be", role = c("ctb")),
+  person("Research Institute for Nature and Forest (INBO)", email = "info@inbo.be", role = "cph"))
 Description: Het package LSVI bundelt een aantal functies in verband met het ophalen van informatie over en het berekenen van de Lokale Staat Van Instandhouding (LSVI) van habitattypes.
 Depends:
     R (>= 3.4.0)
@@ -30,8 +42,10 @@ Imports:
     xtable
 Suggests:
     knitr
-RoxygenNote: 6.1.0.9000
+RoxygenNote: 6.1.1
 VignetteBuilder: knitr
+URL: https://github.com/inbo/LSVI
+BugReports: https://github.com/inbo/LSVI/issues
 Collate: 
     'berekenLSVIbasis.R'
     'berekenStatus.R'
@@ -41,6 +55,7 @@ Collate:
     'combinerenVoorwaarden.R'
     'connecteerMetLSVIdb.R'
     'connecteerMetLSVIlite.R'
+    'controleerInvoerwaarde.R'
     'deselecteerKenmerkenInOpname.R'
     'geefInfoHabitatfiche.R'
     'geefInvoervereisten.R'
@@ -65,7 +80,9 @@ Collate:
     's4_aandeelKruidlaag.R'
     's4_aantal.R'
     's4_analyseVariabele_c.R'
+    's4_bedekkingExcl.R'
     's4_bedekkingLaag.R'
+    's4_bedekkingSom.R'
     's4_maxBedekking.R'
     's4_maxBedekkingExcl.R'
     's4_meting.R'

@@ -61,25 +61,8 @@ geefInvoervereisten <- function(Versie = "alle",
   )
   match.arg(Weergave)
 
-  Kwaliteitsniveau <- ifelse(Kwaliteitsniveau == 1, "1",
-                             ifelse(Kwaliteitsniveau == 2, "2",
-                                    Kwaliteitsniveau))
-  assert_that(is.string(Kwaliteitsniveau))
-  if (!(Kwaliteitsniveau %in% geefUniekeWaarden("Beoordeling",
-                                               "Kwaliteitsniveau",
-                                               ConnectieLSVIhabitats))) {
-    stop(
-      sprintf(
-        "Kwaliteitsniveau moet een van de volgende waarden zijn: %s",
-        geefUniekeWaarden(
-          "Beoordeling",
-          "Kwaliteitsniveau",
-          ConnectieLSVIhabitats
-        )
-      )
-    )
-  }
-
+  Kwaliteitsniveau <-
+    invoercontroleKwaliteitsniveau(Kwaliteitsniveau, ConnectieLSVIhabitats)
 
 
   Selectiewaarden <-
@@ -97,7 +80,8 @@ geefInvoervereisten <- function(Versie = "alle",
       .data$Habitatsubtype,
       .data$Indicator_beoordelingID
     ) %>%
-    distinct()
+    distinct() %>%
+    filter(!is.na(.data$Indicator_beoordelingID))
 
   Indicator_beoordelingIDs <-
     paste(

@@ -31,8 +31,12 @@ berekenVerschilscores <-
     Statustabel$RefMin <- as.double(Statustabel$RefMin)
     Statustabel$RefMax <- as.double(Statustabel$RefMax)
     #geval ja/nee
-    Statustabel[Statustabel$TypeVariabele == "Ja/nee",
-                c("RefMin", "RefMax")] <- c(0.5, 0.5)
+    if ("Ja/nee" %in% Statustabel$TypeVariabele) {
+      Statustabel[Statustabel$TypeVariabele == "Ja/nee",
+                  c("RefMin", "RefMax")] <-
+        c(Statustabel[Statustabel$TypeVariabele == "Ja/nee", c("RefMin")] - 0.5,
+          Statustabel[Statustabel$TypeVariabele == "Ja/nee", c("RefMin")] - 0.5)
+    }
     Statustabel[Statustabel$TypeVariabele == "Ja/nee" &
                   is.na(Statustabel$WaardeMax),
                 c("WaardeMax")] <-
@@ -55,15 +59,28 @@ berekenVerschilscores <-
         Waarde = (.data$WaardeMin + .data$WaardeMax) / 2,
         # negatieve indicatoren * -1
         Teken = ifelse(.data$Operator %in% c("<=", "<"), -1, 1),
+        Teken =
+          ifelse(
+            .data$Ref <= 0 & .data$Operator == "=", -.data$Teken, .data$Teken
+          ),
+        Ref = abs(.data$Ref),
         BereikGunstig = ifelse(.data$Operator %in% c("<=", "<"),
                                .data$Ref,
                                .data$TheoretischMaximum - .data$Ref),
         BereikOngunstig = .data$TheoretischMaximum - .data$BereikGunstig,
+        BereikOngunstig =
+          ifelse(
+            is.na(.data$BereikOngunstig) & !.data$Operator %in% c("<=", "<"),
+            .data$Ref,
+            .data$BereikOngunstig
+          ),
         Verschil = (.data$Waarde - .data$Ref) * .data$Teken,
         Verschilscore = case_when(
           is.na(.data$Verschil) ~ ifelse(.data$Waarde == .data$Ref, 1, -1),
           #gewijzigd naar >= 0 (bereik gunstig is inclusief de grenswaarde zelf)
-          .data$Verschil >= 0 ~ .data$Verschil / .data$BereikGunstig,
+          .data$Verschil >= 0 & .data$BereikGunstig != 0 ~
+            .data$Verschil / .data$BereikGunstig,
+          .data$Verschil >= 0 & .data$BereikGunstig == 0 ~ 1,
           .data$Verschil < 0 ~ .data$Verschil / .data$BereikOngunstig
         ),
         # plaffonering voor geval dat door correctie oppervlakte-afh score > 1

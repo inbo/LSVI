@@ -17,22 +17,9 @@ invoercontroleKwaliteitsniveau <-
                                       Kwaliteitsniveau))
 
     assert_that(is.string(Kwaliteitsniveau))
-    if (!(Kwaliteitsniveau %in%
-          geefUniekeWaarden(
-            "Beoordeling",
-            "Kwaliteitsniveau",
-            ConnectieLSVIhabitats
-          )
-    )) {
-      stop(
-        sprintf(
-          "Kwaliteitsniveau moet een van de volgende waarden zijn: %s",
-          geefUniekeWaarden(
-            "Beoordeling",
-            "Kwaliteitsniveau",
-            ConnectieLSVIhabitats
-          )
-        )
-      )
-    }
+    controleerInvoerwaarde(
+      "Kwaliteitsniveau", Kwaliteitsniveau,
+      "Beoordeling", "Kwaliteitsniveau", ConnectieLSVIhabitats
+    )
+    return(Kwaliteitsniveau)
   }

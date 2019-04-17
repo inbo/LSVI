@@ -26,6 +26,7 @@
 #' @importFrom dplyr %>% mutate filter distinct
 #' @importFrom DBI dbGetQuery
 #' @importFrom assertthat assert_that noNA is.string
+#' @importFrom rgbif parsenames
 #'
 #'
 geefSoortenlijstVoorIDs <-
@@ -116,7 +117,6 @@ geefSoortenlijstVoorIDs <-
         Taxon.NbnTaxonVersionKey,
         Taxon.FloraNaamWetenschappelijk AS WetNaam,
         Taxon.FloraNaamNederlands As NedNaam,
-        Taxon.NbnNaam AS WetNaamKort,
         TaxonType.Naam AS TaxonType
       FROM Groepen
         INNER JOIN TaxongroepTaxon TgT
@@ -136,7 +136,6 @@ geefSoortenlijstVoorIDs <-
         Taxonlijn.NbnTaxonVersionKey,
         Taxonlijn.FloraNaamWetenschappelijk AS WetNaam,
         Taxonlijn.FloraNaamNederlands As NedNaam,
-        Taxonlijn.NbnNaam AS WetNaamKort,
         TaxonType.Naam AS TaxonType
       FROM Groepen
         INNER JOIN TaxongroepTaxon TgT
@@ -162,6 +161,9 @@ geefSoortenlijstVoorIDs <-
           paste(QueryGroepen, QueryTaxa, QueryAlleTaxa, sep = "")
         )
     }
+
+    Soortenlijst$WetNaamKort <-
+      parsenames(Soortenlijst$WetNaam)$canonicalnamewithmarker
 
     return(Soortenlijst)
   }

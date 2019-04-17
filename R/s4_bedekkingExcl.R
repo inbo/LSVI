@@ -1,14 +1,14 @@
-#' S4-klasse die de maximale bedekking berekent van de soorten die niet tot de soortengroep behoren
+#' S4-klasse die de totale bedekking van de soorten berekent die niet in de lijst staan
 #'
-#' Deze klasse MaxBedekkingExcl staat in voor de berekening van waarden voor TypeVariabele Bedekking op basis van opgegeven kenmerken.  Ze is een nakomeling van de klasse AnalyseVariabele.
+#' Deze klasse BedekkingExcl staat in voor de berekening van waarden voor AnalyseVariabele BedekkingExcl op basis van opgegeven kenmerken.  Ze is een nakomeling van de klasse AnalyseVariabele.  Ze berekent de totale bedekking van soorten die niet in de opgegeven soortenlijst staan (dus alle soorten behalve soorten uit soorten uit lijst).
 #'
-#' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
+#' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
 #'
 #' @importFrom methods setClass setMethod
 #'
 #' @include s4_AnalyseVariabele.R
 setClass(
-  Class = "maxBedekkingExcl",
+  Class = "bedekkingExcl",
   representation =
     representation(),
   contains = "AnalyseVariabele"
@@ -16,8 +16,9 @@ setClass(
 
 setMethod(
   f = "berekenWaarde",
-  signature = "maxBedekkingExcl",
+  signature = "bedekkingExcl",
   definition = function(object) {
+
 
     object@Kenmerken <- object@Kenmerken %>%
       filter(
@@ -44,28 +45,23 @@ setMethod(
     #er aan-/afwezigheden opgegeven zijn in plaats van bedekkingen
     #In dat geval berekenen we geen bedekking en geven we een warning
     if (sum(is.na(Resultaat$WaardeMin)) < sum(is.na(Resultaat$WaardeMax))) {
-      MaxBedekkingMin <- NA
-      MaxBedekkingMax <- NA
-      warning("aan- of afwezigheid bedekking") #nolint
-    } else if (nrow(Resultaat) > 0) {
-
-      MaxBedekkingMin <- max(Resultaat$WaardeMin)
-      MaxBedekkingMax <- max(Resultaat$WaardeMax)
-
-    } else if (nrow(Resultaat) == 0) {
-
-      MaxBedekkingMin <- 0
-      MaxBedekkingMax <- 0
-
+      BedekkingMin <- NA
+      BedekkingMax <- NA
+      warning("aan- of afwezigheid bedekking")
+    } else {
+      BedekkingMin <-
+        (1.0 - prod( (1.0 - Resultaat$WaardeMin), na.rm = TRUE))
+      BedekkingMax <-
+        (1.0 - prod( (1.0 - Resultaat$WaardeMax), na.rm = TRUE))
     }
 
-    return(c(MaxBedekkingMin, MaxBedekkingMax))
+    return(c(BedekkingMin, BedekkingMax))
   }
 )
 
 setMethod(
   f = "geefTheoretischMaximum",
-  signature = "maxBedekkingExcl",
+  signature = "bedekkingExcl",
   definition = function(object) {
     return(1)
   }

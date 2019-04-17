@@ -36,7 +36,7 @@ setMethod(
 
 
     if (nrow(alle_soorten) == 0) {
-      return(NA)
+      return(0)
     } else{
       teller_min <- sum(sleutelsoorten$WaardeMin, na.rm = TRUE)
       teller_max <- sum(sleutelsoorten$WaardeMax, na.rm = TRUE)

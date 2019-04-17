@@ -36,8 +36,9 @@ describe("test databank", {
       filter(!grepl("^meting", .data$VariabeleNaam))
     expect_true(
       all(AV$VariabeleNaam %in%
-            c("aandeel", "aandeelKruidlaag", "aantal", "bedekking",
-              "bedekkingLaag", "maxBedekking", "maxBedekkingExcl")
+            c("aandeel", "bedekkingExcl", "aandeelKruidlaag", "bedekkingSom",
+              "aantal", "bedekking", "bedekkingLaag", "maxBedekking",
+              "maxBedekkingExcl")
       )
     )
   })
@@ -201,6 +202,38 @@ describe("test databank", {
     )
   })
 
+  it("AnalyseVariabele bedekkingExcl bevat percentages", {
+    skip_on_cran()
+    ConnectieLSVIhabitats <-
+      connecteerMetLSVIdb()
+    AV <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        "SELECT AnalyseVariabele.Id, AnalyseVariabele.VariabeleNaam,
+        TypeVariabele.Naam as TypeVariabele
+        FROM AnalyseVariabele INNER JOIN TypeVariabele
+        ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
+        WHERE AnalyseVariabele.VariabeleNaam = 'bedekkingExcl'"
+      )
+    AV_ok <- AV %>%
+      filter(TypeVariabele %in% c("Percentage"))
+    AV_leeg <- AV %>%
+      filter(!TypeVariabele %in% c("Percentage"))
+    FouteWaarden <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        sprintf(
+          "SELECT Id, Referentiewaarde FROM Voorwaarde
+          WHERE AnalyseVariabeleId in ('%s')",
+          paste(AV_leeg$Id, collapse = "','")
+        )
+      )
+    expect_equal(
+      nrow(FouteWaarden),
+      0
+    )
+  })
+
   it("AnalyseVariabele aandeelKruidlaag bevat percentages", {
     ConnectieLSVIhabitats <-
       connecteerMetLSVIlite()
@@ -230,6 +263,38 @@ describe("test databank", {
     expect_true(
       all(as.numeric(RefwaardenPerc$Referentiewaarde) <= 100)
     )
+    FouteWaarden <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        sprintf(
+          "SELECT Id, Referentiewaarde FROM Voorwaarde
+          WHERE AnalyseVariabeleId in ('%s')",
+          paste(AV_leeg$Id, collapse = "','")
+        )
+      )
+    expect_equal(
+      nrow(FouteWaarden),
+      0
+    )
+  })
+
+  it("AnalyseVariabele bedekkingSom bevat percentages", {
+    skip_on_cran()
+    ConnectieLSVIhabitats <-
+      connecteerMetLSVIdb()
+    AV <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        "SELECT AnalyseVariabele.Id, AnalyseVariabele.VariabeleNaam,
+        TypeVariabele.Naam as TypeVariabele
+        FROM AnalyseVariabele INNER JOIN TypeVariabele
+        ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
+        WHERE AnalyseVariabele.VariabeleNaam = 'bedekkingSom'"
+      )
+    AV_ok <- AV %>%
+      filter(TypeVariabele %in% c("Percentage"))
+    AV_leeg <- AV %>%
+      filter(!TypeVariabele %in% c("Percentage"))
     FouteWaarden <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -493,6 +558,27 @@ describe("test databank", {
       filter(TypeVariabele == "Categorie")
     expect_true(
       all(!is.na(AV_cat$SubInvoermaskerId))
+    )
+  })
+
+  it("Operator '=' is niet gebruikt tenzij bij type 'ja/nee'", {
+    ConnectieLSVIhabitats <-
+      connecteerMetLSVIlite()
+    AV <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        "SELECT Voorwaarde.Id, TypeVariabele.Naam as TypeVariabele,
+          Voorwaarde.Operator
+        FROM Voorwaarde INNER JOIN AnalyseVariabele
+        ON Voorwaarde.SubAnalyseVariabeleId = AnalyseVariabele.Id
+        INNER JOIN TypeVariabele
+        ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
+        WHERE TypeVariabele.Naam != 'Ja/nee'
+        AND Voorwaarde.Operator != '='"
+      )
+    expect_equal(
+      nrow(AV),
+      0
     )
   })
 

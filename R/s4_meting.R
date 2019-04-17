@@ -19,9 +19,7 @@ setMethod(
   signature = "meting",
   definition = function(object) {
 
-    warning(paste("De waarde voor de voorwaarde met ID",
-                  object@VoorwaardeID,
-                  "kan niet berekend worden. Geef de waarde voor deze voorwaarde rechtstreeks in als input van de functie 'berekenLSVIBasis' via 'Data_voorwaarden'")) #nolint
+    warning("meting onbekend")
 
     return(c(NA, NA))
   }

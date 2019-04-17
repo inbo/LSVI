@@ -10,6 +10,7 @@
 #' 
 #' @importFrom DBI dbGetQuery
 #' @importFrom dplyr %>% bind_rows filter mutate transmute
+#' @importFrom stringr str_detect str_replace_all
 
 logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
 
@@ -58,7 +59,8 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
       FROM AnalyseVariabele INNER JOIN Voorwaarde
       On AnalyseVariabele.Id = Voorwaarde.AnalyseVariabeleId
       WHERE NOT VariabeleNaam in ('aantal', 'aandeel', 'aandeelKruidlaag',
-        'bedekking', 'maxBedekking', 'maxBedekkingExcl', 'bedekkingLaag')
+        'bedekking', 'maxBedekking', 'maxBedekkingExcl', 'bedekkingLaag',
+        'bedekkingSom', 'bedekkingExcl')
       AND NOT VariabeleNaam LIKE 'meting%'"
     ) %>%
     transmute(
@@ -81,7 +83,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
     filter(
       !.data$AnalyseVariabele %in%
         c("aantal", "aandeel", "aandeelKruidlaag", "bedekking", "bedekkingLaag",
-          "maxBedekking", "maxBedekkingExcl"),
+          "maxBedekking", "maxBedekkingExcl", "bedekkingSom", "bedekkingExcl"),
       !grepl("^meting", .data$AnalyseVariabele)
     )
   TypeAantalNietGeheelGetal <- Invoervereisten %>%
@@ -98,7 +100,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
   TypeAandeelFout <- Invoervereisten %>%
     filter(
       .data$AnalyseVariabele %in%
-        c("aandeel", "aandeelKruidlaag"),
+        c("aandeel", "aandeelKruidlaag", "bedekkingSom", "bedekkingExcl"),
       !.data$TypeVariabele %in% c("Percentage")
     )
   LijstItems <-
@@ -242,6 +244,46 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
         mutate(
           Probleem =
             "De SubAnalyseVariabele moet ingevuld zijn als er een SubReferentiewaarde opgegeven is" #nolint
+        )
+    ) %>%
+    bind_rows(
+      Invoervereisten %>%
+        filter(
+          .data$Operator == "=",
+          .data$TypeVariabele != "Ja/nee"
+        ) %>%
+        mutate(
+          Probleem =
+            "De Operator '=' mag niet gebruikt worden, tenzij TypeVariabele 'Ja/nee' is" #nolint
+        )
+    ) %>%
+    bind_rows(
+      Invoervereisten %>%
+        mutate(
+          Formuletest = str_replace_all(.data$Combinatie, "\\(", ""),
+          Formuletest = str_replace_all(.data$Formuletest, "\\)", "")
+        ) %>%
+        filter(
+          str_detect(
+            .data$Formuletest, "^(\\d+(( (AND|OR|<=|<|>|>=) \\d+))*)$"
+          ) == FALSE
+        ) %>%
+        select(-.data$Formuletest) %>%
+        mutate(
+          Probleem =
+            "De formule voor Combinatie is geen combinatie van AND, OR en voorwaardeID's" #nolint
+        )
+    )
+
+  Voorwaarden <- Voorwaarden %>%
+    mutate(
+      Probleem =
+        ifelse(
+          .data$Probleem ==
+            "AnalyseVariabele waarvoor geen code ontwikkeld is" &
+            is.na(.data$VoorwaardeID) & .data$Kwaliteitsniveau == 2,
+          "rekenregel van Voorwaarde ontbreekt, beschrijving van ook verwijderen als het de bedoeling is om voorwaarde te verwijderen", #nolint
+          .data$Probleem
         )
     )
 

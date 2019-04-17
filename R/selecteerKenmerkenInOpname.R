@@ -18,6 +18,7 @@
 #'
 #' @importFrom dplyr %>% filter left_join inner_join mutate distinct group_by do ungroup
 #' @importFrom rlang .data
+#' @importFrom stringr str_c
 #'
 #'
 selecteerKenmerkenInOpname <-
@@ -37,7 +38,14 @@ selecteerKenmerkenInOpname <-
 
     if (length(Soortengroep) > 0) {
       Resultaat <- Kenmerken %>%
-        filter(tolower(.data$TypeKenmerk) == "soort_nbn") %>%
+        filter(tolower(.data$TypeKenmerk) == "soort_nbn")
+      if (nrow(Resultaat) == 0) {
+        warning(
+          "geen enkele soort opgegeven"
+        )
+        return(NA)
+      }
+      Resultaat <- Resultaat %>%
         inner_join(
           Soortengroep,
           by = c("Kenmerk" = "NbnTaxonVersionKey")
@@ -61,6 +69,15 @@ selecteerKenmerkenInOpname <-
           TaxonData <- Dataset %>%
             filter(.data$TaxonId == .data$SubTaxonId)
           if (nrow(TaxonData) < 1) {
+            Dataset <- Dataset %>%
+              group_by(.data$TaxonId) %>%
+              summarise(
+                Kenmerk = str_c(.data$Kenmerk, collapse = " & "),
+                TypeKenmerk = unique(.data$TypeKenmerk),
+                WaardeMax = 1.0 - prod( (1.0 - .data$WaardeMax), na.rm = TRUE),
+                WaardeMin = 1.0 - prod( (1.0 - .data$WaardeMin), na.rm = TRUE),
+                SubTaxonId = mean(.data$TaxonId)
+              )
             return(Dataset)
           }
           return(TaxonData)
@@ -73,8 +90,17 @@ selecteerKenmerkenInOpname <-
     }
 
     if (length(Studiegroep) > 0 & !(length(Soortengroep) > 0)) {
+      if (!unique(Studiegroep$LijstNaam) %in% Kenmerken$LijstNaam) {
+        warning(
+          sprintf(
+            "geen enkel kenmerk opgegeven van studielijst %s",
+            unique(Studiegroep$LijstNaam)
+          )
+        )
+        return(NA)
+      }
       Resultaat <- Kenmerken %>%
-        filter(.data$TypeKenmerk == "studiegroep") %>%
+        filter(tolower(.data$TypeKenmerk) == "studiegroep") %>%
         mutate(
           Kenmerk = tolower(.data$Kenmerk)
         ) %>%
@@ -83,7 +109,7 @@ selecteerKenmerkenInOpname <-
             mutate(
               Waarde = tolower(.data$Waarde)
             ),
-          by = c("Kenmerk" = "Waarde")
+          by = c("Kenmerk" = "Waarde", "LijstNaam" = "LijstNaam")
         )
     }
 

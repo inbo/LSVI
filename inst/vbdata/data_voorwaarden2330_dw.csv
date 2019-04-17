@@ -1,0 +1,5 @@
+"ID";"Criterium";"Indicator";"Voorwaarde";"Waarde";"Type";"Invoertype";"Eenheid"
+"ABCD";"Structuur";"éénjarigen";"aandeel éénjarigen + open zand";"75";"Percentage";NA;"%"
+"ABCD";"Structuur";"éénjarigen";"aandeel meerjarigen";"1";"Percentage";NA;"%"
+"ABCD";"Verstoring";"invasieve exoten";"bedekking invasieve exoten";"0";"Percentage";NA;"%"
+"ABCD";"Verstoring";"verbossing";"bedekking verbossing";"1";"Percentage";NA;"%"

@@ -8,6 +8,7 @@
 #' @importFrom assertthat assert_that has_name
 #' @importFrom dplyr %>% mutate row_number rename left_join
 #' @importFrom rlang .data
+#' @importFrom stringr str_to_sentence
 #' 
 #' @export
 #'
@@ -22,18 +23,19 @@ invoercontroleData_voorwaarden <-
     if (!is.character(Data_voorwaarden$Criterium)) {
       Data_voorwaarden$Criterium <- as.character(Data_voorwaarden$Criterium)
     }
-    if (!all(Data_voorwaarden$Criterium %in%
-             geefUniekeWaarden("Criterium", "Naam", ConnectieLSVIhabitats))) {
-      stop("Niet alle waarden vermeld onder Data_voorwaarden$Criterium komen overeen met waarden vermeld in de databank.") #nolint
-    }
+    Data_voorwaarden$Criterium <- str_to_sentence(Data_voorwaarden$Criterium)
+    controleerInvoerwaarde(
+      "Data_voorwaarden$Criterium", Data_voorwaarden$Criterium,
+      "Criterium", "Naam", ConnectieLSVIhabitats, Tolower = FALSE
+    )
     assert_that(has_name(Data_voorwaarden, "Indicator"))
     if (!is.character(Data_voorwaarden$Indicator)) {
       Data_voorwaarden$Indicator <- as.character(Data_voorwaarden$Indicator)
     }
-    if (!all(Data_voorwaarden$Indicator %in%
-             geefUniekeWaarden("Indicator", "Naam", ConnectieLSVIhabitats))) {
-      stop("Niet alle waarden vermeld onder Data_voorwaarden$Indicator komen overeen met waarden vermeld in de databank.") #nolint
-    }
+    controleerInvoerwaarde(
+      "Data_voorwaarden$Indicator", Data_voorwaarden$Indicator,
+      "Indicator", "Naam", ConnectieLSVIhabitats, Tolower = FALSE
+    )
     assert_that(has_name(Data_voorwaarden, "Voorwaarde"))
     if (!is.character(Data_voorwaarden$Voorwaarde)) {
       Data_voorwaarden$Voorwaarde <- as.character(Data_voorwaarden$Voorwaarde)
@@ -51,88 +53,150 @@ invoercontroleData_voorwaarden <-
     }
     Data_voorwaarden$Voorwaarde <-
       uitbreidingTolower(Data_voorwaarden$Voorwaarde)
-    Geldigewaarden <-
-      tolower(
-        geefUniekeWaarden("Voorwaarde", "VoorwaardeNaam", ConnectieLSVIhabitats)
-      )
-    if (
-      !all(
-        Data_voorwaarden$Voorwaarde %in%
-          Geldigewaarden
-      )
-    ) {
-      stop("Niet alle waarden vermeld onder Data_voorwaarden$Voorwaarde komen overeen met waarden vermeld in de databank.") #nolint
-    }
-    #misschien best ook testen dat die indicator-criterium-voorwaarde-combinatie
-    #in de databank voorkomt?  En of deze voor dat habitattype voorkomt,
-    #maar dat best verderop doen
+    controleerInvoerwaarde(
+      "Data_voorwaarden$Voorwaarde",
+      Data_voorwaarden$Voorwaarde[!is.na(Data_voorwaarden$Voorwaarde)],
+      "Voorwaarde", "VoorwaardeNaam", ConnectieLSVIhabitats
+    )
     assert_that(has_name(Data_voorwaarden, "Waarde"))
-    assert_that(has_name(Data_voorwaarden, "Type"))
-    if (!is.character(Data_voorwaarden$Type)) {
-      Data_voorwaarden$Type <- as.character(Data_voorwaarden$Type)
+    if (!is.character(Data_voorwaarden$Waarde)) {
+      Data_voorwaarden$Waarde <- as.character(Data_voorwaarden$Waarde)
     }
-    if (
-      !all(
-        Data_voorwaarden$Type %in%
-        geefUniekeWaarden("TypeVariabele", "Naam", ConnectieLSVIhabitats)
-      )
-    ) {
-      stop("Niet alle waarden vermeld onder Data_voorwaarden$Type komen overeen met waarden vermeld in de databank.") #nolint
-    }
-    assert_that(has_name(Data_voorwaarden, "Invoertype"))
-    if (!is.character(Data_voorwaarden$Invoertype)) {
-      Data_voorwaarden$Invoertype <- as.character(Data_voorwaarden$Invoertype)
-    }
-    if (!all(is.na(Data_voorwaarden$Invoertype) |
-             tolower(Data_voorwaarden$Invoertype) %in%
-             tolower(
-               geefUniekeWaarden("Lijst", "Naam", ConnectieLSVIhabitats)))) {
-      stop("Niet alle waarden vermeld onder Data_voorwaarden$Invoertype komen overeen met waarden vermeld in de databank.") #nolint
-    }
-    assert_that(has_name(Data_voorwaarden, "Eenheid"))
-    if (!is.character(Data_voorwaarden$Eenheid)) {
-      Data_voorwaarden$Eenheid <- as.character(Data_voorwaarden$Eenheid)
-    }
-    if (
-      !all(
-        Data_voorwaarden$Eenheid %in%
-        geefUniekeWaarden(
-          "AnalyseVariabele",
-          "Eenheid",
-          ConnectieLSVIhabitats
+
+    Dubbels <- Data_voorwaarden %>%
+      group_by(.data$ID, .data$Criterium, .data$Indicator, .data$Voorwaarde) %>%
+      summarise(Aantal = n()) %>%
+      ungroup() %>%
+      filter(.data$Aantal > 1)
+    if (nrow(Dubbels) > 0) {
+      Tekst <- Dubbels %>%
+        group_by(.data$Voorwaarde) %>%
+        summarise(
+          Opname = paste(unique(.data$ID), collapse = ", ")
+        ) %>%
+        ungroup() %>%
+        mutate(
+          TekstOpname =
+            paste0(
+              "Voor opname(n) ", .data$Opname, " is de voorwaarde '",
+              .data$Voorwaarde, "' meermaals opgegeven", collapse = NULL
+            )
+        ) %>%
+        summarise(
+          Tekst = paste(.data$TekstOpname, collapse = "; ")
         )
-      )
-    ) {
-      stop("Niet alle waarden vermeld onder Data_voorwaarden$Eenheid komen overeen met waarden vermeld in de databank.") #nolint
+      stop(Tekst$Tekst)
     }
 
-    #ingevoerde voorwaarden omzetten naar interval
-    Data_voorwaarden <- Data_voorwaarden %>%
-      mutate(
-        Rijnr = row_number(.data$ID)
+    Data_voorwaarden_NA <- Data_voorwaarden %>%
+      filter(is.na(.data$Voorwaarde))
+
+    Data_voorwaarden_nietNA <- Data_voorwaarden %>%
+      filter(!is.na(.data$Voorwaarde))
+
+    if (nrow(Data_voorwaarden_NA) > 0) {
+      if (!all(Data_voorwaarden_NA$Waarde %in% c("TRUE", "FALSE"))) {
+        stop("Als je in de tabel Data_voorwaarden de kolom voorwaarde leeg laat, wordt ervan uitgegaan dat je de indicator rechtstreeks ingeschat hebt.  In dit geval mag je in de kolom Waarde enkel 'TRUE' (gunstig) of 'FALSE' (ongunstig) ingeven.  Voor minstens 1 record heb je Voorwaarde leeggelaten en bij Waarde een andere waarde dan TRUE of FALSE opgegeven") #nolint
+      }
+      DubbeleIndicatoren <- Data_voorwaarden_NA %>%
+        inner_join(
+          Data_voorwaarden_nietNA,
+          by = c("ID", "Criterium", "Indicator")
+        )
+      if (nrow(DubbeleIndicatoren) > 0) {
+        Tekst <- DubbeleIndicatoren %>%
+          group_by(.data$Indicator) %>%
+          summarise(
+            Opname = paste(unique(.data$ID), collapse = ", ")
+          ) %>%
+          ungroup() %>%
+          mutate(
+            TekstOpname =
+              paste0(
+                "Voor opname(n) ", .data$Opname, " is de indicator '",
+                .data$Indicator,
+                "' tweemaal opgegeven: rechtstreeks ingeschat als indicator (TRUE/FALSE) en door het opgeven van concrete waarden voor een van de voorwaarden", #nolint
+                collapse = NULL
+              )
+          ) %>%
+          summarise(
+            Tekst = paste(.data$TekstOpname, collapse = "; ")
+          )
+        stop(Tekst$Tekst)
+      }
+    }
+
+    if (nrow(Data_voorwaarden_nietNA) > 0) {
+      assert_that(has_name(Data_voorwaarden_nietNA, "Type"))
+      Data_voorwaarden_nietNA <- Data_voorwaarden_nietNA %>%
+        mutate(
+          Type =
+            ifelse(
+              is.na(.data$Type) & is.na(.data$Waarde),
+              "Geheel getal",
+              .data$Type
+            )
+        )
+      if (!is.character(Data_voorwaarden_nietNA$Type)) {
+        Data_voorwaarden_nietNA$Type <-
+          as.character(Data_voorwaarden_nietNA$Type)
+      }
+      Data_voorwaarden_nietNA$Type <-
+        str_to_sentence(Data_voorwaarden_nietNA$Type)
+      controleerInvoerwaarde(
+        "Data_voorwaarden$Type", Data_voorwaarden_nietNA$Type,
+        "TypeVariabele", "Naam", ConnectieLSVIhabitats, Tolower = FALSE
+      )
+      assert_that(has_name(Data_voorwaarden_nietNA, "Invoertype"))
+      if (!is.character(Data_voorwaarden_nietNA$Invoertype)) {
+        Data_voorwaarden_nietNA$Invoertype <-
+          as.character(Data_voorwaarden_nietNA$Invoertype)
+      }
+      controleerInvoerwaarde(
+        "Data_voorwaarden$Invoertype",
+        Data_voorwaarden_nietNA$Invoertype[
+          !is.na(Data_voorwaarden_nietNA$Invoertype)
+        ],
+        "Lijst", "Naam", ConnectieLSVIhabitats
+      )
+      assert_that(has_name(Data_voorwaarden_nietNA, "Eenheid"))
+      if (!is.character(Data_voorwaarden_nietNA$Eenheid)) {
+        Data_voorwaarden_nietNA$Eenheid <-
+          as.character(Data_voorwaarden_nietNA$Eenheid)
+      }
+      controleerInvoerwaarde(
+        "Data_voorwaarden$Eenheid", Data_voorwaarden_nietNA$Eenheid,
+        "AnalyseVariabele", "Eenheid", ConnectieLSVIhabitats, Tolower = FALSE
       )
 
-    IntervalVoorwaarden <-
-      vertaalInvoerInterval(
-        Data_voorwaarden[
-          , c("Rijnr", "Type", "Waarde", "Eenheid", "Invoertype")
-          ],
-        LIJST,
-        ConnectieLSVIhabitats
-      ) %>%
-      rename(
-        WaardeMin = .data$Min,
-        WaardeMax = .data$Max
-      )
+      #ingevoerde voorwaarden omzetten naar interval
+      Data_voorwaarden_nietNA <- Data_voorwaarden_nietNA %>%
+        mutate(
+          Rijnr = row_number(.data$ID)
+        )
 
-    Data_voorwaarden <- Data_voorwaarden %>%
-      left_join(
-        IntervalVoorwaarden,
-        by = c("Rijnr")
-      ) %>%
-      mutate(
-        Rijnr = NULL
-      )
+      IntervalVoorwaarden <-
+        vertaalInvoerInterval(
+          Data_voorwaarden_nietNA[
+            , c("Rijnr", "Type", "Waarde", "Eenheid", "Invoertype")
+            ],
+          LIJST,
+          ConnectieLSVIhabitats
+        ) %>%
+        rename(
+          WaardeMin = .data$Min,
+          WaardeMax = .data$Max
+        )
 
-    return(Data_voorwaarden)
+      Data_voorwaarden_nietNA <- Data_voorwaarden_nietNA %>%
+        left_join(
+          IntervalVoorwaarden,
+          by = c("Rijnr")
+        ) %>%
+        mutate(
+          Rijnr = NULL
+        )
+    }
+
+    return(list(Data_voorwaarden_NA, Data_voorwaarden_nietNA))
   }

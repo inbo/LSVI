@@ -87,22 +87,35 @@ geefSoortenlijst <-
       summarise(SoortengroepIDs = paste(.data$TaxongroepId, collapse = ","))
 
     if (SoortengroepIDs$SoortengroepIDs == "") {
-      stop("Voor de opgegeven argumenten is er geen soortenlijst")
+      warning("Voor de opgegeven argumenten is er geen soortenlijst")
+      SoortenlijstSelectie <- Selectiegegevens %>%
+        mutate(
+          TaxonsubgroepId = NA,
+          Omschrijving = NA,
+          Id = NA,
+          TaxonId = NA,
+          SubTaxonId = NA,
+          NbnTaxonVersionKey = NA,
+          WetNaam = NA,
+          NedNaam = NA,
+          WetNaamKort = NA,
+          TaxonType = NA
+        )
+    } else {
+      Soortenlijst <-
+        geefSoortenlijstVoorIDs(
+          Taxongroeplijst = SoortengroepIDs$SoortengroepIDs,
+          Taxonlijsttype = Taxonlijsttype,
+          ConnectieLSVIhabitats
+        )
+
+      #soortgegevens aan selectiegegevens plakken
+      SoortenlijstSelectie <- Selectiegegevens %>%
+        left_join(
+          Soortenlijst,
+          by = ("TaxongroepId")
+        )
     }
-
-    Soortenlijst <-
-      geefSoortenlijstVoorIDs(
-        Taxongroeplijst = SoortengroepIDs$SoortengroepIDs,
-        Taxonlijsttype = Taxonlijsttype,
-        ConnectieLSVIhabitats
-      )
-
-    #soortgegevens aan selectiegegevens plakken
-    SoortenlijstSelectie <- Selectiegegevens %>%
-      left_join(
-        Soortenlijst,
-        by = ("TaxongroepId")
-      )
 
     if (Taxonlijstniveau[1] == "voorwaarde") {
       SoortenlijstSelectie <- SoortenlijstSelectie %>%

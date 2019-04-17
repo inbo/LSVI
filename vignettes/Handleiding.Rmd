@@ -61,7 +61,8 @@ packageDescription(pkg = "LSVI")
 Het package kan als volgt geïnstalleerd worden: <!-- aanpassen als er iets in de master zit -->
 
 ```{r eval = FALSE}
-devtools::install_github("inbo/LSVI@develop", build_vignettes = TRUE)
+# install.packages("remotes")
+remotes::install_github("inbo/LSVI@develop", build = TRUE, build_opts = c("--no-resave-data", "--no-manual"))
 ```
 
 Om de functies uit het package te kunnen gebruiken, moet een connectie gemaakt worden met de databank `D0122_00_LSVIHabitatTypes` die op server `INBO-SQL07-PRD.inbo.be` staat en alle informatie in verband met de LSVI-indicatoren bevat (zie 'Doelstellingen en inhoud package' > 'Inhoud package' voor achtergrondinformatie en 'Gebruik basisfuncties' > 'Basis van LSVI-package' voor hoe die connectie gelegd kan worden).  Dit betekent dat gebruikers die niet op het INBO-netwerk werken, een kopie van deze databank nodig hebben en de locatie en naam van deze databank telkens moeten specifiëren in de functie `connecteerMetLSVIdb()`.  (Dit is een voorlopige oplossing: zodra deze databank in orde is, zal ze geïntegreerd worden in het package zelf, waardoor iedereen de functies uit het package zal kunnen gebruiken.)
@@ -71,6 +72,20 @@ Om de functies uit het package te kunnen gebruiken, moet een connectie gemaakt w
 ##Wegwijs in R
 
 (Wat extra uitleg voor diegenen die niet vertrouwd zijn met R.)
+
+###R, RStudio, scripts en projecten
+
+R is de taal die je gebruikt om met je computer te communiceren, RStudio is een programma dat een aantal tools aanbiedt die het je wat gemakkelijker maken: allerhande knoppen waardoor je niet voor elke handeling een commando moet typen, 'spellingscontrole' (voor R), een 'verkenner' waarin je je mappenstructuur kan raadplegen, een lijst met wat er in het geheugen opgeslagen is,...
+
+De communicatie met je computer gebeurt via de 'console'. Als je vaak gelijkaardige opdrachten wil geven aan je computer, kan je alle commando's ingeven in een script en dit opslaan voor later gebruik (aan te maken met het knopje linksboven onder 'File'). Als je je cursor op een commando in het script zet en 'Ctrl'-'ENTER' drukt, wordt dit commando naar de console gekopieerd en uitgevoerd; bij selectie van meerdere commando's wordt de volledige selectie uitgevoerd.
+
+Aan te raden is om scripts en eventueel bijhorende gegevens te bundelen in een 'project'. Dit maak je aan door 'File > New Project > New Directory > New project' te kiezen, een naam geven aan je project ('Directory name') en een map te selecteren om je project in op te slaan. Enkele voordelen:
+
+- nieuw aangemaakte bestanden worden automatisch in deze map opgeslagen, en verwijzingen naar bestanden kunnen gebeuren ten opzichte van de map van je project (dus relatieve paden i.p.v. absolute paden)
+- in een project blijft je 'werkomgeving' behouden: als bij het afsluiten nog een aantal (niet opgeslagen) scripts open stonden, dan zullen deze bij het heropenen van het project nog in dezelfde staat zijn (bv. geopend en niet opgeslagen), ook als je tussendoor aan andere R-projecten gewerkt hebt
+- enkele instellingen moet je niet meer manueel in orde brengen (bv. 'working directory' instellen), waardoor je minder snel met problemen geconfronteerd wordt
+
+Om scripts gemakkelijk te kunnen hergebruiken met andere waarden, kunnen ze in de vorm van functies geschreven worden.  Die functies kunnen gebundeld worden in een package en beschikbaar gesteld worden voor alle R-gebruikers.
 
 ###Packages en documentatie
 
@@ -107,7 +122,7 @@ maakConnectiePool()
 geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "LSVIfiche")
 ```
 
-Omdat de tabel te breed is, wordt deze opgesplitst in 5 delen, die onder elkaar weergegeven worden.  Deze tabel wordt ook enkel weergegeven, niet opgeslagen, en op deze manier kunnen we er achteraf geen bewerkingen mee doen.  Beter is om de tabel toe te kennen aan een variabele, we geven hier die variabele de naam `soortenlijst4010`:
+Omdat de tabel te breed is, wordt deze opgesplitst in 3 delen, die onder elkaar weergegeven worden.  Deze tabel wordt ook enkel weergegeven, niet opgeslagen, en op deze manier kunnen we er achteraf geen bewerkingen mee doen.  Beter is om de tabel toe te kennen aan een variabele, we geven hier die variabele de naam `soortenlijst4030`:
 
 ```{r}
 soortenlijst4030 <- geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "LSVIfiche")
@@ -117,11 +132,11 @@ Als je dit commando in je eigen console runt, verschijnt deze variabele in het v
 
 In R kan je deze variabele tonen door de variabelenaam in te typen (dan krijg je dezelfde uitvoer van de tabel in 4 delen).  Je kan er ook allerlei bewerkingen mee uitvoeren (sorteren, selecteren,...), maar daarvoor verwijzen we naar een basiscursus van R.
 
-Wat we hier wel tonen, is hoe deze tabel opgeslagen kan worden, zodat hij achteraf in Excel geopend kan worden.  Dit kan met de functie 'write_delim()' uit het package 'readr'.  Om deze tabel met naam `soortenlijst4010.csv` op te slaan in de map R op de C-schijf, gebruiken we volgende commando's:
+Wat we hier wel tonen, is hoe deze tabel opgeslagen kan worden, zodat hij achteraf in Excel geopend kan worden.  Dit kan met de functie 'write_csv2()' uit het package 'readr'.  Om deze tabel met naam `soortenlijst4010.csv` op te slaan in de map R op de C-schijf, gebruiken we volgende commando's:
 
 ```{r eval=FALSE}
 library(readr)
-write_delim(soortenlijst4030, "C:/R/soortenlijst4030.csv", delim = ";")
+write_csv2(soortenlijst4030, "C:/R/soortenlijst4030.csv")
 ```
 
 We hebben hier het absolute path (`C:/R`) weergegeven, een andere mogelijkheid is om het path relatief ten opzichte van de 'working directory' weer te geven.  Dit is de map waarin je aan 't werken bent.  Je kan deze working directory zelf bepalen door het commando `setwd("C:/.../mijn_werkmap")`.  Als je in een project werkt waarin je al je scripts opslaat (aan te raden), dan is de root van dit project automatisch je working directory.
@@ -134,7 +149,7 @@ Als je eigen gegevens wil inlezen in R, is de eenvoudigste methode om deze in ex
 
 ```{r eval=FALSE}
 library(readr)
-Dataset <- read_delim("Gegevens.csv", delim = ";")
+Dataset <- read_csv2("Gegevens.csv")
 ```
 
 Je steekt dus de gegevens uit je bestand `Gegevens.csv` in de variabele `Dataset`.  (Het laden van de library readr is enkel nodig als je dit nog niet eerder gedaan hebt sinds je R opgestart hebt.)
@@ -149,20 +164,17 @@ De functie `berekenLSVIbasis()` geeft gegevens terug in de vorm van een lijst va
 #Eerst worden wat voorbeeldgegevens opgehaald uit het package:
 library(readr)
 Data_habitat <-
-  read_delim(
+  read_csv2(
     system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
-    delim = ";",
     col_types = list(col_character(), col_character(), col_character())
   )
 Data_voorwaarden <-
-  read_delim(
-    system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI"),
-    delim = ";"
+  read_csv2(
+    system.file("vbdata/Opname4030voorwaardenv2.csv", package = "LSVI")
   )
 Data_soortenKenmerken <-
-  read_delim(
-    system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI"),
-    delim = ";"
+  read_csv2(
+    system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI")
   )
 
 #En hier gebeurt de berekening zelf:

@@ -5,6 +5,7 @@ ID;Vegetatielaag;Kenmerk;TypeKenmerk;Waarde;Type;Invoertype;Eenheid
 1;;groeiklasse 4;studiegroep;1;Ja/nee;;
 1;kruidlaag;Grote brandnetel;soort_NL;5;Percentage;;%
 1;boomlaag;Gewone vlier;soort_NL;2;Decimaal getal;;Grondvlak_ha
+1;boomlaag;Gewone vlier;soort_NL;2;Percentage;;%
 1;kruidlaag;Gestreepte witbol;soort_NL;3;Percentage;;%
 1;;kruidlaag (incl. moslaag);studiegroep;30;Percentage;;%
 1;;boomlaag;studiegroep;80;Percentage;;%

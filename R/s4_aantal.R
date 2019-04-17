@@ -51,8 +51,10 @@ setMethod(
         )$Rijnummers
 
       KenmerkenMax <- Kenmerken
-      KenmerkenMax[Problemen, ]$WaardeMin <- 1
-      KenmerkenMax[Problemen, ]$WaardeMax <- 1
+      if (length(Problemen) > 0) {
+        KenmerkenMax[Problemen, ]$WaardeMin <- 1
+        KenmerkenMax[Problemen, ]$WaardeMax <- 1
+      }
       ResultaatMax <-
         selecteerKenmerkenInOpname(
           KenmerkenMax,
@@ -69,8 +71,10 @@ setMethod(
       AantalMax <- nrow(ResultaatMax)
 
       KenmerkenMin <- Kenmerken
-      KenmerkenMin[Problemen, ]$WaardeMin <- 0
-      KenmerkenMin[Problemen, ]$WaardeMax <- 0
+      if (length(Problemen) > 0) {
+        KenmerkenMin[Problemen, ]$WaardeMin <- 0
+        KenmerkenMin[Problemen, ]$WaardeMax <- 0
+      }
       ResultaatMin <-
         selecteerKenmerkenInOpname(
           KenmerkenMin,
@@ -88,7 +92,7 @@ setMethod(
 
       Aantal <- c(AantalMin, AantalMax)
       if (AantalMin != AantalMax) {
-        warning("Voor sommige soorten of kenmerken is enkel aan- of afwezigheid opgegeven, geen bedekking, waardoor het aantal soorten dat aan een welbepaalde voorwaarde voldoet (bv. minimum een welbepaalde bedekking heeft), niet met zekerheid bepaald kan worden.  In deze gevallen is het resultaat als een range weergegeven.") #nolint
+        warning("aan- of afwezigheid aantal")
       }
     } else {
       Resultaat <-

@@ -32,6 +32,7 @@
 #' @importFrom assertthat assert_that is.string
 #' @importFrom dplyr %>% mutate
 #' @importFrom rlang .data
+#' @importFrom stringr str_to_sentence
 #'
 #'
 selecteerIndicatoren <-
@@ -54,77 +55,39 @@ selecteerIndicatoren <-
       msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
     )
 
-    invoercontroleVersie(Versie, ConnectieLSVIhabitats)
+    Versie <- invoercontroleVersie(Versie, ConnectieLSVIhabitats)
 
     assert_that(is.string(Habitatgroep))
-    if (
-      !(Habitatgroep %in%
-        geefUniekeWaarden("Habitatgroep", "Naam", ConnectieLSVIhabitats))
-    ) {
-      stop(
-        sprintf(
-          "Habitatgroep moet een van de volgende waarden zijn: %s",
-          paste(
-            geefUniekeWaarden("Habitatgroep", "Naam", ConnectieLSVIhabitats),
-            collapse = ", "
-          )
-        )
-      )
-    }
-
+    Habitatgroep <- str_to_sentence(Habitatgroep)
+    Habitatgroep <- ifelse(Habitatgroep == "Alle", "alle", Habitatgroep)
+    controleerInvoerwaarde(
+      "Habitatgroep", Habitatgroep,
+      "Habitatgroep", "Naam", ConnectieLSVIhabitats, Tolower = FALSE
+    )
 
     if (is.numeric(Habitattype)) {
       Habitattype <- as.character(Habitattype)
     }
     assert_that(is.character(Habitattype))
-    if (
-      !all(Habitattype %in%
-        geefUniekeWaarden("Habitattype", "Code", ConnectieLSVIhabitats))
-    ) {
-      Habitattypen <-
-        paste(
-          geefUniekeWaarden("Habitattype", "Code", ConnectieLSVIhabitats),
-          collapse = ", "
-        )
-      stop(
-        sprintf(
-          "De opgegeven habitattypen mogen enkel de volgende waarden zijn: %s",
-          Habitattypen
-        )
-      )
-    }
+    Habitattype <- tolower(Habitattype)
+    controleerInvoerwaarde(
+      "Habitattype", Habitattype,
+      "Habitattype", "Code", ConnectieLSVIhabitats
+    )
 
     assert_that(is.string(Criterium))
-    if (
-      !(Criterium %in%
-        geefUniekeWaarden("Criterium", "Naam", ConnectieLSVIhabitats))
-    ) {
-      stop(
-        sprintf(
-          "Criterium moet een van de volgende waarden zijn: %s",
-          paste(
-            geefUniekeWaarden("Criterium", "Naam", ConnectieLSVIhabitats),
-            collapse = ", "
-          )
-        )
-      )
-    }
+    Criterium <- str_to_sentence(Criterium)
+    Criterium <- ifelse(Criterium == "Alle", "alle", Criterium)
+    controleerInvoerwaarde(
+      "Criterium", Criterium,
+      "Criterium", "Naam", ConnectieLSVIhabitats, Tolower = FALSE
+    )
 
     assert_that(is.string(Indicator))
-    if (
-      !(Indicator %in%
-        geefUniekeWaarden("Indicator", "Naam", ConnectieLSVIhabitats))
-    ) {
-      stop(
-        sprintf(
-          "Indicator moet een van de volgende waarden zijn: %s",
-          paste(
-            geefUniekeWaarden("Indicator", "Naam", ConnectieLSVIhabitats),
-            collapse = ", "
-          )
-        )
-      )
-    }
+    controleerInvoerwaarde(
+      "Indicator", Indicator,
+      "Indicator", "Naam", ConnectieLSVIhabitats, Tolower = FALSE
+    )
 
     assert_that(is.logical(HabitatnamenToevoegen))
 
@@ -138,7 +101,25 @@ selecteerIndicatoren <-
 
     #eerst de selectiegegevens ophalen en de nodige gegevens uit tabel
     #Indicator_habitat, query samenstellen op basis van parameters
-    Parametervoorwaarde <- FALSE
+    if (Habitattype[1] == "alle") {
+      Parametervoorwaarde <- FALSE
+      Join <- "INNER"
+      QueryEinde <-
+        "Habitatselectie.HabitatsubtypeId = Indicator_habitat.HabitattypeID"
+    } else {
+      Parametervoorwaarde <- TRUE
+      Join <- "LEFT"
+      Habitattypen <-
+        paste(Habitattype, collapse = "','")
+      QueryEinde <-
+        sprintf(
+          "(Habitatselectie.HabitatsubtypeId = Indicator_habitat.HabitattypeID
+            OR Habitatselectie.HabitattypeId = Indicator_habitat.HabitattypeID)
+          WHERE (Habitatselectie.Habitattype in ('%s') OR
+            Habitatselectie.Habitatsubtype in ('%s'))",
+        Habitattypen, Habitattypen)
+    }
+
     query <-
       sprintf(
         "WITH Habitatselectie
@@ -148,7 +129,7 @@ selecteerIndicatoren <-
             Ht1.Code AS Habitattype, Ht1.Naam AS Habitatnaam,
             Ht1.Code AS Habitatsubtype, Ht1.Naam AS Habitatsubtypenaam,
             Ht1.Omschrijving AS HabitatsubtypeOmschrijving,
-            Ht1.Id AS HabitattypeId
+            Ht1.Id AS HabitattypeId, Ht1.Id AS HabitatsubtypeId
           FROM Habitattype AS Ht1 INNER JOIN Habitatgroep
           ON Ht1.HabitatgroepId = Habitatgroep.Id
           WHERE Ht1.ParentId IS NULL
@@ -157,9 +138,9 @@ selecteerIndicatoren <-
             Habitatselectie.Habitattype, Habitatselectie.Habitatnaam,
             Ht2.Code AS Habitatsubtype, Ht2.Naam AS Habitatsubtypenaam,
             Ht2.Omschrijving AS HabitatsubtypeOmschrijving,
-            Ht2.Id AS HabitattypeId
+            Habitatselectie.HabitattypeId, Ht2.Id AS HabitatsubtypeId
           FROM Habitatselectie INNER JOIN Habitattype AS Ht2
-          ON Habitatselectie.HabitattypeId = Ht2.ParentId
+          ON Habitatselectie.HabitatsubtypeId = Ht2.ParentId
         )
         SELECT Versie.VersieLSVI AS Versie, Habitatselectie.Habitattype,
             Habitatselectie.Habitatsubtype, %s
@@ -168,9 +149,8 @@ selecteerIndicatoren <-
             Indicator_habitat.TaxongroepId,
             IndicatortabellenKoppeling.Indicator_beoordelingId
               AS Indicator_beoordelingID
-        FROM (((Indicator_habitat
-        INNER JOIN Habitatselectie
-        ON Indicator_habitat.HabitattypeID = Habitatselectie.HabitattypeId)
+        FROM Habitatselectie
+        %s JOIN (((Indicator_habitat
         INNER JOIN
           (Indicator INNER JOIN Criterium
             ON Indicator.CriteriumID = Criterium.Id)
@@ -178,12 +158,19 @@ selecteerIndicatoren <-
         INNER JOIN Versie ON Indicator_habitat.VersieID = Versie.Id)
         LEFT JOIN IndicatortabellenKoppeling
         ON Indicator_habitat.Id =
-          IndicatortabellenKoppeling.Indicator_habitatId",
-        query_uitbreiding
+          IndicatortabellenKoppeling.Indicator_habitatId)
+        ON %s",
+        query_uitbreiding, Join, QueryEinde
       )
     if (Versie[1] != "alle") {
-      query <- sprintf("%s WHERE Versie.VersieLSVI = '%s'", query, Versie)
-      Parametervoorwaarde <- TRUE
+      if (Parametervoorwaarde) {
+        Voegwoord <- "AND"
+      } else {
+        Voegwoord <- "WHERE"
+        Parametervoorwaarde <- TRUE
+      }
+      query <-
+        sprintf("%s %s Versie.VersieLSVI = '%s'", query, Voegwoord, Versie)
     }
     if (Habitatgroep[1] != "alle") {
       if (Parametervoorwaarde) {
@@ -195,20 +182,6 @@ selecteerIndicatoren <-
       query <-
         sprintf("%s %s Habitatselectie.Habitatgroepnaam = '%s'",
                 query, Voegwoord, Habitatgroep)
-    }
-    if (Habitattype[1] != "alle") {
-      if (Parametervoorwaarde) {
-        Voegwoord <- "AND"
-      } else {
-        Voegwoord <- "WHERE"
-        Parametervoorwaarde <- TRUE
-      }
-      Habitattypen <-
-        paste(Habitattype, collapse = "','")
-      query <-
-        sprintf("%s %s (Habitatselectie.Habitattype in ('%s') OR
-                Habitatselectie.Habitatsubtype in ('%s'))",
-                query, Voegwoord, Habitattypen, Habitattypen)
     }
     if (Criterium[1] != "alle") {
       if (Parametervoorwaarde) {
