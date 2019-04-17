@@ -444,7 +444,8 @@ berekenLSVIbasis <-
               , c("Rijnr", "Type", "WaardeMin", "WaardeMax",
                   "Eenheid.vw", "Invoertype.vw")
               ],
-            LIJST,
+            LIJST %>%
+              filter(.data$Basisschaal == TRUE),
             ConnectieLSVIhabitats
           ),
           by = c("Rijnr")
