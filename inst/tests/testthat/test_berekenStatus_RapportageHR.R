@@ -51,11 +51,15 @@ describe("bereken status criterium en globaal volgens Rapportage HR", {
 
 
 describe("bereken status criterium en globaal volgens Rapportage HR met NA's", {
-  it("Status Rapportage HR correct berekend in geval van NA's voor status van indicatoren", {
+  it("Correct berekend in geval van NA's voor status van indicatoren", {
 
     Data_voorwaarden_NA <- Data_voorwaarden %>%
       mutate(
-        Waarde = ifelse(.data$Voorwaarde == "bedekking verbossing", NA, .data$Waarde)
+        Waarde = ifelse(
+          .data$Voorwaarde == "bedekking verbossing",
+          NA,
+          .data$Waarde
+          )
       )
 
     Resultaat <- berekenLSVIbasis(
@@ -90,7 +94,12 @@ describe("bereken status criterium en globaal volgens Rapportage HR met NA's", {
         select(ID, Criterium, Status_criterium),
       Resultaatv2$Resultaat_criterium %>%
         select(ID, Criterium, Status_criterium) %>%
-        mutate(Status_criterium = ifelse(.data$Criterium == "Verstoring", NA, .data$Status_criterium))
+        mutate(Status_criterium = ifelse(
+          .data$Criterium == "Verstoring",
+          NA,
+          .data$Status_criterium
+          )
+          )
     )
 
     expect_equal(
@@ -98,7 +107,10 @@ describe("bereken status criterium en globaal volgens Rapportage HR met NA's", {
         select(ID, Criterium, Status_criterium),
       Resultaatv2$Resultaat_criterium %>%
         select(ID, Criterium, Status_criterium) %>%
-        mutate(Status_criterium = ifelse(.data$Criterium == "Verstoring" & .data$ID == "JR0216", TRUE, .data$Status_criterium))
+        mutate(Status_criterium = ifelse(
+          .data$Criterium == "Verstoring" & .data$ID == "JR0216",
+          TRUE,
+          .data$Status_criterium))
     )
   })
 })
