@@ -674,11 +674,13 @@ berekenLSVIbasis <-
         .data$Kwaliteitsniveau
       ) %>%
       summarise(
-        nInd = ifelse( # tijdelijke hulpvariabele: aantal indicatoren, indien na.rm = TRUE nemen we hiervoor het aantal indicatoren dat nie NA is
+        # tijdelijke hulpvariabele: aantal indicatoren
+        nInd = ifelse(
           na.rm,
           sum(!is.na(.data$Status_indicator)),
           n()),
-        nIndZb_ongunstig = sum( # tijdelijke hulpvariabele: aantal zb-indicatoren ongunstig
+        # tijdelijke hulpvariabele: aantal zb-indicatoren ongunstig
+        nIndZb_ongunstig = sum(
                   ifelse(
                     .data$Belang == "zb",
                     .data$Status_indicator == FALSE,
@@ -686,11 +688,13 @@ berekenLSVIbasis <-
                   ),
                   na.rm = na.rm
                   ),
-        nInd_gunstig = sum( # tijdelijke hulpvariabele: aantal indicatoren gunstig
+        # tijdelijke hulpvariabele: aantal indicatoren gunstig
+        nInd_gunstig = sum(
           .data$Status_indicator == TRUE,
           na.rm = TRUE
           ),
-        nInd_ongunstig = sum( # tijdelijke hulpvariabele: aantal indicatoren ongunstig
+        # tijdelijke hulpvariabele: aantal indicatoren ongunstig
+        nInd_ongunstig = sum(
           .data$Status_indicator == FALSE,
           na.rm = TRUE
           ),
@@ -775,11 +779,13 @@ berekenLSVIbasis <-
         .data$Kwaliteitsniveau
       ) %>%
       summarise(
-        nInd = ifelse( # tijdelijke hulpvariabele: aantal indicatoren, indien na.rm = TRUE nemen we hiervoor het aantal indicatoren dat nie NA is
+        # tijdelijke hulpvariabele: aantal indicatoren,
+        nInd = ifelse(
           na.rm,
           sum(!is.na(.data$Status_indicator)),
           n()),
-        nIndZb_ongunstig = sum( # tijdelijke hulpvariabele: aantal zb-indicatoren ongunstig
+        # tijdelijke hulpvariabele: aantal zb-indicatoren ongunstig
+        nIndZb_ongunstig = sum(
                   ifelse(
                     .data$Belang == "zb",
                     .data$Status_indicator == FALSE,
@@ -787,11 +793,13 @@ berekenLSVIbasis <-
                   ),
                   na.rm = na.rm
                   ),
-        nInd_gunstig = sum( # tijdelijke hulpvariabele: aantal indicatoren gunstig
+        # tijdelijke hulpvariabele: aantal indicatoren gunstig
+        nInd_gunstig = sum(
           .data$Status_indicator == TRUE,
           na.rm = TRUE
           ),
-        nInd_ongunstig = sum( # tijdelijke hulpvariabele: aantal indicatoren ongunstig
+        # tijdelijke hulpvariabele: aantal indicatoren ongunstig
+        nInd_ongunstig = sum(
           .data$Status_indicator == FALSE,
           na.rm = TRUE
           ),
