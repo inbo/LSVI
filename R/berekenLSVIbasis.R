@@ -39,7 +39,7 @@
 #'
 #' @export
 #'
-#' @importFrom dplyr %>% select distinct filter mutate row_number rename left_join summarise group_by ungroup rowwise bind_rows arrange transmute
+#' @importFrom dplyr %>% select distinct n filter mutate row_number rename left_join summarise group_by ungroup rowwise bind_rows arrange transmute
 #' @importFrom tidyr unnest
 #' @importFrom assertthat assert_that has_name
 #' @importFrom rlang .data
@@ -674,6 +674,26 @@ berekenLSVIbasis <-
         .data$Kwaliteitsniveau
       ) %>%
       summarise(
+        nInd = ifelse( # tijdelijke hulpvariabele: aantal indicatoren, indien na.rm = TRUE nemen we hiervoor het aantal indicatoren dat nie NA is
+          na.rm,
+          sum(!is.na(.data$Status_indicator)),
+          n()),
+        nIndZb_ongunstig = sum( # tijdelijke hulpvariabele: aantal zb-indicatoren ongunstig
+                  ifelse(
+                    .data$Belang == "zb",
+                    .data$Status_indicator == FALSE,
+                    0
+                  ),
+                  na.rm = na.rm
+                  ),
+        nInd_gunstig = sum( # tijdelijke hulpvariabele: aantal indicatoren gunstig
+          .data$Status_indicator == TRUE,
+          na.rm = TRUE
+          ),
+        nInd_ongunstig = sum( # tijdelijke hulpvariabele: aantal indicatoren ongunstig
+          .data$Status_indicator == FALSE,
+          na.rm = TRUE
+          ),
         Status_criterium =
           ifelse(
             Aggregatiemethode == "1-out-all-out",
@@ -681,15 +701,20 @@ berekenLSVIbasis <-
             ifelse(
               Aggregatiemethode == "RapportageHR",
               (
-                sum(.data$Status_indicator, na.rm = na.rm) >
-                  sum(!is.na(.data$Status_indicator)) / 2.0
-              ) & (
-                sum(
-                  (.data$Status_indicator == FALSE) * (.data$Belang == "zb"),
-                  na.rm = na.rm
-                ) == 0
-              ),
-              NA
+                ifelse(
+                  .data$nIndZb_ongunstig > 0,
+                  FALSE,
+                  ifelse(
+                    .data$nInd_gunstig > .data$nInd / 2.0,
+                    TRUE,
+                    ifelse(
+                      .data$nInd_ongunstig >= .data$nInd / 2.0,
+                      FALSE,
+                      NA
+                    )
+                  )
+                )
+              )
             )
           ),
         Aggregatiemethode = Aggregatiemethode,
@@ -705,7 +730,13 @@ berekenLSVIbasis <-
             na.rm = na.rm
           ) ^ -1 * 2 - 1
       ) %>%
-      ungroup()
+      ungroup() %>%
+      select(
+        -.data$nInd,
+        -.data$nIndZb_ongunstig,
+        -.data$nInd_gunstig,
+        -.data$nInd_ongunstig
+      )
 
     #resultaten op globaal niveau
     Resultaat_globaal_Index <- Resultaat_criterium %>%
@@ -744,6 +775,26 @@ berekenLSVIbasis <-
         .data$Kwaliteitsniveau
       ) %>%
       summarise(
+        nInd = ifelse( # tijdelijke hulpvariabele: aantal indicatoren, indien na.rm = TRUE nemen we hiervoor het aantal indicatoren dat nie NA is
+          na.rm,
+          sum(!is.na(.data$Status_indicator)),
+          n()),
+        nIndZb_ongunstig = sum( # tijdelijke hulpvariabele: aantal zb-indicatoren ongunstig
+                  ifelse(
+                    .data$Belang == "zb",
+                    .data$Status_indicator == FALSE,
+                    0
+                  ),
+                  na.rm = na.rm
+                  ),
+        nInd_gunstig = sum( # tijdelijke hulpvariabele: aantal indicatoren gunstig
+          .data$Status_indicator == TRUE,
+          na.rm = TRUE
+          ),
+        nInd_ongunstig = sum( # tijdelijke hulpvariabele: aantal indicatoren ongunstig
+          .data$Status_indicator == FALSE,
+          na.rm = TRUE
+          ),
         Status =
           ifelse(
             Aggregatiemethode == "1-out-all-out",
@@ -751,20 +802,31 @@ berekenLSVIbasis <-
             ifelse(
               Aggregatiemethode == "RapportageHR",
               (
-                sum(.data$Status_indicator, na.rm = na.rm) >
-                  sum(!is.na(.data$Status_indicator)) / 2.0
-              ) & (
-                sum(
-                  (.data$Status_indicator == FALSE) * (.data$Belang == "zb"),
-                  na.rm = na.rm
-                ) == 0
-              ),
-              NA
+                ifelse(
+                  .data$nIndZb_ongunstig > 0,
+                  FALSE,
+                  ifelse(
+                    .data$nInd_gunstig > .data$nInd / 2.0,
+                    TRUE,
+                    ifelse(
+                      .data$nInd_ongunstig >= .data$nInd / 2.0,
+                      FALSE,
+                      NA
+                    )
+                  )
+                )
+              )
             )
           ),
         Aggregatiemethode = Aggregatiemethode
       ) %>%
-      ungroup()
+      ungroup() %>%
+      select(
+        -.data$nInd,
+        -.data$nIndZb_ongunstig,
+        -.data$nInd_gunstig,
+        -.data$nInd_ongunstig
+      )
 
     Resultaat_globaal <- Resultaat_globaal_Status %>%
       left_join(Resultaat_globaal_Index,
