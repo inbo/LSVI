@@ -7,7 +7,7 @@
 #'
 #' @importFrom assertthat assert_that has_name
 #' @importFrom DBI dbGetQuery
-#' @importFrom dplyr %>% filter mutate select left_join bind_rows rename
+#' @importFrom dplyr %>% filter n mutate select left_join bind_rows rename
 #' @importFrom rlang .data
 #' @importFrom rgbif parsenames
 #' @importFrom stringr str_to_sentence
