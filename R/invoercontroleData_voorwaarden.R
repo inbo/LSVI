@@ -6,10 +6,10 @@
 #' @inheritParams berekenLSVIbasis
 #'
 #' @importFrom assertthat assert_that has_name
-#' @importFrom dplyr %>% mutate row_number rename left_join
+#' @importFrom dplyr %>% mutate row_number n rename left_join
 #' @importFrom rlang .data
 #' @importFrom stringr str_to_sentence
-#' 
+#'
 #' @export
 #'
 invoercontroleData_voorwaarden <-
