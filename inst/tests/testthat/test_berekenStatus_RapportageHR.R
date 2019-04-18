@@ -49,5 +49,71 @@ describe("bereken status criterium en globaal volgens Rapportage HR", {
   })
 })
 
+
+describe("bereken status criterium en globaal volgens Rapportage HR met NA's", {
+  it("Correct berekend in geval van NA's voor status van indicatoren", {
+
+    Data_voorwaarden_NA <- Data_voorwaarden %>%
+      mutate(
+        Waarde = ifelse(
+          .data$Voorwaarde == "bedekking verbossing",
+          NA,
+          .data$Waarde
+          )
+      )
+
+    Resultaat <- berekenLSVIbasis(
+          Versie = "Versie 2.0",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden_NA,
+          Data_soortenKenmerken,
+          Aggregatiemethode = "RapportageHR"
+        )
+
+    Resultaat_negeerNA <- berekenLSVIbasis(
+          Versie = "Versie 2.0",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden_NA,
+          Data_soortenKenmerken,
+          Aggregatiemethode = "RapportageHR",
+          na.rm = TRUE
+        )
+
+    expect_equal(
+      Resultaat$Resultaat_globaal %>%
+        select(ID, Status),
+      Resultaatv2$Resultaat_globaal %>%
+        select(ID, Status) %>%
+        mutate(Status = ifelse(.data$ID == "Ts2036", TRUE, .data$Status))
+    )
+
+    expect_equal(
+      Resultaat$Resultaat_criterium %>%
+        select(ID, Criterium, Status_criterium),
+      Resultaatv2$Resultaat_criterium %>%
+        select(ID, Criterium, Status_criterium) %>%
+        mutate(Status_criterium = ifelse(
+          .data$Criterium == "Verstoring",
+          NA,
+          .data$Status_criterium
+          )
+          )
+    )
+
+    expect_equal(
+      Resultaat_negeerNA$Resultaat_criterium %>%
+        select(ID, Criterium, Status_criterium),
+      Resultaatv2$Resultaat_criterium %>%
+        select(ID, Criterium, Status_criterium) %>%
+        mutate(Status_criterium = ifelse(
+          .data$Criterium == "Verstoring" & .data$ID == "JR0216",
+          TRUE,
+          .data$Status_criterium))
+    )
+  })
+})
+
 library(pool)
 poolClose(ConnectiePool)
