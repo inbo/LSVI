@@ -77,7 +77,8 @@ geefSoortenlijst <-
           .data$Versie, .data$Habitattype, .data$Habitatsubtype,
           .data$Criterium, .data$Indicator, .data$Beoordeling,
           .data$Kwaliteitsniveau, .data$Voorwaarde, .data$TaxongroepId
-        )
+        ) %>%
+        distinct()
     }
 
     SoortengroepIDs <- Selectiegegevens %>%
