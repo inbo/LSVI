@@ -84,7 +84,7 @@ selecteerKenmerkenInOpname <-
         }
 
       Resultaat <- Resultaat %>%
-        group_by(.data$TaxonId) %>%
+        group_by(.data$TaxonId, .data$Eenheid) %>%
         do(kiesTaxonOfSubtaxons(.)) %>%
         ungroup()
     }
@@ -128,7 +128,16 @@ selecteerKenmerkenInOpname <-
     }
 
     if (!identical(SubAnalyseVariabele, character(0)) &
-        SubAnalyseVariabele == "bedekking") {
+        SubAnalyseVariabele %in% c("aandeel", "bedekking")) {
+
+      if (SubAnalyseVariabele == "aandeel") {
+        Resultaat <- Resultaat %>%
+          filter(.data$Eenheid %in% c("Grondvlak_ha", "Volume_ha"))
+      }
+      if (SubAnalyseVariabele == "bedekking") {
+        Resultaat <- Resultaat %>%
+          filter(!.data$Eenheid %in% c("Grondvlak_ha", "Volume_ha"))
+      }
 
       Resultaat <- Resultaat %>%
         mutate(
