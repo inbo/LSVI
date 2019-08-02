@@ -243,7 +243,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
         ) %>%
         mutate(
           Probleem =
-            "De AnalyseVariabele moet aantal zijn als een subanalysevariabele opgegeven is"
+            "De AnalyseVariabele moet aantal zijn als een subanalysevariabele opgegeven is" #nolint
         )
     ) %>%
     bind_rows(
