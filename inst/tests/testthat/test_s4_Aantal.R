@@ -88,6 +88,7 @@ describe("s4_Aantal", {
               TypeKenmerk = "soort_nbn",
               WaardeMin = NA,
               WaardeMax = 1,
+              Eenheid = "ja/nee",
               stringsAsFactors = FALSE
             ),
           Soortengroep =
@@ -111,6 +112,7 @@ describe("s4_Aantal", {
               TypeKenmerk = "soort_nbn",
               WaardeMin = NA,
               WaardeMax = c(1, 1, 1, 1, 0),
+              Eenheid = "ja/nee",
               stringsAsFactors = FALSE
             ),
           Soortengroep =
@@ -157,6 +159,7 @@ describe("s4_Aantal", {
               TypeKenmerk = "soort_nbn",
               WaardeMin = 1,
               WaardeMax = 1,
+              Eenheid = "%",
               stringsAsFactors = FALSE
             ),
           Soortengroep =
@@ -181,6 +184,7 @@ describe("s4_Aantal", {
               TypeKenmerk = "soort_nbn",
               WaardeMax = c(1, 0.8, 0.6, 0.4, 0.2),
               WaardeMin = c(1, 0.8, 0.6, 0.4, 0.2),
+              Eenheid = "%",
               stringsAsFactors = FALSE
             ),
           Soortengroep =
@@ -211,6 +215,7 @@ describe("s4_Aantal", {
               TypeKenmerk = "soort_nbn",
               WaardeMin = 1,
               WaardeMax = NA,
+              Eenheid = "ja/nee",
               stringsAsFactors = FALSE
             ),
           Soortengroep =
@@ -235,6 +240,7 @@ describe("s4_Aantal", {
               TypeKenmerk = "soort_nbn",
               WaardeMin = 1,
               WaardeMax = NA,
+              Eenheid = "ja/nee",
               stringsAsFactors = FALSE
             ),
           Soortengroep =
@@ -266,6 +272,7 @@ describe("s4_Aantal", {
               TypeKenmerk = "soort_nbn",
               WaardeMax = c(1, 0.8, 0.6, 0.6),
               WaardeMin = c(1, 0.8, 0.6, 0.6),
+              Eenheid = "%",
               stringsAsFactors = FALSE
             ),
           Soortengroep =
@@ -294,6 +301,7 @@ describe("s4_Aantal", {
               TypeKenmerk = "soort_nbn",
               WaardeMax = c(1, 0.8, 0.6, 0.4),
               WaardeMin = c(1, 0.8, 0.6, 0.4),
+              Eenheid = "%",
               stringsAsFactors = FALSE
             ),
           Soortengroep =
@@ -322,6 +330,7 @@ describe("s4_Aantal", {
               TypeKenmerk = "soort_nbn",
               WaardeMax = c(1, 0.8, 0.6, 0.6),
               WaardeMin = c(1, 0.8, 0.6, 0.6),
+              Eenheid = "%",
               stringsAsFactors = FALSE
             ),
           Soortengroep =
@@ -350,6 +359,7 @@ describe("s4_Aantal", {
               TypeKenmerk = "soort_nbn",
               WaardeMax = c(1, 0.8, 0.6, 0.4, 0.4),
               WaardeMin = c(1, 0.8, 0.6, 0.4, 0.4),
+              Eenheid = "%",
               stringsAsFactors = FALSE
             ),
           Soortengroep =
