@@ -422,7 +422,7 @@ describe("s4_Aantal", {
               TypeKenmerk = "soort_nbn",
               WaardeMax = c(1, 0.8, 0.6, 0.6, 0.5),
               WaardeMin = c(1, 0.8, 0.6, 0.6, 0.5),
-              Eenheid = c(rep("%",4), "grondvlak_ha"),
+              Eenheid = c(rep("%", 4), "grondvlak_ha"),
               stringsAsFactors = FALSE
             ),
           Soortengroep =
@@ -509,7 +509,7 @@ describe("s4_Aantal", {
               TypeKenmerk = "soort_nbn",
               WaardeMax = c(1, 0.8, 0.6, 0.4, 0.4),
               WaardeMin = c(1, 0.8, 0.6, 0.4, 0.4),
-              Eenheid = c(rep("grondvlak_ha",4),"%"),
+              Eenheid = c(rep("grondvlak_ha", 4), "%"),
               stringsAsFactors = FALSE
             ),
           Soortengroep =
