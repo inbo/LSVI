@@ -72,11 +72,13 @@ selecteerKenmerkenInOpname <-
             Dataset <- Dataset %>%
               group_by(.data$TaxonId) %>%
               summarise(
+                Rijnr = min(.data$Rijnr),
                 Kenmerk = str_c(.data$Kenmerk, collapse = " & "),
                 TypeKenmerk = unique(.data$TypeKenmerk),
                 WaardeMax = 1.0 - prod( (1.0 - .data$WaardeMax), na.rm = TRUE),
                 WaardeMin = 1.0 - prod( (1.0 - .data$WaardeMin), na.rm = TRUE),
-                SubTaxonId = mean(.data$TaxonId)
+                SubTaxonId = mean(.data$TaxonId),
+                Eenheid = unique(.data$Eenheid)
               )
             return(Dataset)
           }
@@ -132,11 +134,11 @@ selecteerKenmerkenInOpname <-
 
       if (SubAnalyseVariabele == "aandeel") {
         Resultaat <- Resultaat %>%
-          filter(.data$Eenheid %in% c("Grondvlak_ha", "Volume_ha"))
+          filter(tolower(.data$Eenheid) %in% c("grondvlak_ha", "volume_ha"))
       }
       if (SubAnalyseVariabele == "bedekking") {
         Resultaat <- Resultaat %>%
-          filter(!.data$Eenheid %in% c("Grondvlak_ha", "Volume_ha"))
+          filter(!tolower(.data$Eenheid) %in% c("grondvlak_ha", "volume_ha"))
       }
 
       Resultaat <- Resultaat %>%
