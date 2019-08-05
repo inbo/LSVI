@@ -72,7 +72,6 @@ selecteerKenmerkenInOpname <-
             Dataset <- Dataset %>%
               group_by(.data$TaxonId) %>%
               summarise(
-                Rijnr = min(.data$Rijnr),
                 Kenmerk = str_c(.data$Kenmerk, collapse = " & "),
                 TypeKenmerk = unique(.data$TypeKenmerk),
                 WaardeMax = 1.0 - prod( (1.0 - .data$WaardeMax), na.rm = TRUE),
