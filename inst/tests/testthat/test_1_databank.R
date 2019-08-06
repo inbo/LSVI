@@ -533,7 +533,9 @@ describe("test databank", {
     )
   })
 
-  it("De subanalysevariabele is overal correct ingevoerd (enkel bedekking)", {
+  it(
+    "De subanalysevariabele is overal correct ingevoerd (bedekking of aandeel)"
+    , {
     ConnectieLSVIhabitats <-
       connecteerMetLSVIlite()
     AV <-
@@ -545,8 +547,7 @@ describe("test databank", {
         FROM Voorwaarde INNER JOIN AnalyseVariabele
         ON Voorwaarde.SubAnalyseVariabeleId = AnalyseVariabele.Id
         INNER JOIN TypeVariabele
-        ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
-        WHERE TypeVariabele.Naam = 'Categorie'"
+        ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id"
       )
     expect_true(
       all(AV$VariabeleNaam == "bedekking")
@@ -555,9 +556,27 @@ describe("test databank", {
       all(AV$TypeVariabele %in% c("Categorie", "Percentage"))
     )
     AV_cat <- AV %>%
-      filter(TypeVariabele == "Categorie")
+      filter(.data$TypeVariabele == "Categorie")
     expect_true(
       all(!is.na(AV_cat$SubInvoermaskerId))
+    )
+  })
+
+  it("De subanalysevariabele is enkel gebruikt bij AnalyseVariabele aantal", {
+    ConnectieLSVIhabitats <-
+      connecteerMetLSVIlite()
+    AV <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        "SELECT vw.Id, av.VariabeleNaam,
+      sav.VariabeleNaam AS SubVariabeleNaam
+      FROM Voorwaarde vw INNER JOIN AnalyseVariabele sav
+      ON vw.SubAnalyseVariabeleId = sav.Id
+      INNER JOIN Analysevariabele av
+      ON vw.AnalyseVariabeleId = av.Id"
+      )
+    expect_true(
+      all(AV$VariabeleNaam == "aantal")
     )
   })
 

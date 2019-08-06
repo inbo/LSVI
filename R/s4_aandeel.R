@@ -29,10 +29,10 @@ setMethod(
         object@SubRefMax,
         object@SubOperator
       ) %>%
-      filter(.data$Eenheid %in% c("Grondvlak_ha", "Volume_ha"))
+      filter(tolower(.data$Eenheid) %in% c("grondvlak_ha", "volume_ha"))
 
     alle_soorten <- object@Kenmerken %>%
-      filter(.data$Eenheid %in% c("Grondvlak_ha", "Volume_ha"))
+      filter(tolower(.data$Eenheid) %in% c("grondvlak_ha", "volume_ha"))
 
 
     if (nrow(alle_soorten) == 0) {

@@ -76,7 +76,8 @@ selecteerKenmerkenInOpname <-
                 TypeKenmerk = unique(.data$TypeKenmerk),
                 WaardeMax = 1.0 - prod( (1.0 - .data$WaardeMax), na.rm = TRUE),
                 WaardeMin = 1.0 - prod( (1.0 - .data$WaardeMin), na.rm = TRUE),
-                SubTaxonId = mean(.data$TaxonId)
+                SubTaxonId = mean(.data$TaxonId),
+                Eenheid = unique(.data$Eenheid)
               )
             return(Dataset)
           }
@@ -84,7 +85,7 @@ selecteerKenmerkenInOpname <-
         }
 
       Resultaat <- Resultaat %>%
-        group_by(.data$TaxonId) %>%
+        group_by(.data$TaxonId, .data$Eenheid) %>%
         do(kiesTaxonOfSubtaxons(.)) %>%
         ungroup()
     }
@@ -128,7 +129,16 @@ selecteerKenmerkenInOpname <-
     }
 
     if (!identical(SubAnalyseVariabele, character(0)) &
-        SubAnalyseVariabele == "bedekking") {
+        SubAnalyseVariabele %in% c("aandeel", "bedekking")) {
+
+      if (SubAnalyseVariabele == "aandeel") {
+        Resultaat <- Resultaat %>%
+          filter(tolower(.data$Eenheid) %in% c("grondvlak_ha", "volume_ha"))
+      }
+      if (SubAnalyseVariabele == "bedekking") {
+        Resultaat <- Resultaat %>%
+          filter(!tolower(.data$Eenheid) %in% c("grondvlak_ha", "volume_ha"))
+      }
 
       Resultaat <- Resultaat %>%
         mutate(

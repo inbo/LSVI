@@ -39,7 +39,7 @@ describe("s4_Aandeel", {
               TypeKenmerk = "soort_nbn",
               WaardeMin = 0.1,
               WaardeMax = 0.1,
-              Eenheid = "Grondvlak_ha",
+              Eenheid = "grondvlak_ha",
               stringsAsFactors = FALSE
             ),
           Soortengroep =
