@@ -1035,7 +1035,7 @@ describe("berekenLSVIbasis", {
             Index_harm_harm =
               ifelse(
                 .data$ID == "Ts2036",
-                0.1313062683,
+                0.124240377,
                 .data$Index_harm_harm
               )
           )
