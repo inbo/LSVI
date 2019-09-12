@@ -58,7 +58,8 @@ Uitvoer <- NULL
 for (VersieRapportdeel in unique(Indicatoren$Versie)) {
   Uitvoer <- c(Uitvoer, paste("#", VersieRapportdeel, sep = ""))
   VersieIndicatoren <- Indicatoren %>%
-    filter(.data$Versie == VersieRapportdeel)
+    filter(.data$Versie == VersieRapportdeel) %>%
+    arrange(.data$Habitattype)
   for (Habitatgroep in unique(VersieIndicatoren$Habitatgroepnaam)) {
     Uitvoer <- c(Uitvoer, paste("##",Habitatgroep, sep = ""))
     Subset <- VersieIndicatoren %>%

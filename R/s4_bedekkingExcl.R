@@ -23,7 +23,7 @@ setMethod(
     object@Kenmerken <- object@Kenmerken %>%
       filter(
         is.na(.data$Eenheid) |
-          (!.data$Eenheid %in% c("Grondvlak_ha", "Volume_ha"))
+          (!tolower(.data$Eenheid) %in% c("grondvlak_ha", "volume_ha"))
       )
 
     Resultaat <-

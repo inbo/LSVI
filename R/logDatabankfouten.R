@@ -228,11 +228,22 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
       Invoervereisten %>%
         filter(
           !is.na(.data$SubAnalyseVariabele) &
-            .data$SubAnalyseVariabele != "bedekking"
+            !.data$SubAnalyseVariabele %in% c("bedekking", "aandeel")
         ) %>%
         mutate(
           Probleem =
-            "De SubAnalyseVariabele moet bedekking zijn"
+            "De SubAnalyseVariabele moet bedekking of aandeel zijn"
+        )
+    ) %>%
+    bind_rows(
+      Invoervereisten %>%
+        filter(
+          !is.na(.data$SubAnalyseVariabele) &
+            .data$AnalyseVariabele != "aantal"
+        ) %>%
+        mutate(
+          Probleem =
+            "De AnalyseVariabele moet aantal zijn als een subanalysevariabele opgegeven is" #nolint
         )
     ) %>%
     bind_rows(
@@ -243,7 +254,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
         ) %>%
         mutate(
           Probleem =
-            "De SubAnalyseVariabele moet ingevuld zijn als er een SubReferentiewaarde opgegeven is" #nolint
+            "De SubAnalyseVariabele moet ingevuld zijn als er een SubReferentiewaarde opgegeven is: kies je voorwaarde zodanig dat deze niet overlapt met een voorwaarde die gebruikt wordt zonder SubAnalyseVariabele en geef nieuwe voorwaarden door aan BMK" #nolint
         )
     ) %>%
     bind_rows(
