@@ -32,43 +32,6 @@ describe("berekenLSVIbasis vegetatielaag", {
                col_character(), col_character())
       )
 
-    # Resultaat <-
-    #   idsWissen(
-    #     berekenLSVIbasis(
-    #       Versie = "Versie 3",
-    #       Kwaliteitsniveau = "1", Data_habitat,
-    #       Data_voorwaarden, Data_soortenKenmerken
-    #     )
-    #   )
-    #
-    # save(Resultaat, file = "inst/vbdata/Resultaat_test_bos.Rdata")  #nolint
-    # load("inst/vbdata/Resultaat_test_bos.Rdata")  #nolint
-
-    # Resultaatv2 <-
-    #   idsWissen(
-    #     berekenLSVIbasis(
-    #       Versie = "Versie 2.0",
-    #       Kwaliteitsniveau = "1", Data_habitat,
-    #       Data_voorwaarden, Data_soortenKenmerken
-    #     )
-    #   )
-    # write.csv2(
-    #   Resultaatv2[["Resultaat_criterium"]],
-    #   file = "inst/vbdata/Resultaat_test_bosv2/Resultaat_criterium.csv"  #nolint
-    # )
-    # write.csv2(
-    #   Resultaatv2[["Resultaat_indicator"]],
-    #   file = "inst/vbdata/Resultaat_test_bosv2/Resultaat_indicator.csv"  #nolint
-    # )
-    # write.csv2(
-    #   Resultaatv2[["Resultaat_detail"]],
-    #   file = "inst/vbdata/Resultaat_test_bosv2/Resultaat_detail.csv"  #nolint
-    # )
-    # write.csv2(
-    #   Resultaatv2[["Resultaat_globaal"]],
-    #   file = "inst/vbdata/Resultaat_test_bosv2/Resultaat_globaal.csv"  #nolint
-    # )
-
     Resultaatv2 <-
       list(
         Resultaat_criterium =

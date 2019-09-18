@@ -19,18 +19,6 @@ Data_soortenKenmerken <-
       system.file("vbdata/data_soortenKenmerken2330_dw.csv", package = "LSVI")
     )
 
-# Resultaat <-
-#   idsWissen(
-#     berekenLSVIbasis(
-#       Versie = "Versie 3",
-#       Kwaliteitsniveau = "1", Data_habitat,
-#       Data_voorwaarden, Data_soortenKenmerken
-#     )
-#   )
-# 
-# save(Resultaat, file = "inst/vbdata/Resultaat_test2330_dw.Rdata")  #nolint
-# load("inst/vbdata/Resultaat_test2330_dw.Rdata")  #nolint
-
 load(system.file("vbdata/Resultaat_test2330_dw.Rdata", package = "LSVI"))
 
 
