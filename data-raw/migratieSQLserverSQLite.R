@@ -7,7 +7,7 @@ library(dplyr)
 
 migratieSQLserverSQLite <-
   function(
-    VectorHabitattypes = c("1330_hpr", "4030", "9130", "9190", "91E0_va"),
+    #VectorHabitattypes = c("1330_hpr", "4030", "9130", "9190", "91E0_va"),
     Versie = "Versie 2.0"
   ) {
   #Tabellen ophalen uit SQLserver
@@ -26,7 +26,7 @@ migratieSQLserverSQLite <-
     )
   
   HabitattypeId <- (Habitattype %>%
-    filter(Code %in% VectorHabitattypes) %>%
+    #filter(Code %in% VectorHabitattypes) %>%
     summarise(Id = paste0(Id, collapse = ",")))$Id
   
   Versie <-
