@@ -219,7 +219,7 @@ geefInvoervereisten <- function(Versie = "alle",
 
   query_voorwaardeinfo <-
     sprintf("SELECT Voorwaarde.Id AS VoorwaardeID,
-            Voorwaarde.VoorwaardeNaam AS Voorwaarde, Voorwaarde.ExtraBewerking,
+            Voorwaarde.VoorwaardeNaam AS Voorwaarde,
             Voorwaarde.Referentiewaarde, Voorwaarde.Operator,
             AnalyseVariabele.VariabeleNaam as AnalyseVariabele,
             AnalyseVariabele.Eenheid, TypeVariabele.Naam AS TypeVariabele,
@@ -288,7 +288,7 @@ geefInvoervereisten <- function(Versie = "alle",
       ) %>%
       group_by(
         .data$VoorwaardeID, .data$Voorwaarde,
-        .data$ExtraBewerking, .data$Referentiewaarde,
+        .data$Referentiewaarde,
         .data$Operator, .data$AnalyseVariabele,
         .data$Eenheid, .data$TypeVariabele,
         .data$Invoertype,
@@ -309,7 +309,7 @@ geefInvoervereisten <- function(Versie = "alle",
       ungroup() %>%
       select(                   #volgorde aanpassen
         .data$VoorwaardeID, .data$Voorwaarde,
-        .data$ExtraBewerking, .data$Referentiewaarde,
+        .data$Referentiewaarde,
         .data$Operator, .data$AnalyseVariabele,
         .data$Eenheid, .data$TypeVariabele,
         .data$Invoertype, .data$Invoerwaarde,

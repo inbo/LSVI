@@ -141,7 +141,7 @@ migratieSQLserverSQLite <-
     dbGetQuery(
       ConnectiePool,
       sprintf(
-        "SELECT Id, VoorwaardeNaam, ExtraBewerking, ExtraInfo,
+        "SELECT Id, VoorwaardeNaam, ExtraInfo,
         AnalyseVariabeleId, Referentiewaarde, Operator, InvoermaskerId,
         TaxongroepId, StudiegroepId, SubAnalyseVariabeleId,
         SubReferentiewaarde, SubOperator, SubInvoermaskerId

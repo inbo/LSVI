@@ -171,7 +171,6 @@ berekenLSVIbasis <-
         .data$Combinatie,
         .data$VoorwaardeID,
         .data$Voorwaarde,
-        .data$ExtraBewerking,
         .data$Referentiewaarde,
         .data$Operator,
         .data$Eenheid,
@@ -253,7 +252,6 @@ berekenLSVIbasis <-
         Combinatie = NULL,
         VoorwaardeID = NULL,
         Voorwaarde = NULL,
-        ExtraBewerking = NULL,
         Referentiewaarde = NULL,
         Operator = NULL,
         Eenheid = NULL,
@@ -517,8 +515,7 @@ berekenLSVIbasis <-
         .data$Beoordeling,
         .data$Kwaliteitsniveau,
         .data$BeoordelingID,
-        .data$Combinatie,
-        .data$ExtraBewerking
+        .data$Combinatie
       ) %>%
       do(
         combinerenDubbeleVoorwaarden(.)
@@ -578,7 +575,6 @@ berekenLSVIbasis <-
       ) %>%
       mutate(
         Rijnr = NULL,
-        ExtraBewerking = NULL,
         RefMin = NULL, #in geval van categorische referentiewaarde (bv HB)
         RefMax = NULL,
         WaardeMin = NULL, #is geval van categorische waarde (bv HB)
