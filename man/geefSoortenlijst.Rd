@@ -40,8 +40,10 @@ Ook voor de weergave van de taxa zijn 2 opties: de taxa weergeven zoals in de ha
 De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten als string opgegeven worden.  Default is telkens 'alle', waarbij de soortenlijsten voor alle mogelijke waarden van die parameter weergegeven worden (m.a.w. er is geen selectie voor deze parameter).
 }
 \examples{
-# deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
-# een connectie gelegd kan worden met de SQL Server-databank binnen INBO
+# Omwille van de iets langere lange duurtijd van de commando's staat bij
+# onderstaande voorbeelden de vermelding 'dontrun' (om problemen te vermijden
+# bij het testen van het package). Maar de voorbeelden werken en kunnen zeker
+# uitgetest worden.
 \dontrun{
 maakConnectiePool()
 geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "LSVIfiche")

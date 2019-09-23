@@ -1,6 +1,6 @@
-#' @title Maak een connectiepool de databank met LSVI-indicatoren in het package
+#' @title Maak een connectiepool met de databank met LSVI-indicatoren in het package
 #'
-#' @description Deze functie maakt een connectiepool met de in het package toegevoegd databank met LSVI-indicatoren, wat nodig is om de functies te kunnen gebruiken.  Deze connectiepool moet eenmalig aangemaakt worden, en functies zullen automatisch deze connectiepool gebruiken om te connecteren met de databank.  Alternatief is om een connectie aan te maken met de functie connecteerMetLSVIlite() en deze bij elke functie mee te geven.  Voorlopig bevat deze databank bij wijze van test maar enkele gegevens en wordt best connectie gemaakt met de volledige databank via de functie maakConnectiePool().
+#' @description Deze functie maakt een connectiepool met de in het package toegevoegde databank met LSVI-indicatoren, net zoals de functie maakConnectiePool().  Aangeraden wordt om de functie maakConnectiePool() te gebruiken in plaats van deze functie, omdat deze functie op termijn zal verdwijnen.
 #'
 #' @return Deze functie maakt een Environment-object aan dat de connecties regelt met de betreffende databank in de installatie-file van het package.
 #'

@@ -23,8 +23,10 @@ Deze functie genereert soortenlijsten (met wetenschappelijke en Nederlandse name
 Deze functie geeft standaard voor de gespecifieerde taxongroepen per groep een lijst van alle taxa zoals ze in de LSVI-habitatfiche vermeld zijn (genusniveau, soortniveau, subsoort,...).  Op basis van de parameter soortenlijsttype kan ook gekozen worden om een volledige lijst te geven van deze taxa en alle taxa die hieronder vallen (en opgenomen zijn in de onderliggende databank).
 }
 \examples{
-# deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
-# een connectie gelegd kan worden met de SQL Server-databank binnen INBO
+# Omwille van de iets langere lange duurtijd van de commando's staat bij
+# onderstaande voorbeelden de vermelding 'dontrun' (om problemen te vermijden
+# bij het testen van het package). Maar de voorbeelden werken en kunnen zeker
+# uitgetest worden.
 \dontrun{
 maakConnectiePool()
 geefSoortenlijstVoorIDs("434,88,565")

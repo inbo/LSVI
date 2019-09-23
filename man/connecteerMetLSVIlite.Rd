@@ -7,10 +7,10 @@
 connecteerMetLSVIlite()
 }
 \value{
-Deze functie geeft een open SQLite-connectie naar de betreffende databank in de installatie-file van het package.
+Deze functie geeft een open odbc-connectie naar de SQLite-databank in de installatie-file van het package.
 }
 \description{
-Deze functie maakt een connectie met de in het package toegevoegde databank met LSVI-indicatoren, wat nodig is om de functies te kunnen gebruiken.  Voorlopig bevat deze databank bij wijze van test maar enkele gegevens en wordt best connectie gemaakt met de volledige databank via de functie connecteerMetLSVIdb().  (Deze functie is zodanig ingebouwd in de code dat ze niet expliciet opgegeven moet worden door de gebruiker, tenzij deze een andere databank wil opgeven.)
+Deze functie maakt een connectie met de in het package toegevoegde databank met LSVI-indicatoren, net zoals de functie connecteerMetLSVIdb().    Aangeraden wordt om de functie connecteerMetLSVIdb() te gebruiken in plaats van deze functie, omdat deze functie op termijn zal verdwijnen.
 }
 \examples{
 library(LSVI)

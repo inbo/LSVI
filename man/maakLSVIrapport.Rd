@@ -32,7 +32,7 @@ De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten
 \examples{
 # Omwille van de iets langere lange duurtijd van de commando's staat bij
 # onderstaande voorbeelden de vermelding 'dontrun' (om problemen te vermijden
-# bij het testen van het package). Maar de voorbeelden werken en mogen zeker
+# bij het testen van het package). Maar de voorbeelden werken en kunnen zeker
 # uitgetest worden.
 \dontrun{
 maakConnectiePool()
