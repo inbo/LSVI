@@ -904,63 +904,6 @@ describe("berekenLSVIbasis", {
     )
   })
 
-  it("Afhandeling van lokale schaal gebeurt correct", {
-    expect_equal(
-      (idsWissen(
-        berekenLSVIbasis(
-          Versie = "Versie 2.0",
-          Kwaliteitsniveau = "1",
-          Data_habitat,
-          Data_voorwaarden2 %>%
-            mutate(
-              Waarde =
-                ifelse(
-                  .data$Indicator == "dwergstruiken" & .data$Waarde == "f",
-                  "la",
-                  .data$Waarde
-                )
-            ),
-          Data_soortenKenmerken
-        )
-      ))[["Resultaat_detail"]],
-      Resultaatv2[["Resultaat_detail"]] %>%
-        mutate(
-          Waarde =
-            ifelse(
-              .data$ID == "JR0216" & .data$Indicator == "dwergstruiken",
-              "la",
-              .data$Waarde
-            ),
-          Verschilscore =
-            ifelse(
-              .data$ID == "JR0216" & .data$Indicator == "dwergstruiken",
-              -0.824,
-              .data$Verschilscore
-            )
-        )
-    )
-    expect_equal(
-      idsWissen(
-        berekenLSVIbasis(
-          Versie = "Versie 2.0",
-          Kwaliteitsniveau = "1",
-          Data_habitat,
-          Data_voorwaarden2,
-          Data_soortenKenmerken %>%
-            mutate(
-              Waarde =
-                ifelse(
-                  .data$Waarde == "f",
-                  "la",
-                  .data$Waarde
-                )
-            )
-        )
-      ),
-      Resultaatv2
-    )
-  })
-
   it("afhandeling van Ja/nee in Data_soortenKenmerken is correct", {
     skip_if_not(
       class(ConnectiePool$.__enclos_env__$private$createObject())[1] ==

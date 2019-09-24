@@ -21,31 +21,61 @@ Data_soortenKenmerken <-
 
 load(system.file("vbdata/Resultaat_test4030v2.Rdata", package = "LSVI"))
 
-describe("invoer van lokale schaal", {
+describe("Afhandeling van lokale schaal gebeurt correct", {
   it("lokale schaal wordt herkend en omzetting/berekening gebeurt correct", {
-    Data_voorwaardenLokaal <- Data_voorwaarden %>%
-      mutate(
-        Waarde = ifelse(.data$Waarde == "o", "lf", .data$Waarde)
-      )
+    expect_equal(
+      (idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 2.0",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden %>%
+            mutate(
+              Waarde =
+                ifelse(
+                  .data$Indicator == "dwergstruiken" & .data$Waarde == "f",
+                  "la",
+                  .data$Waarde
+                )
+            ),
+          Data_soortenKenmerken
+        )
+      ))[["Resultaat_detail"]],
+      Resultaatv2[["Resultaat_detail"]] %>%
+        mutate(
+          Waarde =
+            ifelse(
+              .data$ID == "JR0216" & .data$Indicator == "dwergstruiken",
+              "la",
+              .data$Waarde
+            ),
+          Verschilscore =
+            ifelse(
+              .data$ID == "JR0216" & .data$Indicator == "dwergstruiken",
+              -0.824,
+              .data$Verschilscore
+            )
+        )
+    )
     expect_equal(
       idsWissen(
         berekenLSVIbasis(
           Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
           Data_habitat,
-          Data_voorwaardenLokaal,
-          Data_soortenKenmerken
+          Data_voorwaarden,
+          Data_soortenKenmerken %>%
+            mutate(
+              Waarde =
+                ifelse(
+                  .data$Waarde == "f",
+                  "la",
+                  .data$Waarde
+                )
+            )
         )
       ),
-      list(
-        Resultaat_criterium = Resultaatv2[["Resultaat_criterium"]],
-        Resultaat_indicator = Resultaatv2[["Resultaat_indicator"]],
-        Resultaat_detail = Resultaatv2[["Resultaat_detail"]] %>%
-          mutate(
-            Waarde = ifelse(.data$Waarde == "o", "lf", .data$Waarde)
-          ),
-        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]]
-      )
+      Resultaatv2
     )
   })
 })
