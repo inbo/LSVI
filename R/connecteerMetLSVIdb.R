@@ -37,17 +37,9 @@ connecteerMetLSVIdb <-
   assert_that(is.string(Wachtwoord))
 
   if (Gebruiker == "pc-eigenaar") {
-    ConnectieLSVIhabitats <-
-      dbConnect(
-        odbc(),
-        Driver = "SQL Server",
-        Server = Server,
-        Database = Databank,
-        Trusted_Connection = "True",
-        encoding = "UTF-8"
-      )
     tryCatch(
-      ConnectieLSVIhabitats <-
+      assign(
+        "ConnectieLSVIhabitats",
         dbConnect(
           odbc(),
           Driver = "SQL Server",
@@ -56,8 +48,14 @@ connecteerMetLSVIdb <-
           Trusted_Connection = "True",
           encoding = "UTF-8"
         ),
+        envir = .GlobalEnv
+      ),
       error = function(e) {
-        ConnectieLSVIhabitats <- connecteerMetLSVIlite()
+        assign(
+          "ConnectieLSVIhabitats",
+          connecteerMetLSVIlite(),
+          envir = .GlobalEnv
+        )
       }
     )
   } else {
