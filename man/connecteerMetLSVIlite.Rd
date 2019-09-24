@@ -13,10 +13,16 @@ Deze functie geeft een open odbc-connectie naar de SQLite-databank in de install
 Deze functie maakt een connectie met de in het package toegevoegde databank met LSVI-indicatoren, net zoals de functie connecteerMetLSVIdb().    Aangeraden wordt om de functie connecteerMetLSVIdb() te gebruiken in plaats van deze functie, omdat deze functie op termijn zal verdwijnen.
 }
 \examples{
+# Omwille van de iets langere lange duurtijd van de commando's staat bij
+# onderstaand voorbeeld de vermelding 'dontrun' (om problemen te vermijden
+# bij het testen van het package). Maar het voorbeeld werkt en kan zeker
+# uitgetest worden.
+\dontrun{
 library(LSVI)
 library(DBI)
 ConnectieLSVIhabitats <- connecteerMetLSVIlite()
 dbGetQuery(ConnectieLSVIhabitats, "SELECT VersieLSVI, Referentie FROM Versie")
 dbDisconnect(ConnectieLSVIhabitats)
+}
 
 }

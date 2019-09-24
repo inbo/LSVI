@@ -13,10 +13,16 @@ Deze functie maakt een Environment-object aan dat de connecties regelt met de be
 Deze functie maakt een connectiepool met de in het package toegevoegde databank met LSVI-indicatoren, net zoals de functie maakConnectiePool().  Aangeraden wordt om de functie maakConnectiePool() te gebruiken in plaats van deze functie, omdat deze functie op termijn zal verdwijnen.
 }
 \examples{
+# Omwille van de iets langere lange duurtijd van de commando's staat bij
+# onderstaand voorbeeld de vermelding 'dontrun' (om problemen te vermijden
+# bij het testen van het package). Maar het voorbeeld werkt en kan zeker
+# uitgetest worden.
+\dontrun{
 library(LSVI)
 maakConnectiepoolSQLite()
 geefVersieInfo()
 library(pool)
 poolClose(ConnectiePool)
+}
 
 }

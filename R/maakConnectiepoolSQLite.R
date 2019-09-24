@@ -5,11 +5,17 @@
 #' @return Deze functie maakt een Environment-object aan dat de connecties regelt met de betreffende databank in de installatie-file van het package.
 #'
 #' @examples
+#' # Omwille van de iets langere lange duurtijd van de commando's staat bij
+#' # onderstaand voorbeeld de vermelding 'dontrun' (om problemen te vermijden
+#' # bij het testen van het package). Maar het voorbeeld werkt en kan zeker
+#' # uitgetest worden.
+#' \dontrun{
 #' library(LSVI)
 #' maakConnectiepoolSQLite()
 #' geefVersieInfo()
 #' library(pool)
 #' poolClose(ConnectiePool)
+#' }
 #'
 #' @export
 #'

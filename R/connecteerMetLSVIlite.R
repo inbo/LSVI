@@ -5,11 +5,17 @@
 #' @return Deze functie geeft een open odbc-connectie naar de SQLite-databank in de installatie-file van het package.
 #'
 #' @examples
+#' # Omwille van de iets langere lange duurtijd van de commando's staat bij
+#' # onderstaand voorbeeld de vermelding 'dontrun' (om problemen te vermijden
+#' # bij het testen van het package). Maar het voorbeeld werkt en kan zeker
+#' # uitgetest worden.
+#' \dontrun{
 #' library(LSVI)
 #' library(DBI)
 #' ConnectieLSVIhabitats <- connecteerMetLSVIlite()
 #' dbGetQuery(ConnectieLSVIhabitats, "SELECT VersieLSVI, Referentie FROM Versie")
 #' dbDisconnect(ConnectieLSVIhabitats)
+#' }
 #'
 #' @export
 #'
