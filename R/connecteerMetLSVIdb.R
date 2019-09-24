@@ -46,37 +46,22 @@ connecteerMetLSVIdb <-
         Trusted_Connection = "True",
         encoding = "UTF-8"
       )
+    tryCatch(
+      ConnectieLSVIhabitats <-
+        dbConnect(
+          odbc(),
+          Driver = "SQL Server",
+          Server = Server,
+          Database = Databank,
+          Trusted_Connection = "True",
+          encoding = "UTF-8"
+        ),
+      error = function(e) {
+        ConnectieLSVIhabitats <- connecteerMetLSVIlite()
+      }
+    )
   } else {
-    if (Gebruiker == "lezer") {
-      Gebruiker <- "D0122_AppR"
-      Wachtwoord <-
-        tryCatch(
-          Wachtwoord <-
-            scan(
-              file = system.file("credentials", package = "LSVI"),
-              what = "character"
-            ),
-          error = function(e) {
-            print("Error: Geen wachtwoord gevonden")
-            return(NULL)
-          },
-          warning = function(w) {
-            print("Error: Geen wachtwoord gevonden")
-            return(NULL)
-          },
-          message = FALSE
-        )
-    }
-    ConnectieLSVIhabitats <-
-      dbConnect(
-        odbc(),
-        Driver = "SQL Server",
-        Server = Server,
-        Database = Databank,
-        UID = Gebruiker,
-        PWD = Wachtwoord,
-        encoding = "UTF-8"
-      )
+    ConnectieLSVIhabitats <- connecteerMetLSVIlite()
   }
 
   return(ConnectieLSVIhabitats)
