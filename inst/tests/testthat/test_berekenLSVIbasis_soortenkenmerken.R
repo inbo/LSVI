@@ -333,5 +333,56 @@ describe("ontbreken van soorten of kenmerken", {
   })
 })
 
+describe("samenstelling soortengroepen", {
+  it("bedekkingen op genusniveau en soortniveau geven hetzelfde resultaat (waar dit mag)", { #nolint
+    expect_equal(
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 2.0",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden %>%
+            filter(.data$Voorwaarde != "bedekking verbossing"),
+          Data_soortenKenmerken %>%
+            bind_rows(
+              data.frame(
+                ID = c("JR0216", "Ts2036"),
+                Kenmerk = "Quercus",
+                TypeKenmerk = "Soort_Latijn",
+                Waarde = "10",
+                Type = "Percentage",
+                Eenheid = "%",
+                Vegetatielaag = "boomlaag",
+                stringsAsFactors = FALSE
+              )
+            )
+        )
+      ),
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 2.0",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden %>%
+            filter(.data$Voorwaarde != "bedekking verbossing"),
+          Data_soortenKenmerken %>%
+            bind_rows(
+              data.frame(
+                ID = c("JR0216", "Ts2036"),
+                Kenmerk = "Quercus robur",
+                TypeKenmerk = "Soort_Latijn",
+                Waarde = "10",
+                Type = "Percentage",
+                Eenheid = "%",
+                Vegetatielaag = "boomlaag",
+                stringsAsFactors = FALSE
+              )
+            )
+        )
+      )
+    )
+  })
+})
+
 library(pool)
 poolClose(ConnectiePool)
