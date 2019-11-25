@@ -13,7 +13,7 @@
 #'
 invoercontroleVersie <- function(Versie, ConnectieLSVIhabitats) {
   assert_that(is.string(Versie))
-  Versie <- str_to_sentence(Versie)
+  if (Versie != "RBB v1") Versie <- str_to_sentence(Versie)
   if (Versie == "Versie 2") Versie <- "Versie 2.0"
   if (Versie == "Versie 3.0") Versie <- "Versie 3"
   Versie <- ifelse(Versie == "Alle", "alle", Versie)
