@@ -5,11 +5,14 @@
 \alias{aandeelKruidlaag-class}
 \title{S4-klasse die aandeel bedekking soorten binnen de kruidlaag berekend}
 \description{
-Deze klasse AandeelKruidlaag staat in voor de berekening van waarden voor TypeVariabele AandeelKruidlaag op basis van opgegeven kenmerken.  Ze is een nakomeling van de klasse bedekking.
+Deze klasse AandeelKruidlaag staat in voor de berekening van waarden voor
+TypeVariabele AandeelKruidlaag op basis van opgegeven kenmerken.  Ze is een
+nakomeling van de klasse bedekking.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{Kenmerken}}{dataframe met alle opgegeven kenmerken, met velden Kenmerk, TypeKenmerk, WaardeMin en WaardeMax}
+\item{\code{Kenmerken}}{dataframe met alle opgegeven kenmerken, met velden Kenmerk,
+TypeKenmerk, WaardeMin en WaardeMax}
 }}
 

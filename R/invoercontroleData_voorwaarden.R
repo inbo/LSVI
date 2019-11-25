@@ -1,6 +1,12 @@
 #' Invoercontrole voor dataframe Data_voorwaarden
 #'
-#' Om te vermijden dat we meermaals dezelfde invoercontrole moeten uitvoeren en om de hoofdscripts overzichtelijk te houden, maken we voor elke invoercontrole een aparte hulpfunctie aan, die we kunnen aanroepen.  Deze wordt NIET geëxporteerd, dus deze functies kunnen niet als commando gerund worden (maar worden wel gerund als de functie waarin ze voorkomen, aangeroepen wordt).  Ingeval van Data_voorwaarden is ook de omzetting van de voorwaarden naar een interval opgenomen in de functie.
+#' Om te vermijden dat we meermaals dezelfde invoercontrole moeten uitvoeren en
+#' om de hoofdscripts overzichtelijk te houden, maken we voor elke
+#' invoercontrole een aparte hulpfunctie aan, die we kunnen aanroepen.  Deze
+#' wordt NIET geëxporteerd, dus deze functies kunnen niet als commando gerund
+#' worden (maar worden wel gerund als de functie waarin ze voorkomen,
+#' aangeroepen wordt).  Ingeval van Data_voorwaarden is ook de omzetting van de
+#' voorwaarden naar een interval opgenomen in de functie.
 #'
 #' @param Data_voorwaarden dataframe waarop invoercontrole moet gebeuren.
 #' @inheritParams berekenLSVIbasis
@@ -12,8 +18,8 @@
 #'
 #' @export
 #'
-invoercontroleData_voorwaarden <-
-  function(Data_voorwaarden, ConnectieLSVIhabitats, LIJST) {
+invoercontroleData_voorwaarden <- #nolint
+  function(Data_voorwaarden, ConnectieLSVIhabitats, LIJST) { #nolint
     assert_that(inherits(Data_voorwaarden, "data.frame"))
     assert_that(has_name(Data_voorwaarden, "ID"))
     if (!is.character(Data_voorwaarden$ID)) {
@@ -88,19 +94,19 @@ invoercontroleData_voorwaarden <-
       stop(Tekst$Tekst)
     }
 
-    Data_voorwaarden_NA <- Data_voorwaarden %>%
+    data_voorwaarden_na <- Data_voorwaarden %>%
       filter(is.na(.data$Voorwaarde))
 
-    Data_voorwaarden_nietNA <- Data_voorwaarden %>%
+    data_voorwaarden_niet_na <- Data_voorwaarden %>%
       filter(!is.na(.data$Voorwaarde))
 
-    if (nrow(Data_voorwaarden_NA) > 0) {
-      if (!all(Data_voorwaarden_NA$Waarde %in% c("TRUE", "FALSE"))) {
+    if (nrow(data_voorwaarden_na) > 0) {
+      if (!all(data_voorwaarden_na$Waarde %in% c("TRUE", "FALSE"))) {
         stop("Als je in de tabel Data_voorwaarden de kolom voorwaarde leeg laat, wordt ervan uitgegaan dat je de indicator rechtstreeks ingeschat hebt.  In dit geval mag je in de kolom Waarde enkel 'TRUE' (gunstig) of 'FALSE' (ongunstig) ingeven.  Voor minstens 1 record heb je Voorwaarde leeggelaten en bij Waarde een andere waarde dan TRUE of FALSE opgegeven") #nolint
       }
-      DubbeleIndicatoren <- Data_voorwaarden_NA %>%
+      DubbeleIndicatoren <- data_voorwaarden_na %>%
         inner_join(
-          Data_voorwaarden_nietNA,
+          data_voorwaarden_niet_na,
           by = c("ID", "Criterium", "Indicator")
         )
       if (nrow(DubbeleIndicatoren) > 0) {
@@ -126,9 +132,9 @@ invoercontroleData_voorwaarden <-
       }
     }
 
-    if (nrow(Data_voorwaarden_nietNA) > 0) {
-      assert_that(has_name(Data_voorwaarden_nietNA, "Type"))
-      Data_voorwaarden_nietNA <- Data_voorwaarden_nietNA %>%
+    if (nrow(data_voorwaarden_niet_na) > 0) {
+      assert_that(has_name(data_voorwaarden_niet_na, "Type"))
+      data_voorwaarden_niet_na <- data_voorwaarden_niet_na %>%
         mutate(
           Type =
             ifelse(
@@ -137,47 +143,47 @@ invoercontroleData_voorwaarden <-
               .data$Type
             )
         )
-      if (!is.character(Data_voorwaarden_nietNA$Type)) {
-        Data_voorwaarden_nietNA$Type <-
-          as.character(Data_voorwaarden_nietNA$Type)
+      if (!is.character(data_voorwaarden_niet_na$Type)) {
+        data_voorwaarden_niet_na$Type <-
+          as.character(data_voorwaarden_niet_na$Type)
       }
-      Data_voorwaarden_nietNA$Type <-
-        str_to_sentence(Data_voorwaarden_nietNA$Type)
+      data_voorwaarden_niet_na$Type <-
+        str_to_sentence(data_voorwaarden_niet_na$Type)
       controleerInvoerwaarde(
-        "Data_voorwaarden$Type", Data_voorwaarden_nietNA$Type,
+        "Data_voorwaarden$Type", data_voorwaarden_niet_na$Type,
         "TypeVariabele", "Naam", ConnectieLSVIhabitats, Tolower = FALSE
       )
-      assert_that(has_name(Data_voorwaarden_nietNA, "Invoertype"))
-      if (!is.character(Data_voorwaarden_nietNA$Invoertype)) {
-        Data_voorwaarden_nietNA$Invoertype <-
-          as.character(Data_voorwaarden_nietNA$Invoertype)
+      assert_that(has_name(data_voorwaarden_niet_na, "Invoertype"))
+      if (!is.character(data_voorwaarden_niet_na$Invoertype)) {
+        data_voorwaarden_niet_na$Invoertype <-
+          as.character(data_voorwaarden_niet_na$Invoertype)
       }
       controleerInvoerwaarde(
         "Data_voorwaarden$Invoertype",
-        Data_voorwaarden_nietNA$Invoertype[
-          !is.na(Data_voorwaarden_nietNA$Invoertype)
+        data_voorwaarden_niet_na$Invoertype[
+          !is.na(data_voorwaarden_niet_na$Invoertype)
         ],
         "Lijst", "Naam", ConnectieLSVIhabitats
       )
-      assert_that(has_name(Data_voorwaarden_nietNA, "Eenheid"))
-      if (!is.character(Data_voorwaarden_nietNA$Eenheid)) {
-        Data_voorwaarden_nietNA$Eenheid <-
-          as.character(Data_voorwaarden_nietNA$Eenheid)
+      assert_that(has_name(data_voorwaarden_niet_na, "Eenheid"))
+      if (!is.character(data_voorwaarden_niet_na$Eenheid)) {
+        data_voorwaarden_niet_na$Eenheid <-
+          as.character(data_voorwaarden_niet_na$Eenheid)
       }
       controleerInvoerwaarde(
-        "Data_voorwaarden$Eenheid", Data_voorwaarden_nietNA$Eenheid,
+        "Data_voorwaarden$Eenheid", data_voorwaarden_niet_na$Eenheid,
         "AnalyseVariabele", "Eenheid", ConnectieLSVIhabitats, Tolower = FALSE
       )
 
       #ingevoerde voorwaarden omzetten naar interval
-      Data_voorwaarden_nietNA <- Data_voorwaarden_nietNA %>%
+      data_voorwaarden_niet_na <- data_voorwaarden_niet_na %>%
         mutate(
           Rijnr = row_number(.data$ID)
         )
 
       IntervalVoorwaarden <-
         vertaalInvoerInterval(
-          Data_voorwaarden_nietNA[
+          data_voorwaarden_niet_na[
             , c("Rijnr", "Type", "Waarde", "Eenheid", "Invoertype")
             ],
           LIJST,
@@ -188,7 +194,7 @@ invoercontroleData_voorwaarden <-
           WaardeMax = .data$Max
         )
 
-      Data_voorwaarden_nietNA <- Data_voorwaarden_nietNA %>%
+      data_voorwaarden_niet_na <- data_voorwaarden_niet_na %>%
         left_join(
           IntervalVoorwaarden,
           by = c("Rijnr")
@@ -198,5 +204,5 @@ invoercontroleData_voorwaarden <-
         )
     }
 
-    return(list(Data_voorwaarden_NA, Data_voorwaarden_nietNA))
+    return(list(data_voorwaarden_na, data_voorwaarden_niet_na))
   }

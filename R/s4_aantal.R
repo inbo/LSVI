@@ -1,8 +1,11 @@
 #' S4-klasse die aantal soorten met een bepaalde bedekking berekent
 #'
-#' Deze klasse Aantal staat in voor de berekening van waarden voor TypeVariabele Aantal op basis van opgegeven kenmerken.  Ze is een nakomeling van de klasse AnalyseVariabele.
+#' Deze klasse Aantal staat in voor de berekening van waarden voor
+#' TypeVariabele Aantal op basis van opgegeven kenmerken.  Ze is een nakomeling
+#' van de klasse AnalyseVariabele.
 #'
-#' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
+#' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden
+#' Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
 #'
 #' @importFrom methods setClass setMethod
 #' @importFrom dplyr %>% mutate row_number filter

@@ -5,12 +5,12 @@ library(dplyr)
 library(rlang)
 maakConnectiePool()
 
-Data_habitat <-
+Data_habitat <- #nolint
     read_csv2(
       system.file("vbdata/data_habitat9130.csv", package = "LSVI"),
       col_types = list(col_character(), col_character(), col_character())
     )
-Data_voorwaarden <-
+Data_voorwaarden <- #nolint
     read_csv2(
       system.file("vbdata/data_voorwaarden9130.csv", package = "LSVI"),
       col_types =
@@ -21,7 +21,7 @@ Data_voorwaarden <-
         )
     )
 
-Data_soortenKenmerken <-
+Data_soortenKenmerken <- #nolint
     read_csv2(
       system.file("vbdata/datasoortenKenmerken9130.csv", package = "LSVI")
     )
@@ -45,21 +45,21 @@ describe("nakijken of er onderscheid gemaakt worden tussen bedekking en grondvla
           Data_soortenKenmerken
         )
 
-    Resultaat_invEx <- ResultaatLSVI[["Resultaat_detail"]] %>%
+    resultaat_inv_ex <- ResultaatLSVI[["Resultaat_detail"]] %>%
       select(Indicator, Voorwaarde, Waarde, Status_voorwaarde) %>%
       filter(Indicator == "invasieve exoten van de boom- en struiklaag")
 
-    Resultaat_ss_boomlaag <- ResultaatLSVI[["Resultaat_detail"]] %>%
+    resultaat_ss_boomlaag <- ResultaatLSVI[["Resultaat_detail"]] %>%
       select(Indicator, Voorwaarde, Waarde, Status_voorwaarde) %>%
       filter(Indicator == "sleutelsoorten van de boom- en struiklaag")
 
     expect_equal(
-      round(as.numeric(Resultaat_invEx$Waarde), 2),
+      round(as.numeric(resultaat_inv_ex$Waarde), 2),
       18.95
     )
 
     expect_equal(
-      round(as.numeric(Resultaat_ss_boomlaag$Waarde), 2),
+      round(as.numeric(resultaat_ss_boomlaag$Waarde), 2),
       60.2
     )
 

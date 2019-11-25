@@ -1,16 +1,21 @@
 #' Invoercontrole voor dataframe Data_habitat
 #'
-#' Om te vermijden dat we meermaals dezelfde invoercontrole moeten uitvoeren en om de hoofdscripts overzichtelijk te houden, maken we voor elke invoercontrole een aparte hulpfunctie aan, die we kunnen aanroepen.  Deze wordt NIET geëxporteerd, dus deze functies kunnen niet als commando gerund worden (maar worden wel gerund als de functie waarin ze voorkomen, aangeroepen wordt).
+#' Om te vermijden dat we meermaals dezelfde invoercontrole moeten uitvoeren en
+#' om de hoofdscripts overzichtelijk te houden, maken we voor elke
+#' invoercontrole een aparte hulpfunctie aan, die we kunnen aanroepen.  Deze
+#' wordt NIET geëxporteerd, dus deze functies kunnen niet als commando gerund
+#' worden (maar worden wel gerund als de functie waarin ze voorkomen,
+#' aangeroepen wordt).
 #'
 #' @param Data_habitat dataframe waarop invoercontrole moet gebeuren.
 #' @inheritParams berekenLSVIbasis
 #'
 #' @importFrom assertthat assert_that has_name
 #' @importFrom stringr str_replace
-#' 
+#'
 #' @export
 #'
-invoercontroleData_habitat <- function(Data_habitat, ConnectieLSVIhabitats) {
+invoercontroleData_habitat <- function(Data_habitat, ConnectieLSVIhabitats) { #nolint
   assert_that(inherits(Data_habitat, "data.frame"))
   assert_that(has_name(Data_habitat, "ID"))
   if (!is.character(Data_habitat$ID)) {

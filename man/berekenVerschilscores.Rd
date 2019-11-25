@@ -7,11 +7,17 @@
 berekenVerschilscores(Statustabel)
 }
 \arguments{
-\item{Statustabel}{Dataframe met velden Rijnr, RefMin, RefMax, Operator, WaardeMin, WaardeMax, TheoretischMaximum en TypeVariabele.}
+\item{Statustabel}{Dataframe met velden Rijnr, RefMin, RefMax, Operator,
+WaardeMin, WaardeMax, TheoretischMaximum en TypeVariabele.}
 }
 \value{
 Deze functie geeft een tabel terug met velden Rijnr en Verschilscore
 }
 \description{
-Deze functie, die bedoeld is als hulpfunctie voor de hoofdfunctie berekenLSVIbasis, berekent de verschilscores van de records van een opgegeven 'statustabel' met velden Rijnr, RefMin, RefMax, Operator, WaardeMin, WaardeMax en TheoretischMaximum. De verschilscores hebben een waarde tussen -1 en +1 en geven negatieve of positieve afwijking ten opzichte van de referentiewaarde.
+Deze functie, die bedoeld is als hulpfunctie voor de
+hoofdfunctie berekenLSVIbasis, berekent de verschilscores van de records van
+een opgegeven 'statustabel' met velden Rijnr, RefMin, RefMax, Operator,
+WaardeMin, WaardeMax en TheoretischMaximum. De verschilscores hebben een
+waarde tussen -1 en +1 en geven negatieve of positieve afwijking ten
+opzichte van de referentiewaarde.
 }
