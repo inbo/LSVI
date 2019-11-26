@@ -433,7 +433,7 @@ describe("berekenLSVIbasis vegetatielaag", {
       class(ConnectiePool$.__enclos_env__$private$createObject())[1] ==
       "SQLiteConnection"
     ) {
-      Data_voorwaarden <-
+      Data_voorwaarden <- #nolint
         read_csv2(
           system.file("vbdata/Opname4030voorwaardenv2.csv", package = "LSVI"),
           col_types =
