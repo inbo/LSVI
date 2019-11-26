@@ -1,13 +1,17 @@
 #' Lijst alle nog op te lossen databankfouten op
-#' 
-#' Deze functie geeft een log-tabel met alle problemen die nog in de databank zitten.  Enerzijds is er een beperkte tabel met problemen die op een hoger niveau opgelost kunnen worden en anderzijds een detail met alle Voorwaarden waar nog een fout in zit.  Problemen die op beide niveaus kunnen opgelost worden (bv. benoemen van AnalyseVariabelen), staan op beide niveaus vermeld.
-#' 
+#'
+#' Deze functie geeft een log-tabel met alle problemen die nog in de databank
+#' zitten.  Enerzijds is er een beperkte tabel met problemen die op een hoger
+#' niveau opgelost kunnen worden en anderzijds een detail met alle Voorwaarden
+#' waar nog een fout in zit.  Problemen die op beide niveaus kunnen opgelost
+#' worden (bv. benoemen van AnalyseVariabelen), staan op beide niveaus vermeld.
+#'
 #' @inheritParams selecteerIndicatoren
-#' 
+#'
 #' @return Deze functie geeft een list met 2 dataframes terug
-#' 
+#'
 #' @export
-#' 
+#'
 #' @importFrom DBI dbGetQuery
 #' @importFrom dplyr %>% bind_rows filter mutate transmute
 #' @importFrom stringr str_detect str_replace_all
@@ -60,7 +64,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
       On AnalyseVariabele.Id = Voorwaarde.AnalyseVariabeleId
       WHERE NOT VariabeleNaam in ('aantal', 'aandeel', 'aandeelKruidlaag',
         'bedekking', 'maxBedekking', 'maxBedekkingExcl', 'bedekkingLaag',
-        'bedekkingSom', 'bedekkingExcl')
+        'bedekkingSom', 'bedekkingExcl', 'maxBedekking2s')
       AND NOT VariabeleNaam LIKE 'meting%'"
     ) %>%
     transmute(
@@ -83,7 +87,8 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
     filter(
       !.data$AnalyseVariabele %in%
         c("aantal", "aandeel", "aandeelKruidlaag", "bedekking", "bedekkingLaag",
-          "maxBedekking", "maxBedekkingExcl", "bedekkingSom", "bedekkingExcl"),
+          "maxBedekking", "maxBedekkingExcl", "bedekkingSom", "bedekkingExcl",
+          "maxBedekking2s"),
       !grepl("^meting", .data$AnalyseVariabele)
     )
   TypeAantalNietGeheelGetal <- Invoervereisten %>%
@@ -94,7 +99,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
   TypeBedekkingFout <- Invoervereisten %>%
     filter(
       .data$AnalyseVariabele %in%
-        c("bedekking", "maxBedekking", "maxBedekkingExcl"),
+        c("bedekking", "maxBedekking", "maxBedekkingExcl", "maxBedekking2s"),
       !.data$TypeVariabele %in% c("Percentage", "Categorie")
     )
   TypeAandeelFout <- Invoervereisten %>%

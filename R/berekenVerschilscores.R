@@ -1,8 +1,14 @@
 #' @title Berekent de verschilscores voor de records van een een opgegeven tabel
 #'
-#' @description Deze functie, die bedoeld is als hulpfunctie voor de hoofdfunctie berekenLSVIbasis, berekent de verschilscores van de records van een opgegeven 'statustabel' met velden Rijnr, RefMin, RefMax, Operator, WaardeMin, WaardeMax en TheoretischMaximum. De verschilscores hebben een waarde tussen -1 en +1 en geven negatieve of positieve afwijking ten opzichte van de referentiewaarde.
+#' @description Deze functie, die bedoeld is als hulpfunctie voor de
+#' hoofdfunctie berekenLSVIbasis, berekent de verschilscores van de records van
+#' een opgegeven 'statustabel' met velden Rijnr, RefMin, RefMax, Operator,
+#' WaardeMin, WaardeMax en TheoretischMaximum. De verschilscores hebben een
+#' waarde tussen -1 en +1 en geven negatieve of positieve afwijking ten
+#' opzichte van de referentiewaarde.
 #'
-#' @param Statustabel Dataframe met velden Rijnr, RefMin, RefMax, Operator, WaardeMin, WaardeMax, TheoretischMaximum en TypeVariabele.
+#' @param Statustabel Dataframe met velden Rijnr, RefMin, RefMax, Operator,
+#' WaardeMin, WaardeMax, TheoretischMaximum en TypeVariabele.
 #'
 #'
 #' @return Deze functie geeft een tabel terug met velden Rijnr en Verschilscore
@@ -16,7 +22,7 @@
 #'
 #'
 berekenVerschilscores <-
-  function(Statustabel){
+  function(Statustabel) {
 
     assert_that(inherits(Statustabel, "data.frame"))
     assert_that(has_name(Statustabel, "Rijnr"))

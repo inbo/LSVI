@@ -84,6 +84,7 @@ Collate:
     's4_bedekkingLaag.R'
     's4_bedekkingSom.R'
     's4_maxBedekking.R'
+    's4_maxBedekking2s.R'
     's4_maxBedekkingExcl.R'
     's4_meting.R'
     'selecteerIndicatoren.R'

@@ -1,20 +1,57 @@
 #' @title Geeft de invoervereisten voor de waarde van een opname
 #'
-#' @description Deze functie geeft alle informatie die nodig is om veldobservaties klaar te maken voor de berekening van de de Lokale Staat van Instandhouding met de functie berekenLSVI(), alsook de berekeningsregels die gebruikt worden.  Allereerst geeft ze de 'Voorwaarde' die vermeld moet worden bij de observaties (zie Data_voorwaarden bij berekenLSVIbasis), samen met informatie uit de LSVI-tabellen (vnl. beoordelingsmatrix) en een beschrijving van de voorwaarde ('Voorwaarde') die zou moeten toelaten om de koppeling te maken.
+#' @description Deze functie geeft alle informatie die nodig is om
+#' veldobservaties klaar te maken voor de berekening van de de Lokale Staat van
+#' Instandhouding met de functie berekenLSVI(), alsook de berekeningsregels die
+#' gebruikt worden.  Allereerst geeft ze de 'Voorwaarde' die vermeld moet
+#' worden bij de observaties (zie Data_voorwaarden bij berekenLSVIbasis), samen
+#' met informatie uit de LSVI-tabellen (vnl. beoordelingsmatrix) en een
+#' beschrijving van de voorwaarde ('Voorwaarde') die zou moeten toelaten om de
+#' koppeling te maken.
 #'
-#' Verder geeft ze informatie over de Waarde die verwacht wordt in de functie berekenLSVIbasis().  AnalyseVariabele is een korte omschrijving voor de variabele waarde, bv. 'aantal' staat voor het aantal soorten of klassen en 'bedekking' voor de totale bedekking van de lijst soorten of klassen.  'Referentiewaarde' en 'Operator' geven respectievelijk de grenswaarde en de vergelijking aan op basis waarvan de beoordeling van de waarde zal gebeuren.  Voor elke AnalyseVariabele wordt informatie gegeven over het formaat dat verwacht wordt voor Waarde: de 'Eenheid' (die niet opgenomen moet worden in Waarde maar wel de grootte-orde van het verwachte getal aangeeft), het formaat van de variabele ('TypeVariabele'), en bij categorische variabelen het 'Invoertype' en de 'Invoerwaarde' (een naam voor de categorische variabele en de mogelijke waarden die deze kan aannemen).
-#' 
-#' Waar nodig, wordt een soortengroep of studiegroep opgegeven.  Een studiegroep is eigenlijk equivalent aan een soortengroep: de verschillende klassen of fasen of ... waarvoor een bedekking of andere analysevariabele moet berekend worden.  Voorbeelden zijn groeiklassen, vegetatielagen, ...  Omwille van de overzichtelijkheid van de tabel is voor de Soortengroep enkel een ID gegeven, de volledige lijst kan opgevraagd worden met de functie geefSoortenlijstInvoerniveau.
-#' 
-#' Ingeval van de AnalyseVariabele aantal kan er ook een SubAnalyseVariabele vermeld zijn, meestal 'bedekking', die aangeeft aan welke voorwaarde elke soort of klasse afzonderlijk moet voldoen.  Aan deze SubAnalysevariabele zijn dezelfde velden gekoppeld als aan AnalyseVariabele, nl. SubReferentiewaarde, SubOperator, SubEenheid, TypeSubVariabele, SubInvoertype en SubInvoerwaarde.  Bijvoorbeeld, bij de voorwaarde 'minimum 5 soorten minimum talrijk aanwezig' zal de AnalyseVariabele 'aantal' zijn, de Referentiewaarde '5', de Operator '>=', TypeVariabele 'Geheel getal', SubAnalysevariabele 'bedekking', SubReferentiewaarde 'T', SubOperator '>=', TypeSubVariabele 'Categorie' en SubInvoertype 'Beheermonitoringsschaal 2017'.
+#' Verder geeft ze informatie over de Waarde die verwacht wordt in de functie
+#' berekenLSVIbasis().  AnalyseVariabele is een korte omschrijving voor de
+#' variabele waarde, bv. 'aantal' staat voor het aantal soorten of klassen en
+#' 'bedekking' voor de totale bedekking van de lijst soorten of klassen.
+#' 'Referentiewaarde' en 'Operator' geven respectievelijk de grenswaarde en de
+#' vergelijking aan op basis waarvan de beoordeling van de waarde zal gebeuren.
+#' Voor elke AnalyseVariabele wordt informatie gegeven over het formaat dat
+#' verwacht wordt voor Waarde: de 'Eenheid' (die niet opgenomen moet worden in
+#' Waarde maar wel de grootte-orde van het verwachte getal aangeeft), het
+#' formaat van de variabele ('TypeVariabele'), en bij categorische variabelen
+#' het 'Invoertype' en de 'Invoerwaarde' (een naam voor de categorische
+#' variabele en de mogelijke waarden die deze kan aannemen).
 #'
-#' 
+#' Waar nodig, wordt een soortengroep of studiegroep opgegeven.  Een
+#' studiegroep is eigenlijk equivalent aan een soortengroep: de verschillende
+#' klassen of fasen of ... waarvoor een bedekking of andere analysevariabele
+#' moet berekend worden.  Voorbeelden zijn groeiklassen, vegetatielagen, ...
+#' Omwille van de overzichtelijkheid van de tabel is voor de Soortengroep enkel
+#' een ID gegeven, de volledige lijst kan opgevraagd worden met de functie
+#' geefSoortenlijstInvoerniveau.
+#'
+#' Ingeval van de AnalyseVariabele aantal kan er ook een SubAnalyseVariabele
+#' vermeld zijn, meestal 'bedekking', die aangeeft aan welke voorwaarde elke
+#' soort of klasse afzonderlijk moet voldoen.  Aan deze SubAnalysevariabele
+#' zijn dezelfde velden gekoppeld als aan AnalyseVariabele, nl.
+#' SubReferentiewaarde, SubOperator, SubEenheid, TypeSubVariabele,
+#' SubInvoertype en SubInvoerwaarde.  Bijvoorbeeld, bij de voorwaarde 'minimum
+#' 5 soorten minimum talrijk aanwezig' zal de AnalyseVariabele 'aantal' zijn,
+#' de Referentiewaarde '5', de Operator '>=', TypeVariabele 'Geheel getal',
+#' SubAnalysevariabele 'bedekking', SubReferentiewaarde 'T', SubOperator '>=',
+#' TypeSubVariabele 'Categorie' en SubInvoertype 'Beheermonitoringsschaal 2017'.
+#'
 #'
 #' @inheritParams selecteerIndicatoren
 #' @inheritParams berekenLSVIbasis
-#' @param Weergave Wat moet er in de tabel weergegeven worden?  De default 'basis' geeft een meer overzichtelijke tabel waarbij mogelijke invoerwaarden gescheiden door een komma in 1 cel weergegeven worden, 'uitgebreid' geeft deze invoerwaarden met alle bijhorende informatie weer in aparte records, waardoor de tabel groot en onoverzichtelijk is.
+#' @param Weergave Wat moet er in de tabel weergegeven worden?  De default
+#' 'basis' geeft een meer overzichtelijke tabel waarbij mogelijke invoerwaarden
+#' gescheiden door een komma in 1 cel weergegeven worden, 'uitgebreid' geeft
+#' deze invoerwaarden met alle bijhorende informatie weer in aparte records,
+#' waardoor de tabel groot en onoverzichtelijk is.
 #'
-#' @return Deze functie geeft een tabel met de hierboven beschreven informatie uit de databank.
+#' @return Deze functie geeft een tabel met de hierboven beschreven informatie
+#' uit de databank.
 #'
 #' @examples
 #' # deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
@@ -34,7 +71,8 @@
 #' @export
 #'
 #' @importFrom DBI dbGetQuery
-#' @importFrom dplyr %>% select filter group_by summarise ungroup left_join mutate rowwise arrange distinct
+#' @importFrom dplyr %>% select filter group_by summarise ungroup left_join
+#' mutate rowwise arrange distinct
 #' @importFrom tidyr gather
 #' @importFrom rlang .data
 #' @importFrom assertthat assert_that is.string
@@ -47,7 +85,7 @@ geefInvoervereisten <- function(Versie = "alle",
                                 Indicator = "alle",
                                 Kwaliteitsniveau = "alle",
                                 Weergave = c("basis", "uitgebreid"),
-                                ConnectieLSVIhabitats = NULL){
+                                ConnectieLSVIhabitats = NULL) {
 
   if (is.null(ConnectieLSVIhabitats)) {
     if (exists("ConnectiePool")) {
@@ -83,7 +121,7 @@ geefInvoervereisten <- function(Versie = "alle",
     distinct() %>%
     filter(!is.na(.data$Indicator_beoordelingID))
 
-  Indicator_beoordelingIDs <-
+  indicator_beoordeling_ids <-
     paste(
       unique(
         (Selectiewaarden %>%
@@ -95,12 +133,12 @@ geefInvoervereisten <- function(Versie = "alle",
       collapse = "','"
     )
 
-  query_selectKwaliteitsniveau <-
+  query_select_kwaliteitsniveau <-
     ifelse(Kwaliteitsniveau[1] == "alle", "",
            sprintf("AND Beoordeling.Kwaliteitsniveau = '%s'",
                    Kwaliteitsniveau))
 
-  query_LSVIinfo <-
+  query_lsvi_info <-
     sprintf("SELECT Indicator_beoordeling.Id AS Indicator_beoordelingID,
             Criterium.Naam AS Criterium, Indicator.Naam AS Indicator,
             Beoordeling.Beoordeling_letterlijk AS Beoordeling,
@@ -115,10 +153,10 @@ geefInvoervereisten <- function(Versie = "alle",
                 ON Indicator.CriteriumId = Criterium.Id)
             ON Indicator_beoordeling.IndicatorId = Indicator.Id
             WHERE Indicator_beoordeling.Id in ('%s') %s",
-            Indicator_beoordelingIDs, query_selectKwaliteitsniveau)
+            indicator_beoordeling_ids, query_select_kwaliteitsniveau)
 
   LSVIinfo <-
-    dbGetQuery(ConnectieLSVIhabitats, query_LSVIinfo)
+    dbGetQuery(ConnectieLSVIhabitats, query_lsvi_info)
 
   BeoordelingIDs <-
     paste(
@@ -128,7 +166,7 @@ geefInvoervereisten <- function(Versie = "alle",
       collapse = "','"
     )
 
-  query_combinerenVoorwaarden <-
+  query_combineren_voorwaarden <-
     sprintf("SELECT CV.Id, CV.BeoordelingId AS BeoordelingID,
               CV.VoorwaardeID1, CV.VoorwaardeID2,
               CV.ChildID1, CV.ChildID2, CV.BewerkingOperator
@@ -137,7 +175,7 @@ geefInvoervereisten <- function(Versie = "alle",
               BeoordelingIDs)
 
   Voorwaarden <-
-    dbGetQuery(ConnectieLSVIhabitats, query_combinerenVoorwaarden) %>%
+    dbGetQuery(ConnectieLSVIhabitats, query_combineren_voorwaarden) %>%
     mutate(
       Combinatie =
         ifelse(
@@ -306,8 +344,8 @@ geefInvoervereisten <- function(Versie = "alle",
         SubInvoerwaarde =
           paste(unique(.data$SubInvoerwaarde), collapse = ", "),
       ) %>%
-      ungroup() %>%
-      select(                   #volgorde aanpassen
+      ungroup() %>%                   #volgorde aanpassen
+      select(
         .data$VoorwaardeID, .data$Voorwaarde,
         .data$ExtraBewerking, .data$Referentiewaarde,
         .data$Operator, .data$AnalyseVariabele,

@@ -1,27 +1,38 @@
 #' @title Controle van de ingevoerde opname
 #'
-#' @description Deze hulpfunctie voor de s4-klassen 'aantal' en 'bedekking' zoekt soorten of kenmerken uit de voorwaarde in de opname en maakt een lijstje van de soorten die voldoen en in de opname voorkomen.  Op basis hiervan kunnen de s4-klassen het totale aantal of de bedekking berekenen.
+#' @description Deze hulpfunctie voor de s4-klassen 'aantal' en 'bedekking'
+#' zoekt soorten of kenmerken uit de voorwaarde in de opname en maakt een
+#' lijstje van de soorten die voldoen en in de opname voorkomen.  Op basis
+#' hiervan kunnen de s4-klassen het totale aantal of de bedekking berekenen.
 #'
 #'
-#' @param Kenmerken dataframe met alle opgegeven kenmerken, met velden Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
-#' @param Soortengroep dataframe met de soortenlijst die uit Kenmerken gehaald moet worden
-#' @param Studiegroep dataframe met de lijst kenmerken die uit Kenmerken gehaald moet worden
-#' @param SubAnalyseVariabele heeft waarde 'bedekking' als er een subvoorwaarde is voor de bedekking van de geselecteerde soorten of kenmerken
+#' @param Kenmerken dataframe met alle opgegeven kenmerken, met velden
+#' Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
+#' @param Soortengroep dataframe met de soortenlijst die uit Kenmerken gehaald
+#' moet worden
+#' @param Studiegroep dataframe met de lijst kenmerken die uit Kenmerken
+#' gehaald moet worden
+#' @param SubAnalyseVariabele heeft waarde 'bedekking' als er een subvoorwaarde
+#' is voor de bedekking van de geselecteerde soorten of kenmerken
 #' @param SubRefMin minimumwaarde van de grenswaarde voor de bedekking
 #' @param SubRefMax maximumwaarde van de grenswaarde voor de bedekking
-#' @param SubOperator operator voor deze subvoorwaarde: moet de bedekking hoger of lager liggen dan de opgegeven referentiewaarde?
+#' @param SubOperator operator voor deze subvoorwaarde: moet de bedekking hoger
+#' of lager liggen dan de opgegeven referentiewaarde?
 #'
-#' @return Deze functie geeft een aangepaste tabel Data_soorten terug waarin enkel de soorten uit de soortenlijst(en) opgenomen zijn en die bovendien gekoppeld is aan de gegevens van de soortenlijst.
+#' @return Deze functie geeft een aangepaste tabel Data_soorten terug waarin
+#' enkel de soorten uit de soortenlijst(en) opgenomen zijn en die bovendien
+#' gekoppeld is aan de gegevens van de soortenlijst.
 #'
 #'
 #' @export
 #'
-#' @importFrom dplyr %>% filter left_join inner_join mutate distinct group_by do ungroup
+#' @importFrom dplyr %>% filter left_join inner_join mutate distinct group_by
+#' do ungroup
 #' @importFrom rlang .data
 #' @importFrom stringr str_c
 #'
 #'
-selecteerKenmerkenInOpname <-
+selecteerKenmerkenInOpname <- #nolint
   function(
     Kenmerken,
     Soortengroep,
@@ -30,7 +41,7 @@ selecteerKenmerkenInOpname <-
     SubRefMin,
     SubRefMax,
     SubOperator
-  ){
+  ) {
 
     if (length(Kenmerken) == 0) {
       return(NA)
@@ -74,8 +85,8 @@ selecteerKenmerkenInOpname <-
               summarise(
                 Kenmerk = str_c(.data$Kenmerk, collapse = " & "),
                 TypeKenmerk = unique(.data$TypeKenmerk),
-                WaardeMax = 1.0 - prod( (1.0 - .data$WaardeMax), na.rm = TRUE),
-                WaardeMin = 1.0 - prod( (1.0 - .data$WaardeMin), na.rm = TRUE),
+                WaardeMax = 1.0 - prod((1.0 - .data$WaardeMax), na.rm = TRUE),
+                WaardeMin = 1.0 - prod((1.0 - .data$WaardeMin), na.rm = TRUE),
                 SubTaxonId = mean(.data$TaxonId),
                 Eenheid = unique(.data$Eenheid)
               )
