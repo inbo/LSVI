@@ -1,8 +1,12 @@
-#' S4-klasse die de totale bedekking van de 2 soorten met hoogste bedekking binnen een soortengroep berekent
+#' S4-klasse die de totale bedekking van de 2 soorten met hoogste bedekking
+#' binnen een soortengroep berekent
 #'
-#' Deze klasse MaxBedekking2s staat in voor de berekening van waarden voor TypeVariabele Bedekking op basis van opgegeven kenmerken.  Ze is een nakomeling van de klasse AnalyseVariabele.
+#' Deze klasse MaxBedekking2s staat in voor de berekening van waarden voor
+#' TypeVariabele Bedekking op basis van opgegeven kenmerken.  Ze is een
+#' nakomeling van de klasse AnalyseVariabele.
 #'
-#' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
+#' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden Kenmerk,
+#' TypeKenmerk, WaardeMin en WaardeMax
 #'
 #' @importFrom methods setClass setMethod
 #'
@@ -50,9 +54,9 @@ setMethod(
     } else if (nrow(Resultaat) > 1) {
 
       MaxBedekking2sMin <-
-        1.0 - prod( (1.0 - sort(Resultaat$WaardeMin, decreasing = TRUE)[1:2]))
-      MaxBedekking2sMax <- 
-        1.0 - prod( (1.0 - sort(Resultaat$WaardeMax, decreasing = TRUE)[1:2]))
+        1.0 - prod((1.0 - sort(Resultaat$WaardeMin, decreasing = TRUE)[1:2]))
+      MaxBedekking2sMax <-
+        1.0 - prod((1.0 - sort(Resultaat$WaardeMax, decreasing = TRUE)[1:2]))
 
     } else if (nrow(Resultaat) == 1) {
 
@@ -60,10 +64,10 @@ setMethod(
       MaxBedekking2sMax <- Resultaat$WaardeMax
 
     } else if (nrow(Resultaat) == 0) {
-      
+
       MaxBedekking2sMin <- 0
       MaxBedekking2sMax <- 0
-      
+
     }
 
     return(c(MaxBedekking2sMin, MaxBedekking2sMax))

@@ -449,9 +449,9 @@ describe("test databank", {
            WHERE AnalyseVariabele.VariabeleNaam = 'maxBedekking2s'"
          )
        skip_if_not(nrow(AV) > 0, "maxBedekking2s komt niet voor")
-       AV_ok <- AV %>%
+       av_ok <- AV %>%
          filter(TypeVariabele %in% c("Percentage", "Categorie"))
-       AV_leeg <- AV %>%
+       av_leeg <- AV %>%
          filter(!TypeVariabele %in% c("Percentage", "Categorie"))
        RefwaardenPerc <-
          dbGetQuery(
@@ -471,14 +471,16 @@ describe("test databank", {
            sprintf(
              "SELECT Id, Referentiewaarde FROM Voorwaarde
           WHERE AnalyseVariabeleId in ('%s')",
-             paste(AV_leeg$Id, collapse = "','")
+             paste(av_leeg$Id, collapse = "','")
            )
          )
        expect_equal(
          nrow(FouteWaarden),
          0
        )
-       skip_if_not(nrow(AV_ok) == 2, "Geen categorische var voor maxBedekking2s")
+       skip_if_not(
+         nrow(av_ok) == 2, "Geen categorische var voor maxBedekking2s"
+        )
        RefwaardenCat <-
          dbGetQuery(
            ConnectieLSVIhabitats,

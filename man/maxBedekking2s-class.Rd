@@ -3,13 +3,17 @@
 \docType{class}
 \name{maxBedekking2s-class}
 \alias{maxBedekking2s-class}
-\title{S4-klasse die de totale bedekking van de 2 soorten met hoogste bedekking binnen een soortengroep berekent}
+\title{S4-klasse die de totale bedekking van de 2 soorten met hoogste bedekking
+binnen een soortengroep berekent}
 \description{
-Deze klasse MaxBedekking2s staat in voor de berekening van waarden voor TypeVariabele Bedekking op basis van opgegeven kenmerken.  Ze is een nakomeling van de klasse AnalyseVariabele.
+Deze klasse MaxBedekking2s staat in voor de berekening van waarden voor
+TypeVariabele Bedekking op basis van opgegeven kenmerken.  Ze is een
+nakomeling van de klasse AnalyseVariabele.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{Kenmerken}}{dataframe met alle opgegeven kenmerken, met velden Kenmerk, TypeKenmerk, WaardeMin en WaardeMax}
+\item{\code{Kenmerken}}{dataframe met alle opgegeven kenmerken, met velden Kenmerk,
+TypeKenmerk, WaardeMin en WaardeMax}
 }}
 
