@@ -181,9 +181,9 @@ berekenLSVIbasis <- #nolint
     Aggregatiemethode = "1-out-all-out",
     ConnectieLSVIhabitats = NULL,
     LIJST = geefVertaallijst(ConnectieLSVIhabitats),
-    na.rm = FALSE,
-    Oppervlakte_opname = FALSE
-  ){
+    na.rm = FALSE, #nolint
+    Oppervlakte_opname = FALSE #nolint
+  ) {
 
     #controle invoer
     if (is.null(ConnectieLSVIhabitats)) {
