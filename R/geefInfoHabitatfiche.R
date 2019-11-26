@@ -75,7 +75,7 @@ geefInfoHabitatfiche <-
         ConnectieLSVIhabitats
       )
 
-    Indicator_habitat_ids <-
+    indicator_habitat_ids <-
       paste(
         unique(
           (Selectiegegevens %>%
@@ -95,7 +95,7 @@ geefInfoHabitatfiche <-
       Indicator_habitat.TaxongroepId
       FROM Indicator_habitat
       WHERE Indicator_habitat.Id in ('%s')",
-      Indicator_habitat_ids
+      indicator_habitat_ids
     )
 
     indicator_beoordeling_ids <-

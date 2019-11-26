@@ -32,7 +32,7 @@
 #' @importFrom stringr str_c
 #'
 #'
-selecteerKenmerkenInOpname <-
+selecteerKenmerkenInOpname <- #nolint
   function(
     Kenmerken,
     Soortengroep,

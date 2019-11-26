@@ -98,8 +98,8 @@
 #' Default is FALSE. Dit betekent dat NA waarden niet worden verwijderd.
 #' Hierdoor zal de indexberekening resulteren in een NA zodra één van de
 #' indicatoren NA is. Voor de berekening van de status zal dit enkel resulteren
-#' in een NA indien minstens één van de indicatoren NA is en minstens één van
-#' de indicatoren status TRUE (= gunstig) heeft. Indien na.rm = TRUE worden
+#' in een NA indien minstens één van de indicatoren NA is en minstens één
+#' van de indicatoren status TRUE (= gunstig) heeft. Indien na.rm = TRUE worden
 #' eventuele NA-waarden verwijderd zodat status en de indices een resultaat
 #' hebben. Doordat deze dan mogelijk niet op de volledige set van indicatoren
 #' gebaseerd zijn, moet hiermee rekening gehouden worden afhankelijk van de
