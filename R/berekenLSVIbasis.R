@@ -1,22 +1,115 @@
 #' @title Berekent de LSVI op basis van VoorwaardeID en opgegeven waarden
 #'
-#' @description Deze functie bepaalt de Lokale Staat van Instandhouding en biotische indices op basis van gegevens, die in het juiste formaat moeten aangeleverd worden.  Zie hiervoor de beschrijving bij de parameters ('Arguments') en de tabellen van het voorbeeld.  In principe is enkel de parameter Data_habitat verplicht om op te geven, maar extra datasets zijn uiteraard wel nodig om een resultaat te bekomen.  Welke datasets relevant zijn, is afhankelijk van de opgegeven habitattypes: voor een aantal habitattypes kan een tabel met observaties en hun bedekking of aanwezigheid (=parameter 'Data_soortenKenmerken') volstaan, voor bossen zijn bv. bijkomend gegevens nodig over dood hout.
+#' @description Deze functie bepaalt de Lokale Staat van Instandhouding en
+#' biotische indices op basis van gegevens, die in het juiste formaat moeten
+#' aangeleverd worden.  Zie hiervoor de beschrijving bij de parameters
+#' ('Arguments') en de tabellen van het voorbeeld.  In principe is enkel de
+#' parameter Data_habitat verplicht om op te geven, maar extra datasets zijn
+#' uiteraard wel nodig om een resultaat te bekomen.  Welke datasets relevant
+#' zijn, is afhankelijk van de opgegeven habitattypes: voor een aantal
+#' habitattypes kan een tabel met observaties en hun bedekking of aanwezigheid
+#' (=parameter 'Data_soortenKenmerken') volstaan, voor bossen zijn bv.
+#' bijkomend gegevens nodig over dood hout.
 #'
-#' De Lokale Staat van Instandhouding wordt weergegeven in de kolom 'Status' met als mogelijke waarden TRUE (= gunstig) en FALSE (= ongunstig).
+#' De Lokale Staat van Instandhouding wordt weergegeven in de kolom 'Status'
+#' met als mogelijke waarden TRUE (= gunstig) en FALSE (= ongunstig).
 #'
-#' De biotische indices zijn afgeleid van het verschil tussen een geobserveerde waarde en de referentiewaarde voor elke indicator. Deze verschillen werden herschaald tussen +1 en -1, waarbij een positieve en negatieve waarde overeenkomt met respectievelijk een gunstige en ongunstige score. Deze verschilscores per indicator worden geaggregeerd, eerst voor de indicatoren die tot eenzelfde criterium behoren, vervolgens worden deze geaggregeerde scores verder geaggregeerd om tot een globale index te komen. Er worden drie verschillende globale indices berekend waarbij de naamgeving aangeeft welk aggregatie achtereenvolgens gebruikt werd: index_min_min, index_min_harm en index_harm_harm. Een naam met "min" duidt op minimum van de scores als aggregatie; bij "harm" werd het harmonisch gemiddelde berekend.
+#' De biotische indices zijn afgeleid van het verschil tussen een geobserveerde
+#' waarde en de referentiewaarde voor elke indicator. Deze verschillen werden
+#' herschaald tussen +1 en -1, waarbij een positieve en negatieve waarde
+#' overeenkomt met respectievelijk een gunstige en ongunstige score. Deze
+#' verschilscores per indicator worden geaggregeerd, eerst voor de indicatoren
+#' die tot eenzelfde criterium behoren, vervolgens worden deze geaggregeerde
+#' scores verder geaggregeerd om tot een globale index te komen. Er worden drie
+#' verschillende globale indices berekend waarbij de naamgeving aangeeft welk
+#' aggregatie achtereenvolgens gebruikt werd: index_min_min, index_min_harm en
+#' index_harm_harm. Een naam met "min" duidt op minimum van de scores als
+#' aggregatie; bij "harm" werd het harmonisch gemiddelde berekend.
 #'
 #' @inheritParams selecteerIndicatoren
-#' @param Versie De versie van het LSVI-rapport op basis waarvan de berekening gemaakt wordt, bv. "Versie 2.0" of "Versie 3".  Bij de default "alle" wordt de LSVI volgens de verschillende versies berekend.
-#' @param Kwaliteitsniveau Voor elke versie van de LSVI zijn er een of meerdere kwaliteitsniveaus gedefinieerd in de databank.  Zo is er bij Versie 2.0 een onderscheid gemaakt tussen goede staat (A), voldoende staat (B) en gedegradeerde staat (C).  Hier duidt kwaliteitsniveau 1 de grens tussen voldoende (B) en gedegradeerd (C) aan en kwaliteitsniveau 2 het onderscheid tussen goed (A) en voldoende (B).  Bij Versie 3 duidt kwaliteitsniveau 1 op het onderscheid tussen ongunstig en gunstig en kwaliteitsniveau 2 op de streefwaarde (uiteindelijk niet opgenomen in rapport).  De betekenissen van de 2 kwaliteitsniveaus voor de verschillende versies is weergegeven in de tabel Versie in de databank en kan opgevraagd met de functie geefVersieInfo().  Geef als parameter Kwaliteitsniveau op op basis van welk kwaliteitsniveau de berekening gemaakt moet worden.  (Strikt genomen is de berekening van de LSVI de berekening volgens kwaliteitsniveau 1.)
-#' @param Data_habitat Een opsomming van de te analyseren opnamen met opgave van het aanwezige habitattype (= het habitattype volgens welke criteria de beoordeling moet gebeuren).  Deze info moet doorgegeven worden in de vorm van een dataframe met minimum de velden ID en Habitattype, waarbij ID een groeperende variabele is voor een opname (plaats en tijdstip).  Habitattype moet overeenkomen met de naamgeving in de LSVI-databank (op te zoeken door geefUniekeWaarden("Habitattype", "Code")).  Eventuele extra velden zullen overgenomen worden bij de uitvoer.
-#' @param Data_voorwaarden Gegevens over de opgemeten indicatoren in de vorm van een data.frame met velden ID, Criterium, Indicator, Voorwaarde, Waarde, Type, Invoertype en Eenheid, waarbij ID de groeperende variabele voor een opname is die ook bij Data_habitat opgegeven is.  Criterium, Indicator en Voorwaarde moeten overeenkomen met de waarde in de databank (op te zoeken via de functie geefInvoervereisten()).  Waarde is de waarde die voor die voorwaarde geobserveerd of gemeten is en Type het soort variabele (zie geefUniekeWaarden("TypeVariabele", "Naam") voor de mogelijke waarden).  Ingeval van een categorische variabele moet bij Invoertype de naam van de lijst opgegeven worden waaruit deze waarde komt (bv. welke schaal gebruikt is, zie geefUniekeWaarden("Lijst", "Naam") voor alle mogelijkheden).  Als een indicator rechtstreeks op het veld ingeschat is, kan deze ingevoerd worden door in deze tabel de kolom voorwaarde leeg te laten (wat in R aangeduid wordt door NA) en als waarde "TRUE" of "FALSE" in te geven.  In dit geval moeten Type, Invoertype en Eenheid niet ingevoerd worden.
-#' @param Data_soortenKenmerken Gegevens van soorten en kenmerken en hun bedekking (m.a.w. enkel kenmerken waarvan een bedekking gemeten is, horen in deze tabel).  Deze dataframe moet de velden ID, Vegetatielaag, Kenmerk, TypeKenmerk, Waarde, Type, Invoertype en Eenheid bevatten, waarbij ID de groeperende variabele voor een opname is die ook bij Data_habitat opgegeven is.  Kenmerk bevat een soortnaam of een naam die voorkomt in de lijst gegenereerd door geefUniekeWaarden("StudieItem", "Waarde") en TypeKenmerk geeft een beschrijving voor dat kenmerk: 'studiegroep', 'soort_Latijn', 'soort_NL' of 'soort_NBN'.  Waarde is de geobserveerde bedekking en Type het soort variabele dat voor de bedekking gebruikt is (zie geefUniekeWaarden("TypeVariabele", "Naam") voor de mogelijke waarden).  Ingeval van een categorische variabele moet bij Invoertype de naam van de lijst opgegeven worden welke schaal gebruikt is (zie geefUniekeWaarden("Lijst", "Naam") voor alle mogelijkheden).
-#' @param LIJST Dataframe met lijst die weergeeft hoe de vertaling moet gebeuren van categorische variabelen naar numerieke waarden (en omgekeerd).  Default worden deze waarden uit de databank met LSVI-indicatoren gehaald d.m.v. de functie vertaalInvoerInterval().  Aangeraden wordt om deze default te gebruiken (dus parameter niet expliciet invullen), of deze waar nodig aan te vullen met eigen schalen.  Omdat er ook een omzetting moet gebeuren voor grenswaarden uit de databank, kan het niet doorgeven van een gedeelte van deze lijst problemen geven.
-#' @param Aggregatiemethode Keuze van de methode om tot één beoordeling per criterium of per habitatvlek of meetpunt te komen. Er zijn twee opties: (1) "RapportageHR": de beoordeling is gunstig als meer dan 50 procent van de indicatoren gunstig zijn EN als geen enkele zeer belangrijke indicator ongunstig is; (2) "1-out-all-out": de beoordeling is gunstig als alle indicatoren gunstig zijn. "1-out-all-out" is default.
-#' @param na.rm Hier geeft je aan hoe de berekening moet omgaan met NA waarden. Default is FALSE. Dit betekent dat NA waarden niet worden verwijderd. Hierdoor zal de indexberekening resulteren in een NA zodra één van de indicatoren NA is. Voor de berekening van de status zal dit enkel resulteren in een NA indien minstens één van de indicatoren NA is en minstens één van de indicatoren status TRUE (= gunstig) heeft. Indien na.rm = TRUE worden eventuele NA waarden verwijderd zodat status en de indices een resultaat hebben. Doordat deze dan mogelijk niet op de volledige set van indicatoren gebaseerd zijn, moet hiermee rekening gehouden worden afhankelijk van de context waarvoor de resultaten gebruikt worden.
+#' @param Versie De versie van het LSVI-rapport op basis waarvan de berekening
+#' gemaakt wordt, bv. "Versie 2.0" of "Versie 3".  Bij de default "alle" wordt
+#' de LSVI volgens de verschillende versies berekend.
+#' @param Kwaliteitsniveau Voor elke versie van de LSVI zijn er een of meerdere
+#' kwaliteitsniveaus gedefinieerd in de databank.  Zo is er bij Versie 2.0 een
+#' onderscheid gemaakt tussen goede staat (A), voldoende staat (B) en
+#' gedegradeerde staat (C).  Hier duidt kwaliteitsniveau 1 de grens tussen
+#' voldoende (B) en gedegradeerd (C) aan en kwaliteitsniveau 2 het onderscheid
+#' tussen goed (A) en voldoende (B).  Bij Versie 3 duidt kwaliteitsniveau 1 op
+#' het onderscheid tussen ongunstig en gunstig en kwaliteitsniveau 2 op de
+#' streefwaarde (uiteindelijk niet opgenomen in rapport).  De betekenissen van
+#' de 2 kwaliteitsniveaus voor de verschillende versies is weergegeven in de
+#' tabel Versie in de databank en kan opgevraagd met de functie
+#' geefVersieInfo().  Geef als parameter Kwaliteitsniveau op op basis van welk
+#' kwaliteitsniveau de berekening gemaakt moet worden.  (Strikt genomen is de
+#' berekening van de LSVI de berekening volgens kwaliteitsniveau 1.)
+#' @param Data_habitat Een opsomming van de te analyseren opnamen met opgave
+#' van het aanwezige habitattype (= het habitattype volgens welke criteria de
+#' beoordeling moet gebeuren).  Deze info moet doorgegeven worden in de vorm
+#' van een dataframe met minimum de velden ID en Habitattype, waarbij ID een
+#' groeperende variabele is voor een opname (plaats en tijdstip).  Habitattype
+#' moet overeenkomen met de naamgeving in de LSVI-databank (op te zoeken door
+#' geefUniekeWaarden("Habitattype", "Code")).  Eventuele extra velden zullen
+#' overgenomen worden bij de uitvoer.
+#' @param Data_voorwaarden Gegevens over de opgemeten indicatoren in de vorm
+#' van een data.frame met velden ID, Criterium, Indicator, Voorwaarde, Waarde,
+#' Type, Invoertype en Eenheid, waarbij ID de groeperende variabele voor een
+#' opname is die ook bij Data_habitat opgegeven is.  Criterium, Indicator en
+#' Voorwaarde moeten overeenkomen met de waarde in de databank (op te zoeken
+#' via de functie geefInvoervereisten()).  Waarde is de waarde die voor die
+#' voorwaarde geobserveerd of gemeten is en Type het soort variabele (zie
+#' geefUniekeWaarden("TypeVariabele", "Naam") voor de mogelijke waarden).
+#' Ingeval van een categorische variabele moet bij Invoertype de naam van de
+#' lijst opgegeven worden waaruit deze waarde komt (bv. welke schaal gebruikt
+#' is, zie geefUniekeWaarden("Lijst", "Naam") voor alle mogelijkheden).  Als
+#' een indicator rechtstreeks op het veld ingeschat is, kan deze ingevoerd
+#' worden door in deze tabel de kolom voorwaarde leeg te laten (wat in R
+#' aangeduid wordt door NA) en als waarde "TRUE" of "FALSE" in te geven.  In
+#' dit geval moeten Type, Invoertype en Eenheid niet ingevoerd worden.
+#' @param Data_soortenKenmerken Gegevens van soorten en kenmerken en hun
+#' bedekking (m.a.w. enkel kenmerken waarvan een bedekking gemeten is, horen
+#' in deze tabel).  Deze dataframe moet de velden ID, Vegetatielaag, Kenmerk,
+#' TypeKenmerk, Waarde, Type, Invoertype en Eenheid bevatten, waarbij ID de
+#' groeperende variabele voor een opname is die ook bij Data_habitat opgegeven
+#' is.  Kenmerk bevat een soortnaam of een naam die voorkomt in de lijst
+#' gegenereerd door geefUniekeWaarden("StudieItem", "Waarde") en TypeKenmerk
+#' geeft een beschrijving voor dat kenmerk: 'studiegroep', 'soort_Latijn',
+#' 'soort_NL' of 'soort_NBN'.  Waarde is de geobserveerde bedekking en Type het
+#' soort variabele dat voor de bedekking gebruikt is (zie
+#' geefUniekeWaarden("TypeVariabele", "Naam") voor de mogelijke waarden).
+#' Ingeval van een categorische variabele moet bij Invoertype de naam van de
+#' lijst opgegeven worden welke schaal gebruikt is
+#' (zie geefUniekeWaarden("Lijst", "Naam") voor alle mogelijkheden).
+#' @param LIJST Dataframe met lijst die weergeeft hoe de vertaling moet
+#' gebeuren van categorische variabelen naar numerieke waarden (en omgekeerd).
+#' Default worden deze waarden uit de databank met LSVI-indicatoren gehaald
+#' d.m.v. de functie vertaalInvoerInterval().  Aangeraden wordt om deze default
+#' te gebruiken (dus parameter niet expliciet invullen), of deze waar nodig aan
+#' te vullen met eigen schalen.  Omdat er ook een omzetting moet gebeuren voor
+#' grenswaarden uit de databank, kan het niet doorgeven van een gedeelte van
+#' deze lijst problemen geven.
+#' @param Aggregatiemethode Keuze van de methode om tot één beoordeling per
+#' criterium of per habitatvlek of meetpunt te komen. Er zijn twee opties:
+#' (1) "RapportageHR": de beoordeling is gunstig als meer dan 50 procent van de
+#' indicatoren gunstig zijn EN als geen enkele zeer belangrijke indicator
+#' ongunstig is; (2) "1-out-all-out": de beoordeling is gunstig als alle
+#' indicatoren gunstig zijn. "1-out-all-out" is default.
+#' @param na.rm Hier geeft je aan hoe de berekening moet omgaan met NA waarden.
+#' Default is FALSE. Dit betekent dat NA waarden niet worden verwijderd.
+#' Hierdoor zal de indexberekening resulteren in een NA zodra één van de
+#' indicatoren NA is. Voor de berekening van de status zal dit enkel resulteren
+#' in een NA indien minstens één van de indicatoren NA is en minstens één
+#' van de indicatoren status TRUE (= gunstig) heeft. Indien na.rm = TRUE worden
+#' eventuele NA-waarden verwijderd zodat status en de indices een resultaat
+#' hebben. Doordat deze dan mogelijk niet op de volledige set van indicatoren
+#' gebaseerd zijn, moet hiermee rekening gehouden worden afhankelijk van de
+#' context waarvoor de resultaten gebruikt worden.
 #'
-#' @return Deze functie genereert de resultaten in de vorm van een list met 4 tabellen: een eerste met de beoordelingen per kwaliteitsniveau, een tweede met de beoordelingen per criterium en kwaliteitsniveau, een derde met de beoordelingen per indicator en kwaliteitsniveau, en een vierde met de detailgegevens inclusief meetwaarden.
+#' @return Deze functie genereert de resultaten in de vorm van een list met 4
+#' tabellen: een eerste met de beoordelingen per kwaliteitsniveau, een tweede
+#' met de beoordelingen per criterium en kwaliteitsniveau, een derde met de
+#' beoordelingen per indicator en kwaliteitsniveau, en een vierde met de
+#' detailgegevens inclusief meetwaarden.
 #'
 #' @examples
 #' # deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
@@ -26,12 +119,14 @@
 #' maakConnectiePool()
 #' library(readr)
 #' Data_habitat <-
-#'     read_csv2(system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
-#'               col_types = list(col_character(), col_character(),col_character()))
+#'   read_csv2(system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
+#'     col_types = list(col_character(), col_character(),col_character()))
 #' Data_voorwaarden <-
-#'     read_csv2(system.file("vbdata/Opname4030voorwaardenv2.csv", package = "LSVI"))
+#'   read_csv2(
+#'     system.file("vbdata/Opname4030voorwaardenv2.csv", package = "LSVI"))
 #' Data_soortenKenmerken <-
-#'     read_csv2(system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI"))
+#'   read_csv2(
+#'     system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI"))
 #' berekenLSVIbasis(Versie = "Versie 2.0",
 #'                  Kwaliteitsniveau = "1", Data_habitat,
 #'                  Data_voorwaarden, Data_soortenKenmerken)
@@ -39,19 +134,20 @@
 #'
 #' @export
 #'
-#' @importFrom dplyr %>% select distinct n filter mutate row_number rename left_join summarise group_by ungroup rowwise bind_rows arrange transmute
+#' @importFrom dplyr %>% select distinct n filter mutate row_number rename
+#' left_join summarise group_by ungroup rowwise bind_rows arrange transmute
 #' @importFrom tidyr unnest
 #' @importFrom assertthat assert_that has_name
 #' @importFrom rlang .data
 #' @importFrom stringr str_split_fixed str_c
 #'
 #'
-berekenLSVIbasis <-
+berekenLSVIbasis <- #nolint
   function(
     Versie = "alle",
     Kwaliteitsniveau = "alle",
-    Data_habitat,
-    Data_voorwaarden =
+    Data_habitat, #nolint
+    Data_voorwaarden = #nolint
       data.frame(
         ID = character(),
         Criterium = character(),
@@ -63,12 +159,12 @@ berekenLSVIbasis <-
         WaardeMax = double(),
         stringsAsFactors = FALSE
       ),
-    Data_soortenKenmerken = data.frame(ID = character()),
+    Data_soortenKenmerken = data.frame(ID = character()), #nolint
     Aggregatiemethode = "1-out-all-out",
     ConnectieLSVIhabitats = NULL,
     LIJST = geefVertaallijst(ConnectieLSVIhabitats),
-    na.rm = FALSE
-  ){
+    na.rm = FALSE #nolint
+  ) {
 
     #controle invoer
     if (is.null(ConnectieLSVIhabitats)) {
@@ -90,20 +186,20 @@ berekenLSVIbasis <-
     Kwaliteitsniveau <-
       invoercontroleKwaliteitsniveau(Kwaliteitsniveau, ConnectieLSVIhabitats)
 
-    Data_habitat <-
+    Data_habitat <- #nolint
       invoercontroleData_habitat(Data_habitat, ConnectieLSVIhabitats)
 
     if (nrow(Data_voorwaarden) > 0) {
-      Data_voorwaarden <-
+      Data_voorwaarden <- #nolint
         invoercontroleData_voorwaarden(
           Data_voorwaarden,
           ConnectieLSVIhabitats,
           LIJST
         )
-      Data_voorwaarden_NA <- Data_voorwaarden[[1]]
-      Data_voorwaarden_nietNA <- Data_voorwaarden[[2]]
+      data_voorwaarden_na <- Data_voorwaarden[[1]]
+      data_voorwaarden_niet_na <- Data_voorwaarden[[2]]
     } else {
-      Data_voorwaarden_NA <-
+      data_voorwaarden_na <-
         data.frame(
           ID = character(),
           Criterium = character(),
@@ -111,23 +207,23 @@ berekenLSVIbasis <-
           Waarde = character(),
           stringsAsFactors = FALSE
         )
-      Data_voorwaarden_nietNA <- Data_voorwaarden
+      data_voorwaarden_niet_na <- Data_voorwaarden
     }
 
-    if (nrow(Data_voorwaarden_nietNA) == 0) {
-      assert_that(has_name(Data_voorwaarden_nietNA, "ID"))
-      if (!is.character(Data_voorwaarden_nietNA$ID)) {
-        Data_voorwaarden_nietNA$ID <- as.character(Data_voorwaarden_nietNA$ID)
+    if (nrow(data_voorwaarden_niet_na) == 0) {
+      assert_that(has_name(data_voorwaarden_niet_na, "ID"))
+      if (!is.character(data_voorwaarden_niet_na$ID)) {
+        data_voorwaarden_niet_na$ID <- as.character(data_voorwaarden_niet_na$ID)
       }
-      assert_that(has_name(Data_voorwaarden_nietNA, "Criterium"))
-      assert_that(has_name(Data_voorwaarden_nietNA, "Indicator"))
-      assert_that(has_name(Data_voorwaarden_nietNA, "Voorwaarde"))
-      assert_that(has_name(Data_voorwaarden_nietNA, "WaardeMin"))
-      assert_that(has_name(Data_voorwaarden_nietNA, "WaardeMax"))
+      assert_that(has_name(data_voorwaarden_niet_na, "Criterium"))
+      assert_that(has_name(data_voorwaarden_niet_na, "Indicator"))
+      assert_that(has_name(data_voorwaarden_niet_na, "Voorwaarde"))
+      assert_that(has_name(data_voorwaarden_niet_na, "WaardeMin"))
+      assert_that(has_name(data_voorwaarden_niet_na, "WaardeMax"))
     }
 
     if (nrow(Data_soortenKenmerken) > 0) {
-      Data_soortenKenmerken <-
+      Data_soortenKenmerken <- #nolint
         invoercontroleData_soortenKenmerken(
           Data_soortenKenmerken,
           ConnectieLSVIhabitats,
@@ -216,7 +312,7 @@ berekenLSVIbasis <-
       left_join(
         Invoervereisten,
         by = c("Habitattype" = "Habitatsubtype"))
-    Jointest <- Data_voorwaarden_NA %>%
+    Jointest <- data_voorwaarden_na %>%
       anti_join(Resultaat, by = c("ID", "Criterium", "Indicator"))
     if (nrow(Jointest) > 0) {
       warning(
@@ -239,14 +335,14 @@ berekenLSVIbasis <-
     rm(Jointest)
     Resultaat <- Resultaat %>%
       left_join(
-        Data_voorwaarden_NA %>%
+        data_voorwaarden_na %>%
           select(
             .data$ID, .data$Criterium, .data$Indicator, .data$Waarde
           ),
         by = c("ID", "Criterium", "Indicator"),
         suffix = c("", ".ind")
       )
-    Resultaat_opname_indicator <- Resultaat %>%
+    resultaat_opname_indicator <- Resultaat %>%
       filter(!is.na(.data$Waarde)) %>%
       mutate(
         AfkomstWaarde = "beoordeling indicator",
@@ -273,7 +369,7 @@ berekenLSVIbasis <-
         Waarde = NULL,
         Voorwaarde.lower = tolower(.data$Voorwaarde)
       )
-    Jointest <- Data_voorwaarden_nietNA %>%
+    Jointest <- data_voorwaarden_niet_na %>%
       anti_join(
         Resultaat,
         by =
@@ -302,7 +398,7 @@ berekenLSVIbasis <-
     Resultaat <-
       Resultaat %>%
       left_join(
-        Data_voorwaarden_nietNA,
+        data_voorwaarden_niet_na,
         by =
           c("ID", "Criterium", "Indicator", "Voorwaarde.lower" = "Voorwaarde"),
         suffix = c("", ".vw")
@@ -599,8 +695,8 @@ berekenLSVIbasis <-
       )
 
     #voor de uitvoer de gegevens van de geobserveerde indicatoren toevoegen
-    Resultaat_detail <- Resultaat %>%
-      bind_rows(Resultaat_opname_indicator) %>%
+    resultaat_detail <- Resultaat %>%
+      bind_rows(resultaat_opname_indicator) %>%
       arrange(
         .data$ID,
         .data$Habitattype,
@@ -610,7 +706,7 @@ berekenLSVIbasis <-
       )
 
     #resultaten op niveau van indicator afleiden
-    Resultaat_indicator <- Resultaat %>%
+    resultaat_indicator <- Resultaat %>%
       group_by(
         .data$ID,
         .data$Habitattype,   #en hier zouden extra gegevens uit Data_habitat
@@ -640,7 +736,7 @@ berekenLSVIbasis <-
       ) %>%
       ungroup() %>%
       bind_rows(
-        Resultaat_opname_indicator %>%
+        resultaat_opname_indicator %>%
           transmute(
             .data$ID,
             .data$Habitattype,   #en hier zouden extra gegevens uit Data_habitat
@@ -665,7 +761,7 @@ berekenLSVIbasis <-
       )
 
     #resultaten op niveau van criterium afleiden
-    Resultaat_criterium <- Resultaat_indicator %>%
+    resultaat_criterium <- resultaat_indicator %>%
       group_by(
         .data$ID,
         .data$Habitattype,
@@ -743,7 +839,7 @@ berekenLSVIbasis <-
       )
 
     #resultaten op globaal niveau
-    Resultaat_globaal_Index <- Resultaat_criterium %>%
+    resultaat_globaal_index <- resultaat_criterium %>%
       group_by(
         .data$ID,
         .data$Habitattype,
@@ -771,7 +867,7 @@ berekenLSVIbasis <-
       ) %>%
       ungroup()
 
-    Resultaat_globaal_Status <- Resultaat_indicator %>%
+    resultaat_globaal_status <- resultaat_indicator %>%
       group_by(
         .data$ID,
         .data$Habitattype,
@@ -836,16 +932,16 @@ berekenLSVIbasis <-
         -.data$nInd_ongunstig
       )
 
-    Resultaat_globaal <- Resultaat_globaal_Status %>%
-      left_join(Resultaat_globaal_Index,
+    resultaat_globaal <- resultaat_globaal_status %>%
+      left_join(resultaat_globaal_index,
                 by = c("ID", "Habitattype", "Versie", "Kwaliteitsniveau"))
 
     return(
       list(
-        Resultaat_criterium = Resultaat_criterium,
-        Resultaat_indicator = Resultaat_indicator,
-        Resultaat_detail = Resultaat_detail,
-        Resultaat_globaal = Resultaat_globaal
+        Resultaat_criterium = resultaat_criterium,
+        Resultaat_indicator = resultaat_indicator,
+        Resultaat_detail = resultaat_detail,
+        Resultaat_globaal = resultaat_globaal
       )
     )
   }

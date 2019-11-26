@@ -1,9 +1,20 @@
 #' @title Maak een connectiepool de databank met LSVI-indicatoren
 #'
-#' @description Deze functie maakt een connectiepool met de LSVI-indicatorendatabank, wat nodig is om de functies te kunnen gebruiken.  Deze connectiepool moet eenmalig aangemaakt worden, en functies zullen automatisch deze connectiepool gebruiken om te connecteren met de databank.  Alternatief is om een connectie aan te maken met de functie connecteerMetLSVIdb() en deze bij elke functie mee te geven.  Voorlopig verwijst deze connectiepool naar een databank binnen INBO, waardoor gebruikers buiten INBO een kopie van de databank nodig hebben om met dit package te kunnen werken, en eventueel een aangepaste versie van deze functie.  Op termijn zal deze databank toegevoegd worden aan het package, waardoor ze overal zou moeten werken.
+#' @description Deze functie maakt een connectiepool met de
+#' LSVI-indicatorendatabank, wat nodig is om de functies te kunnen gebruiken.
+#' Deze connectiepool moet eenmalig aangemaakt worden, en functies zullen
+#' automatisch deze connectiepool gebruiken om te connecteren met de databank.
+#' Alternatief is om een connectie aan te maken met de functie
+#' connecteerMetLSVIdb() en deze bij elke functie mee te geven.  Voorlopig
+#' verwijst deze connectiepool naar een databank binnen INBO, waardoor
+#' gebruikers buiten INBO een kopie van de databank nodig hebben om met dit
+#' package te kunnen werken, en eventueel een aangepaste versie van deze
+#' functie.  Op termijn zal deze databank toegevoegd worden aan het package,
+#' waardoor ze overal zou moeten werken.
 #'
 #' @inheritParams connecteerMetLSVIdb
-#' @return Deze functie maakt een Environment-object aan dat de connecties regelt met de betreffende databank.
+#' @return Deze functie maakt een Environment-object aan dat de connecties
+#' regelt met de betreffende databank.
 #'
 #' @examples
 #' # deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
@@ -26,7 +37,7 @@ maakConnectiePool <-
   function(Server = "INBO-SQL07-PRD.inbo.be",
            Databank = "D0122_00_LSVIHabitatTypes",
            Gebruiker = "pc-eigenaar",
-           Wachtwoord = "geen"){
+           Wachtwoord = "geen") {
   assert_that(is.string(Server))
   assert_that(is.string(Databank))
   assert_that(is.string(Gebruiker))

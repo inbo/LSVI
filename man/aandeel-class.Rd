@@ -5,11 +5,14 @@
 \alias{aandeel-class}
 \title{S4-klasse die aandeel grondvlak of volume van bepaalde boomsoort berekend}
 \description{
-Deze klasse Aandeel staat in voor de berekening van waarden voor TypeVariabele Aandeel op basis van opgegeven kenmerken.  Ze is een nakomeling van de klasse AnalyseVariabele.
+Deze klasse Aandeel staat in voor de berekening van waarden voor
+TypeVariabele Aandeel op basis van opgegeven kenmerken.  Ze is een
+nakomeling van de klasse AnalyseVariabele.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{Kenmerken}}{dataframe met alle opgegeven kenmerken, met velden Kenmerk, TypeKenmerk, WaardeMin en WaardeMax}
+\item{\code{Kenmerken}}{dataframe met alle opgegeven kenmerken, met velden Kenmerk,
+TypeKenmerk, WaardeMin en WaardeMax}
 }}
 

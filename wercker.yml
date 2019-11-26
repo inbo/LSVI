@@ -8,4 +8,4 @@ build:
           Rscript -e "install.packages(c('odbc', 'pool', 'rgbif', 'pander'))"
     - inbobmk/r-check
     - inbobmk/r-coverage
-    - inbobmk/r-lint
+    - jimhester/r-lint

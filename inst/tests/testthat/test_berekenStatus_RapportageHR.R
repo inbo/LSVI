@@ -5,14 +5,14 @@ library(dplyr)
 library(rlang)
 maakConnectiePool()
 
-Data_habitat <-
+Data_habitat <- #nolint
     read_csv2(
       system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
       col_types = list(col_character(), col_character(), col_character())
     )
-Data_voorwaarden <-
+Data_voorwaarden <- #nolint
     read_csv2(system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI"))
-Data_soortenKenmerken <-
+Data_soortenKenmerken <- #nolint
     read_csv2(
       system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI")
     )
@@ -53,7 +53,7 @@ describe("bereken status criterium en globaal volgens Rapportage HR", {
 describe("bereken status criterium en globaal volgens Rapportage HR met NA's", {
   it("Correct berekend in geval van NA's voor status van indicatoren", {
 
-    Data_voorwaarden_NA <- Data_voorwaarden %>%
+    data_voorwaarden_na <- Data_voorwaarden %>%
       mutate(
         Waarde = ifelse(
           .data$Voorwaarde == "bedekking verbossing",
@@ -66,16 +66,16 @@ describe("bereken status criterium en globaal volgens Rapportage HR met NA's", {
           Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
           Data_habitat,
-          Data_voorwaarden_NA,
+          data_voorwaarden_na,
           Data_soortenKenmerken,
           Aggregatiemethode = "RapportageHR"
         )
 
-    Resultaat_negeerNA <- berekenLSVIbasis(
+    resultaat_negeer_na <- berekenLSVIbasis(
           Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
           Data_habitat,
-          Data_voorwaarden_NA,
+          data_voorwaarden_na,
           Data_soortenKenmerken,
           Aggregatiemethode = "RapportageHR",
           na.rm = TRUE
@@ -103,7 +103,7 @@ describe("bereken status criterium en globaal volgens Rapportage HR met NA's", {
     )
 
     expect_equal(
-      Resultaat_negeerNA$Resultaat_criterium %>%
+      resultaat_negeer_na$Resultaat_criterium %>%
         select(ID, Criterium, Status_criterium),
       Resultaatv2$Resultaat_criterium %>%
         select(ID, Criterium, Status_criterium) %>%

@@ -3,13 +3,16 @@
 \docType{class}
 \name{meting-class}
 \alias{meting-class}
-\title{S4-klasse voor voorwaarden die enkel rechtstreeks op het terrein gemeten kunnen worden of afgeleid worden uit GIS-data}
+\title{S4-klasse voor voorwaarden die enkel rechtstreeks op het terrein gemeten
+kunnen worden of afgeleid worden uit GIS-data}
 \description{
-Deze klasse meting geeft een waarde NA.  Ze is een nakomeling van de klasse AnalyseVariabele.
+Deze klasse meting geeft een waarde NA.  Ze is een nakomeling van de klasse
+AnalyseVariabele.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{Kenmerken}}{dataframe met alle opgegeven kenmerken, met velden Kenmerk, TypeKenmerk, WaardeMin en WaardeMax}
+\item{\code{Kenmerken}}{dataframe met alle opgegeven kenmerken, met velden Kenmerk,
+TypeKenmerk, WaardeMin en WaardeMax}
 }}
 
