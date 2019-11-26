@@ -94,7 +94,7 @@
 #' indicatoren gunstig zijn EN als geen enkele zeer belangrijke indicator
 #' ongunstig is; (2) "1-out-all-out": de beoordeling is gunstig als alle
 #' indicatoren gunstig zijn. "1-out-all-out" is default.
-#' @param na.rm Hier geeft je aan hoe de berekening moet omgaan met NA waarden.
+#' @param na.rm Hier geef je aan hoe de berekening moet omgaan met NA waarden.
 #' Default is FALSE. Dit betekent dat NA waarden niet worden verwijderd.
 #' Hierdoor zal de indexberekening resulteren in een NA zodra één van de
 #' indicatoren NA is. Voor de berekening van de status zal dit enkel resulteren
