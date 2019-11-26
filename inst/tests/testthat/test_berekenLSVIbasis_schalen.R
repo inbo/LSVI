@@ -5,16 +5,16 @@ library(dplyr)
 library(rlang)
 
 maakConnectiepoolSQLite()
-Data_habitat <-
+Data_habitat <- #nolint
   read_csv2(
     system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
     col_types = list(col_character(), col_character(), col_character())
   )
-Data_voorwaarden <-
+Data_voorwaarden <- #nolint
   read_csv2(
     system.file("vbdata/Opname4030voorwaardenv2.csv", package = "LSVI")
   )
-Data_soortenKenmerken <-
+Data_soortenKenmerken <- #nolint
   read_csv2(
     system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI")
   )
@@ -23,7 +23,7 @@ load(system.file("vbdata/Resultaat_test4030v2.Rdata", package = "LSVI"))
 
 describe("invoer van lokale schaal", {
   it("lokale schaal wordt herkend en omzetting/berekening gebeurt correct", {
-    Data_voorwaardenLokaal <- Data_voorwaarden %>%
+    Data_voorwaardenLokaal <- Data_voorwaarden %>% #nolint
       mutate(
         Waarde = ifelse(.data$Waarde == "o", "lf", .data$Waarde)
       )

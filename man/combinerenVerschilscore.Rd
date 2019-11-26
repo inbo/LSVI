@@ -2,26 +2,33 @@
 % Please edit documentation in R/combinerenVerschilscore.R
 \name{combinerenVerschilscore}
 \alias{combinerenVerschilscore}
-\title{combineert de Verschilscores van voorwaarden die via EN of OF logische operatoren gelinkt zijn}
+\title{combineert de Verschilscores van voorwaarden die via EN of OF
+logische operatoren gelinkt zijn}
 \usage{
 combinerenVerschilscore(Formule, VoorwaardeID, Verschilscore)
 }
 \arguments{
-\item{Formule}{string van ID's gecombineerd met EN en OF, bijvoorbeeld '(720 EN 721) OF 15'}
+\item{Formule}{string van ID's gecombineerd met EN en OF, bijvoorbeeld
+'(720 EN 721) OF 15'}
 
-\item{VoorwaardeID}{vector van alle voorwaardeID's die voorkomen in de Formule}
+\item{VoorwaardeID}{vector van alle voorwaardeID's die voorkomen in de
+Formule}
 
-\item{Verschilscore}{vector met voor elke VoorwaardeID een overeenkomstige verschilscore}
+\item{Verschilscore}{vector met voor elke VoorwaardeID een overeenkomstige
+verschilscore}
 }
 \value{
-gecombineerde verschilscore waarbij EN gecombineerd wordt via het minimum van beide verschilscores en OF gecombineerd wordt via het maximum van beide verschilscores
+gecombineerde verschilscore waarbij EN gecombineerd wordt via het
+minimum van beide verschilscores en OF gecombineerd wordt via het maximum
+van beide verschilscores
 }
 \description{
-Technische hulpfunctie die in een formule de ID's vervangt door opgegeven logische waarden en het resultaat van de formule teruggeeft.
+Technische hulpfunctie die in een formule de ID's vervangt door
+opgegeven logische waarden en het resultaat van de formule teruggeeft.
 }
 \examples{
-#onderstaand voorbeeld geeft problemen bij het testen van het package door devtools
-#maar buiten deze context werkt het wel
+#onderstaand voorbeeld geeft problemen bij het testen van het package door
+#devtools, maar buiten deze context werkt het wel
 \dontrun{
 combinerenVerschilscore(
   "(720 AND 721) OR 15",

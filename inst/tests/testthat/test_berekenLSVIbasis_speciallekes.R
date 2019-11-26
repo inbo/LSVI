@@ -5,18 +5,18 @@ library(dplyr)
 maakConnectiePool()
 describe("twee voorwaarden vergelijken", {
   it("vergelijking wordt correct uitgevoerd", {
-    Data_habitat <-
+    Data_habitat <- #nolint
       data.frame(
         ID = 1, Habitattype = "1330_hpr",
         stringsAsFactors = FALSE)
-    Data_voorwaarden <-
+    Data_voorwaarden <- #nolint
       data.frame(
         ID = 1, Criterium = "Verstoring", Indicator = "overgang naar rbbzil",
         Voorwaarde = c("bedekking grasachtigen rbbzil",
                        "som van de bedekking sleutelsoorten"),
         Waarde = c(10, 20), Type = "Percentage", Invoertype = NA, Eenheid = "%",
         stringsAsFactors = FALSE)
-    Data_soortenKenmerken <-
+    Data_soortenKenmerken <- #nolint
       data.frame(
         ID = 1, Kenmerk = c("Carex hirta", "Carex distans"),
         TypeKenmerk = "soort_Latijn", Waarde = c(10, 20), Type = "Percentage",
@@ -51,7 +51,7 @@ describe("twee voorwaarden vergelijken", {
         Verschilscore = 0.5,
         stringsAsFactors = FALSE
       )
-    Resultaat_berekend <-
+    resultaat_berekend <-
       idsWissen(
         berekenLSVIbasis(
           Versie = "Versie 2.0",
@@ -61,12 +61,12 @@ describe("twee voorwaarden vergelijken", {
         )
       )
     expect_equal(
-      Resultaat_berekend[["Resultaat_detail"]] %>%
+      resultaat_berekend[["Resultaat_detail"]] %>%
         filter(.data$Indicator == "overgang naar rbbzil"),
       Resultaat
     )
     expect_equal(
-      Resultaat_berekend[["Resultaat_indicator"]] %>%
+      resultaat_berekend[["Resultaat_indicator"]] %>%
         filter(.data$Indicator == "overgang naar rbbzil"),
       Resultaat %>%
         select(

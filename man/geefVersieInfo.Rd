@@ -2,18 +2,24 @@
 % Please edit documentation in R/geefVersieInfo.R
 \name{geefVersieInfo}
 \alias{geefVersieInfo}
-\title{Geeft informatie over de verschillende versies voor de berekening van de LSVI}
+\title{Geeft informatie over de verschillende versies voor de berekening van
+de LSVI}
 \usage{
 geefVersieInfo(ConnectieLSVIhabitats = NULL)
 }
 \arguments{
-\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
+\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor
+de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
 }
 \value{
 Deze functie geeft de tabel Versie uit de databank.
 }
 \description{
-Deze functie geeft een overzicht van alle versies die er zijn voor de berekening van de de Lokale Staat van Instandhouding, met naast de opsomming van de versies en de referenties een overzicht van de 2 kwaliteitsniveaus of types van beoordelingscriteria die in deze versie gedefinieerd zijn.
+Deze functie geeft een overzicht van alle versies die er zijn
+voor de berekening van de de Lokale Staat van Instandhouding, met naast de
+opsomming van de versies en de referenties een overzicht van de 2
+kwaliteitsniveaus of types van beoordelingscriteria die in deze versie
+gedefinieerd zijn.
 }
 \examples{
 # deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
