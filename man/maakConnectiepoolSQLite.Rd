@@ -7,10 +7,19 @@
 maakConnectiepoolSQLite()
 }
 \value{
-Deze functie maakt een Environment-object aan dat de connecties regelt met de betreffende databank in de installatie-file van het package.
+Deze functie maakt een Environment-object aan dat de connecties
+regelt met de betreffende databank in de installatie-file van het package.
 }
 \description{
-Deze functie maakt een connectiepool met de in het package toegevoegd databank met LSVI-indicatoren, wat nodig is om de functies te kunnen gebruiken.  Deze connectiepool moet eenmalig aangemaakt worden, en functies zullen automatisch deze connectiepool gebruiken om te connecteren met de databank.  Alternatief is om een connectie aan te maken met de functie connecteerMetLSVIlite() en deze bij elke functie mee te geven.  Voorlopig bevat deze databank bij wijze van test maar enkele gegevens en wordt best connectie gemaakt met de volledige databank via de functie maakConnectiePool().
+Deze functie maakt een connectiepool met de in het package
+toegevoegd databank met LSVI-indicatoren, wat nodig is om de functies te
+kunnen gebruiken.  Deze connectiepool moet eenmalig aangemaakt worden, en
+functies zullen automatisch deze connectiepool gebruiken om te connecteren
+met de databank.  Alternatief is om een connectie aan te maken met de
+functie connecteerMetLSVIlite() en deze bij elke functie mee te geven.
+Voorlopig bevat deze databank bij wijze van test maar enkele gegevens en
+wordt best connectie gemaakt met de volledige databank via de functie
+maakConnectiePool().
 }
 \examples{
 library(LSVI)

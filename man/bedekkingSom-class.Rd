@@ -5,11 +5,15 @@
 \alias{bedekkingSom-class}
 \title{S4-klasse die de bedekkingen van een soortengroep en studiegroep sommeert}
 \description{
-Deze klasse bedekkingSom staat in voor de berekening van waarden voor AnalyseVariabele bedekkingSom op basis van opgegeven kenmerken.  Ze is een nakomeling van de klasse bedekking.  Ze maakt de berekening als een som van de bedekkingen van de studiegroep en de soortengroep.
+Deze klasse bedekkingSom staat in voor de berekening van waarden voor
+AnalyseVariabele bedekkingSom op basis van opgegeven kenmerken.  Ze is een
+nakomeling van de klasse bedekking.  Ze maakt de berekening als een som van
+de bedekkingen van de studiegroep en de soortengroep.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{Kenmerken}}{dataframe met alle opgegeven kenmerken, met velden Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax}
+\item{\code{Kenmerken}}{dataframe met alle opgegeven kenmerken, met velden
+Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax}
 }}
 
