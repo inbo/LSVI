@@ -14,15 +14,25 @@ controleerInvoerwaarde(Beschrijving, Invoerwaarden, Tabelnaam, Veldnaam,
 
 \item{Tabelnaam}{De naam van de tabel waarin het veld zich bevindt (String)}
 
-\item{Veldnaam}{De naam van het veld (in de bij Tabelnaam opgegeven tabel) waarvan de waarden moeten opgezocht worden (String)}
+\item{Veldnaam}{De naam van het veld (in de bij Tabelnaam opgegeven tabel)
+waarvan de waarden moeten opgezocht worden (String)}
 
-\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
+\item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor
+de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
 
-\item{Tolower}{default (als TRUE) wordt tolower() uitgevoerd op de invoerwaarden en databankwaarden vooraleer de vergelijking uitgevoerd wordt, FALSE zorgt dat dit niet uitgevoerd wordt, maar idealiter worden deze stap voor stap vervangen door Tolower = TRUE}
+\item{Tolower}{default (als TRUE) wordt tolower() uitgevoerd op de
+invoerwaarden en databankwaarden vooraleer de vergelijking uitgevoerd wordt,
+FALSE zorgt dat dit niet uitgevoerd wordt, maar idealiter worden deze stap
+voor stap vervangen door Tolower = TRUE}
 }
 \value{
-Deze functie geeft geen waarde terug, maar gooit een error als er een foute waarde ingevoerd is
+Deze functie geeft geen waarde terug, maar gooit een error als er
+een foute waarde ingevoerd is
 }
 \description{
-Deze technische hulpfunctie bevat een standaardroutine om te controleren of de door een gebruiker ingevoerde waarde(n) voorkomen in een gespecifieerde tabel in de databank. Indien niet, dan geeft de functie een informatieve error (welke waarde is fout, en welk zijn de mogelijke invoerwaarden voor de variabele?).
+Deze technische hulpfunctie bevat een standaardroutine om te
+controleren of de door een gebruiker ingevoerde waarde(n) voorkomen in een
+gespecifieerde tabel in de databank. Indien niet, dan geeft de functie een
+informatieve error (welke waarde is fout, en welk zijn de mogelijke
+invoerwaarden voor de variabele?).
 }

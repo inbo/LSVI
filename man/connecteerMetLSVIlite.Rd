@@ -7,10 +7,15 @@
 connecteerMetLSVIlite()
 }
 \value{
-Deze functie geeft een open odbc-connectie naar de SQLite-databank in de installatie-file van het package.
+Deze functie geeft een open odbc-connectie naar de SQLite-databank
+in de installatie-file van het package.
 }
 \description{
-Deze functie maakt een connectie met de in het package toegevoegde databank met LSVI-indicatoren, net zoals de functie connecteerMetLSVIdb().    Aangeraden wordt om de functie connecteerMetLSVIdb() te gebruiken in plaats van deze functie, omdat deze functie op termijn zal verdwijnen.
+Deze functie maakt een connectie met de in het package
+toegevoegde databank met LSVI-indicatoren, net zoals de functie
+connecteerMetLSVIdb().
+Aangeraden wordt om de functie connecteerMetLSVIdb() te gebruiken in plaats
+van deze functie, omdat deze functie op termijn zal verdwijnen.
 }
 \examples{
 # Omwille van de iets langere lange duurtijd van de commando's staat bij
@@ -21,7 +26,8 @@ Deze functie maakt een connectie met de in het package toegevoegde databank met 
 library(LSVI)
 library(DBI)
 ConnectieLSVIhabitats <- connecteerMetLSVIlite()
-dbGetQuery(ConnectieLSVIhabitats, "SELECT VersieLSVI, Referentie FROM Versie")
+dbGetQuery(ConnectieLSVIhabitats,
+           "SELECT VersieLSVI, Referentie FROM Versie")
 dbDisconnect(ConnectieLSVIhabitats)
 }
 

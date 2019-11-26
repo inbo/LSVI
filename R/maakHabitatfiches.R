@@ -1,13 +1,22 @@
-#' @title Genereert habitatfiche(s) van LSVI op basis van de opgegeven parameters
+#' @title Genereert habitatfiche(s) van LSVI op basis van de opgegeven
+#' parameters
 #'
-#' @description Deze functie genereert habitatfiches die gebruikt worden voor de bepaling van de Lokale Staat van Instandhouding van de habitattypes die voldoen aan de opgegeven parameters.  (Om een tabel te genereren met deze informatie om zelf een fiche te kunnen samenstellen, wordt verwezen naar de functie geefInfoHabitatfiche().  Om een rapport samen te stellen met alle fiches na elkaar in 1 document, wordt verwezen naar de functie maakLSVIrapport())
+#' @description Deze functie genereert habitatfiches die gebruikt worden voor
+#' de bepaling van de Lokale Staat van Instandhouding van de habitattypes die
+#' voldoen aan de opgegeven parameters.  (Om een tabel te genereren met deze
+#' informatie om zelf een fiche te kunnen samenstellen, wordt verwezen naar de
+#' functie geefInfoHabitatfiche().  Om een rapport samen te stellen met alle
+#' fiches na elkaar in 1 document, wordt verwezen naar de functie
+#' maakLSVIrapport())
 #'
 #' @template Zoekparameters
 #'
 #' @inheritParams selecteerIndicatoren
-#' @param verbose geeft de toestand van het systeem aan, om te zorgen dat boodschappen niet onnodig gegeven worden
+#' @param verbose geeft de toestand van het systeem aan, om te zorgen dat
+#' boodschappen niet onnodig gegeven worden
 #'
-#' @return Deze functie genereert een rapport met habitatfiches in de vorm van een html-file die in de working directory opgeslagen wordt.
+#' @return Deze functie genereert een rapport met habitatfiches in de vorm van
+#' een html-file die in de working directory opgeslagen wordt.
 #'
 #' @examples
 #' # Omwille van de iets langere lange duurtijd van het commando staat bij
@@ -32,7 +41,7 @@ maakHabitatfiches <-
            Habitatgroep = "alle",
            Habitattype = "alle",
            ConnectieLSVIhabitats = NULL,
-           verbose = TRUE){
+           verbose = TRUE) {
 
     if (is.null(ConnectieLSVIhabitats)) {
       if (exists("ConnectiePool")) {

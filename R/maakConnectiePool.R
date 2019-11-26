@@ -1,9 +1,16 @@
-#' @title Maak een connectiepool met de databank met LSVI-indicatoren in het package
+#' @title Maak een connectiepool met de databank met LSVI-indicatoren in het
+#' package
 #'
-#' @description Deze functie maakt een connectiepool met de in het package toegevoegde databank met LSVI-indicatoren, wat nodig is om de functies te kunnen gebruiken.  Deze connectiepool moet eenmalig aangemaakt worden, en functies zullen automatisch deze connectiepool gebruiken om te connecteren met de databank.  Alternatief is om een connectie aan te maken met de functie connecteerMetLSVIdb() en deze bij elke functie mee te geven.
+#' @description Deze functie maakt een connectiepool met de in het package
+#' toegevoegde databank met LSVI-indicatoren, wat nodig is om de functies te
+#' kunnen gebruiken.  Deze connectiepool moet eenmalig aangemaakt worden, en
+#' functies zullen automatisch deze connectiepool gebruiken om te connecteren
+#' met de databank.  Alternatief is om een connectie aan te maken met de
+#' functie connecteerMetLSVIdb() en deze bij elke functie mee te geven.
 #'
 #' @inheritParams connecteerMetLSVIdb
-#' @return Deze functie maakt een Environment-object aan dat de connecties regelt met de betreffende databank.
+#' @return Deze functie maakt een Environment-object aan dat de connecties
+#' regelt met de betreffende databank.
 #'
 #' @examples
 #' library(LSVI)
@@ -22,7 +29,7 @@ maakConnectiePool <-
   function(Server = "INBO-SQL07-PRD.inbo.be",
            Databank = "D0122_00_LSVIHabitatTypes",
            Gebruiker = "pc-eigenaar",
-           Wachtwoord = "geen"){
+           Wachtwoord = "geen") {
   assert_that(is.string(Server))
   assert_that(is.string(Databank))
   assert_that(is.string(Gebruiker))

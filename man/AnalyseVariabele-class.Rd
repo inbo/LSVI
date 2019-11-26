@@ -3,13 +3,18 @@
 \docType{class}
 \name{AnalyseVariabele-class}
 \alias{AnalyseVariabele-class}
-\title{S4-klasse waarin de generieke onderdelen gedefinieerd worden die voor alle afgeleide klassen gelden (bv. aantal, bedekking,...)}
+\title{S4-klasse waarin de generieke onderdelen gedefinieerd worden die voor alle
+afgeleide klassen gelden (bv. aantal, bedekking,...)}
 \description{
-Deze virtuele klasse Waarde geeft de mogelijkheid om een aantal klassen en methoden die gelijk zijn voor alle verschillende analysevariabelen, maar eenmaal te moeten aanmaken.  Idee is dat voor elke afgeleide klasse minstens de methode berekenWaarde aangemaakt wordt.
+Deze virtuele klasse Waarde geeft de mogelijkheid om een aantal klassen en
+methoden die gelijk zijn voor alle verschillende analysevariabelen, maar
+eenmaal te moeten aanmaken.  Idee is dat voor elke afgeleide klasse minstens
+de methode berekenWaarde aangemaakt wordt.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{Kenmerken}}{dataframe met alle opgegeven kenmerken, met velden Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax}
+\item{\code{Kenmerken}}{dataframe met alle opgegeven kenmerken, met velden
+Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax}
 }}
 

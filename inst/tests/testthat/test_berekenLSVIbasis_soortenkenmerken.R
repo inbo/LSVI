@@ -5,16 +5,16 @@ library(dplyr)
 library(rlang)
 
 maakConnectiePool()
-Data_habitat <-
+Data_habitat <- #nolint
     read_csv2(
       system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
       col_types = list(col_character(), col_character(), col_character())
     )
-Data_voorwaarden2 <-
+Data_voorwaarden2 <- #nolint
   read_csv2(
     system.file("vbdata/Opname4030voorwaardenv2.csv", package = "LSVI")
   )
-Data_voorwaarden <-
+Data_voorwaarden <- #nolint
   read_csv2(
     system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI")
   )
@@ -22,9 +22,9 @@ if (
   class(ConnectiePool$.__enclos_env__$private$createObject())[1] ==
   "SQLiteConnection"
 ) {
-  Data_voorwaarden <- Data_voorwaarden2
+  Data_voorwaarden <- Data_voorwaarden2 #nolint
 }
-Data_soortenKenmerken <-
+Data_soortenKenmerken <- #nolint
     read_csv2(
       system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI")
     )

@@ -1,6 +1,13 @@
 #' Invoercontrole voor dataframe Data_soortenKenmerken
 #'
-#' Om te vermijden dat we meermaals dezelfde invoercontrole moeten uitvoeren en om de hoofdscripts overzichtelijk te houden, maken we voor elke invoercontrole een aparte hulpfunctie aan, die we kunnen aanroepen.  Deze wordt NIET geëxporteerd, dus deze functies kunnen niet als commando gerund worden (maar worden wel gerund als de functie waarin ze voorkomen, aangeroepen wordt).  Ingeval van Data_soortenKenmerken is ook de omzetting van soortnamen naar een NBNTaxonVersionKey en de omzettingen van bedekkingen naar een interval opgenomen in de functie.
+#' Om te vermijden dat we meermaals dezelfde invoercontrole moeten uitvoeren en
+#' om de hoofdscripts overzichtelijk te houden, maken we voor elke
+#' invoercontrole een aparte hulpfunctie aan, die we kunnen aanroepen.  Deze
+#' wordt NIET geëxporteerd, dus deze functies kunnen niet als commando gerund
+#' worden (maar worden wel gerund als de functie waarin ze voorkomen,
+#' aangeroepen wordt).  Ingeval van Data_soortenKenmerken is ook de omzetting
+#' van soortnamen naar een NBNTaxonVersionKey en de omzettingen van bedekkingen
+#' naar een interval opgenomen in de functie.
 #'
 #' @param Data_soortenKenmerken dataframe waarop invoercontrole moet gebeuren.
 #' @inheritParams berekenLSVIbasis
@@ -14,8 +21,8 @@
 #'
 #' @export
 #'
-invoercontroleData_soortenKenmerken <-
-  function(Data_soortenKenmerken, ConnectieLSVIhabitats, LIJST) {
+invoercontroleData_soortenKenmerken <- #nolint
+  function(Data_soortenKenmerken, ConnectieLSVIhabitats, LIJST) { #nolint
     assert_that(
       inherits(ConnectieLSVIhabitats, "DBIConnection") |
         inherits(ConnectieLSVIhabitats, "Pool"),

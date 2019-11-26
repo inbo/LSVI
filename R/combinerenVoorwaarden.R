@@ -1,16 +1,21 @@
 #' @title combineert de Status van voorwaarden via de opgegeven formule
 #'
-#' @description Technische hulpfunctie die in een formule de ID's vervangt door opgegeven logische waarden en het resultaat van de formule teruggeeft.
-#' 
-#' @param Formule string van ID's gecombineerd met EN en OF, bijvoorbeeld '(720 EN 721) OF 15'
-#' @param VoorwaardeID vector van alle voorwaardeID's die voorkomen in de Formule
-#' @param Status vector met voor elke VoorwaardeID een overeenkomstige logische waarde status (TRUE of FALSE)
-#' 
-#' @return logische waarde TRUE/FALSE die de uitkomst van de Formule is (gecombineerd met VoorwaardeID en Status)
-#' 
+#' @description Technische hulpfunctie die in een formule de ID's vervangt door
+#' opgegeven logische waarden en het resultaat van de formule teruggeeft.
+#'
+#' @param Formule string van ID's gecombineerd met EN en OF, bijvoorbeeld
+#' '(720 EN 721) OF 15'
+#' @param VoorwaardeID vector van alle voorwaardeID's die voorkomen in de
+#' Formule
+#' @param Status vector met voor elke VoorwaardeID een overeenkomstige logische
+#' waarde status (TRUE of FALSE)
+#'
+#' @return logische waarde TRUE/FALSE die de uitkomst van de Formule is
+#' (gecombineerd met VoorwaardeID en Status)
+#'
 #' @examples
-#' #onderstaand voorbeeld geeft problemen bij het testen van het package door devtools
-#' #maar buiten deze context werkt het wel
+#' #onderstaand voorbeeld geeft problemen bij het testen van het package door
+#' #devtools, maar buiten deze context werkt het wel
 #' \dontrun{
 #' combinerenVoorwaarden(
 #'   "(720 AND 721) OR 15",
@@ -18,16 +23,16 @@
 #'   c(TRUE, FALSE, TRUE)
 #' )
 #' }
-#' 
+#'
 #' @export
-#' 
+#'
 #' @importFrom assertthat assert_that
 #' @importFrom stringr str_replace_all str_detect str_extract_all
 #' @importFrom pander evals
-#' 
+#'
 
 combinerenVoorwaarden <-
-  function(Formule, VoorwaardeID, Status){
+  function(Formule, VoorwaardeID, Status) {
 
     assert_that(is.character(Formule))
     assert_that(all(sapply(VoorwaardeID, is.numeric)))

@@ -1,8 +1,14 @@
-#' @title Maak een connectiepool met de databank met LSVI-indicatoren in het package
+#' @title Maak een connectiepool met de databank met LSVI-indicatoren in het
+#' package
 #'
-#' @description Deze functie maakt een connectiepool met de in het package toegevoegde databank met LSVI-indicatoren, net zoals de functie maakConnectiePool().  Aangeraden wordt om de functie maakConnectiePool() te gebruiken in plaats van deze functie, omdat deze functie op termijn zal verdwijnen.
+#' @description Deze functie maakt een connectiepool met de in het package
+#' toegevoegde databank met LSVI-indicatoren, net zoals de functie
+#' maakConnectiePool().  Aangeraden wordt om de functie maakConnectiePool() te
+#' gebruiken in plaats van deze functie, omdat deze functie op termijn zal
+#' verdwijnen.
 #'
-#' @return Deze functie maakt een Environment-object aan dat de connecties regelt met de betreffende databank in de installatie-file van het package.
+#' @return Deze functie maakt een Environment-object aan dat de connecties
+#' regelt met de betreffende databank in de installatie-file van het package.
 #'
 #' @examples
 #' # Omwille van de iets langere lange duurtijd van de commando's staat bij
@@ -23,7 +29,7 @@
 #' @importFrom RSQLite SQLite
 #'
 
-maakConnectiepoolSQLite <- function(){
+maakConnectiepoolSQLite <- function() {
   tryCatch(
     assign(
       "ConnectiePool",

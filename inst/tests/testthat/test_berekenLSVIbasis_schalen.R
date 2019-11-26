@@ -5,16 +5,16 @@ library(dplyr)
 library(rlang)
 
 maakConnectiepoolSQLite()
-Data_habitat <-
+Data_habitat <- #nolint
   read_csv2(
     system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
     col_types = list(col_character(), col_character(), col_character())
   )
-Data_voorwaarden <-
+Data_voorwaarden <- #nolint
   read_csv2(
     system.file("vbdata/Opname4030voorwaardenv2.csv", package = "LSVI")
   )
-Data_soortenKenmerken <-
+Data_soortenKenmerken <- #nolint
   read_csv2(
     system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI")
   )

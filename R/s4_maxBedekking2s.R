@@ -1,7 +1,7 @@
-#' S4-klasse die de maximale bedekking berekent van de soorten die niet tot de
-#' soortengroep behoren
+#' S4-klasse die de totale bedekking van de 2 soorten met hoogste bedekking
+#' binnen een soortengroep berekent
 #'
-#' Deze klasse MaxBedekkingExcl staat in voor de berekening van waarden voor
+#' Deze klasse MaxBedekking2s staat in voor de berekening van waarden voor
 #' TypeVariabele Bedekking op basis van opgegeven kenmerken.  Ze is een
 #' nakomeling van de klasse AnalyseVariabele.
 #'
@@ -12,7 +12,7 @@
 #'
 #' @include s4_AnalyseVariabele.R
 setClass(
-  Class = "maxBedekkingExcl",
+  Class = "maxBedekking2s",
   representation =
     representation(),
   contains = "AnalyseVariabele"
@@ -20,7 +20,7 @@ setClass(
 
 setMethod(
   f = "berekenWaarde",
-  signature = "maxBedekkingExcl",
+  signature = "maxBedekking2s",
   definition = function(object) {
 
     object@Kenmerken <- object@Kenmerken %>%
@@ -30,7 +30,7 @@ setMethod(
       )
 
     Resultaat <-
-      deselecteerKenmerkenInOpname(
+      selecteerKenmerkenInOpname(
         object@Kenmerken,
         object@Soortengroep,
         object@Studiegroep,
@@ -50,26 +50,33 @@ setMethod(
     if (sum(is.na(Resultaat$WaardeMin)) < sum(is.na(Resultaat$WaardeMax))) {
       MaxBedekkingMin <- NA
       MaxBedekkingMax <- NA
-      warning("aan- of afwezigheid bedekking") #nolint
-    } else if (nrow(Resultaat) > 0) {
+      warning("aan- of afwezigheid bedekking")
+    } else if (nrow(Resultaat) > 1) {
 
-      MaxBedekkingMin <- max(Resultaat$WaardeMin)
-      MaxBedekkingMax <- max(Resultaat$WaardeMax)
+      MaxBedekking2sMin <-
+        1.0 - prod((1.0 - sort(Resultaat$WaardeMin, decreasing = TRUE)[1:2]))
+      MaxBedekking2sMax <-
+        1.0 - prod((1.0 - sort(Resultaat$WaardeMax, decreasing = TRUE)[1:2]))
+
+    } else if (nrow(Resultaat) == 1) {
+
+      MaxBedekking2sMin <- Resultaat$WaardeMin
+      MaxBedekking2sMax <- Resultaat$WaardeMax
 
     } else if (nrow(Resultaat) == 0) {
 
-      MaxBedekkingMin <- 0
-      MaxBedekkingMax <- 0
+      MaxBedekking2sMin <- 0
+      MaxBedekking2sMax <- 0
 
     }
 
-    return(c(MaxBedekkingMin, MaxBedekkingMax))
+    return(c(MaxBedekking2sMin, MaxBedekking2sMax))
   }
 )
 
 setMethod(
   f = "geefTheoretischMaximum",
-  signature = "maxBedekkingExcl",
+  signature = "maxBedekking2s",
   definition = function(object) {
     return(1)
   }
