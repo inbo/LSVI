@@ -138,7 +138,6 @@
 #'
 #' @importFrom dplyr %>% select distinct n filter mutate row_number rename
 #' left_join summarise group_by ungroup rowwise bind_rows arrange transmute
-#' @importFrom tidyr unnest
 #' @importFrom assertthat assert_that has_name
 #' @importFrom rlang .data
 #' @importFrom stringr str_split_fixed str_c
