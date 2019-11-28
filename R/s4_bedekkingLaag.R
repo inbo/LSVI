@@ -35,15 +35,6 @@ setMethod(
       object@Soortengroep <- data.frame()
       berekenWaarde(as(object, "bedekking"))
     } else {
-      #bij de boom- en struiklaag Salix repens + subsp buiten beschouwing laten
-      if ("boom- en struiklaag" %in% object@Studiegroep$Waarde) {
-        object@Soortengroep <- object@Soortengroep %>%
-          filter(
-            !.data$NbnTaxonVersionKey %in%
-              c("nbnsys0000003877", "inbsys0000004125", "inbsys0000004131",
-                "inbsys0000004133", "inbsys0000004135", "inbsys0000004136")
-          )
-      }
       berekenWaarde(as(object, "bedekking"))
     }
   }
