@@ -10,6 +10,7 @@
 #' Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
 #'
 #' @importFrom methods setClass setMethod as
+#' @importFrom dplyr %>% filter
 #'
 #' @include s4_bedekking.R
 setClass(
