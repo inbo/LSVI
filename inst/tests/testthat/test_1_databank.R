@@ -37,8 +37,9 @@ describe("test databank", {
     expect_true(
       all(av$VariabeleNaam %in%
             c("aandeel", "bedekkingExcl", "aandeelKruidlaag", "bedekkingSom",
-              "aantal", "bedekking", "bedekkingLaag", "maxBedekking",
-              "maxBedekkingExcl", "maxBedekking2s")
+              "aantal", "bedekking", "bedekkingLaag", "bedekkingLaagExcl",
+              "bedekkingLaagPlus", "maxBedekking", "maxBedekkingExcl",
+              "maxBedekking2s")
       )
     )
   })

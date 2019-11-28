@@ -534,7 +534,7 @@ describe("berekenLSVIbasis vegetatielaag", {
     )
   })
 
-  it("bij verbossing wordt Salix repens niet meegeteld als boom", { #nolint
+  it("bij verbossing wordt Salix repens niet meegeteld als boom", {
     Data_habitat <- #nolint
       read_csv2(
         system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
