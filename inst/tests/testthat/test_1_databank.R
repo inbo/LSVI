@@ -616,7 +616,7 @@ describe("test databank", {
         ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id"
       )
     expect_true(
-      all(AV$VariabeleNaam %in% c("bedekking", "aandeel"))
+      all(av$VariabeleNaam %in% c("bedekking", "aandeel"))
     )
     expect_true(
       all(av$TypeVariabele %in% c("Categorie", "Percentage"))
