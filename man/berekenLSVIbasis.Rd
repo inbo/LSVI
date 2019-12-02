@@ -91,7 +91,7 @@ te vullen met eigen schalen.  Omdat er ook een omzetting moet gebeuren voor
 grenswaarden uit de databank, kan het niet doorgeven van een gedeelte van
 deze lijst problemen geven.}
 
-\item{na.rm}{Hier geeft je aan hoe de berekening moet omgaan met NA waarden.
+\item{na.rm}{Hier geef je aan hoe de berekening moet omgaan met NA waarden.
 Default is FALSE. Dit betekent dat NA waarden niet worden verwijderd.
 Hierdoor zal de indexberekening resulteren in een NA zodra één van de
 indicatoren NA is. Voor de berekening van de status zal dit enkel resulteren
@@ -137,8 +137,10 @@ index_harm_harm. Een naam met "min" duidt op minimum van de scores als
 aggregatie; bij "harm" werd het harmonisch gemiddelde berekend.
 }
 \examples{
-# deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
-# een connectie gelegd kan worden met de SQL Server-databank binnen INBO
+# Omwille van de iets langere lange duurtijd van de commando's staat bij
+# onderstaand voorbeeld de vermelding 'dontrun' (om problemen te vermijden
+# bij het testen van het package). Maar het voorbeeld werkt en kan zeker
+# uitgetest worden.
 \dontrun{
 library(LSVI)
 maakConnectiePool()

@@ -37,8 +37,9 @@ describe("test databank", {
     expect_true(
       all(av$VariabeleNaam %in%
             c("aandeel", "bedekkingExcl", "aandeelKruidlaag", "bedekkingSom",
-              "aantal", "bedekking", "bedekkingLaag", "maxBedekking",
-              "maxBedekkingExcl", "maxBedekking2s")
+              "aantal", "bedekking", "bedekkingLaag", "bedekkingLaagExcl",
+              "bedekkingLaagPlus", "maxBedekking", "maxBedekkingExcl",
+              "maxBedekking2s")
       )
     )
   })
@@ -615,7 +616,7 @@ describe("test databank", {
         ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id"
       )
     expect_true(
-      all(av$VariabeleNaam == "bedekking")
+      all(av$VariabeleNaam %in% c("bedekking", "aandeel"))
     )
     expect_true(
       all(av$TypeVariabele %in% c("Categorie", "Percentage"))
@@ -658,7 +659,7 @@ describe("test databank", {
         INNER JOIN TypeVariabele
         ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
         WHERE TypeVariabele.Naam != 'Ja/nee'
-        AND Voorwaarde.Operator != '='"
+        AND Voorwaarde.Operator = '='"
       )
     expect_equal(
       nrow(av),

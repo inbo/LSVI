@@ -12,14 +12,10 @@
 #' @return Deze functie geeft de tabel Versie uit de databank.
 #'
 #' @examples
-#' # deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
-#' # een connectie gelegd kan worden met de SQL Server-databank binnen INBO
-#' \dontrun{
 #' maakConnectiePool()
 #' geefVersieInfo()
 #' library(pool)
 #' poolClose(ConnectiePool)
-#' }
 #'
 #' @export
 #'
