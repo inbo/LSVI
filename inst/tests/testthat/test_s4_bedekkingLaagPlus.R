@@ -1,4 +1,4 @@
-context("test s4_BedekkingExcl")
+context("test s4_BedekkingLaagPlus")
 
 library(methods)
 library(dplyr)
@@ -46,12 +46,12 @@ describe("s4_bedekkingLaagPlus", {
           Kenmerken =
             data.frame(
               Kenmerk = c("A1", "B2", "C1", "D3", "E1", "moslaag"),
-              TypeKenmerk = c(rep("soort_nbn",5), "studiegroep"),
+              TypeKenmerk = c(rep("soort_nbn", 5), "studiegroep"),
               WaardeMin = c(0.5, 0, 0, 0, 0, 0.8),
               WaardeMax = c(0.5, 0.3, 0, 0.3, 1, 0.8),
               Eenheid = "%",
               Vegetatielaag = c(rep("moslaag", 3), rep("kruidlaag", "2"), NA),
-              LijstNaam = c(rep(NA,5), "Vegetatielaag"),
+              LijstNaam = c(rep(NA, 5), "Vegetatielaag"),
               stringsAsFactors = FALSE
             ),
           Soortengroep =
