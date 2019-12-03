@@ -78,7 +78,15 @@ selecteerKenmerkenInOpname <- #nolint
       kiesTaxonOfSubtaxons <-
         function(Dataset) {
           TaxonData <- Dataset %>%
-            filter(.data$TaxonId == .data$SubTaxonId)
+            filter(.data$TaxonId == .data$SubTaxonId) %>%
+            group_by(
+              .data$TaxonId, .data$Kenmerk, .data$TypeKenmerk, .data$SubTaxonId,
+              .data$Eenheid
+            ) %>%
+            summarise(
+              WaardeMin = 1.0 - prod(1.0 - .data$WaardeMin, na.rm = FALSE),
+              WaardeMax = 1.0 - prod(1.0 - .data$WaardeMax, na.rm = FALSE)
+            )
           if (nrow(TaxonData) < 1) {
             Dataset <- Dataset %>%
               group_by(.data$TaxonId) %>%
