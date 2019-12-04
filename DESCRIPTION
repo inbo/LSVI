@@ -27,7 +27,7 @@ Imports:
     dplyr,
     lazyeval,
     methods,
-    odbc (< 1.2.0),
+    odbc,
     pander,
     pool,
     readr,

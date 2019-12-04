@@ -49,6 +49,10 @@ connecteerMetLSVIdb <-
   assert_that(is.string(Databank))
   assert_that(is.string(Gebruiker))
   assert_that(is.string(Wachtwoord))
+  assert_that(
+    packageVersion("odbc") <= package_version("1.2.0"),
+    msg = "Het LSVI-package geeft problemen met de nieuwste versie van odbc. Installeer een oudere versie met het commando install.packages('http://cran.r-project.org/src/contrib/Archive/odbc/odbc_1.1.6.tar.gz', repos = NULL, type = 'source')" #nolint
+  )
 
   if (Gebruiker == "pc-eigenaar") {
     tryCatch(
