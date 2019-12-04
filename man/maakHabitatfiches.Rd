@@ -50,8 +50,8 @@ maakLSVIrapport())
 De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten als string opgegeven worden.  Default is telkens 'alle', waarbij de soortenlijsten voor alle mogelijke waarden van die parameter weergegeven worden (m.a.w. er is geen selectie voor deze parameter).
 }
 \examples{
- # Omwille van de iets langere lange duurtijd van het commando staat bij
-# onderstaande voorbeeld de vermelding 'dontrun' (om problemen te vermijden
+# Omwille van de iets langere lange duurtijd van het commando staat bij
+# onderstaand voorbeeld de vermelding 'dontrun' (om problemen te vermijden
 # bij het testen van het package). Maar het voorbeeld werkt en mag zeker
 # uitgetest worden.
 \dontrun{

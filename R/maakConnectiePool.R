@@ -1,31 +1,23 @@
-#' @title Maak een connectiepool de databank met LSVI-indicatoren
+#' @title Maak een connectiepool met de databank met LSVI-indicatoren in het
+#' package
 #'
-#' @description Deze functie maakt een connectiepool met de
-#' LSVI-indicatorendatabank, wat nodig is om de functies te kunnen gebruiken.
-#' Deze connectiepool moet eenmalig aangemaakt worden, en functies zullen
-#' automatisch deze connectiepool gebruiken om te connecteren met de databank.
-#' Alternatief is om een connectie aan te maken met de functie
-#' connecteerMetLSVIdb() en deze bij elke functie mee te geven.  Voorlopig
-#' verwijst deze connectiepool naar een databank binnen INBO, waardoor
-#' gebruikers buiten INBO een kopie van de databank nodig hebben om met dit
-#' package te kunnen werken, en eventueel een aangepaste versie van deze
-#' functie.  Op termijn zal deze databank toegevoegd worden aan het package,
-#' waardoor ze overal zou moeten werken.
+#' @description Deze functie maakt een connectiepool met de in het package
+#' toegevoegde databank met LSVI-indicatoren, wat nodig is om de functies te
+#' kunnen gebruiken.  Deze connectiepool moet eenmalig aangemaakt worden, en
+#' functies zullen automatisch deze connectiepool gebruiken om te connecteren
+#' met de databank.  Alternatief is om een connectie aan te maken met de
+#' functie connecteerMetLSVIdb() en deze bij elke functie mee te geven.
 #'
 #' @inheritParams connecteerMetLSVIdb
 #' @return Deze functie maakt een Environment-object aan dat de connecties
 #' regelt met de betreffende databank.
 #'
 #' @examples
-#' # deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
-#' # een connectie gelegd kan worden met de SQL Server-databank binnen INBO
-#' \dontrun{
 #' library(LSVI)
 #' maakConnectiePool()
 #' geefVersieInfo()
 #' library(pool)
 #' poolClose(ConnectiePool)
-#' }
 #'
 #' @export
 #'
@@ -42,6 +34,10 @@ maakConnectiePool <-
   assert_that(is.string(Databank))
   assert_that(is.string(Gebruiker))
   assert_that(is.string(Wachtwoord))
+  assert_that(
+    packageVersion("odbc") <= package_version("1.2.0"),
+    msg = "Het LSVI-package geeft problemen met de nieuwste versie van odbc. Installeer een oudere versie met het commando install.packages('http://cran.r-project.org/src/contrib/Archive/odbc/odbc_1.1.6.tar.gz', repos = NULL, type = 'source')" #nolint
+  )
 
   if (Gebruiker == "pc-eigenaar") {
     tryCatch(
@@ -57,11 +53,11 @@ maakConnectiePool <-
         envir = .GlobalEnv
       ),
       error = function(e) {
-        warning("Het lukt niet om een connectie te leggen naar de SQL Server-databank op INBO.  Neem contact op met de beheerder van het package als dit probleem zich blijft voordoen.")  #nolint
         maakConnectiepoolSQLite()
       }
     )
   } else {
-    warning("De procedure om een connectiepool te genereren met de LSVI-indicatoren op de server van INBO, is enkel voorzien op basis van het pc-aanmeldingssysteem binnen INBO.  Neem contact op met de beheerder van het package om eventuele andere opties te bekijken.")  #nolint
+    maakConnectiepoolSQLite()
+    message("Connectie gelegd naar de databank in het package")
   }
 }

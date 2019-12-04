@@ -54,8 +54,10 @@
 #' uit de databank.
 #'
 #' @examples
-#' # deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
-#' # een connectie gelegd kan worden met de SQL Server-databank binnen INBO
+#' # Omwille van de iets langere lange duurtijd van de commando's staat bij
+#' # onderstaande voorbeelden de vermelding 'dontrun' (om problemen te vermijden
+#' # bij het testen van het package). Maar de voorbeelden werken en kunnen zeker
+#' # uitgetest worden.
 #' \dontrun{
 #' library(LSVI)
 #' maakConnectiePool()
@@ -257,7 +259,7 @@ geefInvoervereisten <- function(Versie = "alle",
 
   query_voorwaardeinfo <-
     sprintf("SELECT Voorwaarde.Id AS VoorwaardeID,
-            Voorwaarde.VoorwaardeNaam AS Voorwaarde, Voorwaarde.ExtraBewerking,
+            Voorwaarde.VoorwaardeNaam AS Voorwaarde,
             Voorwaarde.Referentiewaarde, Voorwaarde.Operator,
             AnalyseVariabele.VariabeleNaam as AnalyseVariabele,
             AnalyseVariabele.Eenheid, TypeVariabele.Naam AS TypeVariabele,
@@ -326,7 +328,7 @@ geefInvoervereisten <- function(Versie = "alle",
       ) %>%
       group_by(
         .data$VoorwaardeID, .data$Voorwaarde,
-        .data$ExtraBewerking, .data$Referentiewaarde,
+        .data$Referentiewaarde,
         .data$Operator, .data$AnalyseVariabele,
         .data$Eenheid, .data$TypeVariabele,
         .data$Invoertype,
@@ -347,7 +349,7 @@ geefInvoervereisten <- function(Versie = "alle",
       ungroup() %>%                   #volgorde aanpassen
       select(
         .data$VoorwaardeID, .data$Voorwaarde,
-        .data$ExtraBewerking, .data$Referentiewaarde,
+        .data$Referentiewaarde,
         .data$Operator, .data$AnalyseVariabele,
         .data$Eenheid, .data$TypeVariabele,
         .data$Invoertype, .data$Invoerwaarde,

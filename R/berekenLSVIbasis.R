@@ -130,8 +130,10 @@
 #' detailgegevens inclusief meetwaarden.
 #'
 #' @examples
-#' # deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
-#' # een connectie gelegd kan worden met de SQL Server-databank binnen INBO
+#' # Omwille van de iets langere lange duurtijd van de commando's staat bij
+#' # onderstaand voorbeeld de vermelding 'dontrun' (om problemen te vermijden
+#' # bij het testen van het package). Maar het voorbeeld werkt en kan zeker
+#' # uitgetest worden.
 #' \dontrun{
 #' library(LSVI)
 #' maakConnectiePool()
@@ -154,7 +156,6 @@
 #'
 #' @importFrom dplyr %>% select distinct n filter mutate row_number rename
 #' left_join summarise group_by ungroup rowwise bind_rows arrange transmute
-#' @importFrom tidyr unnest
 #' @importFrom assertthat assert_that has_name
 #' @importFrom rlang .data
 #' @importFrom stringr str_split_fixed str_c
@@ -290,7 +291,6 @@ berekenLSVIbasis <- #nolint
         .data$Combinatie,
         .data$VoorwaardeID,
         .data$Voorwaarde,
-        .data$ExtraBewerking,
         .data$Referentiewaarde,
         .data$Operator,
         .data$Eenheid,
@@ -372,7 +372,6 @@ berekenLSVIbasis <- #nolint
         Combinatie = NULL,
         VoorwaardeID = NULL,
         Voorwaarde = NULL,
-        ExtraBewerking = NULL,
         Referentiewaarde = NULL,
         Operator = NULL,
         Eenheid = NULL,
@@ -672,8 +671,7 @@ berekenLSVIbasis <- #nolint
         .data$Beoordeling,
         .data$Kwaliteitsniveau,
         .data$BeoordelingID,
-        .data$Combinatie,
-        .data$ExtraBewerking
+        .data$Combinatie
       ) %>%
       do(
         combinerenDubbeleVoorwaarden(.)
@@ -733,7 +731,6 @@ berekenLSVIbasis <- #nolint
       ) %>%
       mutate(
         Rijnr = NULL,
-        ExtraBewerking = NULL,
         RefMin = NULL, #in geval van categorische referentiewaarde (bv HB)
         RefMax = NULL,
         WaardeMin = NULL, #is geval van categorische waarde (bv HB)

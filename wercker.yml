@@ -5,7 +5,8 @@ build:
         code: |
           apt-get update
           apt-get install -y libgeos-dev
-          Rscript -e "install.packages(c('odbc', 'pool', 'rgbif', 'pander'))"
+          Rscript -e "install.packages(c('pool', 'rgbif', 'pander'))"
+          Rscript -e "install.packages('http://cran.r-project.org/src/contrib/Archive/odbc/odbc_1.1.6.tar.gz', repos = NULL, type = 'source')"
     - inbobmk/r-check
     - inbobmk/r-coverage
     - jimhester/r-lint

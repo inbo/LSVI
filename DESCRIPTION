@@ -82,6 +82,8 @@ Collate:
     's4_analyseVariabele_c.R'
     's4_bedekkingExcl.R'
     's4_bedekkingLaag.R'
+    's4_bedekkingLaagExcl.R'
+    's4_bedekkingLaagPlus.R'
     's4_bedekkingSom.R'
     's4_maxBedekking.R'
     's4_maxBedekking2s.R'

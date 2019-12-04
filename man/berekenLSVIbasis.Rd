@@ -157,8 +157,10 @@ index_harm_harm. Een naam met "min" duidt op minimum van de scores als
 aggregatie; bij "harm" werd het harmonisch gemiddelde berekend.
 }
 \examples{
-# deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
-# een connectie gelegd kan worden met de SQL Server-databank binnen INBO
+# Omwille van de iets langere lange duurtijd van de commando's staat bij
+# onderstaand voorbeeld de vermelding 'dontrun' (om problemen te vermijden
+# bij het testen van het package). Maar het voorbeeld werkt en kan zeker
+# uitgetest worden.
 \dontrun{
 library(LSVI)
 maakConnectiePool()
