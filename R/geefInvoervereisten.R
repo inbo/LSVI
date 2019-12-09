@@ -143,7 +143,8 @@ geefInvoervereisten <- function(Versie = "alle",
   query_lsvi_info <-
     sprintf("SELECT Indicator_beoordeling.Id AS Indicator_beoordelingID,
             Criterium.Naam AS Criterium, Indicator.Naam AS Indicator,
-            Beoordeling.Beoordeling_letterlijk AS Beoordeling,
+            cast(Beoordeling.Beoordeling_letterlijk AS nvarchar(360))
+              AS Beoordeling,
             Beoordeling.Kwaliteitsniveau,
             Indicator_beoordeling.Belang,
             Beoordeling.Id as BeoordelingID
@@ -270,7 +271,7 @@ geefInvoervereisten <- function(Versie = "alle",
             LijstItem.Gemiddelde AS Invoergemiddelde,
             Lijstitem.Bovengrens AS Invoerbovengrens,
             Voorwaarde.TaxongroepId,
-            Taxongroep.Omschrijving AS TaxongroepNaam,
+            cast(Taxongroep.Omschrijving AS nvarchar(90)) AS TaxongroepNaam,
             Studiegroep.Naam AS Studiegroepnaam,
             Studiegroep.LijstNaam as Studielijstnaam,
             StudieItem.Waarde As Studiewaarde,
@@ -368,7 +369,7 @@ geefInvoervereisten <- function(Versie = "alle",
       LSVIinfo,
       by = c("Indicator_beoordelingID" = "Indicator_beoordelingID")
     ) %>%
-    mutate_(Indicator_beoordelingID = ~NULL) %>%
+    mutate(Indicator_beoordelingID = NULL) %>%
     left_join(BasisVoorwaarden, by = c("BeoordelingID" = "BeoordelingID")) %>%
     left_join(Voorwaardeinfo, by = c("VoorwaardeID" = "VoorwaardeID"))
 

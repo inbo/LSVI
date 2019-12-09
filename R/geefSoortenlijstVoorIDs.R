@@ -82,13 +82,13 @@ geefSoortenlijstVoorIDs <-
         (
           SELECT Tg.Id AS TaxongroepId,
             Tg.Id AS TaxonsubgroepId,
-            Tg.Omschrijving
+            cast(Tg.Omschrijving AS nvarchar(90)) AS Omschrijving
           FROM Taxongroep Tg
           WHERE Tg.Id in (%s)
         UNION ALL
           SELECT Groepen.TaxongroepId,
             Tg2.Id AS TaxonsubgroepId,
-          Tg2.Omschrijving
+            cast(Tg2.Omschrijving AS nvarchar(90)) AS Omschrijving
           FROM Groepen
             INNER JOIN TaxongroepTaxongroep AS TgTg
             ON Groepen.TaxonsubgroepId = TgTg.TaxongroepParentId
