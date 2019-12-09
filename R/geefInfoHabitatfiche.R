@@ -93,7 +93,7 @@ geefInfoHabitatfiche <-
         AS Beschrijving_naSoorten,
       cast(Indicator_habitat.Maatregelen AS nvarchar(510)) AS Maatregelen,
       cast(Indicator_habitat.Opmerkingen AS nvarchar(830)) AS Opmerkingen,
-      cast(Indicator_habitat.Referenties AS nvarchar(260)) AS Referenties,
+      cast(Indicator_habitat.Referenties AS nvarchar(290)) AS Referenties,
       Indicator_habitat.TaxongroepId
       FROM Indicator_habitat
       WHERE Indicator_habitat.Id in ('%s')",
@@ -115,7 +115,7 @@ geefInfoHabitatfiche <-
     query_beoordelingsfiche <- sprintf(
       "SELECT Indicator_beoordeling.Id AS Indicator_beoordelingID,
       Criterium.Naam AS Criterium, Indicator.Naam As Indicator,
-      cast(Indicator_beoordeling.Opmerkingen AS nvarchar(710)) AS Opmerkingen,
+      cast(Indicator_beoordeling.Opmerkingen AS nvarchar(900)) AS Opmerkingen,
       cast(Indicator_beoordeling.Referenties AS nvarchar(150)) AS Referenties,
       Beoordeling.Kwaliteitsniveau,
       cast(Beoordeling.Beoordeling_letterlijk AS nvarchar(360))
