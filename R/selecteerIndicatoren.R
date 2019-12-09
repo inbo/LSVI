@@ -155,7 +155,8 @@ selecteerIndicatoren <-
           SELECT Habitatgroep.Naam AS Habitatgroepnaam,
             Ht1.Code AS Habitattype, Ht1.Naam AS Habitatnaam,
             Ht1.Code AS Habitatsubtype, Ht1.Naam AS Habitatsubtypenaam,
-            Ht1.Omschrijving AS HabitatsubtypeOmschrijving,
+            cast(Ht1.Omschrijving AS nvarchar(10))
+              AS HabitatsubtypeOmschrijving,
             Ht1.Id AS HabitattypeId, Ht1.Id AS HabitatsubtypeId
           FROM Habitattype AS Ht1 INNER JOIN Habitatgroep
           ON Ht1.HabitatgroepId = Habitatgroep.Id
@@ -164,7 +165,8 @@ selecteerIndicatoren <-
           SELECT Habitatselectie.Habitatgroepnaam,
             Habitatselectie.Habitattype, Habitatselectie.Habitatnaam,
             Ht2.Code AS Habitatsubtype, Ht2.Naam AS Habitatsubtypenaam,
-            Ht2.Omschrijving AS HabitatsubtypeOmschrijving,
+            cast(Ht2.Omschrijving AS nvarchar(10))
+              AS HabitatsubtypeOmschrijving,
             Habitatselectie.HabitattypeId, Ht2.Id AS HabitatsubtypeId
           FROM Habitatselectie INNER JOIN Habitattype AS Ht2
           ON Habitatselectie.HabitatsubtypeId = Ht2.ParentId
