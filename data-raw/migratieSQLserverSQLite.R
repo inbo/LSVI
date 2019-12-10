@@ -60,7 +60,7 @@ migratieSQLserverSQLite <-
         cast(Beschrijving_naSoorten AS nvarchar(200)) AS Beschrijving_naSoorten,
         cast(Maatregelen AS nvarchar(510)) AS Maatregelen,
         cast(Opmerkingen AS nvarchar(830)) AS Opmerkingen,
-        cast(Referenties AS nvarchar(260)) AS Referenties,
+        cast(Referenties AS nvarchar(290)) AS Referenties,
         TaxongroepId, HabitattypeId, VersieId
         FROM Indicator_habitat
         WHERE HabitattypeId in (%s) and VersieId in (%s)",
@@ -91,7 +91,7 @@ migratieSQLserverSQLite <-
       ConnectiePool,
       sprintf(
         "SELECT Id, IndicatorId, HabitattypeId, VersieId,
-        cast(Opmerkingen AS nvarchar(710)) AS Opmerkingen,
+        cast(Opmerkingen AS nvarchar(900)) AS Opmerkingen,
         cast(Referenties AS nvarchar(150)) AS Referenties, Belang
         FROM Indicator_beoordeling
         WHERE Id in (%s)",
@@ -266,7 +266,7 @@ migratieSQLserverSQLite <-
       ConnectiePool,
       sprintf(
         "SELECT Id, Naam,
-        cast(Omschrijving AS nvarchar(70)) AS Omschrijving, AfkomstGegevens
+        cast(Omschrijving AS nvarchar(90)) AS Omschrijving, AfkomstGegevens
         FROM Taxongroep
         WHERE Id in (%s)",
         TaxongroepId
