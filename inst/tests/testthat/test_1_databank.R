@@ -608,12 +608,19 @@ describe("test databank", {
       dbGetQuery(
         ConnectieLSVIhabitats,
         "SELECT Voorwaarde.Id, Voorwaarde.SubInvoermaskerId,
+        Voorwaarde.SubReferentiewaarde,
         AnalyseVariabele.VariabeleNaam,
         TypeVariabele.Naam as TypeVariabele
         FROM Voorwaarde INNER JOIN AnalyseVariabele
         ON Voorwaarde.SubAnalyseVariabeleId = AnalyseVariabele.Id
         INNER JOIN TypeVariabele
         ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id"
+      )
+    lijst <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        "SELECT LijstId, Waarde
+        FROM Lijstitem"
       )
     expect_true(
       all(av$VariabeleNaam %in% c("bedekking", "aandeel"))
@@ -625,6 +632,17 @@ describe("test databank", {
       filter(.data$TypeVariabele == "Categorie")
     expect_true(
       all(!is.na(av_cat$SubInvoermaskerId))
+    )
+    expect_true(
+      all(
+        (av_cat %>%
+          left_join(lijst, by = c("SubInvoermaskerId" = "LijstId")) %>%
+          group_by(Id) %>%
+          summarise(
+            test =
+              max(grepl(tolower(unique(SubReferentiewaarde)), tolower(Waarde)))
+          ) %>%
+          ungroup())$test)
     )
   })
 

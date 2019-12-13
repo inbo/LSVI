@@ -52,7 +52,7 @@ describe("Afhandeling van lokale schaal gebeurt correct", {
           Verschilscore =
             ifelse(
               .data$ID == "JR0216" & .data$Indicator == "dwergstruiken",
-              -0.824,
+              -0.85,
               .data$Verschilscore
             )
         )
