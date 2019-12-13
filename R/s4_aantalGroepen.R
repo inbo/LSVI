@@ -31,7 +31,6 @@ setMethod(
         .data$TypeKenmerk == "studiegroep",
         tolower(.data$Kenmerk) %in% tolower(object@Studiegroep$Waarde)
       )
-
     if (nrow(Test) > 0) {
       object@Soortengroep <- data.frame()
       berekenWaarde(as(object, "aantal"))
