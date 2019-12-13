@@ -36,10 +36,11 @@ setMethod(
       object@Soortengroep <- data.frame()
       berekenWaarde(as(object, "aantal"))
     } else {
+      object@Studiegroep <- data.frame()
       object@Soortengroep$TaxonId <- object@Soortengroep$TaxonsubgroepId
       object@Soortengroep$TaxonsubgroepId <- object@Soortengroep$TaxongroepId
       object@Soortengroep$TaxongroepId <- 1
-      berekenWaarde(as(object, "bedekking"))
+      berekenWaarde(as(object, "aantal"))
     }
   }
 )
