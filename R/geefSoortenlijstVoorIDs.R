@@ -172,14 +172,16 @@ geefSoortenlijstVoorIDs <-
         dbGetQuery(
           ConnectieLSVIhabitats,
           paste(QueryGroepen, QueryLSVIfiche, sep = "")
-        )
+        ) %>%
+        distinct()
 
     } else if (Taxonlijsttype[1] == "alle") {
       Soortenlijst <-
         dbGetQuery(
           ConnectieLSVIhabitats,
           paste(QueryGroepen, QueryTaxa, QueryAlleTaxa, sep = "")
-        )
+        ) %>%
+        distinct()
     }
 
     Soortenlijst$WetNaamKort <-
