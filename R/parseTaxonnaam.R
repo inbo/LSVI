@@ -26,7 +26,33 @@
 
 parseTaxonnaam <- function(Taxonnaam, ParseType = "canonicalnamewithmarker") {
 
-  Resultaat <- parsenames(Taxonnaam)[, c(ParseType)]
+  Taxonnaam <- gsub("v\\.d\\.", "v. d.", Taxonnaam)
+  Taxonnaam <- gsub(" v\\.", " Van", Taxonnaam)
+  Taxonnaam <- gsub(" non ", " Non", Taxonnaam)
+  Taxonnaam <- gsub(" auct\\. ", " Auct. ", Taxonnaam)
+  Taxonnaam <- gsub(" auct\\.$", " Auct.", Taxonnaam)
+  Taxonnaam <- gsub(" auct\\., ", " ", Taxonnaam)
+  Taxonnaam <- gsub(" den ", " Den ", Taxonnaam)
+  Taxonnaam <- gsub(" an ", " An ", Taxonnaam)
+  Taxonnaam <- gsub(" anon ", " Anon ", Taxonnaam)
+  Taxonnaam <- gsub(" f.$", "", Taxonnaam)
+  Taxonnaam <- gsub(" f.)$", ")", Taxonnaam)
+  Taxonnaam <-
+    gsub("^([A-Z][a-z]+\\s[a-z]+)\\/([a-z]+)$", "\\1 s.l.", Taxonnaam)
+  Resultaat <- parsenames(Taxonnaam)
+  if ("sensu" %in% colnames(Resultaat)) {
+    Resultaat <-
+      trimws(
+        paste(
+          Resultaat[, c(ParseType)],
+          ifelse(is.na(Resultaat$sensu) | Resultaat$sensu == "s.s.", "",
+                 ifelse(Resultaat$sensu == "s.l.", "groep", Resultaat$sensu))
+        )
+      )
+  } else {
+    Resultaat <- Resultaat[, c(ParseType)]
+  }
+  Resultaat <- gsub("\U00D7", "x", Resultaat)
 
   return(Resultaat)
 }
