@@ -74,6 +74,7 @@ Collate:
     'maakConnectiepoolSQLite.R'
     'maakHabitatfiches.R'
     'maakLSVIrapport.R'
+    'parseTaxonnaam.R'
     's4_AnalyseVariabele.R'
     's4_aandeel.R'
     's4_bedekking.R'
