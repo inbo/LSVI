@@ -195,7 +195,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
           .data$TypeVariabele == "Categorie"
         ) %>%
         filter(
-          !.data$Referentiewaarde %in% LijstItems$Waarde
+          !tolower(.data$Referentiewaarde) %in% tolower(LijstItems$Waarde)
         ) %>%
         mutate(
           Probleem =

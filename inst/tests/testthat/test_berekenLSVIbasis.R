@@ -504,7 +504,7 @@ describe("berekenLSVIbasis", {
             Waarde =
               ifelse(
                 .data$Waarde == "o" & .data$Criterium == "Verstoring",
-                "2 - 5",
+                "1.2 - 2.5",
                 .data$Waarde
               ),
             TypeWaarde =
@@ -568,7 +568,7 @@ describe("berekenLSVIbasis", {
               Invoertype =
                 ifelse(.data$Waarde == "f", NA, .data$Invoertype),
               Waarde =
-                ifelse(.data$Waarde == "f", "5-10", .data$Waarde)
+                ifelse(.data$Waarde == "f", "2,5-5", .data$Waarde)
             ),
           Data_soortenKenmerken
         )
@@ -589,7 +589,7 @@ describe("berekenLSVIbasis", {
                 100, .data$TheoretischMaximum
               ),
             Waarde =
-              ifelse(.data$Waarde == "f", "5-10", .data$Waarde)
+              ifelse(.data$Waarde == "f", "2,5-5", .data$Waarde)
           ),
         Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]])
     )
@@ -606,7 +606,7 @@ describe("berekenLSVIbasis", {
               Invoertype =
                 ifelse(.data$Waarde == "f", NA, .data$Invoertype),
               Waarde =
-                ifelse(.data$Waarde == "f", "5 - 10", .data$Waarde)
+                ifelse(.data$Waarde == "f", "2,5 - 5", .data$Waarde)
             ),
           Data_soortenKenmerken
         )
@@ -627,7 +627,7 @@ describe("berekenLSVIbasis", {
                 100, .data$TheoretischMaximum
               ),
             Waarde =
-              ifelse(.data$Waarde == "f", "5 - 10", .data$Waarde)
+              ifelse(.data$Waarde == "f", "2,5 - 5", .data$Waarde)
           ),
         Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]])
     )
@@ -923,13 +923,13 @@ describe("berekenLSVIbasis", {
               mutate(
                 Waarde =
                   ifelse(
-                    .data$Waarde == "0" & ID == "Ts2036",
+                    .data$Waarde == "0" & .data$ID == "Ts2036",
                     "1",
                     .data$Waarde
                   ),
                 Type =
                   ifelse(
-                    .data$Type == "Percentage" & ID == "Ts2036",
+                    .data$Type == "Percentage" & .data$ID == "Ts2036",
                     "Ja/nee",
                     .data$Type
                   )
@@ -1011,7 +1011,7 @@ describe("berekenLSVIbasis", {
             Index_harm_harm =
               ifelse(
                 .data$ID == "Ts2036",
-                0.124240377,
+                0.126462940,
                 .data$Index_harm_harm
               )
           )

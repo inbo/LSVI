@@ -1,7 +1,6 @@
 context("test s4_BedekkingLaagPlus")
 
 library(methods)
-library(dplyr)
 
 describe("s4_bedekkingLaagPlus", {
 
