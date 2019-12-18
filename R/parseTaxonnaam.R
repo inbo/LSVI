@@ -8,7 +8,7 @@
 #'
 #' @param Taxonnaam Wetenschappelijke naam of namen die vereenvoudigd moeten
 #' worden (String)
-#' 
+#'
 #' @param ParseType Welk type parsing teruggegeven moet worden.  Standaard is
 #' dit 'canonicalnamewithmarker', andere opties zijn 'canonicalname' en
 #' 'canonicalnamecomplete'

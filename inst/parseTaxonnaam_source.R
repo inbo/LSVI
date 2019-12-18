@@ -1,2 +1,2 @@
 library(rgbif)
-source("https://github.com/inbo/LSVI/blob/dubbelsInDatabank/R/parseTaxonnaam_source.R")
+source("https://raw.githubusercontent.com/inbo/LSVI/dubbelsInDatabank/R/parseTaxonnaam.R")
