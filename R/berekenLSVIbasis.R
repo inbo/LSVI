@@ -522,9 +522,13 @@ berekenLSVIbasis <- #nolint
         if (nrow(WarningMeting) > 0) {
           warning(
             sprintf(
-              "De waarde voor de voorwaarde(n) met VoorwaardeID %s kunnen niet berekend worden voor opname(n) %s. Geef de waarde voor deze voorwaarde rechtstreeks in als input van de functie 'berekenLSVIBasis' via 'Data_voorwaarden'",  #nolint
+              "De waarde(n) voor de voorwaarde(n) %s (VoorwaardeID %s) kunnen niet berekend worden voor opname(n) %s. Geef de waarde voor deze voorwaarde rechtstreeks in als input van de functie 'berekenLSVIBasis' via tabel 'Data_voorwaarden' (zie ?berekenLSVIbasis voor meer info). Vermeld hierbij Criterium = %s, Indicator = %s en Voorwaarde = %s.",  #nolint
+              str_c(unique(WarningMeting$Voorwaarde), collapse = ", "),
               str_c(unique(WarningMeting$VoorwaardeID), collapse = ", "),
-              str_c(unique(WarningMeting$ID), collapse = ", ")
+              str_c(unique(WarningMeting$ID), collapse = ", "),
+              str_c(unique(WarningMeting$Criterium), collapse = ", "),
+              str_c(unique(WarningMeting$Indicator), collapse = ", "),
+              str_c(unique(WarningMeting$Voorwaarde), collapse = ", ")
             )
           )
         }
