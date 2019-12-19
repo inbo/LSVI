@@ -41,11 +41,14 @@ parseTaxonnaam <- function(Taxonnaam, ParseType = "canonicalnamewithmarker") {
   Taxonnaam <- gsub(" anon ", " Anon ", Taxonnaam)
   Taxonnaam <- gsub(" f.$", "", Taxonnaam)
   Taxonnaam <- gsub(" f.)$", ")", Taxonnaam)
+  Taxonnaam <- gsub(" nom\\. illegit\\.$", " nom. illeg.", Taxonnaam)
+  Taxonnaam <- gsub(" nom\\. superfl\\.$", "", Taxonnaam)
+  Taxonnaam <- gsub(" sensu lato$", " s.l.", Taxonnaam)
   Taxonnaam <-
-    gsub("^([A-Z][a-z]+\\s[a-z]+)\\/([a-z]+)$", "\\1 s.l.", Taxonnaam)
+    gsub("^([A-Z][a-z]+\\s[a-z]+)(\\/[a-z]+)+$", "\\1 s.l.", Taxonnaam)
   Resultaat <- parsenames(Taxonnaam)
   if ("sensu" %in% colnames(Resultaat)) {
-    Resultaat <-
+    Resultaat[, c(ParseType)] <-
       trimws(
         paste(
           Resultaat[, c(ParseType)],
@@ -53,9 +56,8 @@ parseTaxonnaam <- function(Taxonnaam, ParseType = "canonicalnamewithmarker") {
                  ifelse(Resultaat$sensu == "s.l.", "groep", Resultaat$sensu))
         )
       )
-  } else {
-    Resultaat <- Resultaat[, c(ParseType)]
   }
+  Resultaat <- Resultaat[, c(ParseType)]
   Resultaat <- gsub("\U00D7", "x", Resultaat)
   Resultaat <- gsub("^NA$", NA, Resultaat)
 

@@ -57,7 +57,7 @@ describe("parseTaxonnaam", {
     )
     expect_equal(
       parseTaxonnaam("Lepraria alba Ach. nom. superfl."),
-      "Lepraria alba f."
+      "Lepraria alba"
     )
     expect_equal(
       parseTaxonnaam("Begonia x semperflorens hort. nom. nud."),
