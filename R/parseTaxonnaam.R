@@ -1,4 +1,4 @@
-#' @title Vereenvoudig de soortnaam door de auteurs te verw
+#' @title Vereenvoudig de soortnaam door de auteurs te verwijderen
 #'
 #' @description Deze functie vereenvoudigt de opgegeven taxonna(a)m(en) door
 #' de auteursnaam te verwijderen.  Ze is gebaseerd op de functie parsenames

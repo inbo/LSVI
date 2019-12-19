@@ -2,7 +2,7 @@
 % Please edit documentation in R/parseTaxonnaam.R
 \name{parseTaxonnaam}
 \alias{parseTaxonnaam}
-\title{Vereenvoudig de soortnaam door de auteurs te verw}
+\title{Vereenvoudig de soortnaam door de auteurs te verwijderen}
 \usage{
 parseTaxonnaam(Taxonnaam, ParseType = "canonicalnamewithmarker")
 }
