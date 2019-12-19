@@ -22,8 +22,10 @@ of vector van strings)
 Deze functie vereenvoudigt de opgegeven taxonna(a)m(en) door
 de auteursnaam te verwijderen.  Ze is gebaseerd op de functie parsenames
 uit het package rgbif, maar ze vangt enkele specifieke situaties uit de
-INBO-plantenlijsten wel op die de originele functie niet opvangt, bv.
-toevoegen van subsp.
+INBO-plantenlijsten wel op die de originele functie niet correct opvangt, bv.
+v., an en den herkennen als deel van een auteursnaam en s.l. en meerdere
+soortnamen gescheiden door / (zonder spatie) vervangen door een achtervoegsel
+groep.
 }
 \examples{
 parseTaxonnaam("Rosa canina L.")

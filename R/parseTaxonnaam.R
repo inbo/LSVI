@@ -3,8 +3,10 @@
 #' @description Deze functie vereenvoudigt de opgegeven taxonna(a)m(en) door
 #' de auteursnaam te verwijderen.  Ze is gebaseerd op de functie parsenames
 #' uit het package rgbif, maar ze vangt enkele specifieke situaties uit de
-#' INBO-plantenlijsten wel op die de originele functie niet opvangt, bv.
-#' toevoegen van subsp.
+#' INBO-plantenlijsten wel op die de originele functie niet correct opvangt, bv.
+#' v., an en den herkennen als deel van een auteursnaam en s.l. en meerdere
+#' soortnamen gescheiden door / (zonder spatie) vervangen door een achtervoegsel
+#' groep.
 #'
 #' @param Taxonnaam Wetenschappelijke naam of namen die vereenvoudigd moeten
 #' worden (String)
@@ -29,7 +31,7 @@ parseTaxonnaam <- function(Taxonnaam, ParseType = "canonicalnamewithmarker") {
   if (all(is.na(Taxonnaam))) {
     return(rep(NA, length(Taxonnaam)))
   }
-  
+
   Taxonnaam <- gsub("v\\.d\\.", "v. d.", Taxonnaam)
   Taxonnaam <- gsub(" v\\.", " Van", Taxonnaam)
   Taxonnaam <- gsub(" non ", " Non", Taxonnaam)
