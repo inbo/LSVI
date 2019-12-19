@@ -20,7 +20,7 @@ describe("parseTaxonnaam", {
       "Populus alba groep"
     )
     expect_equal(
-      parseTaxonnaam("Dirina repanda auct., non Fr. f. stenhammari (Stenh.) Clauzade & Cl. Roux"),
+      parseTaxonnaam("Dirina repanda auct., non Fr. f. stenhammari (Stenh.) Clauzade & Cl. Roux"), #nolint
       "Dirina repanda f. stenhammari"
     )
     expect_equal(
