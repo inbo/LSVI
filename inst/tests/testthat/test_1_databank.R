@@ -685,4 +685,178 @@ describe("test databank", {
     )
   })
 
+  it("Elke taxonnaam heeft 1 unieke nbn-key", {
+    ConnectieLSVIhabitats <-
+      connecteerMetLSVIlite()
+    Taxons <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        "SELECT t.NbnTaxonVersionKey AS tkey,
+          t.FloraNaamWetenschappelijk AS tflorawet,
+          t.FloraNaamNederlands AS tfloranl,
+          t.NbnNaam AS tnbn, t.NbnNaamVolledig AS tnbnvol,
+          ts.NbnTaxonVersionKey AS tskey,
+          ts.FloraNaamWetenschappelijk AS tsflorawet,
+          ts.FloraNaamNederlands AS tsfloranl,
+          ts.NbnNaam AS tsnbn, ts.NbnNaamVolledig AS tsnbnvol,
+          ts.CanonicalNameWithMarker AS canname
+        FROM Taxon t LEFT JOIN TaxonSynoniem ts
+        ON t.Id = ts.TaxonId"
+      )
+    expect_equal(
+      nrow(
+        Taxons %>%
+          select(tkey, tflorawet) %>%
+          distinct() %>%
+          group_by(tflorawet) %>%
+          count(tkey) %>%
+          filter(n > 1)
+      ),
+      0
+    )
+    expect_equal(
+      nrow(
+        Taxons %>%
+          select(tkey, tfloranl) %>%
+          distinct() %>%
+          group_by(tfloranl) %>%
+          count(tkey) %>%
+          filter(n > 1)
+      ),
+      0
+    )
+    expect_equal(
+      nrow(
+        Taxons %>%
+          select(tkey, tnbn) %>%
+          distinct() %>%
+          group_by(tnbn) %>%
+          count(tkey) %>%
+          filter(n > 1)
+      ),
+      0
+    )
+    expect_equal(
+      nrow(
+        Taxons %>%
+          select(tkey, tnbnvol) %>%
+          distinct() %>%
+          group_by(tnbnvol) %>%
+          count(tkey) %>%
+          filter(n > 1)
+      ),
+      0
+    )
+    expect_equal(
+      nrow(
+        Taxons %>%
+          select(tkey, tsflorawet) %>%
+          distinct() %>%
+          group_by(tsflorawet) %>%
+          count(tkey) %>%
+          filter(n > 1)
+      ),
+      0
+    )
+    expect_equal(
+      nrow(
+        Taxons %>%
+          select(tkey, tsfloranl) %>%
+          distinct() %>%
+          group_by(tsfloranl) %>%
+          count(tkey) %>%
+          filter(n > 1)
+      ),
+      0
+    )
+    expect_equal(
+      nrow(
+        Taxons %>%
+          select(tkey, tsnbn) %>%
+          distinct() %>%
+          group_by(tsnbn) %>%
+          count(tkey) %>%
+          filter(n > 1)
+      ),
+      0
+    )
+    expect_equal(
+      nrow(
+        Taxons %>%
+          select(tkey, tsnbnvol) %>%
+          distinct() %>%
+          group_by(tsnbnvol) %>%
+          count(tkey) %>%
+          filter(n > 1)
+      ),
+      0
+    )
+    expect_equal(
+      nrow(
+        Taxons %>%
+          select(tskey, tsflorawet) %>%
+          distinct() %>%
+          group_by(tsflorawet) %>%
+          count(tskey) %>%
+          filter(n > 1)
+      ),
+      0
+    )
+    expect_equal(
+      nrow(
+        Taxons %>%
+          select(tskey, tsfloranl) %>%
+          distinct() %>%
+          group_by(tsfloranl) %>%
+          count(tskey) %>%
+          filter(n > 1)
+      ),
+      0
+    )
+    expect_equal(
+      nrow(
+        Taxons %>%
+          select(tskey, tsnbn) %>%
+          distinct() %>%
+          group_by(tsnbn) %>%
+          count(tskey) %>%
+          filter(n > 1)
+      ),
+      0
+    )
+    expect_equal(
+      nrow(
+        Taxons %>%
+          select(tskey, tsnbnvol) %>%
+          distinct() %>%
+          group_by(tsnbnvol) %>%
+          count(tskey) %>%
+          filter(n > 1)
+      ),
+      0
+    )
+    expect_equal(
+      nrow(
+        Taxons %>%
+          select(tkey, canname) %>%
+          distinct() %>%
+          group_by(canname) %>%
+          count(tkey) %>%
+          filter(n > 1)
+      ),
+      0
+    )
+    expect_equal(
+      nrow(
+        Taxons %>%
+          select(tskey, canname) %>%
+          distinct() %>%
+          group_by(canname) %>%
+          count(tskey) %>%
+          filter(n > 1)
+      ),
+      0
+    )
+  })
+
 })
