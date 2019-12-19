@@ -26,6 +26,10 @@
 
 parseTaxonnaam <- function(Taxonnaam, ParseType = "canonicalnamewithmarker") {
 
+  if (all(is.na(Taxonnaam))) {
+    return(rep(NA, length(Taxonnaam)))
+  }
+  
   Taxonnaam <- gsub("v\\.d\\.", "v. d.", Taxonnaam)
   Taxonnaam <- gsub(" v\\.", " Van", Taxonnaam)
   Taxonnaam <- gsub(" non ", " Non", Taxonnaam)
@@ -53,6 +57,7 @@ parseTaxonnaam <- function(Taxonnaam, ParseType = "canonicalnamewithmarker") {
     Resultaat <- Resultaat[, c(ParseType)]
   }
   Resultaat <- gsub("\U00D7", "x", Resultaat)
+  Resultaat <- gsub("^NA$", NA, Resultaat)
 
   return(Resultaat)
 }
