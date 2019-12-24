@@ -242,7 +242,7 @@ invoercontroleData_soortenKenmerken <- #nolint
         summarise(
           Tekst = paste(.data$TekstOpname, collapse = "; ")
         )
-      stop(Tekst$Tekst)
+      warning(Tekst$Tekst)
     }
 
     Dubbels <- Kenmerken %>%
@@ -268,7 +268,7 @@ invoercontroleData_soortenKenmerken <- #nolint
         summarise(
           Tekst = paste(.data$TekstOpname, collapse = "; ")
         )
-      stop(Tekst$Tekst)
+      warning(Tekst$Tekst)
     }
 
 
