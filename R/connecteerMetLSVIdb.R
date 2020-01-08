@@ -61,14 +61,12 @@ connecteerMetLSVIdb <-
           Database = Databank,
           Trusted_Connection = "True",
           encoding = "UTF-8"
-        ),
-        envir = .GlobalEnv
+        )
       ),
       error = function(e) {
         assign(
           "ConnectieLSVIhabitats",
-          connecteerMetLSVIlite(),
-          envir = .GlobalEnv
+          connecteerMetLSVIlite()
         )
       }
     )
