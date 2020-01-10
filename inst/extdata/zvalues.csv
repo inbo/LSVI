@@ -1,48 +1,68 @@
-"Habitattype","zvalues"
-"6410_ve",0.207718990392563
-"2190_mp",0.149783172538417
-"2130_hd",0.046123670727587
-"2130_had",0.041513248096696
-"1330_hpr",0.00137337131749651
-"1330_da",0.00256455655874527
-"2150",0.0760194748133715
-"3130_aom",0.0799990712113215
-"1310_zv",0.0394135463007144
-"3260",0.0343376914982252
-"4010",0.142752538850178
-"2160",0.187227567725907
-"3270",0.0173389802863307
-"9160",0.252401943758281
-"2330_dw",0.0714463945154352
-"6120",0.103969826439421
-"6230_ha",0.00374046247383583
-"6410_mo",0.0911609009773008
-"3150",0.0402224175456929
-"6210",0.0764652704652459
-"6510_hu",0.0876061799321926
-"6230_hmo",0.107625642127144
-"7140_oli",0.0454634838547752
-"7140_meso",0.12906641796943
-"9190",0.109053132097656
-"2180",0.0783759563607584
-"91E0_bron",0.0651833846201876
-"91F0",0.0351296780114301
-"9150",0.125979705269425
-"91E0_meso",0.0948722280982037
-"91E0_veb",0.0246137690522267
-"6430_hf",0.193226039585841
-"7210",0.257920166987415
-"7230",0.228379645454282
-"7140_mrd",0.0288477154649768
-"3140",0.00126775350101725
-"2310",0.105427256041733
-"4030",0.174131950486537
-"3160",0.135250734361465
-"3110",0.00274776488539681
-"6430_mr",0.090077423448329
-"6230_hn",0.0243592545766803
-"6430_hw",0.0916492600118543
-"6430_bz",0.0226722398033944
-"6510_hua",0.415586220102097
-"91E0_wvb",0.00236171472799755
-"6230_hnk",0.0609587346889318
+Habitatsubtype,Versie,intercepts,zvalues,Criterium,Indicator,Beoordeling,Kwaliteitsniveau,Voorwaarde,Referentiewaarde,Operator,AnalyseVariabele,Eenheid
+1310_zv,Versie 2.0,1.3718044791943005,0.009448041821211037,Vegetatie,sleutelsoorten,B: 2-4,1,aantal sleutelsoorten,2,>=,aantal,NA
+1330_da,Versie 2.0,0.6734571393110423,0.0036014306466182473,Vegetatie,sleutelsoorten,B: 2 sleutelsoorten van laag schor aanwezig OF > 1 sleutelsoort van hoog schor samen met > 2 sleutelsoorten van de volledige vegetatiegradiënt,1,aantal sleutelsoorten hoog schor,1,>,aantal,NA
+1330_da,Versie 2.0,0.6890817132205431,6.615855382042122e-4,Vegetatie,sleutelsoorten,B: 2 sleutelsoorten van laag schor aanwezig OF > 1 sleutelsoort van hoog schor samen met > 2 sleutelsoorten van de volledige vegetatiegradiënt,1,aantal sleutelsoorten laag schor,2,>=,aantal,NA
+1330_da,Versie 2.0,0.691444431451756,0.007076988345148216,Vegetatie,sleutelsoorten,B: 2 sleutelsoorten van laag schor aanwezig OF > 1 sleutelsoort van hoog schor samen met > 2 sleutelsoorten van de volledige vegetatiegradiënt,1,aantal sleutelsoorten volledige gradiënt,2,>,aantal,NA
+2130_had,Versie 2.0,0.6945187471451627,0.005138133407675959,Vegetatie,sleutelsoorten,B: 4-10,1,aantal sleutelsoorten,4,>=,aantal,NA
+2130_hd,Versie 2.0,0.3328903724561679,0.10238789727089663,Vegetatie,sleutelsoorten van het droog tot vochtig kalkrijk duingrasland,B: 4-5,1,aantal sleutelsoorten droog tot vochtig duin,4,>=,aantal,NA
+2160,Versie 2.0,0.7108541321479576,0.17498730826416403,Vegetatie,sleutelsoorten,B: 5-10,1,aantal sleutelsoorten,5,>=,aantal,NA
+2170,Versie 2.0,1.0852009976391703,0.003462172764057986,Vegetatie,sleutelsoorten,B: = 3 + Kruipwilg,1,aantal sleutelsoorten excl. kruipwilg,3,>=,aantal,NA
+2180,Versie 2.0,0.5960929775188528,0.018640502437873394,Vegetatie,sleutelsoorten van de kruidlaag,B: 5-8,1,aantal sleutelsoorten kruidlaag,5,>=,aantal,NA
+2190_mp,Versie 2.0,0.6678523485739507,0.1437835140576397,Vegetatie,sleutelsoorten,B: 3-5,1,aantal sleutelsoorten,3,>=,aantal,NA
+2310,Versie 2.0,-0.3429529289803706,0.2506977258838503,Vegetatie,sleutelsoorten,B: Struikhei + 1-2 minstens occasioneel aanwezig,1,aantal sleutelsoorten,1,>=,aantal,NA
+2330_bu,Versie 2.0,1.09453227742279,0.0027872794570336927,Vegetatie,sleutelsoorten,B: >= 3 minstens lokaal frequent aanwezig,1,aantal sleutelsoorten,3,>=,aantal,NA
+3130_aom,Versie 2.0,0.3143948651828367,0.10779349491111274,Vegetatie,sleutelsoorten,B: 1 of 2 sleutelsoorten (uitgezonderd Moerashertshooi en Vlottende bies) minstens frequent aanwezig,1,aantal sleutelsoorten ex vl bies moerashertshooi,1,>=,aantal,NA
+3270,Versie 2.0,1.061562342961411,0.025718989941270566,Vegetatie,sleutelsoorten,B: 4-5 sleutelsoorten,1,aantal sleutelsoorten,4,>=,aantal,NA
+4010,Versie 2.0,0.49247443036415195,0.2421276638261862,Vegetatie,sleutelsoorten,B: 2-3 (excl. veenmossen),1,aantal sleutelsoorten,2,>=,aantal,NA
+4030,Versie 2.0,-0.10744539788568987,0.07618961677756705,Vegetatie,sleutelsoorten,B: Struikhei + 1,1,aantal sleutelsoorten,1,>=,aantal,NA
+6120,Versie 2.0,1.3201091018658409,0.13374630915940772,Vegetatie,sleutelsoorten,B: 4-7,1,aantal sleutelsoorten,4,>=,aantal,NA
+6210,Versie 2.0,1.9335170461621083,0.1158805829545409,Vegetatie,sleutelsoorten,B: 4-14,1,aantal sleutelsoorten,4,>=,aantal,NA
+6230_ha,Versie 2.0,1.1790369651438568,0.04259611781617671,Vegetatie,sleutelsoorten,B: 4-5,1,aantal sleutelsoorten,4,>=,aantal,NA
+6230_hmo,Versie 2.0,0.9954674189396515,0.2756936013506519,Vegetatie,sleutelsoorten,B: 4-8,1,aantal sleutelsoorten,4,>=,aantal,NA
+6230_hn,Versie 2.0,1.3836238359242903,0.035343899629908686,Vegetatie,sleutelsoorten,B: 4-5,1,aantal sleutelsoorten,4,>=,aantal,NA
+6230_hnk,Versie 2.0,2.1266609420805227,0.0843552047853194,Vegetatie,aantal sleutelsoorten totaal,B: 5-9,1,aantal sleutelsoorten totaal,5,>=,aantal,NA
+6410_mo,Versie 2.0,1.4964032310196034,0.10191716539263712,Vegetatie,sleutelsoorten,B: 5-9,1,aantal sleutelsoorten,5,>=,aantal,NA
+6410_ve,Versie 2.0,0.5010586734444188,0.3399843122376165,Vegetatie,sleutelsoorten,B: 5-9,1,aantal sleutelsoorten,5,>=,aantal,NA
+6430_bz,Versie 2.0,0.5242309904719384,0.10801019677634,Vegetatie,sleutelsoorten,B: 10-15,1,aantal sleutelsoorten,10,>=,aantal,NA
+6430_hf,Versie 2.0,0.876713997357625,0.19147946037949132,Vegetatie,sleutelsoorten,B: 5-9,1,aantal sleutelsoorten,5,>=,aantal,NA
+6430_hw,Versie 2.0,1.0382344728014066,0.03154860353785338,Vegetatie,sleutelsoorten,B: 5-9,1,aantal sleutelsoorten,5,>=,aantal,NA
+6430_mr,Versie 2.0,0.761589529620365,0.08045353800014968,Vegetatie,sleutelsoorten,B: Heemst en 3 andere sleutelsoorten,1,aantal sleutelsoorten excl. heemst,3,>=,aantal,NA
+6510_hu,Versie 2.0,0.9423072837941249,0.21751104621218867,Vegetatie,sleutelsoorten,B: 7-9,1,aantal sleutelsoorten,7,>=,aantal,NA
+6510_hua,Versie 2.0,-1.1626167034437427,0.8583898648706848,Vegetatie,sleutelsoorten,B: Weidekerveltorkruid en/of Weidekervel + 3-4 andere sleutelsoorten,1,aantal sleutelsoorten,3,>=,aantal,NA
+7140_meso,Versie 2.0,0.6394561738537161,0.19813072037344517,Vegetatie,sleutelsoorten,B: 4-5,1,aantal sleutelsoorten,4,>=,aantal,NA
+7140_mrd,Versie 2.0,1.6293258609755406,0.06298714380427661,Vegetatie,sleutelsoorten,B: 3-4,1,aantal sleutelsoorten,3,>=,aantal,NA
+7140_oli,Versie 2.0,1.285744467655783,0.0855541068345507,Vegetatie,sleutelsoorten,B: 3-4,1,aantal sleutelsoorten,3,>=,aantal,NA
+7230,Versie 2.0,0.3089074005391203,0.3548741660018557,Vegetatie,sleutelsoorten,B: 3-7,1,aantal sleutelsoorten,3,>=,aantal,NA
+9150,Versie 2.0,0.49459080577449216,0.14454849965373856,Vegetatie,sleutelsoorten van de kruidlaag,B: 3-5,1,aantal sleutelsoorten kruidlaag,3,>=,aantal,NA
+9160,Versie 2.0,1.3854573208067515,0.1661178299526819,Vegetatie,sleutelsoorten van de kruidlaag,B: 30-70% bedekking en >5 soorten of >= 30% bedekking en 6-14 soorten,1,aantal sleutelsoorten kruidlaag,5,>,aantal,NA
+9190,Versie 2.0,0.6776854915096666,0.0031226329590283443,Vegetatie,sleutelsoorten van de kruidlaag,B: 30-70% bedekking en >3 soorten of >= 30% bedekking en 4-6 soorten,1,aantal sleutelsoorten kruidlaag,3,>,aantal,NA
+91F0,Versie 2.0,0.7915586975715295,0.07985929203824395,Vegetatie,sleutelsoorten van de kruidlaag,B: 3-4,1,aantal sleutelsoorten kruidlaag,3,>=,aantal,NA
+1310_zv,Versie 3,1.3696747886426857,0.02255699929264149,Vegetatie,sleutelsoorten,>= 2 hogere planten waaronder Zeevetmuur (Sagina maritima) en/of Sierlijke vetmuur (Sagina nodosa); één hogere plant-sleutelsoort komt ten minste frequent voor,1,aantal sleutelsoorten,2,>=,aantal,NA
+1330_da,Versie 3,1.383082863447904,0.0020711910941833378,Vegetatie,sleutelsoorten,>= 5 sleutelsoorten van laag schor aanwezig EN >= 2 sleutelsoorten van hoog schor,1,aantal sleutelsoorten hoog schor,2,>=,aantal,NA
+1330_da,Versie 3,1.1452398492764226,0.05271542846348467,Vegetatie,sleutelsoorten,>= 5 sleutelsoorten van laag schor aanwezig EN >= 2 sleutelsoorten van hoog schor,1,aantal sleutelsoorten laag schor,5,>=,aantal,NA
+2150,Versie 3,5.859471896661851e-6,2.3526771777021454e-4,Vegetatie,sleutelsoorten,struikheide + ten minste 2 sleutelsoorten talrijk aanwezig,1,aantal sleutelsoorten excl. struikheide,2,>=,aantal,NA
+2180,Versie 3,0.6076375192806702,0.028802508606805364,Vegetatie,sleutelsoorten van de kruidlaag,>= 8 sleutelsoorten ten minste talrijk aanwezig,1,aantal sleutelsoorten kruidlaag,8,>=,aantal,NA
+2190_mp,Versie 3,0.6665281840058016,0.14368666080161835,Vegetatie,sleutelsoorten,>= 3 sleutelsoorten ten minste talrijk aanwezig,1,aantal sleutelsoorten,3,>=,aantal,NA
+2310,Versie 3,-0.4146702165381251,0.30503127735224295,Vegetatie,sleutelsoorten,Struikhei + minstens 2 andere sleutelsoorten aanwezig,1,aantal sleutelsoorten,2,>=,aantal,NA
+3270,Versie 3,1.0622411858654326,0.025255913625202905,Vegetatie,sleutelsoorten,>= 5 sleutelsoorten,1,aantal sleutelsoorten,5,>=,aantal,NA
+4030,Versie 3,-0.21029603067724997,0.27628120545821183,Vegetatie,sleutelsoorten,Struikhei + minimaal 1 andere sleutelsoort aanwezig,1,aantal sleutelsoorten,1,>=,aantal,NA
+6120,Versie 3,1.363073177429373,0.1326199538428246,Vegetatie,sleutelsoorten,>= 4,1,aantal sleutelsoorten,4,>=,aantal,NA
+6210,Versie 3,1.948953932252128,0.10370512844908344,Vegetatie,sleutelsoorten,>= 7,1,aantal sleutelsoorten,7,>=,aantal,NA
+6230_ha,Versie 3,1.787062856772476,0.02605551088992494,Vegetatie,sleutelsoorten,>= 4,1,aantal sleutelsoorten,4,>=,aantal,NA
+6230_hmo,Versie 3,0.9627412228295722,0.35472815026557003,Vegetatie,sleutelsoorten,>= 4,1,aantal sleutelsoorten,4,>=,aantal,NA
+6230_hn,Versie 3,1.6058676490650734,0.0027416058148933163,Vegetatie,sleutelsoorten,>= 4,1,aantal sleutelsoorten,4,>=,aantal,NA
+6230_hnk,Versie 3,2.052394771080778,0.09688245499541641,Vegetatie,sleutelsoorten,>= 5 waarvan minimum 2 kalkminnende en minimum 2 heischrale soorten,1,aantal sleutelsoorten,5,>=,aantal,NA
+6430_bz,Versie 3,-0.0016509359446797778,0.0018170287120166256,Vegetatie,sleutelsoorten,>=1,1,aantal sleutelsoorten,1,>=,aantal,NA
+6430_hf,Versie 3,0.7189735172474477,0.20423482219460248,Vegetatie,sleutelsoorten,>= 5,1,aantal sleutelsoorten,5,>=,aantal,NA
+6430_hw,Versie 3,-0.20285862191459766,0.17315421665355882,Vegetatie,sleutelsoorten,>= 5,1,aantal sleutelsoorten,5,>=,aantal,NA
+6430_mr,Versie 3,0.7310628707867445,0.09973546984831583,Vegetatie,sleutelsoorten,Heemst of Moeraslathyrus of Moerasmelkdistel en >= 2 andere sleutelsoorten,1,aantal sleutelsoorten,2,>=,aantal,NA
+6510_hu,Versie 3,0.9002321422973514,0.19941527047218582,Vegetatie,sleutelsoorten,>= 7,1,aantal sleutelsoorten,7,>=,aantal,NA
+6510_hua,Versie 3,-1.161612407422653,0.8570569311515356,Vegetatie,sleutelsoorten,Weidekerveltorkruid en/of Weidekervel + >=3 andere sleutelsoorten,1,aantal sleutelsoorten,3,>=,aantal,NA
+7140_meso,Versie 3,0.6756602606488232,0.22294696041209783,Vegetatie,sleutelsoorten,>= 4,1,aantal sleutelsoorten,4,>=,aantal,NA
+7140_mrd,Versie 3,1.3274655175926848,0.07893702121572849,Vegetatie,sleutelsoorten,>= 3,1,aantal sleutelsoorten,3,>=,aantal,NA
+7140_oli,Versie 3,1.2516347504481127,0.049501980890434796,Vegetatie,sleutelsoorten,>= 3,1,aantal sleutelsoorten,3,>=,aantal,NA
+7230,Versie 3,0.3217285034146555,0.3589439378669184,Vegetatie,sleutelsoorten,>= 3,1,aantal sleutelsoorten,3,>=,aantal,NA
+9150,Versie 3,-0.3990580460307237,0.24884206295933878,Vegetatie,sleutelsoorten van de kruidlaag,>= 3 soorten,1,aantal sleutelsoorten kruidlaag,3,>=,aantal,NA
+9160,Versie 3,1.2800104063662323,0.14853904076304317,Vegetatie,sleutelsoorten van de kruidlaag,>= 7 soorten EN [sleutelsoorten bedekkend OF aandel sleutelsoorten >=30% ],1,aantal sleutelsoorten kruidlaag,7,>=,aantal,NA
+9190,Versie 3,0.6141389741399284,0.019697113715107593,Vegetatie,sleutelsoorten van de kruidlaag,>= 3 soorten (9190 soorten) EN [9120 en 9190 soorten samen bedekkend OF aandeel 9120 en 9190 soorten samen >= 30%],1,aantal sleutelsoorten kruidlaag,3,>=,aantal,NA
+91F0,Versie 3,0.7937282827844441,0.07886395466154053,Vegetatie,sleutelsoorten van de kruidlaag,>= 7 soorten,1,aantal sleutelsoorten kruidlaag,7,>=,aantal,NA

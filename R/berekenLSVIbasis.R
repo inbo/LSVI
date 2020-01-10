@@ -585,25 +585,56 @@ berekenLSVIbasis <- #nolint
     if (isTRUE(Oppervlakte_opname)) {
       #herberekening refwaarden in geval Oppervlakte_opname = TRUE
       zvalues <- read_csv(system.file(
-        "extdata/zvalues.csv", package = "LSVI"))
+        "extdata/zvalues.csv", package = "LSVI"),
+        col_types = cols(
+          Habitatsubtype = col_character(),
+          Versie = col_character(),
+          intercepts = col_double(),
+          zvalues = col_double(),
+          Criterium = col_character(),
+          Indicator = col_character(),
+          Beoordeling = col_character(),
+          Kwaliteitsniveau = col_double(),
+          Voorwaarde = col_character(),
+          Referentiewaarde = col_character(),
+          Operator = col_character(),
+          AnalyseVariabele = col_character(),
+          Eenheid = col_character()
+        ))
 
       Resultaat <- Resultaat %>%
-        left_join(zvalues, by = "Habitattype") %>%
+        left_join(zvalues %>%
+                    rename(Habitattype = .data$Habitatsubtype),
+                  c("Habitattype", "Versie", "Criterium", "Indicator",
+                    "Beoordeling", "Kwaliteitsniveau", "Voorwaarde",
+                    "Referentiewaarde", "Operator", "Eenheid",
+                    "AnalyseVariabele")) %>%
         mutate(
-          #igv geen zvalue, zvalue = 0, dus geen correctie
-          zvalues = ifelse(is.na(.data$zvalues), 0, .data$zvalues),
-          #igv opp_m2 NA is, ook geen correctie berekenen door opp_m2 = 5000
-          RefMin = ifelse(
-            grepl(pattern = "aantal.*sleutelsoorten",
-                  x = .data$Voorwaarde,
-                  ignore.case = TRUE),
-            ceiling(
-              .data$RefMin * (ifelse(is.na(.data$Opp_m2),
-                                     5000,
-                                     .data$Opp_m2) / 5000) ^ .data$zvalues),
-            .data$RefMin),
-          RefMax = .data$RefMin) %>%
-        select(-.data$zvalues)
+          ref_correctie = ceiling(exp(.data$intercepts +
+                                        .data$zvalues * log(.data$Opp_m2))),
+          ref_correctie = ifelse(.data$Operator == ">=" &
+                                   !is.na(.data$ref_correctie),
+                                 .data$ref_correctie,
+                                 .data$ref_correctie - 1),
+          RefMin = ifelse(!is.na(ref_correctie),
+                          ifelse(.data$Operator == ">=",
+                                 pmax(pmin(2,
+                                           as.numeric(.data$Referentiewaarde)),
+                                      pmin(.data$ref_correctie,
+                                           as.numeric(.data$Referentiewaarde))
+                                 ),
+                                 pmax(1,
+                                      pmin(.data$ref_correctie,
+                                           as.numeric(.data$Referentiewaarde))
+                                 )),
+                          .data$RefMin
+          ),
+          RefMax = .data$RefMin,
+          Referentiewaarde = as.character(.data$RefMin)) %>%
+        select(-.data$zvalues,
+               -.data$intercepts,
+               -.data$ref_correctie)
+
 
       #Waarde voor TheoretischMaximum vervangen
       #in geval Oppervlakte_opname = TRUE
