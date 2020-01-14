@@ -28,6 +28,9 @@
 
 parseTaxonnaam <- function(Taxonnaam, ParseType = "canonicalnamewithmarker") {
 
+  if (length(Taxonnaam) == 0) {
+    return(as.character("geen soort opgegeven (lege vector)"))
+  }
   if (all(is.na(Taxonnaam))) {
     return(rep(NA, length(Taxonnaam)))
   }
@@ -48,6 +51,11 @@ parseTaxonnaam <- function(Taxonnaam, ParseType = "canonicalnamewithmarker") {
   Taxonnaam <- gsub(" sensu lato$", " s.l.", Taxonnaam)
   Taxonnaam <-
     gsub("^([A-Z][a-z]+\\s[a-z]+)(\\/[a-z]+)+$", "\\1 s.l.", Taxonnaam)
+  Taxonnaam <-
+    gsub(
+      "^([A-Z][a-z]+)\\s([A-Z][a-z]*\\.?)\\s(subg.(\\s[A-Z][a-z]+\\.?)(\\s?[A-Z]?[a-z]*\\.?)*)$", #nolint
+      "\\1 \\3", Taxonnaam
+    )
   Resultaat <- parsenames(Taxonnaam)
   if ("sensu" %in% colnames(Resultaat)) {
     Resultaat[, c(ParseType)] <-
