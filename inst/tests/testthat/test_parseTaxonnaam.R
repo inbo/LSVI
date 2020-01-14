@@ -63,6 +63,14 @@ describe("parseTaxonnaam", {
       parseTaxonnaam("Begonia x semperflorens hort. nom. nud."),
       "Begonia xsemperflorens cv."
     )
+    expect_equal(
+      parseTaxonnaam("Centaurea subg. Jacea"),
+      "subgen. Jacea"
+    )
+    expect_equal(
+      parseTaxonnaam("Centaurea L. subg. Jacea"),
+      "subgen. Jacea"
+    )
   })
 
 })
