@@ -183,7 +183,6 @@ geefSoortenlijstVoorIDs <-
           AND Tx2.NbnTaxonVersionKey = Ts2.NbnTaxonVersionKey
       )"
     }
-      
 
     if (Klasse == "Microsoft SQL Server") {
       QueryLSVIfiche <-
