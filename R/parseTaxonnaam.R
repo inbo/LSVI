@@ -34,42 +34,10 @@ parseTaxonnaam <- function(Taxonnaam, ParseType = "canonicalnamewithmarker") {
   if (all(is.na(Taxonnaam))) {
     return(rep(NA, length(Taxonnaam)))
   }
+  Taxonnaam <- preparseTaxonnaam(Taxonnaam)
 
-  Taxonnaam <- gsub("v\\.d\\.", "v. d.", Taxonnaam)
-  Taxonnaam <- gsub(" v\\.", " Van", Taxonnaam)
-  Taxonnaam <- gsub(" non ", " Non", Taxonnaam)
-  Taxonnaam <- gsub(" auct\\. ", " Auct. ", Taxonnaam)
-  Taxonnaam <- gsub(" auct\\.$", " Auct.", Taxonnaam)
-  Taxonnaam <- gsub(" auct\\., ", " ", Taxonnaam)
-  Taxonnaam <- gsub(" den ", " Den ", Taxonnaam)
-  Taxonnaam <- gsub(" an ", " An ", Taxonnaam)
-  Taxonnaam <- gsub(" anon ", " Anon ", Taxonnaam)
-  Taxonnaam <- gsub(" f.$", "", Taxonnaam)
-  Taxonnaam <- gsub(" f.)$", ")", Taxonnaam)
-  Taxonnaam <- gsub(" nom\\. illegit\\.$", " nom. illeg.", Taxonnaam)
-  Taxonnaam <- gsub(" nom\\. superfl\\.$", "", Taxonnaam)
-  Taxonnaam <- gsub(" sensu lato$", " s.l.", Taxonnaam)
-  Taxonnaam <-
-    gsub("^([A-Z][a-z]+\\s[a-z]+)(\\/[a-z]+)+$", "\\1 s.l.", Taxonnaam)
-  Taxonnaam <-
-    gsub(
-      "^([A-Z][a-z]+)\\s([A-Z][a-z]*\\.?)\\s(subg.(\\s[A-Z][a-z]+\\.?)(\\s?[A-Z]?[a-z]*\\.?)*)$", #nolint
-      "\\1 \\3", Taxonnaam
-    )
-  Resultaat <- parsenames(Taxonnaam)
-  if ("sensu" %in% colnames(Resultaat)) {
-    Resultaat[, c(ParseType)] <-
-      trimws(
-        paste(
-          Resultaat[, c(ParseType)],
-          ifelse(is.na(Resultaat$sensu) | Resultaat$sensu == "s.s.", "",
-                 ifelse(Resultaat$sensu == "s.l.", "groep", Resultaat$sensu))
-        )
-      )
-  }
-  Resultaat <- Resultaat[, c(ParseType)]
-  Resultaat <- gsub("\U00D7", "x", Resultaat)
-  Resultaat <- gsub("^NA$", NA, Resultaat)
+  ResultaatParser <- parsenames(Taxonnaam)
+  Resultaat <- postparseTaxonnaam(ResultaatParser, ParseType)
 
   return(Resultaat)
 }
