@@ -222,7 +222,10 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
     bind_rows(
       Invoervereisten %>%
         filter(
-          .data$AnalyseVariabele %in% c("aantal", "bedekking")
+          .data$AnalyseVariabele %in%
+            c("aandeel", "aantal", "aantalGroepen", "bedekking",
+              "bedekkingExcl", "maxBedekking", "maxBedekking2s",
+              "maxBedekkingExcl")
         ) %>%
         filter(
           is.na(.data$TaxongroepId) & is.na(.data$Studiegroepnaam)
@@ -230,6 +233,21 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
         mutate(
           Probleem =
             "Er is geen soortengroep of studiegroep opgegeven"
+        )
+    ) %>%
+    bind_rows(
+      Invoervereisten %>%
+        filter(
+          .data$AnalyseVariabele %in%
+            c("aandeelKruidlaag", "bedekkingLaag", "bedekkingLaagExcl",
+              "bedekkingLaagPlus", "bedekkingSom")
+        ) %>%
+        filter(
+          is.na(.data$TaxongroepId) & is.na(.data$Studiegroepnaam)
+        ) %>%
+        mutate(
+          Probleem =
+            "Er moet een soortengroep en studiegroep opgegeven worden (of de AnalyseVariabele aangepast)" #nolint
         )
     ) %>%
     bind_rows(
@@ -247,11 +265,14 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
       Invoervereisten %>%
         filter(
           !is.na(.data$SubAnalyseVariabele) &
-            .data$AnalyseVariabele != "aantal"
+            !.data$AnalyseVariabele %in%
+            c("aantal", "aandeel", "aandeelKruidlaag", "bedekking",
+              "bedekkingExcl", "maxBedekking", "maxBedekking2s",
+              "maxBedekkingExcl")
         ) %>%
         mutate(
           Probleem =
-            "De AnalyseVariabele moet aantal zijn als een subanalysevariabele opgegeven is" #nolint
+            "Voor deze AnalyseVariabele mag geen subanalysevariabele opgegeven worden" #nolint
         )
     ) %>%
     bind_rows(

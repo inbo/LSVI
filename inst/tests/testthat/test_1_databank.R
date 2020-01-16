@@ -464,7 +464,7 @@ describe("test databank", {
     }
   })
 
-  it("AnalyseVariabele aantal heeft telkens een SoortengroepId of StudiegroepId", { #nolint
+  it("AnalyseVariabelen hebben telkens een SoortengroepId of StudiegroepId", {
     ConnectieLSVIhabitats <-
       connecteerMetLSVIlite()
     av <-
@@ -474,9 +474,11 @@ describe("test databank", {
         TypeVariabele.Naam as TypeVariabele
         FROM AnalyseVariabele INNER JOIN TypeVariabele
         ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
-        WHERE AnalyseVariabele.VariabeleNaam = 'aantal'"
+        WHERE AnalyseVariabele.VariabeleNaam in ('aantal', 'aantalGroepen',
+          'aandeel', 'bedekking', 'bedekkingExcl', 'maxBedekking',
+          'maxBedekking2s', 'maxBedekkingExcl')"
       )
-    skip_if_not(nrow(av) > 0, "aantal komt niet voor")
+    skip_if_not(nrow(av) > 0, "AV komen niet voor")
     Refwaarden <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -491,34 +493,56 @@ describe("test databank", {
     )
   })
 
-  it(
-    "AnalyseVariabele bedekking heeft telkens een SoortengroepId of StudiegroepId" #nolint
-    , {
-      ConnectieLSVIhabitats <-
-        connecteerMetLSVIlite()
-      av <-
-        dbGetQuery(
-          ConnectieLSVIhabitats,
-          "SELECT AnalyseVariabele.Id, AnalyseVariabele.VariabeleNaam,
+  it("AnalyseVariabelen hebben telkens een SoortengroepId en StudiegroepId", {
+    ConnectieLSVIhabitats <-
+      connecteerMetLSVIlite()
+    av <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        "SELECT AnalyseVariabele.Id, AnalyseVariabele.VariabeleNaam,
         TypeVariabele.Naam as TypeVariabele
         FROM AnalyseVariabele INNER JOIN TypeVariabele
         ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
-        WHERE AnalyseVariabele.VariabeleNaam = 'bedekking'"
-        )
-      skip_if_not(nrow(av) > 0, "bedekking komt niet voor")
-      Refwaarden <-
-        dbGetQuery(
-          ConnectieLSVIhabitats,
-          sprintf(
-            "SELECT TaxongroepId, StudiegroepId FROM Voorwaarde
-          WHERE AnalyseVariabeleId in ('%s')",
-            paste(av$Id, collapse = "','")
-          )
-        )
-      expect_true(
-        all(!is.na(Refwaarden$TaxongroepId) | !is.na(Refwaarden$StudiegroepId))
+        WHERE AnalyseVariabele.VariabeleNaam in ('aandeelKruidlaag', 
+          'bedekkingLaag', 'bedekkingLaagExcl', 'bedekkingLaagPlus',
+          'bedekkingSom')"
       )
-    })
+    skip_if_not(nrow(av) > 0, "AV komen niet voor")
+    Refwaarden <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        sprintf(
+          "SELECT TaxongroepId, StudiegroepId FROM Voorwaarde
+          WHERE AnalyseVariabeleId in ('%s')",
+          paste(av$Id, collapse = "','")
+        )
+      )
+    expect_true(
+      all(!is.na(Refwaarden$TaxongroepId) & !is.na(Refwaarden$StudiegroepId))
+    )
+  })
+
+  it("AV bedekkingLaagExcl en bedekkingLaagPlus hebben 2 Soortengroepen", {
+    ConnectieLSVIhabitats <-
+      connecteerMetLSVIlite()
+    tg <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        "SELECT vw.TaxongroepId, tgtg.TaxongroepChildId
+        FROM Voorwaarde vw
+          INNER JOIN AnalyseVariabele av ON vw.AnalyseVariabeleId = av.Id
+          INNER JOIN TypeVariabele tv ON av.TypeVariabeleId = tv.Id
+          LEFT JOIN TaxongroepTaxongroep tgtg
+            ON vw.TaxongroepId = tgtg.TaxongroepParentId
+        WHERE av.VariabeleNaam in ('bedekkingLaagExcl', 'bedekkingLaagPlus')"
+      )
+    skip_if_not(nrow(av) > 0, "AV komen niet voor")
+    Aantalgroepen <- tg %>%
+      count(TaxongroepId)
+    expect_true(
+      all(Aantalgroepen$n == 2)
+    )
+  })
 
   it("TypeVariabele Vrije tekst is nergens gebruikt", {
       ConnectieLSVIhabitats <-
@@ -607,7 +631,7 @@ describe("test databank", {
     )
   })
 
-  it("De subanalysevariabele is enkel gebruikt bij AnalyseVariabele aantal", {
+  it("De subanalysevariabele is enkel gebruikt bij AnalyseVariabelen die dit ondersteunen", { #nolint
     ConnectieLSVIhabitats <-
       connecteerMetLSVIlite()
     av <-
@@ -621,7 +645,10 @@ describe("test databank", {
       ON vw.AnalyseVariabeleId = av.Id"
       )
     expect_true(
-      all(av$VariabeleNaam == "aantal")
+      all(av$VariabeleNaam %in%
+            c("aantal", "aandeel", "aandeelKruidlaag", "bedekking",
+              "bedekkingExcl", "maxBedekking", "maxBedekking2s",
+              "maxBedekkingExcl"))
     )
   })
 
