@@ -10,6 +10,8 @@
 #' @return Deze functie geeft de licht aangepaste naam of namen terug (als
 #' string of vector van strings)
 #'
+#' @noRd
+#'
 
 preparseTaxonnaam <- function(Taxonnaam) {
 
