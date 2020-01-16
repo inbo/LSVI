@@ -65,7 +65,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
       WHERE NOT VariabeleNaam in ('aantal', 'aandeel', 'aandeelKruidlaag',
         'bedekking', 'maxBedekking', 'maxBedekkingExcl', 'bedekkingLaag',
         'bedekkingSom', 'bedekkingExcl', 'maxBedekking2s', 'bedekkingLaagExcl',
-        'bedekkingLaagPlus')
+        'bedekkingLaagPlus', 'aantalGroepen')
       AND NOT VariabeleNaam LIKE 'meting%'"
     ) %>%
     transmute(
@@ -89,12 +89,13 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
       !.data$AnalyseVariabele %in%
         c("aantal", "aandeel", "aandeelKruidlaag", "bedekking", "bedekkingLaag",
           "maxBedekking", "maxBedekkingExcl", "bedekkingSom", "bedekkingExcl",
-          "maxBedekking2s", "bedekkingLaagExcl", "bedekkingLaagPlus"),
+          "maxBedekking2s", "bedekkingLaagExcl", "bedekkingLaagPlus",
+          "aantalGroepen"),
       !grepl("^meting", .data$AnalyseVariabele)
     )
   TypeAantalNietGeheelGetal <- Invoervereisten %>%
     filter(
-      .data$AnalyseVariabele == "aantal" &
+      .data$AnalyseVariabele %in% c("aantal", "aantalGroepen") &
         .data$TypeVariabele != "Geheel getal"
     )
   TypeBedekkingFout <- Invoervereisten %>%
