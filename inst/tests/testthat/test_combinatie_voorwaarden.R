@@ -2,9 +2,9 @@ context("complexe combinatie van voorwaarden")
 
 library(dplyr)
 maakConnectiePool()
-Data_habitat <-
+data_habitat <-
   data.frame(ID = 1, Habitattype = "7150", stringsAsFactors = FALSE)
-Data_voorwaarden <-
+data_voorwaarden <-
   data.frame(
     ID = 1,
     Criterium = "Vegetatie",
@@ -24,8 +24,8 @@ describe("4 voorwaarden combineren", {
       berekenLSVIbasis(
         Versie = "Versie 2.0",
         Kwaliteitsniveau = 1,
-        Data_habitat = Data_habitat,
-        Data_voorwaarden = Data_voorwaarden
+        data_habitat,
+        data_voorwaarden
       )[["Resultaat_indicator"]] %>%
         filter(Indicator == "sleutelsoorten") %>%
         select(Status_indicator, Verschilscore),
@@ -39,8 +39,8 @@ describe("4 voorwaarden combineren", {
       berekenLSVIbasis(
         Versie = "Versie 2.0",
         Kwaliteitsniveau = 1,
-        Data_habitat = Data_habitat,
-        Data_voorwaarden = Data_voorwaarden %>%
+        data_habitat,
+        data_voorwaarden %>%
           mutate(Waarde = Waarde + 1)
       )[["Resultaat_detail"]] %>%
         filter(Indicator == "sleutelsoorten") %>%
@@ -60,8 +60,8 @@ describe("4 voorwaarden combineren", {
       berekenLSVIbasis(
         Versie = "Versie 2.0",
         Kwaliteitsniveau = 1,
-        Data_habitat = Data_habitat,
-        Data_voorwaarden = Data_voorwaarden %>%
+        data_habitat,
+        data_voorwaarden %>%
           mutate(Waarde = Waarde + 1)
       )[["Resultaat_indicator"]] %>%
         filter(Indicator == "sleutelsoorten") %>%
@@ -77,8 +77,8 @@ describe("4 voorwaarden combineren", {
       berekenLSVIbasis(
         Versie = "Versie 2.0",
         Kwaliteitsniveau = 1,
-        Data_habitat = Data_habitat,
-        Data_voorwaarden = Data_voorwaarden %>%
+        data_habitat,
+        data_voorwaarden %>%
           mutate(Waarde = Waarde + 2)
       )[["Resultaat_indicator"]] %>%
         filter(Indicator == "sleutelsoorten") %>%
