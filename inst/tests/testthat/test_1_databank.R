@@ -536,7 +536,7 @@ describe("test databank", {
             ON vw.TaxongroepId = tgtg.TaxongroepParentId
         WHERE av.VariabeleNaam in ('bedekkingLaagExcl', 'bedekkingLaagPlus')"
       )
-    skip_if_not(nrow(av) > 0, "AV komen niet voor")
+    skip_if_not(nrow(tg) > 0, "AV komen niet voor")
     Aantalgroepen <- tg %>%
       count(TaxongroepId)
     expect_true(
