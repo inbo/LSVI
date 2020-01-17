@@ -243,7 +243,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
               "bedekkingLaagPlus", "bedekkingSom")
         ) %>%
         filter(
-          is.na(.data$TaxongroepId) & is.na(.data$Studiegroepnaam)
+          is.na(.data$TaxongroepId) | is.na(.data$Studiegroepnaam)
         ) %>%
         mutate(
           Probleem =
