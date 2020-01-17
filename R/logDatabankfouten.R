@@ -116,6 +116,14 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
       ConnectieLSVIhabitats,
       "SELECT Waarde FROM LijstItem"
     )
+  TweeTaxongroepen <-
+    dbGetQuery(
+      ConnectieLSVIhabitats,
+      "SELECT tgtg.TaxongroepParentId AS tg, tgtg.TaxongroepChildId AS tgChild
+      FROM TaxongroepTaxongroep tgtg"
+    ) %>%
+    count(tg) %>%
+    filter(n == 2)
 
   Voorwaarden <- OnbekendeAV %>%
     mutate(
@@ -248,6 +256,20 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
         mutate(
           Probleem =
             "Er moet een soortengroep en studiegroep opgegeven worden (of de AnalyseVariabele aangepast)" #nolint
+        )
+    ) %>%
+    bind_rows(
+      Invoervereisten %>%
+        filter(
+          .data$AnalyseVariabele %in%
+            c("bedekkingLaagExcl", "bedekkingLaagPlus")
+        ) %>%
+        filter(
+          !(.data$TaxongroepId) %in% TweeTaxongroepen$tg
+        ) %>%
+        mutate(
+          Probleem =
+            "Er moeten 2 soortengroepen opgegeven worden (of de AnalyseVariabele aangepast)" #nolint
         )
     ) %>%
     bind_rows(
