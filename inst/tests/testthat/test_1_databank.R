@@ -503,7 +503,7 @@ describe("test databank", {
         TypeVariabele.Naam as TypeVariabele
         FROM AnalyseVariabele INNER JOIN TypeVariabele
         ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
-        WHERE AnalyseVariabele.VariabeleNaam in ('aandeelKruidlaag', 
+        WHERE AnalyseVariabele.VariabeleNaam in ('aandeelKruidlaag',
           'bedekkingLaag', 'bedekkingLaagExcl', 'bedekkingLaagPlus',
           'bedekkingSom')"
       )
