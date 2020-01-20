@@ -43,7 +43,7 @@ Omwille van de complexiteit van de berekening roept berekenLSVIbasis een aantal 
 
 ##Doelstellingen
 
-Momenteel bevat het package enkel een basisfunctionaliteit: zoekfuncties om alle onderdelen van de databank weer te geven in een naar ons gevoel logische groepering, en de basisfunctie voor de berekening van de LSVI (die nog maar beperkt werkt!).  Op de planning staan een berekenLSVI-functie voor de verwerking van de fieldmap-gegevens (o.a. opnamen in bossen) en de habitatgegevens van het kwaliteitsmeetnet in INBOVEG, en een rekenmodule voor LSVI-opnamen om de LSVI van Natura 2000-habitattypen toe te voegen aan het platform PAS/DPB.  
+Momenteel bevat het package enkel een basisfunctionaliteit: zoekfuncties om alle onderdelen van de databank weer te geven in een naar ons gevoel logische groepering, en de basisfunctie voor de berekening van de LSVI.  Op de planning staan een berekenLSVI-functie voor de verwerking van de fieldmap-gegevens (o.a. opnamen in bossen) en de habitatgegevens van het kwaliteitsmeetnet in INBOVEG, en een rekenmodule voor LSVI-opnamen om de LSVI van Natura 2000-habitattypen toe te voegen aan het platform PAS/DPB.  
 
 De doelstelling is om het package op deze manier stap voor stap verder uit te breiden met nieuwe functionaliteiten op vraag van gebruikers, in het kader van projecten, naar aanleiding van nieuwe berekeningswijzen voor de LSVI,...  We verwachten hiervoor input van de gebruikers (hoe moet de berekening gebeuren,...).  Ook hopen we dat alle scripts die in het kader van de LSVI ontwikkeld worden, uiteindelijk hun weg vinden naar dit package (zie ook de laatste paragraaf van dit onderdeel).  Op die manier is er één plaats waar iedereen voor LSVI-informatie en -berekeningen terecht kan, kan iedereen alle eerder ontwikkelde berekeningsmethoden voor de LSVI op zijn/haar gegevens toepassen en vermijden we binnen INBO een wildgroei van berekeningsmethoden met licht afwijkende resultaten.
 
@@ -64,8 +64,6 @@ Het package kan als volgt geïnstalleerd worden: <!-- aanpassen als er iets in d
 # install.packages("remotes")
 remotes::install_github("inbo/LSVI@develop", build = TRUE, build_opts = c("--no-resave-data", "--no-manual"))
 ```
-
-Om de functies uit het package te kunnen gebruiken, moet een connectie gemaakt worden met de databank `D0122_00_LSVIHabitatTypes` die op server `INBO-SQL07-PRD.inbo.be` staat en alle informatie in verband met de LSVI-indicatoren bevat (zie 'Doelstellingen en inhoud package' > 'Inhoud package' voor achtergrondinformatie en 'Gebruik basisfuncties' > 'Basis van LSVI-package' voor hoe die connectie gelegd kan worden).  Dit betekent dat gebruikers die niet op het INBO-netwerk werken, een kopie van deze databank nodig hebben en de locatie en naam van deze databank telkens moeten specifiëren in de functie `connecteerMetLSVIdb()`.  (Dit is een voorlopige oplossing: zodra deze databank in orde is, zal ze geïntegreerd worden in het package zelf, waardoor iedereen de functies uit het package zal kunnen gebruiken.)
 
 #Gebruik basisfuncties
 

@@ -1,13 +1,17 @@
 #' Lijst alle nog op te lossen databankfouten op
-#' 
-#' Deze functie geeft een log-tabel met alle problemen die nog in de databank zitten.  Enerzijds is er een beperkte tabel met problemen die op een hoger niveau opgelost kunnen worden en anderzijds een detail met alle Voorwaarden waar nog een fout in zit.  Problemen die op beide niveaus kunnen opgelost worden (bv. benoemen van AnalyseVariabelen), staan op beide niveaus vermeld.
-#' 
+#'
+#' Deze functie geeft een log-tabel met alle problemen die nog in de databank
+#' zitten.  Enerzijds is er een beperkte tabel met problemen die op een hoger
+#' niveau opgelost kunnen worden en anderzijds een detail met alle Voorwaarden
+#' waar nog een fout in zit.  Problemen die op beide niveaus kunnen opgelost
+#' worden (bv. benoemen van AnalyseVariabelen), staan op beide niveaus vermeld.
+#'
 #' @inheritParams selecteerIndicatoren
-#' 
+#'
 #' @return Deze functie geeft een list met 2 dataframes terug
-#' 
+#'
 #' @export
-#' 
+#'
 #' @importFrom DBI dbGetQuery
 #' @importFrom dplyr %>% bind_rows filter mutate transmute
 #' @importFrom stringr str_detect str_replace_all
@@ -60,7 +64,8 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
       On AnalyseVariabele.Id = Voorwaarde.AnalyseVariabeleId
       WHERE NOT VariabeleNaam in ('aantal', 'aandeel', 'aandeelKruidlaag',
         'bedekking', 'maxBedekking', 'maxBedekkingExcl', 'bedekkingLaag',
-        'bedekkingSom', 'bedekkingExcl')
+        'bedekkingSom', 'bedekkingExcl', 'maxBedekking2s', 'bedekkingLaagExcl',
+        'bedekkingLaagPlus')
       AND NOT VariabeleNaam LIKE 'meting%'"
     ) %>%
     transmute(
@@ -83,7 +88,8 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
     filter(
       !.data$AnalyseVariabele %in%
         c("aantal", "aandeel", "aandeelKruidlaag", "bedekking", "bedekkingLaag",
-          "maxBedekking", "maxBedekkingExcl", "bedekkingSom", "bedekkingExcl"),
+          "maxBedekking", "maxBedekkingExcl", "bedekkingSom", "bedekkingExcl",
+          "maxBedekking2s", "bedekkingLaagExcl", "bedekkingLaagPlus"),
       !grepl("^meting", .data$AnalyseVariabele)
     )
   TypeAantalNietGeheelGetal <- Invoervereisten %>%
@@ -94,7 +100,8 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
   TypeBedekkingFout <- Invoervereisten %>%
     filter(
       .data$AnalyseVariabele %in%
-        c("bedekking", "maxBedekking", "maxBedekkingExcl"),
+        c("bedekking", "maxBedekking", "maxBedekkingExcl", "maxBedekking2s",
+          "bedekkingLaag", "bedekkingLaagExcl", "bedekkingLaagPlus"),
       !.data$TypeVariabele %in% c("Percentage", "Categorie")
     )
   TypeAandeelFout <- Invoervereisten %>%
@@ -188,7 +195,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
           .data$TypeVariabele == "Categorie"
         ) %>%
         filter(
-          !.data$Referentiewaarde %in% LijstItems$Waarde
+          !tolower(.data$Referentiewaarde) %in% tolower(LijstItems$Waarde)
         ) %>%
         mutate(
           Probleem =
@@ -228,11 +235,22 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
       Invoervereisten %>%
         filter(
           !is.na(.data$SubAnalyseVariabele) &
-            .data$SubAnalyseVariabele != "bedekking"
+            !.data$SubAnalyseVariabele %in% c("bedekking", "aandeel")
         ) %>%
         mutate(
           Probleem =
-            "De SubAnalyseVariabele moet bedekking zijn"
+            "De SubAnalyseVariabele moet bedekking of aandeel zijn"
+        )
+    ) %>%
+    bind_rows(
+      Invoervereisten %>%
+        filter(
+          !is.na(.data$SubAnalyseVariabele) &
+            .data$AnalyseVariabele != "aantal"
+        ) %>%
+        mutate(
+          Probleem =
+            "De AnalyseVariabele moet aantal zijn als een subanalysevariabele opgegeven is" #nolint
         )
     ) %>%
     bind_rows(
@@ -243,7 +261,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
         ) %>%
         mutate(
           Probleem =
-            "De SubAnalyseVariabele moet ingevuld zijn als er een SubReferentiewaarde opgegeven is" #nolint
+            "De SubAnalyseVariabele moet ingevuld zijn als er een SubReferentiewaarde opgegeven is: kies je voorwaarde zodanig dat deze niet overlapt met een voorwaarde die gebruikt wordt zonder SubAnalyseVariabele en geef nieuwe voorwaarden door aan BMK" #nolint
         )
     ) %>%
     bind_rows(

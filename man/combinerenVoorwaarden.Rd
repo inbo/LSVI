@@ -7,21 +7,26 @@
 combinerenVoorwaarden(Formule, VoorwaardeID, Status)
 }
 \arguments{
-\item{Formule}{string van ID's gecombineerd met EN en OF, bijvoorbeeld '(720 EN 721) OF 15'}
+\item{Formule}{string van ID's gecombineerd met EN en OF, bijvoorbeeld
+'(720 EN 721) OF 15'}
 
-\item{VoorwaardeID}{vector van alle voorwaardeID's die voorkomen in de Formule}
+\item{VoorwaardeID}{vector van alle voorwaardeID's die voorkomen in de
+Formule}
 
-\item{Status}{vector met voor elke VoorwaardeID een overeenkomstige logische waarde status (TRUE of FALSE)}
+\item{Status}{vector met voor elke VoorwaardeID een overeenkomstige logische
+waarde status (TRUE of FALSE)}
 }
 \value{
-logische waarde TRUE/FALSE die de uitkomst van de Formule is (gecombineerd met VoorwaardeID en Status)
+logische waarde TRUE/FALSE die de uitkomst van de Formule is
+(gecombineerd met VoorwaardeID en Status)
 }
 \description{
-Technische hulpfunctie die in een formule de ID's vervangt door opgegeven logische waarden en het resultaat van de formule teruggeeft.
+Technische hulpfunctie die in een formule de ID's vervangt door
+opgegeven logische waarden en het resultaat van de formule teruggeeft.
 }
 \examples{
-#onderstaand voorbeeld geeft problemen bij het testen van het package door devtools
-#maar buiten deze context werkt het wel
+#onderstaand voorbeeld geeft problemen bij het testen van het package door
+#devtools, maar buiten deze context werkt het wel
 \dontrun{
 combinerenVoorwaarden(
   "(720 AND 721) OR 15",

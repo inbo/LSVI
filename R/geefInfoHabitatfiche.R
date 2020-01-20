@@ -1,17 +1,32 @@
-#' @title Geeft tabel met info uit de LSVI-rapporten voor de opgegeven parameters
+#' @title Geeft tabel met info uit de LSVI-rapporten voor de opgegeven
+#' parameters
 #'
-#' @description Deze functie geeft de inhoud van de tabellen habitatkarakteristieken en beoordelingsmatrix uit de rapporten van de Lokale Staat van Instandhouding voor de habitattypes die voldoen aan de opgegeven parameters.  Volledigheidshalve geeft ze ook de uitgebreide namen van de habitattypes en habitatsubtypes.  De uitvoer van deze functie kan gebruikt worden om rapportages op te maken (bv. rapport samenstellen met LSVI-criteria,...).  Een 'afgewerkt rapport' kan gegenereerd worden met de functie maakHabitatfiches().
+#' @description Deze functie geeft de inhoud van de tabellen
+#' habitatkarakteristieken en beoordelingsmatrix uit de rapporten van de Lokale
+#' Staat van Instandhouding voor de habitattypes die voldoen aan de opgegeven
+#' parameters.  Volledigheidshalve geeft ze ook de uitgebreide namen van de
+#' habitattypes en habitatsubtypes.  De uitvoer van deze functie kan gebruikt
+#' worden om rapportages op te maken (bv. rapport samenstellen met
+#' LSVI-criteria,...).  Een 'afgewerkt rapport' kan gegenereerd worden met de
+#' functie maakHabitatfiches().
 #'
 #'@template Zoekparameters
 #'
 #' @inheritParams selecteerIndicatoren
-#' @param Stijl Keuze uit "Rmd" en "tekst".  Bij Rmd (default) worden soortgroepnamen voorafgegaan en gevolgd door "__" en Latijnse namen van soorten door "_", waardoor deze bij gebruik van RMarkdown worden omgezet naar resp. vet en italics.  Bij tekst worden deze underscores weggelaten.
+#' @param Stijl Keuze uit "Rmd" en "tekst".  Bij Rmd (default) worden
+#' soortgroepnamen voorafgegaan en gevolgd door "__" en Latijnse namen van
+#' soorten door "_", waardoor deze bij gebruik van RMarkdown worden omgezet
+#' naar resp. vet en italics.  Bij tekst worden deze underscores weggelaten.
 #'
-#' @return Deze functie genereert een tabel met alle gegevens die nodig zijn om de tabellen habitatkarakteristieken en beoordelingsmatrix uit de LSVI-rapporten te genereren.
+#' @return Deze functie genereert een tabel met alle gegevens die nodig zijn om
+#' de tabellen habitatkarakteristieken en beoordelingsmatrix uit de
+#' LSVI-rapporten te genereren.
 #'
 #' @examples
-#' # deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
-#' # een connectie gelegd kan worden met de SQL Server-databank binnen INBO
+#' # Omwille van de iets langere lange duurtijd van de commando's staat bij
+#' # onderstaand voorbeeld de vermelding 'dontrun' (om problemen te vermijden
+#' # bij het testen van het package). Maar het voorbeeld werkt en kan zeker
+#' # uitgetest worden.
 #' \dontrun{
 #' library(LSVI)
 #' maakConnectiePool()
@@ -23,7 +38,8 @@
 #' @export
 #'
 #' @importFrom DBI dbGetQuery
-#' @importFrom dplyr arrange distinct mutate group_by summarise ungroup select left_join filter mutate_
+#' @importFrom dplyr arrange distinct mutate group_by summarise ungroup select
+#' left_join filter mutate_
 #' @importFrom rlang .data
 #' @importFrom lazyeval interp
 #' @importFrom assertthat assert_that
@@ -36,7 +52,7 @@ geefInfoHabitatfiche <-
            Criterium = "alle",
            Indicator = "alle",
            Stijl = c("Rmd", "tekst"),
-           ConnectieLSVIhabitats = NULL){
+           ConnectieLSVIhabitats = NULL) {
 
     match.arg(Stijl)
     if (is.null(ConnectieLSVIhabitats)) {
@@ -61,7 +77,7 @@ geefInfoHabitatfiche <-
         ConnectieLSVIhabitats
       )
 
-    Indicator_hIDs <-
+    indicator_habitat_ids <-
       paste(
         unique(
           (Selectiegegevens %>%
@@ -77,14 +93,14 @@ geefInfoHabitatfiche <-
         AS Beschrijving_naSoorten,
       cast(Indicator_habitat.Maatregelen AS nvarchar(510)) AS Maatregelen,
       cast(Indicator_habitat.Opmerkingen AS nvarchar(830)) AS Opmerkingen,
-      cast(Indicator_habitat.Referenties AS nvarchar(260)) AS Referenties,
+      cast(Indicator_habitat.Referenties AS nvarchar(290)) AS Referenties,
       Indicator_habitat.TaxongroepId
       FROM Indicator_habitat
       WHERE Indicator_habitat.Id in ('%s')",
-      Indicator_hIDs
+      indicator_habitat_ids
     )
 
-    Indicator_bIDs <-
+    indicator_beoordeling_ids <-
       paste(
         unique(
           (Selectiegegevens %>%
@@ -99,7 +115,7 @@ geefInfoHabitatfiche <-
     query_beoordelingsfiche <- sprintf(
       "SELECT Indicator_beoordeling.Id AS Indicator_beoordelingID,
       Criterium.Naam AS Criterium, Indicator.Naam As Indicator,
-      cast(Indicator_beoordeling.Opmerkingen AS nvarchar(710)) AS Opmerkingen,
+      cast(Indicator_beoordeling.Opmerkingen AS nvarchar(900)) AS Opmerkingen,
       cast(Indicator_beoordeling.Referenties AS nvarchar(150)) AS Referenties,
       Beoordeling.Kwaliteitsniveau,
       cast(Beoordeling.Beoordeling_letterlijk AS nvarchar(360))
@@ -111,7 +127,7 @@ geefInfoHabitatfiche <-
         (Indicator INNER JOIN Criterium on Indicator.CriteriumID = Criterium.Id)
       ON Indicator_beoordeling.IndicatorID = Indicator.Id
       WHERE Indicator_beoordeling.Id in ('%s')",
-      Indicator_bIDs
+      indicator_beoordeling_ids
     )
 
     Habitatkarakteristieken <-
@@ -334,12 +350,12 @@ geefInfoHabitatfiche <-
       Habitatfiche$Beschrijving <- gsub("_", "", Habitatfiche$Beschrijving)
       Habitatfiche$Maatregelen <-
         gsub("_", "", Habitatfiche$Maatregelen)
-      Habitatfiche$Opmerkingen.habitat <-
+      Habitatfiche$Opmerkingen.habitat <- #nolint
         gsub("_", "", Habitatfiche$Opmerkingen.habitat)
       Habitatfiche$Soortenlijst <- gsub("_", "", Habitatfiche$Soortenlijst)
-      Habitatfiche$Opmerkingen.beoordeling <-
+      Habitatfiche$Opmerkingen.beoordeling <- #nolint
         gsub("_", "", Habitatfiche$Opmerkingen.beoordeling)
-      Habitatfiche$Beoordeling_letterlijk <-
+      Habitatfiche$Beoordeling_letterlijk <- #nolint
         gsub("_", "", Habitatfiche$Beoordeling)
     }
 

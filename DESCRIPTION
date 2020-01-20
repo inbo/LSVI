@@ -16,7 +16,7 @@ Authors@R: c(
   person("Research Institute for Nature and Forest (INBO)", email = "info@inbo.be", role = "cph"))
 Description: Het package LSVI bundelt een aantal functies in verband met het ophalen van informatie over en het berekenen van de Lokale Staat Van Instandhouding (LSVI) van habitattypes.
 Depends:
-    R (>= 3.4.0)
+    R (>= 3.5.0)
 License: GPL-3
 LazyData: true
 Encoding: UTF-8
@@ -79,11 +79,15 @@ Collate:
     's4_bedekking.R'
     's4_aandeelKruidlaag.R'
     's4_aantal.R'
+    's4_aantalGroepen.R'
     's4_analyseVariabele_c.R'
     's4_bedekkingExcl.R'
     's4_bedekkingLaag.R'
+    's4_bedekkingLaagExcl.R'
+    's4_bedekkingLaagPlus.R'
     's4_bedekkingSom.R'
     's4_maxBedekking.R'
+    's4_maxBedekking2s.R'
     's4_maxBedekkingExcl.R'
     's4_meting.R'
     'selecteerIndicatoren.R'

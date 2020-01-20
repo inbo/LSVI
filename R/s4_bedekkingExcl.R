@@ -1,8 +1,14 @@
-#' S4-klasse die de totale bedekking van de soorten berekent die niet in de lijst staan
+#' S4-klasse die de totale bedekking van de soorten berekent die niet in de
+#' lijst staan
 #'
-#' Deze klasse BedekkingExcl staat in voor de berekening van waarden voor AnalyseVariabele BedekkingExcl op basis van opgegeven kenmerken.  Ze is een nakomeling van de klasse AnalyseVariabele.  Ze berekent de totale bedekking van soorten die niet in de opgegeven soortenlijst staan (dus alle soorten behalve soorten uit soorten uit lijst).
+#' Deze klasse BedekkingExcl staat in voor de berekening van waarden voor
+#' AnalyseVariabele BedekkingExcl op basis van opgegeven kenmerken.  Ze is een
+#' nakomeling van de klasse AnalyseVariabele.  Ze berekent de totale bedekking
+#' van soorten die niet in de opgegeven soortenlijst staan (dus alle soorten
+#' behalve soorten uit soorten uit lijst).
 #'
-#' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
+#' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden
+#' Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
 #'
 #' @importFrom methods setClass setMethod
 #'
@@ -23,7 +29,7 @@ setMethod(
     object@Kenmerken <- object@Kenmerken %>%
       filter(
         is.na(.data$Eenheid) |
-          (!.data$Eenheid %in% c("Grondvlak_ha", "Volume_ha"))
+          (!tolower(.data$Eenheid) %in% c("grondvlak_ha", "volume_ha"))
       )
 
     Resultaat <-
@@ -50,9 +56,9 @@ setMethod(
       warning("aan- of afwezigheid bedekking")
     } else {
       BedekkingMin <-
-        (1.0 - prod( (1.0 - Resultaat$WaardeMin), na.rm = TRUE))
+        (1.0 - prod((1.0 - Resultaat$WaardeMin), na.rm = TRUE))
       BedekkingMax <-
-        (1.0 - prod( (1.0 - Resultaat$WaardeMax), na.rm = TRUE))
+        (1.0 - prod((1.0 - Resultaat$WaardeMax), na.rm = TRUE))
     }
 
     return(c(BedekkingMin, BedekkingMax))

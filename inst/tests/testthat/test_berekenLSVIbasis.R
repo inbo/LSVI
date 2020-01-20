@@ -5,16 +5,16 @@ library(dplyr)
 library(rlang)
 
 maakConnectiePool()
-Data_habitat <-
+Data_habitat <- #nolint
     read_csv2(
       system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
       col_types = list(col_character(), col_character(), col_character())
     )
-Data_voorwaarden2 <-
+Data_voorwaarden2 <- #nolint
   read_csv2(
     system.file("vbdata/Opname4030voorwaardenv2.csv", package = "LSVI")
   )
-Data_voorwaarden <-
+Data_voorwaarden <- #nolint
   read_csv2(
     system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI")
   )
@@ -22,36 +22,12 @@ if (
   class(ConnectiePool$.__enclos_env__$private$createObject())[1] ==
   "SQLiteConnection"
 ) {
-  Data_voorwaarden <- Data_voorwaarden2
+  Data_voorwaarden <- Data_voorwaarden2 #nolint
 }
-Data_soortenKenmerken <-
+Data_soortenKenmerken <- #nolint
     read_csv2(
       system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI")
     )
-
-# Resultaat <-
-#   idsWissen(
-#     berekenLSVIbasis(
-#       Versie = "Versie 3",
-#       Kwaliteitsniveau = "1", Data_habitat,
-#       Data_voorwaarden, Data_soortenKenmerken
-#     )
-#   )
-# 
-# save(Resultaat, file = "inst/vbdata/Resultaat_test4030.Rdata")  #nolint
-# load("inst/vbdata/Resultaat_test4030.Rdata")  #nolint
-
-# Resultaatv2 <-
-#   idsWissen(
-#     berekenLSVIbasis(
-#       Versie = "Versie 2.0",
-#       Kwaliteitsniveau = "1", Data_habitat,
-#       Data_voorwaarden, Data_soortenKenmerken
-#     )
-#   )
-# 
-# save(Resultaatv2, file = "inst/vbdata/Resultaat_test4030v2.Rdata")  #nolint
-# load("inst/vbdata/Resultaat_test4030v2.Rdata")  #nolint
 
 load(system.file("vbdata/Resultaat_test4030.Rdata", package = "LSVI"))
 load(system.file("vbdata/Resultaat_test4030v2.Rdata", package = "LSVI"))
@@ -438,14 +414,14 @@ describe("berekenLSVIbasis", {
   })
 
   it("functie werkt zonder opgave Data_voorwaarden", {
-    Data_soortenKenmerken2 <-
+    Data_soortenKenmerken2 <- #nolint
       read_csv2(
         system.file(
           "vbdata/Opname4030soortenKenmerkenv2tot.csv",
           package = "LSVI"
         )
       )
-    Resultaat_berekening <-
+    resultaat_berekening <-
       idsWissen(
         berekenLSVIbasis(
           Versie = "Versie 2.0",
@@ -456,13 +432,13 @@ describe("berekenLSVIbasis", {
       )
     stopifnot(
       all.equal(
-        Resultaat_berekening[["Resultaat_criterium"]],
+        resultaat_berekening[["Resultaat_criterium"]],
         Resultaatv2[["Resultaat_criterium"]]
       )
     )
     stopifnot(
       all.equal(
-        Resultaat_berekening[["Resultaat_indicator"]],
+        resultaat_berekening[["Resultaat_indicator"]],
         Resultaatv2[["Resultaat_indicator"]]
       )
     )
@@ -497,7 +473,7 @@ describe("berekenLSVIbasis", {
         ]
     stopifnot(
       all.equal(
-        Resultaat_berekening[["Resultaat_detail"]],
+        resultaat_berekening[["Resultaat_detail"]],
         Resultaatv2detail %>%
           mutate(
             AfkomstWaarde = "berekend",
@@ -528,7 +504,7 @@ describe("berekenLSVIbasis", {
             Waarde =
               ifelse(
                 .data$Waarde == "o" & .data$Criterium == "Verstoring",
-                "2 - 5",
+                "1.2 - 2.5",
                 .data$Waarde
               ),
             TypeWaarde =
@@ -592,7 +568,7 @@ describe("berekenLSVIbasis", {
               Invoertype =
                 ifelse(.data$Waarde == "f", NA, .data$Invoertype),
               Waarde =
-                ifelse(.data$Waarde == "f", "5-10", .data$Waarde)
+                ifelse(.data$Waarde == "f", "2,5-5", .data$Waarde)
             ),
           Data_soortenKenmerken
         )
@@ -613,7 +589,7 @@ describe("berekenLSVIbasis", {
                 100, .data$TheoretischMaximum
               ),
             Waarde =
-              ifelse(.data$Waarde == "f", "5-10", .data$Waarde)
+              ifelse(.data$Waarde == "f", "2,5-5", .data$Waarde)
           ),
         Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]])
     )
@@ -630,7 +606,7 @@ describe("berekenLSVIbasis", {
               Invoertype =
                 ifelse(.data$Waarde == "f", NA, .data$Invoertype),
               Waarde =
-                ifelse(.data$Waarde == "f", "5 - 10", .data$Waarde)
+                ifelse(.data$Waarde == "f", "2,5 - 5", .data$Waarde)
             ),
           Data_soortenKenmerken
         )
@@ -651,7 +627,7 @@ describe("berekenLSVIbasis", {
                 100, .data$TheoretischMaximum
               ),
             Waarde =
-              ifelse(.data$Waarde == "f", "5 - 10", .data$Waarde)
+              ifelse(.data$Waarde == "f", "2,5 - 5", .data$Waarde)
           ),
         Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]])
     )
@@ -947,13 +923,13 @@ describe("berekenLSVIbasis", {
               mutate(
                 Waarde =
                   ifelse(
-                    .data$Waarde == "0" & ID == "Ts2036",
+                    .data$Waarde == "0" & .data$ID == "Ts2036",
                     "1",
                     .data$Waarde
                   ),
                 Type =
                   ifelse(
-                    .data$Type == "Percentage" & ID == "Ts2036",
+                    .data$Type == "Percentage" & .data$ID == "Ts2036",
                     "Ja/nee",
                     .data$Type
                   )
@@ -1035,7 +1011,7 @@ describe("berekenLSVIbasis", {
             Index_harm_harm =
               ifelse(
                 .data$ID == "Ts2036",
-                0.1313062683,
+                0.126462940,
                 .data$Index_harm_harm
               )
           )

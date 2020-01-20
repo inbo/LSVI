@@ -5,12 +5,12 @@ library(dplyr)
 library(rlang)
 
 maakConnectiepoolSQLite()
-Data_habitat <-
+Data_habitat <- #nolint
     read_csv2(
       system.file("vbdata/Test9190habitat.csv", package = "LSVI"),
       col_types = list(col_character(), col_character())
     )
-Data_voorwaarden <-
+Data_voorwaarden <- #nolint
   read_csv2(
     system.file("vbdata/Test9190voorwaarden.csv", package = "LSVI"),
     col_types =
@@ -19,7 +19,7 @@ Data_voorwaarden <-
         col_character(), col_character(), col_character(), col_character()
       )
   )
-Data_soortenKenmerken <-
+Data_soortenKenmerken <- #nolint
   read_csv2(
     system.file("vbdata/Test9190soortenKenmerken.csv", package = "LSVI"),
     col_types =
@@ -30,7 +30,7 @@ Data_soortenKenmerken <-
 
 describe("Data_voorwaarden", {
   it("dubbele invoer geeft een error", {
-    Data_voorwaardenDubbel <- Data_voorwaarden %>%
+    Data_voorwaardenDubbel <- Data_voorwaarden %>% #nolint
       bind_rows(
         data.frame(
           ID = "1", Criterium = "Structuur",
@@ -48,7 +48,7 @@ describe("Data_voorwaarden", {
       ),
       " 1 is de voorwaarde 'msa' meermaals opgegeven"
     )
-    Data_voorwaardenDubbel <- Data_voorwaarden %>%
+    Data_voorwaardenDubbel <- Data_voorwaarden %>% #nolint
       bind_rows(
         data.frame(
           ID = "1", Criterium = "Structuur",
@@ -71,7 +71,7 @@ describe("Data_voorwaarden", {
 
 describe("Data_soortenKenmerken", {
   it("dubbele invoer geeft een error", {
-    Data_soortenKenmerkenDubbel <- Data_soortenKenmerken %>%
+    Data_soortenKenmerkenDubbel <- Data_soortenKenmerken %>% #nolint
       bind_rows(
         data.frame(
           ID = "1", Kenmerk = "Gewone vlier",
@@ -89,7 +89,7 @@ describe("Data_soortenKenmerken", {
       ),
       "'Gewone vlier' meermaals opgegeven voor de boomlaag" #nolint
     )
-    Data_soortenKenmerkenDubbel <- Data_soortenKenmerken %>%
+    Data_soortenKenmerkenDubbel <- Data_soortenKenmerken %>% #nolint
       bind_rows(
         data.frame(
           ID = "1", Kenmerk = "Sambucus nigra",

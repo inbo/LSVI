@@ -1,10 +1,14 @@
 #' S4-klasse die de totale bedekking van de soorten berekent
 #'
-#' Deze klasse Bedekking staat in voor de berekening van waarden voor TypeVariabele Bedekking op basis van opgegeven kenmerken.  Ze is een nakomeling van de klasse AnalyseVariabele.
+#' Deze klasse Bedekking staat in voor de berekening van waarden voor
+#' TypeVariabele Bedekking op basis van opgegeven kenmerken.  Ze is een
+#' nakomeling van de klasse AnalyseVariabele.
 #'
-#' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
+#' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden
+#' Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
 #'
 #' @importFrom methods setClass setMethod
+#' @importFrom dplyr %>% filter
 #'
 #' @include s4_AnalyseVariabele.R
 setClass(
@@ -23,7 +27,7 @@ setMethod(
     object@Kenmerken <- object@Kenmerken %>%
       filter(
         is.na(.data$Eenheid) |
-          (!.data$Eenheid %in% c("Grondvlak_ha", "Volume_ha"))
+          (!tolower(.data$Eenheid) %in% c("grondvlak_ha", "volume_ha"))
       )
 
     Resultaat <-
@@ -50,9 +54,9 @@ setMethod(
       warning("aan- of afwezigheid bedekking")
     } else {
       BedekkingMin <-
-        (1.0 - prod( (1.0 - Resultaat$WaardeMin), na.rm = TRUE))
+        (1.0 - prod((1.0 - Resultaat$WaardeMin), na.rm = TRUE))
       BedekkingMax <-
-        (1.0 - prod( (1.0 - Resultaat$WaardeMax), na.rm = TRUE))
+        (1.0 - prod((1.0 - Resultaat$WaardeMax), na.rm = TRUE))
     }
 
     return(c(BedekkingMin, BedekkingMax))

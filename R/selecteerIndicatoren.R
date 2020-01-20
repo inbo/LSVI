@@ -1,24 +1,51 @@
 #' @title Selecteert indicatoren LSVI op basis van de opgegeven parameters
 #'
-#' @description Deze hulpfunctie selecteert de indicatoren die gebruikt worden voor de bepaling van de Lokale Staat van Instandhouding voor de opgegeven parameters.  Ze is bedoeld om te gebruiken als bouwsteen in andere functies waar de gegevens voor bijvoorbeeld een welbepaalde versie of welbepaalde habitattypes geselecteerd moeten kunnen worden.
+#' @description Deze hulpfunctie selecteert de indicatoren die gebruikt worden
+#' voor de bepaling van de Lokale Staat van Instandhouding voor de opgegeven
+#' parameters.  Ze is bedoeld om te gebruiken als bouwsteen in andere functies
+#' waar de gegevens voor bijvoorbeeld een welbepaalde versie of welbepaalde
+#' habitattypes geselecteerd moeten kunnen worden.
 #'
 #' @template Zoekparameters
 #'
-#' @param ConnectieLSVIhabitats Connectie met de databank met indicatoren voor de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.
-#' @param Versie De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".  Bij de default "alle" worden de gegevens voor de verschillende versies gegeven.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden("Versie", "VersieLSVI") of geefVersieInfo().
-#' @param Habitatgroep Parameter waarmee alle habitats van een bepaalde habitatgroep kunnen geselecteerd worden, bv. "Bossen", "Heiden", "(Half-)natuurlijke graslanden", "Zoete en brakke wateren",...   en "alle" (=default).  Deze waarde moet niet gespecifieerd worden als een bepaald habitat(sub)type geselecteerd wordt.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden("Habitatgroep", "Naam").
-#' @param Habitattype Parameter waarmee een habitattype of habitatsubtype kan geselecteerd worden.  Als dit een habitattype betreft met meerdere subtypes, zullen de gegevens van alle subtypes van dit habitattype weergegeven worden.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden("Habitattype", "Code").  Er is voor deze parameter ook de mogelijkheid om een vector van meerdere habitat(sub)typen op te geven.
-#' @param Criterium Het LSVI-criterium waarvoor de gegevens geselecteerd worden: "Vegetatie", "Structuur", "Verstoring" of "alle".
-#' @param Indicator De indicator waarvoor de gegevens uit de databank gehaald worden.  De mogelijke waarden kunnen opgevraagd worden via geefUniekeWaarden("Indicator", "Naam").
-#' @param HabitatnamenToevoegen Moeten de namen van de habitattypen en habitatsubtypen toegevoegd worden als extra kolommen?  (Bij FALSE worden enkel de habitatcodes toegevoegd, niet de volledige namen.)
+#' @param ConnectieLSVIhabitats Connectie met de databank met indicatoren voor
+#' de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.
+#' @param Versie De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".
+#' Bij de default "alle" worden de gegevens voor de verschillende versies
+#' gegeven.  De mogelijke waarden kunnen opgevraagd worden via
+#' geefUniekeWaarden("Versie", "VersieLSVI") of geefVersieInfo().
+#' @param Habitatgroep Parameter waarmee alle habitats van een bepaalde
+#' habitatgroep kunnen geselecteerd worden, bv. "Bossen", "Heiden",
+#' "(Half-)natuurlijke graslanden", "Zoete en brakke wateren",...   en "alle"
+#' (=default).  Deze waarde moet niet gespecifieerd worden als een bepaald
+#' habitat(sub)type geselecteerd wordt.  De mogelijke waarden kunnen opgevraagd
+#' worden via geefUniekeWaarden("Habitatgroep", "Naam").
+#' @param Habitattype Parameter waarmee een habitattype of habitatsubtype kan
+#' geselecteerd worden.  Als dit een habitattype betreft met meerdere subtypes,
+#' zullen de gegevens van alle subtypes van dit habitattype weergegeven worden.
+#' De mogelijke waarden kunnen opgevraagd worden via
+#' geefUniekeWaarden("Habitattype", "Code").  Er is voor deze parameter ook de
+#' mogelijkheid om een vector van meerdere habitat(sub)typen op te geven.
+#' @param Criterium Het LSVI-criterium waarvoor de gegevens geselecteerd
+#' worden: "Vegetatie", "Structuur", "Verstoring" of "alle".
+#' @param Indicator De indicator waarvoor de gegevens uit de databank gehaald
+#' worden.  De mogelijke waarden kunnen opgevraagd worden via
+#' geefUniekeWaarden("Indicator", "Naam").
+#' @param HabitatnamenToevoegen Moeten de namen van de habitattypen en
+#' habitatsubtypen toegevoegd worden als extra kolommen?  (Bij FALSE worden
+#' enkel de habitatcodes toegevoegd, niet de volledige namen.)
 #'
-#' @return Deze functie geeft een tabel met velden Versie, Habitattype, Habitatsubtype, Criterium, Indicator, Indicator_habitatID, TaxongroepId en Indicator_beoordelingID.
+#' @return Deze functie geeft een tabel met velden Versie, Habitattype,
+#' Habitatsubtype, Criterium, Indicator, Indicator_habitatID, TaxongroepId en
+#' Indicator_beoordelingID.
 #'
 #' @export
 #'
 #' @examples
-#' # deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
-#' # een connectie gelegd kan worden met de SQL Server-databank binnen INBO
+#' # Omwille van de iets langere lange duurtijd van de commando's staat bij
+#' # onderstaande voorbeelden de vermelding 'dontrun' (om problemen te vermijden
+#' # bij het testen van het package). Maar de voorbeelden werken en kunnen zeker
+#' # uitgetest worden.
 #' \dontrun{
 #' library(LSVI)
 #' maakConnectiePool()
@@ -42,7 +69,7 @@ selecteerIndicatoren <-
            Criterium = "alle",
            Indicator = "alle",
            HabitatnamenToevoegen = FALSE,
-           ConnectieLSVIhabitats = NULL){
+           ConnectieLSVIhabitats = NULL) {
 
     if (is.null(ConnectieLSVIhabitats)) {
       if (exists("ConnectiePool")) {
@@ -128,7 +155,8 @@ selecteerIndicatoren <-
           SELECT Habitatgroep.Naam AS Habitatgroepnaam,
             Ht1.Code AS Habitattype, Ht1.Naam AS Habitatnaam,
             Ht1.Code AS Habitatsubtype, Ht1.Naam AS Habitatsubtypenaam,
-            Ht1.Omschrijving AS HabitatsubtypeOmschrijving,
+            cast(Ht1.Omschrijving AS nvarchar(10))
+              AS HabitatsubtypeOmschrijving,
             Ht1.Id AS HabitattypeId, Ht1.Id AS HabitatsubtypeId
           FROM Habitattype AS Ht1 INNER JOIN Habitatgroep
           ON Ht1.HabitatgroepId = Habitatgroep.Id
@@ -137,7 +165,8 @@ selecteerIndicatoren <-
           SELECT Habitatselectie.Habitatgroepnaam,
             Habitatselectie.Habitattype, Habitatselectie.Habitatnaam,
             Ht2.Code AS Habitatsubtype, Ht2.Naam AS Habitatsubtypenaam,
-            Ht2.Omschrijving AS HabitatsubtypeOmschrijving,
+            cast(Ht2.Omschrijving AS nvarchar(10))
+              AS HabitatsubtypeOmschrijving,
             Habitatselectie.HabitattypeId, Ht2.Id AS HabitatsubtypeId
           FROM Habitatselectie INNER JOIN Habitattype AS Ht2
           ON Habitatselectie.HabitatsubtypeId = Ht2.ParentId

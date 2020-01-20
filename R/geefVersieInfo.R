@@ -1,20 +1,21 @@
-#' @title Geeft informatie over de verschillende versies voor de berekening van de LSVI
+#' @title Geeft informatie over de verschillende versies voor de berekening van
+#' de LSVI
 #'
-#' @description Deze functie geeft een overzicht van alle versies die er zijn voor de berekening van de de Lokale Staat van Instandhouding, met naast de opsomming van de versies en de referenties een overzicht van de 2 kwaliteitsniveaus of types van beoordelingscriteria die in deze versie gedefinieerd zijn.
+#' @description Deze functie geeft een overzicht van alle versies die er zijn
+#' voor de berekening van de de Lokale Staat van Instandhouding, met naast de
+#' opsomming van de versies en de referenties een overzicht van de 2
+#' kwaliteitsniveaus of types van beoordelingscriteria die in deze versie
+#' gedefinieerd zijn.
 #'
 #' @inheritParams selecteerIndicatoren
 #'
 #' @return Deze functie geeft de tabel Versie uit de databank.
 #'
 #' @examples
-#' # deze functie, en dus ook onderstaande code, kan enkel gerund worden als er
-#' # een connectie gelegd kan worden met de SQL Server-databank binnen INBO
-#' \dontrun{
 #' maakConnectiePool()
 #' geefVersieInfo()
 #' library(pool)
 #' poolClose(ConnectiePool)
-#' }
 #'
 #' @export
 #'
@@ -23,7 +24,7 @@
 #'
 #'
 geefVersieInfo <-
-  function(ConnectieLSVIhabitats = NULL){
+  function(ConnectieLSVIhabitats = NULL) {
 
     if (is.null(ConnectieLSVIhabitats)) {
       if (exists("ConnectiePool")) {

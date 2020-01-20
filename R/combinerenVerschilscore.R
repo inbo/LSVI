@@ -1,16 +1,23 @@
-#' @title combineert de Verschilscores van voorwaarden die via EN of OF logische operatoren gelinkt zijn
+#' @title combineert de Verschilscores van voorwaarden die via EN of OF
+#' logische operatoren gelinkt zijn
 #'
-#' @description Technische hulpfunctie die in een formule de ID's vervangt door opgegeven logische waarden en het resultaat van de formule teruggeeft.
+#' @description Technische hulpfunctie die in een formule de ID's vervangt door
+#' opgegeven logische waarden en het resultaat van de formule teruggeeft.
 #'
-#' @param Formule string van ID's gecombineerd met EN en OF, bijvoorbeeld '(720 EN 721) OF 15'
-#' @param VoorwaardeID vector van alle voorwaardeID's die voorkomen in de Formule
-#' @param Verschilscore vector met voor elke VoorwaardeID een overeenkomstige verschilscore
+#' @param Formule string van ID's gecombineerd met EN en OF, bijvoorbeeld
+#' '(720 EN 721) OF 15'
+#' @param VoorwaardeID vector van alle voorwaardeID's die voorkomen in de
+#' Formule
+#' @param Verschilscore vector met voor elke VoorwaardeID een overeenkomstige
+#' verschilscore
 #'
-#' @return gecombineerde verschilscore waarbij EN gecombineerd wordt via het minimum van beide verschilscores en OF gecombineerd wordt via het maximum van beide verschilscores
+#' @return gecombineerde verschilscore waarbij EN gecombineerd wordt via het
+#' minimum van beide verschilscores en OF gecombineerd wordt via het maximum
+#' van beide verschilscores
 #'
 #' @examples
-#' #onderstaand voorbeeld geeft problemen bij het testen van het package door devtools
-#' #maar buiten deze context werkt het wel
+#' #onderstaand voorbeeld geeft problemen bij het testen van het package door
+#' #devtools, maar buiten deze context werkt het wel
 #' \dontrun{
 #' combinerenVerschilscore(
 #'   "(720 AND 721) OR 15",
@@ -27,7 +34,7 @@
 #'
 
 combinerenVerschilscore <-
-  function(Formule, VoorwaardeID, Verschilscore){
+  function(Formule, VoorwaardeID, Verschilscore) {
 
     assert_that(is.character(Formule))
     assert_that(all(sapply(VoorwaardeID, is.numeric)))
