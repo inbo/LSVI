@@ -26,10 +26,8 @@ postparseTaxonnaam <-
         paste(
           ResultaatParser[, c(ParseType)],
           ifelse(
-            is.na(ResultaatParser$sensu) | ResultaatParser$sensu == "s.s.", "",
-            ifelse(
-              ResultaatParser$sensu == "s.l.", "groep", ResultaatParser$sensu
-            )
+            is.na(ResultaatParser$sensu) | ResultaatParser$sensu != "s.l.",
+            "" , "groep"
           )
         )
       )

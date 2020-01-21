@@ -28,7 +28,9 @@ preparseTaxonnaam <- function(Taxonnaam) {
   Taxonnaam <- gsub(" f.)$", ")", Taxonnaam)
   Taxonnaam <- gsub(" nom\\. illegit\\.$", " nom. illeg.", Taxonnaam)
   Taxonnaam <- gsub(" nom\\. superfl\\.$", "", Taxonnaam)
+  Taxonnaam <- gsub(" nom\\. conf\\.$", "", Taxonnaam)
   Taxonnaam <- gsub(" sensu lato$", " s.l.", Taxonnaam)
+  Taxonnaam <- gsub(" pro parte$", "", Taxonnaam)
   Taxonnaam <-
     gsub("^([A-Z][a-z]+\\s[a-z]+)(\\/[a-z]+)+$", "\\1 s.l.", Taxonnaam)
   Taxonnaam <-
