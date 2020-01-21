@@ -11,32 +11,34 @@ vignette: >
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(LSVI)
+maakConnectiePool()
 ```
 
 #Inleiding
 
-De functie `berekenLSVIbasis` berekent de Lokale Staat van Instandhouding van habitattypen op basis van opnamen, maar wat gebeurt er eigenlijk onder de motorkap? Dit vignet geeft hier een antwoord op. (Voor inleidende informatie over het gebruik van het package verwijzen we naar het vignet handleiding, en voor het gebruik van de verschillende functies verwijzen we naar de help van de functies in kwestie.)
+De functie `berekenLSVIbasis` berekent de Lokale Staat van Instandhouding van habitattypen op basis van opnamen, maar wat gebeurt er eigenlijk onder de motorkap? Dit vignet geeft hier een antwoord op. (Voor inleidende informatie over het gebruik van het package verwijzen we naar het vignet handleiding (`vignette("Handleiding", package = "LSVI")`), en voor het gebruik van de verschillende functies verwijzen we naar de help van de functies in kwestie (`?berekenLSVIbasis`.)
 
 #De beschikbare gegevens en informatie
 
 De gebruiker voert per opname 3 typen informatie in:
 
-- habitattype (geeft aan volgens welke criteria de LSVI berekend moet worden)
-- waarden voor indicatoren en voorwaarden (facultatief, afhankelijk van beschikbare gegevens)
-- bedekking voor soorten en/of kenmerken (facultatief, afhankelijk van beschikbare gegevens)
+- habitattype: tabel die voor elke opname aangeeft volgens de criteria van welk habitattype de LSVI berekend moet worden
+- waarden voor indicatoren en voorwaarden (facultatief, afhankelijk van beschikbare gegevens): tabel met per opname rechtstreeks ingeschatte waarden voor indicatoren en voorwaarden zoals die in de LSVI-criteria vermeld zijn
+- bedekking voor soorten en/of kenmerken (facultatief, afhankelijk van beschikbare gegevens): tabel met per opname soorten en/of kenmerken en hun bedekkingen (of aan/afwezigheid), bv. gegevens die afkomstig zijn uit een volopname
 
-De achterliggende databank bevat ook 3 soorten informatie:
+De achterliggende databank bevat ook 3 soorten informatie (op te vragen met de functie `geefInvoervereisten()`):
 
-- indicatoren en voorwaarden per habitattype (nodig om LSVI te berekenen)
-- rekenregels (op te vragen met de functie `geefInvoervereisten()`)
-- een grenswaarde voor elke voorwaarde
+- indicatoren en voorwaarden per habitattype (die nodig zijn om de LSVI te berekenen)
+- een grenswaarde ('Referentiewaarde') en operator voor elke voorwaarde
+- rekenregels (= alle nodige info om op basis van een volopname een voorwaarde te kunnen berekenen)
 
-#De algemene workflow
-
-```{r echo=FALSE, fig.cap="Schematische voorstelling van de workflow", out.width="100%"}
-knitr::include_graphics("Workflow.png")
+```{r}
+str(geefInvoervereisten(Habitattype = "4030"))
 ```
 
+
+#De algemene workflow
 
 Wat de functie `berekenLSVIbasis()` doet na controle van de gebruikersinvoer, is in een notendop:
 
@@ -45,6 +47,10 @@ Wat de functie `berekenLSVIbasis()` doet na controle van de gebruikersinvoer, is
 - voor de waarden die nog niet ingevuld zijn: in de databank de rekenregels opzoeken en voor elke voorwaarde een waarde proberen te berekenen op basis van de door de gebruiker ingegeven bedekkingen voor soorten en kenmerken
 - voor elke voorwaarde de geobserveerde/berekende waarde vergelijken met de grenswaarde in de databank, en op basis hiervan een status gunstig/ongunstig (TRUE/FALSE) bepalen en een verschilscore of distance-to-target berekenen
 - de resultaten aggregeren naar de hogere niveaus (indicator, criterium, opname) en telkens een status en distance-to-target berekenen
+
+```{r echo=FALSE, fig.cap="Schematische voorstelling van de workflow", out.width="100%"}
+knitr::include_graphics("Workflow.png")
+```
 
 In wat volgt, wordt dieper ingegaan op de onderdelen waarin relevante 'berekeningen' gebeuren of die mogelijk vragen zouden kunnen oproepen:
 
@@ -56,16 +62,42 @@ In wat volgt, wordt dieper ingegaan op de onderdelen waarin relevante 'berekenin
 
 #Rekenregels
 
-algemene uitleg: wat is wat,...
-Bv. minstens 4 sleutelsoorten talrijk aanwezig
--checkt in databank de lijst met sleutelsoorten
--selecteert deze sleutelsoorten uit opname
--selecteert de soorten die talrijk aanwezig zijn
--telt dit aantal soorten
-Bv. bedekking verbossing < 10 %
--checkt of de gebruiker voor de boomlaag een bedekking ingeschat heeft
--Indien niet -> bedekking berekend op basis van alle bomen in de opname
+Uit voorgaande algemene workflow blijkt dat het bepalen van de LSVI relatief eenvoudig is als de indicatoren of voorwaarden rechtstreeks ingeschat zijn op het terrein: een koppeling van de gegevens met de overeenkomstige indicatoren of voorwaarden in de databank volstaat.  Voor volopnames (met voor elke plantensoort een geschatte bedekking, eventueel aangevuld met andere vegetatiekenmerken) is de bepaling van de LSVI iets complexer omwille van de variatie in de voorwaarden.  Enkele voorbeelden om dit te illustreren.
 
+Voor de voorwaarde 'aantal sleutelsoorten minstens frequent aanwezig' zal het script de volgende stappen doorlopen:
+
+- checkt in databank de lijst met sleutelsoorten voor het habitattaype in kwestie
+- selecteert deze sleutelsoorten uit de opname die de gebruiker invoerde
+- selecteert de soorten die minstens frequent aanwezig zijn
+- telt dit aantal soorten
+
+Om de voorwaarde 'bedekking verbossing' te berekenen, zal het volgende stappen doorlopen:
+
+- checkt of de gebruiker voor de boomlaag een totale bedekking ingeschat heeft (en gebruikt dan deze waarde)
+- indien niet:
+    - selecteert alle boomsoorten uit de opname die in de boomlaag voorkomen
+    - berekent de totale bedekking van deze soorten samen, rekening houdend met een gedeeltelijke overlap van de vegetatie
+
+Veel voorwaarden voor de bepaling van de LSVI volgen een gelijkaardig stramien, gebaseerd op aantallen en/of bedekkingen van soorten, maar omwille van de tamelijk grote variatie in voorwaarden is een flexibel systeem ontwikkeld waarbij voor elke voorwaarde de berekeningswijze als een set van 'rekenregels' gecodeerd is in de databank.  Zo is de voorwaarde 'aantal sleutelsoorten minstens frequent aanwezig' als volgt genoteerd:
+
+```{r}
+str(geefInvoervereisten(Versie = "versie 2.0" ,Habitattype = "2330_dw", Indicator = "sleutelsoorten", Kwaliteitsniveau = 1))
+```
+
+De belangrijkste regels zijn:
+
+- een `AnalyseVariabele` die aangeeft welke berekeningswijze uitgevoerd moet worden, in dit geval is dit 'aantal'
+- `TypeVariabele`'Geheel getal'
+- een lijst met de sleutelsoorten van dit habitattype (`TaxongroepId` geeft de nummer van die lijst, en met `geefSoortenlijstVoorIDs("123")` kan je de lijst opvragen), zodat uit de volopname de relevante soorten geselecteerd kunnen worden.  Analoog aan een lijst soorten kan er ook een lijst kenmerken zijn, Studiegroep genoemd.  Deze heeft een naam (`Studielijstnaam`) en kan een aantal waarden bevatten (`Studiewaarde`).  Een voorbeeld zijn de ouderdomsklassen van heide -> bij opgeven van de klassen met bedekking wordt berekend hoeveel klassen er minstens frequent aanwezig zijn.
+- een subvoorwaarde 'minimaal frequent aanwezig' die min of meer dezelfde velden heeft als de voorwaarde zelf en gecodeerd is met o.a.:
+    - `subAnalyseVariabele` 'bedekking'
+    - `TypeSubvariabele` 'Categorie'
+    - `Subreferentiewaarde` 'f' (-> frequent)
+    - `SubOperator`'>='
+
+Type(Sub)Variabele, (Sub)Invoertype en (Sub)Invoerwaarde geven aan wat voor variabele de (Sub)Referentiewaarde in de databank is, waardoor de gebruiker niet verplicht is om dezelfde variabele en eenheid te gebruiken.  Voor verdere uitleg hierover verwijzen we naar het onderdeel over [Bedekking en Schalen](#bedekkingEnSchalen).
+
+De belangrijkste variabele is `AnalyseVariabele`.  Deze verwijst rechtstreeks naar een welbepaald script dat uitgevoerd moet worden om de berekening uit te voeren.  Er zijn enkele basisscripts, zoals bv. 'aantal' of 'bedekking', die een globale workflow bevatten die door de meeste scripts min of meer overgenomen wordt.  Van elk van deze scripts bestaan er afgeleiden die net iets anders doen.  Zo berekent bedekking de totale bedekking van alle opgegeven soorten die in de taxonlijst staan (rekening houdend met overlap), terwijl bedekkingLaag hetgeen doet wat hierboven beschreven staat voor bedekking verbossing: eerst checken of er een bedekking ingeschat is voor de opgegeven laag, en indien niet de bedekking berekenen voor alle soorten die in deze vegetatielaag voorkomen.  Bij de verschillende analysevariabelen kan het gebruik of de interpretatie van de variabelen in de databank afwijkend zijn, dus om een berekening ten volle te begrijpen, is het belangrijk om onderstaande berekeningswijzen voor de verschillende analysevariabelen door te nemen.
 
 ##Aantal
 
@@ -78,6 +110,7 @@ Bv. bedekking verbossing < 10 %
 #Afhandeling soortenlijsten
 
 Databank bevat:
+
 -meerdere taxonomische niveaus
 -zowel ‘preferred names’ als ‘junior synonyms’
 -Latijnse en Nederlandse namen
@@ -87,7 +120,7 @@ Anders wordt naam omgezet naar NBNTaxonVersionKey van ‘preferred name’
 Als taxon niet gevonden wordt, wordt gezocht of taxons van lager niveau wel in opname staan
 
 
-#Bedekking en schalen
+#Bedekking en schalen {#bedekkingEnSchalen}
 
 Gebruiker kan bedekking invoeren
 -als percentage
