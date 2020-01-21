@@ -27,7 +27,7 @@ postparseTaxonnaam <-
           ResultaatParser[, c(ParseType)],
           ifelse(
             is.na(ResultaatParser$sensu) | ResultaatParser$sensu != "s.l.",
-            "" , "groep"
+            "", "groep"
           )
         )
       )
