@@ -16,7 +16,6 @@
 #' @importFrom DBI dbGetQuery
 #' @importFrom dplyr %>% filter n mutate select left_join bind_rows rename
 #' @importFrom rlang .data
-#' @importFrom rgbif parsenames
 #' @importFrom stringr str_to_sentence
 #'
 #' @export
@@ -156,7 +155,7 @@ invoercontroleData_soortenKenmerken <- #nolint
       if (length(Soortenlijst) == 0) {
         return(as.character("geenSoort"))
       } else {
-        return(parsenames(Soortenlijst)$canonicalnamewithmarker)
+        return(parseTaxonnaam(Soortenlijst))
       }
     }
 
