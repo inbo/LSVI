@@ -46,7 +46,6 @@
 #' @importFrom dplyr %>% mutate filter distinct
 #' @importFrom DBI dbGetQuery
 #' @importFrom assertthat assert_that noNA is.string
-#' @importFrom rgbif parsenames
 #'
 #'
 geefSoortenlijstVoorIDs <-
