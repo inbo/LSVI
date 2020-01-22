@@ -66,3 +66,5 @@ Habitatsubtype,Versie,intercepts,zvalues,Criterium,Indicator,Beoordeling,Kwalite
 9160,Versie 3,1.2800104063662323,0.14853904076304317,Vegetatie,sleutelsoorten van de kruidlaag,>= 7 soorten EN [sleutelsoorten bedekkend OF aandel sleutelsoorten >=30% ],1,aantal sleutelsoorten kruidlaag,7,>=,aantal,NA
 9190,Versie 3,0.6141389741399284,0.019697113715107593,Vegetatie,sleutelsoorten van de kruidlaag,>= 3 soorten (9190 soorten) EN [9120 en 9190 soorten samen bedekkend OF aandeel 9120 en 9190 soorten samen >= 30%],1,aantal sleutelsoorten kruidlaag,3,>=,aantal,NA
 91F0,Versie 3,0.7937282827844441,0.07886395466154053,Vegetatie,sleutelsoorten van de kruidlaag,>= 7 soorten,1,aantal sleutelsoorten kruidlaag,7,>=,aantal,NA
+rbbhc,RBB v1,0.6882991424993402,1.1240306560791035e-5,Vegetatie,kwaliteitsindicerende soorten,>= 7,2,aantal kwaliteitsindicerende soorten,7,>=,aantal,NA
+rbbvos,RBB v1,0.7311281501663228,-0.04929946590448584,Vegetatie,kwaliteitsindicerende soorten,>= 4,2,aantal kwaliteitsindicerende soorten,4,>=,aantal,NA
