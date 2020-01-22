@@ -342,7 +342,9 @@ describe("samenstelling soortengroepen", {
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_voorwaarden %>%
-            filter(.data$Voorwaarde != "bedekking verbossing"),
+            filter(!.data$Voorwaarde %in%
+                     c("bedekking verbossing", "bedekking vergrassing",
+                       "bedekking verruiging", "bedekking invasieve exoten")),
           Data_soortenKenmerken %>%
             bind_rows(
               data.frame(
@@ -364,7 +366,9 @@ describe("samenstelling soortengroepen", {
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_voorwaarden %>%
-            filter(.data$Voorwaarde != "bedekking verbossing"),
+            filter(!.data$Voorwaarde %in%
+                     c("bedekking verbossing", "bedekking vergrassing",
+                       "bedekking verruiging", "bedekking invasieve exoten")),
           Data_soortenKenmerken %>%
             bind_rows(
               data.frame(
@@ -375,6 +379,232 @@ describe("samenstelling soortengroepen", {
                 Type = "Percentage",
                 Eenheid = "%",
                 Vegetatielaag = "boomlaag",
+                stringsAsFactors = FALSE
+              )
+            )
+        )
+      )
+    )
+  })
+  it("tweemaal dezelfde soort opgeven geeft een error", {
+    expect_error(
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 2.0",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden %>%
+            filter(!.data$Voorwaarde %in%
+                     c("bedekking verbossing", "bedekking vergrassing",
+                       "bedekking verruiging", "bedekking invasieve exoten")),
+          Data_soortenKenmerken %>%
+            bind_rows(
+              data.frame(
+                ID = c("JR0216", "Ts2036", "Ts2036"),
+                Kenmerk = "Quercus",
+                TypeKenmerk = "Soort_Latijn",
+                Waarde = "10",
+                Type = "Percentage",
+                Eenheid = "%",
+                Vegetatielaag = "boomlaag",
+                stringsAsFactors = FALSE
+              )
+            )
+        )
+      ), "'Quercus' meermaals opgegeven voor de boomlaag"
+    )
+    expect_error(
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 2.0",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden %>%
+            filter(!.data$Voorwaarde %in%
+                     c("bedekking verbossing", "bedekking vergrassing",
+                       "bedekking verruiging", "bedekking invasieve exoten")),
+          Data_soortenKenmerken %>%
+            bind_rows(
+              data.frame(
+                ID = c("JR0216", "Ts2036", "Ts2036"),
+                Kenmerk = "Quercus",
+                TypeKenmerk = "Soort_Latijn",
+                Waarde = c("10", "10", "20"),
+                Type = "Percentage",
+                Eenheid = "%",
+                Vegetatielaag = "boomlaag",
+                stringsAsFactors = FALSE
+              )
+            )
+        )
+      ), "'Quercus' meermaals opgegeven voor de boomlaag"
+    )
+  })
+  it("bedekkingen van lagere taxa worden geaggregeerd tot hoger taxon", {
+    expect_equal(
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 2.0",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden %>%
+            filter(!.data$Voorwaarde %in%
+                     c("bedekking verbossing", "bedekking vergrassing",
+                       "bedekking verruiging", "bedekking invasieve exoten")),
+          Data_soortenKenmerken %>%
+            bind_rows(
+              data.frame(
+                ID = c("JR0216", "Ts2036"),
+                Kenmerk = "Quercus",
+                TypeKenmerk = "Soort_Latijn",
+                Waarde = c("19", "10"),
+                Type = "Percentage",
+                Eenheid = "%",
+                Vegetatielaag = "boomlaag",
+                stringsAsFactors = FALSE
+              )
+            )
+        )
+      ),
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 2.0",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden %>%
+            filter(!.data$Voorwaarde %in%
+                     c("bedekking verbossing", "bedekking vergrassing",
+                       "bedekking verruiging", "bedekking invasieve exoten")),
+          Data_soortenKenmerken %>%
+            bind_rows(
+              data.frame(
+                ID = c("JR0216", "JR0216", "Ts2036"),
+                Kenmerk = c("Quercus robur", "Quercus rubra", "Quercus"),
+                TypeKenmerk = "Soort_Latijn",
+                Waarde = "10",
+                Type = "Percentage",
+                Eenheid = "%",
+                Vegetatielaag = "boomlaag",
+                stringsAsFactors = FALSE
+              )
+            )
+        )
+      )
+    )
+  })
+  it("bedekkingen van synoniemen worden geaggregeerd", {
+    expect_equal(
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 2.0",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden %>%
+            filter(!.data$Voorwaarde %in%
+                     c("bedekking verbossing", "bedekking vergrassing",
+                       "bedekking verruiging", "bedekking invasieve exoten")),
+          Data_soortenKenmerken %>%
+            bind_rows(
+              data.frame(
+                ID = c("JR0216", "Ts2036"),
+                Kenmerk = c("Quercus robur", "Quercus"),
+                TypeKenmerk = "Soort_Latijn",
+                Waarde = c("19", "10"),
+                Type = "Percentage",
+                Eenheid = "%",
+                Vegetatielaag = "boomlaag",
+                stringsAsFactors = FALSE
+              )
+            )
+        )
+      ),
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 2.0",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden %>%
+            filter(!.data$Voorwaarde %in%
+                     c("bedekking verbossing", "bedekking vergrassing",
+                       "bedekking verruiging", "bedekking invasieve exoten")),
+          Data_soortenKenmerken %>%
+            bind_rows(
+              data.frame(
+                ID = c("JR0216", "JR0216", "Ts2036"),
+                Kenmerk = c("Quercus robur", "Quercus pedunculata", "Quercus"),
+                TypeKenmerk = "Soort_Latijn",
+                Waarde = "10",
+                Type = "Percentage",
+                Eenheid = "%",
+                Vegetatielaag = "boomlaag",
+                stringsAsFactors = FALSE
+              )
+            )
+        )
+      )
+    )
+  })
+  it("twee synoniemen opgeven geeft een warning", {
+    expect_warning(
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 2.0",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden %>%
+            filter(!.data$Voorwaarde %in%
+                     c("bedekking verbossing", "bedekking vergrassing",
+                       "bedekking verruiging", "bedekking invasieve exoten")),
+          Data_soortenKenmerken %>%
+            bind_rows(
+              data.frame(
+                ID = c("JR0216", "JR0216", "Ts2036"),
+                Kenmerk = c("Quercus robur", "Quercus pedunculata", "Quercus"),
+                TypeKenmerk = "Soort_Latijn",
+                Waarde = "10",
+                Type = "Percentage",
+                Eenheid = "%",
+                Vegetatielaag = "boomlaag",
+                stringsAsFactors = FALSE
+              )
+            )
+        )
+      ), "de synoniemen 'Quercus robur' en 'Quercus pedunculata' beschouwd als eenzelfde taxon" #nolint
+    )
+  })
+  it("synoniemen worden maar eenmaal meegeteld bij aantallen", {
+    expect_equal(
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 2.0",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden %>%
+            filter(!.data$Voorwaarde %in%
+                     c("bedekking vergrassing", "bedekking verruiging",
+                       "bedekking invasieve exoten")),
+          Data_soortenKenmerken
+        )
+      ),
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 2.0",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden %>%
+            filter(!.data$Voorwaarde %in%
+                     c("bedekking vergrassing", "bedekking verruiging",
+                       "bedekking invasieve exoten")),
+          Data_soortenKenmerken %>%
+            bind_rows(
+              data.frame(
+                ID = c("Ts2036"),
+                Kenmerk = c("Festuca tenuifolia"),
+                TypeKenmerk = "Soort_Latijn",
+                Waarde = c("10"),
+                Type = "Percentage",
+                Eenheid = "%",
+                Vegetatielaag = "kruidlaag",
                 stringsAsFactors = FALSE
               )
             )

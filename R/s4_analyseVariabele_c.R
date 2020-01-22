@@ -90,7 +90,8 @@ analyseVariabele_c <- #nolint
           .data$SubTaxonId,
           .data$NbnTaxonVersionKey,
           .data$TaxonType
-        )
+        ) %>%
+        distinct()
       setSoortengroep(AnalyseObject) <- Soortengroep
     }
 

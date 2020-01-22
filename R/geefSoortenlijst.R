@@ -145,12 +145,7 @@ geefSoortenlijst <-
         )
     }
 
-    if (Taxonlijstniveau[1] == "voorwaarde") {
-      SoortenlijstSelectie <- SoortenlijstSelectie %>%
-        select(
-          -.data$Id
-        )
-    } else {
+    if (Taxonlijstniveau[1] != "voorwaarde") {
       SoortenlijstSelectie <- SoortenlijstSelectie %>%
         select(
           .data$Versie, .data$Habitattype, .data$Habitatsubtype,

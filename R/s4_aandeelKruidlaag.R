@@ -49,7 +49,6 @@ setMethod(
       soorten_vegetatielaag <- object@Kenmerken %>%
         filter(
           tolower(.data$Vegetatielaag) %in% tolower(object@Studiegroep$Waarde))
-
       BedekkingMin <-
         (1.0 - prod((1.0 - soorten_vegetatielaag$WaardeMin), na.rm = TRUE))
       BedekkingMax <-
