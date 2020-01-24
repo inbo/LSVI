@@ -19,7 +19,7 @@ maakConnectiePool()
 
 De functie `berekenLSVIbasis` berekent de Lokale Staat van Instandhouding van habitattypen op basis van opnamen, maar wat gebeurt er eigenlijk onder de motorkap? Dit vignet geeft hier een antwoord op. (Voor inleidende informatie over het gebruik van het package verwijzen we naar het vignet handleiding (`vignette("Handleiding", package = "LSVI")`), en voor het gebruik van deze berekenfunctie verwijzen we naar de help van de functie in kwestie (`?berekenLSVIbasis`.)
 
-#De beschikbare gegevens en informatie
+##Beschikbare gegevens en informatie
 
 De gebruiker voert per opname 3 typen informatie in:
 
@@ -38,7 +38,7 @@ str(geefInvoervereisten(Habitattype = "4030"))
 ```
 
 
-#De algemene workflow
+#Algemene workflow
 
 Wat de functie `berekenLSVIbasis()` doet na controle van de gebruikersinvoer, is in een notendop:
 
@@ -52,7 +52,7 @@ Wat de functie `berekenLSVIbasis()` doet na controle van de gebruikersinvoer, is
 knitr::include_graphics("Workflow.png")
 ```
 
-Deze workflow geeft dus voorrang aan rechtstreeks ingeschatte indicatoren en voorwaarden, wat meestal de meest accurate waarden zijn.  Dit betekent dat je als gebruiker door het opgeven van een voorwaarde met waarde NA kan aangeven dat je niet wil dat bepaalde voorwaarden berekend worden, bv. om te vermijden dat een voorwaarde toch berekend wordt terwijl je weet dat het resultaat niet betrouwbaar gaat zijn, bv. omdat je geen volopname gemaakt hebt.
+Deze workflow geeft dus voorrang aan rechtstreeks ingeschatte indicatoren en voorwaarden, wat meestal de meest accurate waarden zijn.  Dit betekent dat je als gebruiker door het opgeven van een voorwaarde met waarde NA kan aangeven dat je niet wil dat bepaalde voorwaarden berekend worden, bv. om te vermijden dat een voorwaarde toch berekend wordt terwijl je weet dat het resultaat niet betrouwbaar gaat zijn (als je geen volopname gemaakt hebt,...).
 
 In wat volgt, wordt dieper ingegaan op de onderdelen waarin relevante 'berekeningen' gebeuren of die mogelijk vragen zouden kunnen oproepen:
 
@@ -62,7 +62,7 @@ In wat volgt, wordt dieper ingegaan op de onderdelen waarin relevante 'berekenin
 - hoe wordt de status precies bepaald?
 - wat is distance-to-target en hoe wordt het berekend?
 
-#Rekenregels
+#Rekenregels voor voorwaarden
 
 Veel voorwaarden voor de bepaling van de LSVI zijn gebaseerd op het tellen van aantallen en/of het inschatten/berekenen van bedekkingen van soorten of kenmerken.  Dit betekent dat de 'berekening' uitgaande van een volopname (met voor elke plantensoort een geschatte bedekking, eventueel aangevuld met andere vegetatiekenmerken) vaak een gelijkaardig stramien volgt, al zijn er soms aanzienlijke nuanceverschillen.  Enkele voorbeelden om dit te illustreren.
 
@@ -92,41 +92,90 @@ str(geefInvoervereisten(Versie = "versie 2.0" ,Habitattype = "2330_dw", Indicato
 
 Scriptmatig wordt dus gecheckt welke variabelen ('rekenregels') in de databank ingevuld zijn en welke waarden ze hebben, en deze combinatie bepaalt welke stukjes script voor het bepalen van die voorwaarde doorlopen worden.  In enkele gevallen kan een variabele ietwat contextafhankelijk zijn, dus een lichtjes andere interpretatie hebben afhankelijk van de inhoud van andere variabelen.
 
-De belangrijkste variabele is `AnalyseVariabele`.  Deze verwijst rechtstreeks naar een welbepaald script dat leidt tot de bepaling van de LSVI voor die voorwaarde.  Er zijn enkele basisscripts, zoals bv. AnalyseVariabele 'aantal' of 'bedekking', die een globale workflow bevatten die door de meeste scripts min of meer overgenomen wordt.  De afgeleide scripts ('nakomelingen' van aantal of bedekking) doen vaak dezelfde handeling maar voorafgegaan en/of gevolgd door een extra handeling.  Zo berekent bedekking de totale bedekking van alle opgegeven soorten die in de taxonlijst staan (rekening houdend met overlap), terwijl bedekkingLaag eerst checkt of er een totale bedekking ingeschat is voor de opgegeven laag.  Indien niet, dan gebruikt ze de procedure van bedekking om de totale bedekking te berekenen voor alle soorten die in deze vegetatielaag voorkomen (op basis van een taxonlijst die bv. alle bomen (voor boomlaag) of alle mossen (voor moslaag) bevat).
+De belangrijkste variabele in de rekenregels is `AnalyseVariabele`.  Deze verwijst rechtstreeks naar een welbepaald script dat leidt tot de bepaling van de LSVI voor die voorwaarde.  Er zijn enkele basisscripts, zoals bv. AnalyseVariabelen `aantal` en `bedekking`, die een globale workflow bevatten die door de meeste scripts min of meer overgenomen wordt.  De afgeleide scripts ('nakomelingen' van `aantal` of `bedekking`) doen vaak dezelfde handeling maar voorafgegaan en/of gevolgd door een extra handeling.  Zo berekent `bedekking` de totale bedekking van alle opgegeven soorten die in de taxonlijst staan (rekening houdend met overlap), terwijl `bedekkingLaag` eerst checkt of er een totale bedekking ingeschat is voor de opgegeven laag.  Indien niet, dan gebruikt ze de procedure van `bedekking` om de totale bedekking te berekenen voor alle soorten die in deze vegetatielaag voorkomen (op basis van een taxonlijst die bv. alle bomen (voor boomlaag) of alle mossen (voor moslaag) bevat).
 
-Bij de verschillende analysevariabelen kan het gebruik of de interpretatie van de variabelen in de databank afwijkend zijn.  Zo berekent bijvoorbeeld de AnalyseVariabele 'bedekkingExcl' de totale bedekking van alle soorten van de opname behalve deze die in de taxonlijst vermeld staan.  Om een berekening ten volle te begrijpen, is het dus belangrijk om de beschrijvingen van de berekeningswijzen voor de verschillende analysevariabelen door te nemen.
+Bij de verschillende analysevariabelen kan het gebruik of de interpretatie van de variabelen in de databank afwijkend zijn.  Zo berekent bijvoorbeeld de AnalyseVariabele `bedekkingExcl` de totale bedekking van alle soorten van de opname behalve deze die in de taxonlijst vermeld staan (terwijl bij andere berekeningen de soorten in de taxonlijst net wel in beschouwing genomen worden).  Om een berekening ten volle te begrijpen, is het dus belangrijk om de beschrijvingen van de berekeningswijzen voor de verschillende analysevariabelen verderop in dit hoofdstuk door te nemen.  Het deel van de workflow dat ze bijna allemaal gemeenschappelijk hebben, is beschreven in een eerste onderdeeltje [AnalyseVariabele](#AnalyseVariabele).
 
-VANAF HIER VERDER WERKEN
+Meestal is er ook een variabele `TaxongroepId` of een studielijst (variabelen `Studielijstnaam` en `Studiewaarde`) toegevoegd.  Deze verwijzen naar de voor de voorwaarde relevante soortenlijst(en) of kenmerken.  Een voorbeeld van een studielijst zijn de ouderdomsklassen van heide.  Idee is dat de gebruiker voor elk van de kenmerken (in dit geval ouderdomsklassen) een  waarde (in dit geval bedekking) opgeeft, en op basis hiervan wordt bv. 'berekend' hoeveel klassen er minstens frequent aanwezig zijn.  Voor de studielijsten staan de kenmerken rechtstreeks opgesomd onder `Studiewaarde`.
 
+Om de tabel niet te overladen, zijn de soortenlijsten niet rechtstreeks toegevoegd in de tabel, maar vervangen door een verwijzing naar een `TaxongroepId`.  De volledige lijst van bv. `TaxongroepId` 123 kan opgevraagd worden met het commando `geefSoortenlijstVoorIDs("123")` (en in de string kunnen meerdere Id's gescheiden door een `,` opgegeven worden).
 
+Om een gebruiker niet te verplichten om ook alle soorten in te geven die hij niet gezien heeft, gaat de rekenmodule ervan uit dat er voor de soorten een volopname gebeurd is van zodra er minstens 1 soort toegevoegd is aan de tabel met soorten en kenmerken.  Concreet zal hij in dit geval alle niet ingevoerde soorten beschouwen als afwezig of soorten met een bedekking van 0 %.  Als er geen enkele soort ingevoerd is, zullen voorwaarden in verband met soorten de waarde NA krijgen.  En voor kenmerken is min of meer hetzelfde principe toegepast: zodra 1 kenmerk van een bepaalde studielijst opgegeven is, gaat de rekenmodule ervan uit dat de andere kenmerken van die lijst niet aanwezig waren (bv. als pioniersstatium opgegeven is, zal er voor ouderdomsklassen van uitgegaan worden dat de andere klassen afwezig waren).  Ingeval van gedeeltelijke opnamen is het dus aan de gebruiker om voor elke voorwaarde in te schatten in hoeverre het resultaat betrouwbaar is en evt. rechtstreeks een waarde op te geven voor de voorwaarde.
 
+Binnen een voorwaarde kan ook een 'subvoorwaarde' gedefinieerd zijn (opgesplitst in meerdere variabelen met `Sub` in de naam), die een bijkomend selectiecriterium geeft dat toegepast wordt op alle soorten en/of kenmerken uit de lijst.  Zo is de subvoorwaarde 'minimaal frequent aanwezig' uit bovenstaand voorbeeld gecodeerd is met o.a.:
+- `subAnalyseVariabele` 'bedekking'
+- `TypeSubvariabele` 'Categorie'
+- `Subreferentiewaarde` 'f' (-> frequent)
+- `SubOperator`'>='
 
+Tenslotte zijn er nog een aantal variabelen die verschillen in gebruikte schalen of meeteenheden opvangen.  Zo geven `Type`(`Sub`)`Variabele`, (`Sub`)`Invoertype` en (`Sub`)`Invoerwaarde` aan wat voor variabele de (`Sub`)`Referentiewaarde` in de databank is, waardoor de gebruiker niet verplicht is om dezelfde variabele en eenheid te gebruiken.  Voor verdere uitleg hierover verwijzen we naar het onderdeel over [Bedekking en Schalen](#bedekkingEnSchalen).
 
+##AnalyseVariabele {#AnalyseVariabele}
 
-De belangrijkste regels zijn:
+Bij het berekenen van een AnalyseVariabele wordt vaak de (interne) functie `selecteerKenmerkenInOpname` aangeroepen om de soorten/kenmerken uit de opname van de gebruiker te selecteren.  Om de workflow van deze functie niet te herhalen in elk van onderstaande analysevariabelen (berekeningswijzen), bespreken we hem hier apart.
 
-- een `AnalyseVariabele` die aangeeft welke berekeningswijze uitgevoerd moet worden, in dit geval is dit 'aantal'
-- `TypeVariabele`'Geheel getal'
-- een lijst met de sleutelsoorten van dit habitattype (`TaxongroepId` geeft de nummer van die lijst, en met `geefSoortenlijstVoorIDs("123")` kan je de lijst opvragen), zodat uit de volopname de relevante soorten geselecteerd kunnen worden.  Analoog aan een lijst soorten kan er ook een lijst kenmerken zijn, Studiegroep genoemd.  Deze heeft een naam (`Studielijstnaam`) en kan een aantal waarden bevatten (`Studiewaarde`).  Een voorbeeld zijn de ouderdomsklassen van heide -> bij opgeven van de klassen met bedekking wordt berekend hoeveel klassen er minstens frequent aanwezig zijn.
-- een subvoorwaarde 'minimaal frequent aanwezig' die min of meer dezelfde velden heeft als de voorwaarde zelf en gecodeerd is met o.a.:
-    - `subAnalyseVariabele` 'bedekking'
-    - `TypeSubvariabele` 'Categorie'
-    - `Subreferentiewaarde` 'f' (-> frequent)
-    - `SubOperator`'>='
+Als een taxonlijst of studielijst vermeld is in de voorwaarde, zullen de elementen uit deze lijst geselecteerd worden in de opname van de gebruiker.  Als zowel taxonlijst als studielijst vermeld zijn, dan bestaat deze studielijst altijd uit een of meerdere vegetatielagen, en dan worden de soorten uit de taxonlijst geselecteerd in de opname van de gebruiker die in de in de studielijst vermelde vegetatiela(a)g(en) voorkomen.
 
-Type(Sub)Variabele, (Sub)Invoertype en (Sub)Invoerwaarde geven aan wat voor variabele de (Sub)Referentiewaarde in de databank is, waardoor de gebruiker niet verplicht is om dezelfde variabele en eenheid te gebruiken.  Voor verdere uitleg hierover verwijzen we naar het onderdeel over [Bedekking en Schalen](#bedekkingEnSchalen).
+Als er een subvoorwaarde vermeld is in de voorwaarde, zullen uit de geselecteerde deellijst van de opname enkel de elementen geselecteerd worden die aan de subvoorwaarde voldoen (bv. minimum of maximum een bepaalde bedekking of aandeel zijn).
 
+Zoals eerder aangegeven, zal een opname zonder soorten (ingeval van taxonlijst) of kenmerken (ingeval van studielijst) resulteren in NA.
 
+Voor taxonlijsten is de routine iets complexer dan hierboven beschreven, maar deze details zijn uitgebreid beschreven in het hoofdstuk [Afhandeling taxonlijsten](#taxonlijsten).
 
-##Aantal
+##aantal
 
-##Bedekking
+Bij de voorwaarden met analysevariabele `aantal` wordt het aantal records (soorten of kenmerken) geteld dat door `selecteerKenmerkenInOpname` teruggegeven wordt, dus hier wordt simpelweg het aantal relevante soorten (ingeval van taxonlijst) of kenmerken (ingeval van studielijst) geteld dat voorkomt in de door de gebruiker ingegeven opname en voldoet aan een eventuele subvoorwaarde.  Als samen met een taxonlijst ook een studielijst opgegeven wordt, dan is deze te interpreteren als een tweede subvoorwaarde.  In de praktijk gaat het hier over de vegetatielaag waarin de soorten moeten voorkomen.
 
-##Aandeel
+##bedekking
+
+Bij de voorwaarden met analysevariabele `bedekking` wordt de totale bedekking berekend van de records (soorten of kenmerken) die door `selecteerKenmerkenInOpname` teruggegeven worden, dus hier wordt de totale bedekking berekend van de relevante soorten (ingeval van taxonlijst) of kenmerken (ingeval van studielijst) die voorkomen in de door de gebruiker ingegeven opname en voldoen aan een eventuele subvoorwaarde.  Als samen met een taxonlijst ook een studielijst opgegeven wordt, dan is deze te interpreteren als een tweede subvoorwaarde.  In de praktijk gaat het hier over de vegetatielaag waarin de soorten moeten voorkomen.
+
+Voor de berekening van de totale bedekking wordt gebruik gemaakt van de formule van Fisher: 
+
+$$ b_{tot} = 1 - \prod_{i=1}^n (1 - b_{i})$$
+met $b_{tot}$ de totale bedekking in proportie (dus percentage / 100), $b_{i}$ de bedekking van de individuele soorten in proportie (dus percentage / 100) (en $\prod$ het product)
+
+Deze formule geeft uiteraard maar een benaderende waarde die minder accuraat is dan een rechtstreekse inschatting van de totale bedekking van de soorten van de lijst samen (dus gebruik maken van rechtstreekse inschattingen heeft de voorkeur als deze beschikbaar zijn).  In tegenstelling tot een gewone som van bedekkingen, gaat ze uit van een gedeeldelijke overlap van soorten, wat vaak een betere benadering zal zijn.  Een ander pluspunt is dat het resultaat (de totale bedekking) nooit meer dan 1 of 100 % zal zijn.
+
+##bedekkingExcl
+
+Bij de analysevariabele `bedekkingExcl` gaat de voorwaarde over de totale bedekking van de soorten/kenmerken die niet in een lijst voorkomen, bv. alle soorten behalve de sleutelsoorten.
+
+Bij voorwaarden met deze analysevariabele worden de soorten/kenmerken geselecteerd op basis van een functie `deselecteerKenmerkenInOpname`, die in de opname van de gebruiker de soorten/kenmerken schrapt die in de taxonlijst/studielijst voorkomen.  Verder gebeurt de berekening analoog aan deze van de analysevariabele `bedekking`
+
+##bedekkingLaag
+
+Bij de analysevariabele `bedekkingLaag` gaat de voorwaarde over de totale bedekking van een vegetatielaag, bv. de boom- en struiklaag of de moslaag.  In dit geval is de vegetatielaag in kwestie als studielijst ingegeven (met evt. de verschillende deellagen zoals boomlaag en struiklaag ook vermeld als aparte items), en de taxonlijst bevat een lijst van alle soorten die in deze laag voorkomen.
+
+Bij voorwaarden met deze analysevariabele zal eerst gecheckt worden of kenmerken uit de studielijst voorkomen in de opname van de gebruiker.
+
+- Als dat zo is, dan zal de bedekking afgeleid worden van het kenmerk of de kenmerken in de studielijst.  (Meer concreet: de berekening gebeurt zoals bij analysevariabele `bedekking` nadat eerst `TaxongroepId` uit de voorwaarden geschrapt is, dus de selectie van de lagen gebeurt op basis van enkel de studielijst)
+- Als dat niet zo is, dan zal het aantal afgeleid worden op basis van opgegeven taxonlijst en zal de voorwaarde uitgevoerd worden na enkel de analysevariabele te vervangen door `bedekking` (dus de studiegroep met de vegetatielaag blijft behouden, waardoor enkel soorten uit die laag geselecteerd zullen worden)
+
+##bedekkingLaagExcl
+
+De analysevariabele `bedekkingLaagExcl` is zeer analoog aan `bedekkingLaag`, maar lost een taxonlijst-gerelateerd probleem op dat voorkomt bij de taxonlijst van de boomlaag.  Om ervoor te zorgen dat ook in de opname van de gebruiker ingevoerde genera als boom beschouwd worden, bestaat de lijst van bomen en struiken uit genera.  Lagere taxonomische niveaus worden automatisch ook meegenomen (zie [Afhandeling taxonlijsten](#taxonlijsten)).  Er is echter 1 moeilijkheid: _Salix repens_ zou niet meegenomen mogen worden want dit is geen boom (die wel in de struiklaag zou kunnen voorkomen).  Anderzijds zijn er een aantal moeilijk te determineren _Salix_-soorten die evt. als genus in een opname zou kunnen voorkomen, maar die allen bomen zijn.  We gaan ervan uit dat _Salix repens_ wel herkend wordt en dus tot op soortniveau in een opname toegevoegd zal worden, en enkel moeilijk te herkennen _Salix_-soorten als genus toegevoegd worden.  Vanuit die redenering worden '_Salix_ sp.' en de _Salix_-soorten als boom beschouwd, met uitzondering van _Salix repens_.
+
+Dit probleempje heeft aanleiding gegeven voor een nieuwe analysevariabele, die uiteraard ook ruimer gebruikt kan worden.  Voorwaarden met deze analysevariabele bevatten een taxonlijst bestaande uit 2 sublijsten: een lange lijst (bv. alle genera van bomen) en een kort lijstje (bv. _Salix repens_).
+
+Bij de berekening zal eerst gecheckt worden of er inderdaad 2 sublijsten zijn, en in dat geval zullen als een eerste stap de taxa van het kortste lijstje geschrapt worden in de lijst van de taxa met het langste lijstje (in een lijst waarin alle mogelijke taxonniveaus toegevoegd zijn).  Daarna zal met de eventueel aangepaste taxonlijst de voorwaarde uitgerekend worden volgens analysevariabele `bedekkingLaag`.
+
+##aandeel
 
 ...
 
-#Afhandeling soortenlijsten
+##aantalGroepen
+
+De analysevariabele `aantalGroepen` gaat specifiek over kenmerken die eigenlijk soortenlijsten zijn, bv. helofyten.  Deze kenmerken zijn in de databank enerzijds weergegeven in de `studielijst`, en anderzijds verwijst het `TaxongroepId` naar een taxonlijst met meerdere taxonsubgroepen die elk overeenkomen met een kenmerken (en die de relevante soorten bevatten).
+
+Bij voorwaarden met deze analysevariabele zal eerst gecheckt worden of kenmerken uit de studielijst voorkomen in de opname van de gebruiker.
+
+- Als dat zo is, dan zal het aantal afgeleid worden van de kenmerken in de studielijst.  (Meer concreet: de berekening gebeurt zoals bij analysevariabele `aantal` nadat eerst `TaxongroepId` uit de voorwaarden geschrapt is)
+- Als dat niet zo is, dan zal het aantal afgeleid worden op basis van opgegeven taxonlijst.  Concreet zal de originele voorwaarde wat aangepast worden (de studielijst wordt geschrapt en de taxonlijst wordt herwerkt zodat de originele taxonsubgroepen afzonderlijke taxa of soorten worden binnen 1 taxonlijst), waarna de berekening van het aantal groepen/kenmerken kan gebeuren volgens de analysevariabele `aantal`.  (Zoals beschreven in [Afhandeling taxonlijsten](#taxonlijsten) hieronder, zal de aggregatie van de opgegeven soorten - die nu als subsoorten beschouwd worden - gebeuren door de totale bedekking te berekenen en op de resulterende lijst de eventuele subvoorwaarde uit te voeren, waarna het aantal originele taxonsubgroepen - nu hernoemd als soorten - geteld wordt.)
+
+
+
+#Afhandeling taxonlijsten {#taxonlijsten}
 
 Databank bevat:
 
@@ -136,7 +185,9 @@ Databank bevat:
 Herkenning gebeurt op basis van genusnaam + soortnaam + evt. subsoortnaam/variëteit/…
 Als gebruiker een onbekende naam invoert -> waarschuwing
 Anders wordt naam omgezet naar NBNTaxonVersionKey van ‘preferred name’
-Als taxon niet gevonden wordt, wordt gezocht of taxons van lager niveau wel in opname staan
+Als taxon niet gevonden wordt, wordt gezocht of taxons van lager niveau wel in opname staan (in soortenlijsten hoogste niveau opgegeven)
+
+Ook taxonsubgroepen enz. uitleggen, zeker checken dat bovenstaande info over AV te begrijpen is
 
 
 #Bedekking en schalen {#bedekkingEnSchalen}
