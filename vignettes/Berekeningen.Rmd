@@ -126,7 +126,7 @@ Voor taxonlijsten is de routine iets complexer dan hierboven beschreven, maar de
 
 Bij de voorwaarden met analysevariabele `aantal` wordt het aantal records (soorten of kenmerken) geteld dat door `selecteerKenmerkenInOpname` teruggegeven wordt, dus hier wordt simpelweg het aantal relevante soorten (ingeval van taxonlijst) of kenmerken (ingeval van studielijst) geteld dat voorkomt in de door de gebruiker ingegeven opname en voldoet aan een eventuele subvoorwaarde.  Als samen met een taxonlijst ook een studielijst opgegeven wordt, dan is deze te interpreteren als een tweede subvoorwaarde.  In de praktijk gaat het hier over de vegetatielaag waarin de soorten moeten voorkomen.
 
-##bedekking
+##bedekking {#bedekking}
 
 Bij de voorwaarden met analysevariabele `bedekking` wordt de totale bedekking berekend van de records (soorten of kenmerken) die door `selecteerKenmerkenInOpname` teruggegeven worden, dus hier wordt de totale bedekking berekend van de relevante soorten (ingeval van taxonlijst) of kenmerken (ingeval van studielijst) die voorkomen in de door de gebruiker ingegeven opname en voldoen aan een eventuele subvoorwaarde.  Als samen met een taxonlijst ook een studielijst opgegeven wordt, dan is deze te interpreteren als een tweede subvoorwaarde.  In de praktijk gaat het hier over de vegetatielaag waarin de soorten moeten voorkomen.
 
@@ -156,9 +156,15 @@ Bij voorwaarden met deze analysevariabele zal eerst gecheckt worden of kenmerken
 
 De analysevariabele `bedekkingLaagExcl` is zeer analoog aan `bedekkingLaag`, maar lost een taxonlijst-gerelateerd probleem op dat voorkomt bij de taxonlijst van de boomlaag.  Om ervoor te zorgen dat ook in de opname van de gebruiker ingevoerde genera als boom beschouwd worden, bestaat de lijst van bomen en struiken uit genera.  Lagere taxonomische niveaus worden automatisch ook meegenomen (zie [Afhandeling taxonlijsten](#taxonlijsten)).  Er is echter 1 moeilijkheid: _Salix repens_ zou niet meegenomen mogen worden want dit is geen boom (die wel in de struiklaag zou kunnen voorkomen).  Anderzijds zijn er een aantal moeilijk te determineren _Salix_-soorten die evt. als genus in een opname zou kunnen voorkomen, maar die allen bomen zijn.  We gaan ervan uit dat _Salix repens_ wel herkend wordt en dus tot op soortniveau in een opname toegevoegd zal worden, en enkel moeilijk te herkennen _Salix_-soorten als genus toegevoegd worden.  Vanuit die redenering worden '_Salix_ sp.' en de _Salix_-soorten als boom beschouwd, met uitzondering van _Salix repens_.
 
-Dit probleempje heeft aanleiding gegeven voor een nieuwe analysevariabele, die uiteraard ook ruimer gebruikt kan worden.  Voorwaarden met deze analysevariabele bevatten een taxonlijst bestaande uit 2 sublijsten: een lange lijst (bv. alle genera van bomen) en een kort lijstje (bv. _Salix repens_).
+Dit probleempje heeft aanleiding gegeven voor een nieuwe analysevariabele, die uiteraard ook ruimer gebruikt kan worden.  Bij voorwaarden met deze analysevariabele verwijst het `TaxongroepId` naar een taxonlijst bestaande uit 2 sublijsten: een lange lijst (bv. alle genera van bomen) en een kort lijstje (bv. _Salix repens_).
 
 Bij de berekening zal eerst gecheckt worden of er inderdaad 2 sublijsten zijn, en in dat geval zullen als een eerste stap de taxa van het kortste lijstje geschrapt worden in de lijst van de taxa met het langste lijstje (in een lijst waarin alle mogelijke taxonniveaus toegevoegd zijn).  Daarna zal met de eventueel aangepaste taxonlijst de voorwaarde uitgerekend worden volgens analysevariabele `bedekkingLaag`.
+
+##bedekkingLaagPlus
+
+Bij de analysevariabele `bedekkingLaagPlus` gaat de voorwaarde over de totale bedekking van een vegetatielaag en een taxongroep, bv. de bedekking van de moslaag en klimop.  Verschillend van `bedekkingLaag` verwijst het `TaxongroepId` naar een taxonlijst met 2 taxonsublijsten: een lange lijst met alle soorten van de vegetatielaag die in `studielijst` vermeld is (in het voorbeeld alle mossen), en een korte lijst met de soorten waarvan de bedekking hierbij opgeteld moet worden (in het voorbeeld klimop).
+
+Bij de berekening zal eerst gecheckt worden of er inderdaad 2 sublijsten zijn, en in dat geval worden deze opgesplitst in 2 lijsten.  Op basis van de kortste lijst wordt de bedekking van deze soort(en) berekend volgens de analysevariabele `bedekking` (waarbij de `studielijst` buiten beschouwing gelaten wordt).  Op basis van het langste lijst en de `studielijst` wordt de bedekking van de vegetatielaag berekend volgens de analysevariabele `bedekkingLaag`.  Daarna wordt de voorwaarde berekend door beide bedekkingen op te tellen volgens de formule van Fisher (zie onder [bedekking](#bedekking)).  (Ingeval er geen 2 sublijsten zijn, zal de voorwaarde als weergegeven in de databank, berekend worden volgens analysevariabele `bedekkingLaag`).
 
 ##aandeel
 
