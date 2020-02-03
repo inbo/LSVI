@@ -13,6 +13,8 @@
 #'
 #' @importFrom methods setClass setMethod as
 #'
+#' @noRd
+#'
 #' @include s4_aantal.R
 setClass(
   Class = "aantalGroepen",

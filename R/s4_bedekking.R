@@ -10,6 +10,8 @@
 #' @importFrom methods setClass setMethod
 #' @importFrom dplyr %>% filter
 #'
+#' @noRd
+#'
 #' @include s4_AnalyseVariabele.R
 setClass(
   Class = "bedekking",
