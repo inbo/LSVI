@@ -1,12 +1,20 @@
 #' @title Geef alle unieke waarden van een veld uit de databank met de
 #' LSVI-indicatoren voorafgegaan door "alle"
 #'
-#' @description Deze functie geeft een vector met alle verschillende waarden
-#' die een gespecifieerd veld van een gespecifieerde tabel in de databank met
-#' LSVI-indicatoren staan, voorafgegaan door de (toegevoegde) waarde "alle".
-#' Deze functie wordt in verschillende functies van het package gebruikt om de
-#' invoer van parameters te controleren (waar de mogelijke invoer bestaat uit
-#' 'alle' of een item uit het veld).
+#' @description Deze hulpfunctie geeft een vector met alle verschillende
+#' waarden die een gespecifieerd veld van een gespecifieerde tabel in de
+#' databank met LSVI-indicatoren staan, voorafgegaan door de (toegevoegde)
+#' waarde "alle".  Deze functie wordt in verschillende functies van het package
+#' gebruikt om de invoer van parameters te controleren (waar de mogelijke
+#' invoer bestaat uit 'alle' of een item uit het veld).  In enkele gevallen
+#' wordt dit commando in de documentatie vermeld zodat ook de gebruiker in die
+#' specifieke gevallen de lijst met mogelijke invoerwaarden op een eenvoudige
+#' manier kan opvragen.
+#'
+#' Gebruikers die de databankstructuur en bijhorende naamgeving niet kennen,
+#' kunnen dezelfde info het gemakkelijkst bekomen door een tabel voor de
+#' volledige dataset op te vragen, het gewenste veld te selecteren en hiervan
+#' de unieke waarden weer te geven (zie voorbeeld).
 #'
 #' @inheritParams selecteerIndicatoren
 #'
@@ -25,7 +33,16 @@
 #' # uitgetest worden.
 #' \dontrun{
 #' maakConnectiePool()
-#' geefUniekeWaarden("Habitatgroep","Naam")
+#' geefUniekeWaarden("Versie","VersieLSVI")
+#'
+#' #alternatieven om deze invoerlijst te bekomen:
+#' unique(geefVersieInfo()$VersieLSVI)
+#'
+#' library(dplyr)
+#' geefVersieInfo() %>%
+#'   select(VersieLSVI) %>%
+#'   distinct()
+#'
 #' library(pool)
 #' poolClose(ConnectiePool)
 #' }
