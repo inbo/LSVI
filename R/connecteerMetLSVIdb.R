@@ -51,6 +51,7 @@ connecteerMetLSVIdb <-
   assert_that(is.string(Wachtwoord))
 
   if (Gebruiker == "pc-eigenaar") {
+    huidige_env <- as.environment(-1)
     tryCatch(
       assign(
         "ConnectieLSVIhabitats",
@@ -61,14 +62,13 @@ connecteerMetLSVIdb <-
           Database = Databank,
           Trusted_Connection = "True",
           encoding = "UTF-8"
-        ),
-        envir = .GlobalEnv
+        )
       ),
       error = function(e) {
         assign(
           "ConnectieLSVIhabitats",
           connecteerMetLSVIlite(),
-          envir = .GlobalEnv
+          envir = huidige_env
         )
       }
     )
