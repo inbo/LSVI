@@ -228,14 +228,14 @@ De analysevariabele `meting` (of `meting_xxx`) staat in de databank bij voorwaar
 
 #Afhandeling taxonlijsten {#taxonlijsten}
 
-Idealiter worden de door de gebruiker ingevoerde taxonnamen correct herkend en behandeld bij de berekening.  Om dit zo goed mogelijk op te vangen, bevat de databank:
+Idealiter worden de door de gebruiker ingevoerde taxonnamen herkend en correct behandeld bij de berekening.  Om dit zo goed mogelijk op te vangen, bevat de databank:
 
 - taxa van meerdere taxonomische niveaus (genera, soorten, ondersoorten,...) en hun onderlinge verwantschap
 - zowel ‘preferred names’ als ‘junior synonyms’ (bij opgevraagde info worden enkel preferred names gegeven, de junior synonyms dienen enkel om door gebruikers ingevoerde namen te herkennen)
 - Latijnse en Nederlandse namen
 - de binnen INBO gebruikte NbnTaxonVersionKey die een unieke code is voor een taxon
 
-Voor Latijnse namen gebeurt herkenning op basis van genusnaam + soortnaam + evt. subsoortnaam/variëteit/….  Om de koppeling met namen uit de databank toe te laten, worden de door een gebruiker ingevoerde namen deze eerst scriptmatig aangepast naar dit formaat met de functie `parseTaxonnaam()` (o.a. auteursnamen weggelaten zodat verschillen in schrijfwijzen of al dan niet gebruiken van een '.' hierin geen probleem vormen).  Bij Nederlandse namen moet de schrijfwijze wel exact hetzelfde zijn om herkenning toe te laten.
+Voor Latijnse namen gebeurt herkenning op basis van genusnaam + soortnaam + evt. subsoortnaam/variëteit/….  Om de koppeling met namen uit de databank toe te laten, worden de door een gebruiker ingevoerde namen deze eerst scriptmatig aangepast naar dit formaat met de functie `parseTaxonnaam()` (waarbij o.a. auteursnamen worden weggelaten zodat verschillen in schrijfwijzen of al dan niet gebruiken van een '.' hierin geen probleem vormen).  Bij Nederlandse namen moet de schrijfwijze wel exact hetzelfde zijn om herkenning toe te laten.
 
 Als de gebruiker een onbekende naam invoert, krijgt hij een waarschuwing en wordt deze naam bij de berekeningen buiten beschouwing gelaten (ook voor bv. de berekening van een totale bedekking van alle soorten of een bepaalde vegetatielaag).  Anders wordt de naam omgezet naar de NbnTaxonVersionKey van de ‘preferred name’, die intern gebruikt wordt voor de verdere berekeningen.  Als gebruiker kan je ook rechtstreeks deze unieke code invoeren (dan gebeurt de hier beschreven stap om de naam te herkennen niet).
 
@@ -274,8 +274,32 @@ Om de status van een voorwaarde te berekenen, worden de onder- en bovengrenzen m
 
 Het resultaat is telkens een logische waarde die aangeeft of de voorwaarde gunstig (TRUE) of ongunstig (FALSE) scoort.
 
-Om de status van een indicator te berekenen, wordt de aggregatie uitgevoerd die bij `geefInvoervereisten()` in het veld `Combinatie` weergegeven is (meestal een combinatie van voorwaarden met operatoren AND en OR), waarbij de resultaten TRUE/FALSE ingevuld worden bij de respectievelijke voorwaarden (gebruik makend van functie `berekenVoorwaarde()`).
+Om de status van een indicator te berekenen, wordt de aggregatie uitgevoerd die bij `geefInvoervereisten()` in het veld `Combinatie` weergegeven is (meestal een combinatie van voorwaarden met operatoren AND en OR), waarbij de resultaten TRUE/FALSE ingevuld worden bij de respectievelijke voorwaarden (gebruik makend van functie `combinerenVoorwaarden()`).
 
 Voor de aggregatie naar hogere niveaus (criterium en volledige opname) worden deze resultaten normaal verder geaggregeerd met een AND-operator (als parameter aggregatiemethode de default '1-out-all-out' is).  Als een gebruiker kiest voor de aggregatiemethode 'RapportageHR', dan wordt rekening gehouden met het feit of een indicator belangrijk (`Belang` = 'b') of zeer belangrijk is (`Belang` = 'zb').  De beoordeling is gunstig (TRUE) als meer dan 50 procent van de indicatoren gunstig zijn EN als geen enkele zeer belangrijke indicator ongunstig is.
 
 #Distance-to-target
+
+De distance-to-target of verschilscore van een voorwaarde wordt als volgt berekend met de functie `berekenVerschilscores()`:
+
+- theoretisch maximum bepalen voor de voorwaarde:<!--zou idealiter in de databank toegevoegd worden-->
+    - voor bedekkingen en aandelen is dit 1 of 100 %
+    - voor het aantal soorten/kenmerken is dit het aantal soorten/kenmerken van de lijst in de databank
+- theoretisch minimum is in elk van deze gevallen 0
+- voor elke voorwaarde een 'gunstig bereik' en 'ongunstig bereik' berekenen op basis van theoretisch minimum en theoretisch maximum, en de operator en de grenswaarde in de databank
+- de verschilscore wordt berekend door het verschil tussen de score en de grenswaarde te delen door het 'gunstig bereik' of het 'ongunstig bereik'; het resultaat krijgt een negatief teken bij een ongunstige score en een positief teken bij een gunstige score
+- voor voorwaarden die enkel de waarden ja en nee kunnen aannemen, kan de verschilscore enkel de waarden -1 (ongunstig) en 1 (gunstig) aannemen.
+
+Om de verschilscore van een indicator te berekenen, wordt rekening gehouden met de aggregatie 
+die bij `geefInvoervereisten()` in het veld `Combinatie` weergegeven is (meestal een combinatie van voorwaarden met operatoren AND en OR).  Net als bij status worden de resultaten, in dit geval de verschilscores, ingevuld bij de respectievelijke voorwaarden.  Voor de berekening wordt bij de AND-operator het minimum van beide scores genomen, en bij de OR-operator het maximum.  Deze berekening gebeurt met de functie `combinerenVerschilscore()`.
+
+Voor de aggregatie naar het criterium worden deze resultaten op 2 manieren verder geaggregeerd:
+
+- een strenge beoordeling waarbij de redenering van de AND-operator gevolgd wordt, dus door het minimum te nemen (= index_min)
+- een minder strenge beoordeling waarbij het harmonisch gemiddelde van de verschilscores genomen wordt (=index_harm)
+
+Voor de aggregatie naar de volledige opname worden dezelfde 2 aggregatiemethoden opnieuw gebruikt uitgaande van de verschilscores op criteriumniveau.  Doordat de verschilscore index_min volgens de 2 methoden geaggregeerd wordt, resulteert dat in 3 verschillende eindscores van streng naar liberaal:
+
+- index_min_min: telkens het minimum genomen, dus de strengste beoordeling
+- index_min_harm: het harmonisch gemiddelde genomen van index_min
+- index_harm_harm: het harmonisch gemiddelde genomen van index_harm, dus de minst strenge beoordeling
