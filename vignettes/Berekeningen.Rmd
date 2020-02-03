@@ -4,7 +4,7 @@ author: "Els Lommelen, Toon Westra en Hans Van Calster"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Handleiding LSVI-package}
+  %\VignetteIndexEntry{Technische achtergrond bij de berekeningen}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
