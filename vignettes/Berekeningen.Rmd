@@ -43,7 +43,7 @@ str(geefInvoervereisten(Habitattype = "4030"))
 Wat de functie `berekenLSVIbasis()` doet na controle van de gebruikersinvoer, is in een notendop:
 
 - voor het door de gebruiker ingegeven habitattype opzoeken in de databank welke indicatoren en voorwaarden berekend moeten worden
-- de door de gebruiker ingegeven indicatoren en voorwaarden hieraan koppelen waardoor deze waarden 'ingevuld' worden in de (resultaten)tabel
+- de door de gebruiker ingegeven waarden voor indicatoren en voorwaarden hieraan koppelen
 - voor de waarden die nog niet ingevuld zijn: in de databank de rekenregels opzoeken en voor elke voorwaarde een waarde proberen te berekenen op basis van de door de gebruiker ingegeven bedekkingen voor soorten en kenmerken
 - voor elke voorwaarde de geobserveerde/berekende waarde vergelijken met de grenswaarde in de databank, en rekening houdend met de operator een status gunstig/ongunstig (TRUE/FALSE) bepalen en een verschilscore of distance-to-target berekenen
 - de resultaten aggregeren naar de hogere niveaus (indicator, criterium, opname) en telkens een status en distance-to-target berekenen
