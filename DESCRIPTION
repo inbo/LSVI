@@ -28,7 +28,6 @@ Imports:
     lazyeval,
     methods,
     odbc,
-    pander,
     pool,
     readr,
     rgbif,

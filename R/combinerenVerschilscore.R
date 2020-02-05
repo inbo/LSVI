@@ -30,7 +30,6 @@
 #'
 #' @importFrom assertthat assert_that
 #' @importFrom stringr str_replace_all str_detect str_extract_all
-#' @importFrom pander evals
 #'
 
 combinerenVerschilscore <-
@@ -76,7 +75,7 @@ combinerenVerschilscore <-
       Formule <-
         gsub(paste0("ID", VoorwaardeID[i], "ID"), Verschilscore[i], Formule)
     }
-    Resultaat <- evals(Formule, env = new.env())[[1]]$result
+    Resultaat <- eval(parse(text = Formule))
 
     if (!is.null(Resultaat)) {
       Resultaat <- as.numeric(Resultaat)

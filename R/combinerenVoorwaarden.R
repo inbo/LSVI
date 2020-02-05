@@ -28,7 +28,6 @@
 #'
 #' @importFrom assertthat assert_that
 #' @importFrom stringr str_replace_all str_detect str_extract_all
-#' @importFrom pander evals
 #'
 
 combinerenVoorwaarden <-
@@ -67,7 +66,7 @@ combinerenVoorwaarden <-
           Formule
         )
     }
-    Resultaat <- as.logical(evals(Formule)[[1]]$result)
+    Resultaat <- as.logical(eval(parse(text = Formule)))
 
     return(Resultaat)
 
