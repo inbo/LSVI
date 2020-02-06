@@ -77,7 +77,7 @@ Voor de voorwaarde 'aantal sleutelsoorten minstens frequent aanwezig' zal het sc
 
 De voorwaarde 'aantal ouderdomsstadia minstens frequent aanwezig' kan op dezelfde manier berekend worden, maar dan op basis van een lijst (in de databank) die alle ouderdomsstadia weergeeft.  En uiteraard veronderstelt dit dat de gebruiker voor deze ouderdomsstadia een bedekking invoerde in de tabel met soorten en kenmerken.
 
-Om de voorwaarde 'bedekking verbossing' te berekenen, zal het script volgende stappen doorlopen:
+Om de voorwaarde 'bedekking boomlaag' te berekenen, zal het script volgende stappen doorlopen:
 
 - checkt of de gebruiker voor de boomlaag een totale bedekking ingeschat heeft (en gebruikt dan deze waarde als resultaat)
 - indien niet:
