@@ -258,7 +258,7 @@ Ook voor de invoer van bedekkingen heeft de gebruiker enige flexibiliteit en is 
 - als interval van 2 percentages (bv. 20–30) of decimale getallen
 - als waarde uit een Tansley-schaal of beheermonitoringschaal
 
-Er moet wel telkens aangegeven worden over welk type variabele het gaat (`TypeVariabele`, bv. Percentage, Decimaal getal, Categorie) en bij een categorische variabele moet ook de gebruikte schaal opgegeven worden (`Invoertype`, bv. TANSLEY IHD).
+Er moet wel telkens aangegeven worden over welk type variabele het gaat (`TypeVariabele`, bv. Percentage, Decimaal getal, Categorie) en bij een categorische variabele moet ook de gebruikte schaal opgegeven worden (`Invoertype`, bv. TANSLEY IHD).  Bij een interval wordt het type opgegeven van de variabelen die als onder- of bovengrens opgegeven zijn, bv. Percentage of Decimaal getal.
 
 Voor de berekeningen worden deze waarden intern omgezet naar intervallen.  De onder- en bovengrenzen die hierbij voor de verschillende schalen gehanteerd worden, kunnen opgevraagd worden via `geefVertaallijst(ConnectiePool)`.  De berekeningen gebeuren voor de boven- en ondergrens afzonderlijk, met als resultaat een nieuw interval.<!--nog aanpassen als we fuzzy logic gebruiken!-->  Voor de weergave van het resultaat worden voor rechtstreeks ingevoerde voorwaarden de door de gebruiker opgegeven waarden overgenomen; berekende waarden worden weergegeven in dezelfde schaal als de voorwaarde (LSVI-criterium).
 
