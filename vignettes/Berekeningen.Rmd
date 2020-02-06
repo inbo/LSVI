@@ -298,7 +298,8 @@ Voor de aggregatie naar het criterium worden deze resultaten op 2 manieren verde
 - een strenge beoordeling waarbij de redenering van de AND-operator gevolgd wordt, dus door het minimum te nemen (= index_min)
 - een minder strenge beoordeling waarbij het harmonisch gemiddelde van de verschilscores genomen wordt (=index_harm)
 
-Voor de aggregatie naar de volledige opname worden dezelfde 2 aggregatiemethoden opnieuw gebruikt uitgaande van de verschilscores op criteriumniveau.  Doordat de verschilscore index_min volgens de 2 methoden geaggregeerd wordt, resulteert dat in 3 verschillende eindscores van streng naar liberaal:
+Voor de aggregatie naar de volledige opname worden dezelfde 2 aggregatiemethoden opnieuw gebruikt uitgaande van de geaggregeerde resultaten op criteriumniveau.  
+Doordat de verschilscore index_min volgens de 2 methoden geaggregeerd wordt, resulteert dat in 3 verschillende eindscores van streng naar liberaal:
 
 - index_min_min: telkens het minimum genomen, dus de strengste beoordeling
 - index_min_harm: het harmonisch gemiddelde genomen van index_min
