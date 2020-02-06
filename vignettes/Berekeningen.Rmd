@@ -25,7 +25,7 @@ De gebruiker kan per opname 3 typen informatie invoeren:
 
 - habitattype: tabel die voor elke opname aangeeft volgens de criteria van welk habitattype de LSVI berekend moet worden
 - waarden voor indicatoren en voorwaarden (facultatief, afhankelijk van beschikbare gegevens): tabel met per opname rechtstreeks ingeschatte waarden voor indicatoren en voorwaarden zoals die in de LSVI-criteria vermeld zijn
-- bedekking voor soorten en/of kenmerken (facultatief, afhankelijk van beschikbare gegevens): tabel met per opname soorten en/of kenmerken en hun bedekkingen (of aan/afwezigheid), bv. gegevens die afkomstig zijn uit een volopname
+- bedekking voor soorten en/of kenmerken (facultatief, afhankelijk van beschikbare gegevens): tabel met per opname soorten en/of kenmerken en hun bedekkingen (of aan/afwezigheid), bv. gegevens die afkomstig zijn uit een volledige vegetatie-opname
 
 De achterliggende databank bevat ook 3 soorten informatie (op te vragen met de functie `geefInvoervereisten()`):
 
