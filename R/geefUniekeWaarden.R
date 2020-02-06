@@ -2,7 +2,7 @@
 #' LSVI-indicatoren voorafgegaan door "alle"
 #'
 #' @description Deze hulpfunctie geeft een vector met alle verschillende
-#' waarden die een gespecifieerd veld van een gespecifieerde tabel in de
+#' waarden die in een gespecificeerd veld van een gespecificeerde tabel in de
 #' databank met LSVI-indicatoren staan, voorafgegaan door de (toegevoegde)
 #' waarde "alle".  Deze functie wordt in verschillende functies van het package
 #' gebruikt om de invoer van parameters te controleren (waar de mogelijke
