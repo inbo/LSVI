@@ -31,7 +31,7 @@ De achterliggende databank bevat ook 3 soorten informatie (op te vragen met de f
 
 - indicatoren en voorwaarden per habitattype (op basis waarvan de LSVI bepaald wordt)
 - een grenswaarde ('Referentiewaarde') en operator voor elke voorwaarde (die aangeeft wanneer de staat gunstig of goed is)
-- rekenregels (= alle nodige info om op basis van een volopname een voorwaarde te kunnen berekenen)
+- rekenregels (= alle nodige info om een voorwaarde te kunnen berekenen)
 
 ```{r}
 str(geefInvoervereisten(Habitattype = "4030"))
