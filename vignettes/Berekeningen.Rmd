@@ -280,7 +280,7 @@ Voor de aggregatie naar hogere niveaus (criterium en volledige opname) worden de
 
 #Distance-to-target
 
-De distance-to-target of verschilscore van een voorwaarde wordt als volgt berekend met de functie `berekenVerschilscores()`:
+Eerst worden verschilscores voor elk van de voorwaarden berekend met de functie `berekenVerschilscores()`:
 
 - theoretisch maximum bepalen voor de voorwaarde:<!--zou idealiter in de databank toegevoegd worden-->
     - voor bedekkingen en aandelen is dit 1 of 100 %
