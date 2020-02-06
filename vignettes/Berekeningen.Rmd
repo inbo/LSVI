@@ -287,7 +287,7 @@ Eerst worden verschilscores voor elk van de voorwaarden berekend met de functie 
     - voor het aantal soorten/kenmerken is dit het aantal soorten/kenmerken van de lijst in de databank
 - theoretisch minimum is in elk van deze gevallen 0
 - voor elke voorwaarde een 'gunstig bereik' en 'ongunstig bereik' berekenen op basis van theoretisch minimum en theoretisch maximum, en de operator en de grenswaarde in de databank
-- de verschilscore wordt berekend door het verschil tussen de score en de grenswaarde te delen door het 'gunstig bereik' of het 'ongunstig bereik'; het resultaat krijgt een negatief teken bij een ongunstige score en een positief teken bij een gunstige score
+- de verschilscore wordt berekend door het verschil tussen de score en de grenswaarde te delen door het 'gunstig bereik' (in geval van gunstige status) of het 'ongunstig bereik' (in geval van ongunstige status); het resultaat krijgt een negatief teken bij een ongunstige score en een positief teken bij een gunstige score
 - voor voorwaarden die enkel de waarden ja en nee kunnen aannemen, kan de verschilscore enkel de waarden -1 (ongunstig) en 1 (gunstig) aannemen.
 
 Om de verschilscore van een indicator te berekenen, wordt rekening gehouden met de aggregatie 
