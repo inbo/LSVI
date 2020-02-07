@@ -12,6 +12,8 @@
 #' @importFrom methods setClass setMethod as
 #' @importFrom dplyr %>% filter
 #'
+#' @noRd
+#'
 #' @include s4_bedekking.R
 setClass(
   Class = "bedekkingLaag",

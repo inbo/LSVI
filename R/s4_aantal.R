@@ -10,6 +10,8 @@
 #' @importFrom methods setClass setMethod
 #' @importFrom dplyr %>% mutate row_number filter
 #'
+#' @noRd
+#'
 #' @include s4_AnalyseVariabele.R
 setClass(
   Class = "aantal",
