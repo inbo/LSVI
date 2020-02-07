@@ -9,6 +9,8 @@
 #'
 #' @importFrom methods setClass setMethod
 #'
+#' @noRd
+#'
 #' @include s4_bedekking.R
 setClass(
   Class = "aandeelKruidlaag",
