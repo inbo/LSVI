@@ -10,6 +10,8 @@
 #'
 #' @importFrom methods setClass setMethod
 #'
+#' @noRd
+#'
 #' @include s4_AnalyseVariabele.R
 setClass(
   Class = "maxBedekking2s",

@@ -9,6 +9,8 @@
 #' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden
 #' Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
 #'
+#' @noRd
+#'
 #' @importFrom assertthat assert_that has_name
 #' @importFrom methods setClass setValidity getGeneric setMethod
 #' setReplaceMethod validObject

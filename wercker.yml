@@ -5,7 +5,7 @@ build:
         code: |
           apt-get update
           apt-get install -y libgeos-dev
-          Rscript -e "install.packages(c('odbc', 'pool', 'rgbif'))"
+          Rscript -e "install.packages(c('odbc', 'pool', 'rgbif', 'prettyunits'))"
     - inbobmk/r-check
     - inbobmk/r-coverage
     - jimhester/r-lint

@@ -15,6 +15,7 @@
 #' @importFrom dplyr %>% mutate select filter summarise
 #' @importFrom rlang .data
 #'
+#'@noRd
 
 analyseVariabele_c <- #nolint
   function(
