@@ -21,6 +21,7 @@ setClass(
       Soortengroep = "data.frame",
       Studiegroep = "data.frame",
       SubAnalyseVariabele = "character",
+      SubReferentiewaarde = "character",
       SubRefMin = "numeric",
       SubRefMax = "numeric",
       SubOperator = "character",
@@ -318,5 +319,37 @@ setGeneric(
   name = "geefTheoretischMaximum",
   def = function(object) {
     standardGeneric("geefTheoretischMaximum")
+  }
+)
+
+setGeneric(
+  name = "getSubReferentiewaarde",
+  def = function(object) {
+    standardGeneric("getSubReferentiewaarde")
+  }
+)
+
+setMethod(
+  f = "getSubReferentiewaarde",
+  signature = "AnalyseVariabele",
+  definition = function(object) {
+    return(object@SubReferentiewaarde)
+  }
+)
+
+setGeneric(
+  name = "setSubReferentiewaarde<-",
+  def = function(object, value) {
+    standardGeneric("setSubReferentiewaarde<-")
+  }
+)
+
+setReplaceMethod(
+  f = "setSubReferentiewaarde",
+  signature = "AnalyseVariabele",
+  definition = function(object, value) {
+    object@SubReferentiewaarde <- value
+    validObject(object)
+    return(object)
   }
 )

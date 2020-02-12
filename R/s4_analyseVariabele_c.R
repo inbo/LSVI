@@ -132,6 +132,8 @@ analyseVariabele_c <- #nolint
       setSubRefMin(AnalyseObject) <- SAV$Min
       setSubRefMax(AnalyseObject) <- SAV$Max
       setSubOperator(AnalyseObject) <- VoorwaardeInfo$SubOperator
+      setSubReferentiewaarde(AnalyseObject) <-
+        VoorwaardeInfo$SubReferentiewaarde
     }
 
     return(AnalyseObject)

@@ -18,6 +18,7 @@
 #' @param SubRefMax maximumwaarde van de grenswaarde voor de bedekking
 #' @param SubOperator operator voor deze subvoorwaarde: moet de bedekking hoger
 #' of lager liggen dan de opgegeven referentiewaarde?
+#' @param SubReferentiewaarde bedekkingscode van de grenswaarde voor bedekking
 #'
 #' @return Deze functie geeft een aangepaste tabel Data_soorten terug waarin
 #' enkel de soorten uit de soortenlijst(en) opgenomen zijn en die bovendien
@@ -103,10 +104,22 @@ selecteerKenmerkenInOpname <- #nolint
           return(TaxonData)
         }
 
-      Resultaat <- Resultaat %>%
-        group_by(.data$TaxonId, .data$Eenheid) %>%
-        do(kiesTaxonOfSubtaxons(.)) %>%
-        ungroup()
+      if ("is_frequent" %in% colnames(Resultaat)) {
+        Resultaat <- Resultaat %>%
+          group_by(.data$TaxonId,
+                   .data$Eenheid,
+                   .data$is_frequent,
+                   .data$is_talrijk,
+                   .data$is_abundant) %>%
+          do(kiesTaxonOfSubtaxons(.)) %>%
+          ungroup()
+      } else {
+        Resultaat <- Resultaat %>%
+          group_by(.data$TaxonId, .data$Eenheid) %>%
+          do(kiesTaxonOfSubtaxons(.)) %>%
+          ungroup()
+      }
+
     }
 
     if (length(Studiegroep) > 0 & !(length(Soortengroep) > 0)) {
