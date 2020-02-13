@@ -41,7 +41,8 @@ selecteerKenmerkenInOpname <- #nolint
     SubAnalyseVariabele,
     SubRefMin,
     SubRefMax,
-    SubOperator
+    SubOperator,
+    SubReferentiewaarde
   ) {
 
     if (length(Kenmerken) == 0) {
@@ -181,34 +182,47 @@ selecteerKenmerkenInOpname <- #nolint
         )
 
       if (nrow(Resultaat) > 0) {
+        if ("is_frequent" %in% colnames(Resultaat)) {
+          select_kolom <- switch(SubReferentiewaarde,
+                 T = "is_talrijk",
+                 f = "is_frequent",
+                 a = "is_abundant",
+                 la = "is_frequent",
+                 WT = "is_frequent",
+                 o = "is_frequent",
+                 lf = "is_frequent")
+          Resultaat <- Resultaat[Resultaat[[select_kolom]] == 1,] %>%
+            mutate(Status = TRUE) %>%
+            distinct()
+        } else {
+          SubStatusberekening <-
+            berekenStatus(
+              Resultaat[
+                , c(
+                  "Rijnr",
+                  "RefMin",
+                  "RefMax",
+                  "Operator",
+                  "WaardeMin",
+                  "WaardeMax"
+                )
+                ]
+            )
 
-        SubStatusberekening <-
-          berekenStatus(
-            Resultaat[
-              , c(
-                "Rijnr",
-                "RefMin",
-                "RefMax",
-                "Operator",
-                "WaardeMin",
-                "WaardeMax"
-              )
-              ]
-          )
+          Resultaat <- Resultaat %>%
+            left_join(
+              SubStatusberekening,
+              by = c("Rijnr")
+            ) %>%
+            mutate(
+              Rijnr = NULL
+            ) %>%
+            filter(
+              .data$Status == TRUE
+            ) %>%
+            distinct()
 
-        Resultaat <- Resultaat %>%
-          left_join(
-            SubStatusberekening,
-            by = c("Rijnr")
-          ) %>%
-          mutate(
-            Rijnr = NULL
-          ) %>%
-          filter(
-            .data$Status == TRUE
-          ) %>%
-          distinct()
-
+          }
       }
 
     } else {
