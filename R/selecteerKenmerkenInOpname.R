@@ -187,7 +187,7 @@ selecteerKenmerkenInOpname <- #nolint
                  T = "is_talrijk",
                  f = "is_frequent",
                  a = "is_abundant",
-                 la = "is_frequent",
+                 la = "is_abundant",
                  WT = "is_frequent",
                  o = "is_frequent",
                  lf = "is_frequent")

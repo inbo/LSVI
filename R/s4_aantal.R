@@ -66,7 +66,8 @@ setMethod(
           object@SubAnalyseVariabele,
           object@SubRefMin,
           object@SubRefMax,
-          object@SubOperator
+          object@SubOperator,
+          object@SubReferentiewaarde
         )
       if (length(ResultaatMax) == 1 & all(is.na(ResultaatMax))) {
         return(NA)
@@ -86,7 +87,8 @@ setMethod(
           object@SubAnalyseVariabele,
           object@SubRefMin,
           object@SubRefMax,
-          object@SubOperator
+          object@SubOperator,
+          object@SubReferentiewaarde
         )
       if (length(ResultaatMin) == 1 & all(is.na(ResultaatMin))) {
         AantalMin <- 0
@@ -106,7 +108,8 @@ setMethod(
           object@SubAnalyseVariabele,
           object@SubRefMin,
           object@SubRefMax,
-          object@SubOperator
+          object@SubOperator,
+          object@SubReferentiewaarde
         )
 
       if (length(Resultaat) == 1 & all(is.na(Resultaat))) {
