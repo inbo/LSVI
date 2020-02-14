@@ -18,7 +18,6 @@
 #' @param SubRefMax maximumwaarde van de grenswaarde voor de bedekking
 #' @param SubOperator operator voor deze subvoorwaarde: moet de bedekking hoger
 #' of lager liggen dan de opgegeven referentiewaarde?
-#' @param SubReferentiewaarde bedekkingscode van de grenswaarde voor bedekking
 #'
 #' @return Deze functie geeft een aangepaste tabel Data_soorten terug waarin
 #' enkel de soorten uit de soortenlijst(en) opgenomen zijn en die bovendien
@@ -41,8 +40,7 @@ selecteerKenmerkenInOpname <- #nolint
     SubAnalyseVariabele,
     SubRefMin,
     SubRefMax,
-    SubOperator,
-    SubReferentiewaarde
+    SubOperator
   ) {
 
     if (length(Kenmerken) == 0) {
@@ -105,22 +103,10 @@ selecteerKenmerkenInOpname <- #nolint
           return(TaxonData)
         }
 
-      if ("is_frequent" %in% colnames(Resultaat)) {
-        Resultaat <- Resultaat %>%
-          group_by(.data$TaxonId,
-                   .data$Eenheid,
-                   .data$is_frequent,
-                   .data$is_talrijk,
-                   .data$is_abundant) %>%
-          do(kiesTaxonOfSubtaxons(.)) %>%
-          ungroup()
-      } else {
-        Resultaat <- Resultaat %>%
-          group_by(.data$TaxonId, .data$Eenheid) %>%
-          do(kiesTaxonOfSubtaxons(.)) %>%
-          ungroup()
-      }
-
+      Resultaat <- Resultaat %>%
+        group_by(.data$TaxonId, .data$Eenheid) %>%
+        do(kiesTaxonOfSubtaxons(.)) %>%
+        ungroup()
     }
 
     if (length(Studiegroep) > 0 & !(length(Soortengroep) > 0)) {
@@ -182,47 +168,34 @@ selecteerKenmerkenInOpname <- #nolint
         )
 
       if (nrow(Resultaat) > 0) {
-        if ("is_frequent" %in% colnames(Resultaat)) {
-          select_kolom <- switch(SubReferentiewaarde,
-                 T = "is_talrijk",
-                 f = "is_frequent",
-                 a = "is_abundant",
-                 la = "is_abundant",
-                 WT = "is_frequent",
-                 o = "is_frequent",
-                 lf = "is_frequent")
-          Resultaat <- Resultaat[Resultaat[[select_kolom]] == 1,] %>%
-            mutate(Status = TRUE) %>%
-            distinct()
-        } else {
-          SubStatusberekening <-
-            berekenStatus(
-              Resultaat[
-                , c(
-                  "Rijnr",
-                  "RefMin",
-                  "RefMax",
-                  "Operator",
-                  "WaardeMin",
-                  "WaardeMax"
-                )
-                ]
-            )
 
-          Resultaat <- Resultaat %>%
-            left_join(
-              SubStatusberekening,
-              by = c("Rijnr")
-            ) %>%
-            mutate(
-              Rijnr = NULL
-            ) %>%
-            filter(
-              .data$Status == TRUE
-            ) %>%
-            distinct()
+        SubStatusberekening <-
+          berekenStatus(
+            Resultaat[
+              , c(
+                "Rijnr",
+                "RefMin",
+                "RefMax",
+                "Operator",
+                "WaardeMin",
+                "WaardeMax"
+              )
+              ]
+          )
 
-          }
+        Resultaat <- Resultaat %>%
+          left_join(
+            SubStatusberekening,
+            by = c("Rijnr")
+          ) %>%
+          mutate(
+            Rijnr = NULL
+          ) %>%
+          filter(
+            .data$Status == TRUE
+          ) %>%
+          distinct()
+
       }
 
     } else {
