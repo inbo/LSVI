@@ -103,10 +103,21 @@ selecteerKenmerkenInOpname <- #nolint
           return(TaxonData)
         }
 
-      Resultaat <- Resultaat %>%
-        group_by(.data$TaxonId, .data$Eenheid) %>%
-        do(kiesTaxonOfSubtaxons(.)) %>%
-        ungroup()
+      if ("is_talrijk" %in% colnames(Resultaat)) {
+        Resultaat <- Resultaat %>%
+          group_by(.data$TaxonId,
+                   .data$Eenheid,
+                   .data$is_weinigtalrijk,
+                   .data$is_talrijk,
+                   .data$is_bedekkend) %>%
+          do(kiesTaxonOfSubtaxons(.)) %>%
+          ungroup()
+      } else {
+        Resultaat <- Resultaat %>%
+          group_by(.data$TaxonId, .data$Eenheid) %>%
+          do(kiesTaxonOfSubtaxons(.)) %>%
+          ungroup()
+      }
     }
 
     if (length(Studiegroep) > 0 & !(length(Soortengroep) > 0)) {
@@ -168,34 +179,56 @@ selecteerKenmerkenInOpname <- #nolint
         )
 
       if (nrow(Resultaat) > 0) {
-
-        SubStatusberekening <-
-          berekenStatus(
-            Resultaat[
-              , c(
-                "Rijnr",
-                "RefMin",
-                "RefMax",
-                "Operator",
-                "WaardeMin",
-                "WaardeMax"
-              )
-              ]
+        if (
+          all(
+            c("is_weinigtalrijk", "is_talrijk", "is_bedekkend")
+            %in% colnames(Resultaat)
           )
+        ) {
+          if (SubRefMin < 0.02) {
+            Resultaat <- Resultaat %>%
+              filter(as.logical(is_weinigtalrijk)) %>%
+              mutate(Status = TRUE) %>%
+              distinct()
+          } else if (SubRefMin >= 0.05) {
+            Resultaat <- Resultaat %>%
+              filter(as.logical(is_bedekkend)) %>%
+              mutate(Status = TRUE) %>%
+              distinct()
+          } else {
+            Resultaat <- Resultaat %>%
+              filter(as.logical(is_talrijk)) %>%
+              mutate(Status = TRUE) %>%
+              distinct()
+          }
+        } else {
+          SubStatusberekening <-
+            berekenStatus(
+              Resultaat[
+                , c(
+                  "Rijnr",
+                  "RefMin",
+                  "RefMax",
+                  "Operator",
+                  "WaardeMin",
+                  "WaardeMax"
+                )
+                ]
+            )
 
-        Resultaat <- Resultaat %>%
-          left_join(
-            SubStatusberekening,
-            by = c("Rijnr")
-          ) %>%
-          mutate(
-            Rijnr = NULL
-          ) %>%
-          filter(
-            .data$Status == TRUE
-          ) %>%
-          distinct()
-
+          Resultaat <- Resultaat %>%
+            left_join(
+              SubStatusberekening,
+              by = c("Rijnr")
+            ) %>%
+            mutate(
+              Rijnr = NULL
+            ) %>%
+            filter(
+              .data$Status == TRUE
+            ) %>%
+            distinct()
+        }
       }
 
     } else {
