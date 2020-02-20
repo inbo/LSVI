@@ -23,6 +23,8 @@
 #' @importFrom methods setClass setMethod as
 #' @importFrom dplyr %>% arrange count filter group_by
 #'
+#' @noRd
+#'
 #' @include s4_bedekkingLaag.R
 setClass(
   Class = "bedekkingLaagExcl",

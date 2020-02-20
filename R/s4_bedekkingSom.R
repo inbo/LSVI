@@ -10,6 +10,8 @@
 #'
 #' @importFrom methods setClass setMethod as
 #'
+#' @noRd
+#'
 #' @include s4_bedekking.R
 setClass(
   Class = "bedekkingSom",

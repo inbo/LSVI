@@ -371,7 +371,8 @@ geefInvoervereisten <- function(Versie = "alle",
     ) %>%
     mutate(Indicator_beoordelingID = NULL) %>%
     left_join(BasisVoorwaarden, by = c("BeoordelingID" = "BeoordelingID")) %>%
-    left_join(Voorwaardeinfo, by = c("VoorwaardeID" = "VoorwaardeID"))
+    left_join(Voorwaardeinfo, by = c("VoorwaardeID" = "VoorwaardeID")) %>%
+    distinct()
 
   return(Invoervereisten)
 }
