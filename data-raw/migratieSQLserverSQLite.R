@@ -4,6 +4,7 @@ library(DBI)
 library(RSQLite)
 library(LSVI)
 library(dplyr)
+library(purrr)
 
 migratieSQLserverSQLite <-
   function(
@@ -318,6 +319,74 @@ migratieSQLserverSQLite <-
       ConnectiePool,
       "SELECT Id, Naam
       FROM TaxonType"
+    )
+
+
+  #berekening Theoretisch Maximum
+  Voorwaardetest <- Voorwaarde %>%
+    rowwise() %>%
+    mutate(
+      AantalSoorten =
+        ifelse(
+          !is.na(TaxongroepId),
+          nrow(geefSoortenlijstVoorIDs(as.character(TaxongroepId))),
+          NA
+        ),
+      AantalLijstitems =
+        ifelse(
+          !is.na(InvoermaskerId),
+          nrow(LijstItem %>% filter(LijstId == LijstID)),
+          NA
+        )
+    )Voorwaardetest <- Voorwaardetest %>%
+    inner_join(AnalyseVariabele, by = c("AnalyseVariabeleId" = "Id")) %>%
+    inner_join(TypeVariabele, by = c("TypeVariabeleId" = "Id")) %>%
+    mutate(
+      Maximumwaarde =
+        ifelse(
+          VariabeleNaam %in% c("aandeel", "aandeelKruidlaag", "meting_perc"),
+          1,
+          NA
+        ),
+      Maximumwaarde =
+        ifelse(
+          grepl("bedekking", tolower(VariabeleNaam)), 1, Maximumwaarde
+        ),
+      Maximumwaarde =
+        ifelse(
+          grepl("meting", VariabeleNaam) & Naam == "Categorie", 1, Maximumwaarde
+        ),
+      Maximumwaarde =
+        ifelse(
+          grepl("meting", VariabeleNaam) & Naam == "Ja/nee", 1, Maximumwaarde
+        ),
+      Maximumwaarde =
+        ifelse(
+          grepl("meting", VariabeleNaam) & VoorwaardeNaam == "aantal geslachten",
+          2, Maximumwaarde
+        ),
+      Maximumwaarde =
+        ifelse(
+          grepl("meting", VariabeleNaam) & VoorwaardeNaam == "bosconstantie",
+          250, Maximumwaarde
+        ),
+      Maximumwaarde =
+        ifelse(
+          VariabeleNaam == "aantal" & !is.na(TaxongroepId),
+          AantalSoorten,
+          Maximumwaarde
+        ),
+      Maximumwaarde =
+        ifelse(
+          VariabeleNaam == "aantal" & is.na(TaxongroepId),
+          AantalLijstitems,
+          Maximumwaarde
+        ),
+      Maximumwaarde =
+        ifelse(
+          grepl("meting", VariabeleNaam) | VariabeleNaam == "aantal",
+          min(3 * Referentiewaarde, Maximumwaarde), Maximumwaarde
+        )
     )
   
   NieuweDb <- dbConnect(SQLite(), "inst/databank/LSVIHabitatTypes.sqlite")
