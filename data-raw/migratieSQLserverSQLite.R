@@ -323,7 +323,7 @@ migratieSQLserverSQLite <-
 
 
   #berekening Theoretisch Maximum
-  Voorwaardetest <- Voorwaarde %>%
+  Voorwaarde <- Voorwaarde %>%
     rowwise() %>%
     mutate(
       AantalSoorten =
@@ -331,14 +331,18 @@ migratieSQLserverSQLite <-
           !is.na(TaxongroepId),
           nrow(geefSoortenlijstVoorIDs(as.character(TaxongroepId))),
           NA
-        ),
-      AantalLijstitems =
-        ifelse(
-          !is.na(InvoermaskerId),
-          nrow(LijstItem %>% filter(LijstId == LijstID)),
-          NA
         )
-    )Voorwaardetest <- Voorwaardetest %>%
+    ) %>%
+    ungroup() %>%
+    left_join(StudieItem, by = "StudiegroepId", suffix = c("", ".studie")) %>%
+    group_by(
+      Id, VoorwaardeNaam, ExtraInfo, AnalyseVariabeleId, Referentiewaarde,
+      Operator, InvoermaskerId, TaxongroepId, StudiegroepId,
+      SubAnalyseVariabeleId, SubReferentiewaarde, SubOperator,
+      SubInvoermaskerId, AantalSoorten
+    ) %>%
+    summarise(AantalKenmerken = n()) %>%
+    ungroup() %>%
     inner_join(AnalyseVariabele, by = c("AnalyseVariabeleId" = "Id")) %>%
     inner_join(TypeVariabele, by = c("TypeVariabeleId" = "Id")) %>%
     mutate(
@@ -378,15 +382,23 @@ migratieSQLserverSQLite <-
         ),
       Maximumwaarde =
         ifelse(
-          VariabeleNaam == "aantal" & is.na(TaxongroepId),
-          AantalLijstitems,
+          VariabeleNaam == "aantal" & is.na(TaxongroepId) & !is.na(StudiegroepId),
+          AantalKenmerken,
           Maximumwaarde
         ),
       Maximumwaarde =
         ifelse(
-          grepl("meting", VariabeleNaam) | VariabeleNaam == "aantal",
-          min(3 * Referentiewaarde, Maximumwaarde), Maximumwaarde
+          grepl("meting", VariabeleNaam) & Naam != "Ja/nee" | VariabeleNaam == "aantal",
+          pmin(3 * as.numeric(sub(",", ".", Referentiewaarde)), Maximumwaarde,
+               na.rm = TRUE),
+          Maximumwaarde
         )
+    ) %>%
+    select(
+      Id, VoorwaardeNaam, ExtraInfo, AnalyseVariabeleId, Referentiewaarde,
+      Operator, InvoermaskerId, TaxongroepId, StudiegroepId,
+      SubAnalyseVariabeleId, SubReferentiewaarde, SubOperator,
+      SubInvoermaskerId, Maximumwaarde
     )
   
   NieuweDb <- dbConnect(SQLite(), "inst/databank/LSVIHabitatTypes.sqlite")
