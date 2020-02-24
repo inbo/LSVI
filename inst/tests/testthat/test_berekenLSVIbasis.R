@@ -834,72 +834,14 @@ describe("berekenLSVIbasis", {
         )
       ),
       list(
-        Resultaat_criterium = Resultaatv2[["Resultaat_criterium"]] %>%
-          mutate(
-            Index_min_criterium =
-              ifelse(
-                .data$Criterium == "Vegetatie",
-                NA,
-                .data$Index_min_criterium
-              ),
-            Index_min_criterium =
-              ifelse(
-                .data$Criterium == "Structuur" & .data$ID == "Ts2036",
-                NA,
-                .data$Index_min_criterium
-              ),
-            Index_harm_criterium =
-              ifelse(
-                is.na(.data$Index_min_criterium),
-                NA,
-                .data$Index_harm_criterium
-              )
-          ),
-        Resultaat_indicator = Resultaatv2[["Resultaat_indicator"]] %>%
-          mutate(
-            Verschilscore =
-              ifelse(
-                .data$Criterium == "Vegetatie",
-                NA,
-                .data$Verschilscore
-              ),
-            Verschilscore =
-              ifelse(
-                .data$Indicator == "ouderdomsstructuur Struikheide" &
-                  .data$ID == "Ts2036",
-                NA,
-                .data$Verschilscore
-              )
-          ),
+        Resultaat_criterium = Resultaatv2[["Resultaat_criterium"]],
+        Resultaat_indicator = Resultaatv2[["Resultaat_indicator"]],
         Resultaat_detail =
           Resultaatv2[["Resultaat_detail"]] %>%
           mutate(
-            TheoretischMaximum =
-              ifelse(
-                .data$AfkomstWaarde == "berekend",
-                NA,
-                .data$TheoretischMaximum
-              ),
-            Verschilscore =
-              ifelse(
-                .data$Voorwaarde == "aanwezigheid struikheide",
-                NA,
-                .data$Verschilscore
-              ),
-            Verschilscore =
-              ifelse(
-                .data$Waarde == "3",
-                NA,
-                .data$Verschilscore
-              ),
             AfkomstWaarde = "observatie"
           ),
-        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]] %>%
-          mutate(
-            Index_min_min = as.numeric(NA),
-            Index_min_harm = as.numeric(NA),
-            Index_harm_harm = as.numeric(NA)
-          )
+        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]]
       )
     )
   })
@@ -1011,7 +953,7 @@ describe("berekenLSVIbasis", {
             Index_harm_harm =
               ifelse(
                 .data$ID == "Ts2036",
-                0.126462940,
+                0.24316082,
                 .data$Index_harm_harm
               )
           )
