@@ -283,8 +283,13 @@ Voor de aggregatie naar hogere niveaus (criterium en volledige opname) worden de
 Eerst worden verschilscores voor elk van de voorwaarden berekend met de functie `berekenVerschilscores()`:
 
 - theoretisch maximum bepalen voor de voorwaarde:<!--zou idealiter in de databank toegevoegd worden-->
-    - voor bedekkingen en aandelen is dit 1 of 100 %
-    - voor het aantal soorten/kenmerken is dit het aantal soorten/kenmerken van de lijst in de databank
+    - voor bedekkingen en aandelen is dit 1 of 100 % (ook als de grenswaarde een categorische variabele is)
+    - voor het aantal soorten/kenmerken is dit het minimum van:
+        - het aantal soorten/kenmerken van de lijst in de databank
+        - 3 keer de grenswaarde
+    - voor gemeten waarden is dit 3 keer de grenswaarde, m.u.v.
+        - het maximum voor aantal geslachten (van jeneverbes) is 2
+        - voor bosconstantie is het maximum begrensd op 250 (~ leeftijd van Ferrariskaart)
 - theoretisch minimum is in elk van deze gevallen 0
 - voor elke voorwaarde een 'gunstig bereik' en 'ongunstig bereik' berekenen op basis van theoretisch minimum en theoretisch maximum, en de operator en de grenswaarde in de databank
 - de verschilscore wordt berekend door het verschil tussen de score en de grenswaarde te delen door het 'gunstig bereik' (in geval van gunstige status) of het 'ongunstig bereik' (in geval van ongunstige status); het resultaat krijgt een negatief teken bij een ongunstige score en een positief teken bij een gunstige score
