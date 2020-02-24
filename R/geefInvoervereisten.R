@@ -257,11 +257,22 @@ geefInvoervereisten <- function(Versie = "alle",
       ),
       collapse = "','"
     )
+  
+  Maximumwaarde <- ""
+  if (class(ConnectieLSVIhabitats)[1] == "Pool") {
+    Klasse <-
+      class(ConnectieLSVIhabitats$.__enclos_env__$private$createObject())[1]
+  } else {
+    Klasse <- class(ConnectieLSVIhabitats)[1]
+  }
+  if (Klasse == "SQLiteConnection") {
+    Maximumwaarde <- "Voorwaarde.Maximumwaarde,"
+  }
 
   query_voorwaardeinfo <-
     sprintf("SELECT Voorwaarde.Id AS VoorwaardeID,
             Voorwaarde.VoorwaardeNaam AS Voorwaarde,
-            Voorwaarde.Referentiewaarde, Voorwaarde.Operator,
+            Voorwaarde.Referentiewaarde, Voorwaarde.Operator, %s
             AnalyseVariabele.VariabeleNaam as AnalyseVariabele,
             AnalyseVariabele.Eenheid, TypeVariabele.Naam AS TypeVariabele,
             Lijst.Naam AS Invoertype, LijstItem.Waarde As Invoerwaarde,
@@ -312,7 +323,7 @@ geefInvoervereisten <- function(Versie = "alle",
                       LEFT JOIN LijstItem AS SubLijstItem
                         ON SubLijst.Id = SubLijstItem.LijstId)
               ON Voorwaarde.SubInvoermaskerId = SubLijst.Id
-            WHERE Voorwaarde.Id in ('%s')", VoorwaardenIDs)
+            WHERE Voorwaarde.Id in ('%s')", Maximumwaarde, VoorwaardenIDs)
 
   Voorwaardeinfo <-
     dbGetQuery(
@@ -321,47 +332,91 @@ geefInvoervereisten <- function(Versie = "alle",
     )
 
   if (tolower(Weergave[1]) == "basis") {
-    Voorwaardeinfo <- Voorwaardeinfo %>%
-      arrange(
-        .data$Invoervolgnr,
-        .data$Studievolgnr,
-        .data$SubInvoervolgnr
-      ) %>%
-      group_by(
-        .data$VoorwaardeID, .data$Voorwaarde,
-        .data$Referentiewaarde,
-        .data$Operator, .data$AnalyseVariabele,
-        .data$Eenheid, .data$TypeVariabele,
-        .data$Invoertype,
-        .data$TaxongroepId, .data$TaxongroepNaam,
-        .data$Studiegroepnaam, .data$Studielijstnaam,
-        .data$SubAnalyseVariabele, .data$SubEenheid,
-        .data$TypeSubVariabele, .data$SubReferentiewaarde,
-        .data$SubOperator, .data$SubInvoertype
-      ) %>%
-      summarise(
-        Invoerwaarde =
-          paste(unique(.data$Invoerwaarde), collapse = ", "),
-        Studiewaarde =
-          paste(unique(.data$Studiewaarde), collapse = ", "),
-        SubInvoerwaarde =
-          paste(unique(.data$SubInvoerwaarde), collapse = ", "),
-      ) %>%
-      ungroup() %>%                   #volgorde aanpassen
-      select(
-        .data$VoorwaardeID, .data$Voorwaarde,
-        .data$Referentiewaarde,
-        .data$Operator, .data$AnalyseVariabele,
-        .data$Eenheid, .data$TypeVariabele,
-        .data$Invoertype, .data$Invoerwaarde,
-        .data$TaxongroepId, .data$TaxongroepNaam,
-        .data$Studiegroepnaam, .data$Studielijstnaam,
-        .data$Studiewaarde,
-        .data$SubAnalyseVariabele, .data$SubEenheid,
-        .data$TypeSubVariabele, .data$SubReferentiewaarde,
-        .data$SubOperator, .data$SubInvoertype,
-        .data$SubInvoerwaarde
-      )
+    if (Klasse == "Microsoft SQL Server") {
+      Voorwaardeinfo <- Voorwaardeinfo %>%
+        arrange(
+          .data$Invoervolgnr,
+          .data$Studievolgnr,
+          .data$SubInvoervolgnr
+        ) %>%
+        group_by(
+          .data$VoorwaardeID, .data$Voorwaarde,
+          .data$Referentiewaarde,
+          .data$Operator, .data$AnalyseVariabele,
+          .data$Eenheid, .data$TypeVariabele,
+          .data$Invoertype,
+          .data$TaxongroepId, .data$TaxongroepNaam,
+          .data$Studiegroepnaam, .data$Studielijstnaam,
+          .data$SubAnalyseVariabele, .data$SubEenheid,
+          .data$TypeSubVariabele, .data$SubReferentiewaarde,
+          .data$SubOperator, .data$SubInvoertype
+        ) %>%
+        summarise(
+          Invoerwaarde =
+            paste(unique(.data$Invoerwaarde), collapse = ", "),
+          Studiewaarde =
+            paste(unique(.data$Studiewaarde), collapse = ", "),
+          SubInvoerwaarde =
+            paste(unique(.data$SubInvoerwaarde), collapse = ", "),
+        ) %>%
+        ungroup() %>%                   #volgorde aanpassen
+        select(
+          .data$VoorwaardeID, .data$Voorwaarde,
+          .data$Referentiewaarde,
+          .data$Operator, .data$AnalyseVariabele,
+          .data$Eenheid, .data$TypeVariabele,
+          .data$Invoertype, .data$Invoerwaarde,
+          .data$TaxongroepId, .data$TaxongroepNaam,
+          .data$Studiegroepnaam, .data$Studielijstnaam,
+          .data$Studiewaarde,
+          .data$SubAnalyseVariabele, .data$SubEenheid,
+          .data$TypeSubVariabele, .data$SubReferentiewaarde,
+          .data$SubOperator, .data$SubInvoertype,
+          .data$SubInvoerwaarde
+        )
+    } else {
+      Voorwaardeinfo <- Voorwaardeinfo %>%
+        arrange(
+          .data$Invoervolgnr,
+          .data$Studievolgnr,
+          .data$SubInvoervolgnr
+        ) %>%
+        group_by(
+          .data$VoorwaardeID, .data$Voorwaarde,
+          .data$Referentiewaarde,
+          .data$Operator, .data$Maximumwaarde, .data$AnalyseVariabele,
+          .data$Eenheid, .data$TypeVariabele,
+          .data$Invoertype,
+          .data$TaxongroepId, .data$TaxongroepNaam,
+          .data$Studiegroepnaam, .data$Studielijstnaam,
+          .data$SubAnalyseVariabele, .data$SubEenheid,
+          .data$TypeSubVariabele, .data$SubReferentiewaarde,
+          .data$SubOperator, .data$SubInvoertype
+        ) %>%
+        summarise(
+          Invoerwaarde =
+            paste(unique(.data$Invoerwaarde), collapse = ", "),
+          Studiewaarde =
+            paste(unique(.data$Studiewaarde), collapse = ", "),
+          SubInvoerwaarde =
+            paste(unique(.data$SubInvoerwaarde), collapse = ", "),
+        ) %>%
+        ungroup() %>%                   #volgorde aanpassen
+        select(
+          .data$VoorwaardeID, .data$Voorwaarde,
+          .data$Referentiewaarde,
+          .data$Operator, .data$Maximumwaarde, .data$AnalyseVariabele,
+          .data$Eenheid, .data$TypeVariabele,
+          .data$Invoertype, .data$Invoerwaarde,
+          .data$TaxongroepId, .data$TaxongroepNaam,
+          .data$Studiegroepnaam, .data$Studielijstnaam,
+          .data$Studiewaarde,
+          .data$SubAnalyseVariabele, .data$SubEenheid,
+          .data$TypeSubVariabele, .data$SubReferentiewaarde,
+          .data$SubOperator, .data$SubInvoertype,
+          .data$SubInvoerwaarde
+        )
+    }
   }
 
   Invoervereisten <- Selectiewaarden %>%
