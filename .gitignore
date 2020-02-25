@@ -7,7 +7,8 @@ doc
 *.Rproj
 *_cache/
 *_files/
-*.html
+vignettes/*.html
+inst/*.html
 .git
 inst/doc
 credentials
