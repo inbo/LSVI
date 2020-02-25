@@ -105,7 +105,7 @@ describe("Data_soortenKenmerken", {
         Data_voorwaarden,
         Data_soortenKenmerkenDubbel
       ),
-      "'Sambucus nigra, Gewone vlier' meermaals opgegeven voor de boomlaag" #nolint
+      "zowel Nederlandse als Latijnse namen gebruikt voor de soort 'Sambucus nigra'" #nolint
     )
   })
 })

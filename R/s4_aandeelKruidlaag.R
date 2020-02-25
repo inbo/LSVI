@@ -50,7 +50,7 @@ setMethod(
       #op basis van alle soorten in kruidlaag
       soorten_vegetatielaag <- object@Kenmerken %>%
         filter(
-          .data$Vegetatielaag  %in% tolower(object@Studiegroep$Waarde))
+          tolower(.data$Vegetatielaag)  %in% tolower(object@Studiegroep$Waarde))
 
       BedekkingMin <-
         (1.0 - prod((1.0 - soorten_vegetatielaag$WaardeMin), na.rm = TRUE))

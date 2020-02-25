@@ -139,7 +139,68 @@ describe("berekenLSVIbasis", {
           ),
         Data_voorwaarden,
         Data_soortenKenmerken
-      )
+      ), "'onbestaand' ingevoerd in Data_habitat"
+    )
+  })
+  it("habitattype in Data_habitat moet eenduidige fiche hebben", {
+    expect_error(
+      berekenLSVIbasis(
+        Versie = "Versie 2.0",
+        Kwaliteitsniveau = "1",
+        Data_habitat %>%
+          bind_rows(
+            data.frame(
+              ID = "JR0216",
+              Habitattype = "6410",
+              stringsAsFactors = FALSE
+            )
+          ),
+        Data_voorwaarden,
+        Data_soortenKenmerken
+      ), "6410 voor de opgegeven versie"
+    )
+    expect_error(
+      berekenLSVIbasis(
+        Versie = "Versie 2.0",
+        Kwaliteitsniveau = "1",
+        Data_habitat %>%
+          bind_rows(
+            data.frame(
+              ID = "JR0216",
+              Habitattype = "91E0",
+              stringsAsFactors = FALSE
+            )
+          ),
+        Data_voorwaarden,
+        Data_soortenKenmerken
+      ), "91E0 voor de opgegeven versie"
+    )
+    expect_equal(
+      berekenLSVIbasis(
+        Versie = "Versie 2.0",
+        Kwaliteitsniveau = "1",
+        Data_habitat =
+          data.frame(
+            ID = "JR0216",
+            Habitattype = "9130_end",
+            stringsAsFactors = FALSE
+          ),
+        Data_voorwaarden,
+        Data_soortenKenmerken
+      )[["Resultaat_detail"]],
+      berekenLSVIbasis(
+        Versie = "Versie 2.0",
+        Kwaliteitsniveau = "1",
+        Data_habitat =
+          data.frame(
+            ID = "JR0216",
+            Habitattype = "9130",
+            stringsAsFactors = FALSE
+          ),
+        Data_voorwaarden,
+        Data_soortenKenmerken
+      )[["Resultaat_detail"]] %>%
+        mutate(Habitattype = "9130_end")
     )
   })
 
