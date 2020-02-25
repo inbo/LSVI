@@ -706,11 +706,10 @@ berekenLSVIbasis <- #nolint
             ifelse(
               .data$AnalyseVariabele == "aantal" |
                 grepl("meting", .data$AnalyseVariabele) &
-                tolower(.data$TypeVariabele) == "ja/nee" ,
+                tolower(.data$TypeVariabele) != "ja/nee",
               pmin(
                 3 * as.numeric(sub(",", ".", .data$Referentiewaarde)),
-                .data$TheoretischMaximum,
-                na.rm = TRUE
+                .data$TheoretischMaximum
               ),
               .data$TheoretischMaximum
             )
