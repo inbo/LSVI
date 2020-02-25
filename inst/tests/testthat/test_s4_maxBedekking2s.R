@@ -78,7 +78,6 @@ describe("s4_maxBedekking2s", {
       c(0, 0)
     )
   })
-  
   it("Aan-/afwezig geeft NA en een warning", {
     expect_equal(
       berekenWaarde(
