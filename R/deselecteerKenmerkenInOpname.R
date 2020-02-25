@@ -72,7 +72,7 @@ deselecteerKenmerkenInOpname <-
     if (identical(SubAnalyseVariabele, character(0))) {
       Resultaat <- Resultaat %>%
         filter(
-          .data$WaardeMax > 0
+          .data$WaardeMax > 0 | (is.na(.data$WaardeMax) & .data$WaardeMin > 0)
         ) %>%
         distinct()
 
