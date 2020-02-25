@@ -25,7 +25,7 @@ describe("parseTaxonnaam", {
     )
     expect_equal(
       parseTaxonnaam("Mentha x velutina Lej."),
-      "Mentha xvelutina"
+      "Mentha x velutina"
     )
     expect_equal(
       parseTaxonnaam("Carex flava L. s.l."),
@@ -61,7 +61,7 @@ describe("parseTaxonnaam", {
     )
     expect_equal(
       parseTaxonnaam("Begonia x semperflorens hort. nom. nud."),
-      "Begonia xsemperflorens cv."
+      "Begonia x semperflorens cv."
     )
     expect_equal(
       parseTaxonnaam("Centaurea subg. Jacea"),
