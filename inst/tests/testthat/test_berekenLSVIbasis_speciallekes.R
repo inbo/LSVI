@@ -1,0 +1,127 @@
+context("test speciale gevallen")
+
+library(dplyr)
+
+maakConnectiePool()
+describe("twee voorwaarden vergelijken", {
+  it("vergelijking wordt correct uitgevoerd", {
+    Data_habitat <- #nolint
+      data.frame(
+        ID = 1, Habitattype = "1330_hpr",
+        stringsAsFactors = FALSE)
+    Data_voorwaarden <- #nolint
+      data.frame(
+        ID = 1, Criterium = "Verstoring", Indicator = "overgang naar rbbzil",
+        Voorwaarde = c("bedekking grasachtigen rbbzil",
+                       "som van de bedekking sleutelsoorten"),
+        Waarde = c(10, 20), Type = "Percentage", Invoertype = NA, Eenheid = "%",
+        stringsAsFactors = FALSE)
+    Data_soortenKenmerken <- #nolint
+      data.frame(
+        ID = 1, Kenmerk = c("Carex hirta", "Carex distans"),
+        TypeKenmerk = "soort_Latijn", Waarde = c(10, 20), Type = "Percentage",
+        Invoertype = NA, Eenheid = "%", Vegetatielaag = NA,
+        stringsAsFactors = FALSE)
+    Resultaat <-
+      data.frame(
+        ID = "1",
+        Habitattype = "1330_hpr",
+        Versie = "Versie 2.0",
+        Habitattype.y = "1330",
+        Criterium = "Verstoring",
+        Indicator = "overgang naar rbbzil",
+        Beoordeling =
+          "B: som van de bedekking grasachtigen uit het zilverschoonverbond <= som van de bedekking sleutelsoorten", #nolint
+        Kwaliteitsniveau = 1,
+        Belang = "zb",
+        Voorwaarde =
+          "bedekking grasachtigen rbbzil <= som van de bedekking sleutelsoorten", #nolint
+        Referentiewaarde = "20",
+        Operator = "<=",
+        EenheidRefwaarde = "%",
+        TypeRefwaarde = "Percentage",
+        InvoertypeRevwaarde = as.character(NA),
+        Waarde = "10",
+        TypeWaarde = "Percentage",
+        InvoertypeWaarde = as.character(NA),
+        EenheidWaarde = "%",
+        AfkomstWaarde = "observatie",
+        TheoretischMaximum = 100,
+        Status_voorwaarde = TRUE,
+        Verschilscore = 0.5,
+        stringsAsFactors = FALSE
+      )
+    resultaat_berekend <-
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 2.0",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden
+        )
+      )
+    expect_equal(
+      resultaat_berekend[["Resultaat_detail"]] %>%
+        filter(.data$Indicator == "overgang naar rbbzil"),
+      Resultaat
+    )
+    expect_equal(
+      resultaat_berekend[["Resultaat_indicator"]] %>%
+        filter(.data$Indicator == "overgang naar rbbzil"),
+      Resultaat %>%
+        select(
+          ID, Habitattype, Versie, Habitattype.y, Criterium, Indicator,
+          Beoordeling, Belang, Kwaliteitsniveau
+        ) %>%
+        mutate(
+          Kwaliteitsniveau = as.integer(Kwaliteitsniveau),
+          Status_indicator = TRUE,
+          Verschilscore = 0.5
+        )
+    )
+    Resultaat2 <- Resultaat %>%
+      mutate(
+        AfkomstWaarde = "berekend"
+      )
+    Resultaat2 <-
+      Resultaat2[
+        shuffle_columns(names(Resultaat2), "AfkomstWaarde before EenheidWaarde")
+      ]
+    Resultaat2 <-
+      Resultaat2[
+        shuffle_columns(
+          names(Resultaat2),
+          "AfkomstWaarde before InvoertypeWaarde"
+        )
+      ]
+    Resultaat2 <-
+      Resultaat2[
+        shuffle_columns(
+          names(Resultaat2),
+          "TheoretischMaximum before EenheidWaarde"
+        )
+      ]
+    Resultaat2 <-
+      Resultaat2[
+        shuffle_columns(
+          names(Resultaat2),
+          "TheoretischMaximum before InvoertypeWaarde"
+        )
+      ]
+    expect_equal(
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 2.0",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_soortenKenmerken = Data_soortenKenmerken
+        )
+      )[["Resultaat_detail"]] %>%
+        filter(.data$Indicator == "overgang naar rbbzil"),
+      Resultaat2
+    )
+  })
+})
+
+library(pool)
+poolClose(ConnectiePool)

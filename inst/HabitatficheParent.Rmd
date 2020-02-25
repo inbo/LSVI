@@ -1,0 +1,43 @@
+---
+title: "Habitatfiche"
+date: "`r Sys.Date()`"
+output: html_document
+params: 
+  ConnectieLSVIhabitats: "dummy"
+  Versie: "Versie 3"
+  Habitatsubtype: "4010"
+  Habitatnaam: "Natte heide"
+---
+
+
+```{r setupParent, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r libraries, include=FALSE}
+library(LSVI)
+library(dplyr)
+```
+
+```{r}
+if (
+  inherits(params$ConnectieLSVIhabitats, "DBIConnection") |
+    inherits(ConnectieLSVIhabitats, "Pool")
+) {
+  ConnectieLSVIhabitats <- params$ConnectieLSVIhabitats
+} else {
+  #print("Connectiefout!")
+  ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+}
+VersieRapportdeel <- params$Versie
+HabitatsubtypeFiche <- params$Habitatsubtype
+Habitatnaam <- params$Habitatnaam
+
+```
+
+####Habitattype `r HabitatsubtypeFiche`: `r Habitatnaam`
+
+```{r child="Habitatfiche.Rmd"}
+
+```
+

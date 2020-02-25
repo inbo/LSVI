@@ -1,3 +1,5 @@
+Meta
+doc
 .Rproj.user
 .Rhistory
 .RData
@@ -5,3 +7,10 @@
 *.Rproj
 *_cache/
 *_files/
+*.html
+.git
+inst/doc
+credentials
+inst/databanktoestanden
+inst/problemen
+inst/oudecode

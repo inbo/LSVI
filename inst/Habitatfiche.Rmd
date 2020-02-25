@@ -1,0 +1,130 @@
+---
+title: "Habitatfiche"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+
+```{r include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+```{r include=FALSE}
+
+library(xtable)
+library(tidyr)
+library(LSVI)
+library(dplyr)
+
+```
+
+
+
+```{r}
+# VersieRapportdeel <- "Versie 3"
+# HabitatsubtypeFiche <- "4010"
+# ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+
+Habitatfiche <- 
+  geefInfoHabitatfiche(
+    ConnectieLSVIhabitats = ConnectieLSVIhabitats,
+    Versie = VersieRapportdeel,
+    Habitattype = HabitatsubtypeFiche
+  )
+
+Versie <- geefVersieInfo(ConnectieLSVIhabitats) %>%
+  filter_(~VersieLSVI == VersieRapportdeel)
+
+```
+
+
+#####Habitatkarakteristieken
+
+```{r results='asis'}
+
+Habitatkarakteristieken <- Habitatfiche %>%
+  select(
+    Criterium = .data$Criterium.habitat,
+    Indicator = .data$Indicator.habitat,
+    .data$Beschrijving,
+    .data$Maatregelen,
+    Opmerkingen = .data$Opmerkingen.habitat,
+    Referenties = .data$Referenties.habitat
+  ) %>%
+  distinct() %>%
+  mutate(
+    fCriterium =
+      factor(
+        .data$Criterium, , levels = c("Vegetatie", "Structuur", "Verstoring"),
+        ordered = TRUE
+      )
+  ) %>%
+  arrange(.data$fCriterium)
+
+for (criterium in unique(Habitatkarakteristieken$Criterium)) {
+  cat("__", criterium, "__", sep = "")
+  Habitattabel <- Habitatkarakteristieken %>%
+    filter(.data$Criterium == criterium) %>%
+    select(
+      .data$Indicator, 
+      .data$Beschrijving, 
+      .data$Maatregelen, 
+      .data$Opmerkingen, 
+      .data$Referenties
+    ) %>%
+    xtable(digits = ncol(.))
+  print(Habitattabel, type = "html", include.rownames = FALSE)
+}
+
+```
+
+
+#####Beoordelingsmatrix
+
+```{r results='asis', message=FALSE, warning=FALSE}
+
+Beoordelingsfiche <- Habitatfiche %>%
+  select(
+    .data$Beoordeling,
+    Criterium = .data$Criterium.beoordeling,
+    Indicator = .data$Indicator.beoordeling,
+    Opmerkingen = .data$Opmerkingen.beoordeling,
+    Referenties = .data$Referenties.beoordeling,
+    .data$Kwaliteitsniveau
+  ) %>%
+  distinct() %>%
+  inner_join(
+    data.frame(Kwaliteitsniveau = c(1,2), 
+               Referentieniveau = c(Versie$Kwaliteitsniveau1, 
+                                    Versie$Kwaliteitsniveau2),
+               stringsAsFactors = FALSE)
+  ) %>%
+  select(-Kwaliteitsniveau) %>%
+  spread(key = Referentieniveau, value = Beoordeling) %>%
+  mutate(
+    fCriterium =
+      factor(
+        .data$Criterium, , levels = c("Vegetatie", "Structuur", "Verstoring"),
+        ordered = TRUE
+      )
+  ) %>%
+  arrange(.data$fCriterium)
+
+for (Criterium in unique(Beoordelingsfiche$Criterium)) {   
+  cat("__", Criterium, "__", sep = "")
+  Beoordelingsmatrix <- 
+    xtable(Beoordelingsfiche[Beoordelingsfiche$Criterium == Criterium,
+                        c("Indicator",
+                          if (ncol(Beoordelingsfiche) == 7) {
+                            c(Versie$Kwaliteitsniveau1,Versie$Kwaliteitsniveau2)
+                          } else if (ncol(Beoordelingsfiche) == 6) {
+                            Versie$Kwaliteitsniveau1
+                          },
+                          "Opmerkingen","Referenties")])
+  print(Beoordelingsmatrix, type = "html", include.rownames = FALSE)
+}
+
+```
+
+

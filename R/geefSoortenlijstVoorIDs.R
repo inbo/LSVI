@@ -1,0 +1,272 @@
+#' @title Genereert soorten(groep)lijst(en) LSVI op basis van TaxongroepID
+#'
+#' @description Deze functie genereert soortenlijsten (met wetenschappelijke en
+#' Nederlandse namen) uit de databank met de criteria en indicatoren voor de
+#' bepaling van de Lokale Staat van Instandhouding.  Het is in feite een
+#' hulpfunctie die voor verschillende andere functies gebruikt wordt en die de
+#' complexe zoekfunctie in de tabellen met soorten uitvoert op basis van een
+#' opgegeven TaxongroepId (en in die zin iets minder gebruiksvriendelijk is).
+#' Voor een selectie van soortenlijsten op basis van specifieke parameters is
+#' de functie geefSoortenlijst() een beter alternatief.
+#'
+#' Deze functie geeft standaard voor de gespecifieerde taxongroepen per groep
+#' een lijst van alle taxa zoals ze in de LSVI-habitatfiche vermeld zijn
+#' (genusniveau, soortniveau, subsoort,...).  Op basis van de parameter
+#' soortenlijsttype kan ook gekozen worden om een volledige lijst te geven van
+#' deze taxa en alle taxa die hieronder vallen (en opgenomen zijn in de
+#' onderliggende databank).
+#'
+#' @inheritParams selecteerIndicatoren
+#' @inheritParams geefSoortenlijst
+#' @param Taxongroeplijst string waarin de TaxongroepId's na elkaar weergegeven
+#' worden, gescheiden door een komma.  Eventueel mag dit ook een vector zijn
+#' van TaxongroepId's.
+#'
+#' @return Deze functie geeft een tabel met velden TaxongroepId, evt.
+#' Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een
+#' omschrijving is voor een groep van taxons binnen eenzelfde indicator).
+#' WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort
+#' geeft de verkorte naam zonder auteursnaam.
+#'
+#' @examples
+#' # Omwille van de iets langere lange duurtijd van de commando's staat bij
+#' # onderstaande voorbeelden de vermelding 'dontrun' (om problemen te vermijden
+#' # bij het testen van het package). Maar de voorbeelden werken en kunnen zeker
+#' # uitgetest worden.
+#' \dontrun{
+#' maakConnectiePool()
+#' geefSoortenlijstVoorIDs("434,88,565")
+#' geefSoortenlijstVoorIDs("434,88,565","alle")
+#' library(pool)
+#' poolClose(ConnectiePool)
+#' }
+#'
+#' @export
+#'
+#' @importFrom dplyr %>% mutate filter distinct
+#' @importFrom DBI dbGetQuery
+#' @importFrom assertthat assert_that noNA is.string
+#'
+#'
+geefSoortenlijstVoorIDs <-
+  function(Taxongroeplijst,
+           Taxonlijsttype = c("LSVIfiche", "alle"),
+           ConnectieLSVIhabitats = NULL) {
+
+    if (is.null(ConnectieLSVIhabitats)) {
+      if (exists("ConnectiePool")) {
+        ConnectieLSVIhabitats <- get("ConnectiePool", envir = .GlobalEnv)
+      }
+    }
+    assert_that(
+      inherits(ConnectieLSVIhabitats, "DBIConnection") |
+        inherits(ConnectieLSVIhabitats, "Pool"),
+      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
+    )
+    assert_that(is.character(Taxongroeplijst))
+    if (!is.string(Taxongroeplijst)) {
+      Taxongroeplijst <- paste(Taxongroeplijst, collapse = ",")
+    }
+    assert_that(is.string(Taxongroeplijst))
+    assert_that(noNA(Taxongroeplijst))
+    if (!grepl("^([[:digit:]]+,)*[[:digit:]]+$", Taxongroeplijst)) {
+      stop("Taxongroeplijst bestaat niet uit een reeks getallen gescheiden door een komma") #nolint
+    }
+    match.arg(Taxonlijsttype)
+
+    # Om naamsverandering in databank van GbifCanonicalNameWithMarker naar
+    # CanonicalNameWithMarker op te vangen
+    if (class(ConnectieLSVIhabitats)[1] == "Pool") {
+      Klasse <-
+        class(ConnectieLSVIhabitats$.__enclos_env__$private$createObject())[1]
+    } else {
+      Klasse <- class(ConnectieLSVIhabitats)[1]
+    }
+
+    QueryGroepen <-
+      sprintf(
+        "WITH Groepen
+        AS
+        (
+          SELECT Tg.Id AS TaxongroepId,
+            Tg.Id AS TaxonsubgroepId,
+            cast(Tg.Omschrijving AS nvarchar(90)) AS Omschrijving
+          FROM Taxongroep Tg
+          WHERE Tg.Id in (%s)
+        UNION ALL
+          SELECT Groepen.TaxongroepId,
+            Tg2.Id AS TaxonsubgroepId,
+            cast(Tg2.Omschrijving AS nvarchar(90)) AS Omschrijving
+          FROM Groepen
+            INNER JOIN TaxongroepTaxongroep AS TgTg
+            ON Groepen.TaxonsubgroepId = TgTg.TaxongroepParentId
+          INNER JOIN Taxongroep Tg2
+          ON TgTg.TaxongroepChildId = Tg2.Id
+          WHERE TgTg.TaxongroepChildId > 0
+        )",
+        Taxongroeplijst
+      )
+
+    if (Klasse == "Microsoft SQL Server") {
+      QueryTaxa <-
+        ",
+        Taxonlijn
+        AS
+        (
+          SELECT Tx.Id AS TaxonId,
+            Tx.Id AS SubTaxonId,
+            Tx.NbnTaxonVersionKey,
+            Tx.FloraNaamWetenschappelijk,
+            Tx.FloraNaamNederlands,
+            Tx.NbnNaam,
+            Tx.TaxonTypeId,
+            Ts.GbifCanonicalNameWithMarker AS WetNaamKort
+          FROM Taxon Tx
+            INNER JOIN TaxonSynoniem Ts
+              ON Tx.Id = Ts.TaxonId
+          WHERE Tx.NbnTaxonVersionKey = Ts.NbnTaxonVersionKey
+        UNION ALL
+          SELECT Taxonlijn.TaxonId,
+            Tx2.Id AS SubTaxonId,
+            Tx2.NbnTaxonVersionKey,
+            Tx2.FloraNaamWetenschappelijk,
+            Tx2.FloraNaamNederlands,
+            Tx2.NbnNaam,
+            Tx2.TaxonTypeId,
+            Ts2.GbifCanonicalNameWithMarker AS WetNaamKort
+          FROM Taxonlijn
+            INNER JOIN TaxonTaxon AS TxTx
+              ON Taxonlijn.SubTaxonId = TxTx.TaxonParentId
+            INNER JOIN Taxon Tx2
+              ON TxTx.TaxonChildId = Tx2.Id
+            INNER JOIN TaxonSynoniem Ts2
+              ON Tx2.Id = Ts2.TaxonId
+          WHERE TxTx.TaxonChildId > 0
+            AND Tx2.NbnTaxonVersionKey = Ts2.NbnTaxonVersionKey
+        )"
+    } else {
+      QueryTaxa <-
+        ",
+      Taxonlijn
+      AS
+      (
+        SELECT Tx.Id AS TaxonId,
+          Tx.Id AS SubTaxonId,
+          Tx.NbnTaxonVersionKey,
+          Tx.FloraNaamWetenschappelijk,
+          Tx.FloraNaamNederlands,
+          Tx.NbnNaam,
+          Tx.TaxonTypeId,
+          Ts.CanonicalNameWithMarker AS WetNaamKort
+        FROM Taxon Tx
+          INNER JOIN TaxonSynoniem Ts
+            ON Tx.Id = Ts.TaxonId
+        WHERE Tx.NbnTaxonVersionKey = Ts.NbnTaxonVersionKey
+      UNION ALL
+        SELECT Taxonlijn.TaxonId,
+          Tx2.Id AS SubTaxonId,
+          Tx2.NbnTaxonVersionKey,
+          Tx2.FloraNaamWetenschappelijk,
+          Tx2.FloraNaamNederlands,
+          Tx2.NbnNaam,
+          Tx2.TaxonTypeId,
+          Ts2.CanonicalNameWithMarker AS WetNaamKort
+        FROM Taxonlijn
+          INNER JOIN TaxonTaxon AS TxTx
+            ON Taxonlijn.SubTaxonId = TxTx.TaxonParentId
+          INNER JOIN Taxon Tx2
+            ON TxTx.TaxonChildId = Tx2.Id
+          INNER JOIN TaxonSynoniem Ts2
+            ON Tx2.Id = Ts2.TaxonId
+        WHERE TxTx.TaxonChildId > 0
+          AND Tx2.NbnTaxonVersionKey = Ts2.NbnTaxonVersionKey
+      )"
+    }
+
+    if (Klasse == "Microsoft SQL Server") {
+      QueryLSVIfiche <-
+        "
+        SELECT Groepen.TaxongroepId,
+          Groepen.TaxonsubgroepId,
+          Groepen.Omschrijving,
+          Taxon.Id,
+          Taxon.NbnTaxonVersionKey,
+          Taxon.FloraNaamWetenschappelijk AS WetNaam,
+          Taxon.FloraNaamNederlands As NedNaam,
+          TaxonType.Naam AS TaxonType,
+          ts.GbifCanonicalNameWithMarker AS WetNaamKort
+        FROM Groepen
+          INNER JOIN TaxongroepTaxon TgT
+          on Groepen.TaxonsubgroepId = TgT.TaxongroepId
+          INNER JOIN Taxon
+          ON TgT.TaxonId = Taxon.Id
+          INNER JOIN TaxonType
+          ON Taxon.TaxonTypeId = TaxonType.Id
+          INNER JOIN TaxonSynoniem ts
+          ON Taxon.Id = ts.TaxonId
+        WHERE Taxon.NbnTaxonVersionKey = ts.NbnTaxonVersionKey;"
+    } else {
+      QueryLSVIfiche <-
+        "
+        SELECT Groepen.TaxongroepId,
+          Groepen.TaxonsubgroepId,
+          Groepen.Omschrijving,
+          Taxon.Id,
+          Taxon.NbnTaxonVersionKey,
+          Taxon.FloraNaamWetenschappelijk AS WetNaam,
+          Taxon.FloraNaamNederlands As NedNaam,
+          TaxonType.Naam AS TaxonType,
+          ts.CanonicalNameWithMarker AS WetNaamKort
+        FROM Groepen
+          INNER JOIN TaxongroepTaxon TgT
+          on Groepen.TaxonsubgroepId = TgT.TaxongroepId
+          INNER JOIN Taxon
+          ON TgT.TaxonId = Taxon.Id
+          INNER JOIN TaxonType
+          ON Taxon.TaxonTypeId = TaxonType.Id
+          INNER JOIN TaxonSynoniem ts
+          ON Taxon.Id = ts.TaxonId
+        WHERE Taxon.NbnTaxonVersionKey = ts.NbnTaxonVersionKey;"
+    }
+
+    QueryAlleTaxa <-
+      "
+      SELECT Groepen.TaxongroepId,
+        Groepen.TaxonsubgroepId,
+        Groepen.Omschrijving,
+        Taxonlijn.TaxonId,
+        Taxonlijn.SubTaxonId,
+        Taxonlijn.NbnTaxonVersionKey,
+        Taxonlijn.FloraNaamWetenschappelijk AS WetNaam,
+        Taxonlijn.FloraNaamNederlands As NedNaam,
+        TaxonType.Naam AS TaxonType,
+        Taxonlijn.WetNaamKort
+      FROM Groepen
+        INNER JOIN TaxongroepTaxon TgT
+        on Groepen.TaxonsubgroepId = TgT.TaxongroepId
+        INNER JOIN Taxonlijn
+        ON TgT.TaxonId = Taxonlijn.TaxonId
+        INNER JOIN TaxonType
+        ON Taxonlijn.TaxonTypeId = TaxonType.Id
+      ORDER BY Groepen.TaxongroepId, Groepen.TaxonsubgroepId,
+        Taxonlijn.TaxonId;"
+
+    if (Taxonlijsttype[1] == "LSVIfiche") {
+      Soortenlijst <-
+        dbGetQuery(
+          ConnectieLSVIhabitats,
+          paste(QueryGroepen, QueryLSVIfiche, sep = "")
+        ) %>%
+        distinct()
+
+    } else if (Taxonlijsttype[1] == "alle") {
+      Soortenlijst <-
+        dbGetQuery(
+          ConnectieLSVIhabitats,
+          paste(QueryGroepen, QueryTaxa, QueryAlleTaxa, sep = "")
+        ) %>%
+        distinct()
+    }
+
+    return(Soortenlijst)
+  }

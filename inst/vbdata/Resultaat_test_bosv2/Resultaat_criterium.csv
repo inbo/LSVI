@@ -1,0 +1,4 @@
+"";"ID";"Habitattype";"Versie";"Criterium";"Kwaliteitsniveau";"Status_criterium";"Aggregatiemethode";"Index_min_criterium";"Index_harm_criterium"
+"1";"1";"9190";"Versie 2.0";"Structuur";1;FALSE;"1-out-all-out";NA;NA
+"2";"1";"9190";"Versie 2.0";"Vegetatie";1;FALSE;"1-out-all-out";0;0,314763231197771
+"3";"1";"9190";"Versie 2.0";"Verstoring";1;TRUE;"1-out-all-out";0;0,447513812154696

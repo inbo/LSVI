@@ -1,0 +1,11 @@
+^data-raw$
+^Meta$
+^doc$
+^.*\.Rproj$
+^\.Rproj\.user$
+^man-roxygen$
+^\.lintr$
+^data$
+^\wercker.yml$
+^inst/databanktoestanden$
+^inst/oudecode$

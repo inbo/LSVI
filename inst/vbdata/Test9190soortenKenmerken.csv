@@ -1,0 +1,19 @@
+ID;Vegetatielaag;Kenmerk;TypeKenmerk;Waarde;Type;Invoertype;Eenheid
+1;;groeiklasse 1;studiegroep;1;Ja/nee;;
+1;;groeiklasse 2;studiegroep;1;Ja/nee;;
+1;;groeiklasse 3;studiegroep;1;Ja/nee;;
+1;;groeiklasse 4;studiegroep;1;Ja/nee;;
+1;kruidlaag;Grote brandnetel;soort_NL;5;Percentage;;%
+1;boomlaag;Gewone vlier;soort_NL;2;Decimaal getal;;Grondvlak_ha
+1;boomlaag;Gewone vlier;soort_NL;2;Percentage;;%
+1;kruidlaag;Gestreepte witbol;soort_NL;3;Percentage;;%
+1;;kruidlaag (incl. moslaag);studiegroep;30;Percentage;;%
+1;;boomlaag;studiegroep;80;Percentage;;%
+1;;struiklaag;studiegroep;30;Percentage;;%
+1;kruidlaag;Calluna vulgaris;soort_Latijn;15;Percentage;;%
+1;kruidlaag;Molinia caerulea;soort_Latijn;30;Percentage;;%
+1;kruidlaag;Lonicera periclymenum;soort_Latijn;10;Percentage;;%
+1;kruidlaag;Pteridium aquilinum;soort_Latijn;6;Percentage;;%
+1;boom- en struiklaag;Quercus robur;soort_Latijn;50;Decimaal getal;;Grondvlak_ha
+1;boomlaag;Betula pendula;soort_Latijn;10;Decimaal getal;;Grondvlak_ha
+1;struiklaag;Frangula alnus;soort_Latijn;20;Decimaal getal;;Grondvlak_ha
