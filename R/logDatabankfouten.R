@@ -122,7 +122,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
       "SELECT tgtg.TaxongroepParentId AS tg, tgtg.TaxongroepChildId AS tgChild
       FROM TaxongroepTaxongroep tgtg"
     ) %>%
-    count(tg) %>%
+    count(.data$tg) %>%
     filter(n == 2)
 
   Voorwaarden <- OnbekendeAV %>%
