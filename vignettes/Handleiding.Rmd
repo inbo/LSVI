@@ -95,7 +95,7 @@ Om scripts gemakkelijk te kunnen hergebruiken met andere waarden, kunnen ze in d
 
 Om in R packages te kunnen gebruiken, moeten deze telkens (na elke herstart van de R-console) eerst ingeladen worden met de functie `library()`.  Om de functies in verband met de LSVI te gebruiken, voer je dus eerst het commando `library(LSVI)` in.  Dit kan wel enkel met reeds geïnstalleerde packages, die in het venster rechtsonder onder de tab Packages vermeld zijn.  Andere packages moet je eerst eenmalig installeren (via de knop Install of het commando `install.packages("naam_nieuw_package")`).
 
-Als je in de lijst met packages onder de tab Packages op een packagenaam klikt, krijg je de documentatie van het package: eventuele handleidingen (onder de link `User guides, package vignettes and other documentation`) en een klikbare lijst met alle functies die in het package beschikbaar zijn.
+Als je in de lijst met packages onder de tab Packages op een packagenaam klikt, krijg je de documentatie van het package: eventuele handleidingen (onder de link `User guides, package vignettes and other documentation`) en een klikbare lijst met alle functies die in het package beschikbaar zijn.  Dezelfde documentatie is terug te vinden via de bovenste balk op de [website](https://inbo.github.io/LSVI/index.html): handleidingen staan onder [Articles](https://inbo.github.io/LSVI/articles/index.html) en functies onder [Reference](https://inbo.github.io/LSVI/reference/index.html).
 
 Zodra een package ingeladen is, kan je deze documentatie van functies ook opvragen door een `?` te typen, gevolgd door de naam van de functie, bijvoorbeeld:
 
