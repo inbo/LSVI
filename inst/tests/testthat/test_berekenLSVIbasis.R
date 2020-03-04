@@ -46,7 +46,7 @@ describe("berekenLSVIbasis", {
       "Er is geen connectie met de databank met de LSVI-indicatoren"
     )
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIlite()
+      connecteerMetLSVIdb()
     expect_equal(
       idsWissen(
         berekenLSVIbasis(

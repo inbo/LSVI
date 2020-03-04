@@ -352,5 +352,5 @@ migratieSQLserverSQLite <-
 unlink("inst/databank/LSVIHabitatTypes.sqlite")
 
 #databank terug vullen
-maakConnectiePool()
+maakConnectiePoolServer()
 migratieSQLserverSQLite()

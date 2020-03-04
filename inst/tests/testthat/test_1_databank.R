@@ -7,7 +7,7 @@ library(stringr)
 describe("test databank", {
   it("Lijstitems hebben een ondergrens en bovengrens", {
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIlite()
+      connecteerMetLSVIdb()
     expect_true(
       all(
         !is.na(
@@ -28,7 +28,7 @@ describe("test databank", {
     "In de databank zitten enkel AnalyseVariabelen waarvoor code ontwikkeld is"
     , {
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIlite()
+      connecteerMetLSVIdb()
     av <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -47,7 +47,7 @@ describe("test databank", {
 
   it("AnalyseVariabele aantal bevat enkel gehele getallen", {
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIlite()
+      connecteerMetLSVIdb()
     av <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -98,7 +98,7 @@ describe("test databank", {
 
   it("AnalyseVariabele bedekking bevat percentages en categorische var", {
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIlite()
+      connecteerMetLSVIdb()
     av <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -127,7 +127,7 @@ describe("test databank", {
 
   it("AnalyseVariabele aandeel bevat percentages", {
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIlite()
+      connecteerMetLSVIdb()
     av <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -186,7 +186,7 @@ describe("test databank", {
 
   it("AnalyseVariabele bedekkingLaag bevat percentages en categorische var", {
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIlite()
+      connecteerMetLSVIdb()
     av <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -215,7 +215,7 @@ describe("test databank", {
 
   it("AnalyseVariabele bedekkingLaagExcl bevat percentages en categorische var", { #nolint
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIlite()
+      connecteerMetLSVIdb()
     av <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -244,7 +244,7 @@ describe("test databank", {
 
   it("AnalyseVariabele bedekkingLaagPlus bevat percentages en categorische var", { #nolint
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIlite()
+      connecteerMetLSVIdb()
     av <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -273,7 +273,7 @@ describe("test databank", {
 
   it("AnalyseVariabele aandeelKruidlaag bevat percentages", {
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIlite()
+      connecteerMetLSVIdb()
     av <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -332,7 +332,7 @@ describe("test databank", {
 
   it("AnalyseVariabele maxBedekking bevat percentages en categorische var", {
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIlite()
+      connecteerMetLSVIdb()
     av <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -362,7 +362,7 @@ describe("test databank", {
   it("AnalyseVariabele maxBedekkingExcl bevat percentages en categorische var"
      , {
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIlite()
+      connecteerMetLSVIdb()
     av <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -391,7 +391,7 @@ describe("test databank", {
 
   it("AnalyseVariabele maxBedekking2s bevat percentages en categorische var", {
      ConnectieLSVIhabitats <-
-       connecteerMetLSVIlite()
+       connecteerMetLSVIdb()
      AV <-
        dbGetQuery(
          ConnectieLSVIhabitats,
@@ -420,7 +420,7 @@ describe("test databank", {
 
   it("De waarden van percentages zijn getallen kleiner dan of gelijk aan 100", {
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIlite()
+      connecteerMetLSVIdb()
     RefwaardenPerc <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -439,7 +439,7 @@ describe("test databank", {
 
   it("De waarden van categorische var zijn in de databank opgenomen schalen", {
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIlite()
+      connecteerMetLSVIdb()
     RefwaardenCat <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -466,7 +466,7 @@ describe("test databank", {
 
   it("AnalyseVariabelen hebben telkens een SoortengroepId of StudiegroepId", {
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIlite()
+      connecteerMetLSVIdb()
     av <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -495,7 +495,7 @@ describe("test databank", {
 
   it("AnalyseVariabelen hebben telkens een SoortengroepId en StudiegroepId", {
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIlite()
+      connecteerMetLSVIdb()
     av <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -524,7 +524,7 @@ describe("test databank", {
 
   it("AV bedekkingLaagExcl en bedekkingLaagPlus hebben 2 Soortengroepen", {
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIlite()
+      connecteerMetLSVIdb()
     tg <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -546,7 +546,7 @@ describe("test databank", {
 
   it("TypeVariabele Vrije tekst is nergens gebruikt", {
       ConnectieLSVIhabitats <-
-        connecteerMetLSVIlite()
+        connecteerMetLSVIdb()
       av <-
         dbGetQuery(
           ConnectieLSVIhabitats,
@@ -566,7 +566,7 @@ describe("test databank", {
 
   it("Voor elke categorische variabele is een Invoermasker opgegeven", {
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIlite()
+      connecteerMetLSVIdb()
     av <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -588,7 +588,7 @@ describe("test databank", {
     "De subanalysevariabele is overal correct ingevoerd (bedekking of aandeel)"
     , {
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIlite()
+      connecteerMetLSVIdb()
     av <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -633,7 +633,7 @@ describe("test databank", {
 
   it("De subanalysevariabele is enkel gebruikt bij AnalyseVariabelen die dit ondersteunen", { #nolint
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIlite()
+      connecteerMetLSVIdb()
     av <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -654,7 +654,7 @@ describe("test databank", {
 
   it("Operator '=' is niet gebruikt tenzij bij type 'ja/nee'", {
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIlite()
+      connecteerMetLSVIdb()
     av <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -675,7 +675,7 @@ describe("test databank", {
 
   it("Een indicator is een combinatie van AND, OR en voorwaardeID's", {
     Fouteformule <-
-      geefInvoervereisten(ConnectieLSVIhabitats = connecteerMetLSVIlite()) %>%
+      geefInvoervereisten(ConnectieLSVIhabitats = connecteerMetLSVIdb()) %>%
       mutate(
         Formuletest = str_replace_all(.data$Combinatie, "\\(", ""),
         Formuletest = str_replace_all(.data$Formuletest, "\\)", "")
@@ -690,7 +690,7 @@ describe("test databank", {
 
   it("Elke taxonnaam heeft 1 unieke nbn-key", {
     ConnectieLSVIhabitats <-
-      connecteerMetLSVIlite()
+      connecteerMetLSVIdb()
     Taxons <-
       dbGetQuery(
         ConnectieLSVIhabitats,

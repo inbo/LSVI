@@ -5,7 +5,7 @@ library(dplyr)
 library(rlang)
 library(stringr)
 
-maakConnectiepoolSQLite()
+maakConnectiepool()
 
 describe("berekenLSVIbasis vegetatielaag", {
   it("de vegetatielagen worden correct geselecteerd", {
