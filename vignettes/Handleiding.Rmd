@@ -145,7 +145,6 @@ write_csv2(soortenlijst4030, "C:/R/soortenlijst4030.csv")
 
 We hebben hier het absolute path (`C:/R`) weergegeven, een andere mogelijkheid is om het path relatief ten opzichte van de 'working directory' weer te geven.  Dit is de map waarin je aan 't werken bent.  Je kan deze working directory zelf bepalen door het commando `setwd("C:/.../mijn_werkmap")`.  Als je in een project werkt waarin je al je scripts opslaat (aan te raden), dan is de root van dit project automatisch je working directory.
 
-'delim' geeft aan dat het scheidingsteken tussen de tabellen een ; is.  Hier kan je ook een ander teken kiezen, maar dan moet je de gegevens in Excel nog manueel in kolommen zetten via Gegevens -> Tekst naar kolommen.
 
 ###Hoe eigen gegevens inlezen in R?
 
@@ -231,7 +230,7 @@ library(pool)
 poolClose(ConnectiePool)
 rm(ConnectiePool)
 ```
-- Een connectie met de databank maken met de functie `connecteerMetLSVIdb()` en deze connectie voor elke functie meegeven bij de parameter ConnectieLSVIhabitats.  Hier moet je dus wel zelf een connectie leggen telkens als dit nodig zijn.
+- Een connectie met de databank maken met de functie `connecteerMetLSVIdb()` en deze connectie voor elke functie meegeven bij de parameter ConnectieLSVIhabitats.
 ```{r eval=FALSE}
 library(LSVI)
 Connectie <- connecteerMetLSVIdb()
