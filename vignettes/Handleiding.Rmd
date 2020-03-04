@@ -58,13 +58,18 @@ packageDescription(pkg = "LSVI")
 
 #Installatie van het package {#installatie_package}
 
-Het package kan als volgt geïnstalleerd worden: <!-- aanpassen als er iets in de master zit -->
+Het package kan als volgt geïnstalleerd worden (altijd eerst R herstarten en deze installatie doen in een sessie waarin nog geen andere packages geladen zijn!):
 
 ```{r eval = FALSE}
 # install.packages("remotes")
-remotes::install_github("inbo/LSVI@develop", build = TRUE, build_opts = c("--no-resave-data", "--no-manual"))
+remotes::install_github("inbo/LSVI", build_vignettes = TRUE)
 ```
 
+Een testversie met de nieuwste aanpassingen kan als volgt geïnstalleerd worden:
+
+```{r eval = FALSE}
+remotes::install_github("inbo/LSVI@develop", build_vignettes = TRUE)
+```
 
 #Gebruik basisfuncties {#gebruik_basisfuncties}
 
