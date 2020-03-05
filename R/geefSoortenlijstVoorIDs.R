@@ -107,127 +107,64 @@ geefSoortenlijstVoorIDs <-
         Taxongroeplijst
       )
 
-    if (Klasse == "Microsoft SQL Server") {
-      QueryTaxa <-
-        ",
-        Taxonlijn
-        AS
-        (
-          SELECT Tx.Id AS TaxonId,
-            Tx.Id AS SubTaxonId,
-            Tx.NbnTaxonVersionKey,
-            Tx.FloraNaamWetenschappelijk,
-            Tx.FloraNaamNederlands,
-            Tx.NbnNaam,
-            Tx.TaxonTypeId,
-            Ts.GbifCanonicalNameWithMarker AS WetNaamKort
-          FROM Taxon Tx
-            INNER JOIN TaxonSynoniem Ts
-              ON Tx.Id = Ts.TaxonId
-          WHERE Tx.NbnTaxonVersionKey = Ts.NbnTaxonVersionKey
-        UNION ALL
-          SELECT Taxonlijn.TaxonId,
-            Tx2.Id AS SubTaxonId,
-            Tx2.NbnTaxonVersionKey,
-            Tx2.FloraNaamWetenschappelijk,
-            Tx2.FloraNaamNederlands,
-            Tx2.NbnNaam,
-            Tx2.TaxonTypeId,
-            Ts2.GbifCanonicalNameWithMarker AS WetNaamKort
-          FROM Taxonlijn
-            INNER JOIN TaxonTaxon AS TxTx
-              ON Taxonlijn.SubTaxonId = TxTx.TaxonParentId
-            INNER JOIN Taxon Tx2
-              ON TxTx.TaxonChildId = Tx2.Id
-            INNER JOIN TaxonSynoniem Ts2
-              ON Tx2.Id = Ts2.TaxonId
-          WHERE TxTx.TaxonChildId > 0
-            AND Tx2.NbnTaxonVersionKey = Ts2.NbnTaxonVersionKey
-        )"
-    } else {
-      QueryTaxa <-
-        ",
-      Taxonlijn
-      AS
-      (
-        SELECT Tx.Id AS TaxonId,
-          Tx.Id AS SubTaxonId,
-          Tx.NbnTaxonVersionKey,
-          Tx.FloraNaamWetenschappelijk,
-          Tx.FloraNaamNederlands,
-          Tx.NbnNaam,
-          Tx.TaxonTypeId,
-          Ts.CanonicalNameWithMarker AS WetNaamKort
-        FROM Taxon Tx
-          INNER JOIN TaxonSynoniem Ts
-            ON Tx.Id = Ts.TaxonId
-        WHERE Tx.NbnTaxonVersionKey = Ts.NbnTaxonVersionKey
-      UNION ALL
-        SELECT Taxonlijn.TaxonId,
-          Tx2.Id AS SubTaxonId,
-          Tx2.NbnTaxonVersionKey,
-          Tx2.FloraNaamWetenschappelijk,
-          Tx2.FloraNaamNederlands,
-          Tx2.NbnNaam,
-          Tx2.TaxonTypeId,
-          Ts2.CanonicalNameWithMarker AS WetNaamKort
-        FROM Taxonlijn
-          INNER JOIN TaxonTaxon AS TxTx
-            ON Taxonlijn.SubTaxonId = TxTx.TaxonParentId
-          INNER JOIN Taxon Tx2
-            ON TxTx.TaxonChildId = Tx2.Id
-          INNER JOIN TaxonSynoniem Ts2
-            ON Tx2.Id = Ts2.TaxonId
-        WHERE TxTx.TaxonChildId > 0
-          AND Tx2.NbnTaxonVersionKey = Ts2.NbnTaxonVersionKey
-      )"
-    }
+    QueryTaxa <-
+      ",
+    Taxonlijn
+    AS
+    (
+      SELECT Tx.Id AS TaxonId,
+        Tx.Id AS SubTaxonId,
+        Tx.NbnTaxonVersionKey,
+        Tx.FloraNaamWetenschappelijk,
+        Tx.FloraNaamNederlands,
+        Tx.NbnNaam,
+        Tx.TaxonTypeId,
+        Ts.CanonicalNameWithMarker AS WetNaamKort
+      FROM Taxon Tx
+        INNER JOIN TaxonSynoniem Ts
+          ON Tx.Id = Ts.TaxonId
+      WHERE Tx.NbnTaxonVersionKey = Ts.NbnTaxonVersionKey
+    UNION ALL
+      SELECT Taxonlijn.TaxonId,
+        Tx2.Id AS SubTaxonId,
+        Tx2.NbnTaxonVersionKey,
+        Tx2.FloraNaamWetenschappelijk,
+        Tx2.FloraNaamNederlands,
+        Tx2.NbnNaam,
+        Tx2.TaxonTypeId,
+        Ts2.CanonicalNameWithMarker AS WetNaamKort
+      FROM Taxonlijn
+        INNER JOIN TaxonTaxon AS TxTx
+          ON Taxonlijn.SubTaxonId = TxTx.TaxonParentId
+        INNER JOIN Taxon Tx2
+          ON TxTx.TaxonChildId = Tx2.Id
+        INNER JOIN TaxonSynoniem Ts2
+          ON Tx2.Id = Ts2.TaxonId
+      WHERE TxTx.TaxonChildId > 0
+        AND Tx2.NbnTaxonVersionKey = Ts2.NbnTaxonVersionKey
+    )"
 
-    if (Klasse == "Microsoft SQL Server") {
-      QueryLSVIfiche <-
-        "
-        SELECT Groepen.TaxongroepId,
-          Groepen.TaxonsubgroepId,
-          Groepen.Omschrijving,
-          Taxon.Id,
-          Taxon.NbnTaxonVersionKey,
-          Taxon.FloraNaamWetenschappelijk AS WetNaam,
-          Taxon.FloraNaamNederlands As NedNaam,
-          TaxonType.Naam AS TaxonType,
-          ts.GbifCanonicalNameWithMarker AS WetNaamKort
-        FROM Groepen
-          INNER JOIN TaxongroepTaxon TgT
-          on Groepen.TaxonsubgroepId = TgT.TaxongroepId
-          INNER JOIN Taxon
-          ON TgT.TaxonId = Taxon.Id
-          INNER JOIN TaxonType
-          ON Taxon.TaxonTypeId = TaxonType.Id
-          INNER JOIN TaxonSynoniem ts
-          ON Taxon.Id = ts.TaxonId
-        WHERE Taxon.NbnTaxonVersionKey = ts.NbnTaxonVersionKey;"
-    } else {
-      QueryLSVIfiche <-
-        "
-        SELECT Groepen.TaxongroepId,
-          Groepen.TaxonsubgroepId,
-          Groepen.Omschrijving,
-          Taxon.Id,
-          Taxon.NbnTaxonVersionKey,
-          Taxon.FloraNaamWetenschappelijk AS WetNaam,
-          Taxon.FloraNaamNederlands As NedNaam,
-          TaxonType.Naam AS TaxonType,
-          ts.CanonicalNameWithMarker AS WetNaamKort
-        FROM Groepen
-          INNER JOIN TaxongroepTaxon TgT
-          on Groepen.TaxonsubgroepId = TgT.TaxongroepId
-          INNER JOIN Taxon
-          ON TgT.TaxonId = Taxon.Id
-          INNER JOIN TaxonType
-          ON Taxon.TaxonTypeId = TaxonType.Id
-          INNER JOIN TaxonSynoniem ts
-          ON Taxon.Id = ts.TaxonId
-        WHERE Taxon.NbnTaxonVersionKey = ts.NbnTaxonVersionKey;"
-    }
+    QueryLSVIfiche <-
+      "
+      SELECT Groepen.TaxongroepId,
+        Groepen.TaxonsubgroepId,
+        Groepen.Omschrijving,
+        Taxon.Id,
+        Taxon.NbnTaxonVersionKey,
+        Taxon.FloraNaamWetenschappelijk AS WetNaam,
+        Taxon.FloraNaamNederlands As NedNaam,
+        TaxonType.Naam AS TaxonType,
+        ts.CanonicalNameWithMarker AS WetNaamKort
+      FROM Groepen
+        INNER JOIN TaxongroepTaxon TgT
+        on Groepen.TaxonsubgroepId = TgT.TaxongroepId
+        INNER JOIN Taxon
+        ON TgT.TaxonId = Taxon.Id
+        INNER JOIN TaxonType
+        ON Taxon.TaxonTypeId = TaxonType.Id
+        INNER JOIN TaxonSynoniem ts
+        ON Taxon.Id = ts.TaxonId
+      WHERE Taxon.NbnTaxonVersionKey = ts.NbnTaxonVersionKey;"
 
     QueryAlleTaxa <-
       "

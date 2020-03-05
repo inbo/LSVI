@@ -130,23 +130,13 @@ invoercontroleData_soortenKenmerken <- #nolint
       Klasse <- class(ConnectieLSVIhabitats)[1]
     }
 
-    if (Klasse == "Microsoft SQL Server") {
-      QuerySoorten <-
-        "SELECT TaxonSynoniem.FloraNaamNederlands AS NedNaam,
-            TaxonSynoniem.GbifCanonicalNameWithMarker AS Canonicalname,
-            Taxon.NbnTaxonVersionKey AS NBNTaxonVersionKey, Taxon.TaxonTypeId
-        FROM TaxonSynoniem INNER JOIN Taxon
-          ON TaxonSynoniem.TaxonId = Taxon.Id
-        WHERE Taxon.NbnTaxonVersionKey IS NOT NULL"
-    } else {
-      QuerySoorten <-
-        "SELECT TaxonSynoniem.FloraNaamNederlands AS NedNaam,
-            TaxonSynoniem.CanonicalNameWithMarker AS Canonicalname,
-            Taxon.NbnTaxonVersionKey AS NBNTaxonVersionKey, Taxon.TaxonTypeId
-        FROM TaxonSynoniem INNER JOIN Taxon
-          ON TaxonSynoniem.TaxonId = Taxon.Id
-        WHERE Taxon.NbnTaxonVersionKey IS NOT NULL"
-    }
+    QuerySoorten <-
+      "SELECT TaxonSynoniem.FloraNaamNederlands AS NedNaam,
+          TaxonSynoniem.CanonicalNameWithMarker AS Canonicalname,
+          Taxon.NbnTaxonVersionKey AS NBNTaxonVersionKey, Taxon.TaxonTypeId
+      FROM TaxonSynoniem INNER JOIN Taxon
+        ON TaxonSynoniem.TaxonId = Taxon.Id
+      WHERE Taxon.NbnTaxonVersionKey IS NOT NULL"
 
     Taxonlijst <-
       dbGetQuery(ConnectieLSVIhabitats, QuerySoorten)
