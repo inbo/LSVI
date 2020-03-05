@@ -7,9 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Technische achtergrond bij de berekeningen • LSVI</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
 <meta property="og:title" content="Technische achtergrond bij de berekeningen">
 <meta property="og:description" content="">
@@ -40,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -66,7 +65,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/inbo/LSVI">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -79,14 +78,13 @@
 <!--/.navbar -->
 
       
-
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Technische achtergrond bij de berekeningen</h1>
                         <h4 class="author">Els Lommelen, Toon Westra en Hans Van Calster</h4>
             
-            <h4 class="date">2020-02-25</h4>
+            <h4 class="date">2020-03-04</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/inbo/LSVI/blob/master/vignettes/Berekeningen.Rmd"><code>vignettes/Berekeningen.Rmd</code></a></small>
       <div class="hidden name"><code>Berekeningen.Rmd</code></div>
@@ -114,28 +112,28 @@
 <li>een grenswaarde (‘Referentiewaarde’) en operator voor elke voorwaarde (die aangeeft wanneer de staat gunstig of goed is)</li>
 <li>rekenregels (= alle nodige info om een voorwaarde te kunnen berekenen)</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(<span class="kw"><a href="../reference/geefInvoervereisten.html">geefInvoervereisten</a></span>(<span class="dt">Habitattype =</span> <span class="st">"4030"</span>))</code></pre></div>
-<pre><code>## 'data.frame':    12 obs. of  31 variables:
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(<span class="kw"><a href="../reference/geefInvoervereisten.html">geefInvoervereisten</a></span>(<span class="dt">Habitattype =</span> <span class="st">"4030"</span>))</code></pre></div>
+<pre><code>## 'data.frame':    21 obs. of  31 variables:
 ##  $ Versie             : chr  "Versie 2.0" "Versie 2.0" "Versie 2.0" "Versie 2.0" ...
 ##  $ Habitattype        : chr  "4030" "4030" "4030" "4030" ...
 ##  $ Habitatsubtype     : chr  "4030" "4030" "4030" "4030" ...
 ##  $ Criterium          : chr  "Structuur" "Structuur" "Verstoring" "Verstoring" ...
 ##  $ Indicator          : chr  "ouderdomsstructuur Struikheide" "ouderdomsstructuur Struikheide" "vergrassing/verruiging" "vergrassing/verruiging" ...
-##  $ Beoordeling        : chr  "B: 2 tot 3 stadia aanwezig" "A: alle stadia aanwezig" "A: &lt; 30%" "B: 30-50%" ...
-##  $ Kwaliteitsniveau   : int  1 2 2 1 1 2 2 1 1 1 ...
+##  $ Beoordeling        : chr  "B: 2 tot 3 stadia aanwezig" "A: alle stadia aanwezig" "B: 30-50%" "A: &lt; 30%" ...
+##  $ Kwaliteitsniveau   : int  1 2 1 2 1 2 1 2 1 1 ...
 ##  $ Belang             : chr  "b" "b" "zb" "zb" ...
-##  $ BeoordelingID      : int  321 322 323 324 317 318 319 320 325 325 ...
-##  $ Combinatie         : chr  "270" "265" "1616" "1615" ...
-##  $ VoorwaardeID       : int  270 265 1616 1615 739 741 1497 1499 672 312 ...
+##  $ BeoordelingID      : int  321 322 324 323 317 318 320 319 1069 1069 ...
+##  $ Combinatie         : chr  "270" "265" "1615" "1616" ...
+##  $ VoorwaardeID       : int  270 265 1615 1616 739 741 1499 1497 271 1963 ...
 ##  $ Voorwaarde         : chr  "aantal ouderdomsstadia" "aantal ouderdomsstadia" "bedekking vergrassing/verruiging" "bedekking vergrassing/verruiging" ...
-##  $ Referentiewaarde   : chr  "2" "4" "30" "50" ...
-##  $ Operator           : chr  "&gt;=" "&gt;=" "&lt;" "&lt;=" ...
+##  $ Referentiewaarde   : chr  "2" "4" "50" "30" ...
+##  $ Operator           : chr  "&gt;=" "&gt;=" "&lt;=" "&lt;" ...
 ##  $ AnalyseVariabele   : chr  "aantal" "aantal" "bedekking" "bedekking" ...
 ##  $ Eenheid            : chr  NA NA "%" "%" ...
 ##  $ TypeVariabele      : chr  "Geheel getal" "Geheel getal" "Percentage" "Percentage" ...
 ##  $ Invoertype         : chr  NA NA NA NA ...
 ##  $ Invoerwaarde       : chr  "NA" "NA" "NA" "NA" ...
-##  $ TaxongroepId       : int  NA NA 453 453 93 93 761 762 416 371 ...
+##  $ TaxongroepId       : int  NA NA 453 453 93 93 760 759 NA NA ...
 ##  $ TaxongroepNaam     : chr  NA NA "vergrassing/verruiging" "vergrassing/verruiging" ...
 ##  $ Studiegroepnaam    : chr  "50pioniersstadium&amp;100ontwikkelingsstadium&amp;150climaxstadium&amp;200degeneratiestadium" "50pioniersstadium&amp;100ontwikkelingsstadium&amp;150climaxstadium&amp;200degeneratiestadium" NA NA ...
 ##  $ Studielijstnaam    : chr  "ouderdomsstadia" "ouderdomsstadia" NA NA ...
@@ -202,7 +200,7 @@ Schematische voorstelling van de workflow
 </ul>
 <p>Het stukje ‘selecteert de soorten/kenmerken uit de opname’ komt in bijna alle voorwaarden terug. Soms moet er achteraf nog een extra selectie gebeuren, bv. enkel soorten/kenmerken die minstens/maximum een bepaalde bedekking hebben of enkel soorten uit een bepaalde vegetatielaag, soms niet. Vaak is het uiteindelijke eindresultaat een telling van het aantal soorten of een totale bedekking van alle soorten samen. Soms wordt de totale bedekking van een volledige vegetatielaag gevraagd, en dan zal de rekenmodule de berekening op basis van de volopname/soortenlijst enkel doen als de totale bedekking van de vegetatielaag niet opgegeven is.</p>
 <p>Globaal bekeken is het aantal verschillende handelingen/berekeningswijzen (oftewel stukjes script die nodig zijn) relatief beperkt, maar zoals de ‘soms’ en de ‘vaak’ in voorgaande alinea aangeven, moeten deze wel zeer flexibel ingezet kunnen worden afhankelijk van de voorwaarde. Deze flexibiliteit is in het package opgevangen door voor elke voorwaarde de berekeningswijze als een set van ‘rekenregels’ te coderen in de databank. Zo is de voorwaarde ‘aantal sleutelsoorten minstens frequent aanwezig’ als volgt gecodeerd:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(<span class="kw"><a href="../reference/geefInvoervereisten.html">geefInvoervereisten</a></span>(<span class="dt">Versie =</span> <span class="st">"versie 2.0"</span> ,<span class="dt">Habitattype =</span> <span class="st">"2330_dw"</span>, <span class="dt">Indicator =</span> <span class="st">"sleutelsoorten"</span>, <span class="dt">Kwaliteitsniveau =</span> <span class="dv">1</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(<span class="kw"><a href="../reference/geefInvoervereisten.html">geefInvoervereisten</a></span>(<span class="dt">Versie =</span> <span class="st">"versie 2.0"</span> ,<span class="dt">Habitattype =</span> <span class="st">"2330_dw"</span>, <span class="dt">Indicator =</span> <span class="st">"sleutelsoorten"</span>, <span class="dt">Kwaliteitsniveau =</span> <span class="dv">1</span>))</code></pre></div>
 <pre><code>## 'data.frame':    1 obs. of  31 variables:
 ##  $ Versie             : chr "Versie 2.0"
 ##  $ Habitattype        : chr "2330"
@@ -234,7 +232,7 @@ Schematische voorstelling van de workflow
 ##  $ SubReferentiewaarde: chr "f"
 ##  $ SubOperator        : chr "&gt;="
 ##  $ SubInvoertype      : chr "TANSLEY IHD"
-##  $ SubInvoerwaarde    : chr "A, CD, D, F, LA, LCD, LD, LF, LO, LR, LS, O, R, RA, RCD, RD, RF, RO, RR, RS, S, lf"</code></pre>
+##  $ SubInvoerwaarde    : chr "A, CD, D, F, LA, LCD, LD, LF, LO, LR, LS, O, R, RA, RCD, RD, RF, RO, RR, RS, S"</code></pre>
 <p>Scriptmatig wordt dus gecheckt welke variabelen (‘rekenregels’) in de databank ingevuld zijn en welke waarden ze hebben, en deze combinatie bepaalt welke stukjes script voor het bepalen van die voorwaarde doorlopen worden. In enkele gevallen kan een variabele ietwat contextafhankelijk zijn, dus een lichtjes andere interpretatie hebben afhankelijk van de inhoud van andere variabelen.</p>
 </div>
 <div id="rekenregels" class="section level2">
@@ -261,7 +259,7 @@ Schematische voorstelling van de workflow
 <div id="AnalyseVariabele" class="section level2">
 <h2 class="hasAnchor">
 <a href="#AnalyseVariabele" class="anchor"></a>AnalyseVariabele</h2>
-<p>Bij het berekenen van een AnalyseVariabele wordt vaak de (interne) functie <code>selecteerKenmerkenInOpname</code> aangeroepen om de soorten/kenmerken uit de opname van de gebruiker te selecteren. Om de workflow van deze functie niet te herhalen in elk van onderstaande analysevariabelen (berekeningswijzen), bespreken we hem hier apart.</p>
+<p>Bij het berekenen van een AnalyseVariabele wordt vaak de (interne) functie <code><a href="../reference/selecteerKenmerkenInOpname.html">selecteerKenmerkenInOpname()</a></code> aangeroepen om de soorten/kenmerken uit de opname van de gebruiker te selecteren. Om de workflow van deze functie niet te herhalen in elk van onderstaande analysevariabelen (berekeningswijzen), bespreken we hem hier apart.</p>
 <p>In te voeren parameters voor deze functie zijn de door de gebruiker ingevoerde opname (soorten en/of kenmerken) en de velden die in de databank gedefinieerd zijn voor de voorwaarde. De workflow van de functie is als volgt:</p>
 <p>Als een taxonlijst of studielijst vermeld is in de voorwaarde, zullen de elementen uit deze lijst geselecteerd worden in de opname van de gebruiker. Als zowel taxonlijst als studielijst vermeld zijn, dan bestaat deze studielijst altijd uit een of meerdere vegetatielagen, en dan worden de soorten uit de taxonlijst geselecteerd in de opname van de gebruiker die in de in de studielijst vermelde vegetatiela(a)g(en) voorkomen.</p>
 <p>Als er een subvoorwaarde vermeld is in de voorwaarde, zullen uit de geselecteerde deellijst van de opname enkel de elementen geselecteerd worden die aan de subvoorwaarde voldoen (bv. minimum of maximum een bepaalde bedekking of aandeel zijn).</p>
@@ -271,12 +269,12 @@ Schematische voorstelling van de workflow
 <div id="aantal" class="section level2">
 <h2 class="hasAnchor">
 <a href="#aantal" class="anchor"></a>aantal</h2>
-<p>Bij de voorwaarden met analysevariabele <code>aantal</code> wordt het aantal records (soorten of kenmerken) geteld dat door <code>selecteerKenmerkenInOpname</code> teruggegeven wordt, dus hier wordt simpelweg het aantal relevante soorten (ingeval van taxonlijst) of kenmerken (ingeval van studielijst) geteld dat voorkomt in de door de gebruiker ingegeven opname en voldoet aan een eventuele subvoorwaarde. Als samen met een taxonlijst ook een studielijst opgegeven wordt, dan is deze te interpreteren als een tweede subvoorwaarde. In de praktijk gaat het hier over de vegetatielaag waarin de soorten moeten voorkomen.</p>
+<p>Bij de voorwaarden met analysevariabele <code>aantal</code> wordt het aantal records (soorten of kenmerken) geteld dat door <code><a href="../reference/selecteerKenmerkenInOpname.html">selecteerKenmerkenInOpname()</a></code> teruggegeven wordt, dus hier wordt simpelweg het aantal relevante soorten (ingeval van taxonlijst) of kenmerken (ingeval van studielijst) geteld dat voorkomt in de door de gebruiker ingegeven opname en voldoet aan een eventuele subvoorwaarde. Als samen met een taxonlijst ook een studielijst opgegeven wordt, dan is deze te interpreteren als een tweede subvoorwaarde. In de praktijk gaat het hier over de vegetatielaag waarin de soorten moeten voorkomen.</p>
 </div>
 <div id="bedekking" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bedekking" class="anchor"></a>bedekking</h2>
-<p>Bij de voorwaarden met analysevariabele <code>bedekking</code> wordt de totale bedekking berekend van de records (soorten of kenmerken) die door <code>selecteerKenmerkenInOpname</code> teruggegeven worden, dus hier wordt de totale bedekking berekend van de relevante soorten (ingeval van taxonlijst) of kenmerken (ingeval van studielijst) die voorkomen in de door de gebruiker ingegeven opname en voldoen aan een eventuele subvoorwaarde. Als samen met een taxonlijst ook een studielijst opgegeven wordt, dan is deze te interpreteren als een tweede subvoorwaarde. In de praktijk gaat het hier over de vegetatielaag waarin de soorten moeten voorkomen.</p>
+<p>Bij de voorwaarden met analysevariabele <code>bedekking</code> wordt de totale bedekking berekend van de records (soorten of kenmerken) die door <code><a href="../reference/selecteerKenmerkenInOpname.html">selecteerKenmerkenInOpname()</a></code> teruggegeven worden, dus hier wordt de totale bedekking berekend van de relevante soorten (ingeval van taxonlijst) of kenmerken (ingeval van studielijst) die voorkomen in de door de gebruiker ingegeven opname en voldoen aan een eventuele subvoorwaarde. Als samen met een taxonlijst ook een studielijst opgegeven wordt, dan is deze te interpreteren als een tweede subvoorwaarde. In de praktijk gaat het hier over de vegetatielaag waarin de soorten moeten voorkomen.</p>
 <p>Voor de berekening van de totale bedekking wordt gebruik gemaakt van de formule van Fisher:</p>
 <p><span class="math display">\[ b_{tot} = 1 - \prod_{i=1}^n (1 - b_{i})\]</span> met <span class="math inline">\(b_{tot}\)</span> de totale bedekking in proportie (dus percentage / 100), <span class="math inline">\(b_{i}\)</span> de bedekking van de individuele soorten in proportie (dus percentage / 100) (en <span class="math inline">\(\prod\)</span> het product)</p>
 <p>Deze formule geeft uiteraard maar een benaderende waarde die minder accuraat is dan een rechtstreekse inschatting van de totale bedekking van de soorten van de lijst samen (dus gebruik maken van rechtstreekse inschattingen heeft de voorkeur als deze beschikbaar zijn). In tegenstelling tot een gewone som van bedekkingen, gaat ze uit van een gedeeldelijke overlap van soorten, wat vaak een betere benadering zal zijn. Een ander pluspunt is dat het resultaat (de totale bedekking) nooit meer dan 1 of 100 % zal zijn.</p>
@@ -285,79 +283,79 @@ Schematische voorstelling van de workflow
 <h2 class="hasAnchor">
 <a href="#bedekkingexcl" class="anchor"></a>bedekkingExcl</h2>
 <p>Bij de analysevariabele <code>bedekkingExcl</code> gaat de voorwaarde over de totale bedekking van de soorten/kenmerken die niet in een lijst voorkomen, bv. alle soorten behalve de sleutelsoorten.</p>
-<p>Bij voorwaarden met deze analysevariabele worden de soorten/kenmerken geselecteerd op basis van een functie <code>deselecteerKenmerkenInOpname</code>, die in de opname van de gebruiker de soorten/kenmerken schrapt die in de taxonlijst/studielijst voorkomen. Verder gebeurt de berekening analoog aan deze van de analysevariabele <code>bedekking</code></p>
+<p>Bij voorwaarden met deze analysevariabele worden de soorten/kenmerken geselecteerd op basis van een functie <code><a href="../reference/deselecteerKenmerkenInOpname.html">deselecteerKenmerkenInOpname()</a></code>, die in de opname van de gebruiker de soorten/kenmerken schrapt die in de taxonlijst/studielijst voorkomen. Verder gebeurt de berekening analoog aan deze van de analysevariabele <a href="#bedekking"><code>bedekking</code></a></p>
 </div>
-<div id="bedekkinglaag" class="section level2">
+<div id="bedekkingLaag" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bedekkinglaag" class="anchor"></a>bedekkingLaag</h2>
+<a href="#bedekkingLaag" class="anchor"></a>bedekkingLaag</h2>
 <p>Bij de analysevariabele <code>bedekkingLaag</code> gaat de voorwaarde over de totale bedekking van een vegetatielaag, bv. de boom- en struiklaag of de moslaag. In dit geval is de vegetatielaag in kwestie als studielijst ingegeven (met evt. de verschillende deellagen zoals boomlaag en struiklaag ook vermeld als aparte items), en de taxonlijst bevat een lijst van alle soorten die in deze laag voorkomen.</p>
 <p>Bij voorwaarden met deze analysevariabele zal eerst gecheckt worden of kenmerken uit de studielijst voorkomen in de opname van de gebruiker.</p>
 <ul>
-<li>Als dat zo is, dan zal de bedekking afgeleid worden van het kenmerk of de kenmerken in de studielijst. (Meer concreet: de berekening gebeurt zoals bij analysevariabele <code>bedekking</code> nadat eerst <code>TaxongroepId</code> uit de voorwaarden geschrapt is, dus de selectie van de lagen gebeurt op basis van enkel de studielijst)</li>
+<li>Als dat zo is, dan zal de bedekking afgeleid worden van het kenmerk of de kenmerken in de studielijst. (Meer concreet: de berekening gebeurt zoals bij analysevariabele <a href="#bedekking"><code>bedekking</code></a> nadat eerst <code>TaxongroepId</code> uit de voorwaarden geschrapt is, dus de selectie van de lagen gebeurt op basis van enkel de studielijst)</li>
 <li>Als dat niet zo is, dan zal de bedekking afgeleid worden op basis van opgegeven taxonlijst en zal de voorwaarde uitgevoerd worden na enkel de analysevariabele te vervangen door <code>bedekking</code> (dus de studielijst met de vegetatielaag blijft behouden, waardoor enkel soorten uit die laag geselecteerd zullen worden)</li>
 </ul>
 </div>
-<div id="bedekkinglaagexcl" class="section level2">
+<div id="bedekkingLaagExcl" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bedekkinglaagexcl" class="anchor"></a>bedekkingLaagExcl</h2>
-<p>De analysevariabele <code>bedekkingLaagExcl</code> is zeer analoog aan <code>bedekkingLaag</code>, maar lost een taxonlijst-gerelateerd probleem op dat voorkomt bij de taxonlijst van de boomlaag. Om ervoor te zorgen dat ook in de opname van de gebruiker ingevoerde genera als boom beschouwd worden, bestaat de lijst van bomen en struiken uit genera. Lagere taxonomische niveaus worden automatisch ook meegenomen (zie <a href="#taxonlijsten">Afhandeling taxonlijsten</a>). Er is echter 1 moeilijkheid: <em>Salix repens</em> zou niet meegenomen mogen worden want dit is geen boom (die wel in de struiklaag zou kunnen voorkomen). Anderzijds zijn er een aantal moeilijk te determineren <em>Salix</em>-soorten die evt. als genus in een opname zou kunnen voorkomen, maar die allen bomen zijn. We gaan ervan uit dat <em>Salix repens</em> wel herkend wordt en dus tot op soortniveau in een opname toegevoegd zal worden, en enkel moeilijk te herkennen <em>Salix</em>-soorten als genus toegevoegd worden. Vanuit die redenering worden ‘<em>Salix</em> sp.’ en de <em>Salix</em>-soorten als boom beschouwd, met uitzondering van <em>Salix repens</em>.</p>
+<a href="#bedekkingLaagExcl" class="anchor"></a>bedekkingLaagExcl</h2>
+<p>De analysevariabele <code>bedekkingLaagExcl</code> is zeer analoog aan <a href="#bedekkingLaag"><code>bedekkingLaag</code></a>, maar lost een taxonlijst-gerelateerd probleem op dat voorkomt bij de taxonlijst van de boomlaag. Om ervoor te zorgen dat ook in de opname van de gebruiker ingevoerde genera als boom beschouwd worden, bestaat de lijst van bomen en struiken uit genera. Lagere taxonomische niveaus worden automatisch ook meegenomen (zie <a href="#taxonlijsten">Afhandeling taxonlijsten</a>). Er is echter 1 moeilijkheid: <em>Salix repens</em> zou niet meegenomen mogen worden want dit is geen boom (die wel in de struiklaag zou kunnen voorkomen). Anderzijds zijn er een aantal moeilijk te determineren <em>Salix</em>-soorten die evt. als genus in een opname zou kunnen voorkomen, maar die allen bomen zijn. We gaan ervan uit dat <em>Salix repens</em> wel herkend wordt en dus tot op soortniveau in een opname toegevoegd zal worden, en enkel moeilijk te herkennen <em>Salix</em>-soorten als genus toegevoegd worden. Vanuit die redenering worden ‘<em>Salix</em> sp.’ en de <em>Salix</em>-soorten als boom beschouwd, met uitzondering van <em>Salix repens</em>.</p>
 <p>Dit probleempje heeft aanleiding gegeven voor een nieuwe analysevariabele, die uiteraard ook ruimer gebruikt kan worden. Bij voorwaarden met deze analysevariabele verwijst het <code>TaxongroepId</code> naar een taxonlijst bestaande uit 2 sublijsten: een lange lijst (bv. alle genera van bomen) en een kort lijstje (bv. <em>Salix repens</em>).</p>
-<p>Bij de berekening zal eerst gecheckt worden of er inderdaad 2 sublijsten zijn, en in dat geval zullen als een eerste stap de taxa van het kortste lijstje geschrapt worden in de lijst van de taxa met het langste lijstje (in een lijst waarin alle mogelijke taxonniveaus toegevoegd zijn). Daarna zal met de eventueel aangepaste taxonlijst de voorwaarde uitgerekend worden volgens analysevariabele <code>bedekkingLaag</code>.</p>
+<p>Bij de berekening zal eerst gecheckt worden of er inderdaad 2 sublijsten zijn, en in dat geval zullen als een eerste stap de taxa van het kortste lijstje geschrapt worden in de lijst van de taxa met het langste lijstje (in een lijst waarin alle mogelijke taxonniveaus toegevoegd zijn). Daarna zal met de eventueel aangepaste taxonlijst de voorwaarde uitgerekend worden volgens analysevariabele <a href="#bedekkingLaag"><code>bedekkingLaag</code></a>.</p>
 </div>
-<div id="bedekkinglaagplus" class="section level2">
+<div id="bedekkingLaagPlus" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bedekkinglaagplus" class="anchor"></a>bedekkingLaagPlus</h2>
-<p>Bij de analysevariabele <code>bedekkingLaagPlus</code> gaat de voorwaarde over de totale bedekking van een vegetatielaag en een taxongroep, bv. de bedekking van de moslaag en klimop. Verschillend van <code>bedekkingLaag</code> verwijst het <code>TaxongroepId</code> naar een taxonlijst met 2 taxonsublijsten (zie <a href="#taxonlijsten">Afhandeling taxonlijsten</a>): een lange lijst met alle soorten van de vegetatielaag die in studielijst vermeld is (in het voorbeeld alle mossen), en een korte lijst met de soorten waarvan de bedekking hierbij opgeteld moet worden (in het voorbeeld klimop).</p>
-<p>Bij de berekening zal eerst gecheckt worden of er inderdaad 2 sublijsten zijn, en in dat geval worden deze opgesplitst in 2 lijsten. Op basis van de kortste lijst wordt de bedekking van deze soort(en) berekend volgens de analysevariabele <code>bedekking</code> (waarbij de studielijst buiten beschouwing gelaten wordt). Op basis van het langste lijst en de studielijst wordt de bedekking van de vegetatielaag berekend volgens de analysevariabele <code>bedekkingLaag</code>. Daarna wordt de voorwaarde berekend door beide bedekkingen op te tellen volgens de formule van Fisher (zie onder <a href="#bedekking">bedekking</a>). (Ingeval er geen 2 sublijsten zijn, zal de voorwaarde als weergegeven in de databank, berekend worden volgens analysevariabele <code>bedekkingLaag</code>).</p>
+<a href="#bedekkingLaagPlus" class="anchor"></a>bedekkingLaagPlus</h2>
+<p>Bij de analysevariabele <code>bedekkingLaagPlus</code> gaat de voorwaarde over de totale bedekking van een vegetatielaag en een taxongroep, bv. de bedekking van de moslaag en klimop. Verschillend van <a href="#bedekkingLaag"><code>bedekkingLaag</code></a> verwijst het <code>TaxongroepId</code> naar een taxonlijst met 2 taxonsublijsten (zie <a href="#taxonlijsten">Afhandeling taxonlijsten</a>): een lange lijst met alle soorten van de vegetatielaag die in studielijst vermeld is (in het voorbeeld alle mossen), en een korte lijst met de soorten waarvan de bedekking hierbij opgeteld moet worden (in het voorbeeld klimop).</p>
+<p>Bij de berekening zal eerst gecheckt worden of er inderdaad 2 sublijsten zijn, en in dat geval worden deze opgesplitst in 2 lijsten. Op basis van de kortste lijst wordt de bedekking van deze soort(en) berekend volgens de analysevariabele <a href="#bedekking"><code>bedekking</code></a> (waarbij de studielijst buiten beschouwing gelaten wordt). Op basis van het langste lijst en de studielijst wordt de bedekking van de vegetatielaag berekend volgens de analysevariabele <a href="#bedekkingLaag"><code>bedekkingLaag</code></a>. Daarna wordt de voorwaarde berekend door beide bedekkingen op te tellen volgens de formule van Fisher (zie onder <a href="#bedekking">bedekking</a>). (Ingeval er geen 2 sublijsten zijn, zal de voorwaarde als weergegeven in de databank, berekend worden volgens analysevariabele <a href="#bedekkingLaag"><code>bedekkingLaag</code></a>).</p>
 </div>
 <div id="bedekkingsom" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bedekkingsom" class="anchor"></a>bedekkingSom</h2>
 <p>Bij de analysevariabele <code>bedekkingSom</code> gaat de voorwaarde over de totale bedekking van een taxongroep en een studiegroep, bv. de bedekking van pioniersvegetatie en open zand.</p>
-<p>De bedekkingen worden berekend volgens de analysevariabele <code>bedekking</code> voor enerzijds de studielijst (waarbij <code>TaxongroepId</code> buiten beschouwing gelaten wordt), en anderzijds voor <code>TaxongroepId</code> (waarbij de studielijst buiten beschouwing gelaten wordt). Daarna wordt de voorwaarde berekend door beide bedekkingen op te tellen. Vermits de studielijst doorgaans geen vegetatie bevat, wordt niet uitgegaan van een gedeeltelijke overlap en wordt een gewone som gebruikt.</p>
+<p>De bedekkingen worden berekend volgens de analysevariabele <a href="#bedekking"><code>bedekking</code></a> voor enerzijds de studielijst (waarbij <code>TaxongroepId</code> buiten beschouwing gelaten wordt), en anderzijds voor <code>TaxongroepId</code> (waarbij de studielijst buiten beschouwing gelaten wordt). Daarna wordt de voorwaarde berekend door beide bedekkingen op te tellen. Vermits de studielijst doorgaans geen vegetatie bevat, wordt niet uitgegaan van een gedeeltelijke overlap en wordt een gewone som gebruikt.</p>
 </div>
-<div id="maxbedekking" class="section level2">
+<div id="maxBedekking" class="section level2">
 <h2 class="hasAnchor">
-<a href="#maxbedekking" class="anchor"></a>maxBedekking</h2>
-<p>Bij de voorwaarden met analysevariabele <code>maxBedekking</code> wordt de maximale bedekking geselecteerd uit de records (soorten of kenmerken) die door <code>selecteerKenmerkenInOpname</code> teruggegeven worden (zie onder <a href="#AnalyseVariabele">AnalyseVariabele</a>), dus hier wordt de soort of kenmerk met de hoogste bedekking geselecteerd uit de relevante soorten (ingeval van taxonlijst) of kenmerken (ingeval van studielijst) die voorkomen in de door de gebruiker ingegeven opname en voldoen aan een eventuele subvoorwaarde. Als samen met een taxonlijst ook een studielijst opgegeven wordt, dan is deze te interpreteren als een tweede subvoorwaarde. In de praktijk gaat het hier over de vegetatielaag waarin de soorten moeten voorkomen.</p>
+<a href="#maxBedekking" class="anchor"></a>maxBedekking</h2>
+<p>Bij de voorwaarden met analysevariabele <code>maxBedekking</code> wordt de maximale bedekking geselecteerd uit de records (soorten of kenmerken) die door <code><a href="../reference/selecteerKenmerkenInOpname.html">selecteerKenmerkenInOpname()</a></code> teruggegeven worden (zie onder <a href="#AnalyseVariabele">AnalyseVariabele</a>), dus hier wordt de soort of kenmerk met de hoogste bedekking geselecteerd uit de relevante soorten (ingeval van taxonlijst) of kenmerken (ingeval van studielijst) die voorkomen in de door de gebruiker ingegeven opname en voldoen aan een eventuele subvoorwaarde. Als samen met een taxonlijst ook een studielijst opgegeven wordt, dan is deze te interpreteren als een tweede subvoorwaarde. In de praktijk gaat het hier over de vegetatielaag waarin de soorten moeten voorkomen.</p>
 </div>
 <div id="maxbedekking2s" class="section level2">
 <h2 class="hasAnchor">
 <a href="#maxbedekking2s" class="anchor"></a>maxBedekking2s</h2>
-<p>De analysevariabele <code>maxBedekking2s</code> is gelijkaardig aan <code>maxBedekking</code> met als enige verschil dat bij 2 of meer aanwezige soorten of kenmerken, de bedekkingen van de 2 soorten/kenmerken met de hoogste bedekking opgeteld worden volgens de formule van Fisher (zie onder <a href="#bedekking">bedekking</a>).</p>
+<p>De analysevariabele <code>maxBedekking2s</code> is gelijkaardig aan <a href="#maxBedekking"><code>maxBedekking</code></a> met als enige verschil dat bij 2 of meer aanwezige soorten of kenmerken, de bedekkingen van de 2 soorten/kenmerken met de hoogste bedekking opgeteld worden volgens de formule van Fisher (zie onder <a href="#bedekking">bedekking</a>).</p>
 </div>
 <div id="maxbedekkingexcl" class="section level2">
 <h2 class="hasAnchor">
 <a href="#maxbedekkingexcl" class="anchor"></a>maxBedekkingExcl</h2>
 <p>Bij de analysevariabele <code>maxBedekkingExcl</code> gaat de voorwaarde over de maximale bedekking van de soorten/kenmerken die niet in een lijst voorkomen, bv. alle soorten behalve de sleutelsoorten.</p>
-<p>Bij voorwaarden met deze analysevariabele worden de soorten/kenmerken geselecteerd op basis van een functie <code>deselecteerKenmerkenInOpname</code>, die in de opname van de gebruiker de soorten/kenmerken schrapt die in de taxonlijst/studielijst voorkomen. Verder gebeurt de berekening analoog aan deze van de analysevariabele <code>maxBedekking</code></p>
+<p>Bij voorwaarden met deze analysevariabele worden de soorten/kenmerken geselecteerd op basis van een functie <code><a href="../reference/deselecteerKenmerkenInOpname.html">deselecteerKenmerkenInOpname()</a></code>, die in de opname van de gebruiker de soorten/kenmerken schrapt die in de taxonlijst/studielijst voorkomen. Verder gebeurt de berekening analoog aan deze van de analysevariabele <a href="#maxBedekking"><code>maxBedekking</code></a>.</p>
 </div>
 <div id="aandeel" class="section level2">
 <h2 class="hasAnchor">
 <a href="#aandeel" class="anchor"></a>aandeel</h2>
 <p>Bij de analysevariabele <code>aandeel</code> gaat de voorwaarde over grondvlakken of volumes van bomen. Terwijl alle andere analysevariabelen enkel door gebruikers ingevoerde records in beschouwing nemen waarbij <code>Eenheid</code> niet gelijk is aan ‘grondvlak_ha’ of ‘volume_ha’, zal deze analysevariabele deze records net wel in beschouwing nemen (en alle andere records wissen).</p>
-<p>Om het totale grondvlak of volume te berekenen van de relevante soorten, wordt de som genomen van de grondvlakken/volumes van de records (in principe soorten, maar voor kenmerken zou het technisch ook werken) die door <code>selecteerKenmerkenInOpname</code> teruggegeven worden (zie onder <a href="#AnalyseVariabele">AnalyseVariabele</a>), dus hier wordt het totale grondvlak of volume berekend van de relevante soorten (uit taxonlijst) die voorkomen in de door de gebruiker ingegeven opname en voldoen aan een eventuele subvoorwaarde. Als samen met een taxonlijst ook een studielijst opgegeven wordt, dan is deze te interpreteren als een tweede subvoorwaarde. In de praktijk gaat het hier over de vegetatielaag waarin de soorten moeten voorkomen.</p>
+<p>Om het totale grondvlak of volume te berekenen van de relevante soorten, wordt de som genomen van de grondvlakken/volumes van de records (in principe soorten, maar voor kenmerken zou het technisch ook werken) die door <code><a href="../reference/selecteerKenmerkenInOpname.html">selecteerKenmerkenInOpname()</a></code> teruggegeven worden (zie onder <a href="#AnalyseVariabele">AnalyseVariabele</a>), dus hier wordt het totale grondvlak of volume berekend van de relevante soorten (uit taxonlijst) die voorkomen in de door de gebruiker ingegeven opname en voldoen aan een eventuele subvoorwaarde. Als samen met een taxonlijst ook een studielijst opgegeven wordt, dan is deze te interpreteren als een tweede subvoorwaarde. In de praktijk gaat het hier over de vegetatielaag waarin de soorten moeten voorkomen.</p>
 <p>Om tenslotte het aandeel te berekenen, wordt het bekomen grondvlak of volume gedeeld door het totale grondvlak of volume van alle opgegeven soorten, wat de som is van alle soorten in de opname met <code>Eenheid</code> ‘grondvlak_ha’ of ‘volume_ha’.</p>
 </div>
 <div id="aandeelkruidlaag" class="section level2">
 <h2 class="hasAnchor">
 <a href="#aandeelkruidlaag" class="anchor"></a>aandeelKruidlaag</h2>
 <p>De analysevariabele <code>aandeelKruidlaag</code> heeft eigenlijk een ietwat slecht gekozen naam, omdat de functie in principe het aandeel ten opzichte van eender welke vegetatielaag berekent. Bij voorwaarden met deze analysevariabele verwijst <code>TaxongroepId</code> naar een lijst met de relevante soorten om het aandeel te berekenen, en studielijst vermeldt de vegetatielaag waarin dit aandeel bestudeerd wordt.</p>
-<p>De totale bedekking van de relevante soorten wordt berekend door de voorwaarde (met <code>TaxongroepId</code> en studielijst) te berekenen volgens de analysevariabele <code>bedekking</code>. Voor de totale bedekking van de vegetatielaag zal eerst gecheckt worden of het kenmerk uit de studielijst (de vegetatielaag) voorkomt in de opname van de gebruiker.</p>
+<p>De totale bedekking van de relevante soorten wordt berekend door de voorwaarde (met <code>TaxongroepId</code> en studielijst) te berekenen volgens de analysevariabele <a href="#bedekking"><code>bedekking</code></a>. Voor de totale bedekking van de vegetatielaag zal eerst gecheckt worden of het kenmerk uit de studielijst (de vegetatielaag) voorkomt in de opname van de gebruiker.</p>
 <ul>
 <li>Als dat zo is, dan zal de bedekking afgeleid worden van het kenmerk in de studielijst.</li>
 <li>Als dat niet zo is, dan zal de bedekking afgeleid worden van de opname van de gebruiker waaruit enkel soorten van de vegetatielaag in kwestie (bepaald op basis van studielijst) gefilterd zijn.</li>
 </ul>
 <p>Om de voorwaarde te berekenen, zal de totale bedekking van de relevante soorten gedeeld worden door de totale bedekking van de vegetatielaag. <!-- Het tweede deel van de berekening lijkt wat op bedekkingLaag, maar is niet helemaal hetzelfde (er wordt uitgegaan van de veronderstelling dat er maar 1 vegetatielaag opgegeven is in studielijst, alle soorten uit de opname uit de laag worden meegenomen,...).  Omwille van het laatste verschil kan bedekkingLaag op het eerste zicht moeilijk als alternatief gebruikt worden. --></p>
 </div>
-<div id="aantalgroepen" class="section level2">
+<div id="aantalGroepen" class="section level2">
 <h2 class="hasAnchor">
-<a href="#aantalgroepen" class="anchor"></a>aantalGroepen</h2>
+<a href="#aantalGroepen" class="anchor"></a>aantalGroepen</h2>
 <p>De analysevariabele <code>aantalGroepen</code> gaat specifiek over kenmerken die eigenlijk soortenlijsten zijn, bv. helofyten. Deze kenmerken zijn in de databank enerzijds weergegeven in de studielijst, en anderzijds verwijst het <code>TaxongroepId</code> naar een taxonlijst met meerdere taxonsubgroepen die elk overeenkomen met een van de kenmerken (en die de relevante soorten bevatten).</p>
 <p>Bij voorwaarden met deze analysevariabele zal eerst gecheckt worden of kenmerken uit de studielijst voorkomen in de opname van de gebruiker.</p>
 <ul>
-<li>Als dat zo is, dan zal het aantal afgeleid worden van de kenmerken in de studielijst. (Meer concreet: de berekening gebeurt zoals bij analysevariabele <code>aantal</code> nadat eerst <code>TaxongroepId</code> uit de voorwaarden geschrapt is)</li>
-<li>Als dat niet zo is, dan zal het aantal afgeleid worden op basis van opgegeven taxonlijst. Concreet zal de originele voorwaarde wat aangepast worden (de studielijst wordt geschrapt en de taxonlijst wordt herwerkt zodat de originele taxonsubgroepen afzonderlijke taxa of soorten worden binnen 1 taxonlijst), waarna de berekening van het aantal groepen/kenmerken kan gebeuren volgens de analysevariabele <code>aantal</code>. (Zoals beschreven in <a href="#taxonlijsten">Afhandeling taxonlijsten</a> hieronder, zal de aggregatie van de opgegeven soorten - die nu als subsoorten beschouwd worden - gebeuren door de totale bedekking te berekenen en op de resulterende lijst de eventuele subvoorwaarde uit te voeren, waarna het aantal originele taxonsubgroepen - nu hernoemd als soorten - geteld wordt.)</li>
+<li>Als dat zo is, dan zal het aantal afgeleid worden van de kenmerken in de studielijst. (Meer concreet: de berekening gebeurt zoals bij analysevariabele <a href="#aantal"><code>aantal</code></a> nadat eerst <code>TaxongroepId</code> uit de voorwaarden geschrapt is)</li>
+<li>Als dat niet zo is, dan zal het aantal afgeleid worden op basis van opgegeven taxonlijst. Concreet zal de originele voorwaarde wat aangepast worden (de studielijst wordt geschrapt en de taxonlijst wordt herwerkt zodat de originele taxonsubgroepen afzonderlijke taxa of soorten worden binnen 1 taxonlijst), waarna de berekening van het aantal groepen/kenmerken kan gebeuren volgens de analysevariabele <a href="#aantal"><code>aantal</code></a>. (Zoals beschreven in <a href="#taxonlijsten">Afhandeling taxonlijsten</a> hieronder, zal de aggregatie van de opgegeven soorten - die nu als subsoorten beschouwd worden - gebeuren door de totale bedekking te berekenen en op de resulterende lijst de eventuele subvoorwaarde uit te voeren, waarna het aantal originele taxonsubgroepen - nu hernoemd als soorten - geteld wordt.)</li>
 </ul>
 </div>
 <div id="meting" class="section level2">
@@ -378,9 +376,9 @@ Schematische voorstelling van de workflow
 </ul>
 <p>Voor Latijnse namen gebeurt herkenning op basis van genusnaam + soortnaam + evt. subsoortnaam/variëteit/…. Om de koppeling met namen uit de databank toe te laten, worden de door een gebruiker ingevoerde namen deze eerst scriptmatig aangepast naar dit formaat met de functie <code><a href="../reference/parseTaxonnaam.html">parseTaxonnaam()</a></code> (waarbij o.a. auteursnamen worden weggelaten zodat verschillen in schrijfwijzen of al dan niet gebruiken van een ‘.’ hierin geen probleem vormen). Bij Nederlandse namen moet de schrijfwijze wel exact hetzelfde zijn om herkenning toe te laten.</p>
 <p>Als de gebruiker een onbekende naam invoert, krijgt hij een waarschuwing en wordt deze naam bij de berekeningen buiten beschouwing gelaten (ook voor bv. de berekening van een totale bedekking van alle soorten of een bepaalde vegetatielaag). Anders wordt de naam omgezet naar de NbnTaxonVersionKey van de ‘preferred name’, die intern gebruikt wordt voor de verdere berekeningen. Als gebruiker kan je ook rechtstreeks deze unieke code invoeren (dan gebeurt de hier beschreven stap om de naam te herkennen niet).</p>
-<p>Bij het selecteren van soorten uit de opname op basis van een taxonlijst in de databank (met <code>selecteerKenmerkenInOpname</code>, zie onder <a href="#AnalyseVariabele">AnalyseVariabele</a>), wordt voor de taxa in de databank eerst gecheckt of ze in de opname voorkomen. Als een taxon niet gevonden wordt (bv. <em>Quercus</em>), wordt gezocht of taxa van een lager niveau wel in opname voorkomen (bv. <em>Quercus robur</em>, <em>Quercus petraea</em>,…). Als er meerdere taxa van dit lagere niveau voorkomen, dan worden deze bedekkingen geaggregeerd door middel van de formule van Fisher (zie onder <a href="#bedekking">bedekking</a>). Op deze lijst gebeurt de uiteindelijke bewerking als beschreven bij de analysevariabelen (aantallen tellen, bedekkingen aggregeren,…).</p>
+<p>Bij het selecteren van soorten uit de opname op basis van een taxonlijst in de databank (met <code><a href="../reference/selecteerKenmerkenInOpname.html">selecteerKenmerkenInOpname()</a></code>, zie onder <a href="#AnalyseVariabele">AnalyseVariabele</a>), wordt voor de taxa in de databank eerst gecheckt of ze in de opname voorkomen. Als een taxon niet gevonden wordt (bv. <em>Quercus</em>), wordt gezocht of taxa van een lager niveau wel in opname voorkomen (bv. <em>Quercus robur</em>, <em>Quercus petraea</em>,…). Als er meerdere taxa van dit lagere niveau voorkomen, dan worden deze bedekkingen geaggregeerd door middel van de formule van Fisher (zie onder <a href="#bedekking">bedekking</a>). Op deze lijst gebeurt de uiteindelijke bewerking als beschreven bij de analysevariabelen (aantallen tellen, bedekkingen aggregeren,…).</p>
 <p>Een soortenlijst met toevoeging van deze taxa van lagere niveaus kan opgevraagd worden door bij functies <code><a href="../reference/geefSoortenlijst.html">geefSoortenlijst()</a></code> of <code><a href="../reference/geefSoortenlijstVoorIDs.html">geefSoortenlijstVoorIDs()</a></code> de parameter <code>Taxonlijsttype = "alle"</code> toe te voegen. In de verkregen lijst zijn de taxa van het hoogste niveau de records waar <code>TaxonId</code> en <code>SubTaxonId</code> dezelfde waarde hebben. De taxa van een lager niveau hebben hier een verschillende waarde, en ze hebben dezelfde <code>TaxonId</code> als het bijhorend taxon van het hoogste niveau.</p>
-<p>Voor enkele analysevariabelen (<code>bedekkingLaagPlus</code>, <code>bedekkingLaagExcl</code> en <code>aantalGroepen</code>) zijn 2 soortenlijsten nodig voor de berekening. Dit is opgelost door een lijst te maken (aangeduid met eenzelfde <code>TaxongroepId</code>) met 2 sublijsten (elk aangeduid met eenzelfde <code>TaxonsubgroepId</code>). Bij <code>bedekkingLaagPlus</code> en <code>bedekkingLaagExcl</code> wordt deze lijst op basis van <code>TaxonsubgroepId</code> opgesplitst in 2 afzonderlijke lijsten, en de bewerking gebeurt op lijsten zonder sublijsten. Bij <code>aantalGroepen</code> zijn de Id’s hernoemd om code van analysevariabele <code>aantal</code> te kunnen herbruiken:</p>
+<p>Voor enkele analysevariabelen (<a href="#bedekkingLaagPlus"><code>bedekkingLaagPlus</code></a>, <a href="#bedekkingLaagExcl"><code>bedekkingLaagExcl</code></a> en <a href="#aantalGroepen"><code>aantalGroepen</code></a>) zijn 2 soortenlijsten nodig voor de berekening. Dit is opgelost door een lijst te maken (aangeduid met eenzelfde <code>TaxongroepId</code>) met 2 sublijsten (elk aangeduid met eenzelfde <code>TaxonsubgroepId</code>). Bij <a href="#bedekkingLaagPlus"><code>bedekkingLaagPlus</code></a> en <a href="#bedekkingLaagExcl"><code>bedekkingLaagExcl</code></a> wordt deze lijst op basis van <code>TaxonsubgroepId</code> opgesplitst in 2 afzonderlijke lijsten, en de bewerking gebeurt op lijsten zonder sublijsten. Bij <a href="#aantalGroepen"><code>aantalGroepen</code></a>) zijn de Id’s hernoemd om code van analysevariabele <a href="#aantal"><code>aantal</code></a> te kunnen herbruiken:</p>
 <ul>
 <li>
 <code>TaxonsubgroepId</code> -&gt; <code>TaxonId</code> zodanig dat de originele <code>TaxongroepId</code>’s aanzien worden als de items (soorten) die geteld moeten worden</li>
@@ -467,16 +465,16 @@ Doordat de verschilscore index_min volgens de 2 methoden geaggregeerd wordt, res
       <li><a href="#aantal">aantal</a></li>
       <li><a href="#bedekking">bedekking</a></li>
       <li><a href="#bedekkingexcl">bedekkingExcl</a></li>
-      <li><a href="#bedekkinglaag">bedekkingLaag</a></li>
-      <li><a href="#bedekkinglaagexcl">bedekkingLaagExcl</a></li>
-      <li><a href="#bedekkinglaagplus">bedekkingLaagPlus</a></li>
+      <li><a href="#bedekkingLaag">bedekkingLaag</a></li>
+      <li><a href="#bedekkingLaagExcl">bedekkingLaagExcl</a></li>
+      <li><a href="#bedekkingLaagPlus">bedekkingLaagPlus</a></li>
       <li><a href="#bedekkingsom">bedekkingSom</a></li>
-      <li><a href="#maxbedekking">maxBedekking</a></li>
+      <li><a href="#maxBedekking">maxBedekking</a></li>
       <li><a href="#maxbedekking2s">maxBedekking2s</a></li>
       <li><a href="#maxbedekkingexcl">maxBedekkingExcl</a></li>
       <li><a href="#aandeel">aandeel</a></li>
       <li><a href="#aandeelkruidlaag">aandeelKruidlaag</a></li>
-      <li><a href="#aantalgroepen">aantalGroepen</a></li>
+      <li><a href="#aantalGroepen">aantalGroepen</a></li>
       <li><a href="#meting">meting</a></li>
       </ul>
 </li>
@@ -491,20 +489,17 @@ Doordat de verschilscore index_min volgens de 2 methoden geaggregeerd wordt, res
 </div>
 
 
-
       <footer><div class="copyright">
   <p>Developed by Els Lommelen, Patrik Oosterlynck, Gert Van Spaendonk, Hans Van Calster, Martine Van Hove, Toon Westra.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
 </div>
-
       </footer>
 </div>
 
   
-
 
   </body>
 </html>
