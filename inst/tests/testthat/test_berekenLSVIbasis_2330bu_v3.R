@@ -25,12 +25,6 @@ Resultaat <-
 describe("berekenLSVIbasis 2330_bu versie 3", {
 
   it("waarden van voorwaarden correct berekend", {
-    skip_if_not(
-      class(ConnectiePool$.__enclos_env__$private$createObject())[1] ==
-        "Microsoft SQL Server",
-      "SQL Server niet beschikbaar"
-    )
-
     resultaat_berekend <- berekenLSVIbasis(
           Versie = "Versie 3",
           Kwaliteitsniveau = "1",
