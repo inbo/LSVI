@@ -19,29 +19,29 @@ Deze handleiding is bedoeld voor iedereen die met het package LSVI zal werken.  
 
 De handleiding is zo opgesteld dat ze voor beide groepen de relevante informatie bevat om aan de slag te gaan.  Enkele hoofdstukken gaan over de opbouw en het gebruik van het package, en deze zijn zinvol om te lezen voor alle gebruikers:
 
-- __Doelstellingen en inhoud package__: de globale opbouw van de databank en het package, met extra terminologie die in het package gebruikt is en ook een ruw overzicht van de inhoud (groepen van functies).  In een tweede onderdeel wordt dieper ingegaan op de doelstelling: een package van en voor LSVI-gebruikers.  In feite bevat dit deel alle informatie die niet specifiek over het gebruik van de code zelf gaat.
-- __Installatie van het package__
-- __Gebruik basisfuncties__, onderdeel __Basis van LSVI-package__: hoe de functies in het LSVI-package gebruiken
+- [Doelstellingen en inhoud package](#doelstellingen_inhoud): de globale opbouw van de databank en het package, met extra terminologie die in het package gebruikt is en ook een ruw overzicht van de inhoud (groepen van functies).  In een tweede onderdeel wordt dieper ingegaan op de doelstelling: een package van en voor LSVI-gebruikers.  In feite bevat dit deel alle informatie die niet specifiek over het gebruik van de code zelf gaat.
+- [Installatie van het package](#installatie_package)
+- [Gebruik basisfuncties, onderdeel Basis van LSVI-package](#basis_LSVI): hoe de functies in het LSVI-package gebruiken
 
-Voor beginnende R-gebruikers is er onder __Gebruik basisfuncties__ een extra onderdeel __Wegwijs in R__ waarin ingegaan wordt op enkele basishandelingen in R die nuttig kunnen zijn bij het gebruik van dit package (hoe documentatie opzoeken en hoe de bekomen informatie opslaan voor gebruik in Excel).
+Voor beginnende R-gebruikers is er onder [Gebruik basisfuncties](#gebruik_basisfuncties) een extra onderdeel [Wegwijs in R](#wegwijs_in_R) waarin ingegaan wordt op enkele basishandelingen in R die nuttig kunnen zijn bij het gebruik van dit package (hoe documentatie opzoeken en hoe de bekomen informatie opslaan voor gebruik in Excel).
 
-#Doelstellingen en inhoud package
+#Doelstellingen en inhoud package {#doelstellingen_inhoud}
 
-##Inhoud package
+##Inhoud package {#inhoud_package}
 
-Doelstellingen van het package LSVI zijn om de informatie in verband met het bepalen van de lokale staat van instandhouding (LSVI) van habitattypen digitaal ter beschikking te stellen en de functionaliteit aan te bieden om deze LSVI te berekenen (zie Doelstellingen voor details).  Het project bestaat uit 2 onderdelen die onlosmakelijk met elkaar verbonden zijn: een databank die de informatie bevat en het package dat beide doelstellingen uitvoert, gebruik makend van de informatie uit de databank.
+Doelstellingen van het package LSVI zijn om de informatie in verband met het bepalen van de lokale staat van instandhouding (LSVI) van habitattypen digitaal ter beschikking te stellen en de functionaliteit aan te bieden om deze LSVI te berekenen (zie [Doelstellingen](#doelstellingen) voor details).  Het project bestaat uit 2 onderdelen die onlosmakelijk met elkaar verbonden zijn: een databank die de informatie bevat en het package dat beide doelstellingen uitvoert, gebruik makend van de informatie uit de databank.
 
 De __databank__ bevat alle informatie uit de LSVI-rapporten van de habitattypen, waarbij de verschillende versies van de rapporten naast elkaar opgeslagen zijn en dus afzonderlijk geraadpleegd of gebruikt kunnen worden.  Behalve de teksten die letterlijk uit de rapporten overgenomen zijn, bevat de databank ook informatie in een vorm die door het package gebruikt kan worden om de informatie op de juiste manier uit de databank te halen of om berekeningen te maken.  Zo is voor elke beoordeling van een indicator een opsplitsing gemaakt in 'voorwaarden': de elementaire onderdelen die deel uitmaken van deze beoordeling en die herleid kunnen worden tot een statement dat door een computer geëvalueerd kan worden.  Vaak zijn deze voorwaarden de onderdelen die in de rapporten gescheiden zijn door 'en' en/of 'of', soms is de opsplitsing ook gemaakt uit louter technische noodzaak (bv. '10% < x < 50%' wordt vervangen door de voorwaarden 'x > 10%' en 'x < 50%').  Voor elk van deze voorwaarden is gedetailleerde informatie opgenomen over de variabele die nodig is om deze beoordeling te kunnen maken, die enerzijds bedoeld is om de gebruiker te informeren en anderzijds om de LSVI-berekening gemakkelijk te kunnen automatiseren.
 
-De aard (complexiteit) van de informatie in de LSVI-rapporten en de vereiste om ook als basis te dienen voor de rekenmodule hebben geleid tot een eerder complexe databankstructuur.  We hebben dit opgevangen door in het __package__ functies voorzien die louter dienen om de databank te bevragen: met de functies geefVersieInfo(), geefInfoHabitatfiche(), geefSoortenlijst() en geefInvoervereisten() samen kan alle info uit de databank opgevraagd worden.  Ze focussen respectievelijk op informatie over de versies van de rapporten (__geefVersieInfo()__), de letterlijke info uit de LSVI-rapporten (__geefInfoHabitatfiche()__), de soortenlijsten die aan de habitattypes/indicatoren hangen (__geefSoortenlijst()__) en de info over de voorwaarden die nodig zijn voor de berekening (__geefInvoervereisten()__).  
+De aard (complexiteit) van de informatie in de LSVI-rapporten en de vereiste om ook als basis te dienen voor de rekenmodule hebben geleid tot een eerder complexe databankstructuur.  We hebben dit opgevangen door in het __package__ functies voorzien die louter dienen om de databank te bevragen: met de functies `geefVersieInfo()`, `geefInfoHabitatfiche()`, `geefSoortenlijst()` en `geefInvoervereisten()` samen kan alle info uit de databank opgevraagd worden.  Ze focussen respectievelijk op informatie over de versies van de rapporten (`geefVersieInfo()`), de letterlijke info uit de LSVI-rapporten (`geefInfoHabitatfiche()`), de soortenlijsten die aan de habitattypes/indicatoren hangen (`geefSoortenlijst()`) en de info over de voorwaarden die nodig zijn voor de berekening (`geefInvoervereisten()`).
 
-Daarnaast bevat het package enkele functies die deze informatie meteen in een rapport giet: __maakLSVIrapport()__ genereert een rapport waarin de habitatfiches van de geselecteerde gegevens na elkaar weergegeven worden (inclusief titels), en __maakHabitatfiches()__ slaat elke habitatfiche op in een apart bestand.
+Daarnaast bevat het package enkele functies die deze informatie meteen in een rapport giet: `maakLSVIrapport()` genereert een rapport waarin de habitatfiches van de geselecteerde gegevens na elkaar weergegeven worden (inclusief titels), en `maakHabitatfiches()` slaat elke habitatfiche op in een apart bestand.
 
-Verder bevat het package functies m.b.t. de berekening van de LSVI.  De hoofdfunctie __berekenLSVIbasis()__ kan door iedereen gebruikt worden om de LSVI te berekenen op basis van eigen gegevens.  De gebruiker moet wel eerst de gegevens van de veldopnames omzetten naar het formaat dat beschreven is in de helpfunctie van de functie zelf.  Op termijn zullen er ook functies ontwikkeld worden op maat van een specifieke databank of project (met bruikbaarheid afhankelijk van de toegang tot de databank).
+Verder bevat het package functies m.b.t. de berekening van de LSVI.  De hoofdfunctie `berekenLSVIbasis()` kan door iedereen gebruikt worden om de LSVI te berekenen op basis van eigen gegevens.  De gebruiker moet wel eerst de gegevens van de veldopnames omzetten naar het formaat dat beschreven is in de helpfunctie van de functie zelf.  Op termijn zullen er ook functies ontwikkeld worden op maat van een specifieke databank of project (met bruikbaarheid afhankelijk van de toegang tot de databank).
 
 Omwille van de complexiteit van de berekening roept berekenLSVIbasis een aantal hulpfuncties op die elk een deel van de controle of berekening uitvoeren.  Voor het gemak bij het ontwikkelen zullen deze voorlopig beschikbaar zijn; op termijn zullen omwille van de overzichtelijkheid enkel de functies beschikbaar gesteld blijven die een meerwaarde bieden voor de gebruiker (en relatief gemakkelijk toegepast kunnen worden).
 
-##Doelstellingen
+##Doelstellingen {#doelstellingen}
 
 Momenteel bevat het package enkel een basisfunctionaliteit: zoekfuncties om alle onderdelen van de databank weer te geven in een naar ons gevoel logische groepering, en de basisfunctie voor de berekening van de LSVI.  Op de planning staan een berekenLSVI-functie voor de verwerking van de fieldmap-gegevens (o.a. opnamen in bossen) en de habitatgegevens van het kwaliteitsmeetnet in INBOVEG, en een rekenmodule voor LSVI-opnamen om de LSVI van Natura 2000-habitattypen toe te voegen aan het platform PAS/DPB.  
 
@@ -56,18 +56,24 @@ packageDescription(pkg = "LSVI")
 ```
 
 
-#Installatie van het package
+#Installatie van het package {#installatie_package}
 
-Het package kan als volgt geïnstalleerd worden: <!-- aanpassen als er iets in de master zit -->
+Het package kan als volgt geïnstalleerd worden (altijd eerst R herstarten en deze installatie doen in een sessie waarin nog geen andere packages geladen zijn!):
 
 ```{r eval = FALSE}
 # install.packages("remotes")
-remotes::install_github("inbo/LSVI@develop", build = TRUE, build_opts = c("--no-resave-data", "--no-manual"))
+remotes::install_github("inbo/LSVI", build_vignettes = TRUE)
 ```
 
-#Gebruik basisfuncties
+Een testversie met de nieuwste aanpassingen kan als volgt geïnstalleerd worden:
 
-##Wegwijs in R
+```{r eval = FALSE}
+remotes::install_github("inbo/LSVI@develop", build_vignettes = TRUE)
+```
+
+#Gebruik basisfuncties {#gebruik_basisfuncties}
+
+##Wegwijs in R {#wegwijs_in_R}
 
 (Wat extra uitleg voor diegenen die niet vertrouwd zijn met R.)
 
@@ -89,7 +95,7 @@ Om scripts gemakkelijk te kunnen hergebruiken met andere waarden, kunnen ze in d
 
 Om in R packages te kunnen gebruiken, moeten deze telkens (na elke herstart van de R-console) eerst ingeladen worden met de functie `library()`.  Om de functies in verband met de LSVI te gebruiken, voer je dus eerst het commando `library(LSVI)` in.  Dit kan wel enkel met reeds geïnstalleerde packages, die in het venster rechtsonder onder de tab Packages vermeld zijn.  Andere packages moet je eerst eenmalig installeren (via de knop Install of het commando `install.packages("naam_nieuw_package")`).
 
-Als je in de lijst met packages onder de tab Packages op een packagenaam klikt, krijg je de documentatie van het package: eventuele handleidingen (onder de link `User guides, package vignettes and other documentation`) en een klikbare lijst met alle functies die in het package beschikbaar zijn.
+Als je in de lijst met packages onder de tab Packages op een packagenaam klikt, krijg je de documentatie van het package: eventuele handleidingen (onder de link `User guides, package vignettes and other documentation`) en een klikbare lijst met alle functies die in het package beschikbaar zijn.  Dezelfde documentatie is terug te vinden via de bovenste balk op de [website](https://inbo.github.io/LSVI/index.html): handleidingen staan onder [Articles](https://inbo.github.io/LSVI/articles/index.html) en functies onder [Reference](https://inbo.github.io/LSVI/reference/index.html).
 
 Zodra een package ingeladen is, kan je deze documentatie van functies ook opvragen door een `?` te typen, gevolgd door de naam van de functie, bijvoorbeeld:
 
@@ -106,9 +112,9 @@ Deze documentatie geeft aan wat de functie doet en hoe je de functie moet gebrui
 - Value: wat de functie teruggeeft.  Dit is voor het LSVI-package vaak een tabel met gegevens, in bovenstaand voorbeeld wordt een document gegenereerd dat automatisch opgeslagen wordt in de map waarin je op dat moment werkt.
 - Examples: een of meerdere voorbeelden die tonen hoe je de functie kan gebruiken.  Als het package LSVI ingeladen is (dus na intypen van `library(LSVI)`), kan je deze voorbeelden kopiëren en uittesten.  Door de argumenten aan te passen (of toe te voegen of te wissen), kan je op een gemakkelijke manier je eigen script maken.
 
-_(Leeswijzer: info over het gebruik van de functies in het LSVI-package staat onder 'Basis van LSVI-package'.  Wat hier volgt, is wat met de gegenereerde gegevens gedaan kan worden.  We raden daarom aan om eerst 'Basis van LSVI-package' te lezen.)_
+_(Leeswijzer: info over het gebruik van de functies in het LSVI-package staat onder [Basis van LSVI-package](#basis_LSVI).  Wat hier volgt, is wat met de gegenereerde gegevens gedaan kan worden.  We raden daarom aan om eerst [Basis van LSVI-package](#basis_LSVI) te lezen.)_
 
-###Wat met gegenereerde gegevens in tabelvorm?
+###Wat met gegenereerde gegevens in tabelvorm? {#gegs_in_tabelvorm}
 
 Vaak genereert een functie gegevens in de vorm van een tabel.  Hoe kan je hier nu mee verdergaan?  
 
@@ -139,7 +145,6 @@ write_csv2(soortenlijst4030, "C:/R/soortenlijst4030.csv")
 
 We hebben hier het absolute path (`C:/R`) weergegeven, een andere mogelijkheid is om het path relatief ten opzichte van de 'working directory' weer te geven.  Dit is de map waarin je aan 't werken bent.  Je kan deze working directory zelf bepalen door het commando `setwd("C:/.../mijn_werkmap")`.  Als je in een project werkt waarin je al je scripts opslaat (aan te raden), dan is de root van dit project automatisch je working directory.
 
-'delim' geeft aan dat het scheidingsteken tussen de tabellen een ; is.  Hier kan je ook een ander teken kiezen, maar dan moet je de gegevens in Excel nog manueel in kolommen zetten via Gegevens -> Tekst naar kolommen.
 
 ###Hoe eigen gegevens inlezen in R?
 
@@ -203,14 +208,14 @@ resultaat$Resultaat_indicator
 resultaat$Resultaat_detail
 ```
 
-Met deze tabellen kan verder gewerkt worden zoals hierboven beschreven is ('Wat met gegenereerde gegevens in tabelvorm?') 
+Met deze tabellen kan verder gewerkt worden zoals hierboven beschreven is ([Wat met gegenereerde gegevens in tabelvorm?](#gegs_in_tabelvorm)) 
 
 
-##Basis van LSVI-package
+##Basis van LSVI-package {#basis_LSVI}
 
 ###Connecteren met de databank
 
-Om de functies van het LSVI-package te gebruiken, heb je een connectie nodig met de databank met informatie uit LSVI-rapporten (zie 'Doelstellingen en inhoud package' > 'Inhoud package').  Deze connectie kan op 2 manieren gelegd worden:
+Om de functies van het LSVI-package te gebruiken, heb je een connectie nodig met de databank met informatie uit LSVI-rapporten (zie [Doelstellingen en inhoud package > Inhoud package](#inhoud_package)).  Deze connectie kan op 2 manieren gelegd worden:
 
 - Na het laden van het package eenmalig een pool van connecties aanmaken door de functie `maakConnectiePool()` te runnen.  De gegenereerde ConnectiePool zal in de achtergrond verbinding leggen met de databank telkens wanneer dit nodig is, extra connecties aanleggen als dit nodig is, overbodig geworden connecties verwijderen,... en je moet niet telkens de connectie als parameter vermelden bij elke functie die je gebruikt.  Met andere woorden: nadat je die ConnectiePool aangemaakt hebt, moet je je verder niet meer bezighouden met die connectie.  Is er toch een functie die vereist dat je een connectie meegeeft?  Dan kan je simpelweg `ConnectiePool` als argument meegeven.  Als je geen functies meer nodig hebt uit het LSVI-package, kan je deze ConnectiePool sluiten met `poolClose()` uit het package `pool` en eventueel het object verwijderen.
 ```{r eval=FALSE}
@@ -225,7 +230,7 @@ library(pool)
 poolClose(ConnectiePool)
 rm(ConnectiePool)
 ```
-- Een connectie met de databank maken met de functie `connecteerMetLSVIdb()` en deze connectie voor elke functie meegeven bij de parameter ConnectieLSVIhabitats.  Hier moet je dus wel zelf een connectie leggen telkens als dit nodig zijn.
+- Een connectie met de databank maken met de functie `connecteerMetLSVIdb()` en deze connectie voor elke functie meegeven bij de parameter ConnectieLSVIhabitats.
 ```{r eval=FALSE}
 library(LSVI)
 Connectie <- connecteerMetLSVIdb()
@@ -249,7 +254,8 @@ De functies kunnen min of meer in groepen ingedeeld worden op basis van het eers
 
 Voor de functies van voornamelijk de eerste twee groepen zijn er een aantal argumenten die facultatief meegegeven kunnen worden: Versie, Habitatgroep, Habitattype, Criterium en Indicator.  Door hiervoor waarden op te geven, kunnen de relevante gegevens uit de databank geselecteerd worden.  Voor de argumenten waarvoor geen specifieke waarden opgegeven zijn, wordt de default 'alle' gebruikt, waardoor alle beschikbare gegevens voor dat argument uit de databank gehaald worden.
 
-Voor een overzicht van de belangrijkste beschikbare functies verwijzen we naar een eerder hoofdstuk in deze handleiding ('Doelstellingen en inhoud package') en voor de gedetailleerde beschrijving verwijzen we naar de documentatie van de functies zelf.  In deze documentatie wordt verwezen naar hulpfuncties waar het relevant is om deze te gebruiken.  
+Voor een overzicht van de belangrijkste beschikbare functies verwijzen we naar een eerder hoofdstuk in deze handleiding (
+[Doelstellingen en inhoud package](#doelstellingen_inhoud)) en voor de gedetailleerde beschrijving verwijzen we naar de [documentatie van de functies zelf](https://inbo.github.io/LSVI/reference/index.html).  In deze documentatie wordt verwezen naar hulpfuncties waar het relevant is om deze te gebruiken.  
 
 Enkele functies worden niet of amper vermeld in deze handleiding of de documentatie van andere functies.  Dit zijn technische hulpfuncties die moeilijk zijn in gebruik (vaak doordat ze als argumenten identificatienummers uit de databank nodig hebben) en die een meer gebruiksvriendelijk alternatief hebben.  Ze dienen doorgaans als hulpfunctie voor hun gebruiksvriendelijke alternatieven en/of andere basisfuncties en zijn in de documentatie duidelijk benoemd als 'hulpfunctie' met vaak de vermelding van het meer gebruiksvriendelijke alternatief.  We willen ervaren R-gebruikers de kans te geven om deze indien nodig te gebruiken, vandaar dat we ervoor kiezen om deze toch beschikbaar te stellen. 
 

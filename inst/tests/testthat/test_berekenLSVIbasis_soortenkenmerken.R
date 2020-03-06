@@ -18,12 +18,6 @@ Data_voorwaarden <- #nolint
   read_csv2(
     system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI")
   )
-if (
-  class(ConnectiePool$.__enclos_env__$private$createObject())[1] ==
-  "SQLiteConnection"
-) {
-  Data_voorwaarden <- Data_voorwaarden2 #nolint
-}
 Data_soortenKenmerken <- #nolint
     read_csv2(
       system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI")
