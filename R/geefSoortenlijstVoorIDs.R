@@ -109,6 +109,13 @@ geefSoortenlijstVoorIDs <-
 
     QueryTaxa <-
       ",
+    UniekeTaxa
+    AS
+    (
+      SELECT DISTINCT TgT.TaxonId
+      FROM Groepen INNER JOIN TaxongroepTaxon TgT
+      ON Groepen.TaxonsubgroepId = TgT.TaxongroepId
+    ),
     Taxonlijn
     AS
     (
@@ -124,6 +131,7 @@ geefSoortenlijstVoorIDs <-
         INNER JOIN TaxonSynoniem Ts
           ON Tx.Id = Ts.TaxonId
       WHERE Tx.NbnTaxonVersionKey = Ts.NbnTaxonVersionKey
+        AND Tx.Id IN (SELECT TaxonId FROM UniekeTaxa)
     UNION ALL
       SELECT Taxonlijn.TaxonId,
         Tx2.Id AS SubTaxonId,
