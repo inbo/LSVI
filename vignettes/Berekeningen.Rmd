@@ -148,7 +148,7 @@ Deze formule geeft uiteraard maar een benaderende waarde die minder accuraat is 
 
 Bij de analysevariabele `bedekkingExcl` gaat de voorwaarde over de totale bedekking van de soorten/kenmerken die niet in een lijst voorkomen, bv. alle soorten behalve de sleutelsoorten.
 
-Bij voorwaarden met deze analysevariabele worden de soorten/kenmerken geselecteerd op basis van een functie `deselecteerKenmerkenInOpname()`, die in de opname van de gebruiker de soorten/kenmerken schrapt die in de taxonlijst/studielijst voorkomen (en de overblijvende soorten/kenmerken vormen de selectie).  Verder gebeurt de berekening analoog aan deze van de analysevariabele `bedekking`: met de formule van Fisher wordt de totale bedekking van deze selectie berekend.
+Bij voorwaarden met deze analysevariabele worden de soorten/kenmerken geselecteerd op basis van een functie `deselecteerKenmerkenInOpname()`, die in de opname van de gebruiker de soorten/kenmerken schrapt die in de taxonlijst/studielijst voorkomen (en de overblijvende soorten/kenmerken vormen de selectie).  Verder gebeurt de berekening analoog aan deze van de analysevariabele [`bedekking`](#bedekking): met de formule van Fisher wordt de totale bedekking van deze selectie berekend.
 
 ##bedekkingLaag {#bedekkingLaag}
 
@@ -191,7 +191,7 @@ De analysevariabele `maxBedekking2s` is gelijkaardig aan [`maxBedekking`](#maxBe
 
 Bij de analysevariabele `maxBedekkingExcl` gaat de voorwaarde over de maximale bedekking van de soorten/kenmerken die niet in een lijst voorkomen, bv. alle soorten behalve de sleutelsoorten.
 
-Bij voorwaarden met deze analysevariabele worden de soorten/kenmerken geselecteerd op basis van een functie `deselecteerKenmerkenInOpname()`, die in de opname van de gebruiker de soorten/kenmerken schrapt die in de taxonlijst/studielijst voorkomen (en de overblijvende soorten/kenmerken vormen de selectie).  Verder gebeurt de berekening analoog aan deze van de analysevariabele `maxBedekking`: de soort of kenmerk met maximale bedekking wordt geselecteerd uit de selectie.
+Bij voorwaarden met deze analysevariabele worden de soorten/kenmerken geselecteerd op basis van een functie `deselecteerKenmerkenInOpname()`, die in de opname van de gebruiker de soorten/kenmerken schrapt die in de taxonlijst/studielijst voorkomen (en de overblijvende soorten/kenmerken vormen de selectie).  Verder gebeurt de berekening analoog aan deze van de analysevariabele [`maxBedekking`](#maxBedekking): de soort of kenmerk met maximale bedekking wordt geselecteerd uit de selectie.
 
 ##aandeel
 
