@@ -121,15 +121,6 @@ invoercontroleData_soortenKenmerken <- #nolint
     # Omzettingen naar een bruikbare dataframe
     Kenmerken <- Data_soortenKenmerken    # naamsverandering!
 
-    # Om naamsverandering in databank van GbifCanonicalNameWithMarker naar
-    # CanonicalNameWithMarker op te vangen
-    if (class(ConnectieLSVIhabitats)[1] == "Pool") {
-      Klasse <-
-        class(ConnectieLSVIhabitats$.__enclos_env__$private$createObject())[1]
-    } else {
-      Klasse <- class(ConnectieLSVIhabitats)[1]
-    }
-
     QuerySoorten <-
       "SELECT TaxonSynoniem.FloraNaamNederlands AS NedNaam,
           TaxonSynoniem.CanonicalNameWithMarker AS Canonicalname,

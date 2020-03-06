@@ -74,15 +74,6 @@ geefSoortenlijstVoorIDs <-
     }
     match.arg(Taxonlijsttype)
 
-    # Om naamsverandering in databank van GbifCanonicalNameWithMarker naar
-    # CanonicalNameWithMarker op te vangen
-    if (class(ConnectieLSVIhabitats)[1] == "Pool") {
-      Klasse <-
-        class(ConnectieLSVIhabitats$.__enclos_env__$private$createObject())[1]
-    } else {
-      Klasse <- class(ConnectieLSVIhabitats)[1]
-    }
-
     QueryGroepen <-
       sprintf(
         "WITH Groepen
