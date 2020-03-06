@@ -321,13 +321,45 @@ migratieSQLserverSQLite <-
 
 
   #berekening Theoretisch Maximum
+  Querytekst <-
+    "WITH Groepen
+      AS
+      (
+        SELECT Tg.Id AS TaxongroepId,
+          Tg.Id AS TaxonsubgroepId
+        FROM Taxongroep Tg
+        WHERE Tg.Id in (%s)
+      UNION ALL
+        SELECT Groepen.TaxongroepId,
+          Tg2.Id AS TaxonsubgroepId
+        FROM Groepen
+          INNER JOIN TaxongroepTaxongroep AS TgTg
+          ON Groepen.TaxonsubgroepId = TgTg.TaxongroepParentId
+        INNER JOIN Taxongroep Tg2
+        ON TgTg.TaxongroepChildId = Tg2.Id
+        WHERE TgTg.TaxongroepChildId > 0
+      )
+    SELECT Groepen.TaxongroepId,
+      Groepen.TaxonsubgroepId,
+      Taxon.Id
+    FROM Groepen
+      INNER JOIN TaxongroepTaxon TgT
+      on Groepen.TaxonsubgroepId = TgT.TaxongroepId
+      INNER JOIN Taxon
+      ON TgT.TaxonId = Taxon.Id;"
   Voorwaarde <- Voorwaarde %>%
     rowwise() %>%
     mutate(
       AantalSoorten =
         ifelse(
           !is.na(TaxongroepId),
-          nrow(geefSoortenlijstVoorIDs(as.character(TaxongroepId))),
+          nrow(
+            dbGetQuery(
+              ConnectiePool,
+              sprintf(Querytekst, as.character(TaxongroepId))
+            ) %>%
+              distinct()
+          ),
           NA
         )
     ) %>%
