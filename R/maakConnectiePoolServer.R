@@ -1,7 +1,7 @@
 #' @title Maak een connectiepool met de databank met LSVI-indicatoren op de
 #' databankserver
 #'
-#' @description Deze interne functie maakt een connectiepool met de databank 
+#' @description Deze interne functie maakt een connectiepool met de databank
 #' met LSVI-indicatoren op de databankserver binnen INBO (werking gelijkaardig
 #' aan maakConnectiePool).  Deze functie is enkel bedoeld voor ontwikkeling van
 #' het package; niet alle functies werken correct bij gebruik van deze databank.
