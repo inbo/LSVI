@@ -140,38 +140,8 @@ functie connecteerMetLSVIdb() en deze bij elke functie mee te geven.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>maakConnectiePool</span>(<span class='kw'>Server</span> <span class='kw'>=</span> <span class='st'>"INBO-SQL07-PRD.inbo.be"</span>,
-  <span class='kw'>Databank</span> <span class='kw'>=</span> <span class='st'>"D0122_00_LSVIHabitatTypes"</span>, <span class='kw'>Gebruiker</span> <span class='kw'>=</span> <span class='st'>"pc-eigenaar"</span>,
-  <span class='kw'>Wachtwoord</span> <span class='kw'>=</span> <span class='st'>"geen"</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>Server</th>
-      <td><p>de server waarop de databank staat die aangeroepen wordt
-(standaard "INBO-SQL07-PRD.inbo.be")</p></td>
-    </tr>
-    <tr>
-      <th>Databank</th>
-      <td><p>de naam van de databank die aangeroepen wordt (standaard
-"D0122_00_LSVIHabitatTypes")</p></td>
-    </tr>
-    <tr>
-      <th>Gebruiker</th>
-      <td><p>gebruiker van de databank, standaard "pc-eigenaar" waarbij
-de login en wachtwoord gebruikt wordt waarmee ingelogd is op de pc, andere
-opties zijn "lezer" waarbij een gebruiker met leesrechten aangemaakt wordt
-(dit kan enkel als er een login-file is toegevoegd op je pc) of een eigen
-gebruikersnaam en wachtwoord ingeven</p></td>
-    </tr>
-    <tr>
-      <th>Wachtwoord</th>
-      <td><p>wachtwoord van de gebruiker van de databank, standaard de
-tekst "geen", moet niet ingevuld worden als Gebruiker "pc-eigenaar" is</p></td>
-    </tr>
-    </table>
-    
+    <pre class="usage"><span class='fu'>maakConnectiePool</span>()</pre>
+        
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Deze functie maakt een Environment-object aan dat de connecties
@@ -198,7 +168,6 @@ regelt met de betreffende databank.</p>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
       
