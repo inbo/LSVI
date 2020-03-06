@@ -110,7 +110,8 @@ geefSoortenlijstVoorIDs <-
     Taxonlijn
     AS
     (
-      SELECT Tx.Id AS TaxonId,
+      SELECT Tx.Id AS AncestorTaxonId,
+        Tx.Id AS ParentTaxonId,
         Tx.Id AS SubTaxonId,
         Tx.NbnTaxonVersionKey,
         Tx.FloraNaamWetenschappelijk,
@@ -124,7 +125,8 @@ geefSoortenlijstVoorIDs <-
       WHERE Tx.NbnTaxonVersionKey = Ts.NbnTaxonVersionKey
         AND Tx.Id IN (SELECT TaxonId FROM UniekeTaxa)
     UNION ALL
-      SELECT Taxonlijn.TaxonId,
+      SELECT Taxonlijn.AncestorTaxonId,
+        Txtx.TaxonParentId AS ParentTaxonId,
         Tx2.Id AS SubTaxonId,
         Tx2.NbnTaxonVersionKey,
         Tx2.FloraNaamWetenschappelijk,
@@ -135,6 +137,7 @@ geefSoortenlijstVoorIDs <-
       FROM Taxonlijn
         INNER JOIN TaxonTaxon AS TxTx
           ON Taxonlijn.SubTaxonId = TxTx.TaxonParentId
+          AND Taxonlijn.ParentTaxonId != TxTx.TaxonChildId
         INNER JOIN Taxon Tx2
           ON TxTx.TaxonChildId = Tx2.Id
         INNER JOIN TaxonSynoniem Ts2
@@ -170,7 +173,7 @@ geefSoortenlijstVoorIDs <-
       SELECT Groepen.TaxongroepId,
         Groepen.TaxonsubgroepId,
         Groepen.Omschrijving,
-        Taxonlijn.TaxonId,
+        Taxonlijn.AncestorTaxonId AS TaxonId,
         Taxonlijn.SubTaxonId,
         Taxonlijn.NbnTaxonVersionKey,
         Taxonlijn.FloraNaamWetenschappelijk AS WetNaam,
@@ -179,13 +182,13 @@ geefSoortenlijstVoorIDs <-
         Taxonlijn.WetNaamKort
       FROM Groepen
         INNER JOIN TaxongroepTaxon TgT
-        on Groepen.TaxonsubgroepId = TgT.TaxongroepId
+        ON Groepen.TaxonsubgroepId = TgT.TaxongroepId
         INNER JOIN Taxonlijn
-        ON TgT.TaxonId = Taxonlijn.TaxonId
+        ON TgT.TaxonId = Taxonlijn.AncestorTaxonId
         INNER JOIN TaxonType
         ON Taxonlijn.TaxonTypeId = TaxonType.Id
       ORDER BY Groepen.TaxongroepId, Groepen.TaxonsubgroepId,
-        Taxonlijn.TaxonId;"
+        Taxonlijn.AncestorTaxonId;"
 
     if (Taxonlijsttype[1] == "LSVIfiche") {
       Soortenlijst <-
