@@ -46,7 +46,6 @@
 #' @importFrom dplyr %>% mutate filter distinct
 #' @importFrom DBI dbGetQuery
 #' @importFrom assertthat assert_that noNA is.string
-#' @importFrom rgbif parsenames
 #'
 #'
 geefSoortenlijstVoorIDs <-
@@ -101,32 +100,51 @@ geefSoortenlijstVoorIDs <-
 
     QueryTaxa <-
       ",
-      Taxonlijn
-      AS
-      (
-        SELECT Tx.Id AS TaxonId,
-          Tx.Id AS SubTaxonId,
-          Tx.NbnTaxonVersionKey,
+    UniekeTaxa
+    AS
+    (
+      SELECT DISTINCT TgT.TaxonId
+      FROM Groepen INNER JOIN TaxongroepTaxon TgT
+      ON Groepen.TaxonsubgroepId = TgT.TaxongroepId
+    ),
+    Taxonlijn
+    AS
+    (
+      SELECT Tx.Id AS AncestorTaxonId,
+        Tx.Id AS ParentTaxonId,
+        Tx.Id AS SubTaxonId,
+        Tx.NbnTaxonVersionKey,
         Tx.FloraNaamWetenschappelijk,
         Tx.FloraNaamNederlands,
         Tx.NbnNaam,
-        Tx.TaxonTypeId
-        FROM Taxon Tx
-      UNION ALL
-        SELECT Taxonlijn.TaxonId,
-          Tx2.Id AS SubTaxonId,
+        Tx.TaxonTypeId,
+        Ts.CanonicalNameWithMarker AS WetNaamKort
+      FROM Taxon Tx
+        INNER JOIN TaxonSynoniem Ts
+          ON Tx.Id = Ts.TaxonId
+      WHERE Tx.NbnTaxonVersionKey = Ts.NbnTaxonVersionKey
+        AND Tx.Id IN (SELECT TaxonId FROM UniekeTaxa)
+    UNION ALL
+      SELECT Taxonlijn.AncestorTaxonId,
+        Txtx.TaxonParentId AS ParentTaxonId,
+        Tx2.Id AS SubTaxonId,
         Tx2.NbnTaxonVersionKey,
         Tx2.FloraNaamWetenschappelijk,
         Tx2.FloraNaamNederlands,
         Tx2.NbnNaam,
-        Tx2.TaxonTypeId
-        FROM Taxonlijn
-          INNER JOIN TaxonTaxon AS TxTx
+        Tx2.TaxonTypeId,
+        Ts2.CanonicalNameWithMarker AS WetNaamKort
+      FROM Taxonlijn
+        INNER JOIN TaxonTaxon AS TxTx
           ON Taxonlijn.SubTaxonId = TxTx.TaxonParentId
+          AND Taxonlijn.ParentTaxonId != TxTx.TaxonChildId
         INNER JOIN Taxon Tx2
-        ON TxTx.TaxonChildId = Tx2.Id
-        WHERE TxTx.TaxonChildId > 0
-      )"
+          ON TxTx.TaxonChildId = Tx2.Id
+        INNER JOIN TaxonSynoniem Ts2
+          ON Tx2.Id = Ts2.TaxonId
+      WHERE TxTx.TaxonChildId > 0
+        AND Tx2.NbnTaxonVersionKey = Ts2.NbnTaxonVersionKey
+    )"
 
     QueryLSVIfiche <-
       "
@@ -137,53 +155,57 @@ geefSoortenlijstVoorIDs <-
         Taxon.NbnTaxonVersionKey,
         Taxon.FloraNaamWetenschappelijk AS WetNaam,
         Taxon.FloraNaamNederlands As NedNaam,
-        TaxonType.Naam AS TaxonType
+        TaxonType.Naam AS TaxonType,
+        ts.CanonicalNameWithMarker AS WetNaamKort
       FROM Groepen
         INNER JOIN TaxongroepTaxon TgT
         on Groepen.TaxonsubgroepId = TgT.TaxongroepId
         INNER JOIN Taxon
         ON TgT.TaxonId = Taxon.Id
         INNER JOIN TaxonType
-        ON Taxon.TaxonTypeId = TaxonType.Id;"
+        ON Taxon.TaxonTypeId = TaxonType.Id
+        INNER JOIN TaxonSynoniem ts
+        ON Taxon.Id = ts.TaxonId
+      WHERE Taxon.NbnTaxonVersionKey = ts.NbnTaxonVersionKey;"
 
     QueryAlleTaxa <-
       "
       SELECT Groepen.TaxongroepId,
         Groepen.TaxonsubgroepId,
         Groepen.Omschrijving,
-        Taxonlijn.TaxonId,
+        Taxonlijn.AncestorTaxonId AS TaxonId,
         Taxonlijn.SubTaxonId,
         Taxonlijn.NbnTaxonVersionKey,
         Taxonlijn.FloraNaamWetenschappelijk AS WetNaam,
         Taxonlijn.FloraNaamNederlands As NedNaam,
-        TaxonType.Naam AS TaxonType
+        TaxonType.Naam AS TaxonType,
+        Taxonlijn.WetNaamKort
       FROM Groepen
         INNER JOIN TaxongroepTaxon TgT
-        on Groepen.TaxonsubgroepId = TgT.TaxongroepId
+        ON Groepen.TaxonsubgroepId = TgT.TaxongroepId
         INNER JOIN Taxonlijn
-        ON TgT.TaxonId = Taxonlijn.TaxonId
+        ON TgT.TaxonId = Taxonlijn.AncestorTaxonId
         INNER JOIN TaxonType
         ON Taxonlijn.TaxonTypeId = TaxonType.Id
       ORDER BY Groepen.TaxongroepId, Groepen.TaxonsubgroepId,
-        Taxonlijn.TaxonId;"
+        Taxonlijn.AncestorTaxonId;"
 
     if (Taxonlijsttype[1] == "LSVIfiche") {
       Soortenlijst <-
         dbGetQuery(
           ConnectieLSVIhabitats,
           paste(QueryGroepen, QueryLSVIfiche, sep = "")
-        )
+        ) %>%
+        distinct()
 
     } else if (Taxonlijsttype[1] == "alle") {
       Soortenlijst <-
         dbGetQuery(
           ConnectieLSVIhabitats,
           paste(QueryGroepen, QueryTaxa, QueryAlleTaxa, sep = "")
-        )
+        ) %>%
+        distinct()
     }
-
-    Soortenlijst$WetNaamKort <-
-      parsenames(Soortenlijst$WetNaam)$canonicalnamewithmarker
 
     return(Soortenlijst)
   }

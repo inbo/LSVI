@@ -24,11 +24,6 @@ load(system.file("vbdata/Resultaat_test2330_dw.Rdata", package = "LSVI"))
 
 describe("eenjarigen + open zand > meerjarigen", {
   it("berekening op basis van voorwaarden", {
-    skip_if_not(
-      class(ConnectiePool$.__enclos_env__$private$createObject())[1] ==
-        "Microsoft SQL Server",
-      "SQL Server niet beschikbaar"
-    )
     resultaat_berekend <-
       idsWissen(
         berekenLSVIbasis(
@@ -45,11 +40,6 @@ describe("eenjarigen + open zand > meerjarigen", {
     )
   })
   it("berekening op basis van soortenlijst", {
-    skip_if_not(
-      class(ConnectiePool$.__enclos_env__$private$createObject())[1] ==
-        "Microsoft SQL Server",
-      "SQL Server niet beschikbaar"
-    )
     resultaat_berekend <-
       idsWissen(
         berekenLSVIbasis(

@@ -4,7 +4,7 @@ library(readr)
 library(dplyr)
 library(rlang)
 
-maakConnectiepoolSQLite()
+maakConnectiePool()
 Data_habitat <- #nolint
   read_csv2(
     system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),

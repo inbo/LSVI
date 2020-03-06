@@ -9,7 +9,7 @@ library(purrr)
 migratieSQLserverSQLite <-
   function(
     #VectorHabitattypes = c("1330_hpr", "4030", "9130", "9190", "91E0_va"),
-    Versie = "Versie 2.0"
+    #Versie = "Versie 2.0"
   ) {
   #Tabellen ophalen uit SQLserver
   Habitatgroep <-
@@ -33,15 +33,13 @@ migratieSQLserverSQLite <-
   Versie <-
     dbGetQuery(
       ConnectiePool,
-      sprintf(
+      #sprintf(
         "SELECT Id, VersieLSVI,
         cast(Referentie AS nvarchar(30)) AS Referentie,
         cast(Beschrijving AS nvarchar(120)) AS Beschrijving,
         Kwaliteitsniveau1, Kwaliteitsniveau2
-        FROM Versie
-        WHERE VersieLSVI = '%s'",
-        Versie
-      )
+        FROM Versie"
+      #)
     )
   
   VersieId <- (Versie %>% summarise(Id = paste0(Id, collapse = ",")))$Id
@@ -433,5 +431,5 @@ migratieSQLserverSQLite <-
 unlink("inst/databank/LSVIHabitatTypes.sqlite")
 
 #databank terug vullen
-maakConnectiePool()
+LSVI:::maakConnectiePoolServer()
 migratieSQLserverSQLite()

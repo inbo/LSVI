@@ -4,7 +4,7 @@ library(readr)
 library(dplyr)
 library(rlang)
 
-maakConnectiepoolSQLite()
+maakConnectiePool()
 Data_habitat <- #nolint
     read_csv2(
       system.file("vbdata/Test9190habitat.csv", package = "LSVI"),
@@ -105,7 +105,7 @@ describe("Data_soortenKenmerken", {
         Data_voorwaarden,
         Data_soortenKenmerkenDubbel
       ),
-      "'Sambucus nigra, Gewone vlier' meermaals opgegeven voor de boomlaag" #nolint
+      "zowel Nederlandse als Latijnse namen gebruikt voor de soort 'Sambucus nigra'" #nolint
     )
   })
 })

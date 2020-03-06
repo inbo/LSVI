@@ -50,8 +50,8 @@ setMethod(
     #er aan-/afwezigheden opgegeven zijn in plaats van bedekkingen
     #In dat geval berekenen we geen bedekking en geven we een warning
     if (sum(is.na(Resultaat$WaardeMin)) < sum(is.na(Resultaat$WaardeMax))) {
-      MaxBedekkingMin <- NA
-      MaxBedekkingMax <- NA
+      MaxBedekking2sMin <- NA
+      MaxBedekking2sMax <- NA
       warning("aan- of afwezigheid bedekking")
     } else if (nrow(Resultaat) > 1) {
 

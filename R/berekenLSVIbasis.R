@@ -353,6 +353,18 @@ berekenLSVIbasis <- #nolint
       left_join(
         Invoervereisten,
         by = c("Habitattype" = "Habitatsubtype"))
+    records_zonder_fiche <- Resultaat %>%
+      filter(is.na(.data$Criterium))
+    if (nrow(records_zonder_fiche) > 0) {
+      stop(
+        paste0(
+          "Er bestaan geen eenduidige criteria voor de berekening van de LSVI voor habitattype(s) ", #nolint
+          paste(records_zonder_fiche$Habitattype, collapse = ", "),
+          " voor de opgegeven versie (", Versie,
+          "), geef het juiste subtype op of zoek uit voor welk habitattype er wel fiches zijn" #nolint
+        )
+      )
+    }
     Jointest <- data_voorwaarden_na %>%
       anti_join(Resultaat, by = c("ID", "Criterium", "Indicator"))
     if (nrow(Jointest) > 0) {

@@ -18,7 +18,6 @@
 #' @importFrom dplyr %>% mutate select group_by do
 #' @importFrom tidyr unnest
 #' @importFrom rlang .data
-#' @importFrom pander evals
 #'
 #'
 berekenStatus <-
@@ -43,9 +42,9 @@ berekenStatus <-
             ifelse(
               !is.na(.data$Waarde),
               sapply(
-                evals(.data$Vergelijking),
+                parse(text = .data$Vergelijking),
                 function(x) {
-                  as.logical(x[2])
+                  eval(x)
                 }
               ),
               NA

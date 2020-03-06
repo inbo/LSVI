@@ -16,7 +16,6 @@
 #' @importFrom DBI dbGetQuery
 #' @importFrom dplyr %>% filter n mutate select left_join bind_rows rename
 #' @importFrom rlang .data
-#' @importFrom rgbif parsenames
 #' @importFrom stringr str_to_sentence
 #'
 #' @export
@@ -122,32 +121,13 @@ invoercontroleData_soortenKenmerken <- #nolint
     # Omzettingen naar een bruikbare dataframe
     Kenmerken <- Data_soortenKenmerken    # naamsverandering!
 
-    # Om naamsverandering in databank van GbifCanonicalNameWithMarker naar
-    # CanonicalNameWithMarker op te vangen
-    if (class(ConnectieLSVIhabitats)[1] == "Pool") {
-      Klasse <-
-        class(ConnectieLSVIhabitats$.__enclos_env__$private$createObject())[1]
-    } else {
-      Klasse <- class(ConnectieLSVIhabitats)[1]
-    }
-
-    if (Klasse == "Microsoft SQL Server") {
-      QuerySoorten <-
-        "SELECT TaxonSynoniem.FloraNaamNederlands AS NedNaam,
-            TaxonSynoniem.GbifCanonicalNameWithMarker AS Canonicalname,
-            Taxon.NbnTaxonVersionKey AS NBNTaxonVersionKey, Taxon.TaxonTypeId
-        FROM TaxonSynoniem INNER JOIN Taxon
-          ON TaxonSynoniem.TaxonId = Taxon.Id
-        WHERE Taxon.NbnTaxonVersionKey IS NOT NULL"
-    } else {
-      QuerySoorten <-
-        "SELECT TaxonSynoniem.FloraNaamNederlands AS NedNaam,
-            TaxonSynoniem.CanonicalNameWithMarker AS Canonicalname,
-            Taxon.NbnTaxonVersionKey AS NBNTaxonVersionKey, Taxon.TaxonTypeId
-        FROM TaxonSynoniem INNER JOIN Taxon
-          ON TaxonSynoniem.TaxonId = Taxon.Id
-        WHERE Taxon.NbnTaxonVersionKey IS NOT NULL"
-    }
+    QuerySoorten <-
+      "SELECT TaxonSynoniem.FloraNaamNederlands AS NedNaam,
+          TaxonSynoniem.CanonicalNameWithMarker AS Canonicalname,
+          Taxon.NbnTaxonVersionKey AS NBNTaxonVersionKey, Taxon.TaxonTypeId
+      FROM TaxonSynoniem INNER JOIN Taxon
+        ON TaxonSynoniem.TaxonId = Taxon.Id
+      WHERE Taxon.NbnTaxonVersionKey IS NOT NULL"
 
     Taxonlijst <-
       dbGetQuery(ConnectieLSVIhabitats, QuerySoorten)
@@ -156,7 +136,7 @@ invoercontroleData_soortenKenmerken <- #nolint
       if (length(Soortenlijst) == 0) {
         return(as.character("geenSoort"))
       } else {
-        return(parsenames(Soortenlijst)$canonicalnamewithmarker)
+        return(parseTaxonnaam(Soortenlijst))
       }
     }
 
@@ -216,7 +196,8 @@ invoercontroleData_soortenKenmerken <- #nolint
 
     Dubbels <- KenmerkenSoort %>%
       group_by(
-        .data$ID, .data$NBNTaxonVersionKey, .data$Vegetatielaag, .data$Eenheid
+        .data$ID, .data$NBNTaxonVersionKey, .data$Vegetatielaag, .data$Eenheid,
+        .data$Canonicalname
       ) %>%
       summarise(Aantal = n()) %>%
       ungroup() %>%
@@ -224,11 +205,13 @@ invoercontroleData_soortenKenmerken <- #nolint
     if (nrow(Dubbels) > 0) {
       Tekst <- Dubbels %>%
         inner_join(
-          KenmerkenSoort, by = c("ID", "NBNTaxonVersionKey", "Vegetatielaag")
+          KenmerkenSoort,
+          by = c("ID", "NBNTaxonVersionKey", "Vegetatielaag", "Eenheid",
+                 "Canonicalname")
         ) %>%
         group_by(.data$ID, .data$Vegetatielaag) %>%
         summarise(
-          Soorten = paste(unique(.data$Kenmerk), collapse = ", ")
+          Soorten = paste(unique(.data$Kenmerk), collapse = "', '")
         ) %>%
         ungroup() %>%
         mutate(
@@ -243,6 +226,69 @@ invoercontroleData_soortenKenmerken <- #nolint
           Tekst = paste(.data$TekstOpname, collapse = "; ")
         )
       stop(Tekst$Tekst)
+    }
+
+    Synoniemen <- KenmerkenSoort %>%
+      group_by(
+        .data$ID, .data$NBNTaxonVersionKey, .data$Vegetatielaag, .data$Eenheid
+      ) %>%
+      summarise(Aantal = n()) %>%
+      ungroup() %>%
+      filter(.data$Aantal > 1)
+    if (nrow(Synoniemen) > 0) {
+      Synoniemen <- Synoniemen %>%
+        inner_join(
+          KenmerkenSoort,
+          by = c("ID", "NBNTaxonVersionKey", "Vegetatielaag", "Eenheid")
+        )
+      LatijnEnNl <- Synoniemen %>%
+        group_by(
+          .data$ID, .data$NBNTaxonVersionKey, .data$Vegetatielaag,
+          .data$Eenheid, .data$TypeKenmerk
+        ) %>%
+        summarise(Aantal = n()) %>%
+        ungroup() %>%
+        filter(.data$Aantal == 1)
+      if (nrow(LatijnEnNl) > 0) {
+        Tekst <- Synoniemen %>%
+          group_by(.data$ID, .data$Vegetatielaag) %>%
+          summarise(
+            Soorten = paste(unique(.data$Kenmerk), collapse = "' / '")
+          ) %>%
+          ungroup() %>%
+          mutate(
+            TekstOpname =
+              paste0(
+                "Voor opname ", .data$ID, " zijn in de ", .data$Vegetatielaag,
+                " zowel Nederlandse als Latijnse namen gebruikt voor de soort '", #nolint
+                .data$Soorten, collapse = NULL
+              )
+          ) %>%
+          summarise(
+            Tekst = paste(.data$TekstOpname, collapse = "; ")
+          )
+        stop(Tekst$Tekst)
+      } else {
+        Tekst <- Synoniemen %>%
+          group_by(.data$ID, .data$Vegetatielaag) %>%
+          summarise(
+            Soorten = paste(unique(.data$Kenmerk), collapse = "' en '")
+          ) %>%
+          ungroup() %>%
+          mutate(
+            TekstOpname =
+              paste0(
+                "Voor opname ", .data$ID, " zijn in de ", .data$Vegetatielaag,
+                " de synoniemen '", .data$Soorten,
+                "' beschouwd als eenzelfde taxon met aggregatie van de bedekkingen (rekening houdend met gedeeltelijke overlap)", #nolint
+                collapse = NULL
+              )
+          ) %>%
+          summarise(
+            Tekst = paste(.data$TekstOpname, collapse = "; ")
+          )
+        warning(Tekst$Tekst)
+      }
     }
 
     Dubbels <- Kenmerken %>%

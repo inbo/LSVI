@@ -26,34 +26,21 @@
 #'
 
 maakConnectiePool <-
-  function(Server = "INBO-SQL07-PRD.inbo.be",
-           Databank = "D0122_00_LSVIHabitatTypes",
-           Gebruiker = "pc-eigenaar",
-           Wachtwoord = "geen") {
-  assert_that(is.string(Server))
-  assert_that(is.string(Databank))
-  assert_that(is.string(Gebruiker))
-  assert_that(is.string(Wachtwoord))
+  function() {
 
-  if (Gebruiker == "pc-eigenaar") {
-    tryCatch(
-      assign(
-        "ConnectiePool",
-        dbPool(
-          drv = odbc(),
-          Driver = "SQL Server",
-          Database = Databank,
-          Server = Server,
-          Trusted_Connection = "TRUE"
-        ),
-        envir = .GlobalEnv
+  tryCatch(
+    assign(
+      "ConnectiePool",
+      dbPool(
+        drv = SQLite(),
+        dbname =
+          system.file("databank/LSVIHabitatTypes.sqlite", package = "LSVI"),
+        encoding = "UTF-8"
       ),
-      error = function(e) {
-        maakConnectiepoolSQLite()
-      }
-    )
-  } else {
-    maakConnectiepoolSQLite()
-    message("Connectie gelegd naar de databank in het package")
-  }
+      envir = .GlobalEnv
+    ),
+    error = function(e) {
+      warning("Het lukt niet om een connectiepool te leggen naar de databank in het package.  Controleer of deze databank lokaal aanwezig is (bestand LSVIHabitatTypes.sqlite in folder Library/LSVI/databank) en test eventueel of een connectie leggen wel lukt met de functie connecteerMetLSVIdb().")  #nolint
+    }
+  )
 }

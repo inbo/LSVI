@@ -10,14 +10,18 @@ The package is written in Dutch.
 
 # Installation
 
-To install the development version, start a new R session and run this code (before loading any packages). 
+To install `LSVI` from Github, start a new R session and run this code (before loading any packages).
 
 ```r
 # install.packages("remotes")
-remotes::install_github("inbo/LSVI@develop", build = TRUE, build_opts = c("--no-resave-data", "--no-manual"))
+remotes::install_github("inbo/LSVI", build_vignettes = TRUE)
 ```
 
-To have access to the database (which is a precondition for using the package), one should be logged in as a user on the INBO network (locally or by using VPN).
+To install the development version, run this code: 
+
+```r
+remotes::install_github("inbo/LSVI@develop", build_vignettes = TRUE)
+```
 
 # Documentation
 
@@ -33,4 +37,4 @@ Please use the output of `citation("LSVI")`
 
 # Contributor Code of Conduct
 
-Please note that the 'LSVI' project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By contributing to this project, you agree to abide by its terms.
+Please note that the 'LSVI' project is released with a [Contributor Code of Conduct](LICENSE.md). By contributing to this project, you agree to abide by its terms.
