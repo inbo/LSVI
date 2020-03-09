@@ -121,17 +121,3 @@ setMethod(
     return(Aantal)
   }
 )
-
-setMethod(
-  f = "geefTheoretischMaximum",
-  signature = "aantal",
-  definition = function(object) {
-    if (nrow(object@Soortengroep) > 0) {
-      return(nrow(unique(object@Soortengroep)))
-    }
-    if (nrow(object@Studiegroep) > 0) {
-      return(nrow(unique(object@Studiegroep)))
-    }
-    return(NA)
-  }
-)

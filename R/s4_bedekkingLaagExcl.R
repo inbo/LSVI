@@ -53,11 +53,3 @@ setMethod(
     }
   }
 )
-
-setMethod(
-  f = "geefTheoretischMaximum",
-  signature = "bedekkingLaagExcl",
-  definition = function(object) {
-    return(1)
-  }
-)

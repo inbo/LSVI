@@ -79,7 +79,6 @@ berekenVoorwaarde <-
       list(
         Min = Waarde[1],
         Max = Waarde[2],
-        TheoretischMaximum = geefTheoretischMaximum(AV),
         Warnings = str_c(Warnings, collapse = ";")
       )
 

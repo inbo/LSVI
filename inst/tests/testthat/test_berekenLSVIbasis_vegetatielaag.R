@@ -286,7 +286,12 @@ describe("berekenLSVIbasis vegetatielaag", {
     stopifnot(
       all.equal(
         BerekendRes3[["Resultaat_globaal"]],
-        Resultaatv2[["Resultaat_globaal"]]
+        Resultaatv2[["Resultaat_globaal"]] %>%
+          mutate(
+            Index_min_min = -0.842220185,
+            Index_min_harm = -0.6540303,
+            Index_harm_harm = -0.42208728
+          )
       )
     )
   })
