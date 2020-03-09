@@ -897,7 +897,7 @@ describe("test databank", {
     TMmeting <-
       geefInvoervereisten(ConnectieLSVIhabitats = connecteerMetLSVIdb()) %>%
       filter(
-        grepl("meting", AnalyseVariabele) & 
+        grepl("meting", AnalyseVariabele) &
           !AnalyseVariabele %in% c("meting_perc", "meting_bedekking"),
         !(TypeVariabele == "Ja/nee" & Maximumwaarde == 1),
         !(Voorwaarde == "aantal geslachten" & Maximumwaarde == 2),
