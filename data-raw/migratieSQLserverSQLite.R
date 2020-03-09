@@ -4,6 +4,7 @@ library(DBI)
 library(RSQLite)
 library(LSVI)
 library(dplyr)
+library(purrr)
 
 migratieSQLserverSQLite <-
   function(
@@ -316,6 +317,121 @@ migratieSQLserverSQLite <-
       ConnectiePool,
       "SELECT Id, Naam
       FROM TaxonType"
+    )
+
+
+  #berekening Theoretisch Maximum
+  Querytekst <-
+    "WITH Groepen
+      AS
+      (
+        SELECT Tg.Id AS TaxongroepId,
+          Tg.Id AS TaxonsubgroepId
+        FROM Taxongroep Tg
+        WHERE Tg.Id in (%s)
+      UNION ALL
+        SELECT Groepen.TaxongroepId,
+          Tg2.Id AS TaxonsubgroepId
+        FROM Groepen
+          INNER JOIN TaxongroepTaxongroep AS TgTg
+          ON Groepen.TaxonsubgroepId = TgTg.TaxongroepParentId
+        INNER JOIN Taxongroep Tg2
+        ON TgTg.TaxongroepChildId = Tg2.Id
+        WHERE TgTg.TaxongroepChildId > 0
+      )
+    SELECT Groepen.TaxongroepId,
+      Groepen.TaxonsubgroepId,
+      Taxon.Id
+    FROM Groepen
+      INNER JOIN TaxongroepTaxon TgT
+      on Groepen.TaxonsubgroepId = TgT.TaxongroepId
+      INNER JOIN Taxon
+      ON TgT.TaxonId = Taxon.Id;"
+  Voorwaarde <- Voorwaarde %>%
+    rowwise() %>%
+    mutate(
+      AantalSoorten =
+        ifelse(
+          !is.na(TaxongroepId),
+          nrow(
+            dbGetQuery(
+              ConnectiePool,
+              sprintf(Querytekst, as.character(TaxongroepId))
+            ) %>%
+              distinct()
+          ),
+          NA
+        )
+    ) %>%
+    ungroup() %>%
+    left_join(StudieItem, by = "StudiegroepId", suffix = c("", ".studie")) %>%
+    group_by(
+      Id, VoorwaardeNaam, ExtraInfo, AnalyseVariabeleId, Referentiewaarde,
+      Operator, InvoermaskerId, TaxongroepId, StudiegroepId,
+      SubAnalyseVariabeleId, SubReferentiewaarde, SubOperator,
+      SubInvoermaskerId, AantalSoorten
+    ) %>%
+    summarise(AantalKenmerken = n()) %>%
+    ungroup() %>%
+    inner_join(AnalyseVariabele, by = c("AnalyseVariabeleId" = "Id")) %>%
+    inner_join(TypeVariabele, by = c("TypeVariabeleId" = "Id")) %>%
+    mutate(
+      Maximumwaarde =
+        ifelse(
+          VariabeleNaam %in% c("aandeel", "aandeelKruidlaag", "meting_perc"),
+          1,
+          NA
+        ),
+      Maximumwaarde =
+        ifelse(
+          grepl("bedekking", tolower(VariabeleNaam)), 1, Maximumwaarde
+        ),
+      Maximumwaarde =
+        ifelse(
+          grepl("meting", VariabeleNaam) & Naam == "Categorie", 1, Maximumwaarde
+        ),
+      Maximumwaarde =
+        ifelse(
+          grepl("meting", VariabeleNaam) & Naam == "Ja/nee", 1, Maximumwaarde
+        ),
+      Maximumwaarde =
+        ifelse(
+          grepl("meting", VariabeleNaam) & VoorwaardeNaam == "aantal geslachten",
+          2, Maximumwaarde
+        ),
+      Maximumwaarde =
+        ifelse(
+          grepl("meting", VariabeleNaam) & VoorwaardeNaam == "bosconstantie",
+          250, Maximumwaarde
+        ),
+      Maximumwaarde =
+        ifelse(
+          VariabeleNaam == "aantal" & !is.na(TaxongroepId),
+          AantalSoorten,
+          Maximumwaarde
+        ),
+      Maximumwaarde =
+        ifelse(
+          VariabeleNaam == "aantal" & is.na(TaxongroepId) & !is.na(StudiegroepId),
+          AantalKenmerken,
+          Maximumwaarde
+        ),
+      Maximumwaarde =
+        ifelse(
+          grepl("meting", VariabeleNaam) &
+            Naam != "Ja/nee" &
+            !VariabeleNaam %in% c("meting_perc", "meting_bedekking") |
+            VariabeleNaam == "aantal",
+          pmin(3 * as.numeric(sub(",", ".", Referentiewaarde)), Maximumwaarde,
+               na.rm = TRUE),
+          Maximumwaarde
+        )
+    ) %>%
+    select(
+      Id, VoorwaardeNaam, ExtraInfo, AnalyseVariabeleId, Referentiewaarde,
+      Operator, InvoermaskerId, TaxongroepId, StudiegroepId,
+      SubAnalyseVariabeleId, SubReferentiewaarde, SubOperator,
+      SubInvoermaskerId, Maximumwaarde
     )
   
   NieuweDb <- dbConnect(SQLite(), "inst/databank/LSVIHabitatTypes.sqlite")

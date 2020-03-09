@@ -45,11 +45,3 @@ setMethod(
     }
   }
 )
-
-setMethod(
-  f = "geefTheoretischMaximum",
-  signature = "aantalGroepen",
-  definition = function(object) {
-    return(nrow(unique(object@Studiegroep)))
-  }
-)
