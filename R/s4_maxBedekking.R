@@ -68,11 +68,3 @@ setMethod(
     return(c(MaxBedekkingMin, MaxBedekkingMax))
   }
 )
-
-setMethod(
-  f = "geefTheoretischMaximum",
-  signature = "maxBedekking",
-  definition = function(object) {
-    return(1)
-  }
-)

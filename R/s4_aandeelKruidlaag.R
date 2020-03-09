@@ -64,11 +64,3 @@ setMethod(
     return(resultaat)
   }
 )
-
-setMethod(
-  f = "geefTheoretischMaximum",
-  signature = "aandeelKruidlaag",
-  definition = function(object) {
-    return(1)
-  }
-)

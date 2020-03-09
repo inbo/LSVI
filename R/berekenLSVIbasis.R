@@ -254,73 +254,38 @@ berekenLSVIbasis <- #nolint
 
 
     #nodige info ophalen uit de databank
-    if (Klasse == "SQLiteConnection") {
-      Invoervereisten <-
-        geefInvoervereisten(
-          Versie,
-          Habitattype = unique(Data_habitat$Habitattype),
-          Kwaliteitsniveau = Kwaliteitsniveau,
-          ConnectieLSVIhabitats = ConnectieLSVIhabitats
-        ) %>%
-        select(
-          .data$Versie,
-          .data$Habitattype,
-          .data$Habitatsubtype,
-          .data$Criterium,
-          .data$Indicator,
-          .data$Beoordeling,
-          .data$Kwaliteitsniveau,
-          .data$Belang,
-          .data$BeoordelingID,
-          .data$Combinatie,
-          .data$VoorwaardeID,
-          .data$Voorwaarde,
-          .data$Referentiewaarde,
-          .data$Operator,
-          .data$Eenheid,
-          .data$Maximumwaarde,
-          .data$TypeVariabele,
-          .data$Invoertype
-        ) %>%
-        distinct() %>%
-        filter(!is.na(.data$TypeVariabele)) %>%
-        mutate(
-          Rijnr = row_number(.data$VoorwaardeID)
-        )
-    } else {
-      Invoervereisten <-
-        geefInvoervereisten(
-          Versie,
-          Habitattype = unique(Data_habitat$Habitattype),
-          Kwaliteitsniveau = Kwaliteitsniveau,
-          ConnectieLSVIhabitats = ConnectieLSVIhabitats
-        ) %>%
-        select(
-          .data$Versie,
-          .data$Habitattype,
-          .data$Habitatsubtype,
-          .data$Criterium,
-          .data$Indicator,
-          .data$Beoordeling,
-          .data$Kwaliteitsniveau,
-          .data$Belang,
-          .data$BeoordelingID,
-          .data$Combinatie,
-          .data$VoorwaardeID,
-          .data$Voorwaarde,
-          .data$Referentiewaarde,
-          .data$Operator,
-          .data$Eenheid,
-          .data$AnalyseVariabele, #toegevoegd voor invullen TheoretischMaximum
-          .data$TypeVariabele,
-          .data$Invoertype
-        ) %>%
-        distinct() %>%
-        filter(!is.na(.data$TypeVariabele)) %>%
-        mutate(
-          Rijnr = row_number(.data$VoorwaardeID)
-        )
-    }
+    Invoervereisten <-
+      geefInvoervereisten(
+        Versie,
+        Habitattype = unique(Data_habitat$Habitattype),
+        Kwaliteitsniveau = Kwaliteitsniveau,
+        ConnectieLSVIhabitats = ConnectieLSVIhabitats
+      ) %>%
+      select(
+        .data$Versie,
+        .data$Habitattype,
+        .data$Habitatsubtype,
+        .data$Criterium,
+        .data$Indicator,
+        .data$Beoordeling,
+        .data$Kwaliteitsniveau,
+        .data$Belang,
+        .data$BeoordelingID,
+        .data$Combinatie,
+        .data$VoorwaardeID,
+        .data$Voorwaarde,
+        .data$Referentiewaarde,
+        .data$Operator,
+        .data$Eenheid,
+        .data$Maximumwaarde,
+        .data$TypeVariabele,
+        .data$Invoertype
+      ) %>%
+      distinct() %>%
+      filter(!is.na(.data$TypeVariabele)) %>%
+      mutate(
+        Rijnr = row_number(.data$VoorwaardeID)
+      )
 
     IntervalVereisten <-
       vertaalInvoerInterval(
@@ -409,13 +374,10 @@ berekenLSVIbasis <- #nolint
         TypeVariabele = NULL,
         Invoertype = NULL,
         RefMin = NULL,
-        RefMax = NULL
+        RefMax = NULL,
+        Maximumwaarde = NULL
       ) %>%
       distinct()
-    if (Klasse == "SQLiteConnection") {
-      resultaat_opname_indicator <- resultaat_opname_indicator %>%
-        mutate(Maximumwaarde = NULL)
-    }
 
     #voorwaardegegevens koppelen aan info uit de databank
     Resultaat <-
@@ -487,8 +449,6 @@ berekenLSVIbasis <- #nolint
             ),
           WaardeMin = as.numeric(unlist(.data$Berekening)["Min"]),
           WaardeMax = as.numeric(unlist(.data$Berekening)["Max"]),
-          TheoretischMaximum =
-            as.numeric(unlist(.data$Berekening)["TheoretischMaximum"]),
           Warnings = unlist(.data$Berekening)["Warnings"],
           Berekening = NULL
         ) %>%
@@ -680,53 +640,13 @@ berekenLSVIbasis <- #nolint
       ) %>%
       ungroup()
 
-    if (Klasse == "SQLiteConnection") {
-      Resultaat <- Resultaat %>%
-        filter(!.data$Referentiewaarde %in% Invoervereisten$Voorwaarde) %>%
-        bind_rows(DubbeleVoorwaarden) %>%
-        mutate(
-          TheoretischMaximum = .data$Maximumwaarde,
-          Maximumwaarde = NULL
-        )
-    } else {
-      Resultaat <- Resultaat %>%
-        filter(!.data$Referentiewaarde %in% Invoervereisten$Voorwaarde) %>%
-        bind_rows(DubbeleVoorwaarden) %>%
-        mutate(
-          TheoretischMaximum =
-            ifelse(
-              is.na(.data$TheoretischMaximum) & .data$Eenheid == "%",
-              1,
-              .data$TheoretischMaximum
-            ),
-          TheoretischMaximum =
-            ifelse(
-              is.na(.data$TheoretischMaximum) &
-                tolower(.data$TypeVariabele) == "categorie" &
-                grepl("bedekking", tolower(.data$AnalyseVariabele)),
-              1,
-              .data$TheoretischMaximum
-            ),
-          TheoretischMaximum =
-            ifelse(
-              is.na(.data$TheoretischMaximum) &
-                tolower(.data$TypeVariabele) == "ja/nee",
-              1,
-              .data$TheoretischMaximum
-            ),
-          TheoretischMaximum =
-            ifelse(
-              .data$AnalyseVariabele == "aantal" |
-                grepl("meting", .data$AnalyseVariabele) &
-                tolower(.data$TypeVariabele) != "ja/nee",
-              pmin(
-                3 * as.numeric(sub(",", ".", .data$Referentiewaarde)),
-                .data$TheoretischMaximum
-              ),
-              .data$TheoretischMaximum
-            )
-        )
-    }
+    Resultaat <- Resultaat %>%
+      filter(!.data$Referentiewaarde %in% Invoervereisten$Voorwaarde) %>%
+      bind_rows(DubbeleVoorwaarden) %>%
+      mutate(
+        TheoretischMaximum = .data$Maximumwaarde,
+        Maximumwaarde = NULL
+      )
 
     Statusberekening <-
       berekenStatus(

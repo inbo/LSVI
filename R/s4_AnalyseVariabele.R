@@ -315,10 +315,3 @@ setGeneric(
     standardGeneric("berekenWaarde")
   }
 )
-
-setGeneric(
-  name = "geefTheoretischMaximum",
-  def = function(object) {
-    standardGeneric("geefTheoretischMaximum")
-  }
-)
