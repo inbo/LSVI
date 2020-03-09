@@ -862,4 +862,48 @@ describe("test databank", {
     )
   })
 
+  it("Het theoretisch maximum (Maximumwaarde) is correct berekend", {
+    TMbedekkingaandeel <-
+      geefInvoervereisten(ConnectieLSVIhabitats = connecteerMetLSVIdb()) %>%
+      filter(
+        AnalyseVariabele %in%
+          c("aandeel", "aandeelKruidlaag", "bedekking", "meting_perc") |
+        grepl("bedekking", tolower(AnalyseVariabele))
+      ) %>%
+      filter(Maximumwaarde != 1)
+    expect_equal(nrow(TMbedekkingaandeel), 0)
+    TMaantal <-
+      geefInvoervereisten(ConnectieLSVIhabitats = connecteerMetLSVIdb()) %>%
+      filter(
+        AnalyseVariabele %in% c("aantal", "aantalGroepen"),
+        !(Maximumwaarde == 3 * as.numeric(sub(",", ".", Referentiewaarde)))
+      ) %>%
+      rowwise() %>%
+      mutate(
+        AantalSoortenKenmerken =
+          ifelse(
+            !is.na(TaxongroepId),
+            nrow(
+              geefSoortenlijstVoorIDs(
+                as.character(TaxongroepId),
+                ConnectieLSVIhabitats = connecteerMetLSVIdb()
+              )
+            ),
+            str_count(Studiewaarde, ",") + 1
+          )
+      ) %>%
+      filter(Maximumwaarde != AantalSoortenKenmerken)
+    expect_equal(nrow(TMaantal), 0)
+    TMmeting <-
+      geefInvoervereisten(ConnectieLSVIhabitats = connecteerMetLSVIdb()) %>%
+      filter(
+        grepl("meting", AnalyseVariabele) & 
+          !AnalyseVariabele %in% c("meting_perc", "meting_bedekking"),
+        !(TypeVariabele == "Ja/nee" & Maximumwaarde == 1),
+        !(Voorwaarde == "aantal geslachten" & Maximumwaarde == 2),
+        !(Voorwaarde == "bosconstantie" & Maximumwaarde == 250),
+        !(Maximumwaarde == 3 * as.numeric(sub(",", ".", Referentiewaarde)))
+      )
+    expect_equal(nrow(TMmeting), 0)
+  })
 })
