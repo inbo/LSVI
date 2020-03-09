@@ -257,22 +257,12 @@ geefInvoervereisten <- function(Versie = "alle",
       ),
       collapse = "','"
     )
-  
-  Maximumwaarde <- ""
-  if (class(ConnectieLSVIhabitats)[1] == "Pool") {
-    Klasse <-
-      class(ConnectieLSVIhabitats$.__enclos_env__$private$createObject())[1]
-  } else {
-    Klasse <- class(ConnectieLSVIhabitats)[1]
-  }
-  if (Klasse == "SQLiteConnection") {
-    Maximumwaarde <- "Voorwaarde.Maximumwaarde,"
-  }
 
   query_voorwaardeinfo <-
     sprintf("SELECT Voorwaarde.Id AS VoorwaardeID,
             Voorwaarde.VoorwaardeNaam AS Voorwaarde,
-            Voorwaarde.Referentiewaarde, Voorwaarde.Operator, %s
+            Voorwaarde.Referentiewaarde, Voorwaarde.Operator,
+            Voorwaarde.Maximumwaarde,
             AnalyseVariabele.VariabeleNaam as AnalyseVariabele,
             AnalyseVariabele.Eenheid, TypeVariabele.Naam AS TypeVariabele,
             Lijst.Naam AS Invoertype, LijstItem.Waarde As Invoerwaarde,
