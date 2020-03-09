@@ -96,10 +96,9 @@ selecteerIndicatoren <-
       Habitattype <- as.character(Habitattype)
     }
     assert_that(is.character(Habitattype))
-    Habitattype <- tolower(Habitattype)
     controleerInvoerwaarde(
       "Habitattype", Habitattype,
-      "Habitattype", "Code", ConnectieLSVIhabitats
+      "Habitattype", "Code", ConnectieLSVIhabitats, Tolower = FALSE
     )
 
     assert_that(is.string(Criterium))
