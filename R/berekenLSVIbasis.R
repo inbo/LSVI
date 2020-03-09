@@ -775,7 +775,7 @@ berekenLSVIbasis <- #nolint
 
     #voor de uitvoer de gegevens van de geobserveerde indicatoren toevoegen
     resultaat_detail <- Resultaat %>%
-      bind_rows(resultaat_opname_indicator) %>%
+      bind_rows(resultaat_opname_indicator %>% distinct()) %>%
       arrange(
         .data$ID,
         .data$Habitattype,
@@ -829,7 +829,8 @@ berekenLSVIbasis <- #nolint
             .data$Kwaliteitsniveau,
             .data$BeoordelingID,
             Status_indicator = as.logical(.data$Waarde),
-          )
+          ) %>%
+          distinct()
       ) %>%
       arrange(
         .data$ID,
