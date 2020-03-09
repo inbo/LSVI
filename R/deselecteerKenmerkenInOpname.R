@@ -72,56 +72,15 @@ deselecteerKenmerkenInOpname <-
     if (identical(SubAnalyseVariabele, character(0))) {
       Resultaat <- Resultaat %>%
         filter(
-          .data$WaardeMax > 0
+          .data$WaardeMax > 0 | (is.na(.data$WaardeMax) & .data$WaardeMin > 0)
         ) %>%
         distinct()
 
       return(Resultaat)
-    }
-
-    if (!identical(SubAnalyseVariabele, character(0)) &
-        SubAnalyseVariabele == "bedekking") {
-      Resultaat <- Resultaat %>%
-        mutate(
-          RefMin = SubRefMin,
-          RefMax = SubRefMax,
-          Operator = SubOperator,
-          Rijnr = row_number(.data$Kenmerk)
-        )
-
-      SubStatusberekening <-
-        berekenStatus(
-          Resultaat[
-            , c(
-              "Rijnr",
-              "RefMin",
-              "RefMax",
-              "Operator",
-              "WaardeMin",
-              "WaardeMax"
-            )
-          ]
-        )
-
-      Resultaat <- Resultaat %>%
-        left_join(
-          SubStatusberekening,
-          by = c("Rijnr")
-        ) %>%
-        mutate(
-          Rijnr = NULL
-        ) %>%
-        filter(
-          .data$Status == TRUE
-        ) %>%
-        distinct()
-
     } else {
       stop(
         paste(
-          "Onbekende subanalysevariabele",
-          SubAnalyseVariabele,
-          "in de indicatorendatabank.  Meld deze fout aan de beheerder van dit package."  #nolint
+          "Fout in de indicatorendatabank: een analysevariabele met achtervoegsel 'Excl' bevat een subanalysevariabele en dit wordt niet ondersteund in het script.  Meld deze fout aan de beheerder van dit package."  #nolint
         )
       )
     }

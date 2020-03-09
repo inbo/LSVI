@@ -33,7 +33,7 @@ postparseTaxonnaam <-
       )
   }
   Resultaat <- ResultaatParser[, c(ParseType)]
-  Resultaat <- gsub("\U00D7", "x", Resultaat)
+  Resultaat <- gsub("\U00D7", "x ", Resultaat)
   Resultaat <- gsub("^NA$", NA, Resultaat)
 
   return(Resultaat)

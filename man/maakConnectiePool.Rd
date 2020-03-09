@@ -5,25 +5,7 @@
 \title{Maak een connectiepool met de databank met LSVI-indicatoren in het
 package}
 \usage{
-maakConnectiePool(Server = "INBO-SQL07-PRD.inbo.be",
-  Databank = "D0122_00_LSVIHabitatTypes", Gebruiker = "pc-eigenaar",
-  Wachtwoord = "geen")
-}
-\arguments{
-\item{Server}{de server waarop de databank staat die aangeroepen wordt
-(standaard "INBO-SQL07-PRD.inbo.be")}
-
-\item{Databank}{de naam van de databank die aangeroepen wordt (standaard
-"D0122_00_LSVIHabitatTypes")}
-
-\item{Gebruiker}{gebruiker van de databank, standaard "pc-eigenaar" waarbij
-de login en wachtwoord gebruikt wordt waarmee ingelogd is op de pc, andere
-opties zijn "lezer" waarbij een gebruiker met leesrechten aangemaakt wordt
-(dit kan enkel als er een login-file is toegevoegd op je pc) of een eigen
-gebruikersnaam en wachtwoord ingeven}
-
-\item{Wachtwoord}{wachtwoord van de gebruiker van de databank, standaard de
-tekst "geen", moet niet ingevuld worden als Gebruiker "pc-eigenaar" is}
+maakConnectiePool()
 }
 \value{
 Deze functie maakt een Environment-object aan dat de connecties
