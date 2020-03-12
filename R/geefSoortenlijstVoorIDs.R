@@ -80,14 +80,12 @@ geefSoortenlijstVoorIDs <-
         AS
         (
           SELECT Tg.Id AS TaxongroepId,
-            Tg.Id AS TaxonsubgroepId,
-            cast(Tg.Omschrijving AS nvarchar(90)) AS Omschrijving
+            Tg.Id AS TaxonsubgroepId
           FROM Taxongroep Tg
           WHERE Tg.Id in (%s)
         UNION ALL
           SELECT Groepen.TaxongroepId,
-            Tg2.Id AS TaxonsubgroepId,
-            cast(Tg2.Omschrijving AS nvarchar(90)) AS Omschrijving
+            Tg2.Id AS TaxonsubgroepId
           FROM Groepen
             INNER JOIN TaxongroepTaxongroep AS TgTg
             ON Groepen.TaxonsubgroepId = TgTg.TaxongroepParentId
@@ -112,45 +110,27 @@ geefSoortenlijstVoorIDs <-
     (
       SELECT Tx.Id AS AncestorTaxonId,
         Tx.Id AS ParentTaxonId,
-        Tx.Id AS SubTaxonId,
-        Tx.NbnTaxonVersionKey,
-        Tx.FloraNaamWetenschappelijk,
-        Tx.FloraNaamNederlands,
-        Tx.NbnNaam,
-        Tx.TaxonTypeId,
-        Ts.CanonicalNameWithMarker AS WetNaamKort
+        Tx.Id AS SubTaxonId
       FROM Taxon Tx
-        INNER JOIN TaxonSynoniem Ts
-          ON Tx.Id = Ts.TaxonId
-      WHERE Tx.NbnTaxonVersionKey = Ts.NbnTaxonVersionKey
-        AND Tx.Id IN (SELECT TaxonId FROM UniekeTaxa)
+      WHERE Tx.Id IN (SELECT TaxonId FROM UniekeTaxa)
     UNION ALL
       SELECT Taxonlijn.AncestorTaxonId,
         Txtx.TaxonParentId AS ParentTaxonId,
-        Tx2.Id AS SubTaxonId,
-        Tx2.NbnTaxonVersionKey,
-        Tx2.FloraNaamWetenschappelijk,
-        Tx2.FloraNaamNederlands,
-        Tx2.NbnNaam,
-        Tx2.TaxonTypeId,
-        Ts2.CanonicalNameWithMarker AS WetNaamKort
+        Tx2.Id AS SubTaxonId
       FROM Taxonlijn
         INNER JOIN TaxonTaxon AS TxTx
           ON Taxonlijn.SubTaxonId = TxTx.TaxonParentId
           AND Taxonlijn.ParentTaxonId != TxTx.TaxonChildId
         INNER JOIN Taxon Tx2
           ON TxTx.TaxonChildId = Tx2.Id
-        INNER JOIN TaxonSynoniem Ts2
-          ON Tx2.Id = Ts2.TaxonId
       WHERE TxTx.TaxonChildId > 0
-        AND Tx2.NbnTaxonVersionKey = Ts2.NbnTaxonVersionKey
     )"
 
     QueryLSVIfiche <-
       "
       SELECT Groepen.TaxongroepId,
         Groepen.TaxonsubgroepId,
-        Groepen.Omschrijving,
+        cast(Tg.Omschrijving AS nvarchar(90)) AS Omschrijving,
         Taxon.Id,
         Taxon.NbnTaxonVersionKey,
         Taxon.FloraNaamWetenschappelijk AS WetNaam,
@@ -158,8 +138,10 @@ geefSoortenlijstVoorIDs <-
         TaxonType.Naam AS TaxonType,
         ts.CanonicalNameWithMarker AS WetNaamKort
       FROM Groepen
+        INNER JOIN Taxongroep Tg
+        ON Groepen.TaxonsubgroepId = Tg.Id
         INNER JOIN TaxongroepTaxon TgT
-        on Groepen.TaxonsubgroepId = TgT.TaxongroepId
+        ON Groepen.TaxonsubgroepId = TgT.TaxongroepId
         INNER JOIN Taxon
         ON TgT.TaxonId = Taxon.Id
         INNER JOIN TaxonType
@@ -172,21 +154,28 @@ geefSoortenlijstVoorIDs <-
       "
       SELECT Groepen.TaxongroepId,
         Groepen.TaxonsubgroepId,
-        Groepen.Omschrijving,
+        cast(Tg.Omschrijving AS nvarchar(90)) AS Omschrijving,
         Taxonlijn.AncestorTaxonId AS TaxonId,
         Taxonlijn.SubTaxonId,
-        Taxonlijn.NbnTaxonVersionKey,
-        Taxonlijn.FloraNaamWetenschappelijk AS WetNaam,
-        Taxonlijn.FloraNaamNederlands As NedNaam,
+        Taxon.NbnTaxonVersionKey,
+        Taxon.FloraNaamWetenschappelijk AS WetNaam,
+        Taxon.FloraNaamNederlands As NedNaam,
         TaxonType.Naam AS TaxonType,
-        Taxonlijn.WetNaamKort
+        ts.CanonicalNameWithMarker AS WetNaamKort
       FROM Groepen
+        INNER JOIN Taxongroep Tg
+        ON Groepen.TaxonsubgroepId = Tg.Id
         INNER JOIN TaxongroepTaxon TgT
         ON Groepen.TaxonsubgroepId = TgT.TaxongroepId
         INNER JOIN Taxonlijn
         ON TgT.TaxonId = Taxonlijn.AncestorTaxonId
+        INNER JOIN Taxon
+        ON Taxonlijn.SubTaxonId = Taxon.Id
         INNER JOIN TaxonType
-        ON Taxonlijn.TaxonTypeId = TaxonType.Id
+        ON Taxon.TaxonTypeId = TaxonType.Id
+        INNER JOIN TaxonSynoniem Ts
+          ON Taxon.Id = Ts.TaxonId
+      WHERE Taxon.NbnTaxonVersionKey = Ts.NbnTaxonVersionKey
       ORDER BY Groepen.TaxongroepId, Groepen.TaxonsubgroepId,
         Taxonlijn.AncestorTaxonId;"
 
