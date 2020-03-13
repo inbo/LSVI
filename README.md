@@ -1,4 +1,6 @@
-[![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](http://www.repostatus.org/badges/latest/wip.svg)](http://www.repostatus.org/#wip)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![Licence](https://img.shields.io/badge/licence-GPL--3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 [![wercker status](https://app.wercker.com/status/91ffc2688434d321a85dc5d79fd7c428/s/develop "wercker status")](https://app.wercker.com/project/byKey/91ffc2688434d321a85dc5d79fd7c428)
 [![codecov](https://codecov.io/gh/inbo/LSVI/branch/develop/graph/badge.svg)](https://codecov.io/gh/inbo/LSVI)
 
@@ -17,7 +19,7 @@ To install `LSVI` from Github, start a new R session and run this code (before l
 remotes::install_github("inbo/LSVI", build_vignettes = TRUE)
 ```
 
-To install the development version, run this code: 
+To install the development version with the latest changes included (but less stable), run this code: 
 
 ```r
 remotes::install_github("inbo/LSVI@develop", build_vignettes = TRUE)
