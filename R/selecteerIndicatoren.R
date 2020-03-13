@@ -119,10 +119,10 @@ selecteerIndicatoren <-
 
 
     query_uitbreiding <- ifelse(HabitatnamenToevoegen,
-                                "Habitatselectie.Habitatnaam,
-    Habitatselectie.Habitatsubtypenaam,
-    Habitatselectie.HabitatsubtypeOmschrijving,
-                                Habitatselectie.Habitatgroepnaam, ",
+                                "Ht1.Naam AS Habitatnaam,
+    Ht2.Naam AS Habitatsubtypenaam,
+    cast(Ht2.Omschrijving AS nvarchar(10)) AS HabitatsubtypeOmschrijving,
+                                Habitatgroep.Naam AS Habitatgroepnaam, ",
                                 "")
 
     #eerst de selectiegegevens ophalen en de nodige gegevens uit tabel
@@ -141,8 +141,7 @@ selecteerIndicatoren <-
         sprintf(
           "(Habitatselectie.HabitatsubtypeId = Indicator_habitat.HabitattypeID
             OR Habitatselectie.HabitattypeId = Indicator_habitat.HabitattypeID)
-          WHERE (Habitatselectie.Habitattype in ('%s') OR
-            Habitatselectie.Habitatsubtype in ('%s'))",
+          WHERE (Ht1.Code in ('%s') OR Ht2.Code in ('%s'))",
         Habitattypen, Habitattypen)
     }
 
@@ -151,33 +150,27 @@ selecteerIndicatoren <-
         "WITH Habitatselectie
         AS
         (
-          SELECT Habitatgroep.Naam AS Habitatgroepnaam,
-            Ht1.Code AS Habitattype, Ht1.Naam AS Habitatnaam,
-            Ht1.Code AS Habitatsubtype, Ht1.Naam AS Habitatsubtypenaam,
-            cast(Ht1.Omschrijving AS nvarchar(10))
-              AS HabitatsubtypeOmschrijving,
-            Ht1.Id AS HabitattypeId, Ht1.Id AS HabitatsubtypeId
-          FROM Habitattype AS Ht1 INNER JOIN Habitatgroep
-          ON Ht1.HabitatgroepId = Habitatgroep.Id
+          SELECT Ht1.Id AS HabitattypeId, Ht1.Id AS HabitatsubtypeId
+          FROM Habitattype AS Ht1
           WHERE Ht1.ParentId IS NULL
         UNION ALL
-          SELECT Habitatselectie.Habitatgroepnaam,
-            Habitatselectie.Habitattype, Habitatselectie.Habitatnaam,
-            Ht2.Code AS Habitatsubtype, Ht2.Naam AS Habitatsubtypenaam,
-            cast(Ht2.Omschrijving AS nvarchar(10))
-              AS HabitatsubtypeOmschrijving,
-            Habitatselectie.HabitattypeId, Ht2.Id AS HabitatsubtypeId
+          SELECT Habitatselectie.HabitattypeId, Ht2.Id AS HabitatsubtypeId
           FROM Habitatselectie INNER JOIN Habitattype AS Ht2
           ON Habitatselectie.HabitatsubtypeId = Ht2.ParentId
         )
-        SELECT Versie.VersieLSVI AS Versie, Habitatselectie.Habitattype,
-            Habitatselectie.Habitatsubtype, %s
+        SELECT Versie.VersieLSVI AS Versie, Ht1.Code AS Habitattype,
+            Ht2.Code AS Habitatsubtype, %s
             Criterium.Naam AS Criterium, Indicator.Naam AS Indicator,
             Indicator_habitat.Id AS Indicator_habitatID,
             Indicator_habitat.TaxongroepId,
             IndicatortabellenKoppeling.Indicator_beoordelingId
               AS Indicator_beoordelingID
         FROM Habitatselectie
+          INNER JOIN Habitattype Ht1
+            ON Habitatselectie.HabitattypeId = Ht1.Id
+          INNER JOIN Habitattype Ht2
+            ON Habitatselectie.HabitatsubtypeId = Ht2.Id
+          INNER JOIN Habitatgroep ON Ht1.HabitatgroepId = Habitatgroep.Id
         %s JOIN (((Indicator_habitat
         INNER JOIN
           (Indicator INNER JOIN Criterium
@@ -208,7 +201,7 @@ selecteerIndicatoren <-
         Parametervoorwaarde <- TRUE
       }
       query <-
-        sprintf("%s %s Habitatselectie.Habitatgroepnaam = '%s'",
+        sprintf("%s %s Habitatgroep.Naam = '%s'",
                 query, Voegwoord, Habitatgroep)
     }
     if (Criterium[1] != "alle") {
