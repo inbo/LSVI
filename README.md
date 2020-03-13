@@ -10,7 +10,7 @@ The package is written in Dutch.
 
 # Installation
 
-To install `LSVI` from Github, start a new R session and run this code (before loading any packages).
+To install `LSVI` from Github, start a new R session and run this code (before loading any packages):
 
 ```r
 # install.packages("remotes")
