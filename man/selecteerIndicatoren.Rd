@@ -4,9 +4,15 @@
 \alias{selecteerIndicatoren}
 \title{Selecteert indicatoren LSVI op basis van de opgegeven parameters}
 \usage{
-selecteerIndicatoren(Versie = "alle", Habitatgroep = "alle",
-  Habitattype = "alle", Criterium = "alle", Indicator = "alle",
-  HabitatnamenToevoegen = FALSE, ConnectieLSVIhabitats = NULL)
+selecteerIndicatoren(
+  Versie = "alle",
+  Habitatgroep = "alle",
+  Habitattype = "alle",
+  Criterium = "alle",
+  Indicator = "alle",
+  HabitatnamenToevoegen = FALSE,
+  ConnectieLSVIhabitats = NULL
+)
 }
 \arguments{
 \item{Versie}{De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".

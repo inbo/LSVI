@@ -4,8 +4,15 @@
 \alias{selecteerKenmerkenInOpname}
 \title{Controle van de ingevoerde opname}
 \usage{
-selecteerKenmerkenInOpname(Kenmerken, Soortengroep, Studiegroep,
-  SubAnalyseVariabele, SubRefMin, SubRefMax, SubOperator)
+selecteerKenmerkenInOpname(
+  Kenmerken,
+  Soortengroep,
+  Studiegroep,
+  SubAnalyseVariabele,
+  SubRefMin,
+  SubRefMax,
+  SubOperator
+)
 }
 \arguments{
 \item{Kenmerken}{dataframe met alle opgegeven kenmerken, met velden
