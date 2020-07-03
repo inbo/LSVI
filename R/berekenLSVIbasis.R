@@ -817,7 +817,8 @@ berekenLSVIbasis <- #nolint
                     )
                   )
                 )
-              )
+              ),
+              NA
             )
           ),
         Aggregatiemethode = Aggregatiemethode,
@@ -922,7 +923,8 @@ berekenLSVIbasis <- #nolint
                     )
                   )
                 )
-              )
+              ),
+              NA
             )
           ),
         Aggregatiemethode = Aggregatiemethode
