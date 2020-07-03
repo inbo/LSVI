@@ -160,8 +160,8 @@ migratieSQLserverSQLite <-
       ConnectiePool,
       "SELECT Id, LijstId, Waarde, Volgnummer, Omschrijving, Ondergrens,
       Gemiddelde, Bovengrens, Basisschaal FROM LijstItem"
-    ) %>%
-    filter(!is.na(.data$Ondergrens)) %>%  #voorwaarden zonder onder- en bovengrens er voorlopig uit halen!
+    ) %>%      #voorwaarden zonder onder- en bovengrens er voorlopig uit halen!
+    filter(!is.na(.data$Ondergrens)) %>%
     bind_rows(
       data.frame(
         Id = 8, LijstId = 1, Waarde = "lf", Ondergrens = 2, Gemiddelde = 3,
