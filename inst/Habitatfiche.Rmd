@@ -22,11 +22,7 @@ library(dplyr)
 
 
 ```{r}
-# VersieRapportdeel <- "Versie 3"
-# HabitatsubtypeFiche <- "4010"
-# ConnectieLSVIhabitats <- connecteerMetLSVIdb()
-
-Habitatfiche <- 
+Habitatfiche <-
   geefInfoHabitatfiche(
     ConnectieLSVIhabitats = ConnectieLSVIhabitats,
     Versie = VersieRapportdeel,
@@ -67,10 +63,10 @@ for (criterium in unique(Habitatkarakteristieken$Criterium)) {
   Habitattabel <- Habitatkarakteristieken %>%
     filter(.data$Criterium == criterium) %>%
     select(
-      .data$Indicator, 
-      .data$Beschrijving, 
-      .data$Maatregelen, 
-      .data$Opmerkingen, 
+      .data$Indicator,
+      .data$Beschrijving,
+      .data$Maatregelen,
+      .data$Opmerkingen,
       .data$Referenties
     ) %>%
     xtable(digits = ncol(.))
@@ -95,8 +91,8 @@ Beoordelingsfiche <- Habitatfiche %>%
   ) %>%
   distinct() %>%
   inner_join(
-    data.frame(Kwaliteitsniveau = c(1,2), 
-               Referentieniveau = c(Versie$Kwaliteitsniveau1, 
+    data.frame(Kwaliteitsniveau = c(1, 2),
+               Referentieniveau = c(Versie$Kwaliteitsniveau1,
                                     Versie$Kwaliteitsniveau2),
                stringsAsFactors = FALSE)
   ) %>%
@@ -111,20 +107,20 @@ Beoordelingsfiche <- Habitatfiche %>%
   ) %>%
   arrange(.data$fCriterium)
 
-for (Criterium in unique(Beoordelingsfiche$Criterium)) {   
+for (Criterium in unique(Beoordelingsfiche$Criterium)) {
   cat("__", Criterium, "__", sep = "")
-  Beoordelingsmatrix <- 
+  Beoordelingsmatrix <-
     xtable(Beoordelingsfiche[Beoordelingsfiche$Criterium == Criterium,
                         c("Indicator",
                           if (ncol(Beoordelingsfiche) == 7) {
-                            c(Versie$Kwaliteitsniveau1,Versie$Kwaliteitsniveau2)
+                            c(Versie$Kwaliteitsniveau1,
+                              Versie$Kwaliteitsniveau2)
                           } else if (ncol(Beoordelingsfiche) == 6) {
                             Versie$Kwaliteitsniveau1
                           },
-                          "Opmerkingen","Referenties")])
+                          "Opmerkingen", "Referenties")])
   print(Beoordelingsmatrix, type = "html", include.rownames = FALSE)
 }
-
 ```
 
 

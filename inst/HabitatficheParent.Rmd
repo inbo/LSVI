@@ -26,18 +26,15 @@ if (
 ) {
   ConnectieLSVIhabitats <- params$ConnectieLSVIhabitats
 } else {
-  #print("Connectiefout!")
   ConnectieLSVIhabitats <- connecteerMetLSVIdb()
 }
 VersieRapportdeel <- params$Versie
 HabitatsubtypeFiche <- params$Habitatsubtype
 Habitatnaam <- params$Habitatnaam
-
 ```
 
 ####Habitattype `r HabitatsubtypeFiche`: `r Habitatnaam`
 
 ```{r child="Habitatfiche.Rmd"}
-
 ```
 
