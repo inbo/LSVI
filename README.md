@@ -6,7 +6,7 @@
 
 # Local conservation status for Natura 2000 habitats in Flanders
 
-The `LSVI` package bundles a number of functions to support researchers studying the local conservation status of habitats. Several functions give information on the criteria that are used to determine the local conservation status in Flanders, others allow to calculate the conservation status. Criteria are stored in a database, which is indispensable for running functions. (The database is now external for development reasons, but it will be integrated in the package as soon as it is completed).
+The `LSVI` package bundles a number of functions to support researchers studying the local conservation status of habitats. Several functions give information on the criteria that are used to determine the local conservation status in Flanders, others allow to calculate the conservation status. Criteria are stored in a database, which is integrated in the package and indispensable for running functions.
 
 The package is written in Dutch.
 
@@ -27,11 +27,7 @@ remotes::install_github("inbo/LSVI@develop", build_vignettes = TRUE)
 
 # Documentation
 
-After installation, a user manual is available by running this code:
-
-```r
-vignette("Handleiding", package = "LSVI")
-```
+All helpfiles and vignettes are available at [https://inbo.github.io/LSVI/](https://inbo.github.io/LSVI/)
 
 # Citation
 
