@@ -1,0 +1,68 @@
+---
+title: "Routines to determine conservation status"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Routines}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(LSVI)
+```
+
+# Aim of vignet
+
+This vignet explains the routines that are used in this package.  It gives an outline of the code and translates some Dutch words into English to make the package code accessible as an example.  First some generalities on the package are given, then the general workflow is described, and a final part shows into detail how s4 classes are used to deal with different rules.
+
+# General information on the package
+
+The package basically contains:
+
+- a SQLite database containing indicators and rules that describe how to assess the local conservation status (abbreviated as 'LSVI' in Dutch) of each of the indicators (file `inst\databank\LSVIHabitatTypes.sqlite`)
+- code (in folder `R`):
+    - a routine to determine the indicators on a given dataset (described into detail in this vignet)
+    - functions that allow users to consult information from the database (function names often start with `geef` which means `give`)
+
+For nearly all package functions, a connection with the SQLite is needed.  The package offers 2 functions to accomplish this:
+
+- `maakConnectiePool()` ('make connection pool'): this function makes a pool of connections with the SQLite database using the package [pool](https://github.com/rstudio/pool).  Functions automatically use this pool when needed, taking away the need for users to add this connection as a parameter in each function (meant to keep things easy for starting R users).
+- `connecteerMetLSVIdb` ('connect with LSVI db'): this function makes a regular DBI connection object to the SQLite database, that has to be given as a parameter in each function
+
+The main routine to assess the status of indicators is performed in the function `berekenLSVIbasis()` ('calculate LSVI basic').  The 'rules' for this assessment can be retrieved from the database using the function `geefInvoervereisten()` ('give input requirements', the name reflects the fact that this table gives a guideline for users which information to add).
+
+# Routine to assess status of indicators
+
+## Some generalities on the assessment of the local conservation status
+
+The local conservation status (LSVI in Dutch) assesses whether a habitat is on a good or bad status on a specific location.  This assessment is based on a set of indicators, and each habitattype has its own rules to assess this status.  The assessment is presented on different levels:
+
+- the indicators level points conservationalists at potential problems (represented as different indicators)
+- the criteria level is an aggregation of indicators to 3 criteria: vegetation (key species), habitat structure and 'disturbance' species
+- an aggregation to 1 score for the habitattype (on 1 location)
+
+`berekenLSVIbasis()` returns scores on these 3 different levels, as well as the detailed results of the calculation (as an indicator can consist of different 'rules' that are combined with logical operators, in Dutch we refer to one such rule as an unique 'voorwaarde', which means literally 'condition' or 'prerequisite').
+
+For this assessment, indicators can be observed directly in the field, or on the level of a rule ('voorwaarde').  Traditionally field observations result in data on all present plant species and their coverage, and it is also possible to assess indicators from these data, by performing the 'rules', which are in fact a sequence of operations.  The idea is that users add all their available data for a certain location, together with the present habitattype, and the routine assesses the indicators based on the available data.
+
+`berekenLSVIbasis()` allows to perform the routine on multiple locations and it takes following parameters:
+
+- table with habitattype for each location (required)
+- table with values for indicators and rules ('voorwaarde') for each location (if available, same names from the database must be used)
+- table with species and their coverage or other measures (if available)
+
+## General workflow
+
+'invoercontrole'
+'geefInvoervereisten'
+'berekenVoorwaarde' -> constructor 'analyseVariabele_c' ('geefSoortenlijstInvoerniveau' en 'geefSoortenlijstSoortniveau') + method 'berekenWaarde'
+'berekenStatus' and 'berekenVerschilscore'
+
+'vertaalInvoerInterval' and 'vertaalInvervalUitvoer'
