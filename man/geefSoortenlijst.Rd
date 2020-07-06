@@ -4,11 +4,16 @@
 \alias{geefSoortenlijst}
 \title{Genereert soortenlijst(en) LSVI op basis van de opgegeven parameters}
 \usage{
-geefSoortenlijst(Versie = "alle", Habitatgroep = "alle",
-  Habitattype = "alle", Criterium = "alle", Indicator = "alle",
-  Taxonlijstniveau = c("habitattype", "criterium", "indicator",
-  "voorwaarde"), Taxonlijsttype = c("LSVIfiche", "alle"),
-  ConnectieLSVIhabitats = NULL)
+geefSoortenlijst(
+  Versie = "alle",
+  Habitatgroep = "alle",
+  Habitattype = "alle",
+  Criterium = "alle",
+  Indicator = "alle",
+  Taxonlijstniveau = c("habitattype", "criterium", "indicator", "voorwaarde"),
+  Taxonlijsttype = c("LSVIfiche", "alle"),
+  ConnectieLSVIhabitats = NULL
+)
 }
 \arguments{
 \item{Versie}{De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".

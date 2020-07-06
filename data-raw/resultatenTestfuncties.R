@@ -5,20 +5,20 @@ library(LSVI)
 library(readr)
 
 maakConnectiePool()
-Data_habitat <-
+Data_habitat <- #nolint
   read_csv2(
     system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
     col_types = list(col_character(), col_character(), col_character())
   )
-Data_voorwaarden2 <-
+Data_voorwaarden2 <- #nolint
   read_csv2(
     system.file("vbdata/Opname4030voorwaardenv2.csv", package = "LSVI")
   )
-Data_voorwaarden <-
+Data_voorwaarden <- #nolint
   read_csv2(
     system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI")
   )
-Data_soortenKenmerken <-
+Data_soortenKenmerken <- #nolint
   read_csv2(
     system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI")
   )
@@ -32,7 +32,7 @@ Resultaat <-
   )
 save(Resultaat, file = "inst/vbdata/Resultaat_test4030.Rdata")
 load("inst/vbdata/Resultaat_test4030.Rdata")
-Data_soortenKenmerken <-
+Data_soortenKenmerken <- #nolint
   read_csv2(
     system.file("vbdata/Opname4030soortenKenmerkenv2tot.csv", package = "LSVI")
   )
@@ -47,16 +47,16 @@ Resultaatv2 <-
 save(Resultaatv2, file = "inst/vbdata/Resultaat_test4030v2.Rdata")
 load("inst/vbdata/Resultaat_test4030v2.Rdata")
 
-Data_habitat <-
+Data_habitat <- #nolint
   read_csv2(
     system.file("vbdata/data_habitat2330_dw.csv", package = "LSVI"),
     col_types = list(col_character(), col_character(), col_character())
   )
-Data_voorwaarden <-
+Data_voorwaarden <- #nolint
   read_csv2(
     system.file("vbdata/data_voorwaarden2330_dw.csv", package = "LSVI")
   )
-Data_soortenKenmerken <-
+Data_soortenKenmerken <- #nolint
   read_csv2(
     system.file("vbdata/data_soortenKenmerken2330_dw.csv", package = "LSVI")
   )
@@ -71,12 +71,12 @@ Resultaat <-
 save(Resultaat, file = "inst/vbdata/Resultaat_test2330_dw.Rdata")
 load("inst/vbdata/Resultaat_test2330_dw.Rdata")
 
-Data_habitat <-
+Data_habitat <- #nolint
   read_csv2(
     system.file("vbdata/Test9190habitat.csv", package = "LSVI"),
     col_types = list(col_character(), col_character())
   )
-Data_voorwaarden <-
+Data_voorwaarden <- #nolint
   read_csv2(
     system.file("vbdata/Test9190voorwaarden.csv", package = "LSVI"),
     col_types =
@@ -85,7 +85,7 @@ Data_voorwaarden <-
         col_character(), col_character(), col_character(), col_character()
       )
   )
-Data_soortenKenmerken <-
+Data_soortenKenmerken <- #nolint
   read_csv2(
     system.file("vbdata/Test9190soortenKenmerken.csv", package = "LSVI"),
     col_types =
@@ -128,4 +128,3 @@ write.csv2(
   Resultaatv2[["Resultaat_globaal"]],
   file = "inst/vbdata/Resultaat_test_bosv2/Resultaat_globaal.csv"
 )
-

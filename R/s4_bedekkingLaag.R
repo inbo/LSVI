@@ -27,6 +27,9 @@ setMethod(
   signature = "bedekkingLaag",
   definition = function(object) {
 
+    if (length(object@Kenmerken) == 0) {
+      return(NA)
+    }
     Test <- object@Kenmerken %>%
       filter(
         .data$TypeKenmerk == "studiegroep",

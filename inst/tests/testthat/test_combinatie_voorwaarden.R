@@ -29,10 +29,9 @@ describe("4 voorwaarden combineren", {
       )[["Resultaat_indicator"]] %>%
         filter(Indicator == "sleutelsoorten") %>%
         select(Status_indicator, Verschilscore),
-      data.frame(
+      tibble(
         Status_indicator = FALSE,
-        Verschilscore = -1,
-        stringsAsFactors = FALSE
+        Verschilscore = -1
       )
     )
     expect_equal(

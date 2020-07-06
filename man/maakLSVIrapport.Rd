@@ -4,9 +4,14 @@
 \alias{maakLSVIrapport}
 \title{Genereert LSVI-rapport op basis van de opgegeven parameters}
 \usage{
-maakLSVIrapport(Bestandsnaam = "LSVIrapport.html", Versie = "alle",
-  Habitatgroep = "alle", Habitattype = "alle",
-  ConnectieLSVIhabitats = NULL, verbose = TRUE)
+maakLSVIrapport(
+  Bestandsnaam = "LSVIrapport.html",
+  Versie = "alle",
+  Habitatgroep = "alle",
+  Habitattype = "alle",
+  ConnectieLSVIhabitats = NULL,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{Bestandsnaam}{Een naam voor het html-bestand dat gegenereerd wordt,

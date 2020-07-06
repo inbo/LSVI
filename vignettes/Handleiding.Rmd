@@ -61,7 +61,7 @@ packageDescription(pkg = "LSVI")
 Het package kan als volgt geïnstalleerd worden (altijd eerst R herstarten en deze installatie doen in een sessie waarin nog geen andere packages geladen zijn!):
 
 ```{r eval = FALSE}
-# install.packages("remotes")
+install.packages("remotes")
 remotes::install_github("inbo/LSVI", build_vignettes = TRUE)
 ```
 
@@ -129,7 +129,8 @@ geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "LSVIfiche")
 Omdat de tabel te breed is, wordt deze opgesplitst in 3 delen, die onder elkaar weergegeven worden.  Deze tabel wordt ook enkel weergegeven, niet opgeslagen, en op deze manier kunnen we er achteraf geen bewerkingen mee doen.  Beter is om de tabel toe te kennen aan een variabele, we geven hier die variabele de naam `soortenlijst4030`:
 
 ```{r}
-soortenlijst4030 <- geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "LSVIfiche")
+soortenlijst4030 <-
+  geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "LSVIfiche")
 ```
 
 Als je dit commando in je eigen console runt, verschijnt deze variabele in het venster rechtsboven onder de tab Environment (dat een overzicht geeft van alle variabelen).  Bij tabellen kan je deze variabele bekijken door erop te klikken.
@@ -166,16 +167,16 @@ De functie `berekenLSVIbasis()` geeft gegevens terug in de vorm van een lijst va
 ```{r}
 #Eerst worden wat voorbeeldgegevens opgehaald uit het package:
 library(readr)
-Data_habitat <-
+data_habitat <-
   read_csv2(
     system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
     col_types = list(col_character(), col_character(), col_character())
   )
-Data_voorwaarden <-
+data_voorwaarden <-
   read_csv2(
     system.file("vbdata/Opname4030voorwaardenv2.csv", package = "LSVI")
   )
-Data_soortenKenmerken <-
+data_soorten_kenmerken <-
   read_csv2(
     system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI")
   )
@@ -183,8 +184,8 @@ Data_soortenKenmerken <-
 #En hier gebeurt de berekening zelf:
 berekenLSVIbasis(
   Versie = "Versie 2.0",
-  Kwaliteitsniveau = "1", Data_habitat,
-  Data_voorwaarden, Data_soortenKenmerken
+  Kwaliteitsniveau = "1", data_habitat,
+  data_voorwaarden, data_soorten_kenmerken
 )
 ```
 
@@ -202,10 +203,16 @@ resultaat <-
 Nu kunnen we de afzonderlijke tabellen als volgt uit het object `resultaat` halen (je kan met `$` of met `[[]]` werken):
 
 ```{r}
-resultaat$Resultaat_globaal  #ofwel: resultaat[["Resultaat_globaal"]]
+resultaat$Resultaat_globaal
 resultaat$Resultaat_criterium
 resultaat$Resultaat_indicator
 resultaat$Resultaat_detail
+
+# ofwel:
+resultaat[["Resultaat_globaal"]]
+resultaat[["Resultaat_criterium"]]
+resultaat[["Resultaat_indicator"]]
+resultaat[["Resultaat_detail"]]
 ```
 
 Met deze tabellen kan verder gewerkt worden zoals hierboven beschreven is ([Wat met gegenereerde gegevens in tabelvorm?](#gegs_in_tabelvorm)) 
@@ -221,11 +228,13 @@ Om de functies van het LSVI-package te gebruiken, heb je een connectie nodig met
 ```{r eval=FALSE}
 library(LSVI)
 maakConnectiePool()
-#Nu kan je alle functies gebruiken zonder expliciet het argument ConnectieLSVIhabitats op te geven, bv.
+#Nu kan je alle functies gebruiken zonder expliciet het argument
+#ConnectieLSVIhabitats op te geven, bv.
 geefVersieInfo()
 geefSoortenlijst(Habitattype = "4030")
 
-#En als je geen functies meer nodig hebt uit het LSVI-package, kan je de ConnectiePool afsluiten en verwijderen:
+#En als je geen functies meer nodig hebt uit het LSVI-package, kan je de
+#ConnectiePool afsluiten en verwijderen:
 library(pool)
 poolClose(ConnectiePool)
 rm(ConnectiePool)

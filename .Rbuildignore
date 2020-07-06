@@ -10,3 +10,5 @@
 ^inst/databanktoestanden$
 ^inst/oudecode$
 ^CODE_OF_CONDUCT\.md$
+^LICENSE\.md$
+^docx$

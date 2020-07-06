@@ -1,6 +1,5 @@
 context("test parseTaxonnaam")
 
-maakConnectiePool()
 describe("parseTaxonnaam", {
   it("Taxonnamen worden correct geparst", {
     expect_equal(
