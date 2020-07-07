@@ -1,4 +1,5 @@
-# Deze functie zorgt voor de migratie van (een deel van) de databank op SQL-server naar een SQLite-databank in het package zelf in de map inst/data
+# Deze functie zorgt voor de migratie van (een deel van) de databank op
+# SQL-server naar een SQLite-databank in het package zelf in de map inst/data
 
 library(DBI)
 library(RSQLite)
@@ -7,15 +8,12 @@ library(dplyr)
 library(purrr)
 
 migratieSQLserverSQLite <-
-  function(
-    #VectorHabitattypes = c("1330_hpr", "4030", "9130", "9190", "91E0_va"),
-    #Versie = "Versie 2.0"
-  ) {
+  function() {
   #Tabellen ophalen uit SQLserver
   Habitatgroep <-
     dbGetQuery(ConnectiePool, "SELECT Id, Naam FROM Habitatgroep")
-  
-  Habitattype <-        #Hier zitten enkele lege velden bij, en enkele die mogelijk overbodig zijn, nog na te kijken!
+
+  Habitattype <-
     dbGetQuery(
       ConnectiePool,
       "SELECT Id, Code, Naam, NaamKort, HabitatgroepId, ParentId,
@@ -24,12 +22,13 @@ migratieSQLserverSQLite <-
       cast(Referentie AS nvarchar(30)) AS Referentie,
       cast(Opmerking AS nvarchar(400)) AS Opmerking, GroepVrij
       FROM Habitattype"
-    )
-  
+    )       #Hier zitten enkele lege velden bij,
+            #en enkele die mogelijk overbodig zijn, nog na te kijken!
+
   HabitattypeId <- (Habitattype %>%
     #filter(Code %in% VectorHabitattypes) %>%
     summarise(Id = paste0(Id, collapse = ",")))$Id
-  
+
   Versie <-
     dbGetQuery(
       ConnectiePool,
@@ -41,16 +40,16 @@ migratieSQLserverSQLite <-
         FROM Versie"
       #)
     )
-  
+
   VersieId <- (Versie %>% summarise(Id = paste0(Id, collapse = ",")))$Id
-  
+
   Criterium <-
     dbGetQuery(ConnectiePool, "SELECT Id, Naam FROM Criterium")
-  
+
   Indicator <-
     dbGetQuery(ConnectiePool, "SELECT Id, CriteriumId, Naam FROM Indicator")
-  
-  Indicator_habitat <-
+
+  Indicator_habitat <- #nolint
     dbGetQuery(
       ConnectiePool,
       sprintf(
@@ -66,10 +65,10 @@ migratieSQLserverSQLite <-
         HabitattypeId, VersieId
       )
     )
-  
-  Indicator_habitatId <-
+
+  Indicator_habitatId <- #nolint
     (Indicator_habitat %>% summarise(Id = paste0(Id, collapse = ",")))$Id
-  
+
   IndicatortabellenKoppeling <-
     dbGetQuery(
       ConnectiePool,
@@ -80,12 +79,12 @@ migratieSQLserverSQLite <-
         Indicator_habitatId
       )
     )
-  
-  Indicator_beoordelingId <-
+
+  Indicator_beoordelingId <- #nolint
     (IndicatortabellenKoppeling %>%
        summarise(Id = paste0(Indicator_beoordelingId, collapse = ",")))$Id
-  
-  Indicator_beoordeling <-
+
+  Indicator_beoordeling <- #nolint
     dbGetQuery(
       ConnectiePool,
       sprintf(
@@ -97,7 +96,7 @@ migratieSQLserverSQLite <-
         Indicator_beoordelingId
       )
     )
-  
+
   Beoordeling <-
     dbGetQuery(
       ConnectiePool,
@@ -109,11 +108,11 @@ migratieSQLserverSQLite <-
         Indicator_beoordelingId
       )
     )
-  
+
   BeoordelingId <-
     (Beoordeling %>% summarise(Id = paste0(Id, collapse = ",")))$Id
-  
-  CombinerenVoorwaarden <-         #BewerkingAND niet overgenomen, die mag eigenlijk ook weg in de brondb!
+
+  CombinerenVoorwaarden <-
     dbGetQuery(
       ConnectiePool,
       sprintf(
@@ -123,19 +122,23 @@ migratieSQLserverSQLite <-
         WHERE BeoordelingId in (%s)",
         BeoordelingId
       )
-    )
-  
+    )   #BewerkingAND niet overgenomen, die mag eigenlijk ook weg in de brondb!
+
   VoorwaardeId <-
     paste0(
       unique(
         c(
-          (CombinerenVoorwaarden %>% filter(!is.na(VoorwaardeID1)))$VoorwaardeID1,
-          (CombinerenVoorwaarden %>% filter(!is.na(VoorwaardeID2)))$VoorwaardeID2
+          (
+            CombinerenVoorwaarden %>% filter(!is.na(VoorwaardeID1))
+          )$VoorwaardeID1,
+          (
+            CombinerenVoorwaarden %>% filter(!is.na(VoorwaardeID2))
+          )$VoorwaardeID2
         )
       ),
       collapse = ","
     )
-  
+
   Voorwaarde <-
     dbGetQuery(
       ConnectiePool,
@@ -149,23 +152,23 @@ migratieSQLserverSQLite <-
         VoorwaardeId
       )
     )
-  
+
   Lijst <- dbGetQuery(ConnectiePool, "SELECT Id, Naam FROM Lijst")
-  
+
   LijstItem <-
     dbGetQuery(
       ConnectiePool,
       "SELECT Id, LijstId, Waarde, Volgnummer, Omschrijving, Ondergrens,
       Gemiddelde, Bovengrens, Basisschaal FROM LijstItem"
-    ) %>%
-    filter(!is.na(.data$Ondergrens)) %>%  #voorwaarden zonder onder- en bovengrens er voorlopig uit halen!
+    ) %>%      #voorwaarden zonder onder- en bovengrens er voorlopig uit halen!
+    filter(!is.na(.data$Ondergrens)) %>%
     bind_rows(
       data.frame(
         Id = 8, LijstId = 1, Waarde = "lf", Ondergrens = 2, Gemiddelde = 3,
         Bovengrens = 5, Basisschaal = FALSE, stringsAsFactors = FALSE
       )
     )
-  
+
   StudiegroepId <-
     paste0(
       unique(
@@ -173,7 +176,7 @@ migratieSQLserverSQLite <-
       ),
       collapse = ","
     )
-  
+
   Studiegroep <-
     dbGetQuery(
       ConnectiePool,
@@ -184,7 +187,7 @@ migratieSQLserverSQLite <-
         StudiegroepId
       )
     )
-  
+
   StudieItem <-
     dbGetQuery(
       ConnectiePool,
@@ -196,7 +199,7 @@ migratieSQLserverSQLite <-
         StudiegroepId
       )
     )
-  
+
   AnalyseVariabeleId <-
     paste0(
       unique(
@@ -204,7 +207,7 @@ migratieSQLserverSQLite <-
       ),
       collapse = ","
     )
-  
+
   AnalyseVariabele <-
     dbGetQuery(
       ConnectiePool,
@@ -215,10 +218,10 @@ migratieSQLserverSQLite <-
         AnalyseVariabeleId
       )
     )
-  
+
   TypeVariabele <-
     dbGetQuery(ConnectiePool, "SELECT Id, Naam from TypeVariabele")
-  
+
   TaxongroepId <-
     paste0(
       unique(
@@ -229,7 +232,7 @@ migratieSQLserverSQLite <-
       ),
       collapse = ","
     )
-  
+
   TaxongroepTaxongroep <-
     dbGetQuery(
       ConnectiePool,
@@ -250,7 +253,7 @@ migratieSQLserverSQLite <-
         TaxongroepId
       )
     )
-  
+
   TaxongroepId <-
     paste0(
       c(
@@ -259,7 +262,7 @@ migratieSQLserverSQLite <-
       ),
       collapse = ","
     )
-  
+
   Taxongroep <-
     dbGetQuery(
       ConnectiePool,
@@ -271,7 +274,7 @@ migratieSQLserverSQLite <-
         TaxongroepId
       )
     )
-  
+
   TaxongroepTaxon <-
     dbGetQuery(
       ConnectiePool,
@@ -282,7 +285,7 @@ migratieSQLserverSQLite <-
         TaxongroepId
       )
     )
-  
+
   Taxon <-
     dbGetQuery(
       ConnectiePool,
@@ -291,16 +294,16 @@ migratieSQLserverSQLite <-
       NbnNaam, NbnNaamVolledig, NbnTaal
       FROM Taxon"
     )
-  
+
   TaxonTaxon <-
     dbGetQuery(
       ConnectiePool,
       "SELECT Id, TaxonParentId, TaxonChildId
       FROM TaxonTaxon"
     )
-  
-  TaxonSynoniem <-               #aanpassing Gbif-namen!!!  Na definitieve migratie ook in brondb aanpassen?
-    dbGetQuery(                  #(als het de gebruikers niet meer hindert als ze de kopie gebruiken)
+
+  TaxonSynoniem <-
+    dbGetQuery(
       ConnectiePool,
       "SELECT Id, NBNTaxonVersionKey, FloraNaamWetenschappelijk,
       FloraNaamNederlands, FloraTaxonId, FloraCode, TaxonTypeId,
@@ -311,14 +314,15 @@ migratieSQLserverSQLite <-
       TaxonId
       FROM TaxonSynoniem;"
     )
-  
+  #aanpassing Gbif-namen!!!  Na definitieve migratie ook in brondb aanpassen?
+  #(als het de gebruikers niet meer hindert als ze de kopie gebruiken)
+
   TaxonType <-
     dbGetQuery(
       ConnectiePool,
       "SELECT Id, Naam
       FROM TaxonType"
     )
-
 
   #berekening Theoretisch Maximum
   Querytekst <-
@@ -396,7 +400,8 @@ migratieSQLserverSQLite <-
         ),
       Maximumwaarde =
         ifelse(
-          grepl("meting", VariabeleNaam) & VoorwaardeNaam == "aantal geslachten",
+          grepl("meting", VariabeleNaam) &
+            VoorwaardeNaam == "aantal geslachten",
           2, Maximumwaarde
         ),
       Maximumwaarde =
@@ -412,7 +417,8 @@ migratieSQLserverSQLite <-
         ),
       Maximumwaarde =
         ifelse(
-          VariabeleNaam == "aantal" & is.na(TaxongroepId) & !is.na(StudiegroepId),
+          VariabeleNaam == "aantal" & is.na(TaxongroepId) &
+            !is.na(StudiegroepId),
           AantalKenmerken,
           Maximumwaarde
         ),
@@ -433,7 +439,7 @@ migratieSQLserverSQLite <-
       SubAnalyseVariabeleId, SubReferentiewaarde, SubOperator,
       SubInvoermaskerId, Maximumwaarde
     )
-  
+
   NieuweDb <- dbConnect(SQLite(), "inst/databank/LSVIHabitatTypes.sqlite")
   dbWriteTable(NieuweDb, "AnalyseVariabele", AnalyseVariabele)
   dbWriteTable(NieuweDb, "Beoordeling", Beoordeling)
@@ -444,7 +450,8 @@ migratieSQLserverSQLite <-
   dbWriteTable(NieuweDb, "Indicator", Indicator)
   dbWriteTable(NieuweDb, "Indicator_beoordeling", Indicator_beoordeling)
   dbWriteTable(NieuweDb, "Indicator_habitat", Indicator_habitat)
-  dbWriteTable(NieuweDb, "IndicatortabellenKoppeling", IndicatortabellenKoppeling)
+  dbWriteTable(NieuweDb, "IndicatortabellenKoppeling",
+               IndicatortabellenKoppeling)
   dbWriteTable(NieuweDb, "Lijst", Lijst)
   dbWriteTable(NieuweDb, "LijstItem", LijstItem)
   dbWriteTable(NieuweDb, "Studiegroep", Studiegroep)

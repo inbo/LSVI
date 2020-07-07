@@ -4,10 +4,16 @@
 \alias{geefInvoervereisten}
 \title{Geeft de invoervereisten voor de waarde van een opname}
 \usage{
-geefInvoervereisten(Versie = "alle", Habitatgroep = "alle",
-  Habitattype = "alle", Criterium = "alle", Indicator = "alle",
-  Kwaliteitsniveau = "alle", Weergave = c("basis", "uitgebreid"),
-  ConnectieLSVIhabitats = NULL)
+geefInvoervereisten(
+  Versie = "alle",
+  Habitatgroep = "alle",
+  Habitattype = "alle",
+  Criterium = "alle",
+  Indicator = "alle",
+  Kwaliteitsniveau = "alle",
+  Weergave = c("basis", "uitgebreid"),
+  ConnectieLSVIhabitats = NULL
+)
 }
 \arguments{
 \item{Versie}{De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".

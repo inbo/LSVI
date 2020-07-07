@@ -89,7 +89,12 @@ Het stukje 'selecteert de soorten/kenmerken uit de opname' komt in bijna alle vo
 Globaal bekeken is het aantal verschillende handelingen/berekeningswijzen (oftewel stukjes script die nodig zijn) relatief beperkt, maar zoals de 'soms' en de 'vaak' in voorgaande alinea aangeven, moeten deze wel zeer flexibel ingezet kunnen worden afhankelijk van de voorwaarde.  Deze flexibiliteit is in het package opgevangen door voor elke voorwaarde de berekeningswijze als een set van 'rekenregels' te coderen in de databank.  Zo is de voorwaarde 'aantal sleutelsoorten minstens frequent aanwezig' als volgt gecodeerd:
 
 ```{r}
-str(geefInvoervereisten(Versie = "versie 2.0" ,Habitattype = "2330_dw", Indicator = "sleutelsoorten", Kwaliteitsniveau = 1))
+str(
+  geefInvoervereisten(
+    Versie = "versie 2.0", Habitattype = "2330_dw",
+    Indicator = "sleutelsoorten", Kwaliteitsniveau = 1
+  )
+)
 ```
 
 Scriptmatig wordt dus gecheckt welke variabelen ('rekenregels') in de databank ingevuld zijn en welke waarden ze hebben, en deze combinatie bepaalt welke stukjes script voor het bepalen van die voorwaarde doorlopen worden.  In enkele gevallen kan een variabele ietwat contextafhankelijk zijn, dus een lichtjes andere interpretatie hebben afhankelijk van de inhoud van andere variabelen.
