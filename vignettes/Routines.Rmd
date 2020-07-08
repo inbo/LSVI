@@ -52,17 +52,29 @@ The local conservation status (LSVI in Dutch) assesses whether a habitat is on a
 
 For this assessment, indicators can be observed directly in the field, or on the level of a rule ('voorwaarde').  Traditionally field observations result in data on all present plant species and their coverage, and it is also possible to assess indicators from these data, by performing the 'rules', which are in fact a sequence of operations.  The idea is that users add all their available data for a certain location, together with the present habitattype, and the routine assesses the indicators based on the available data.
 
-`berekenLSVIbasis()` allows to perform the routine on multiple locations and it takes following parameters:
+`berekenLSVIbasis()` allows to perform the routine on multiple locations in one function call and it takes the following data related parameters:
 
-- table with habitattype for each location (required)
-- table with values for indicators and rules ('voorwaarde') for each location (if available, same names from the database must be used)
-- table with species and their coverage or other measures (if available)
+- `Data_habitat`: table with habitattype for each location id (required)
+- `Data_voorwaarden`: table with values for indicators and rules ('voorwaarde') for each location id (if available, indicator and 'voorwaarde' names should be the same as in the database)
+- `Data_soortenKenmerken`: table with species and their coverage or other measures (if available)
 
 ## General workflow
 
-'invoercontrole'
-'geefInvoervereisten'
-'berekenVoorwaarde' -> constructor 'analyseVariabele_c' ('geefSoortenlijstInvoerniveau' en 'geefSoortenlijstSoortniveau') + method 'berekenWaarde'
-'berekenStatus' and 'berekenVerschilscore'
+The function `berekenLSVIbasis()` follows this routine:
 
-'vertaalInvoerInterval' and 'vertaalInvervalUitvoer'
+- first some data testing (`#controle invoer`: 'check input'). For clarity and to avoid repetition, part of the data testing is done in separate functions, with names starting with `invoercontrole`
+- indicators and rules from the database (retrieved by function `geefInvoervereisten()`) are coupled to the user provided habitattype data (`Data_habitat`), resulting in a table of indicators that have to be assessed (`#nodige info ophalen uit de databank` = 'retrieve necessary info from the database')
+- as far as possible, user provided data of indicators and rules (`Data_voorwaarden`) are coupled to this indicators table (`#indicatorgegevens koppelen aan info uit de databank` = couple indicator data to info from the database' and `#voorwaardegegevens koppelen aan info uit de databank` = couple rules to info from the database')
+- indicators/rules that have no coupled value yet, are assessed using function `berekenVoorwaarde()` ('calculate rule') that uses s4 classes.  (`#niet opgegeven voorwaaarden berekenen` = 'calculate unspecified rules')  This step is discussed into detail below.
+- `#de warnings terug omzetten naar warnings, maar gegroepeerd per onderwerp` (= convert the warnings back to warnings, but grouped by subject) is a step to deal with warnings: they are all caught in function `berekenVoorwaarde()` and passed as an additional value, and now they are grouped and dropped as a warning to the user.
+- for each rule, the status is finally assessed by comparing value of the rule (provided by user or calculated) with a reference value, using the function `berekenStatus()` ('calculate status'), resulting in TRUE (good status) or FALSE (bad status).  Similarly a numerical assessment value (distance to target) is given using the function `berekenVerschilscore()` ('calculate difference score').
+- for the output of the detailed results, user provided indicators (= assessed rules having value TRUE or FALSE) are added to this table to have a complete overview with all indicators (`#voor de uitvoer de gegevens van de geobserveerde indicatoren toevoegen` = for the output add the data of the observed indicators')
+- finally the results are aggregated to higher levels for additional outputs:
+    - `#resultaten op niveau van indicator afleiden` = 'derive results on the level of indicator'
+    - `#resultaten op niveau van criterium afleiden` = 'derive results on the level of criterium'
+    - `#resultaten op globaal niveau` = 'derive results on a general level'
+
+Measurements can be given as exact values, but often they are estimated using intervals or categories (e.g. vegetation coverage can be estimated following Tansley scale).  To deal with these differences in this routine, all measurements are initially converted to a minimum and maximum value using function `vertaalInvoerInterval` ('translate input interval').  The routine is performed on these minimum and maximum values, and for output, newly calculated values are converted to one output using the function `vertaalInvervalUitvoer()` ('translate interval output').  (For user inserted values, the original input value is reused.)
+
+## s4 classes
+'berekenVoorwaarde' -> constructor 'analyseVariabele_c' ('geefSoortenlijstInvoerniveau' en 'geefSoortenlijstSoortniveau') + method 'berekenWaarde'
