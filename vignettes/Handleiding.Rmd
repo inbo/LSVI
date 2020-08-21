@@ -13,7 +13,7 @@ vignette: >
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-#Leeswijzer
+# Leeswijzer
 
 Deze handleiding is bedoeld voor iedereen die met het package LSVI zal werken.  Ze richt zich zowel op gebruikers die de gegevens uit de databank willen raadplegen maar nooit met R gewerkt hebben als op ervaren R-gebruikers die eigen scripts willen ontwikkelen voor de verwerking van hun veldopnames (berekening van LSVI).  Er wordt wel van uitgegaan dat gebruikers een grondige kennis hebben over LSVI van habitattypen (terminologie, achtergrond,...).
 
@@ -25,9 +25,9 @@ De handleiding is zo opgesteld dat ze voor beide groepen de relevante informatie
 
 Voor beginnende R-gebruikers is er onder [Gebruik basisfuncties](#gebruik_basisfuncties) een extra onderdeel [Wegwijs in R](#wegwijs_in_R) waarin ingegaan wordt op enkele basishandelingen in R die nuttig kunnen zijn bij het gebruik van dit package (hoe documentatie opzoeken en hoe de bekomen informatie opslaan voor gebruik in Excel).
 
-#Doelstellingen en inhoud package {#doelstellingen_inhoud}
+# Doelstellingen en inhoud package {#doelstellingen_inhoud}
 
-##Inhoud package {#inhoud_package}
+## Inhoud package {#inhoud_package}
 
 Doelstellingen van het package LSVI zijn om de informatie in verband met het bepalen van de lokale staat van instandhouding (LSVI) van habitattypen digitaal ter beschikking te stellen en de functionaliteit aan te bieden om deze LSVI te berekenen (zie [Doelstellingen](#doelstellingen) voor details).  Het project bestaat uit 2 onderdelen die onlosmakelijk met elkaar verbonden zijn: een databank die de informatie bevat en het package dat beide doelstellingen uitvoert, gebruik makend van de informatie uit de databank.
 
@@ -41,7 +41,7 @@ Verder bevat het package functies m.b.t. de berekening van de LSVI.  De hoofdfun
 
 Omwille van de complexiteit van de berekening roept berekenLSVIbasis een aantal hulpfuncties op die elk een deel van de controle of berekening uitvoeren.  Voor het gemak bij het ontwikkelen zullen deze voorlopig beschikbaar zijn; op termijn zullen omwille van de overzichtelijkheid enkel de functies beschikbaar gesteld blijven die een meerwaarde bieden voor de gebruiker (en relatief gemakkelijk toegepast kunnen worden).
 
-##Doelstellingen {#doelstellingen}
+## Doelstellingen {#doelstellingen}
 
 Momenteel bevat het package enkel een basisfunctionaliteit: zoekfuncties om alle onderdelen van de databank weer te geven in een naar ons gevoel logische groepering, en de basisfunctie voor de berekening van de LSVI.  Op de planning staan een berekenLSVI-functie voor de verwerking van de fieldmap-gegevens (o.a. opnamen in bossen) en de habitatgegevens van het kwaliteitsmeetnet in INBOVEG, en een rekenmodule voor LSVI-opnamen om de LSVI van Natura 2000-habitattypen toe te voegen aan het platform PAS/DPB.  
 
@@ -56,7 +56,7 @@ packageDescription(pkg = "LSVI")
 ```
 
 
-#Installatie van het package {#installatie_package}
+# Installatie van het package {#installatie_package}
 
 Het package kan als volgt geïnstalleerd worden (altijd eerst R herstarten en deze installatie doen in een sessie waarin nog geen andere packages geladen zijn!):
 
@@ -71,13 +71,13 @@ Een testversie met de nieuwste aanpassingen kan als volgt geïnstalleerd worden:
 remotes::install_github("inbo/LSVI@develop", build_vignettes = TRUE)
 ```
 
-#Gebruik basisfuncties {#gebruik_basisfuncties}
+# Gebruik basisfuncties {#gebruik_basisfuncties}
 
-##Wegwijs in R {#wegwijs_in_R}
+# #Wegwijs in R {#wegwijs_in_R}
 
 (Wat extra uitleg voor diegenen die niet vertrouwd zijn met R.)
 
-###R, RStudio, scripts en projecten
+### R, RStudio, scripts en projecten
 
 R is de taal die je gebruikt om met je computer te communiceren, RStudio is een programma dat een aantal tools aanbiedt die het je wat gemakkelijker maken: allerhande knoppen waardoor je niet voor elke handeling een commando moet typen, 'spellingscontrole' (voor R), een 'verkenner' waarin je je mappenstructuur kan raadplegen, een lijst met wat er in het geheugen opgeslagen is,...
 
@@ -91,7 +91,7 @@ Aan te raden is om scripts en eventueel bijhorende gegevens te bundelen in een '
 
 Om scripts gemakkelijk te kunnen hergebruiken met andere waarden, kunnen ze in de vorm van functies geschreven worden.  Die functies kunnen gebundeld worden in een package en beschikbaar gesteld worden voor alle R-gebruikers.
 
-###Packages en documentatie
+### Packages en documentatie
 
 Om in R packages te kunnen gebruiken, moeten deze telkens (na elke herstart van de R-console) eerst ingeladen worden met de functie `library()`.  Om de functies in verband met de LSVI te gebruiken, voer je dus eerst het commando `library(LSVI)` in.  Dit kan wel enkel met reeds geïnstalleerde packages, die in het venster rechtsonder onder de tab Packages vermeld zijn.  Andere packages moet je eerst eenmalig installeren (via de knop Install of het commando `install.packages("naam_nieuw_package")`).
 
@@ -114,7 +114,7 @@ Deze documentatie geeft aan wat de functie doet en hoe je de functie moet gebrui
 
 _(Leeswijzer: info over het gebruik van de functies in het LSVI-package staat onder [Basis van LSVI-package](#basis_LSVI).  Wat hier volgt, is wat met de gegenereerde gegevens gedaan kan worden.  We raden daarom aan om eerst [Basis van LSVI-package](#basis_LSVI) te lezen.)_
 
-###Wat met gegenereerde gegevens in tabelvorm? {#gegs_in_tabelvorm}
+### Wat met gegenereerde gegevens in tabelvorm? {#gegs_in_tabelvorm}
 
 Vaak genereert een functie gegevens in de vorm van een tabel.  Hoe kan je hier nu mee verdergaan?  
 
@@ -147,7 +147,7 @@ write_csv2(soortenlijst4030, "C:/R/soortenlijst4030.csv")
 We hebben hier het absolute path (`C:/R`) weergegeven, een andere mogelijkheid is om het path relatief ten opzichte van de 'working directory' weer te geven.  Dit is de map waarin je aan 't werken bent.  Je kan deze working directory zelf bepalen door het commando `setwd("C:/.../mijn_werkmap")`.  Als je in een project werkt waarin je al je scripts opslaat (aan te raden), dan is de root van dit project automatisch je working directory.
 
 
-###Hoe eigen gegevens inlezen in R?
+### Hoe eigen gegevens inlezen in R?
 
 Als je eigen gegevens wil inlezen in R, is de eenvoudigste methode om deze in excel op te slaan als 'csv (gescheiden door lijstscheidingsteken)' en in de 'working directory' te plaatsen (of je kan ook het path specifiëren).  Daarna kan je de gegevens als volgt inlezen:
 
@@ -160,7 +160,7 @@ Je steekt dus de gegevens uit je bestand `Gegevens.csv` in de variabele `Dataset
 
 Gegevens kunnen ook rechtstreeks vanuit een databank ingelezen worden, en ze kunnen in R naar het gewenste formaat omgezet worden.  Een volledige uitleg hierover zou ons echter te ver leiden.  Toch interesse om hier meer over te leren?  Neem dan contact op met een collega van BMK.
 
-###Wat met een list van tabellen?
+### Wat met een list van tabellen?
 
 De functie `berekenLSVIbasis()` geeft gegevens terug in de vorm van een lijst van 4 tabellen.
 
@@ -183,9 +183,9 @@ data_soorten_kenmerken <-
 
 #En hier gebeurt de berekening zelf:
 berekenLSVIbasis(
-  Versie = "Versie 2.0",
-  Kwaliteitsniveau = "1", data_habitat,
-  data_voorwaarden, data_soorten_kenmerken
+  Versie = "Versie 2.0", Kwaliteitsniveau = "1",
+  Data_habitat = data_habitat, Data_voorwaarden = data_voorwaarden,
+  Data_soortenKenmerken = data_soorten_kenmerken
 )
 ```
 
@@ -194,9 +194,9 @@ We gaan weer beginnen met de uitvoer in een variabele ('resultaat') te steken om
 ```{r}
 resultaat <-
   berekenLSVIbasis(
-    Versie = "Versie 2.0",
-    Kwaliteitsniveau = "1", Data_habitat,
-    Data_voorwaarden, Data_soortenKenmerken
+    Versie = "Versie 2.0", Kwaliteitsniveau = "1",
+    Data_habitat = data_habitat, Data_voorwaarden = data_voorwaarden,
+    Data_soortenKenmerken = data_soorten_kenmerken
   )
 ```
 
@@ -218,9 +218,9 @@ resultaat[["Resultaat_detail"]]
 Met deze tabellen kan verder gewerkt worden zoals hierboven beschreven is ([Wat met gegenereerde gegevens in tabelvorm?](#gegs_in_tabelvorm)) 
 
 
-##Basis van LSVI-package {#basis_LSVI}
+## Basis van LSVI-package {#basis_LSVI}
 
-###Connecteren met de databank
+### Connecteren met de databank
 
 Om de functies van het LSVI-package te gebruiken, heb je een connectie nodig met de databank met informatie uit LSVI-rapporten (zie [Doelstellingen en inhoud package > Inhoud package](#inhoud_package)).  Deze connectie kan op 2 manieren gelegd worden:
 
@@ -252,7 +252,7 @@ library(DBI)
 dbDisconnect(Connectie)
 ```
 
-###Gebruik van de functies zelf
+### Gebruik van de functies zelf
 
 De functies kunnen min of meer in groepen ingedeeld worden op basis van het eerste deel van hun naam:
 
