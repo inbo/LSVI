@@ -73,7 +73,7 @@ remotes::install_github("inbo/LSVI@develop", build_vignettes = TRUE)
 
 # Gebruik basisfuncties {#gebruik_basisfuncties}
 
-# #Wegwijs in R {#wegwijs_in_R}
+## Wegwijs in R {#wegwijs_in_R}
 
 (Wat extra uitleg voor diegenen die niet vertrouwd zijn met R.)
 
@@ -137,7 +137,7 @@ Als je dit commando in je eigen console runt, verschijnt deze variabele in het v
 
 In R kan je deze variabele tonen door de variabelenaam in te typen (dan krijg je dezelfde uitvoer van de tabel in 4 delen).  Je kan er ook allerlei bewerkingen mee uitvoeren (sorteren, selecteren,...), maar daarvoor verwijzen we naar een basiscursus van R.
 
-Wat we hier wel tonen, is hoe deze tabel opgeslagen kan worden, zodat hij achteraf in Excel geopend kan worden.  Dit kan met de functie 'write_csv2()' uit het package 'readr'.  Om deze tabel met naam `soortenlijst4010.csv` op te slaan in de map R op de C-schijf, gebruiken we volgende commando's:
+Wat we hier wel tonen, is hoe deze tabel opgeslagen kan worden, zodat hij achteraf in Excel geopend kan worden.  Dit kan met de functie `write_csv2()` uit het package 'readr'.  Om deze tabel met naam `soortenlijst4010.csv` op te slaan in de map R op de C-schijf, gebruiken we volgende commando's:
 
 ```{r eval=FALSE}
 library(readr)
