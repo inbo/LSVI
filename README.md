@@ -16,13 +16,13 @@ To install `LSVI` from Github, start a new R session and run this code (before l
 
 ```r
 # install.packages("remotes")
-remotes::install_github("inbo/LSVI", build_vignettes = TRUE)
+remotes::install_github("inbo/LSVI")
 ```
 
 To install the development version with the latest changes included (but less stable), run this code: 
 
 ```r
-remotes::install_github("inbo/LSVI@develop", build_vignettes = TRUE)
+remotes::install_github("inbo/LSVI@develop")
 ```
 
 # Documentation
