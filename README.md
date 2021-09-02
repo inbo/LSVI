@@ -12,6 +12,20 @@ The package is written in Dutch.
 
 # Installation
 
+To install `LSVI` from the [INBO universe](https://inbo.r-universe.dev/ui#builds),
+start a new R session and run this code (before loading any packages):
+
+```r
+# Enable the INBO universe
+options(
+  repos = c(
+    inbo = "https://inbo.r-universe.dev", CRAN = "https://cloud.r-project.org"
+  )
+)
+# Install the packages
+install.packages("LSVI")
+```
+
 To install `LSVI` from Github, start a new R session and run this code (before loading any packages):
 
 ```r
