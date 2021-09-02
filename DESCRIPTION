@@ -38,6 +38,7 @@ Imports:
     RSQLite,
     stringr,
     testthat,
+    tibble,
     tidyr,
     utils,
     xtable
