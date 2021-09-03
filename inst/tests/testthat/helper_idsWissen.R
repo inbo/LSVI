@@ -1,14 +1,14 @@
 #'@importFrom dplyr %>% mutate
 
 idsWissen <- function(Resultaat) {
-  Resultaat_detail <-
+  ResultaatDetail <-
     Resultaat[["Resultaat_detail"]] %>%
     mutate(
       BeoordelingID = NULL,
       Combinatie = NULL,
       VoorwaardeID = NULL
     )
-  attr(Resultaat_detail, "problems") <- NULL
+  attr(ResultaatDetail, "problems") <- NULL
   Resultaat <-
     list(
       Resultaat_criterium = Resultaat[["Resultaat_criterium"]],
@@ -17,7 +17,7 @@ idsWissen <- function(Resultaat) {
         mutate(
           BeoordelingID = NULL
         ),
-      Resultaat_detail = Resultaat_detail,
+      Resultaat_detail = ResultaatDetail,
       Resultaat_globaal = Resultaat[["Resultaat_globaal"]]
     )
   return(Resultaat)
