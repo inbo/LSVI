@@ -52,7 +52,7 @@ describe("4 voorwaarden combineren", {
             "aanwezigheid specifieke sleutelsoorten"),
         Waarde = "1",
         Status_voorwaarde = c(FALSE, FALSE, TRUE, TRUE),
-        Verschilscore = c(-0.666666666666667, -0.5, NA_real_, NA_real_),
+        Verschilscore = c(-0.666666666666667, -0.5, 0, 0),
         stringsAsFactors = FALSE
       )
     )
@@ -69,7 +69,7 @@ describe("4 voorwaarden combineren", {
         data.frame(),
       data.frame(
         Status_indicator = FALSE,
-        Verschilscore = NA_real_,
+        Verschilscore = -0.5,
         stringsAsFactors = FALSE
       )
     )
@@ -86,7 +86,7 @@ describe("4 voorwaarden combineren", {
         data.frame(),
       data.frame(
         Status_indicator = TRUE,
-        Verschilscore = NA_real_,
+        Verschilscore = 0,
         stringsAsFactors = FALSE
       )
     )

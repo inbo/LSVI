@@ -1,4 +1,4 @@
-linters: with_defaults(object_name_linter(styles = c("camelCase", "CamelCase", "snake_case")))
+linters: with_defaults(object_name_linter(styles = c("camelCase", "CamelCase", "snake_case")), object_usage_linter=NULL)
 exclude: "#nolint"
 exclude_start: "# Begin Exclude Linting"
 exclude_end: "# End Exclude Linting"

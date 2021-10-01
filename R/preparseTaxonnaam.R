@@ -16,7 +16,8 @@
 preparseTaxonnaam <- function(Taxonnaam) {
 
   Taxonnaam <- gsub("v\\.d\\.", "v. d.", Taxonnaam)
-  Taxonnaam <- gsub(" v\\.", " Van", Taxonnaam)
+  Taxonnaam <- gsub("((\\s|\\()v)\\.", "\\1an", Taxonnaam)
+  Taxonnaam <- gsub(" auct\\. non ", " ", Taxonnaam)
   Taxonnaam <- gsub(" non ", " Non", Taxonnaam)
   Taxonnaam <- gsub(" auct\\. ", " Auct. ", Taxonnaam)
   Taxonnaam <- gsub(" auct\\.$", " Auct.", Taxonnaam)
@@ -24,8 +25,8 @@ preparseTaxonnaam <- function(Taxonnaam) {
   Taxonnaam <- gsub(" den ", " Den ", Taxonnaam)
   Taxonnaam <- gsub(" an ", " An ", Taxonnaam)
   Taxonnaam <- gsub(" anon ", " Anon ", Taxonnaam)
-  Taxonnaam <- gsub(" f.$", "", Taxonnaam)
-  Taxonnaam <- gsub(" f.)$", ")", Taxonnaam)
+  Taxonnaam <- gsub("\\sf\\.$", "", Taxonnaam)
+  Taxonnaam <- gsub("\\sf\\.\\)", ")", Taxonnaam)
   Taxonnaam <- gsub(" nom\\. illegit\\.$", " nom. illeg.", Taxonnaam)
   Taxonnaam <- gsub(" nom\\. superfl\\.$", "", Taxonnaam)
   Taxonnaam <- gsub(" nom\\. conf\\.$", "", Taxonnaam)
@@ -38,6 +39,8 @@ preparseTaxonnaam <- function(Taxonnaam) {
       "^([A-Z][a-z]+)\\s([A-Z][a-z]*\\.?)\\s(subg.(\\s[A-Z][a-z]+\\.?)(\\s?[A-Z]?[a-z]*\\.?)*)$", #nolint
       "\\1 \\3", Taxonnaam
     )
+  Taxonnaam <-
+    gsub("\\scv\\.\\s([A-Z][a-z]+(\\s[a-z]+)?)$", " '\\1'", Taxonnaam)
 
   return(Taxonnaam)
 }

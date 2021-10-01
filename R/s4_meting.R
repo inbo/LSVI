@@ -29,11 +29,3 @@ setMethod(
     return(c(NA, NA))
   }
 )
-
-setMethod(
-  f = "geefTheoretischMaximum",
-  signature = "meting",
-  definition = function(object) {
-    return(NA)
-  }
-)

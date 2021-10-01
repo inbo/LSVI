@@ -18,6 +18,10 @@ Data_voorwaarden <-
   read_csv2(
     system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI")
   )
+Data_soortenKenmerken <-
+  read_csv2(
+    system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI")
+  )
 Resultaat <-
   idsWissen(
     berekenLSVIbasis(
@@ -28,6 +32,10 @@ Resultaat <-
   )
 save(Resultaat, file = "inst/vbdata/Resultaat_test4030.Rdata")
 load("inst/vbdata/Resultaat_test4030.Rdata")
+Data_soortenKenmerken <-
+  read_csv2(
+    system.file("vbdata/Opname4030soortenKenmerkenv2tot.csv", package = "LSVI")
+  )
 Resultaatv2 <-
   idsWissen(
     berekenLSVIbasis(

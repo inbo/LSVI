@@ -200,6 +200,12 @@ berekenLSVIbasis <- #nolint
         inherits(ConnectieLSVIhabitats, "Pool"),
       msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
     )
+    if (class(ConnectieLSVIhabitats)[1] == "Pool") {
+      Klasse <-
+        class(ConnectieLSVIhabitats$.__enclos_env__$private$createObject())[1]
+    } else {
+      Klasse <- class(ConnectieLSVIhabitats)[1]
+    }
 
     Versie <- invoercontroleVersie(Versie, ConnectieLSVIhabitats)
 
@@ -294,7 +300,7 @@ berekenLSVIbasis <- #nolint
         .data$Referentiewaarde,
         .data$Operator,
         .data$Eenheid,
-        .data$AnalyseVariabele, #toegevoegd voor invullen TheoretischMaximum
+        .data$Maximumwaarde,
         .data$TypeVariabele,
         .data$Invoertype
       ) %>%
@@ -391,7 +397,8 @@ berekenLSVIbasis <- #nolint
         TypeVariabele = NULL,
         Invoertype = NULL,
         RefMin = NULL,
-        RefMax = NULL
+        RefMax = NULL,
+        Maximumwaarde = NULL
       ) %>%
       distinct()
 
@@ -465,8 +472,6 @@ berekenLSVIbasis <- #nolint
             ),
           WaardeMin = as.numeric(unlist(.data$Berekening)["Min"]),
           WaardeMax = as.numeric(unlist(.data$Berekening)["Max"]),
-          TheoretischMaximum =
-            as.numeric(unlist(.data$Berekening)["TheoretischMaximum"]),
           Warnings = unlist(.data$Berekening)["Warnings"],
           Berekening = NULL
         ) %>%
@@ -729,27 +734,8 @@ berekenLSVIbasis <- #nolint
       filter(!.data$Referentiewaarde %in% Invoervereisten$Voorwaarde) %>%
       bind_rows(DubbeleVoorwaarden) %>%
       mutate(
-        TheoretischMaximum =
-          ifelse(
-            is.na(.data$TheoretischMaximum) & .data$Eenheid == "%",
-            1,
-            .data$TheoretischMaximum
-          ),
-        TheoretischMaximum =
-          ifelse(
-            is.na(.data$TheoretischMaximum) &
-              tolower(.data$TypeVariabele) == "categorie" &
-              grepl("bedekking", tolower(.data$AnalyseVariabele)),
-            1,
-            .data$TheoretischMaximum
-          ),
-        TheoretischMaximum =
-          ifelse(
-            is.na(.data$TheoretischMaximum) &
-              tolower(.data$TypeVariabele) == "ja/nee",
-            1,
-            .data$TheoretischMaximum
-          )
+        TheoretischMaximum = .data$Maximumwaarde,
+        Maximumwaarde = NULL
       )
 
     Statusberekening <-
@@ -799,7 +785,10 @@ berekenLSVIbasis <- #nolint
 
     #voor de uitvoer de gegevens van de geobserveerde indicatoren toevoegen
     resultaat_detail <- Resultaat %>%
-      bind_rows(resultaat_opname_indicator) %>%
+      bind_rows(
+        resultaat_opname_indicator %>%
+          distinct()
+      ) %>%
       arrange(
         .data$ID,
         .data$Habitattype,
@@ -853,7 +842,8 @@ berekenLSVIbasis <- #nolint
             .data$Kwaliteitsniveau,
             .data$BeoordelingID,
             Status_indicator = as.logical(.data$Waarde),
-          )
+          ) %>%
+          distinct()
       ) %>%
       arrange(
         .data$ID,

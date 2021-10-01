@@ -68,8 +68,24 @@ describe("parseTaxonnaam", {
       "subgen. Jacea"
     )
     expect_equal(
-      parseTaxonnaam("Centaurea L. subg. Jacea"),
-      "subgen. Jacea"
+      parseTaxonnaam("Arenaria serpyllifolia L. subsp. serpyllifolia var. viscida (Haller f.) DC."), #nolint
+      "Arenaria serpyllifolia var. viscida"
+    )
+    expect_equal(
+      parseTaxonnaam("Caltha palustris L. subsp. araneosa (v. Steenis) v. d. Meijden"), #nolint
+      "Caltha palustris subsp. araneosa"
+    )
+    expect_equal(
+      parseTaxonnaam("Carex leporina auct. non L. var. argyroglochin (Hornem.) Koch"), #nolint
+      "Carex leporina var. argyroglochin"
+    )
+    expect_equal(
+      parseTaxonnaam("Daucus carota L. subsp. carota cv. Sativus"),
+      "Daucus carota cv. carota 'Sativus'"
+    )
+    expect_equal(
+      parseTaxonnaam("Salix babylonica L. var. pekinensis 'Tortuosa'"),
+      parseTaxonnaam("Salix babylonica L. var. pekinensis A. Henry cv. Tortuosa") #nolint
     )
   })
 
