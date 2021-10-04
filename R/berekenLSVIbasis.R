@@ -728,7 +728,10 @@ berekenLSVIbasis <- #nolint
       do(
         combinerenDubbeleVoorwaarden(.)
       ) %>%
-      ungroup()
+      ungroup() %>%
+      mutate(
+        AfkomstWaarde = as.character(.data$AfkomstWaarde)
+      )
 
     Resultaat <- Resultaat %>%
       filter(!.data$Referentiewaarde %in% Invoervereisten$Voorwaarde) %>%
