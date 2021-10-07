@@ -16,7 +16,7 @@ To install `LSVI` from the [INBO universe](https://inbo.r-universe.dev/ui#builds
 start a new R session and run this code (before loading any packages):
 
 ```r
-# Enable the INBO universe
+# Enable the INBO universe (not needed for INBO employees, as this is the default setting)
 options(
   repos = c(
     inbo = "https://inbo.r-universe.dev", CRAN = "https://cloud.r-project.org"
