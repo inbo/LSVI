@@ -35,7 +35,7 @@ invoercontroleData_soortenKenmerken <- #nolint
     }
     assert_that(has_name(Data_soortenKenmerken, "Kenmerk"))
     if (!is.character(Data_soortenKenmerken$Kenmerk)) {
-      Data_soortenKenmerken$Kenmerk <-
+      Data_soortenKenmerken$Kenmerk <- #nolint
         as.character(Data_soortenKenmerken$Kenmerk)
     }
     assert_that(has_name(Data_soortenKenmerken, "TypeKenmerk"))
