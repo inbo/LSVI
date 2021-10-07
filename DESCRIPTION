@@ -1,6 +1,6 @@
 Package: LSVI
 Title: Rekenmodule Lokale Staat Van Instandhouding van habitattypen
-Version: 0.1.0.9001
+Version: 0.1.1
 Authors@R: c(
   person(
     "Els", "Lommelen", email = "els.lommelen@inbo.be",
