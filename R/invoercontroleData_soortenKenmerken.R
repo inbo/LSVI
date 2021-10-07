@@ -31,7 +31,7 @@ invoercontroleData_soortenKenmerken <- #nolint
     assert_that(inherits(Data_soortenKenmerken, "data.frame"))
     assert_that(has_name(Data_soortenKenmerken, "ID"))
     if (!is.character(Data_soortenKenmerken$ID)) {
-      Data_soortenKenmerken$ID <- as.character(Data_soortenKenmerken$ID)
+      Data_soortenKenmerken$ID <- as.character(Data_soortenKenmerken$ID) #nolint
     }
     assert_that(has_name(Data_soortenKenmerken, "Kenmerk"))
     if (!is.character(Data_soortenKenmerken$Kenmerk)) {
@@ -40,10 +40,10 @@ invoercontroleData_soortenKenmerken <- #nolint
     }
     assert_that(has_name(Data_soortenKenmerken, "TypeKenmerk"))
     if (!is.character(Data_soortenKenmerken$TypeKenmerk)) {
-      Data_soortenKenmerken$TypeKenmerk <-
+      Data_soortenKenmerken$TypeKenmerk <- #nolint
         as.character(Data_soortenKenmerken$TypeKenmerk)
     }
-    Data_soortenKenmerken$TypeKenmerk <-
+    Data_soortenKenmerken$TypeKenmerk <- #nolint
       tolower(Data_soortenKenmerken$TypeKenmerk)
     assert_that(
       all(
@@ -54,22 +54,22 @@ invoercontroleData_soortenKenmerken <- #nolint
     )
     assert_that(has_name(Data_soortenKenmerken, "Waarde"))
     if (!is.character(Data_soortenKenmerken$Waarde)) {
-      Data_soortenKenmerken$Waarde <-
+      Data_soortenKenmerken$Waarde <- #nolint
         as.character(Data_soortenKenmerken$Waarde)
     }
     assert_that(has_name(Data_soortenKenmerken, "Type"))
     if (!is.character(Data_soortenKenmerken$Type)) {
-      Data_soortenKenmerken$Type <-
+      Data_soortenKenmerken$Type <- #nolint
         as.character(Data_soortenKenmerken$Type)
     }
-    Data_soortenKenmerken$Type <- str_to_sentence(Data_soortenKenmerken$Type)
+    Data_soortenKenmerken$Type <- str_to_sentence(Data_soortenKenmerken$Type) #nolint
     controleerInvoerwaarde(
       "Data_soortenKenmerken$Type", Data_soortenKenmerken$Type,
       "TypeVariabele", "Naam", ConnectieLSVIhabitats, Tolower = FALSE
     )
     assert_that(has_name(Data_soortenKenmerken, "Invoertype"))
     if (!is.character(Data_soortenKenmerken$Invoertype)) {
-      Data_soortenKenmerken$Invoertype <-
+      Data_soortenKenmerken$Invoertype <- #nolint
         as.character(Data_soortenKenmerken$Invoertype)
     }
     controleerInvoerwaarde(
@@ -81,7 +81,7 @@ invoercontroleData_soortenKenmerken <- #nolint
     )
     assert_that(has_name(Data_soortenKenmerken, "Eenheid"))
     if (!is.character(Data_soortenKenmerken$Eenheid)) {
-      Data_soortenKenmerken$Eenheid <-
+      Data_soortenKenmerken$Eenheid <- #nolint
         as.character(Data_soortenKenmerken$Eenheid)
     }
     GeldigeWaarden <-
@@ -106,7 +106,7 @@ invoercontroleData_soortenKenmerken <- #nolint
 
     assert_that(has_name(Data_soortenKenmerken, "Vegetatielaag"))
     if (!is.character(Data_soortenKenmerken$Vegetatielaag)) {
-      Data_soortenKenmerken$Vegetatielaag <-
+      Data_soortenKenmerken$Vegetatielaag <- #nolint
         as.character(tolower(Data_soortenKenmerken$Vegetatielaag))
     }
     controleerInvoerwaarde(
