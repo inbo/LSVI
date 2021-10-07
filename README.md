@@ -39,14 +39,6 @@ To install the development version with the latest changes included (but less st
 remotes::install_github("inbo/LSVI@develop")
 ```
 
-# Documentation
-
-After installation, a user manual is available by running this code:
-
-```r
-vignette("Handleiding", package = "LSVI")
-```
-
 # Citation
 
 Please use the output of `citation("LSVI")`
