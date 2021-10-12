@@ -1,4 +1,4 @@
-context("test geefVersieInfo")
+context("test geefVersieInfo()")
 
 maakConnectiePool()
 describe("selectie volgens habitattype", {
