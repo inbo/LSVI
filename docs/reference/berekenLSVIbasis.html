@@ -8,21 +8,29 @@
 
 <title>Berekent de LSVI op basis van VoorwaardeID en opgegeven waarden — berekenLSVIbasis • LSVI</title>
 
+
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -32,8 +40,8 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Berekent de LSVI op basis van VoorwaardeID en opgegeven waarden — berekenLSVIbasis" />
 
+<meta property="og:title" content="Berekent de LSVI op basis van VoorwaardeID en opgegeven waarden — berekenLSVIbasis" />
 <meta property="og:description" content="Deze functie bepaalt de Lokale Staat van Instandhouding en
 biotische indices op basis van gegevens, die in het juiste formaat moeten
 aangeleverd worden.  Zie hiervoor de beschrijving bij de parameters
@@ -57,7 +65,7 @@ verschillende globale indices berekend waarbij de naamgeving aangeeft welk
 aggregatie achtereenvolgens gebruikt werd: index_min_min, index_min_harm en
 index_harm_harm. Een naam met &quot;min&quot; duidt op minimum van de scores als
 aggregatie; bij &quot;harm&quot; werd het harmonisch gemiddelde berekend." />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -71,9 +79,10 @@ aggregatie; bij &quot;harm&quot; werd het harmonisch gemiddelde berekend." />
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -87,7 +96,7 @@ aggregatie; bij &quot;harm&quot; werd het harmonisch gemiddelde berekend." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">LSVI</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9001</span>
       </span>
     </div>
 
@@ -95,7 +104,7 @@ aggregatie; bij &quot;harm&quot; werd het harmonisch gemiddelde berekend." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -118,11 +127,10 @@ aggregatie; bij &quot;harm&quot; werd het harmonisch gemiddelde berekend." />
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/inbo/LSVI">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="https://github.com/inbo/LSVI/">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -133,6 +141,7 @@ aggregatie; bij &quot;harm&quot; werd het harmonisch gemiddelde berekend." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -144,7 +153,6 @@ aggregatie; bij &quot;harm&quot; werd het harmonisch gemiddelde berekend." />
     </div>
 
     <div class="ref-description">
-    
     <p>Deze functie bepaalt de Lokale Staat van Instandhouding en
 biotische indices op basis van gegevens, die in het juiste formaat moeten
 aangeleverd worden.  Zie hiervoor de beschrijving bij de parameters
@@ -168,18 +176,22 @@ verschillende globale indices berekend waarbij de naamgeving aangeeft welk
 aggregatie achtereenvolgens gebruikt werd: index_min_min, index_min_harm en
 index_harm_harm. Een naam met "min" duidt op minimum van de scores als
 aggregatie; bij "harm" werd het harmonisch gemiddelde berekend.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>berekenLSVIbasis</span>(<span class='kw'>Versie</span> <span class='kw'>=</span> <span class='st'>"alle"</span>, <span class='kw'>Kwaliteitsniveau</span> <span class='kw'>=</span> <span class='st'>"alle"</span>,
-  <span class='no'>Data_habitat</span>, <span class='kw'>Data_voorwaarden</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>ID</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>(), <span class='kw'>Criterium</span>
-  <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>(), <span class='kw'>Indicator</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>(), <span class='kw'>Voorwaarde</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>(), <span class='kw'>Waarde</span>
-  <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>(), <span class='kw'>Type</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>(), <span class='kw'>WaardeMin</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/double'>double</a></span>(), <span class='kw'>WaardeMax</span> <span class='kw'>=</span>
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/double'>double</a></span>(), <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>),
-  <span class='kw'>Data_soortenKenmerken</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>ID</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>()),
-  <span class='kw'>Aggregatiemethode</span> <span class='kw'>=</span> <span class='st'>"1-out-all-out"</span>, <span class='kw'>ConnectieLSVIhabitats</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>LIJST</span> <span class='kw'>=</span> <span class='fu'><a href='geefVertaallijst.html'>geefVertaallijst</a></span>(<span class='no'>ConnectieLSVIhabitats</span>), <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>berekenLSVIbasis</span><span class='op'>(</span>
+  Versie <span class='op'>=</span> <span class='st'>"alle"</span>,
+  Kwaliteitsniveau <span class='op'>=</span> <span class='st'>"alle"</span>,
+  <span class='va'>Data_habitat</span>,
+  Data_voorwaarden <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>ID <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='op'>)</span>, Criterium <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='op'>)</span>, Indicator <span class='op'>=</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='op'>)</span>, Voorwaarde <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='op'>)</span>, Waarde <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='op'>)</span>, Type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='op'>)</span>,
+    WaardeMin <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/double.html'>double</a></span><span class='op'>(</span><span class='op'>)</span>, WaardeMax <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/double.html'>double</a></span><span class='op'>(</span><span class='op'>)</span>, stringsAsFactors <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>,
+  Data_soortenKenmerken <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>ID <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>,
+  Aggregatiemethode <span class='op'>=</span> <span class='st'>"1-out-all-out"</span>,
+  ConnectieLSVIhabitats <span class='op'>=</span> <span class='cn'>NULL</span>,
+  LIJST <span class='op'>=</span> <span class='fu'><a href='geefVertaallijst.html'>geefVertaallijst</a></span><span class='op'>(</span><span class='va'>ConnectieLSVIhabitats</span><span class='op'>)</span>,
+  na.rm <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -290,7 +302,7 @@ gebaseerd zijn, moet hiermee rekening gehouden worden afhankelijk van de
 context waarvoor de resultaten gebruikt worden.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Deze functie genereert de resultaten in de vorm van een list met 4
@@ -298,44 +310,39 @@ tabellen: een eerste met de beoordelingen per kwaliteitsniveau, een tweede
 met de beoordelingen per criterium en kwaliteitsniveau, een derde met de
 beoordelingen per indicator en kwaliteitsniveau, en een vierde met de
 detailgegevens inclusief meetwaarden.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'># Omwille van de iets langere lange duurtijd van de commando's staat bij
-# onderstaand voorbeeld de vermelding 'dontrun' (om problemen te vermijden
-# bij het testen van het package). Maar het voorbeeld werkt en kan zeker
-# uitgetest worden.
-</div><span class='co'># NOT RUN {</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>LSVI</span>)
-<span class='fu'><a href='maakConnectiePool.html'>maakConnectiePool</a></span>()
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>readr</span>)
-<span class='no'>Data_habitat</span> <span class='kw'>&lt;-</span>
-  <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv2</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"vbdata/Opname4030habitat.csv"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"LSVI"</span>),
-    <span class='kw'>col_types</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_character</a></span>(), <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_character</a></span>(),<span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_character</a></span>()))
-<span class='no'>Data_voorwaarden</span> <span class='kw'>&lt;-</span>
-  <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv2</a></span>(
-    <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"vbdata/Opname4030voorwaardenv2.csv"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"LSVI"</span>))
-<span class='no'>Data_soortenKenmerken</span> <span class='kw'>&lt;-</span>
-  <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv2</a></span>(
-    <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"vbdata/Opname4030soortenKenmerken.csv"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"LSVI"</span>))
-<span class='fu'>berekenLSVIbasis</span>(<span class='kw'>Versie</span> <span class='kw'>=</span> <span class='st'>"Versie 2.0"</span>,
-                 <span class='kw'>Kwaliteitsniveau</span> <span class='kw'>=</span> <span class='st'>"1"</span>, <span class='no'>Data_habitat</span>,
-                 <span class='no'>Data_voorwaarden</span>, <span class='no'>Data_soortenKenmerken</span>)
-<span class='co'># }</span><div class='input'>
+    <pre class="examples"><div class='input'><span class='co'># Omwille van de iets langere lange duurtijd van de commando's staat bij</span>
+<span class='co'># onderstaand voorbeeld de vermelding 'dontrun' (om problemen te vermijden</span>
+<span class='co'># bij het testen van het package). Maar het voorbeeld werkt en kan zeker</span>
+<span class='co'># uitgetest worden.</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/inbo/LSVI'>LSVI</a></span><span class='op'>)</span>
+<span class='fu'><a href='maakConnectiePool.html'>maakConnectiePool</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://readr.tidyverse.org'>readr</a></span><span class='op'>)</span>
+<span class='va'>Data_habitat</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv2</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"vbdata/Opname4030habitat.csv"</span>, package <span class='op'>=</span> <span class='st'>"LSVI"</span><span class='op'>)</span>,
+    col_types <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_character</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_character</a></span><span class='op'>(</span><span class='op'>)</span>,<span class='fu'><a href='https://readr.tidyverse.org/reference/parse_atomic.html'>col_character</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>Data_voorwaarden</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv2</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"vbdata/Opname4030voorwaardenv2.csv"</span>, package <span class='op'>=</span> <span class='st'>"LSVI"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>Data_soortenKenmerken</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv2</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"vbdata/Opname4030soortenKenmerken.csv"</span>, package <span class='op'>=</span> <span class='st'>"LSVI"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>berekenLSVIbasis</span><span class='op'>(</span>Versie <span class='op'>=</span> <span class='st'>"Versie 2.0"</span>,
+                 Kwaliteitsniveau <span class='op'>=</span> <span class='st'>"1"</span>, <span class='va'>Data_habitat</span>,
+                 <span class='va'>Data_voorwaarden</span>, <span class='va'>Data_soortenKenmerken</span><span class='op'>)</span>
+<span class='op'>}</span>
+
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -343,13 +350,16 @@ detailgegevens inclusief meetwaarden.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 
