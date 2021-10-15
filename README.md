@@ -2,7 +2,7 @@
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![Licence](https://img.shields.io/badge/licence-GPL--3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 [![wercker status](https://app.wercker.com/status/91ffc2688434d321a85dc5d79fd7c428/s/develop "wercker status")](https://app.wercker.com/project/byKey/91ffc2688434d321a85dc5d79fd7c428)
-[![codecov](https://codecov.io/gh/inbo/LSVI/branch/develop/graph/badge.svg)](https://codecov.io/gh/inbo/LSVI)
+[![codecov](https://app.codecov.io/gh/inbo/LSVI/branch/develop/graph/badge.svg)](https://app.codecov.io/gh/inbo/LSVI)
 
 # Local conservation status for Natura 2000 habitats in Flanders
 
