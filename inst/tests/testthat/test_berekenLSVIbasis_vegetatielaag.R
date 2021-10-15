@@ -14,6 +14,7 @@ describe("berekenLSVIbasis vegetatielaag", {
         system.file("vbdata/Test9190habitat.csv", package = "LSVI"),
         col_types = list(col_character(), col_character())
       )
+    attr(Data_habitat, "spec") <- NULL #nolint
     Data_voorwaarden <- #nolint
       read_csv2(
         system.file("vbdata/Test9190voorwaarden.csv", package = "LSVI"),
@@ -47,7 +48,7 @@ describe("berekenLSVIbasis vegetatielaag", {
                 col_character(), col_double(), col_double()
               )
           ) %>%
-          select(-.data$X1) %>%
+          select(-.data$...1) %>%
           mutate(
             ID = as.character(.data$ID),
             Habitattype = as.character(.data$Habitattype)
@@ -66,7 +67,7 @@ describe("berekenLSVIbasis vegetatielaag", {
                 col_integer(), col_logical(), col_double()
               )
           ) %>%
-          select(-.data$X1),
+          select(-.data$...1),
         Resultaat_detail =
           read_csv2(
             system.file(
@@ -85,7 +86,7 @@ describe("berekenLSVIbasis vegetatielaag", {
                 col_logical(), col_double()
               )
           ) %>%
-          select(-.data$X1),
+          select(-.data$...1),
         Resultaat_globaal =
           read_csv2(
             system.file(
@@ -99,7 +100,7 @@ describe("berekenLSVIbasis vegetatielaag", {
                 col_character(), col_double(), col_double(), col_double()
               )
           ) %>%
-          select(-.data$X1)
+          select(-.data$...1)
       )
     attr(Resultaatv2[["Resultaat_criterium"]], "spec") <- NULL
     attr(Resultaatv2[["Resultaat_indicator"]], "spec") <- NULL
@@ -302,6 +303,7 @@ describe("berekenLSVIbasis vegetatielaag", {
         system.file("vbdata/Test9190habitat.csv", package = "LSVI"),
         col_types = list(col_character(), col_character())
       )
+    attr(Data_habitat, "spec") <- NULL #nolint
     Data_voorwaarden <- #nolint
       read_csv2(
         system.file("vbdata/Test9190voorwaarden.csv", package = "LSVI"),
@@ -343,6 +345,7 @@ describe("berekenLSVIbasis vegetatielaag", {
         system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
         col_types = list(col_character(), col_character(), col_character())
       )
+    attr(Data_habitat, "spec") <- NULL #nolint
     Data_voorwaarden <- #nolint
       read_csv2(
         system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI"),
@@ -397,6 +400,7 @@ describe("berekenLSVIbasis vegetatielaag", {
         system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
         col_types = list(col_character(), col_character(), col_character())
       )
+    attr(Data_habitat, "spec") <- NULL #nolint
     Data_voorwaarden <- #nolint
       read_csv2(
         system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI"),
@@ -529,6 +533,7 @@ describe("berekenLSVIbasis vegetatielaag", {
         system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
         col_types = list(col_character(), col_character(), col_character())
       )
+    attr(Data_habitat, "spec") <- NULL #nolint
     Data_voorwaarden <- #nolint
       read_csv2(
         system.file("vbdata/Opname4030voorwaardenv2.csv", package = "LSVI")

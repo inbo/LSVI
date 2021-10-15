@@ -1,4 +1,4 @@
-context("test selecteerIndicatoren")
+context("test selecteerIndicatoren()")
 
 library(dplyr)
 library(rlang)

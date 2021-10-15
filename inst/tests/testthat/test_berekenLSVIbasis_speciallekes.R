@@ -66,8 +66,10 @@ describe("twee voorwaarden vergelijken", {
       Resultaat
     )
     expect_equal(
-      resultaat_berekend[["Resultaat_indicator"]] %>%
-        filter(.data$Indicator == "overgang naar rbbzil"),
+      as.data.frame(
+        resultaat_berekend[["Resultaat_indicator"]] %>%
+          filter(.data$Indicator == "overgang naar rbbzil")
+      ),
       Resultaat %>%
         select(
           ID, Habitattype, Versie, Habitattype.y, Criterium, Indicator,

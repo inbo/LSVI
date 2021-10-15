@@ -5,8 +5,13 @@
 \title{Genereert habitatfiche(s) van LSVI op basis van de opgegeven
 parameters}
 \usage{
-maakHabitatfiches(Versie = "alle", Habitatgroep = "alle",
-  Habitattype = "alle", ConnectieLSVIhabitats = NULL, verbose = TRUE)
+maakHabitatfiches(
+  Versie = "alle",
+  Habitatgroep = "alle",
+  Habitattype = "alle",
+  ConnectieLSVIhabitats = NULL,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{Versie}{De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".

@@ -4,8 +4,11 @@
 \alias{geefSoortenlijstVoorIDs}
 \title{Genereert soorten(groep)lijst(en) LSVI op basis van TaxongroepID}
 \usage{
-geefSoortenlijstVoorIDs(Taxongroeplijst, Taxonlijsttype = c("LSVIfiche",
-  "alle"), ConnectieLSVIhabitats = NULL)
+geefSoortenlijstVoorIDs(
+  Taxongroeplijst,
+  Taxonlijsttype = c("LSVIfiche", "alle"),
+  ConnectieLSVIhabitats = NULL
+)
 }
 \arguments{
 \item{Taxongroeplijst}{string waarin de TaxongroepId's na elkaar weergegeven

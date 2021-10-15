@@ -29,15 +29,14 @@ if (
 ) {
   ConnectieLSVIhabitats <- params$ConnectieLSVIhabitats
 } else {
-  #print("Connectiefout!")
   ConnectieLSVIhabitats <- connecteerMetLSVIdb()
 }
 
-Indicatoren <- 
+Indicatoren <-
   selecteerIndicatoren(
     ConnectieLSVIhabitats = ConnectieLSVIhabitats,
     Versie = params$Versie,
-    Habitatgroep = params$Habitatgroep, 
+    Habitatgroep = params$Habitatgroep,
     Habitattype = params$Habitattype,
     HabitatnamenToevoegen = TRUE
   ) %>%
@@ -55,47 +54,63 @@ Indicatoren <-
 
 Uitvoer <- NULL
 
-for (VersieRapportdeel in unique(Indicatoren$Versie)) {
+for (VersieRapportdeel in unique(Indicatoren$Versie)) { #nolint
   Uitvoer <- c(Uitvoer, paste("#", VersieRapportdeel, sep = ""))
   VersieIndicatoren <- Indicatoren %>%
     filter(.data$Versie == VersieRapportdeel) %>%
     arrange(.data$Habitattype)
   for (Habitatgroep in unique(VersieIndicatoren$Habitatgroepnaam)) {
-    Uitvoer <- c(Uitvoer, paste("##",Habitatgroep, sep = ""))
+    Uitvoer <- c(Uitvoer, paste("##", Habitatgroep, sep = ""))
     Subset <- VersieIndicatoren %>%
       filter(.data$Habitatgroepnaam == Habitatgroep)
     for (Habitat in unique(as.character(Subset$Habitattype))) {
       Subsubset <- Subset %>%
         filter(.data$Habitattype == Habitat)
-      Habitatnaam <- ifelse(is.na(unique(Subsubset$Habitatnaam)),
-                            "",
-                            paste(": ", unique(Subsubset$Habitatnaam), sep = ""))
-      Uitvoer <- c(Uitvoer, paste("###Habitattype ", Habitat, Habitatnaam, "\n", sep = ""))
-      for (HabitatsubtypeFiche in unique(as.character(Subsubset$Habitatsubtype))) {
-        Habitatsubtypenaam <- 
-          ifelse(is.na(unique((Subsubset %>% 
-                                filter(.data$Habitatsubtype == HabitatsubtypeFiche))$Habitatsubtypenaam)),
-                 "",
-                 paste(": ", unique((Subsubset %>% 
-                                filter(.data$Habitatsubtype == HabitatsubtypeFiche))$Habitatsubtypenaam), sep = ""))
+      Habitatnaam <-
+        ifelse(
+          is.na(unique(Subsubset$Habitatnaam)),
+          "",
+          paste(": ", unique(Subsubset$Habitatnaam), sep = "")
+        )
+      Uitvoer <-
+        c(
+          Uitvoer,
+          paste("###Habitattype ", Habitat, Habitatnaam, "\n", sep = "")
+        )
+      for (HabitatsubtypeFiche in
+           unique(as.character(Subsubset$Habitatsubtype))) {
+        Habitatsubtypenaam <-
+          ifelse(
+            is.na(
+              unique(
+                (Subsubset %>%
+                   filter(.data$Habitatsubtype == HabitatsubtypeFiche)
+                 )$Habitatsubtypenaam)
+              ),
+            "",
+            paste(
+              ": ",
+              unique(
+                (Subsubset %>%
+                   filter(.data$Habitatsubtype == HabitatsubtypeFiche)
+                 )$Habitatsubtypenaam
+                ),
+              sep = ""
+            )
+          )
         if (HabitatsubtypeFiche != Habitat) {
-          Uitvoer <- 
+          Uitvoer <-
             c(Uitvoer,
-              paste("####Habitatsubtype ", HabitatsubtypeFiche, 
+              paste("####Habitatsubtype ", HabitatsubtypeFiche,
                     Habitatsubtypenaam, "\n", sep = ""))
         }
-        Uitvoer <- 
+        Uitvoer <-
           c(Uitvoer,
             knit_child("Habitatfiche.Rmd"))
-        
       }
     }
-
   }
 }
-
-
-
 ```
 
 

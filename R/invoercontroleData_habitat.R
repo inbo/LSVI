@@ -19,16 +19,16 @@ invoercontroleData_habitat <- function(Data_habitat, ConnectieLSVIhabitats) { #n
   assert_that(inherits(Data_habitat, "data.frame"))
   assert_that(has_name(Data_habitat, "ID"))
   if (!is.character(Data_habitat$ID)) {
-    Data_habitat$ID <- as.character(Data_habitat$ID)
+    Data_habitat$ID <- as.character(Data_habitat$ID) #nolint
   }
   assert_that(has_name(Data_habitat, "Habitattype"))
   if (!is.character(Data_habitat$Habitattype)) {
-    Data_habitat$Habitattype <- as.character(Data_habitat$Habitattype)
+    Data_habitat$Habitattype <- as.character(Data_habitat$Habitattype) #nolint
   }
-  Data_habitat$Habitattype <- tolower(Data_habitat$Habitattype)
-  Data_habitat$Habitattype <-
+  Data_habitat$Habitattype <- tolower(Data_habitat$Habitattype) #nolint
+  Data_habitat$Habitattype <- #nolint
     str_replace(Data_habitat$Habitattype, "91e0", "91E0")
-  Data_habitat$Habitattype <-
+  Data_habitat$Habitattype <- #nolint
     str_replace(Data_habitat$Habitattype, "91f0", "91F0")
   controleerInvoerwaarde(
     "Data_habitat$Habitattype", Data_habitat$Habitattype,
