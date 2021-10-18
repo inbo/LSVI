@@ -194,8 +194,9 @@ We gaan weer beginnen met de uitvoer in een variabele ('resultaat') te steken om
 ```{r}
 resultaat <-
   berekenLSVIbasis(
-    Versie = "Versie 2.0", Kwaliteitsniveau = "1",
-    Data_habitat = data_habitat, Data_voorwaarden = data_voorwaarden,
+    Versie = "Versie 2.0",
+    Kwaliteitsniveau = "1", Data_habitat = data_habitat,
+    Data_voorwaarden = data_voorwaarden,
     Data_soortenKenmerken = data_soorten_kenmerken
   )
 ```

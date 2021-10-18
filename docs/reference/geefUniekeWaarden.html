@@ -9,21 +9,29 @@
 <title>Geef alle unieke waarden van een veld uit de databank met de
 LSVI-indicatoren voorafgegaan door "alle" — geefUniekeWaarden • LSVI</title>
 
+
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -33,9 +41,9 @@ LSVI-indicatoren voorafgegaan door "alle" — geefUniekeWaarden • LSVI</title>
 
   <link href="../extra.css" rel="stylesheet">
   
+
 <meta property="og:title" content="Geef alle unieke waarden van een veld uit de databank met de
 LSVI-indicatoren voorafgegaan door "alle" — geefUniekeWaarden" />
-
 <meta property="og:description" content="Deze hulpfunctie geeft een vector met alle verschillende
 waarden die in een gespecificeerd veld van een gespecificeerde tabel in de
 databank met LSVI-indicatoren staan, voorafgegaan door de (toegevoegde)
@@ -49,7 +57,7 @@ Gebruikers die de databankstructuur en bijhorende naamgeving niet kennen,
 kunnen dezelfde info het gemakkelijkst bekomen door een tabel voor de
 volledige dataset op te vragen, het gewenste veld te selecteren en hiervan
 de unieke waarden weer te geven (zie voorbeeld)." />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -63,9 +71,10 @@ de unieke waarden weer te geven (zie voorbeeld)." />
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -79,7 +88,7 @@ de unieke waarden weer te geven (zie voorbeeld)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">LSVI</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9001</span>
       </span>
     </div>
 
@@ -87,7 +96,7 @@ de unieke waarden weer te geven (zie voorbeeld)." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -110,11 +119,10 @@ de unieke waarden weer te geven (zie voorbeeld)." />
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/inbo/LSVI">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="https://github.com/inbo/LSVI/">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -125,6 +133,7 @@ de unieke waarden weer te geven (zie voorbeeld)." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -137,7 +146,6 @@ LSVI-indicatoren voorafgegaan door "alle"</h1>
     </div>
 
     <div class="ref-description">
-    
     <p>Deze hulpfunctie geeft een vector met alle verschillende
 waarden die in een gespecificeerd veld van een gespecificeerde tabel in de
 databank met LSVI-indicatoren staan, voorafgegaan door de (toegevoegde)
@@ -151,11 +159,10 @@ manier kan opvragen.</p>
 kunnen dezelfde info het gemakkelijkst bekomen door een tabel voor de
 volledige dataset op te vragen, het gewenste veld te selecteren en hiervan
 de unieke waarden weer te geven (zie voorbeeld).</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>geefUniekeWaarden</span>(<span class='no'>Tabelnaam</span>, <span class='no'>Veldnaam</span>, <span class='kw'>ConnectieLSVIhabitats</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>geefUniekeWaarden</span><span class='op'>(</span><span class='va'>Tabelnaam</span>, <span class='va'>Veldnaam</span>, ConnectieLSVIhabitats <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -174,47 +181,42 @@ waarvan de waarden moeten opgezocht worden (String)</p></td>
 de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Deze functie geeft een vector bestaande uit "alle" en de
 verschillende waarden uit de gespecifieerde tabel.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'># Omwille van de iets langere lange duurtijd van de commando's staat bij
-# onderstaand voorbeeld de vermelding 'dontrun' (om problemen te vermijden
-# bij het testen van het package). Maar het voorbeelden werkt en kan zeker
-# uitgetest worden.
-</div><span class='co'># NOT RUN {</span>
-<span class='fu'><a href='maakConnectiePool.html'>maakConnectiePool</a></span>()
-<span class='fu'>geefUniekeWaarden</span>(<span class='st'>"Versie"</span>,<span class='st'>"VersieLSVI"</span>)
+    <pre class="examples"><div class='input'><span class='co'># Omwille van de iets langere lange duurtijd van de commando's staat bij</span>
+<span class='co'># onderstaand voorbeeld de vermelding 'dontrun' (om problemen te vermijden</span>
+<span class='co'># bij het testen van het package). Maar het voorbeelden werkt en kan zeker</span>
+<span class='co'># uitgetest worden.</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'><a href='maakConnectiePool.html'>maakConnectiePool</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='fu'>geefUniekeWaarden</span><span class='op'>(</span><span class='st'>"Versie"</span>,<span class='st'>"VersieLSVI"</span><span class='op'>)</span>
 
 <span class='co'>#alternatieven om deze invoerlijst te bekomen:</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/unique'>unique</a></span>(<span class='fu'><a href='geefVersieInfo.html'>geefVersieInfo</a></span>()$<span class='no'>VersieLSVI</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='op'>(</span><span class='fu'><a href='geefVersieInfo.html'>geefVersieInfo</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>$</span><span class='va'>VersieLSVI</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>dplyr</span>)
-<span class='fu'><a href='geefVersieInfo.html'>geefVersieInfo</a></span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>VersieLSVI</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/distinct.html'>distinct</a></span>()
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span>
+<span class='fu'><a href='geefVersieInfo.html'>geefVersieInfo</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>VersieLSVI</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/distinct.html'>distinct</a></span><span class='op'>(</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>pool</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/pool/topics/pool'>poolClose</a></span>(<span class='no'>ConnectiePool</span>)
-<span class='co'># }</span><div class='input'>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/rstudio/pool'>pool</a></span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/pkg/pool/man/Pool-class.html'>poolClose</a></span><span class='op'>(</span><span class='va'>ConnectiePool</span><span class='op'>)</span>
+<span class='op'>}</span>
+
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -222,13 +224,16 @@ verschillende waarden uit de gespecifieerde tabel.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

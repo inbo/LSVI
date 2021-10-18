@@ -20,9 +20,10 @@
 #' @export
 #'
 #' @importFrom assertthat assert_that has_name
-#' @importFrom dplyr %>% left_join mutate select filter bind_rows as.tbl
+#' @importFrom dplyr %>% left_join mutate select filter bind_rows
 #' @importFrom stringr str_split_fixed
 #' @importFrom rlang .data
+#' @importFrom tibble as_tibble
 #'
 
 vertaalInvoerInterval <-
@@ -48,7 +49,7 @@ vertaalInvoerInterval <-
     )
 
     LIJST <- LIJST %>%
-      as.tbl() %>%
+      as_tibble() %>%
       mutate(
         Naam = tolower(.data$Naam),
         Waarde = tolower(.data$Waarde),
