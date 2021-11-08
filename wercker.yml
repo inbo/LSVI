@@ -8,4 +8,6 @@ build:
           Rscript -e "install.packages(c('odbc', 'pool', 'rgbif', 'prettyunits'))"
     - inbobmk/r-check
     - inbobmk/r-coverage
+    - env
+        token: $GITHUB_PAT
     - jimhester/r-lint
