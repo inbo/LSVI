@@ -621,11 +621,11 @@ berekenLSVIbasis <- #nolint
 
       Resultaat <- Resultaat %>%
         left_join(zvalues %>%
-                    rename(Habitattype = .data$Habitatsubtype),
+                    rename(Habitattype = .data$Habitatsubtype) %>%
+                    select(Habitattype, Versie, Criterium, Indicator,
+                           Kwaliteitsniveau, intercepts, zvalues),
                   c("Habitattype", "Versie", "Criterium", "Indicator",
-                    "Beoordeling", "Kwaliteitsniveau", "Voorwaarde",
-                    "Referentiewaarde", "Operator", "Eenheid",
-                    "AnalyseVariabele")) %>%
+                    "Kwaliteitsniveau")) %>%
         mutate(
           ref_correctie = ceiling(exp(.data$intercepts +
                                         .data$zvalues * log(.data$Opp_m2))),
