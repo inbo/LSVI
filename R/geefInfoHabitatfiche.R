@@ -148,7 +148,8 @@ geefInfoHabitatfiche <-
         lapply(
           L,
           function(x) {
-            x[is.na(x)] <- ""; x
+            x[is.na(x)] <- ""
+            x
           }
         )
       gsub(paste0("(^", sep, "|", sep, "$)"), "",

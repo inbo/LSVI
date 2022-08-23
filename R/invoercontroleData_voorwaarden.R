@@ -23,20 +23,20 @@ invoercontroleData_voorwaarden <- #nolint
     assert_that(inherits(Data_voorwaarden, "data.frame"))
     assert_that(has_name(Data_voorwaarden, "ID"))
     if (!is.character(Data_voorwaarden$ID)) {
-      Data_voorwaarden$ID <- as.character(Data_voorwaarden$ID)
+      Data_voorwaarden$ID <- as.character(Data_voorwaarden$ID) #nolint
     }
     assert_that(has_name(Data_voorwaarden, "Criterium"))
     if (!is.character(Data_voorwaarden$Criterium)) {
-      Data_voorwaarden$Criterium <- as.character(Data_voorwaarden$Criterium)
+      Data_voorwaarden$Criterium <- as.character(Data_voorwaarden$Criterium) #nolint
     }
-    Data_voorwaarden$Criterium <- str_to_sentence(Data_voorwaarden$Criterium)
+    Data_voorwaarden$Criterium <- str_to_sentence(Data_voorwaarden$Criterium) #nolint
     controleerInvoerwaarde(
       "Data_voorwaarden$Criterium", Data_voorwaarden$Criterium,
       "Criterium", "Naam", ConnectieLSVIhabitats, Tolower = FALSE
     )
     assert_that(has_name(Data_voorwaarden, "Indicator"))
     if (!is.character(Data_voorwaarden$Indicator)) {
-      Data_voorwaarden$Indicator <- as.character(Data_voorwaarden$Indicator)
+      Data_voorwaarden$Indicator <- as.character(Data_voorwaarden$Indicator) #nolint
     }
     controleerInvoerwaarde(
       "Data_voorwaarden$Indicator", Data_voorwaarden$Indicator,
@@ -44,7 +44,7 @@ invoercontroleData_voorwaarden <- #nolint
     )
     assert_that(has_name(Data_voorwaarden, "Voorwaarde"))
     if (!is.character(Data_voorwaarden$Voorwaarde)) {
-      Data_voorwaarden$Voorwaarde <- as.character(Data_voorwaarden$Voorwaarde)
+      Data_voorwaarden$Voorwaarde <- as.character(Data_voorwaarden$Voorwaarde) #nolint
     }
     uitbreidingTolower <- function(x) {
       tryCatch(
@@ -57,7 +57,7 @@ invoercontroleData_voorwaarden <- #nolint
         }
       )
     }
-    Data_voorwaarden$Voorwaarde <-
+    Data_voorwaarden$Voorwaarde <- #nolint
       uitbreidingTolower(Data_voorwaarden$Voorwaarde)
     controleerInvoerwaarde(
       "Data_voorwaarden$Voorwaarde",
@@ -66,7 +66,7 @@ invoercontroleData_voorwaarden <- #nolint
     )
     assert_that(has_name(Data_voorwaarden, "Waarde"))
     if (!is.character(Data_voorwaarden$Waarde)) {
-      Data_voorwaarden$Waarde <- as.character(Data_voorwaarden$Waarde)
+      Data_voorwaarden$Waarde <- as.character(Data_voorwaarden$Waarde) #nolint
     }
 
     Dubbels <- Data_voorwaarden %>%
