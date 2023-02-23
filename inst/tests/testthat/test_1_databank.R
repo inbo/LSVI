@@ -64,15 +64,15 @@ describe("test databank", {
       filter(TypeVariabele != "Geheel getal")
     expect_equal(
       nrow(av_ok),
-      1
+      2
     )
     Refwaarden <-
       dbGetQuery(
         ConnectieLSVIhabitats,
         sprintf(
           "SELECT Referentiewaarde FROM Voorwaarde
-          WHERE AnalyseVariabeleId = '%s'",
-          av_ok$Id
+          WHERE AnalyseVariabeleId in ('%s')",
+          paste(av_ok$Id, collapse = "', '")
         )
       )
     expect_true(
