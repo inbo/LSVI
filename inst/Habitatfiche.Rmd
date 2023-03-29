@@ -116,7 +116,13 @@ for (Criterium in unique(Beoordelingsfiche$Criterium)) {
                             c(Versie$Kwaliteitsniveau1,
                               Versie$Kwaliteitsniveau2)
                           } else if (ncol(Beoordelingsfiche) == 6) {
-                            Versie$Kwaliteitsniveau1
+                            if (
+                              Versie$Kwaliteitsniveau1 == "niet van toepassing"
+                            ) {
+                              Versie$Kwaliteitsniveau2
+                            } else {
+                              Versie$Kwaliteitsniveau1
+                            }
                           },
                           "Opmerkingen", "Referenties")])
   print(Beoordelingsmatrix, type = "html", include.rownames = FALSE)
