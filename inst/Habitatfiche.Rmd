@@ -30,7 +30,7 @@ Habitatfiche <-
   )
 
 Versie <- geefVersieInfo(ConnectieLSVIhabitats) %>%
-  filter_(~VersieLSVI == VersieRapportdeel)
+  filter(.data$VersieLSVI == VersieRapportdeel)
 
 ```
 
