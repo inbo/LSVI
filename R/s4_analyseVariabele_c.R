@@ -85,12 +85,12 @@ analyseVariabele_c <- #nolint
             tolower(.data$NbnTaxonVersionKey)
         ) %>%
         select(
-          .data$TaxongroepId,
-          .data$TaxonsubgroepId,
-          .data$TaxonId,
-          .data$SubTaxonId,
-          .data$NbnTaxonVersionKey,
-          .data$TaxonType
+          "TaxongroepId",
+          "TaxonsubgroepId",
+          "TaxonId",
+          "SubTaxonId",
+          "NbnTaxonVersionKey",
+          "TaxonType"
         ) %>%
         distinct()
       setSoortengroep(AnalyseObject) <- Soortengroep

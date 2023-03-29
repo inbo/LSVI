@@ -101,15 +101,15 @@ geefSoortenlijst <-
           Indicator = Indicator,
           ConnectieLSVIhabitats = ConnectieLSVIhabitats) %>%
         select(
-          .data$Versie, .data$Habitattype, .data$Habitatsubtype,
-          .data$Criterium, .data$Indicator, .data$Beoordeling,
-          .data$Kwaliteitsniveau, .data$Voorwaarde, .data$TaxongroepId
+          "Versie", "Habitattype", "Habitatsubtype",
+          "Criterium", "Indicator", "Beoordeling",
+          "Kwaliteitsniveau", "Voorwaarde", "TaxongroepId"
         ) %>%
         distinct()
     }
 
     SoortengroepIDs <- Selectiegegevens %>%
-      select(.data$TaxongroepId) %>%
+      select("TaxongroepId") %>%
       distinct() %>%
       filter(!is.na(.data$TaxongroepId)) %>%
       summarise(SoortengroepIDs = paste(.data$TaxongroepId, collapse = ","))
@@ -148,24 +148,24 @@ geefSoortenlijst <-
     if (Taxonlijstniveau[1] != "voorwaarde") {
       SoortenlijstSelectie <- SoortenlijstSelectie %>%
         select(
-          .data$Versie, .data$Habitattype, .data$Habitatsubtype,
-          .data$Criterium, .data$Indicator, .data$TaxongroepId,
-          .data$Omschrijving,
-          .data$NbnTaxonVersionKey, .data$WetNaam, .data$NedNaam,
-          .data$WetNaamKort, .data$TaxonType
+          "Versie", "Habitattype", "Habitatsubtype",
+          "Criterium", "Indicator", "TaxongroepId",
+          "Omschrijving",
+          "NbnTaxonVersionKey", "WetNaam", "NedNaam",
+          "WetNaamKort", "TaxonType"
         ) %>%
         distinct()
     }
 
     if (Taxonlijstniveau[1] == "criterium") {
       SoortenlijstSelectie <- SoortenlijstSelectie %>%
-        select(-.data$Indicator) %>%
+        select(-"Indicator") %>%
         filter(!is.na(.data$NbnTaxonVersionKey)) %>%
         distinct()
     }
     if (Taxonlijstniveau[1] == "habitattype") {
       SoortenlijstSelectie <- SoortenlijstSelectie %>%
-        select(-.data$Indicator, -.data$Criterium) %>%
+        select(-"Indicator", -"Criterium") %>%
         filter(!is.na(.data$NbnTaxonVersionKey)) %>%
         distinct()
     }

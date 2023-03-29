@@ -330,7 +330,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
             .data$Formuletest, "^(\\d+(( (AND|OR|<=|<|>|>=) \\d+))*)$"
           ) == FALSE
         ) %>%
-        select(-.data$Formuletest) %>%
+        select(-"Formuletest") %>%
         mutate(
           Probleem =
             "De formule voor Combinatie is geen combinatie van AND, OR en voorwaardeID's" #nolint

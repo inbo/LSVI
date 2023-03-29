@@ -43,8 +43,8 @@ Habitatkarakteristieken <- Habitatfiche %>%
   select(
     Criterium = .data$Criterium.habitat,
     Indicator = .data$Indicator.habitat,
-    .data$Beschrijving,
-    .data$Maatregelen,
+    "Beschrijving",
+    "Maatregelen",
     Opmerkingen = .data$Opmerkingen.habitat,
     Referenties = .data$Referenties.habitat
   ) %>%
@@ -63,11 +63,11 @@ for (criterium in unique(Habitatkarakteristieken$Criterium)) {
   Habitattabel <- Habitatkarakteristieken %>%
     filter(.data$Criterium == criterium) %>%
     select(
-      .data$Indicator,
-      .data$Beschrijving,
-      .data$Maatregelen,
-      .data$Opmerkingen,
-      .data$Referenties
+      "Indicator",
+      "Beschrijving",
+      "Maatregelen",
+      "Opmerkingen",
+      "Referenties"
     ) %>%
     xtable(digits = ncol(.))
   print(Habitattabel, type = "html", include.rownames = FALSE)
@@ -82,12 +82,12 @@ for (criterium in unique(Habitatkarakteristieken$Criterium)) {
 
 Beoordelingsfiche <- Habitatfiche %>%
   select(
-    .data$Beoordeling,
+    "Beoordeling",
     Criterium = .data$Criterium.beoordeling,
     Indicator = .data$Indicator.beoordeling,
     Opmerkingen = .data$Opmerkingen.beoordeling,
     Referenties = .data$Referenties.beoordeling,
-    .data$Kwaliteitsniveau
+    "Kwaliteitsniveau"
   ) %>%
   distinct() %>%
   inner_join(
@@ -96,7 +96,7 @@ Beoordelingsfiche <- Habitatfiche %>%
                                     Versie$Kwaliteitsniveau2),
                stringsAsFactors = FALSE)
   ) %>%
-  select(-Kwaliteitsniveau) %>%
+  select(-"Kwaliteitsniveau") %>%
   spread(key = Referentieniveau, value = Beoordeling) %>%
   mutate(
     fCriterium =

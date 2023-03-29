@@ -41,8 +41,8 @@ Indicatoren <-
     HabitatnamenToevoegen = TRUE
   ) %>%
   select(
-    .data$Versie, .data$Habitatgroepnaam, .data$Habitattype, .data$Habitatnaam,
-    .data$Habitatsubtype, .data$Habitatsubtypenaam
+    "Versie", "Habitatgroepnaam", "Habitattype", "Habitatnaam",
+    "Habitatsubtype", "Habitatsubtypenaam"
   ) %>%
   distinct()
 
