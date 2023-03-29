@@ -33,7 +33,7 @@ HabitatsubtypeFiche <- params$Habitatsubtype
 Habitatnaam <- params$Habitatnaam
 ```
 
-####Habitattype `r HabitatsubtypeFiche`: `r Habitatnaam`
+#### Habitattype `r HabitatsubtypeFiche`: `r Habitatnaam`
 
 ```{r child="Habitatfiche.Rmd"}
 ```

@@ -35,7 +35,7 @@ Versie <- geefVersieInfo(ConnectieLSVIhabitats) %>%
 ```
 
 
-#####Habitatkarakteristieken
+##### Habitatkarakteristieken
 
 ```{r results='asis'}
 
@@ -76,7 +76,7 @@ for (criterium in unique(Habitatkarakteristieken$Criterium)) {
 ```
 
 
-#####Beoordelingsmatrix
+##### Beoordelingsmatrix
 
 ```{r results='asis', message=FALSE, warning=FALSE}
 
