@@ -54,7 +54,7 @@
 #' @export
 #'
 #' @importFrom dplyr %>% select distinct filter group_by summarise ungroup
-#' mutate_ left_join rename
+#' mutate left_join rename
 #' @importFrom rlang .data
 #'
 #'
