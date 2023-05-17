@@ -158,7 +158,8 @@ vertaalIntervalUitvoer <-
                   round(.data$Min, 1),
                   round(.data$Max, 1),
                   sep = " - ")
-              )
+              ),
+            Waarde = as.character(Waarde)
           )
       ) %>%
       select(
