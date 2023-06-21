@@ -95,6 +95,7 @@ Collate:
     's4_maxBedekking2s.R'
     's4_maxBedekkingExcl.R'
     's4_meting.R'
+    's4_scoresom.R'
     'selecteerIndicatoren.R'
     'selecteerKenmerkenInOpname.R'
     'vertaalIntervalUitvoer.R'

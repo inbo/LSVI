@@ -76,12 +76,18 @@ vertaalInvoerInterval <-
       )
 
     Resultaat <- Dataset %>%
-      filter(tolower(.data$Type) == "categorie")
+      filter(tolower(.data$Type) %in% c("categorie", "scoresom"))
 
     if (nrow(Resultaat) > 0) {
       Resultaat <- Resultaat %>%
         mutate(
           Invoertype = tolower(.data$Invoertype),
+          Invoertype =
+            ifelse(
+              .data$Type == "scoresom" & .data$Invoertype == "tansley meren",
+              "lsvi2190_scoresom",
+              .data$Invoertype
+            ),
           Waarde = tolower(.data$Waarde)
         ) %>%
         left_join(

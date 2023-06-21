@@ -290,6 +290,14 @@ berekenLSVIbasis <- #nolint
     IntervalVereisten <-
       vertaalInvoerInterval(
         (Invoervereisten %>%
+           mutate(
+             TypeVariabele =
+               ifelse(
+                 .data$TypeVariabele == "scoresom",
+                 "geheel getal",
+                 .data$TypeVariabele
+               )
+           ) %>%
           filter(!.data$Referentiewaarde %in% Invoervereisten$Voorwaarde))[
           , c("Rijnr", "TypeVariabele", "Referentiewaarde",
               "Eenheid", "Invoertype")
