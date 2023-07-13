@@ -418,7 +418,7 @@ describe("test databank", {
      )
    })
 
-  it("AnalyseVariabele scoresom heeft typevariabele scoresom", {
+  it("AnalyseVariabele scoresom heeft typevariabele Geheel getal", {
     ConnectieLSVIhabitats <-
       connecteerMetLSVIdb()
     AV <-
@@ -431,7 +431,7 @@ describe("test databank", {
          WHERE AnalyseVariabele.VariabeleNaam = 'scoresom'"
       )
     av_leeg <- AV %>%
-      filter(TypeVariabele != "scoresom")
+      filter(TypeVariabele != "Geheel getal")
     FouteWaarden <-
       dbGetQuery(
         ConnectieLSVIhabitats,
@@ -447,7 +447,7 @@ describe("test databank", {
     )
   })
 
-  it("De waarden van scoresom zijn getallen kleiner dan of gelijk aan 10", {
+  it("De waarden van scoresom zijn getallen kleiner dan of gelijk aan 10 (als / 100)", {
     ConnectieLSVIhabitats <-
       connecteerMetLSVIdb()
     Refwaarden <-
@@ -456,13 +456,12 @@ describe("test databank", {
         "SELECT vw.VoorwaardeNaam, vw.Referentiewaarde
         FROM Voorwaarde vw
         INNER JOIN AnalyseVariabele av ON vw.AnalyseVariabeleId = av.Id
-        INNER JOIN TypeVariabele tv ON av.TypeVariabeleId = tv.Id
-        WHERE tv.Naam = 'scoresom'"
+        WHERE av.VariabeleNaam = 'scoresom'"
       )
     Refwaarden <- Refwaarden %>%
       filter(!.data$Referentiewaarde %in% Refwaarden$VoorwaardeNaam)
     expect_true(
-      all(as.numeric(Refwaarden$Referentiewaarde) <= 10)
+      all(as.numeric(Refwaarden$Referentiewaarde) / 100 <= 10)
     )
   })
 

@@ -1,14 +1,15 @@
 #' S4-klasse die de som van de toegekende klasses berekent
 #'
 #' Deze klasse Scoresom staat in voor de berekening van waarden voor
-#' TypeVariabele Scoresom op basis van opgegeven kenmerken.  Ze is een
+#' AnalyseVariabele Scoresom op basis van opgegeven kenmerken.  Ze is een
 #' nakomeling van de klasse AnalyseVariabele.
 #'
 #' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden
 #' Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
 #'
 #' @importFrom methods setClass setMethod
-#' @importFrom dplyr %>% filter
+#' @importFrom dplyr %>% filter left_join transmute
+#' @importFrom tidyr pivot_wider
 #'
 #' @noRd
 #'
@@ -45,14 +46,26 @@ setMethod(
     #er aan-/afwezigheden opgegeven zijn in plaats van bedekkingen
     #In dat geval berekenen we geen bedekking en geven we een warning
     if (sum(is.na(Resultaat$WaardeMin)) < sum(is.na(Resultaat$WaardeMax))) {
-      ScoresomMin <- NA
-      ScoresomMax <- NA
+      Scoresom <- NA
       warning("aan- of afwezigheid bedekking")
     } else {
-      ScoresomMin <- sum(Resultaat$WaardeMin, na.rm = TRUE)
-      ScoresomMax <- sum(Resultaat$WaardeMax, na.rm = TRUE)
+      ScoreWaarde <- object@LIJST %>%
+        filter(.data$Naam %in% c("TANSLEY MEREN", "LSVI2190_scoresom")) %>%
+        pivot_wider(
+          id_cols = "Waarde", names_from = "Naam", values_from = "Bovengrens"
+        ) %>%
+        transmute(
+          WaardeMax = as.character(.data$`TANSLEY MEREN`),
+          Score = .data$LSVI2190_scoresom
+        )
+      Resultaat <- Resultaat %>%
+        transmute(
+          WaardeMax = as.character(.data$WaardeMax)
+        ) %>%
+        left_join(ScoreWaarde, by = "WaardeMax")
+      Scoresom <- sum(Resultaat$Score, na.rm = TRUE)
     }
 
-    return(c(ScoresomMin, ScoresomMax))
+    return(c(Scoresom, Scoresom))
   }
 )

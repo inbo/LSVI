@@ -135,5 +135,9 @@ analyseVariabele_c <- #nolint
       setSubOperator(AnalyseObject) <- VoorwaardeInfo$SubOperator
     }
 
+    if (nrow(LIJST) > 0) {
+      setLIJST(AnalyseObject) <- LIJST
+    }
+
     return(AnalyseObject)
   }
