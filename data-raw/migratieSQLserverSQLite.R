@@ -437,6 +437,12 @@ migratieSQLserverSQLite <-
           pmin(3 * as.numeric(sub(",", ".", Referentiewaarde)), Maximumwaarde,
                na.rm = TRUE),
           Maximumwaarde
+        ),
+      Maximumwaarde =
+        ifelse(
+          VariabeleNaam == "scoresom",
+          ifelse(Referentiewaarde == 6, 15, 11),
+          Maximumwaarde
         )
     ) %>%
     select(
