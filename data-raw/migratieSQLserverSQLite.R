@@ -424,12 +424,24 @@ migratieSQLserverSQLite <-
         ),
       Maximumwaarde =
         ifelse(
+          VariabeleNaam == "aantalGroepen" & !is.na(StudiegroepId),
+          AantalKenmerken,
+          Maximumwaarde
+        ),
+      Maximumwaarde =
+        ifelse(
           grepl("meting", VariabeleNaam) &
             Naam != "Ja/nee" &
             !VariabeleNaam %in% c("meting_perc", "meting_bedekking") |
             VariabeleNaam == "aantal",
           pmin(3 * as.numeric(sub(",", ".", Referentiewaarde)), Maximumwaarde,
                na.rm = TRUE),
+          Maximumwaarde
+        ),
+      Maximumwaarde =
+        ifelse(
+          VariabeleNaam == "scoresom",
+          ifelse(Referentiewaarde == 6, 15, 11),
           Maximumwaarde
         )
     ) %>%
