@@ -41,8 +41,8 @@ Indicatoren <-
     HabitatnamenToevoegen = TRUE
   ) %>%
   select(
-    .data$Versie, .data$Habitatgroepnaam, .data$Habitattype, .data$Habitatnaam,
-    .data$Habitatsubtype, .data$Habitatsubtypenaam
+    "Versie", "Habitatgroepnaam", "Habitattype", "Habitatnaam",
+    "Habitatsubtype", "Habitatsubtypenaam"
   ) %>%
   distinct()
 
@@ -55,12 +55,12 @@ Indicatoren <-
 Uitvoer <- NULL
 
 for (VersieRapportdeel in unique(Indicatoren$Versie)) { #nolint
-  Uitvoer <- c(Uitvoer, paste("#", VersieRapportdeel, sep = ""))
+  Uitvoer <- c(Uitvoer, paste("#", VersieRapportdeel, sep = " "))
   VersieIndicatoren <- Indicatoren %>%
     filter(.data$Versie == VersieRapportdeel) %>%
     arrange(.data$Habitattype)
   for (Habitatgroep in unique(VersieIndicatoren$Habitatgroepnaam)) {
-    Uitvoer <- c(Uitvoer, paste("##", Habitatgroep, sep = ""))
+    Uitvoer <- c(Uitvoer, paste("##", Habitatgroep, sep = " "))
     Subset <- VersieIndicatoren %>%
       filter(.data$Habitatgroepnaam == Habitatgroep)
     for (Habitat in unique(as.character(Subset$Habitattype))) {
@@ -75,7 +75,7 @@ for (VersieRapportdeel in unique(Indicatoren$Versie)) { #nolint
       Uitvoer <-
         c(
           Uitvoer,
-          paste("###Habitattype ", Habitat, Habitatnaam, "\n", sep = "")
+          paste("### Habitattype ", Habitat, Habitatnaam, "\n", sep = "")
         )
       for (HabitatsubtypeFiche in
            unique(as.character(Subsubset$Habitatsubtype))) {
@@ -101,7 +101,7 @@ for (VersieRapportdeel in unique(Indicatoren$Versie)) { #nolint
         if (HabitatsubtypeFiche != Habitat) {
           Uitvoer <-
             c(Uitvoer,
-              paste("####Habitatsubtype ", HabitatsubtypeFiche,
+              paste("#### Habitatsubtype ", HabitatsubtypeFiche,
                     Habitatsubtypenaam, "\n", sep = ""))
         }
         Uitvoer <-

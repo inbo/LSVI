@@ -91,8 +91,8 @@ berekenVerschilscores <-
         )
       ) %>%
       select(
-        .data$Rijnr,
-        .data$Verschilscore
+        "Rijnr",
+        "Verschilscore"
       )
 
 

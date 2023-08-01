@@ -20,6 +20,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -32,41 +34,53 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">LSVI</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.900</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
+  <a href="../news/index.html">NEWS</a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../reference/index.html">Functions</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/Berekeningen.html">Technische achtergrond bij de berekeningen</a>
+      <a href="../articles/Handleiding.html">Handleiding</a>
     </li>
     <li>
-      <a href="../articles/Handleiding.html">Handleiding LSVI-package</a>
+      <a href="../articles/Berekeningen.html">Berekeningen</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../CONTRIBUTING.html">Contributing</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/inbo/LSVI/">
-    <span class="fab fa-github fa-lg"></span>
+  <a href="https://github.com/inbo/%7B%7B%7B%20Package%20%7D%7D%7D" class="external-link">
+    <span class="fa fa-github"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://twitter.com/INBOVlaanderen" class="external-link">
+    <span class="fa fa-twitter"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://www.facebook.com/pg/INBOVlaanderen" class="external-link">
+    <span class="fa fa-facebook"></span>
      
   </a>
 </li>
@@ -80,15 +94,16 @@
 
       
 
-      </header><script src="Handleiding_files/header-attrs-2.10/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Handleiding LSVI-package</h1>
-                        <h4 class="author">Els Lommelen</h4>
+                        <h4 data-toc-skip class="author">Els
+Lommelen</h4>
             
-            <h4 class="date">2021-09-03</h4>
+            <h4 data-toc-skip class="date">2023-04-18</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/inbo/LSVI/blob/master/vignettes/Handleiding.Rmd"><code>vignettes/Handleiding.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/inbo/LSVI/blob/HEAD/vignettes/Handleiding.Rmd" class="external-link"><code>vignettes/Handleiding.Rmd</code></a></small>
       <div class="hidden name"><code>Handleiding.Rmd</code></div>
 
     </div>
@@ -96,573 +111,845 @@
     
     
 <p>#Leeswijzer</p>
-<p>Deze handleiding is bedoeld voor iedereen die met het package LSVI zal werken. Ze richt zich zowel op gebruikers die de gegevens uit de databank willen raadplegen maar nooit met R gewerkt hebben als op ervaren R-gebruikers die eigen scripts willen ontwikkelen voor de verwerking van hun veldopnames (berekening van LSVI). Er wordt wel van uitgegaan dat gebruikers een grondige kennis hebben over LSVI van habitattypen (terminologie, achtergrond,…).</p>
-<p>De handleiding is zo opgesteld dat ze voor beide groepen de relevante informatie bevat om aan de slag te gaan. Enkele hoofdstukken gaan over de opbouw en het gebruik van het package, en deze zijn zinvol om te lezen voor alle gebruikers:</p>
+<p>Deze handleiding is bedoeld voor iedereen die met het package LSVI
+zal werken. Ze richt zich zowel op gebruikers die de gegevens uit de
+databank willen raadplegen maar nooit met R gewerkt hebben als op
+ervaren R-gebruikers die eigen scripts willen ontwikkelen voor de
+verwerking van hun veldopnames (berekening van LSVI). Er wordt wel van
+uitgegaan dat gebruikers een grondige kennis hebben over LSVI van
+habitattypen (terminologie, achtergrond,…).</p>
+<p>De handleiding is zo opgesteld dat ze voor beide groepen de relevante
+informatie bevat om aan de slag te gaan. Enkele hoofdstukken gaan over
+de opbouw en het gebruik van het package, en deze zijn zinvol om te
+lezen voor alle gebruikers:</p>
 <ul>
 <li>
-<a href="#doelstellingen_inhoud">Doelstellingen en inhoud package</a>: de globale opbouw van de databank en het package, met extra terminologie die in het package gebruikt is en ook een ruw overzicht van de inhoud (groepen van functies). In een tweede onderdeel wordt dieper ingegaan op de doelstelling: een package van en voor LSVI-gebruikers. In feite bevat dit deel alle informatie die niet specifiek over het gebruik van de code zelf gaat.</li>
+<a href="#doelstellingen_inhoud">Doelstellingen en inhoud
+package</a>: de globale opbouw van de databank en het package, met extra
+terminologie die in het package gebruikt is en ook een ruw overzicht van
+de inhoud (groepen van functies). In een tweede onderdeel wordt dieper
+ingegaan op de doelstelling: een package van en voor LSVI-gebruikers. In
+feite bevat dit deel alle informatie die niet specifiek over het gebruik
+van de code zelf gaat.</li>
 <li><a href="#installatie_package">Installatie van het package</a></li>
 <li>
-<a href="#basis_LSVI">Gebruik basisfuncties, onderdeel Basis van LSVI-package</a>: hoe de functies in het LSVI-package gebruiken</li>
+<a href="#basis_LSVI">Gebruik basisfuncties, onderdeel Basis van
+LSVI-package</a>: hoe de functies in het LSVI-package gebruiken</li>
 </ul>
-<p>Voor beginnende R-gebruikers is er onder <a href="#gebruik_basisfuncties">Gebruik basisfuncties</a> een extra onderdeel <a href="#wegwijs_in_R">Wegwijs in R</a> waarin ingegaan wordt op enkele basishandelingen in R die nuttig kunnen zijn bij het gebruik van dit package (hoe documentatie opzoeken en hoe de bekomen informatie opslaan voor gebruik in Excel).</p>
+<p>Voor beginnende R-gebruikers is er onder <a href="#gebruik_basisfuncties">Gebruik basisfuncties</a> een extra
+onderdeel <a href="#wegwijs_in_R">Wegwijs in R</a> waarin ingegaan wordt
+op enkele basishandelingen in R die nuttig kunnen zijn bij het gebruik
+van dit package (hoe documentatie opzoeken en hoe de bekomen informatie
+opslaan voor gebruik in Excel).</p>
 <p>#Doelstellingen en inhoud package {#doelstellingen_inhoud}</p>
 <p>##Inhoud package {#inhoud_package}</p>
-<p>Doelstellingen van het package LSVI zijn om de informatie in verband met het bepalen van de lokale staat van instandhouding (LSVI) van habitattypen digitaal ter beschikking te stellen en de functionaliteit aan te bieden om deze LSVI te berekenen (zie <a href="#doelstellingen">Doelstellingen</a> voor details). Het project bestaat uit 2 onderdelen die onlosmakelijk met elkaar verbonden zijn: een databank die de informatie bevat en het package dat beide doelstellingen uitvoert, gebruik makend van de informatie uit de databank.</p>
-<p>De <strong>databank</strong> bevat alle informatie uit de LSVI-rapporten van de habitattypen, waarbij de verschillende versies van de rapporten naast elkaar opgeslagen zijn en dus afzonderlijk geraadpleegd of gebruikt kunnen worden. Behalve de teksten die letterlijk uit de rapporten overgenomen zijn, bevat de databank ook informatie in een vorm die door het package gebruikt kan worden om de informatie op de juiste manier uit de databank te halen of om berekeningen te maken. Zo is voor elke beoordeling van een indicator een opsplitsing gemaakt in ‘voorwaarden’: de elementaire onderdelen die deel uitmaken van deze beoordeling en die herleid kunnen worden tot een statement dat door een computer geëvalueerd kan worden. Vaak zijn deze voorwaarden de onderdelen die in de rapporten gescheiden zijn door ‘en’ en/of ‘of’, soms is de opsplitsing ook gemaakt uit louter technische noodzaak (bv. ‘10% &lt; x &lt; 50%’ wordt vervangen door de voorwaarden ‘x &gt; 10%’ en ‘x &lt; 50%’). Voor elk van deze voorwaarden is gedetailleerde informatie opgenomen over de variabele die nodig is om deze beoordeling te kunnen maken, die enerzijds bedoeld is om de gebruiker te informeren en anderzijds om de LSVI-berekening gemakkelijk te kunnen automatiseren.</p>
-<p>De aard (complexiteit) van de informatie in de LSVI-rapporten en de vereiste om ook als basis te dienen voor de rekenmodule hebben geleid tot een eerder complexe databankstructuur. We hebben dit opgevangen door in het <strong>package</strong> functies voorzien die louter dienen om de databank te bevragen: met de functies <code><a href="../reference/geefVersieInfo.html">geefVersieInfo()</a></code>, <code><a href="../reference/geefInfoHabitatfiche.html">geefInfoHabitatfiche()</a></code>, <code><a href="../reference/geefSoortenlijst.html">geefSoortenlijst()</a></code> en <code><a href="../reference/geefInvoervereisten.html">geefInvoervereisten()</a></code> samen kan alle info uit de databank opgevraagd worden. Ze focussen respectievelijk op informatie over de versies van de rapporten (<code><a href="../reference/geefVersieInfo.html">geefVersieInfo()</a></code>), de letterlijke info uit de LSVI-rapporten (<code><a href="../reference/geefInfoHabitatfiche.html">geefInfoHabitatfiche()</a></code>), de soortenlijsten die aan de habitattypes/indicatoren hangen (<code><a href="../reference/geefSoortenlijst.html">geefSoortenlijst()</a></code>) en de info over de voorwaarden die nodig zijn voor de berekening (<code><a href="../reference/geefInvoervereisten.html">geefInvoervereisten()</a></code>).</p>
-<p>Daarnaast bevat het package enkele functies die deze informatie meteen in een rapport giet: <code><a href="../reference/maakLSVIrapport.html">maakLSVIrapport()</a></code> genereert een rapport waarin de habitatfiches van de geselecteerde gegevens na elkaar weergegeven worden (inclusief titels), en <code><a href="../reference/maakHabitatfiches.html">maakHabitatfiches()</a></code> slaat elke habitatfiche op in een apart bestand.</p>
-<p>Verder bevat het package functies m.b.t. de berekening van de LSVI. De hoofdfunctie <code><a href="../reference/berekenLSVIbasis.html">berekenLSVIbasis()</a></code> kan door iedereen gebruikt worden om de LSVI te berekenen op basis van eigen gegevens. De gebruiker moet wel eerst de gegevens van de veldopnames omzetten naar het formaat dat beschreven is in de helpfunctie van de functie zelf. Op termijn zullen er ook functies ontwikkeld worden op maat van een specifieke databank of project (met bruikbaarheid afhankelijk van de toegang tot de databank).</p>
-<p>Omwille van de complexiteit van de berekening roept berekenLSVIbasis een aantal hulpfuncties op die elk een deel van de controle of berekening uitvoeren. Voor het gemak bij het ontwikkelen zullen deze voorlopig beschikbaar zijn; op termijn zullen omwille van de overzichtelijkheid enkel de functies beschikbaar gesteld blijven die een meerwaarde bieden voor de gebruiker (en relatief gemakkelijk toegepast kunnen worden).</p>
+<p>Doelstellingen van het package LSVI zijn om de informatie in verband
+met het bepalen van de lokale staat van instandhouding (LSVI) van
+habitattypen digitaal ter beschikking te stellen en de functionaliteit
+aan te bieden om deze LSVI te berekenen (zie <a href="#doelstellingen">Doelstellingen</a> voor details). Het project
+bestaat uit 2 onderdelen die onlosmakelijk met elkaar verbonden zijn:
+een databank die de informatie bevat en het package dat beide
+doelstellingen uitvoert, gebruik makend van de informatie uit de
+databank.</p>
+<p>De <strong>databank</strong> bevat alle informatie uit de
+LSVI-rapporten van de habitattypen, waarbij de verschillende versies van
+de rapporten naast elkaar opgeslagen zijn en dus afzonderlijk
+geraadpleegd of gebruikt kunnen worden. Behalve de teksten die
+letterlijk uit de rapporten overgenomen zijn, bevat de databank ook
+informatie in een vorm die door het package gebruikt kan worden om de
+informatie op de juiste manier uit de databank te halen of om
+berekeningen te maken. Zo is voor elke beoordeling van een indicator een
+opsplitsing gemaakt in ‘voorwaarden’: de elementaire onderdelen die deel
+uitmaken van deze beoordeling en die herleid kunnen worden tot een
+statement dat door een computer geëvalueerd kan worden. Vaak zijn deze
+voorwaarden de onderdelen die in de rapporten gescheiden zijn door ‘en’
+en/of ‘of’, soms is de opsplitsing ook gemaakt uit louter technische
+noodzaak (bv. ‘10% &lt; x &lt; 50%’ wordt vervangen door de voorwaarden
+‘x &gt; 10%’ en ‘x &lt; 50%’). Voor elk van deze voorwaarden is
+gedetailleerde informatie opgenomen over de variabele die nodig is om
+deze beoordeling te kunnen maken, die enerzijds bedoeld is om de
+gebruiker te informeren en anderzijds om de LSVI-berekening gemakkelijk
+te kunnen automatiseren.</p>
+<p>De aard (complexiteit) van de informatie in de LSVI-rapporten en de
+vereiste om ook als basis te dienen voor de rekenmodule hebben geleid
+tot een eerder complexe databankstructuur. We hebben dit opgevangen door
+in het <strong>package</strong> functies voorzien die louter dienen om
+de databank te bevragen: met de functies <code><a href="../reference/geefVersieInfo.html">geefVersieInfo()</a></code>,
+<code><a href="../reference/geefInfoHabitatfiche.html">geefInfoHabitatfiche()</a></code>, <code><a href="../reference/geefSoortenlijst.html">geefSoortenlijst()</a></code> en
+<code><a href="../reference/geefInvoervereisten.html">geefInvoervereisten()</a></code> samen kan alle info uit de databank
+opgevraagd worden. Ze focussen respectievelijk op informatie over de
+versies van de rapporten (<code><a href="../reference/geefVersieInfo.html">geefVersieInfo()</a></code>), de letterlijke
+info uit de LSVI-rapporten (<code><a href="../reference/geefInfoHabitatfiche.html">geefInfoHabitatfiche()</a></code>), de
+soortenlijsten die aan de habitattypes/indicatoren hangen
+(<code><a href="../reference/geefSoortenlijst.html">geefSoortenlijst()</a></code>) en de info over de voorwaarden die
+nodig zijn voor de berekening (<code><a href="../reference/geefInvoervereisten.html">geefInvoervereisten()</a></code>).</p>
+<p>Daarnaast bevat het package enkele functies die deze informatie
+meteen in een rapport giet: <code><a href="../reference/maakLSVIrapport.html">maakLSVIrapport()</a></code> genereert een
+rapport waarin de habitatfiches van de geselecteerde gegevens na elkaar
+weergegeven worden (inclusief titels), en
+<code><a href="../reference/maakHabitatfiches.html">maakHabitatfiches()</a></code> slaat elke habitatfiche op in een apart
+bestand.</p>
+<p>Verder bevat het package functies m.b.t. de berekening van de LSVI.
+De hoofdfunctie <code><a href="../reference/berekenLSVIbasis.html">berekenLSVIbasis()</a></code> kan door iedereen
+gebruikt worden om de LSVI te berekenen op basis van eigen gegevens. De
+gebruiker moet wel eerst de gegevens van de veldopnames omzetten naar
+het formaat dat beschreven is in de helpfunctie van de functie zelf. Op
+termijn zullen er ook functies ontwikkeld worden op maat van een
+specifieke databank of project (met bruikbaarheid afhankelijk van de
+toegang tot de databank).</p>
+<p>Omwille van de complexiteit van de berekening roept berekenLSVIbasis
+een aantal hulpfuncties op die elk een deel van de controle of
+berekening uitvoeren. Voor het gemak bij het ontwikkelen zullen deze
+voorlopig beschikbaar zijn; op termijn zullen omwille van de
+overzichtelijkheid enkel de functies beschikbaar gesteld blijven die een
+meerwaarde bieden voor de gebruiker (en relatief gemakkelijk toegepast
+kunnen worden).</p>
 <p>##Doelstellingen {#doelstellingen}</p>
-<p>Momenteel bevat het package enkel een basisfunctionaliteit: zoekfuncties om alle onderdelen van de databank weer te geven in een naar ons gevoel logische groepering, en de basisfunctie voor de berekening van de LSVI. Op de planning staan een berekenLSVI-functie voor de verwerking van de fieldmap-gegevens (o.a. opnamen in bossen) en de habitatgegevens van het kwaliteitsmeetnet in INBOVEG, en een rekenmodule voor LSVI-opnamen om de LSVI van Natura 2000-habitattypen toe te voegen aan het platform PAS/DPB.</p>
-<p>De doelstelling is om het package op deze manier stap voor stap verder uit te breiden met nieuwe functionaliteiten op vraag van gebruikers, in het kader van projecten, naar aanleiding van nieuwe berekeningswijzen voor de LSVI,… We verwachten hiervoor input van de gebruikers (hoe moet de berekening gebeuren,…). Ook hopen we dat alle scripts die in het kader van de LSVI ontwikkeld worden, uiteindelijk hun weg vinden naar dit package (zie ook de laatste paragraaf van dit onderdeel). Op die manier is er één plaats waar iedereen voor LSVI-informatie en -berekeningen terecht kan, kan iedereen alle eerder ontwikkelde berekeningsmethoden voor de LSVI op zijn/haar gegevens toepassen en vermijden we binnen INBO een wildgroei van berekeningsmethoden met licht afwijkende resultaten.</p>
-<p>We testen de functies die we ontwikkelen, maar we zien ook wel eens iets over het hoofd. Het is dus (zeker in het begin) mogelijk dat er nog foutjes in geslopen zijn, dat de functies niet in alle omstandigheden een correct resultaat (of correcte foutmelding) geven, of dat een functie zich ‘irritant’ gedraagt (bv. foutmelding geven als je een hoofdletter ingeeft i.p.v. een kleine letter op een plaats waar dit verschil niet relevant is). <strong>Als je deze of andere problemen tegenkomt, meld ze ons dan a.u.b.</strong> (en ga er niet van uit dat je collega’s dat doen). Geef dan bij voorkeur het script door waarbij het misloopt (waar van toepassing inclusief de gegevens of een suggestie voor het resultaat), dit helpt ons om het probleem te situeren en aan te pakken. Ook alle andere feedback is trouwens welkom.</p>
-<p>Als je zelf een script ontwikkelt dat in aanmerking zou kunnen komen om in het package opgenomen te worden, wees dan collegiaal met je collega’s die later een gelijkaardig script nodig hebben en neem contact op met de beheerder van dit package (‘cre’ in description-file, zie code hieronder). We bekijken dan samen op welke manier je het script kan aanleveren en hoe we eventueel resterende taken verdelen. (<em>Aan het berekenscript wordt bij voorkeur een stukje script toegevoegd dat foutcontrole uitvoert op de argumenten van de functie, en documentatie over wat de functie doet, en er wordt bij voorkeur ook een aparte testfunctie geschreven die nagaat of de functie in verschillende situaties het juiste resultaat geeft. We kunnen dit zelf toevoegen of je hierbij helpen, maar het is handig als we hiervoor wat bijkomende informatie krijgen.</em>) Als bedankje word je uiteraard vermeld in de auteurslijst van het package.</p>
+<p>Momenteel bevat het package enkel een basisfunctionaliteit:
+zoekfuncties om alle onderdelen van de databank weer te geven in een
+naar ons gevoel logische groepering, en de basisfunctie voor de
+berekening van de LSVI. Op de planning staan een berekenLSVI-functie
+voor de verwerking van de fieldmap-gegevens (o.a. opnamen in bossen) en
+de habitatgegevens van het kwaliteitsmeetnet in INBOVEG, en een
+rekenmodule voor LSVI-opnamen om de LSVI van Natura 2000-habitattypen
+toe te voegen aan het platform PAS/DPB.</p>
+<p>De doelstelling is om het package op deze manier stap voor stap
+verder uit te breiden met nieuwe functionaliteiten op vraag van
+gebruikers, in het kader van projecten, naar aanleiding van nieuwe
+berekeningswijzen voor de LSVI,… We verwachten hiervoor input van de
+gebruikers (hoe moet de berekening gebeuren,…). Ook hopen we dat alle
+scripts die in het kader van de LSVI ontwikkeld worden, uiteindelijk hun
+weg vinden naar dit package (zie ook de laatste paragraaf van dit
+onderdeel). Op die manier is er één plaats waar iedereen voor
+LSVI-informatie en -berekeningen terecht kan, kan iedereen alle eerder
+ontwikkelde berekeningsmethoden voor de LSVI op zijn/haar gegevens
+toepassen en vermijden we binnen INBO een wildgroei van
+berekeningsmethoden met licht afwijkende resultaten.</p>
+<p>We testen de functies die we ontwikkelen, maar we zien ook wel eens
+iets over het hoofd. Het is dus (zeker in het begin) mogelijk dat er nog
+foutjes in geslopen zijn, dat de functies niet in alle omstandigheden
+een correct resultaat (of correcte foutmelding) geven, of dat een
+functie zich ‘irritant’ gedraagt (bv. foutmelding geven als je een
+hoofdletter ingeeft i.p.v. een kleine letter op een plaats waar dit
+verschil niet relevant is). <strong>Als je deze of andere problemen
+tegenkomt, meld ze ons dan a.u.b.</strong> (en ga er niet van uit dat je
+collega’s dat doen). Geef dan bij voorkeur het script door waarbij het
+misloopt (waar van toepassing inclusief de gegevens of een suggestie
+voor het resultaat), dit helpt ons om het probleem te situeren en aan te
+pakken. Ook alle andere feedback is trouwens welkom.</p>
+<p>Als je zelf een script ontwikkelt dat in aanmerking zou kunnen komen
+om in het package opgenomen te worden, wees dan collegiaal met je
+collega’s die later een gelijkaardig script nodig hebben en neem contact
+op met de beheerder van dit package (‘cre’ in description-file, zie code
+hieronder). We bekijken dan samen op welke manier je het script kan
+aanleveren en hoe we eventueel resterende taken verdelen. (<em>Aan het
+berekenscript wordt bij voorkeur een stukje script toegevoegd dat
+foutcontrole uitvoert op de argumenten van de functie, en documentatie
+over wat de functie doet, en er wordt bij voorkeur ook een aparte
+testfunctie geschreven die nagaat of de functie in verschillende
+situaties het juiste resultaat geeft. We kunnen dit zelf toevoegen of je
+hierbij helpen, maar het is handig als we hiervoor wat bijkomende
+informatie krijgen.</em>) Als bedankje word je uiteraard vermeld in de
+auteurslijst van het package.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html">packageDescription</a></span><span class="op">(</span>pkg <span class="op">=</span> <span class="st">"LSVI"</span><span class="op">)</span></code></pre></div>
-<pre><code>## Package: LSVI
-## Title: Rekenmodule Lokale Staat Van Instandhouding van habitattypen
-## Version: 0.1.0.9001
-## Authors@R: c( person( "Els", "Lommelen", email =
-##         "els.lommelen@inbo.be", comment = c(ORCID =
-##         "0000-0002-3481-5684"), role = c("aut", "cre")),
-##         person("Patrik", "Oosterlynck", email =
-##         "patrik.oosterlynck@inbo.be", comment = c(ORCID =
-##         "0000-0002-5712-0770"), role = c("aut")), person("Gert", "Van
-##         Spaendonk", email = "gert.vanspaendonk@inbo.be", role =
-##         c("aut")), person("Hans", "Van Calster", email =
-##         "hans.vancalster@inbo.be", comment = c(ORCID =
-##         "0000-0001-8595-8426"), role = c("aut")), person("Martine",
-##         "Van Hove", email = "martine.vanhove@inbo.be", role =
-##         c("aut")), person("Toon", "Westra", email =
-##         "toon.westra@inbo.be", comment = c(ORCID =
-##         "0000-0003-2478-9459"), role = c("aut")), person("An",
-##         "Leyssen", email = "an.leyssen@inbo.be", role = c("ctb")),
-##         person("Toon", "Spanhove", email = "toon.spanhove@inbo.be",
-##         role = c("ctb")), person("Research Institute for Nature and
-##         Forest (INBO)", email = "info@inbo.be", role = "cph"))
-## Description: Het package LSVI bundelt een aantal functies in verband
-##         met het ophalen van informatie over en het berekenen van de
-##         Lokale Staat Van Instandhouding (LSVI) van habitattypes.
-## Depends: R (&gt;= 3.5.0)
-## License: GPL-3
-## LazyData: true
-## Encoding: UTF-8
-## Imports: assertthat, DBI, plyr, dplyr, lazyeval, methods, odbc, pool,
-##         readr, rgbif, rlang, rmarkdown, RSQLite, stringr, testthat,
-##         tibble, tidyr, utils, xtable
-## Suggests: knitr
-## RoxygenNote: 7.1.1
-## VignetteBuilder: knitr
-## URL: https://github.com/inbo/LSVI
-## BugReports: https://github.com/inbo/LSVI/issues
-## Collate: 'berekenLSVIbasis.R' 'berekenStatus.R'
-##         'berekenVerschilscores.R' .....
-## Author: Els Lommelen [aut, cre]
-##         (&lt;https://orcid.org/0000-0002-3481-5684&gt;), Patrik Oosterlynck
-##         [aut] (&lt;https://orcid.org/0000-0002-5712-0770&gt;), Gert Van
-##         Spaendonk [aut], Hans Van Calster [aut]
-##         (&lt;https://orcid.org/0000-0001-8595-8426&gt;), Martine Van Hove
-##         [aut], Toon Westra [aut]
-##         (&lt;https://orcid.org/0000-0003-2478-9459&gt;), An Leyssen [ctb],
-##         Toon Spanhove [ctb], Research Institute for Nature and Forest
-##         (INBO) [cph]
-## Maintainer: Els Lommelen &lt;els.lommelen@inbo.be&gt;
-## Built: R 4.1.0; ; 2021-09-03 09:25:29 UTC; windows
-## 
-## -- File: C:/R/Library/LSVI/Meta/package.rds</code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">packageDescription</a></span><span class="op">(</span>pkg <span class="op">=</span> <span class="st">"LSVI"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Package: LSVI</span></span>
+<span><span class="co">## Title: Rekenmodule Lokale Staat Van Instandhouding van habitattypen</span></span>
+<span><span class="co">## Version: 0.1.1.900</span></span>
+<span><span class="co">## Authors@R: c( person( "Els", "Lommelen", email =</span></span>
+<span><span class="co">##         "els.lommelen@inbo.be", comment = c(ORCID =</span></span>
+<span><span class="co">##         "0000-0002-3481-5684"), role = c("aut", "cre")),</span></span>
+<span><span class="co">##         person("Patrik", "Oosterlynck", email =</span></span>
+<span><span class="co">##         "patrik.oosterlynck@inbo.be", comment = c(ORCID =</span></span>
+<span><span class="co">##         "0000-0002-5712-0770"), role = c("aut")), person("Gert", "Van</span></span>
+<span><span class="co">##         Spaendonk", email = "gert.vanspaendonk@inbo.be", role =</span></span>
+<span><span class="co">##         c("aut")), person("Hans", "Van Calster", email =</span></span>
+<span><span class="co">##         "hans.vancalster@inbo.be", comment = c(ORCID =</span></span>
+<span><span class="co">##         "0000-0001-8595-8426"), role = c("aut")), person("Martine",</span></span>
+<span><span class="co">##         "Van Hove", email = "martine.vanhove@inbo.be", role =</span></span>
+<span><span class="co">##         c("aut")), person("Toon", "Westra", email =</span></span>
+<span><span class="co">##         "toon.westra@inbo.be", comment = c(ORCID =</span></span>
+<span><span class="co">##         "0000-0003-2478-9459"), role = c("aut")), person("An",</span></span>
+<span><span class="co">##         "Leyssen", email = "an.leyssen@inbo.be", role = c("ctb")),</span></span>
+<span><span class="co">##         person("Toon", "Spanhove", email = "toon.spanhove@inbo.be",</span></span>
+<span><span class="co">##         role = c("ctb")), person("Research Institute for Nature and</span></span>
+<span><span class="co">##         Forest (INBO)", email = "info@inbo.be", role = "cph"))</span></span>
+<span><span class="co">## Description: Het package LSVI bundelt een aantal functies in verband</span></span>
+<span><span class="co">##         met het ophalen van informatie over en het berekenen van de</span></span>
+<span><span class="co">##         Lokale Staat Van Instandhouding (LSVI) van habitattypes.</span></span>
+<span><span class="co">## Depends: R (&gt;= 3.5.0)</span></span>
+<span><span class="co">## License: GPL-3</span></span>
+<span><span class="co">## LazyData: true</span></span>
+<span><span class="co">## Encoding: UTF-8</span></span>
+<span><span class="co">## Imports: assertthat, DBI, plyr, dplyr, lazyeval, methods, odbc, pool,</span></span>
+<span><span class="co">##         readr, rgbif, rlang, rmarkdown, RSQLite, stringr, testthat,</span></span>
+<span><span class="co">##         tibble, tidyr, utils, xtable</span></span>
+<span><span class="co">## Suggests: knitr</span></span>
+<span><span class="co">## RoxygenNote: 7.2.3</span></span>
+<span><span class="co">## VignetteBuilder: knitr</span></span>
+<span><span class="co">## URL: https://github.com/inbo/LSVI</span></span>
+<span><span class="co">## BugReports: https://github.com/inbo/LSVI/issues</span></span>
+<span><span class="co">## Collate: 'berekenLSVIbasis.R' 'berekenStatus.R'</span></span>
+<span><span class="co">##         'berekenVerschilscores.R' .....</span></span>
+<span><span class="co">## Author: Els Lommelen [aut, cre]</span></span>
+<span><span class="co">##         (&lt;https://orcid.org/0000-0002-3481-5684&gt;), Patrik Oosterlynck</span></span>
+<span><span class="co">##         [aut] (&lt;https://orcid.org/0000-0002-5712-0770&gt;), Gert Van</span></span>
+<span><span class="co">##         Spaendonk [aut], Hans Van Calster [aut]</span></span>
+<span><span class="co">##         (&lt;https://orcid.org/0000-0001-8595-8426&gt;), Martine Van Hove</span></span>
+<span><span class="co">##         [aut], Toon Westra [aut]</span></span>
+<span><span class="co">##         (&lt;https://orcid.org/0000-0003-2478-9459&gt;), An Leyssen [ctb],</span></span>
+<span><span class="co">##         Toon Spanhove [ctb], Research Institute for Nature and Forest</span></span>
+<span><span class="co">##         (INBO) [cph]</span></span>
+<span><span class="co">## Maintainer: Els Lommelen &lt;els.lommelen@inbo.be&gt;</span></span>
+<span><span class="co">## Built: R 4.2.1; ; 2023-04-18 08:36:50 UTC; windows</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## -- File: C:/R/library/LSVI/Meta/package.rds</span></span></code></pre>
 <p>#Installatie van het package {#installatie_package}</p>
-<p>Het package kan als volgt geïnstalleerd worden (altijd eerst R herstarten en deze installatie doen in een sessie waarin nog geen andere packages geladen zijn!):</p>
+<p>Het package kan als volgt geïnstalleerd worden (altijd eerst R
+herstarten en deze installatie doen in een sessie waarin nog geen andere
+packages geladen zijn!):</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"inbo/LSVI"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<p>Een testversie met de nieuwste aanpassingen kan als volgt geïnstalleerd worden:</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"inbo/LSVI"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>Een testversie met de nieuwste aanpassingen kan als volgt
+geïnstalleerd worden:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"inbo/LSVI@develop"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"inbo/LSVI@develop"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>#Gebruik basisfuncties {#gebruik_basisfuncties}</p>
 <p>##Wegwijs in R {#wegwijs_in_R}</p>
 <p>(Wat extra uitleg voor diegenen die niet vertrouwd zijn met R.)</p>
 <p>###R, RStudio, scripts en projecten</p>
-<p>R is de taal die je gebruikt om met je computer te communiceren, RStudio is een programma dat een aantal tools aanbiedt die het je wat gemakkelijker maken: allerhande knoppen waardoor je niet voor elke handeling een commando moet typen, ‘spellingscontrole’ (voor R), een ‘verkenner’ waarin je je mappenstructuur kan raadplegen, een lijst met wat er in het geheugen opgeslagen is,…</p>
-<p>De communicatie met je computer gebeurt via de ‘console’. Als je vaak gelijkaardige opdrachten wil geven aan je computer, kan je alle commando’s ingeven in een script en dit opslaan voor later gebruik (aan te maken met het knopje linksboven onder ‘File’). Als je je cursor op een commando in het script zet en ‘Ctrl’-‘ENTER’ drukt, wordt dit commando naar de console gekopieerd en uitgevoerd; bij selectie van meerdere commando’s wordt de volledige selectie uitgevoerd.</p>
-<p>Aan te raden is om scripts en eventueel bijhorende gegevens te bundelen in een ‘project’. Dit maak je aan door ‘File &gt; New Project &gt; New Directory &gt; New project’ te kiezen, een naam geven aan je project (‘Directory name’) en een map te selecteren om je project in op te slaan. Enkele voordelen:</p>
+<p>R is de taal die je gebruikt om met je computer te communiceren,
+RStudio is een programma dat een aantal tools aanbiedt die het je wat
+gemakkelijker maken: allerhande knoppen waardoor je niet voor elke
+handeling een commando moet typen, ‘spellingscontrole’ (voor R), een
+‘verkenner’ waarin je je mappenstructuur kan raadplegen, een lijst met
+wat er in het geheugen opgeslagen is,…</p>
+<p>De communicatie met je computer gebeurt via de ‘console’. Als je vaak
+gelijkaardige opdrachten wil geven aan je computer, kan je alle
+commando’s ingeven in een script en dit opslaan voor later gebruik (aan
+te maken met het knopje linksboven onder ‘File’). Als je je cursor op
+een commando in het script zet en ‘Ctrl’-‘ENTER’ drukt, wordt dit
+commando naar de console gekopieerd en uitgevoerd; bij selectie van
+meerdere commando’s wordt de volledige selectie uitgevoerd.</p>
+<p>Aan te raden is om scripts en eventueel bijhorende gegevens te
+bundelen in een ‘project’. Dit maak je aan door ‘File &gt; New Project
+&gt; New Directory &gt; New project’ te kiezen, een naam geven aan je
+project (‘Directory name’) en een map te selecteren om je project in op
+te slaan. Enkele voordelen:</p>
 <ul>
-<li>nieuw aangemaakte bestanden worden automatisch in deze map opgeslagen, en verwijzingen naar bestanden kunnen gebeuren ten opzichte van de map van je project (dus relatieve paden i.p.v. absolute paden)</li>
-<li>in een project blijft je ‘werkomgeving’ behouden: als bij het afsluiten nog een aantal (niet opgeslagen) scripts open stonden, dan zullen deze bij het heropenen van het project nog in dezelfde staat zijn (bv. geopend en niet opgeslagen), ook als je tussendoor aan andere R-projecten gewerkt hebt</li>
-<li>enkele instellingen moet je niet meer manueel in orde brengen (bv. ‘working directory’ instellen), waardoor je minder snel met problemen geconfronteerd wordt</li>
+<li>nieuw aangemaakte bestanden worden automatisch in deze map
+opgeslagen, en verwijzingen naar bestanden kunnen gebeuren ten opzichte
+van de map van je project (dus relatieve paden i.p.v. absolute
+paden)</li>
+<li>in een project blijft je ‘werkomgeving’ behouden: als bij het
+afsluiten nog een aantal (niet opgeslagen) scripts open stonden, dan
+zullen deze bij het heropenen van het project nog in dezelfde staat zijn
+(bv. geopend en niet opgeslagen), ook als je tussendoor aan andere
+R-projecten gewerkt hebt</li>
+<li>enkele instellingen moet je niet meer manueel in orde brengen (bv.
+‘working directory’ instellen), waardoor je minder snel met problemen
+geconfronteerd wordt</li>
 </ul>
-<p>Om scripts gemakkelijk te kunnen hergebruiken met andere waarden, kunnen ze in de vorm van functies geschreven worden. Die functies kunnen gebundeld worden in een package en beschikbaar gesteld worden voor alle R-gebruikers.</p>
+<p>Om scripts gemakkelijk te kunnen hergebruiken met andere waarden,
+kunnen ze in de vorm van functies geschreven worden. Die functies kunnen
+gebundeld worden in een package en beschikbaar gesteld worden voor alle
+R-gebruikers.</p>
 <p>###Packages en documentatie</p>
-<p>Om in R packages te kunnen gebruiken, moeten deze telkens (na elke herstart van de R-console) eerst ingeladen worden met de functie <code><a href="https://rdrr.io/r/base/library.html">library()</a></code>. Om de functies in verband met de LSVI te gebruiken, voer je dus eerst het commando <code><a href="https://github.com/inbo/LSVI">library(LSVI)</a></code> in. Dit kan wel enkel met reeds geïnstalleerde packages, die in het venster rechtsonder onder de tab Packages vermeld zijn. Andere packages moet je eerst eenmalig installeren (via de knop Install of het commando <code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("naam_nieuw_package")</a></code>).</p>
-<p>Als je in de lijst met packages onder de tab Packages op een packagenaam klikt, krijg je de documentatie van het package: eventuele handleidingen (onder de link <code>User guides, package vignettes and other documentation</code>) en een klikbare lijst met alle functies die in het package beschikbaar zijn. Dezelfde documentatie is terug te vinden via de bovenste balk op de <a href="https://inbo.github.io/LSVI/index.html">website</a>: handleidingen staan onder <a href="https://inbo.github.io/LSVI/articles/index.html">Articles</a> en functies onder <a href="https://inbo.github.io/LSVI/reference/index.html">Reference</a>.</p>
-<p>Zodra een package ingeladen is, kan je deze documentatie van functies ook opvragen door een <code><a href="https://rdrr.io/r/utils/Question.html">?</a></code> te typen, gevolgd door de naam van de functie, bijvoorbeeld:</p>
+<p>Om in R packages te kunnen gebruiken, moeten deze telkens (na elke
+herstart van de R-console) eerst ingeladen worden met de functie
+<code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code>. Om de functies in verband met de LSVI te
+gebruiken, voer je dus eerst het commando <code><a href="https://github.com/inbo/LSVI" class="external-link">library(LSVI)</a></code> in.
+Dit kan wel enkel met reeds geïnstalleerde packages, die in het venster
+rechtsonder onder de tab Packages vermeld zijn. Andere packages moet je
+eerst eenmalig installeren (via de knop Install of het commando
+<code>install.packages("naam_nieuw_package")</code>).</p>
+<p>Als je in de lijst met packages onder de tab Packages op een
+packagenaam klikt, krijg je de documentatie van het package: eventuele
+handleidingen (onder de link
+<code>User guides, package vignettes and other documentation</code>) en
+een klikbare lijst met alle functies die in het package beschikbaar
+zijn. Dezelfde documentatie is terug te vinden via de bovenste balk op
+de <a href="https://inbo.github.io/LSVI/index.html" class="external-link">website</a>:
+handleidingen staan onder <a href="https://inbo.github.io/LSVI/articles/index.html" class="external-link">Articles</a> en
+functies onder <a href="https://inbo.github.io/LSVI/reference/index.html" class="external-link">Reference</a>.</p>
+<p>Zodra een package ingeladen is, kan je deze documentatie van functies
+ook opvragen door een <code>?</code> te typen, gevolgd door de naam van
+de functie, bijvoorbeeld:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/inbo/LSVI">LSVI</a></span><span class="op">)</span>
-<span class="op">?</span><span class="va">maakLSVIrapport</span></code></pre></div>
-<p>Deze documentatie geeft aan wat de functie doet en hoe je de functie moet gebruiken:</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/inbo/LSVI" class="external-link">LSVI</a></span><span class="op">)</span></span>
+<span><span class="op">?</span><span class="va">maakLSVIrapport</span></span></code></pre></div>
+<p>Deze documentatie geeft aan wat de functie doet en hoe je de functie
+moet gebruiken:</p>
 <ul>
 <li>Description: beschrijft wat de functie doet</li>
-<li>Usage: geeft de argumenten weer en de defaultwaarden die voor deze argumenten meegegeven worden (zie ook Arguments)</li>
-<li>Arguments: de argumenten die je met de functie kan of moet meegeven. Hiermee bepaal je dus zelf welke uitvoer je wil, door bijvoorbeeld te kiezen voor een bepaalde versie of bepaald habitattype. Of bij berekenfuncties geef je hier een tabel mee met de veldobservaties waarop de berekening uitgevoerd moet worden. Voor deze argumenten moet je een waarde meegeven als er geen waarde vermeld is onder Usage, in het andere geval mag je een waarde meegeven (als je dit niet doet, wordt de onder Usage vermelde defaultwaarde gebruikt).</li>
-<li>Value: wat de functie teruggeeft. Dit is voor het LSVI-package vaak een tabel met gegevens, in bovenstaand voorbeeld wordt een document gegenereerd dat automatisch opgeslagen wordt in de map waarin je op dat moment werkt.</li>
-<li>Examples: een of meerdere voorbeelden die tonen hoe je de functie kan gebruiken. Als het package LSVI ingeladen is (dus na intypen van <code><a href="https://github.com/inbo/LSVI">library(LSVI)</a></code>), kan je deze voorbeelden kopiëren en uittesten. Door de argumenten aan te passen (of toe te voegen of te wissen), kan je op een gemakkelijke manier je eigen script maken.</li>
+<li>Usage: geeft de argumenten weer en de defaultwaarden die voor deze
+argumenten meegegeven worden (zie ook Arguments)</li>
+<li>Arguments: de argumenten die je met de functie kan of moet meegeven.
+Hiermee bepaal je dus zelf welke uitvoer je wil, door bijvoorbeeld te
+kiezen voor een bepaalde versie of bepaald habitattype. Of bij
+berekenfuncties geef je hier een tabel mee met de veldobservaties waarop
+de berekening uitgevoerd moet worden. Voor deze argumenten moet je een
+waarde meegeven als er geen waarde vermeld is onder Usage, in het andere
+geval mag je een waarde meegeven (als je dit niet doet, wordt de onder
+Usage vermelde defaultwaarde gebruikt).</li>
+<li>Value: wat de functie teruggeeft. Dit is voor het LSVI-package vaak
+een tabel met gegevens, in bovenstaand voorbeeld wordt een document
+gegenereerd dat automatisch opgeslagen wordt in de map waarin je op dat
+moment werkt.</li>
+<li>Examples: een of meerdere voorbeelden die tonen hoe je de functie
+kan gebruiken. Als het package LSVI ingeladen is (dus na intypen van
+<code><a href="https://github.com/inbo/LSVI" class="external-link">library(LSVI)</a></code>), kan je deze voorbeelden kopiëren en
+uittesten. Door de argumenten aan te passen (of toe te voegen of te
+wissen), kan je op een gemakkelijke manier je eigen script maken.</li>
 </ul>
-<p><em>(Leeswijzer: info over het gebruik van de functies in het LSVI-package staat onder <a href="#basis_LSVI">Basis van LSVI-package</a>. Wat hier volgt, is wat met de gegenereerde gegevens gedaan kan worden. We raden daarom aan om eerst <a href="#basis_LSVI">Basis van LSVI-package</a> te lezen.)</em></p>
-<p>###Wat met gegenereerde gegevens in tabelvorm? {#gegs_in_tabelvorm}</p>
-<p>Vaak genereert een functie gegevens in de vorm van een tabel. Hoe kan je hier nu mee verdergaan?</p>
-<p>We illustreren dit a.d.h.v de functie <code><a href="../reference/geefSoortenlijst.html">geefSoortenlijst()</a></code>. Als we deze functie op zich gebruiken zoals in de documentatie is weergegeven (eerste voorbeeld), dan wordt de uitvoer weergegeven in de R-console:</p>
+<p><em>(Leeswijzer: info over het gebruik van de functies in het
+LSVI-package staat onder <a href="#basis_LSVI">Basis van
+LSVI-package</a>. Wat hier volgt, is wat met de gegenereerde gegevens
+gedaan kan worden. We raden daarom aan om eerst <a href="#basis_LSVI">Basis van LSVI-package</a> te lezen.)</em></p>
+<p>###Wat met gegenereerde gegevens in tabelvorm?
+{#gegs_in_tabelvorm}</p>
+<p>Vaak genereert een functie gegevens in de vorm van een tabel. Hoe kan
+je hier nu mee verdergaan?</p>
+<p>We illustreren dit a.d.h.v de functie
+<code><a href="../reference/geefSoortenlijst.html">geefSoortenlijst()</a></code>. Als we deze functie op zich gebruiken
+zoals in de documentatie is weergegeven (eerste voorbeeld), dan wordt de
+uitvoer weergegeven in de R-console:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/inbo/LSVI">LSVI</a></span><span class="op">)</span></code></pre></div>
-<pre><code>## Om de functies van het package LSVI te kunnen gebruiken, moet eerst een connectie gelegd worden met de databank.  Dit kan door na het laden van het package eenmaal de functie 'maakConnectiePool()' te runnen.</code></pre>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/inbo/LSVI" class="external-link">LSVI</a></span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Om de functies van het package LSVI te kunnen gebruiken, moet eerst een connectie gelegd worden met de databank.  Dit kan door na het laden van het package eenmaal de functie 'maakConnectiePool()' te runnen.</span></span></code></pre>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/maakConnectiePool.html">maakConnectiePool</a></span><span class="op">(</span><span class="op">)</span>
-<span class="fu"><a href="../reference/geefSoortenlijst.html">geefSoortenlijst</a></span><span class="op">(</span>Habitattype <span class="op">=</span> <span class="st">"4030"</span>, Taxonlijsttype <span class="op">=</span> <span class="st">"LSVIfiche"</span><span class="op">)</span></code></pre></div>
-<pre><code>##        Versie Habitattype Habitatsubtype TaxongroepId           Omschrijving
-## 1  Versie 2.0        4030           4030          453 vergrassing/verruiging
-## 2  Versie 2.0        4030           4030          453 vergrassing/verruiging
-## 3  Versie 2.0        4030           4030          453 vergrassing/verruiging
-## 4  Versie 2.0        4030           4030          453 vergrassing/verruiging
-## 5  Versie 2.0        4030           4030          453 vergrassing/verruiging
-## 6  Versie 2.0        4030           4030           93          dwergstruiken
-## 7  Versie 2.0        4030           4030           93          dwergstruiken
-## 8  Versie 2.0        4030           4030           93          dwergstruiken
-## 9  Versie 2.0        4030           4030           93          dwergstruiken
-## 10   Versie 3        4030           4030           94          dwergstruiken
-## 11   Versie 3        4030           4030           94          dwergstruiken
-## 12   Versie 3        4030           4030           94          dwergstruiken
-## 13   Versie 3        4030           4030           94          dwergstruiken
-## 14   Versie 3        4030           4030           94          dwergstruiken
-## 15   Versie 3        4030           4030          440            vergrassing
-## 16   Versie 3        4030           4030          440            vergrassing
-## 17   Versie 3        4030           4030          440            vergrassing
-## 18   Versie 3        4030           4030          440            vergrassing
-## 19   Versie 3        4030           4030          484             verruiging
-## 20   Versie 3        4030           4030          484             verruiging
-## 21   Versie 3        4030           4030          414           invasief mos
-## 22 Versie 2.0        4030           4030          596         sleutelsoorten
-## 23 Versie 2.0        4030           4030          596         sleutelsoorten
-## 24 Versie 2.0        4030           4030          596         sleutelsoorten
-## 25 Versie 2.0        4030           4030          596         sleutelsoorten
-## 26 Versie 2.0        4030           4030          596         sleutelsoorten
-## 27 Versie 2.0        4030           4030          596         sleutelsoorten
-## 28 Versie 2.0        4030           4030          596         sleutelsoorten
-## 29 Versie 2.0        4030           4030          596  aanwezigheidstruikhei
-## 30   Versie 3        4030           4030          597         sleutelsoorten
-## 31   Versie 3        4030           4030          597         sleutelsoorten
-## 32   Versie 3        4030           4030          597         sleutelsoorten
-## 33   Versie 3        4030           4030          597         sleutelsoorten
-## 34   Versie 3        4030           4030          597         sleutelsoorten
-## 35   Versie 3        4030           4030          597         sleutelsoorten
-## 36   Versie 3        4030           4030          597         sleutelsoorten
-## 37   Versie 3        4030           4030          597         sleutelsoorten
-## 38   Versie 3        4030           4030          597         sleutelsoorten
-## 39   Versie 3        4030           4030          597         sleutelsoorten
-## 40   Versie 3        4030           4030          597  aanwezigheidstruikhei
-##    NbnTaxonVersionKey                                 WetNaam
-## 1    NBNSYS0000002031           Pteridium aquilinum (L.) Kuhn
-## 2    NBNSYS0000002499            Molinia caerulea (L.) Moench
-## 3    NBNSYS0000002623         Deschampsia flexuosa (L.) Trin.
-## 4    NBNSYS0000039520                                Agrostis
-## 5    NBNSYS0000137437                                   Rubus
-## 6    NBNSYS0000003902              Calluna vulgaris (L.) Hull
-## 7    NBNSYS0000003903                       Erica tetralix L.
-## 8    NBNSYS0000003909                        Erica cinerea L.
-## 9    NBNSYS0000003915                  Vaccinium myrtillus L.
-## 10   NBNSYS0000003902              Calluna vulgaris (L.) Hull
-## 11   NBNSYS0000003903                       Erica tetralix L.
-## 12   NBNSYS0000003909                        Erica cinerea L.
-## 13   NBNSYS0000003914                Vaccinium vitis-idaea L.
-## 14   NBNSYS0000003915                  Vaccinium myrtillus L.
-## 15   NBNSYS0000002499            Molinia caerulea (L.) Moench
-## 16   NBNSYS0000002623         Deschampsia flexuosa (L.) Trin.
-## 17   NBNSYS0000002630        Calamagrostis epigejos (L.) Roth
-## 18   NBNSYS0000039520                                Agrostis
-## 19   NBNSYS0000002031           Pteridium aquilinum (L.) Kuhn
-## 20   NBNSYS0000137437                                   Rubus
-## 21   NBNSYS0000036261    Campylopus introflexus (Hedw.) Brid.
-## 22   INBSYS0000004851 Diphasiastrum tristachyum (Pursh) Holub
-## 23   NBNSYS0000002003                  Lycopodium clavatum L.
-## 24   NBNSYS0000003207                      Genista anglica L.
-## 25   NBNSYS0000003208                       Genista pilosa L.
-## 26   NBNSYS0000003909                        Erica cinerea L.
-## 27   NBNSYS0000003914                Vaccinium vitis-idaea L.
-## 28   NBNSYS0000004030               Cuscuta epithymum (L.) L.
-## 29   NBNSYS0000003902              Calluna vulgaris (L.) Hull
-## 30   INBSYS0000004426         Potentilla erecta (L.) Räuschel
-## 31   INBSYS0000004851 Diphasiastrum tristachyum (Pursh) Holub
-## 32   NBNSYS0000002003                  Lycopodium clavatum L.
-## 33   NBNSYS0000002444                     Carex pilulifera L.
-## 34   NBNSYS0000002676                       Nardus stricta L.
-## 35   NBNSYS0000003207                      Genista anglica L.
-## 36   NBNSYS0000003208                       Genista pilosa L.
-## 37   NBNSYS0000003909                        Erica cinerea L.
-## 38   NBNSYS0000004030               Cuscuta epithymum (L.) L.
-## 39   NHMSYS0000458768               Festuca filiformis Pourr.
-## 40   NBNSYS0000003902              Calluna vulgaris (L.) Hull
-##                  NedNaam               WetNaamKort TaxonType
-## 1          Adelaarsvaren       Pteridium aquilinum   Species
-## 2         Pijpenstrootje          Molinia caerulea   Species
-## 3         Bochtige smele      Deschampsia flexuosa   Species
-## 4         Struisgras (G)                  Agrostis     Genus
-## 5              Braam (G)                     Rubus     Genus
-## 6              Struikhei          Calluna vulgaris   Species
-## 7          Gewone dophei            Erica tetralix   Species
-## 8            Rode dophei             Erica cinerea   Species
-## 9          Blauwe bosbes       Vaccinium myrtillus   Species
-## 10             Struikhei          Calluna vulgaris   Species
-## 11         Gewone dophei            Erica tetralix   Species
-## 12           Rode dophei             Erica cinerea   Species
-## 13           Rode bosbes     Vaccinium vitis-idaea   Species
-## 14         Blauwe bosbes       Vaccinium myrtillus   Species
-## 15        Pijpenstrootje          Molinia caerulea   Species
-## 16        Bochtige smele      Deschampsia flexuosa   Species
-## 17     Gewoon struisriet    Calamagrostis epigejos   Species
-## 18        Struisgras (G)                  Agrostis     Genus
-## 19         Adelaarsvaren       Pteridium aquilinum   Species
-## 20             Braam (G)                     Rubus     Genus
-## 21 Grijs kronkelsteeltje    Campylopus introflexus   Species
-## 22     Kleine wolfsklauw Diphasiastrum tristachyum   Species
-## 23      Grote wolfsklauw       Lycopodium clavatum   Species
-## 24            Stekelbrem           Genista anglica   Species
-## 25             Kruipbrem            Genista pilosa   Species
-## 26           Rode dophei             Erica cinerea   Species
-## 27           Rode bosbes     Vaccinium vitis-idaea   Species
-## 28        Klein warkruid         Cuscuta epithymum   Species
-## 29             Struikhei          Calluna vulgaris   Species
-## 30             Tormentil         Potentilla erecta   Species
-## 31     Kleine wolfsklauw Diphasiastrum tristachyum   Species
-## 32      Grote wolfsklauw       Lycopodium clavatum   Species
-## 33              Pilzegge          Carex pilulifera   Species
-## 34           Borstelgras            Nardus stricta   Species
-## 35            Stekelbrem           Genista anglica   Species
-## 36             Kruipbrem            Genista pilosa   Species
-## 37           Rode dophei             Erica cinerea   Species
-## 38        Klein warkruid         Cuscuta epithymum   Species
-## 39      Fijn schapengras        Festuca filiformis   Species
-## 40             Struikhei          Calluna vulgaris   Species</code></pre>
-<p>Omdat de tabel te breed is, wordt deze opgesplitst in 3 delen, die onder elkaar weergegeven worden. Deze tabel wordt ook enkel weergegeven, niet opgeslagen, en op deze manier kunnen we er achteraf geen bewerkingen mee doen. Beter is om de tabel toe te kennen aan een variabele, we geven hier die variabele de naam <code>soortenlijst4030</code>:</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/maakConnectiePool.html">maakConnectiePool</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/geefSoortenlijst.html">geefSoortenlijst</a></span><span class="op">(</span>Habitattype <span class="op">=</span> <span class="st">"4030"</span>, Taxonlijsttype <span class="op">=</span> <span class="st">"LSVIfiche"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##        Versie Habitattype Habitatsubtype TaxongroepId           Omschrijving</span></span>
+<span><span class="co">## 1  Versie 2.0        4030           4030          528 vergrassing/verruiging</span></span>
+<span><span class="co">## 2  Versie 2.0        4030           4030          528 vergrassing/verruiging</span></span>
+<span><span class="co">## 3  Versie 2.0        4030           4030          528 vergrassing/verruiging</span></span>
+<span><span class="co">## 4  Versie 2.0        4030           4030          528 vergrassing/verruiging</span></span>
+<span><span class="co">## 5  Versie 2.0        4030           4030          528 vergrassing/verruiging</span></span>
+<span><span class="co">## 6  Versie 2.0        4030           4030           99          dwergstruiken</span></span>
+<span><span class="co">## 7  Versie 2.0        4030           4030           99          dwergstruiken</span></span>
+<span><span class="co">## 8  Versie 2.0        4030           4030           99          dwergstruiken</span></span>
+<span><span class="co">## 9  Versie 2.0        4030           4030           99          dwergstruiken</span></span>
+<span><span class="co">## 10   Versie 3        4030           4030          100          dwergstruiken</span></span>
+<span><span class="co">## 11   Versie 3        4030           4030          100          dwergstruiken</span></span>
+<span><span class="co">## 12   Versie 3        4030           4030          100          dwergstruiken</span></span>
+<span><span class="co">## 13   Versie 3        4030           4030          100          dwergstruiken</span></span>
+<span><span class="co">## 14   Versie 3        4030           4030          100          dwergstruiken</span></span>
+<span><span class="co">## 15   Versie 3        4030           4030          514            vergrassing</span></span>
+<span><span class="co">## 16   Versie 3        4030           4030          514            vergrassing</span></span>
+<span><span class="co">## 17   Versie 3        4030           4030          514            vergrassing</span></span>
+<span><span class="co">## 18   Versie 3        4030           4030          514            vergrassing</span></span>
+<span><span class="co">## 19   Versie 3        4030           4030          559             verruiging</span></span>
+<span><span class="co">## 20   Versie 3        4030           4030          559             verruiging</span></span>
+<span><span class="co">## 21   Versie 3        4030           4030          484           invasief mos</span></span>
+<span><span class="co">## 22 Versie 2.0        4030           4030          695         sleutelsoorten</span></span>
+<span><span class="co">## 23 Versie 2.0        4030           4030          695         sleutelsoorten</span></span>
+<span><span class="co">## 24 Versie 2.0        4030           4030          695         sleutelsoorten</span></span>
+<span><span class="co">## 25 Versie 2.0        4030           4030          695         sleutelsoorten</span></span>
+<span><span class="co">## 26 Versie 2.0        4030           4030          695         sleutelsoorten</span></span>
+<span><span class="co">## 27 Versie 2.0        4030           4030          695         sleutelsoorten</span></span>
+<span><span class="co">## 28 Versie 2.0        4030           4030          695         sleutelsoorten</span></span>
+<span><span class="co">## 29 Versie 2.0        4030           4030          695  aanwezigheidstruikhei</span></span>
+<span><span class="co">## 30   Versie 3        4030           4030          696         sleutelsoorten</span></span>
+<span><span class="co">## 31   Versie 3        4030           4030          696         sleutelsoorten</span></span>
+<span><span class="co">## 32   Versie 3        4030           4030          696         sleutelsoorten</span></span>
+<span><span class="co">## 33   Versie 3        4030           4030          696         sleutelsoorten</span></span>
+<span><span class="co">## 34   Versie 3        4030           4030          696         sleutelsoorten</span></span>
+<span><span class="co">## 35   Versie 3        4030           4030          696         sleutelsoorten</span></span>
+<span><span class="co">## 36   Versie 3        4030           4030          696         sleutelsoorten</span></span>
+<span><span class="co">## 37   Versie 3        4030           4030          696         sleutelsoorten</span></span>
+<span><span class="co">## 38   Versie 3        4030           4030          696         sleutelsoorten</span></span>
+<span><span class="co">## 39   Versie 3        4030           4030          696         sleutelsoorten</span></span>
+<span><span class="co">## 40   Versie 3        4030           4030          696  aanwezigheidstruikhei</span></span>
+<span><span class="co">##    NbnTaxonVersionKey                                 WetNaam</span></span>
+<span><span class="co">## 1    NBNSYS0000002031           Pteridium aquilinum (L.) Kuhn</span></span>
+<span><span class="co">## 2    NBNSYS0000002499            Molinia caerulea (L.) Moench</span></span>
+<span><span class="co">## 3    NBNSYS0000002623         Deschampsia flexuosa (L.) Trin.</span></span>
+<span><span class="co">## 4    NBNSYS0000039520                                Agrostis</span></span>
+<span><span class="co">## 5    NBNSYS0000137437                                   Rubus</span></span>
+<span><span class="co">## 6    NBNSYS0000003902              Calluna vulgaris (L.) Hull</span></span>
+<span><span class="co">## 7    NBNSYS0000003903                       Erica tetralix L.</span></span>
+<span><span class="co">## 8    NBNSYS0000003909                        Erica cinerea L.</span></span>
+<span><span class="co">## 9    NBNSYS0000003915                  Vaccinium myrtillus L.</span></span>
+<span><span class="co">## 10   NBNSYS0000003902              Calluna vulgaris (L.) Hull</span></span>
+<span><span class="co">## 11   NBNSYS0000003903                       Erica tetralix L.</span></span>
+<span><span class="co">## 12   NBNSYS0000003909                        Erica cinerea L.</span></span>
+<span><span class="co">## 13   NBNSYS0000003914                Vaccinium vitis-idaea L.</span></span>
+<span><span class="co">## 14   NBNSYS0000003915                  Vaccinium myrtillus L.</span></span>
+<span><span class="co">## 15   NBNSYS0000002499            Molinia caerulea (L.) Moench</span></span>
+<span><span class="co">## 16   NBNSYS0000002623         Deschampsia flexuosa (L.) Trin.</span></span>
+<span><span class="co">## 17   NBNSYS0000002630        Calamagrostis epigejos (L.) Roth</span></span>
+<span><span class="co">## 18   NBNSYS0000039520                                Agrostis</span></span>
+<span><span class="co">## 19   NBNSYS0000002031           Pteridium aquilinum (L.) Kuhn</span></span>
+<span><span class="co">## 20   NBNSYS0000137437                                   Rubus</span></span>
+<span><span class="co">## 21   NBNSYS0000036261    Campylopus introflexus (Hedw.) Brid.</span></span>
+<span><span class="co">## 22   INBSYS0000004851 Diphasiastrum tristachyum (Pursh) Holub</span></span>
+<span><span class="co">## 23   NBNSYS0000002003                  Lycopodium clavatum L.</span></span>
+<span><span class="co">## 24   NBNSYS0000003207                      Genista anglica L.</span></span>
+<span><span class="co">## 25   NBNSYS0000003208                       Genista pilosa L.</span></span>
+<span><span class="co">## 26   NBNSYS0000003909                        Erica cinerea L.</span></span>
+<span><span class="co">## 27   NBNSYS0000003914                Vaccinium vitis-idaea L.</span></span>
+<span><span class="co">## 28   NBNSYS0000004030               Cuscuta epithymum (L.) L.</span></span>
+<span><span class="co">## 29   NBNSYS0000003902              Calluna vulgaris (L.) Hull</span></span>
+<span><span class="co">## 30   INBSYS0000004426         Potentilla erecta (L.) Räuschel</span></span>
+<span><span class="co">## 31   INBSYS0000004851 Diphasiastrum tristachyum (Pursh) Holub</span></span>
+<span><span class="co">## 32   NBNSYS0000002003                  Lycopodium clavatum L.</span></span>
+<span><span class="co">## 33   NBNSYS0000002444                     Carex pilulifera L.</span></span>
+<span><span class="co">## 34   NBNSYS0000002676                       Nardus stricta L.</span></span>
+<span><span class="co">## 35   NBNSYS0000003207                      Genista anglica L.</span></span>
+<span><span class="co">## 36   NBNSYS0000003208                       Genista pilosa L.</span></span>
+<span><span class="co">## 37   NBNSYS0000003909                        Erica cinerea L.</span></span>
+<span><span class="co">## 38   NBNSYS0000004030               Cuscuta epithymum (L.) L.</span></span>
+<span><span class="co">## 39   NHMSYS0000458768               Festuca filiformis Pourr.</span></span>
+<span><span class="co">## 40   NBNSYS0000003902              Calluna vulgaris (L.) Hull</span></span>
+<span><span class="co">##                  NedNaam               WetNaamKort TaxonType</span></span>
+<span><span class="co">## 1          Adelaarsvaren       Pteridium aquilinum   Species</span></span>
+<span><span class="co">## 2         Pijpenstrootje          Molinia caerulea   Species</span></span>
+<span><span class="co">## 3         Bochtige smele      Deschampsia flexuosa   Species</span></span>
+<span><span class="co">## 4         Struisgras (G)                  Agrostis     Genus</span></span>
+<span><span class="co">## 5              Braam (G)                     Rubus     Genus</span></span>
+<span><span class="co">## 6              Struikhei          Calluna vulgaris   Species</span></span>
+<span><span class="co">## 7          Gewone dophei            Erica tetralix   Species</span></span>
+<span><span class="co">## 8            Rode dophei             Erica cinerea   Species</span></span>
+<span><span class="co">## 9          Blauwe bosbes       Vaccinium myrtillus   Species</span></span>
+<span><span class="co">## 10             Struikhei          Calluna vulgaris   Species</span></span>
+<span><span class="co">## 11         Gewone dophei            Erica tetralix   Species</span></span>
+<span><span class="co">## 12           Rode dophei             Erica cinerea   Species</span></span>
+<span><span class="co">## 13           Rode bosbes     Vaccinium vitis-idaea   Species</span></span>
+<span><span class="co">## 14         Blauwe bosbes       Vaccinium myrtillus   Species</span></span>
+<span><span class="co">## 15        Pijpenstrootje          Molinia caerulea   Species</span></span>
+<span><span class="co">## 16        Bochtige smele      Deschampsia flexuosa   Species</span></span>
+<span><span class="co">## 17     Gewoon struisriet    Calamagrostis epigejos   Species</span></span>
+<span><span class="co">## 18        Struisgras (G)                  Agrostis     Genus</span></span>
+<span><span class="co">## 19         Adelaarsvaren       Pteridium aquilinum   Species</span></span>
+<span><span class="co">## 20             Braam (G)                     Rubus     Genus</span></span>
+<span><span class="co">## 21 Grijs kronkelsteeltje    Campylopus introflexus   Species</span></span>
+<span><span class="co">## 22     Kleine wolfsklauw Diphasiastrum tristachyum   Species</span></span>
+<span><span class="co">## 23      Grote wolfsklauw       Lycopodium clavatum   Species</span></span>
+<span><span class="co">## 24            Stekelbrem           Genista anglica   Species</span></span>
+<span><span class="co">## 25             Kruipbrem            Genista pilosa   Species</span></span>
+<span><span class="co">## 26           Rode dophei             Erica cinerea   Species</span></span>
+<span><span class="co">## 27           Rode bosbes     Vaccinium vitis-idaea   Species</span></span>
+<span><span class="co">## 28        Klein warkruid         Cuscuta epithymum   Species</span></span>
+<span><span class="co">## 29             Struikhei          Calluna vulgaris   Species</span></span>
+<span><span class="co">## 30             Tormentil         Potentilla erecta   Species</span></span>
+<span><span class="co">## 31     Kleine wolfsklauw Diphasiastrum tristachyum   Species</span></span>
+<span><span class="co">## 32      Grote wolfsklauw       Lycopodium clavatum   Species</span></span>
+<span><span class="co">## 33              Pilzegge          Carex pilulifera   Species</span></span>
+<span><span class="co">## 34           Borstelgras            Nardus stricta   Species</span></span>
+<span><span class="co">## 35            Stekelbrem           Genista anglica   Species</span></span>
+<span><span class="co">## 36             Kruipbrem            Genista pilosa   Species</span></span>
+<span><span class="co">## 37           Rode dophei             Erica cinerea   Species</span></span>
+<span><span class="co">## 38        Klein warkruid         Cuscuta epithymum   Species</span></span>
+<span><span class="co">## 39      Fijn schapengras        Festuca filiformis   Species</span></span>
+<span><span class="co">## 40             Struikhei          Calluna vulgaris   Species</span></span></code></pre>
+<p>Omdat de tabel te breed is, wordt deze opgesplitst in 3 delen, die
+onder elkaar weergegeven worden. Deze tabel wordt ook enkel weergegeven,
+niet opgeslagen, en op deze manier kunnen we er achteraf geen
+bewerkingen mee doen. Beter is om de tabel toe te kennen aan een
+variabele, we geven hier die variabele de naam
+<code>soortenlijst4030</code>:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">soortenlijst4030</span> <span class="op">&lt;-</span>
-  <span class="fu"><a href="../reference/geefSoortenlijst.html">geefSoortenlijst</a></span><span class="op">(</span>Habitattype <span class="op">=</span> <span class="st">"4030"</span>, Taxonlijsttype <span class="op">=</span> <span class="st">"LSVIfiche"</span><span class="op">)</span></code></pre></div>
-<p>Als je dit commando in je eigen console runt, verschijnt deze variabele in het venster rechtsboven onder de tab Environment (dat een overzicht geeft van alle variabelen). Bij tabellen kan je deze variabele bekijken door erop te klikken.</p>
-<p>In R kan je deze variabele tonen door de variabelenaam in te typen (dan krijg je dezelfde uitvoer van de tabel in 4 delen). Je kan er ook allerlei bewerkingen mee uitvoeren (sorteren, selecteren,…), maar daarvoor verwijzen we naar een basiscursus van R.</p>
-<p>Wat we hier wel tonen, is hoe deze tabel opgeslagen kan worden, zodat hij achteraf in Excel geopend kan worden. Dit kan met de functie ‘write_csv2()’ uit het package ‘readr’. Om deze tabel met naam <code>soortenlijst4010.csv</code> op te slaan in de map R op de C-schijf, gebruiken we volgende commando’s:</p>
+<code class="sourceCode R"><span><span class="va">soortenlijst4030</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="../reference/geefSoortenlijst.html">geefSoortenlijst</a></span><span class="op">(</span>Habitattype <span class="op">=</span> <span class="st">"4030"</span>, Taxonlijsttype <span class="op">=</span> <span class="st">"LSVIfiche"</span><span class="op">)</span></span></code></pre></div>
+<p>Als je dit commando in je eigen console runt, verschijnt deze
+variabele in het venster rechtsboven onder de tab Environment (dat een
+overzicht geeft van alle variabelen). Bij tabellen kan je deze variabele
+bekijken door erop te klikken.</p>
+<p>In R kan je deze variabele tonen door de variabelenaam in te typen
+(dan krijg je dezelfde uitvoer van de tabel in 4 delen). Je kan er ook
+allerlei bewerkingen mee uitvoeren (sorteren, selecteren,…), maar
+daarvoor verwijzen we naar een basiscursus van R.</p>
+<p>Wat we hier wel tonen, is hoe deze tabel opgeslagen kan worden, zodat
+hij achteraf in Excel geopend kan worden. Dit kan met de functie
+‘write_csv2()’ uit het package ‘readr’. Om deze tabel met naam
+<code>soortenlijst4010.csv</code> op te slaan in de map R op de
+C-schijf, gebruiken we volgende commando’s:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org">readr</a></span><span class="op">)</span>
-<span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html">write_csv2</a></span><span class="op">(</span><span class="va">soortenlijst4030</span>, <span class="st">"C:/R/soortenlijst4030.csv"</span><span class="op">)</span></code></pre></div>
-<p>We hebben hier het absolute path (<code>C:/R</code>) weergegeven, een andere mogelijkheid is om het path relatief ten opzichte van de ‘working directory’ weer te geven. Dit is de map waarin je aan ’t werken bent. Je kan deze working directory zelf bepalen door het commando <code><a href="https://rdrr.io/r/base/getwd.html">setwd("C:/.../mijn_werkmap")</a></code>. Als je in een project werkt waarin je al je scripts opslaat (aan te raden), dan is de root van dit project automatisch je working directory.</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org" class="external-link">readr</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">write_csv2</a></span><span class="op">(</span><span class="va">soortenlijst4030</span>, <span class="st">"C:/R/soortenlijst4030.csv"</span><span class="op">)</span></span></code></pre></div>
+<p>We hebben hier het absolute path (<code>C:/R</code>) weergegeven, een
+andere mogelijkheid is om het path relatief ten opzichte van de ‘working
+directory’ weer te geven. Dit is de map waarin je aan ’t werken bent. Je
+kan deze working directory zelf bepalen door het commando
+<code>setwd("C:/.../mijn_werkmap")</code>. Als je in een project werkt
+waarin je al je scripts opslaat (aan te raden), dan is de root van dit
+project automatisch je working directory.</p>
 <p>###Hoe eigen gegevens inlezen in R?</p>
-<p>Als je eigen gegevens wil inlezen in R, is de eenvoudigste methode om deze in excel op te slaan als ‘csv (gescheiden door lijstscheidingsteken)’ en in de ‘working directory’ te plaatsen (of je kan ook het path specifiëren). Daarna kan je de gegevens als volgt inlezen:</p>
+<p>Als je eigen gegevens wil inlezen in R, is de eenvoudigste methode om
+deze in excel op te slaan als ‘csv (gescheiden door
+lijstscheidingsteken)’ en in de ‘working directory’ te plaatsen (of je
+kan ook het path specifiëren). Daarna kan je de gegevens als volgt
+inlezen:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org">readr</a></span><span class="op">)</span>
-<span class="va">Dataset</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv2</a></span><span class="op">(</span><span class="st">"Gegevens.csv"</span><span class="op">)</span></code></pre></div>
-<p>Je steekt dus de gegevens uit je bestand <code>Gegevens.csv</code> in de variabele <code>Dataset</code>. (Het laden van de library readr is enkel nodig als je dit nog niet eerder gedaan hebt sinds je R opgestart hebt.)</p>
-<p>Gegevens kunnen ook rechtstreeks vanuit een databank ingelezen worden, en ze kunnen in R naar het gewenste formaat omgezet worden. Een volledige uitleg hierover zou ons echter te ver leiden. Toch interesse om hier meer over te leren? Neem dan contact op met een collega van BMK.</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org" class="external-link">readr</a></span><span class="op">)</span></span>
+<span><span class="va">Dataset</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_csv2</a></span><span class="op">(</span><span class="st">"Gegevens.csv"</span><span class="op">)</span></span></code></pre></div>
+<p>Je steekt dus de gegevens uit je bestand <code>Gegevens.csv</code> in
+de variabele <code>Dataset</code>. (Het laden van de library readr is
+enkel nodig als je dit nog niet eerder gedaan hebt sinds je R opgestart
+hebt.)</p>
+<p>Gegevens kunnen ook rechtstreeks vanuit een databank ingelezen
+worden, en ze kunnen in R naar het gewenste formaat omgezet worden. Een
+volledige uitleg hierover zou ons echter te ver leiden. Toch interesse
+om hier meer over te leren? Neem dan contact op met een collega van
+BMK.</p>
 <p>###Wat met een list van tabellen?</p>
-<p>De functie <code><a href="../reference/berekenLSVIbasis.html">berekenLSVIbasis()</a></code> geeft gegevens terug in de vorm van een lijst van 4 tabellen.</p>
+<p>De functie <code><a href="../reference/berekenLSVIbasis.html">berekenLSVIbasis()</a></code> geeft gegevens terug in de
+vorm van een lijst van 4 tabellen.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#Eerst worden wat voorbeeldgegevens opgehaald uit het package:</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org">readr</a></span><span class="op">)</span></code></pre></div>
-<pre><code>## Warning: package 'readr' was built under R version 4.1.1</code></pre>
+<code class="sourceCode R"><span><span class="co">#Eerst worden wat voorbeeldgegevens opgehaald uit het package:</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org" class="external-link">readr</a></span><span class="op">)</span></span>
+<span><span class="va">data_habitat</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_csv2</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"vbdata/Opname4030habitat.csv"</span>, package <span class="op">=</span> <span class="st">"LSVI"</span><span class="op">)</span>,</span>
+<span>    col_types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://readr.tidyverse.org/reference/parse_atomic.html" class="external-link">col_character</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="https://readr.tidyverse.org/reference/parse_atomic.html" class="external-link">col_character</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="https://readr.tidyverse.org/reference/parse_atomic.html" class="external-link">col_character</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Using <span style="color: #0000BB;">"','"</span> as decimal and <span style="color: #0000BB;">"'.'"</span> as grouping mark. Use `read_delim()` for more control.</span></span></code></pre>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">data_habitat</span> <span class="op">&lt;-</span>
-  <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv2</a></span><span class="op">(</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"vbdata/Opname4030habitat.csv"</span>, package <span class="op">=</span> <span class="st">"LSVI"</span><span class="op">)</span>,
-    col_types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://readr.tidyverse.org/reference/parse_atomic.html">col_character</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="https://readr.tidyverse.org/reference/parse_atomic.html">col_character</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="https://readr.tidyverse.org/reference/parse_atomic.html">col_character</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-  <span class="op">)</span></code></pre></div>
-<pre><code>## i Using "','" as decimal and "'.'" as grouping mark. Use `read_delim()` for more control.</code></pre>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">data_voorwaarden</span> <span class="op">&lt;-</span>
-  <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv2</a></span><span class="op">(</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"vbdata/Opname4030voorwaardenv2.csv"</span>, package <span class="op">=</span> <span class="st">"LSVI"</span><span class="op">)</span>
-  <span class="op">)</span></code></pre></div>
-<pre><code>## i Using "','" as decimal and "'.'" as grouping mark. Use `read_delim()` for more control.</code></pre>
-<pre><code>## Rows: 8 Columns: 8</code></pre>
-<pre><code>## -- Column specification --------------------------------------------------------
-## Delimiter: ";"
-## chr (8): ID, Criterium, Indicator, Voorwaarde, Waarde, Type, Invoertype, Een...</code></pre>
-<pre><code>## 
-## i Use `spec()` to retrieve the full column specification for this data.
-## i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">data_soorten_kenmerken</span> <span class="op">&lt;-</span>
-  <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv2</a></span><span class="op">(</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"vbdata/Opname4030soortenKenmerken.csv"</span>, package <span class="op">=</span> <span class="st">"LSVI"</span><span class="op">)</span>
-  <span class="op">)</span></code></pre></div>
-<pre><code>## i Using "','" as decimal and "'.'" as grouping mark. Use `read_delim()` for more control.</code></pre>
-<pre><code>## Rows: 13 Columns: 8</code></pre>
-<pre><code>## -- Column specification --------------------------------------------------------
-## Delimiter: ";"
-## chr (8): ID, Kenmerk, TypeKenmerk, Waarde, Type, Invoertype, Eenheid, Vegeta...</code></pre>
-<pre><code>## 
-## i Use `spec()` to retrieve the full column specification for this data.
-## i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<code class="sourceCode R"><span><span class="va">data_voorwaarden</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_csv2</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"vbdata/Opname4030voorwaardenv2.csv"</span>, package <span class="op">=</span> <span class="st">"LSVI"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Using <span style="color: #0000BB;">"','"</span> as decimal and <span style="color: #0000BB;">"'.'"</span> as grouping mark. Use `read_delim()` for more control.</span></span></code></pre>
+<pre><code><span><span class="co">## <span style="font-weight: bold;">Rows: </span><span style="color: #0000BB;">8</span> <span style="font-weight: bold;">Columns: </span><span style="color: #0000BB;">8</span></span></span>
+<span><span class="co">## <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Column specification</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span></span></span>
+<span><span class="co">## <span style="font-weight: bold;">Delimiter:</span> ";"</span></span>
+<span><span class="co">## <span style="color: #BB0000;">chr</span> (8): ID, Criterium, Indicator, Voorwaarde, Waarde, Type, Invoertype, Een...</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Use `spec()` to retrieve the full column specification for this data.</span></span>
+<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span></code></pre>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data_soorten_kenmerken</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_csv2</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"vbdata/Opname4030soortenKenmerken.csv"</span>, package <span class="op">=</span> <span class="st">"LSVI"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Using <span style="color: #0000BB;">"','"</span> as decimal and <span style="color: #0000BB;">"'.'"</span> as grouping mark. Use `read_delim()` for more control.</span></span>
+<span><span class="co">## <span style="font-weight: bold;">Rows: </span><span style="color: #0000BB;">13</span> <span style="font-weight: bold;">Columns: </span><span style="color: #0000BB;">8</span><span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Column specification</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span></span></span>
+<span><span class="co">## <span style="font-weight: bold;">Delimiter:</span> ";"</span></span>
+<span><span class="co">## <span style="color: #BB0000;">chr</span> (8): ID, Kenmerk, TypeKenmerk, Waarde, Type, Invoertype, Eenheid, Vegeta...</span></span>
+<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Use `spec()` to retrieve the full column specification for this data.</span></span>
+<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span></code></pre>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#En hier gebeurt de berekening zelf:</span></span>
+<span><span class="fu"><a href="../reference/berekenLSVIbasis.html">berekenLSVIbasis</a></span><span class="op">(</span></span>
+<span>  Versie <span class="op">=</span> <span class="st">"Versie 2.0"</span>,</span>
+<span>  Kwaliteitsniveau <span class="op">=</span> <span class="st">"1"</span>, <span class="va">data_habitat</span>,</span>
+<span>  <span class="va">data_voorwaarden</span>, <span class="va">data_soorten_kenmerken</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning in berekenLSVIbasis(Versie = "Versie 2.0", Kwaliteitsniveau = "1", :</span></span>
+<span><span class="co">## Volgende records uit Data_voorwaarden kunnen niet gekoppeld worden aan</span></span>
+<span><span class="co">## indicatoren uit de databank omdat de criterium-indicator-voorwaarde-combinatie</span></span>
+<span><span class="co">## niet voorkomt bij de LSVI-regels van het opgegeven habitattype: &lt;JR0216,</span></span>
+<span><span class="co">## Verstoring, invasieve exoten, bedekking invasieve exoten&gt; &lt;Ts2036, Verstoring,</span></span>
+<span><span class="co">## invasieve exoten, bedekking invasieve exoten&gt;</span></span></code></pre>
+<pre><code><span><span class="co">## $Resultaat_criterium</span></span>
+<span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 9</span></span></span>
+<span><span class="co">##   ID     Habitattype Versie     Criter…¹ Kwali…² Statu…³ Aggre…⁴ Index…⁵ Index…⁶</span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> JR0216 4030        Versie 2.0 Structu…       1 FALSE   1-out-… -<span style="color: #BB0000;">0.9</span>     -<span style="color: #BB0000;">0.833</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> JR0216 4030        Versie 2.0 Vegetat…       1 FALSE   1-out-… -<span style="color: #BB0000;">1</span>       -<span style="color: #BB0000;">1</span>    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> JR0216 4030        Versie 2.0 Verstor…       1 FALSE   1-out-… -<span style="color: #BB0000;">0.071</span><span style="color: #BB0000; text-decoration: underline;">4</span>   0.261</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> Ts2036 4030        Versie 2.0 Structu…       1 TRUE    1-out-…  0        0.200</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">5</span> Ts2036 4030        Versie 2.0 Vegetat…       1 FALSE   1-out-… -<span style="color: #BB0000;">1</span>       -<span style="color: #BB0000;">1</span>    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">6</span> Ts2036 4030        Versie 2.0 Verstor…       1 TRUE    1-out-…  0.25     0.458</span></span>
+<span><span class="co">## <span style="color: #949494;"># … with abbreviated variable names ¹​Criterium, ²​Kwaliteitsniveau,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   ³​Status_criterium, ⁴​Aggregatiemethode, ⁵​Index_min_criterium,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   ⁶​Index_harm_criterium</span></span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $Resultaat_indicator</span></span>
+<span><span class="co">## <span style="color: #949494;"># A tibble: 10 × 12</span></span></span>
+<span><span class="co">##    ID     Habita…¹ Versie Habit…² Crite…³ Indic…⁴ Beoor…⁵ Belang Kwali…⁶ Beoor…⁷</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> JR0216 4030     Versi… 4030    Struct… dwergs… B: &gt;= … b            1     318</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> JR0216 4030     Versi… 4030    Struct… ouderd… B: 2 t… b            1     322</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> JR0216 4030     Versi… 4030    Vegeta… sleute… B: Str… b            1     326</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> JR0216 4030     Versi… 4030    Versto… verbos… B: 10-… b            1     319</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> JR0216 4030     Versi… 4030    Versto… vergra… B: 30-… zb           1     323</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> Ts2036 4030     Versi… 4030    Struct… dwergs… B: &gt;= … b            1     318</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> Ts2036 4030     Versi… 4030    Struct… ouderd… B: 2 t… b            1     322</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> Ts2036 4030     Versi… 4030    Vegeta… sleute… B: Str… b            1     326</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> Ts2036 4030     Versi… 4030    Versto… verbos… B: 10-… b            1     319</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> Ts2036 4030     Versi… 4030    Versto… vergra… B: 30-… zb           1     323</span></span>
+<span><span class="co">## <span style="color: #949494;"># … with 2 more variables: Status_indicator &lt;lgl&gt;, Verschilscore &lt;dbl&gt;, and</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   abbreviated variable names ¹​Habitattype, ²​Habitattype.y, ³​Criterium,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   ⁴​Indicator, ⁵​Beoordeling, ⁶​Kwaliteitsniveau, ⁷​BeoordelingID</span></span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $Resultaat_detail</span></span>
+<span><span class="co">## <span style="color: #949494;"># A tibble: 12 × 27</span></span></span>
+<span><span class="co">##    ID     Habita…¹ kwali…² Versie Habit…³ Crite…⁴ Indic…⁵ Beoor…⁶ Kwali…⁷ Belang</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> JR0216 4030     Zeer g… Versi… 4030    Struct… dwergs… B: &gt;= …       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> JR0216 4030     Zeer g… Versi… 4030    Struct… ouderd… B: 2 t…       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> JR0216 4030     Zeer g… Versi… 4030    Vegeta… sleute… B: Str…       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> JR0216 4030     Zeer g… Versi… 4030    Vegeta… sleute… B: Str…       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> JR0216 4030     Zeer g… Versi… 4030    Versto… verbos… B: 10-…       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> JR0216 4030     Zeer g… Versi… 4030    Versto… vergra… B: 30-…       1 zb    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> Ts2036 4030     Matig?… Versi… 4030    Struct… dwergs… B: &gt;= …       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> Ts2036 4030     Matig?… Versi… 4030    Struct… ouderd… B: 2 t…       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> Ts2036 4030     Matig?… Versi… 4030    Vegeta… sleute… B: Str…       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> Ts2036 4030     Matig?… Versi… 4030    Vegeta… sleute… B: Str…       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">11</span> Ts2036 4030     Matig?… Versi… 4030    Versto… verbos… B: 10-…       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">12</span> Ts2036 4030     Matig?… Versi… 4030    Versto… vergra… B: 30-…       1 zb    </span></span>
+<span><span class="co">## <span style="color: #949494;"># … with 17 more variables: BeoordelingID &lt;int&gt;, Combinatie &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   VoorwaardeID &lt;int&gt;, Voorwaarde &lt;chr&gt;, Referentiewaarde &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   Operator &lt;chr&gt;, EenheidRefwaarde &lt;chr&gt;, TypeRefwaarde &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   InvoertypeRevwaarde &lt;chr&gt;, Waarde &lt;chr&gt;, TypeWaarde &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   InvoertypeWaarde &lt;chr&gt;, EenheidWaarde &lt;chr&gt;, AfkomstWaarde &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   TheoretischMaximum &lt;dbl&gt;, Status_voorwaarde &lt;lgl&gt;, Verschilscore &lt;dbl&gt;, and</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   abbreviated variable names ¹​Habitattype, …</span></span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $Resultaat_globaal</span></span>
+<span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 9</span></span></span>
+<span><span class="co">##   ID     Habitattype Versie     Kwalite…¹ Status Aggre…² Index…³ Index…⁴ Index…⁵</span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> JR0216 4030        Versie 2.0         1 FALSE  1-out-…      -<span style="color: #BB0000;">1</span>      -<span style="color: #BB0000;">1</span>      -<span style="color: #BB0000;">1</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> Ts2036 4030        Versie 2.0         1 FALSE  1-out-…      -<span style="color: #BB0000;">1</span>      -<span style="color: #BB0000;">1</span>      -<span style="color: #BB0000;">1</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># … with abbreviated variable names ¹​Kwaliteitsniveau, ²​Aggregatiemethode,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   ³​Index_min_min, ⁴​Index_min_harm, ⁵​Index_harm_harm</span></span></span></code></pre>
+<p>We gaan weer beginnen met de uitvoer in een variabele (‘resultaat’)
+te steken om er bewerkingen op te kunnen uitvoeren:</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">resultaat</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="../reference/berekenLSVIbasis.html">berekenLSVIbasis</a></span><span class="op">(</span></span>
+<span>    Versie <span class="op">=</span> <span class="st">"Versie 2.0"</span>,</span>
+<span>    Kwaliteitsniveau <span class="op">=</span> <span class="st">"1"</span>, Data_habitat <span class="op">=</span> <span class="va">data_habitat</span>,</span>
+<span>    Data_voorwaarden <span class="op">=</span> <span class="va">data_voorwaarden</span>,</span>
+<span>    Data_soortenKenmerken <span class="op">=</span> <span class="va">data_soorten_kenmerken</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning in berekenLSVIbasis(Versie = "Versie 2.0", Kwaliteitsniveau = "1", :</span></span>
+<span><span class="co">## Volgende records uit Data_voorwaarden kunnen niet gekoppeld worden aan</span></span>
+<span><span class="co">## indicatoren uit de databank omdat de criterium-indicator-voorwaarde-combinatie</span></span>
+<span><span class="co">## niet voorkomt bij de LSVI-regels van het opgegeven habitattype: &lt;JR0216,</span></span>
+<span><span class="co">## Verstoring, invasieve exoten, bedekking invasieve exoten&gt; &lt;Ts2036, Verstoring,</span></span>
+<span><span class="co">## invasieve exoten, bedekking invasieve exoten&gt;</span></span></code></pre>
+<p>Nu kunnen we de afzonderlijke tabellen als volgt uit het object
+<code>resultaat</code> halen (je kan met <code>$</code> of met
+<code>[[]]</code> werken):</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">resultaat</span><span class="op">$</span><span class="va">Resultaat_globaal</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 9</span></span></span>
+<span><span class="co">##   ID     Habitattype Versie     Kwalite…¹ Status Aggre…² Index…³ Index…⁴ Index…⁵</span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> JR0216 4030        Versie 2.0         1 FALSE  1-out-…      -<span style="color: #BB0000;">1</span>      -<span style="color: #BB0000;">1</span>      -<span style="color: #BB0000;">1</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> Ts2036 4030        Versie 2.0         1 FALSE  1-out-…      -<span style="color: #BB0000;">1</span>      -<span style="color: #BB0000;">1</span>      -<span style="color: #BB0000;">1</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># … with abbreviated variable names ¹​Kwaliteitsniveau, ²​Aggregatiemethode,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   ³​Index_min_min, ⁴​Index_min_harm, ⁵​Index_harm_harm</span></span></span></code></pre>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#En hier gebeurt de berekening zelf:</span>
-<span class="fu"><a href="../reference/berekenLSVIbasis.html">berekenLSVIbasis</a></span><span class="op">(</span>
-  Versie <span class="op">=</span> <span class="st">"Versie 2.0"</span>,
-  Kwaliteitsniveau <span class="op">=</span> <span class="st">"1"</span>, <span class="va">data_habitat</span>,
-  <span class="va">data_voorwaarden</span>, <span class="va">data_soorten_kenmerken</span>
-<span class="op">)</span></code></pre></div>
-<pre><code>## Warning in berekenLSVIbasis(Versie = "Versie 2.0", Kwaliteitsniveau = "1", :
-## Volgende records uit Data_voorwaarden kunnen niet gekoppeld worden aan
-## indicatoren uit de databank omdat de criterium-indicator-voorwaarde-combinatie
-## niet voorkomt bij de LSVI-regels van het opgegeven habitattype: &lt;JR0216,
-## Verstoring, invasieve exoten, bedekking invasieve exoten&gt; &lt;Ts2036, Verstoring,
-## invasieve exoten, bedekking invasieve exoten&gt;</code></pre>
-<pre><code>## $Resultaat_criterium
-## # A tibble: 6 x 9
-##   ID     Habitattype Versie     Criterium  Kwaliteitsniveau Status_criterium
-##   &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt;                 &lt;int&gt; &lt;lgl&gt;           
-## 1 JR0216 4030        Versie 2.0 Structuur                 1 FALSE           
-## 2 JR0216 4030        Versie 2.0 Vegetatie                 1 FALSE           
-## 3 JR0216 4030        Versie 2.0 Verstoring                1 FALSE           
-## 4 Ts2036 4030        Versie 2.0 Structuur                 1 TRUE            
-## 5 Ts2036 4030        Versie 2.0 Vegetatie                 1 FALSE           
-## 6 Ts2036 4030        Versie 2.0 Verstoring                1 TRUE            
-## # ... with 3 more variables: Aggregatiemethode &lt;chr&gt;,
-## #   Index_min_criterium &lt;dbl&gt;, Index_harm_criterium &lt;dbl&gt;
-## 
-## $Resultaat_indicator
-## # A tibble: 10 x 12
-##    ID     Habitattype Versie Habitattype.y Criterium Indicator Beoordeling Belang
-##    &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;         &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;       &lt;chr&gt; 
-##  1 JR0216 4030        Versi~ 4030          Structuur dwergstr~ B: &gt;= codo~ b     
-##  2 JR0216 4030        Versi~ 4030          Structuur ouderdom~ B: 2 tot 3~ b     
-##  3 JR0216 4030        Versi~ 4030          Vegetatie sleutels~ B: Struikh~ b     
-##  4 JR0216 4030        Versi~ 4030          Verstori~ verbossi~ B: 10-30%   b     
-##  5 JR0216 4030        Versi~ 4030          Verstori~ vergrass~ B: 30-50%   zb    
-##  6 Ts2036 4030        Versi~ 4030          Structuur dwergstr~ B: &gt;= codo~ b     
-##  7 Ts2036 4030        Versi~ 4030          Structuur ouderdom~ B: 2 tot 3~ b     
-##  8 Ts2036 4030        Versi~ 4030          Vegetatie sleutels~ B: Struikh~ b     
-##  9 Ts2036 4030        Versi~ 4030          Verstori~ verbossi~ B: 10-30%   b     
-## 10 Ts2036 4030        Versi~ 4030          Verstori~ vergrass~ B: 30-50%   zb    
-## # ... with 4 more variables: Kwaliteitsniveau &lt;int&gt;, BeoordelingID &lt;int&gt;,
-## #   Status_indicator &lt;lgl&gt;, Verschilscore &lt;dbl&gt;
-## 
-## $Resultaat_detail
-## # A tibble: 12 x 27
-##    ID     Habitattype `kwaliteit van o~ Versie Habitattype.y Criterium Indicator
-##    &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;             &lt;chr&gt;  &lt;chr&gt;         &lt;chr&gt;     &lt;chr&gt;    
-##  1 JR0216 4030        Zeer goed (Zeker~ Versi~ 4030          Structuur dwergstr~
-##  2 JR0216 4030        Zeer goed (Zeker~ Versi~ 4030          Structuur ouderdom~
-##  3 JR0216 4030        Zeer goed (Zeker~ Versi~ 4030          Vegetatie sleutels~
-##  4 JR0216 4030        Zeer goed (Zeker~ Versi~ 4030          Vegetatie sleutels~
-##  5 JR0216 4030        Zeer goed (Zeker~ Versi~ 4030          Verstori~ verbossi~
-##  6 JR0216 4030        Zeer goed (Zeker~ Versi~ 4030          Verstori~ vergrass~
-##  7 Ts2036 4030        Matig?(Waarschij~ Versi~ 4030          Structuur dwergstr~
-##  8 Ts2036 4030        Matig?(Waarschij~ Versi~ 4030          Structuur ouderdom~
-##  9 Ts2036 4030        Matig?(Waarschij~ Versi~ 4030          Vegetatie sleutels~
-## 10 Ts2036 4030        Matig?(Waarschij~ Versi~ 4030          Vegetatie sleutels~
-## 11 Ts2036 4030        Matig?(Waarschij~ Versi~ 4030          Verstori~ verbossi~
-## 12 Ts2036 4030        Matig?(Waarschij~ Versi~ 4030          Verstori~ vergrass~
-## # ... with 20 more variables: Beoordeling &lt;chr&gt;, Kwaliteitsniveau &lt;int&gt;,
-## #   Belang &lt;chr&gt;, BeoordelingID &lt;int&gt;, Combinatie &lt;chr&gt;, VoorwaardeID &lt;int&gt;,
-## #   Voorwaarde &lt;chr&gt;, Referentiewaarde &lt;chr&gt;, Operator &lt;chr&gt;,
-## #   EenheidRefwaarde &lt;chr&gt;, TypeRefwaarde &lt;chr&gt;, InvoertypeRevwaarde &lt;chr&gt;,
-## #   Waarde &lt;chr&gt;, TypeWaarde &lt;chr&gt;, InvoertypeWaarde &lt;chr&gt;,
-## #   EenheidWaarde &lt;chr&gt;, AfkomstWaarde &lt;chr&gt;, TheoretischMaximum &lt;dbl&gt;,
-## #   Status_voorwaarde &lt;lgl&gt;, Verschilscore &lt;dbl&gt;
-## 
-## $Resultaat_globaal
-## # A tibble: 2 x 9
-##   ID     Habitattype Versie     Kwaliteitsniveau Status Aggregatiemethode
-##   &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;                 &lt;int&gt; &lt;lgl&gt;  &lt;chr&gt;            
-## 1 JR0216 4030        Versie 2.0                1 FALSE  1-out-all-out    
-## 2 Ts2036 4030        Versie 2.0                1 FALSE  1-out-all-out    
-## # ... with 3 more variables: Index_min_min &lt;dbl&gt;, Index_min_harm &lt;dbl&gt;,
-## #   Index_harm_harm &lt;dbl&gt;</code></pre>
-<p>We gaan weer beginnen met de uitvoer in een variabele (‘resultaat’) te steken om er bewerkingen op te kunnen uitvoeren:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">resultaat</span> <span class="op">&lt;-</span>
-  <span class="fu"><a href="../reference/berekenLSVIbasis.html">berekenLSVIbasis</a></span><span class="op">(</span>
-    Versie <span class="op">=</span> <span class="st">"Versie 2.0"</span>,
-    Kwaliteitsniveau <span class="op">=</span> <span class="st">"1"</span>, Data_habitat <span class="op">=</span> <span class="va">data_habitat</span>,
-    Data_voorwaarden <span class="op">=</span> <span class="va">data_voorwaarden</span>,
-    Data_soortenKenmerken <span class="op">=</span> <span class="va">data_soorten_kenmerken</span>
-  <span class="op">)</span></code></pre></div>
-<pre><code>## Warning in berekenLSVIbasis(Versie = "Versie 2.0", Kwaliteitsniveau = "1", :
-## Volgende records uit Data_voorwaarden kunnen niet gekoppeld worden aan
-## indicatoren uit de databank omdat de criterium-indicator-voorwaarde-combinatie
-## niet voorkomt bij de LSVI-regels van het opgegeven habitattype: &lt;JR0216,
-## Verstoring, invasieve exoten, bedekking invasieve exoten&gt; &lt;Ts2036, Verstoring,
-## invasieve exoten, bedekking invasieve exoten&gt;</code></pre>
-<p>Nu kunnen we de afzonderlijke tabellen als volgt uit het object <code>resultaat</code> halen (je kan met <code><a href="https://rdrr.io/r/base/Extract.html">$</a></code> of met <code>[[]]</code> werken):</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">resultaat</span><span class="op">$</span><span class="va">Resultaat_globaal</span></code></pre></div>
-<pre><code>## # A tibble: 2 x 9
-##   ID     Habitattype Versie     Kwaliteitsniveau Status Aggregatiemethode
-##   &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;                 &lt;int&gt; &lt;lgl&gt;  &lt;chr&gt;            
-## 1 JR0216 4030        Versie 2.0                1 FALSE  1-out-all-out    
-## 2 Ts2036 4030        Versie 2.0                1 FALSE  1-out-all-out    
-## # ... with 3 more variables: Index_min_min &lt;dbl&gt;, Index_min_harm &lt;dbl&gt;,
-## #   Index_harm_harm &lt;dbl&gt;</code></pre>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">resultaat</span><span class="op">$</span><span class="va">Resultaat_criterium</span></code></pre></div>
-<pre><code>## # A tibble: 6 x 9
-##   ID     Habitattype Versie     Criterium  Kwaliteitsniveau Status_criterium
-##   &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt;                 &lt;int&gt; &lt;lgl&gt;           
-## 1 JR0216 4030        Versie 2.0 Structuur                 1 FALSE           
-## 2 JR0216 4030        Versie 2.0 Vegetatie                 1 FALSE           
-## 3 JR0216 4030        Versie 2.0 Verstoring                1 FALSE           
-## 4 Ts2036 4030        Versie 2.0 Structuur                 1 TRUE            
-## 5 Ts2036 4030        Versie 2.0 Vegetatie                 1 FALSE           
-## 6 Ts2036 4030        Versie 2.0 Verstoring                1 TRUE            
-## # ... with 3 more variables: Aggregatiemethode &lt;chr&gt;,
-## #   Index_min_criterium &lt;dbl&gt;, Index_harm_criterium &lt;dbl&gt;</code></pre>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">resultaat</span><span class="op">$</span><span class="va">Resultaat_indicator</span></code></pre></div>
-<pre><code>## # A tibble: 10 x 12
-##    ID     Habitattype Versie Habitattype.y Criterium Indicator Beoordeling Belang
-##    &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;         &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;       &lt;chr&gt; 
-##  1 JR0216 4030        Versi~ 4030          Structuur dwergstr~ B: &gt;= codo~ b     
-##  2 JR0216 4030        Versi~ 4030          Structuur ouderdom~ B: 2 tot 3~ b     
-##  3 JR0216 4030        Versi~ 4030          Vegetatie sleutels~ B: Struikh~ b     
-##  4 JR0216 4030        Versi~ 4030          Verstori~ verbossi~ B: 10-30%   b     
-##  5 JR0216 4030        Versi~ 4030          Verstori~ vergrass~ B: 30-50%   zb    
-##  6 Ts2036 4030        Versi~ 4030          Structuur dwergstr~ B: &gt;= codo~ b     
-##  7 Ts2036 4030        Versi~ 4030          Structuur ouderdom~ B: 2 tot 3~ b     
-##  8 Ts2036 4030        Versi~ 4030          Vegetatie sleutels~ B: Struikh~ b     
-##  9 Ts2036 4030        Versi~ 4030          Verstori~ verbossi~ B: 10-30%   b     
-## 10 Ts2036 4030        Versi~ 4030          Verstori~ vergrass~ B: 30-50%   zb    
-## # ... with 4 more variables: Kwaliteitsniveau &lt;int&gt;, BeoordelingID &lt;int&gt;,
-## #   Status_indicator &lt;lgl&gt;, Verschilscore &lt;dbl&gt;</code></pre>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">resultaat</span><span class="op">$</span><span class="va">Resultaat_detail</span></code></pre></div>
-<pre><code>## # A tibble: 12 x 27
-##    ID     Habitattype `kwaliteit van o~ Versie Habitattype.y Criterium Indicator
-##    &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;             &lt;chr&gt;  &lt;chr&gt;         &lt;chr&gt;     &lt;chr&gt;    
-##  1 JR0216 4030        Zeer goed (Zeker~ Versi~ 4030          Structuur dwergstr~
-##  2 JR0216 4030        Zeer goed (Zeker~ Versi~ 4030          Structuur ouderdom~
-##  3 JR0216 4030        Zeer goed (Zeker~ Versi~ 4030          Vegetatie sleutels~
-##  4 JR0216 4030        Zeer goed (Zeker~ Versi~ 4030          Vegetatie sleutels~
-##  5 JR0216 4030        Zeer goed (Zeker~ Versi~ 4030          Verstori~ verbossi~
-##  6 JR0216 4030        Zeer goed (Zeker~ Versi~ 4030          Verstori~ vergrass~
-##  7 Ts2036 4030        Matig?(Waarschij~ Versi~ 4030          Structuur dwergstr~
-##  8 Ts2036 4030        Matig?(Waarschij~ Versi~ 4030          Structuur ouderdom~
-##  9 Ts2036 4030        Matig?(Waarschij~ Versi~ 4030          Vegetatie sleutels~
-## 10 Ts2036 4030        Matig?(Waarschij~ Versi~ 4030          Vegetatie sleutels~
-## 11 Ts2036 4030        Matig?(Waarschij~ Versi~ 4030          Verstori~ verbossi~
-## 12 Ts2036 4030        Matig?(Waarschij~ Versi~ 4030          Verstori~ vergrass~
-## # ... with 20 more variables: Beoordeling &lt;chr&gt;, Kwaliteitsniveau &lt;int&gt;,
-## #   Belang &lt;chr&gt;, BeoordelingID &lt;int&gt;, Combinatie &lt;chr&gt;, VoorwaardeID &lt;int&gt;,
-## #   Voorwaarde &lt;chr&gt;, Referentiewaarde &lt;chr&gt;, Operator &lt;chr&gt;,
-## #   EenheidRefwaarde &lt;chr&gt;, TypeRefwaarde &lt;chr&gt;, InvoertypeRevwaarde &lt;chr&gt;,
-## #   Waarde &lt;chr&gt;, TypeWaarde &lt;chr&gt;, InvoertypeWaarde &lt;chr&gt;,
-## #   EenheidWaarde &lt;chr&gt;, AfkomstWaarde &lt;chr&gt;, TheoretischMaximum &lt;dbl&gt;,
-## #   Status_voorwaarde &lt;lgl&gt;, Verschilscore &lt;dbl&gt;</code></pre>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># ofwel:</span>
-<span class="va">resultaat</span><span class="op">[[</span><span class="st">"Resultaat_globaal"</span><span class="op">]</span><span class="op">]</span></code></pre></div>
-<pre><code>## # A tibble: 2 x 9
-##   ID     Habitattype Versie     Kwaliteitsniveau Status Aggregatiemethode
-##   &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;                 &lt;int&gt; &lt;lgl&gt;  &lt;chr&gt;            
-## 1 JR0216 4030        Versie 2.0                1 FALSE  1-out-all-out    
-## 2 Ts2036 4030        Versie 2.0                1 FALSE  1-out-all-out    
-## # ... with 3 more variables: Index_min_min &lt;dbl&gt;, Index_min_harm &lt;dbl&gt;,
-## #   Index_harm_harm &lt;dbl&gt;</code></pre>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">resultaat</span><span class="op">[[</span><span class="st">"Resultaat_criterium"</span><span class="op">]</span><span class="op">]</span></code></pre></div>
-<pre><code>## # A tibble: 6 x 9
-##   ID     Habitattype Versie     Criterium  Kwaliteitsniveau Status_criterium
-##   &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt;                 &lt;int&gt; &lt;lgl&gt;           
-## 1 JR0216 4030        Versie 2.0 Structuur                 1 FALSE           
-## 2 JR0216 4030        Versie 2.0 Vegetatie                 1 FALSE           
-## 3 JR0216 4030        Versie 2.0 Verstoring                1 FALSE           
-## 4 Ts2036 4030        Versie 2.0 Structuur                 1 TRUE            
-## 5 Ts2036 4030        Versie 2.0 Vegetatie                 1 FALSE           
-## 6 Ts2036 4030        Versie 2.0 Verstoring                1 TRUE            
-## # ... with 3 more variables: Aggregatiemethode &lt;chr&gt;,
-## #   Index_min_criterium &lt;dbl&gt;, Index_harm_criterium &lt;dbl&gt;</code></pre>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">resultaat</span><span class="op">[[</span><span class="st">"Resultaat_indicator"</span><span class="op">]</span><span class="op">]</span></code></pre></div>
-<pre><code>## # A tibble: 10 x 12
-##    ID     Habitattype Versie Habitattype.y Criterium Indicator Beoordeling Belang
-##    &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;         &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;       &lt;chr&gt; 
-##  1 JR0216 4030        Versi~ 4030          Structuur dwergstr~ B: &gt;= codo~ b     
-##  2 JR0216 4030        Versi~ 4030          Structuur ouderdom~ B: 2 tot 3~ b     
-##  3 JR0216 4030        Versi~ 4030          Vegetatie sleutels~ B: Struikh~ b     
-##  4 JR0216 4030        Versi~ 4030          Verstori~ verbossi~ B: 10-30%   b     
-##  5 JR0216 4030        Versi~ 4030          Verstori~ vergrass~ B: 30-50%   zb    
-##  6 Ts2036 4030        Versi~ 4030          Structuur dwergstr~ B: &gt;= codo~ b     
-##  7 Ts2036 4030        Versi~ 4030          Structuur ouderdom~ B: 2 tot 3~ b     
-##  8 Ts2036 4030        Versi~ 4030          Vegetatie sleutels~ B: Struikh~ b     
-##  9 Ts2036 4030        Versi~ 4030          Verstori~ verbossi~ B: 10-30%   b     
-## 10 Ts2036 4030        Versi~ 4030          Verstori~ vergrass~ B: 30-50%   zb    
-## # ... with 4 more variables: Kwaliteitsniveau &lt;int&gt;, BeoordelingID &lt;int&gt;,
-## #   Status_indicator &lt;lgl&gt;, Verschilscore &lt;dbl&gt;</code></pre>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">resultaat</span><span class="op">[[</span><span class="st">"Resultaat_detail"</span><span class="op">]</span><span class="op">]</span></code></pre></div>
-<pre><code>## # A tibble: 12 x 27
-##    ID     Habitattype `kwaliteit van o~ Versie Habitattype.y Criterium Indicator
-##    &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;             &lt;chr&gt;  &lt;chr&gt;         &lt;chr&gt;     &lt;chr&gt;    
-##  1 JR0216 4030        Zeer goed (Zeker~ Versi~ 4030          Structuur dwergstr~
-##  2 JR0216 4030        Zeer goed (Zeker~ Versi~ 4030          Structuur ouderdom~
-##  3 JR0216 4030        Zeer goed (Zeker~ Versi~ 4030          Vegetatie sleutels~
-##  4 JR0216 4030        Zeer goed (Zeker~ Versi~ 4030          Vegetatie sleutels~
-##  5 JR0216 4030        Zeer goed (Zeker~ Versi~ 4030          Verstori~ verbossi~
-##  6 JR0216 4030        Zeer goed (Zeker~ Versi~ 4030          Verstori~ vergrass~
-##  7 Ts2036 4030        Matig?(Waarschij~ Versi~ 4030          Structuur dwergstr~
-##  8 Ts2036 4030        Matig?(Waarschij~ Versi~ 4030          Structuur ouderdom~
-##  9 Ts2036 4030        Matig?(Waarschij~ Versi~ 4030          Vegetatie sleutels~
-## 10 Ts2036 4030        Matig?(Waarschij~ Versi~ 4030          Vegetatie sleutels~
-## 11 Ts2036 4030        Matig?(Waarschij~ Versi~ 4030          Verstori~ verbossi~
-## 12 Ts2036 4030        Matig?(Waarschij~ Versi~ 4030          Verstori~ vergrass~
-## # ... with 20 more variables: Beoordeling &lt;chr&gt;, Kwaliteitsniveau &lt;int&gt;,
-## #   Belang &lt;chr&gt;, BeoordelingID &lt;int&gt;, Combinatie &lt;chr&gt;, VoorwaardeID &lt;int&gt;,
-## #   Voorwaarde &lt;chr&gt;, Referentiewaarde &lt;chr&gt;, Operator &lt;chr&gt;,
-## #   EenheidRefwaarde &lt;chr&gt;, TypeRefwaarde &lt;chr&gt;, InvoertypeRevwaarde &lt;chr&gt;,
-## #   Waarde &lt;chr&gt;, TypeWaarde &lt;chr&gt;, InvoertypeWaarde &lt;chr&gt;,
-## #   EenheidWaarde &lt;chr&gt;, AfkomstWaarde &lt;chr&gt;, TheoretischMaximum &lt;dbl&gt;,
-## #   Status_voorwaarde &lt;lgl&gt;, Verschilscore &lt;dbl&gt;</code></pre>
-<p>Met deze tabellen kan verder gewerkt worden zoals hierboven beschreven is (<a href="#gegs_in_tabelvorm">Wat met gegenereerde gegevens in tabelvorm?</a>)</p>
+<code class="sourceCode R"><span><span class="va">resultaat</span><span class="op">$</span><span class="va">Resultaat_criterium</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 9</span></span></span>
+<span><span class="co">##   ID     Habitattype Versie     Criter…¹ Kwali…² Statu…³ Aggre…⁴ Index…⁵ Index…⁶</span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> JR0216 4030        Versie 2.0 Structu…       1 FALSE   1-out-… -<span style="color: #BB0000;">0.9</span>     -<span style="color: #BB0000;">0.833</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> JR0216 4030        Versie 2.0 Vegetat…       1 FALSE   1-out-… -<span style="color: #BB0000;">1</span>       -<span style="color: #BB0000;">1</span>    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> JR0216 4030        Versie 2.0 Verstor…       1 FALSE   1-out-… -<span style="color: #BB0000;">0.071</span><span style="color: #BB0000; text-decoration: underline;">4</span>   0.261</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> Ts2036 4030        Versie 2.0 Structu…       1 TRUE    1-out-…  0        0.200</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">5</span> Ts2036 4030        Versie 2.0 Vegetat…       1 FALSE   1-out-… -<span style="color: #BB0000;">1</span>       -<span style="color: #BB0000;">1</span>    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">6</span> Ts2036 4030        Versie 2.0 Verstor…       1 TRUE    1-out-…  0.25     0.458</span></span>
+<span><span class="co">## <span style="color: #949494;"># … with abbreviated variable names ¹​Criterium, ²​Kwaliteitsniveau,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   ³​Status_criterium, ⁴​Aggregatiemethode, ⁵​Index_min_criterium,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   ⁶​Index_harm_criterium</span></span></span></code></pre>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">resultaat</span><span class="op">$</span><span class="va">Resultaat_indicator</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 10 × 12</span></span></span>
+<span><span class="co">##    ID     Habita…¹ Versie Habit…² Crite…³ Indic…⁴ Beoor…⁵ Belang Kwali…⁶ Beoor…⁷</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> JR0216 4030     Versi… 4030    Struct… dwergs… B: &gt;= … b            1     318</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> JR0216 4030     Versi… 4030    Struct… ouderd… B: 2 t… b            1     322</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> JR0216 4030     Versi… 4030    Vegeta… sleute… B: Str… b            1     326</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> JR0216 4030     Versi… 4030    Versto… verbos… B: 10-… b            1     319</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> JR0216 4030     Versi… 4030    Versto… vergra… B: 30-… zb           1     323</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> Ts2036 4030     Versi… 4030    Struct… dwergs… B: &gt;= … b            1     318</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> Ts2036 4030     Versi… 4030    Struct… ouderd… B: 2 t… b            1     322</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> Ts2036 4030     Versi… 4030    Vegeta… sleute… B: Str… b            1     326</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> Ts2036 4030     Versi… 4030    Versto… verbos… B: 10-… b            1     319</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> Ts2036 4030     Versi… 4030    Versto… vergra… B: 30-… zb           1     323</span></span>
+<span><span class="co">## <span style="color: #949494;"># … with 2 more variables: Status_indicator &lt;lgl&gt;, Verschilscore &lt;dbl&gt;, and</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   abbreviated variable names ¹​Habitattype, ²​Habitattype.y, ³​Criterium,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   ⁴​Indicator, ⁵​Beoordeling, ⁶​Kwaliteitsniveau, ⁷​BeoordelingID</span></span></span></code></pre>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">resultaat</span><span class="op">$</span><span class="va">Resultaat_detail</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 12 × 27</span></span></span>
+<span><span class="co">##    ID     Habita…¹ kwali…² Versie Habit…³ Crite…⁴ Indic…⁵ Beoor…⁶ Kwali…⁷ Belang</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> JR0216 4030     Zeer g… Versi… 4030    Struct… dwergs… B: &gt;= …       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> JR0216 4030     Zeer g… Versi… 4030    Struct… ouderd… B: 2 t…       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> JR0216 4030     Zeer g… Versi… 4030    Vegeta… sleute… B: Str…       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> JR0216 4030     Zeer g… Versi… 4030    Vegeta… sleute… B: Str…       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> JR0216 4030     Zeer g… Versi… 4030    Versto… verbos… B: 10-…       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> JR0216 4030     Zeer g… Versi… 4030    Versto… vergra… B: 30-…       1 zb    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> Ts2036 4030     Matig?… Versi… 4030    Struct… dwergs… B: &gt;= …       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> Ts2036 4030     Matig?… Versi… 4030    Struct… ouderd… B: 2 t…       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> Ts2036 4030     Matig?… Versi… 4030    Vegeta… sleute… B: Str…       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> Ts2036 4030     Matig?… Versi… 4030    Vegeta… sleute… B: Str…       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">11</span> Ts2036 4030     Matig?… Versi… 4030    Versto… verbos… B: 10-…       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">12</span> Ts2036 4030     Matig?… Versi… 4030    Versto… vergra… B: 30-…       1 zb    </span></span>
+<span><span class="co">## <span style="color: #949494;"># … with 17 more variables: BeoordelingID &lt;int&gt;, Combinatie &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   VoorwaardeID &lt;int&gt;, Voorwaarde &lt;chr&gt;, Referentiewaarde &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   Operator &lt;chr&gt;, EenheidRefwaarde &lt;chr&gt;, TypeRefwaarde &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   InvoertypeRevwaarde &lt;chr&gt;, Waarde &lt;chr&gt;, TypeWaarde &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   InvoertypeWaarde &lt;chr&gt;, EenheidWaarde &lt;chr&gt;, AfkomstWaarde &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   TheoretischMaximum &lt;dbl&gt;, Status_voorwaarde &lt;lgl&gt;, Verschilscore &lt;dbl&gt;, and</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   abbreviated variable names ¹​Habitattype, …</span></span></span></code></pre>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ofwel:</span></span>
+<span><span class="va">resultaat</span><span class="op">[[</span><span class="st">"Resultaat_globaal"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 9</span></span></span>
+<span><span class="co">##   ID     Habitattype Versie     Kwalite…¹ Status Aggre…² Index…³ Index…⁴ Index…⁵</span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> JR0216 4030        Versie 2.0         1 FALSE  1-out-…      -<span style="color: #BB0000;">1</span>      -<span style="color: #BB0000;">1</span>      -<span style="color: #BB0000;">1</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> Ts2036 4030        Versie 2.0         1 FALSE  1-out-…      -<span style="color: #BB0000;">1</span>      -<span style="color: #BB0000;">1</span>      -<span style="color: #BB0000;">1</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># … with abbreviated variable names ¹​Kwaliteitsniveau, ²​Aggregatiemethode,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   ³​Index_min_min, ⁴​Index_min_harm, ⁵​Index_harm_harm</span></span></span></code></pre>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">resultaat</span><span class="op">[[</span><span class="st">"Resultaat_criterium"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 9</span></span></span>
+<span><span class="co">##   ID     Habitattype Versie     Criter…¹ Kwali…² Statu…³ Aggre…⁴ Index…⁵ Index…⁶</span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> JR0216 4030        Versie 2.0 Structu…       1 FALSE   1-out-… -<span style="color: #BB0000;">0.9</span>     -<span style="color: #BB0000;">0.833</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> JR0216 4030        Versie 2.0 Vegetat…       1 FALSE   1-out-… -<span style="color: #BB0000;">1</span>       -<span style="color: #BB0000;">1</span>    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> JR0216 4030        Versie 2.0 Verstor…       1 FALSE   1-out-… -<span style="color: #BB0000;">0.071</span><span style="color: #BB0000; text-decoration: underline;">4</span>   0.261</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> Ts2036 4030        Versie 2.0 Structu…       1 TRUE    1-out-…  0        0.200</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">5</span> Ts2036 4030        Versie 2.0 Vegetat…       1 FALSE   1-out-… -<span style="color: #BB0000;">1</span>       -<span style="color: #BB0000;">1</span>    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">6</span> Ts2036 4030        Versie 2.0 Verstor…       1 TRUE    1-out-…  0.25     0.458</span></span>
+<span><span class="co">## <span style="color: #949494;"># … with abbreviated variable names ¹​Criterium, ²​Kwaliteitsniveau,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   ³​Status_criterium, ⁴​Aggregatiemethode, ⁵​Index_min_criterium,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   ⁶​Index_harm_criterium</span></span></span></code></pre>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">resultaat</span><span class="op">[[</span><span class="st">"Resultaat_indicator"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 10 × 12</span></span></span>
+<span><span class="co">##    ID     Habita…¹ Versie Habit…² Crite…³ Indic…⁴ Beoor…⁵ Belang Kwali…⁶ Beoor…⁷</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> JR0216 4030     Versi… 4030    Struct… dwergs… B: &gt;= … b            1     318</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> JR0216 4030     Versi… 4030    Struct… ouderd… B: 2 t… b            1     322</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> JR0216 4030     Versi… 4030    Vegeta… sleute… B: Str… b            1     326</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> JR0216 4030     Versi… 4030    Versto… verbos… B: 10-… b            1     319</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> JR0216 4030     Versi… 4030    Versto… vergra… B: 30-… zb           1     323</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> Ts2036 4030     Versi… 4030    Struct… dwergs… B: &gt;= … b            1     318</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> Ts2036 4030     Versi… 4030    Struct… ouderd… B: 2 t… b            1     322</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> Ts2036 4030     Versi… 4030    Vegeta… sleute… B: Str… b            1     326</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> Ts2036 4030     Versi… 4030    Versto… verbos… B: 10-… b            1     319</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> Ts2036 4030     Versi… 4030    Versto… vergra… B: 30-… zb           1     323</span></span>
+<span><span class="co">## <span style="color: #949494;"># … with 2 more variables: Status_indicator &lt;lgl&gt;, Verschilscore &lt;dbl&gt;, and</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   abbreviated variable names ¹​Habitattype, ²​Habitattype.y, ³​Criterium,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   ⁴​Indicator, ⁵​Beoordeling, ⁶​Kwaliteitsniveau, ⁷​BeoordelingID</span></span></span></code></pre>
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">resultaat</span><span class="op">[[</span><span class="st">"Resultaat_detail"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 12 × 27</span></span></span>
+<span><span class="co">##    ID     Habita…¹ kwali…² Versie Habit…³ Crite…⁴ Indic…⁵ Beoor…⁶ Kwali…⁷ Belang</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> JR0216 4030     Zeer g… Versi… 4030    Struct… dwergs… B: &gt;= …       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> JR0216 4030     Zeer g… Versi… 4030    Struct… ouderd… B: 2 t…       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> JR0216 4030     Zeer g… Versi… 4030    Vegeta… sleute… B: Str…       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> JR0216 4030     Zeer g… Versi… 4030    Vegeta… sleute… B: Str…       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> JR0216 4030     Zeer g… Versi… 4030    Versto… verbos… B: 10-…       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> JR0216 4030     Zeer g… Versi… 4030    Versto… vergra… B: 30-…       1 zb    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> Ts2036 4030     Matig?… Versi… 4030    Struct… dwergs… B: &gt;= …       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> Ts2036 4030     Matig?… Versi… 4030    Struct… ouderd… B: 2 t…       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> Ts2036 4030     Matig?… Versi… 4030    Vegeta… sleute… B: Str…       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> Ts2036 4030     Matig?… Versi… 4030    Vegeta… sleute… B: Str…       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">11</span> Ts2036 4030     Matig?… Versi… 4030    Versto… verbos… B: 10-…       1 b     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">12</span> Ts2036 4030     Matig?… Versi… 4030    Versto… vergra… B: 30-…       1 zb    </span></span>
+<span><span class="co">## <span style="color: #949494;"># … with 17 more variables: BeoordelingID &lt;int&gt;, Combinatie &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   VoorwaardeID &lt;int&gt;, Voorwaarde &lt;chr&gt;, Referentiewaarde &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   Operator &lt;chr&gt;, EenheidRefwaarde &lt;chr&gt;, TypeRefwaarde &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   InvoertypeRevwaarde &lt;chr&gt;, Waarde &lt;chr&gt;, TypeWaarde &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   InvoertypeWaarde &lt;chr&gt;, EenheidWaarde &lt;chr&gt;, AfkomstWaarde &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   TheoretischMaximum &lt;dbl&gt;, Status_voorwaarde &lt;lgl&gt;, Verschilscore &lt;dbl&gt;, and</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   abbreviated variable names ¹​Habitattype, …</span></span></span></code></pre>
+<p>Met deze tabellen kan verder gewerkt worden zoals hierboven
+beschreven is (<a href="#gegs_in_tabelvorm">Wat met gegenereerde
+gegevens in tabelvorm?</a>)</p>
 <p>##Basis van LSVI-package {#basis_LSVI}</p>
 <p>###Connecteren met de databank</p>
-<p>Om de functies van het LSVI-package te gebruiken, heb je een connectie nodig met de databank met informatie uit LSVI-rapporten (zie <a href="#inhoud_package">Doelstellingen en inhoud package &gt; Inhoud package</a>). Deze connectie kan op 2 manieren gelegd worden:</p>
+<p>Om de functies van het LSVI-package te gebruiken, heb je een
+connectie nodig met de databank met informatie uit LSVI-rapporten (zie
+<a href="#inhoud_package">Doelstellingen en inhoud package &gt; Inhoud
+package</a>). Deze connectie kan op 2 manieren gelegd worden:</p>
 <ul>
-<li>Na het laden van het package eenmalig een pool van connecties aanmaken door de functie <code><a href="../reference/maakConnectiePool.html">maakConnectiePool()</a></code> te runnen. De gegenereerde ConnectiePool zal in de achtergrond verbinding leggen met de databank telkens wanneer dit nodig is, extra connecties aanleggen als dit nodig is, overbodig geworden connecties verwijderen,… en je moet niet telkens de connectie als parameter vermelden bij elke functie die je gebruikt. Met andere woorden: nadat je die ConnectiePool aangemaakt hebt, moet je je verder niet meer bezighouden met die connectie. Is er toch een functie die vereist dat je een connectie meegeeft? Dan kan je simpelweg <code>ConnectiePool</code> als argument meegeven. Als je geen functies meer nodig hebt uit het LSVI-package, kan je deze ConnectiePool sluiten met <code><a href="https://rdrr.io/pkg/pool/man/Pool-class.html">poolClose()</a></code> uit het package <code>pool</code> en eventueel het object verwijderen.</li>
+<li>Na het laden van het package eenmalig een pool van connecties
+aanmaken door de functie <code><a href="../reference/maakConnectiePool.html">maakConnectiePool()</a></code> te runnen. De
+gegenereerde ConnectiePool zal in de achtergrond verbinding leggen met
+de databank telkens wanneer dit nodig is, extra connecties aanleggen als
+dit nodig is, overbodig geworden connecties verwijderen,… en je moet
+niet telkens de connectie als parameter vermelden bij elke functie die
+je gebruikt. Met andere woorden: nadat je die ConnectiePool aangemaakt
+hebt, moet je je verder niet meer bezighouden met die connectie. Is er
+toch een functie die vereist dat je een connectie meegeeft? Dan kan je
+simpelweg <code>ConnectiePool</code> als argument meegeven. Als je geen
+functies meer nodig hebt uit het LSVI-package, kan je deze ConnectiePool
+sluiten met <code><a href="https://rdrr.io/pkg/pool/man/Pool-class.html" class="external-link">poolClose()</a></code> uit het package <code>pool</code>
+en eventueel het object verwijderen.</li>
 </ul>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/inbo/LSVI">LSVI</a></span><span class="op">)</span>
-<span class="fu"><a href="../reference/maakConnectiePool.html">maakConnectiePool</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#Nu kan je alle functies gebruiken zonder expliciet het argument</span>
-<span class="co">#ConnectieLSVIhabitats op te geven, bv.</span>
-<span class="fu"><a href="../reference/geefVersieInfo.html">geefVersieInfo</a></span><span class="op">(</span><span class="op">)</span>
-<span class="fu"><a href="../reference/geefSoortenlijst.html">geefSoortenlijst</a></span><span class="op">(</span>Habitattype <span class="op">=</span> <span class="st">"4030"</span><span class="op">)</span>
-
-<span class="co">#En als je geen functies meer nodig hebt uit het LSVI-package, kan je de</span>
-<span class="co">#ConnectiePool afsluiten en verwijderen:</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rstudio/pool">pool</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/pool/man/Pool-class.html">poolClose</a></span><span class="op">(</span><span class="va">ConnectiePool</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span><span class="va">ConnectiePool</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/inbo/LSVI" class="external-link">LSVI</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/maakConnectiePool.html">maakConnectiePool</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#Nu kan je alle functies gebruiken zonder expliciet het argument</span></span>
+<span><span class="co">#ConnectieLSVIhabitats op te geven, bv.</span></span>
+<span><span class="fu"><a href="../reference/geefVersieInfo.html">geefVersieInfo</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/geefSoortenlijst.html">geefSoortenlijst</a></span><span class="op">(</span>Habitattype <span class="op">=</span> <span class="st">"4030"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#En als je geen functies meer nodig hebt uit het LSVI-package, kan je de</span></span>
+<span><span class="co">#ConnectiePool afsluiten en verwijderen:</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rstudio/pool" class="external-link">pool</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/pool/man/Pool-class.html" class="external-link">poolClose</a></span><span class="op">(</span><span class="va">ConnectiePool</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span><span class="va">ConnectiePool</span><span class="op">)</span></span></code></pre></div>
 <ul>
-<li>Een connectie met de databank maken met de functie <code><a href="../reference/connecteerMetLSVIdb.html">connecteerMetLSVIdb()</a></code> en deze connectie voor elke functie meegeven bij de parameter ConnectieLSVIhabitats.</li>
+<li>Een connectie met de databank maken met de functie
+<code><a href="../reference/connecteerMetLSVIdb.html">connecteerMetLSVIdb()</a></code> en deze connectie voor elke functie
+meegeven bij de parameter ConnectieLSVIhabitats.</li>
 </ul>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/inbo/LSVI">LSVI</a></span><span class="op">)</span>
-<span class="va">Connectie</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/connecteerMetLSVIdb.html">connecteerMetLSVIdb</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#Nu moet je bij elke functie opnieuw deze connectie meegeven</span>
-<span class="fu"><a href="../reference/geefVersieInfo.html">geefVersieInfo</a></span><span class="op">(</span>ConnectieLSVIhabitats <span class="op">=</span> <span class="va">Connectie</span><span class="op">)</span>
-<span class="fu"><a href="../reference/geefSoortenlijst.html">geefSoortenlijst</a></span><span class="op">(</span>Habitattype <span class="op">=</span> <span class="st">"4030"</span>, ConnectieLSVIhabitats <span class="op">=</span> <span class="va">Connectie</span><span class="op">)</span>
-
-<span class="co">#De connectie sluiten kan met dbDisconnect uit het DBI-package:</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org">DBI</a></span><span class="op">)</span>
-<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html">dbDisconnect</a></span><span class="op">(</span><span class="va">Connectie</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/inbo/LSVI" class="external-link">LSVI</a></span><span class="op">)</span></span>
+<span><span class="va">Connectie</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/connecteerMetLSVIdb.html">connecteerMetLSVIdb</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#Nu moet je bij elke functie opnieuw deze connectie meegeven</span></span>
+<span><span class="fu"><a href="../reference/geefVersieInfo.html">geefVersieInfo</a></span><span class="op">(</span>ConnectieLSVIhabitats <span class="op">=</span> <span class="va">Connectie</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/geefSoortenlijst.html">geefSoortenlijst</a></span><span class="op">(</span>Habitattype <span class="op">=</span> <span class="st">"4030"</span>, ConnectieLSVIhabitats <span class="op">=</span> <span class="va">Connectie</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#De connectie sluiten kan met dbDisconnect uit het DBI-package:</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html" class="external-link">dbDisconnect</a></span><span class="op">(</span><span class="va">Connectie</span><span class="op">)</span></span></code></pre></div>
 <p>###Gebruik van de functies zelf</p>
-<p>De functies kunnen min of meer in groepen ingedeeld worden op basis van het eerste deel van hun naam:</p>
+<p>De functies kunnen min of meer in groepen ingedeeld worden op basis
+van het eerste deel van hun naam:</p>
 <ul>
 <li>
-<code>maakXXX</code>: deze functies genereren een bestand (.html) waarin de informatie uit de databank in een rapportageformaat weergegeven wordt</li>
+<code>maakXXX</code>: deze functies genereren een bestand (.html)
+waarin de informatie uit de databank in een rapportageformaat
+weergegeven wordt</li>
 <li>
-<code>geefXXX</code>: deze functies genereren een tabel met informatie uit de databank</li>
+<code>geefXXX</code>: deze functies genereren een tabel met
+informatie uit de databank</li>
 <li>
-<code>berekenXXX</code>: deze functies voeren berekeningen uit m.b.t. de LSVI op basis van opgegeven veldgegevens</li>
-<li>andere (<code>selecteerXXX</code>, <code>vertaalXXX</code> en <code>connecteerXXX</code>): hulpfuncties die eventueel relevant kunnen zijn voor gevorderde R-gebruikers</li>
+<code>berekenXXX</code>: deze functies voeren berekeningen uit
+m.b.t. de LSVI op basis van opgegeven veldgegevens</li>
+<li>andere (<code>selecteerXXX</code>, <code>vertaalXXX</code> en
+<code>connecteerXXX</code>): hulpfuncties die eventueel relevant kunnen
+zijn voor gevorderde R-gebruikers</li>
 </ul>
-<p>Voor de functies van voornamelijk de eerste twee groepen zijn er een aantal argumenten die facultatief meegegeven kunnen worden: Versie, Habitatgroep, Habitattype, Criterium en Indicator. Door hiervoor waarden op te geven, kunnen de relevante gegevens uit de databank geselecteerd worden. Voor de argumenten waarvoor geen specifieke waarden opgegeven zijn, wordt de default ‘alle’ gebruikt, waardoor alle beschikbare gegevens voor dat argument uit de databank gehaald worden.</p>
-<p>Voor een overzicht van de belangrijkste beschikbare functies verwijzen we naar een eerder hoofdstuk in deze handleiding ( <a href="#doelstellingen_inhoud">Doelstellingen en inhoud package</a>) en voor de gedetailleerde beschrijving verwijzen we naar de <a href="https://inbo.github.io/LSVI/reference/index.html">documentatie van de functies zelf</a>. In deze documentatie wordt verwezen naar hulpfuncties waar het relevant is om deze te gebruiken.</p>
-<p>Enkele functies worden niet of amper vermeld in deze handleiding of de documentatie van andere functies. Dit zijn technische hulpfuncties die moeilijk zijn in gebruik (vaak doordat ze als argumenten identificatienummers uit de databank nodig hebben) en die een meer gebruiksvriendelijk alternatief hebben. Ze dienen doorgaans als hulpfunctie voor hun gebruiksvriendelijke alternatieven en/of andere basisfuncties en zijn in de documentatie duidelijk benoemd als ‘hulpfunctie’ met vaak de vermelding van het meer gebruiksvriendelijke alternatief. We willen ervaren R-gebruikers de kans te geven om deze indien nodig te gebruiken, vandaar dat we ervoor kiezen om deze toch beschikbaar te stellen.</p>
+<p>Voor de functies van voornamelijk de eerste twee groepen zijn er een
+aantal argumenten die facultatief meegegeven kunnen worden: Versie,
+Habitatgroep, Habitattype, Criterium en Indicator. Door hiervoor waarden
+op te geven, kunnen de relevante gegevens uit de databank geselecteerd
+worden. Voor de argumenten waarvoor geen specifieke waarden opgegeven
+zijn, wordt de default ‘alle’ gebruikt, waardoor alle beschikbare
+gegevens voor dat argument uit de databank gehaald worden.</p>
+<p>Voor een overzicht van de belangrijkste beschikbare functies
+verwijzen we naar een eerder hoofdstuk in deze handleiding ( <a href="#doelstellingen_inhoud">Doelstellingen en inhoud package</a>) en
+voor de gedetailleerde beschrijving verwijzen we naar de <a href="https://inbo.github.io/LSVI/reference/index.html" class="external-link">documentatie van
+de functies zelf</a>. In deze documentatie wordt verwezen naar
+hulpfuncties waar het relevant is om deze te gebruiken.</p>
+<p>Enkele functies worden niet of amper vermeld in deze handleiding of
+de documentatie van andere functies. Dit zijn technische hulpfuncties
+die moeilijk zijn in gebruik (vaak doordat ze als argumenten
+identificatienummers uit de databank nodig hebben) en die een meer
+gebruiksvriendelijk alternatief hebben. Ze dienen doorgaans als
+hulpfunctie voor hun gebruiksvriendelijke alternatieven en/of andere
+basisfuncties en zijn in de documentatie duidelijk benoemd als
+‘hulpfunctie’ met vaak de vermelding van het meer gebruiksvriendelijke
+alternatief. We willen ervaren R-gebruikers de kans te geven om deze
+indien nodig te gebruiken, vandaar dat we ervoor kiezen om deze toch
+beschikbaar te stellen.</p>
 <p>Vragen of hulp nodig? Spring gerust binnen bij BMK.</p>
   </div>
 
@@ -675,11 +962,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Els Lommelen, Patrik Oosterlynck, Gert Van Spaendonk, Hans Van Calster, Martine Van Hove, Toon Westra.</p>
+  <p></p>
+<p>Developed by Els Lommelen, Patrik Oosterlynck, Gert Van Spaendonk, Hans Van Calster, Martine Van Hove, Toon Westra.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -687,6 +976,8 @@
 
   
 
+
+  
 
   </body>
 </html>

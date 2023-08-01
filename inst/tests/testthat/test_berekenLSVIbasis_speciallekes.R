@@ -1,6 +1,7 @@
 context("test speciale gevallen")
 
 library(dplyr)
+library(readr)
 
 maakConnectiePool()
 describe("twee voorwaarden vergelijken", {
@@ -121,6 +122,86 @@ describe("twee voorwaarden vergelijken", {
       )[["Resultaat_detail"]] %>%
         filter(.data$Indicator == "overgang naar rbbzil"),
       Resultaat2
+    )
+  })
+})
+
+describe("AnalyseVariabele scoresom", {
+  Data_habitat <- #nolint
+    data.frame(
+      ID = c("demo1", "demo2", "demo3"),
+      Habitattype = "2190_a",
+      stringsAsFactors = FALSE)
+  Data_voorwaarden <- #nolint
+    read_csv2(
+      system.file("vbdata/data_voorwaarden2190_a.csv", package = "LSVI")
+    )
+  Data_soortenKenmerken <- #nolint
+    read_csv2(
+      system.file("vbdata/data_soortenKenmerken2190_a.csv", package = "LSVI")
+    )
+  it("berekening op basis van soortenlijst geeft correct resultaat", {
+    resultaat_berekend <-
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 3",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden,
+          Data_soortenKenmerken
+        )
+      )
+    expect_equal(
+      (resultaat_berekend[["Resultaat_detail"]] %>%
+        filter(.data$Indicator == "bedekking sleutelsoorten"))$Waarde,
+      c("6", "3", "2", "1", "8", "1")
+    )
+    expect_equal(
+      (resultaat_berekend[["Resultaat_detail"]] %>%
+         filter(.data$Indicator == "bedekking sleutelsoorten"))$Verschilscore,
+      c(0, 0, -0.666666666667, -0.66666666667, 0.2222222222, -0.666666666667)
+    )
+    expect_equal(
+      as.data.frame(
+        resultaat_berekend[["Resultaat_indicator"]] %>%
+          filter(.data$Indicator == "bedekking sleutelsoorten")
+      )$Verschilscore,
+      c(0, -0.666666666667, 0.22222222222)
+    )
+    expect_equal(
+      as.data.frame(
+        resultaat_berekend[["Resultaat_indicator"]] %>%
+          filter(.data$Indicator == "bedekking sleutelsoorten")
+      )$Status_indicator,
+      c(TRUE, FALSE, TRUE)
+    )
+  })
+  it("opgeven van voorwaarde geeft correct resultaat", {
+    Data_voorwaarden <- Data_voorwaarden %>%
+      bind_rows(
+        data.frame(
+          ID = c("demo1", "demo1", "demo2", "demo2", "demo3", "demo3"),
+          Criterium = "Vegetatie",
+          Indicator = "bedekking sleutelsoorten",
+          Voorwaarde = c("scoresom hydrofyten", "scoresom niet-hydrofyten"),
+          Waarde = c(7, 4, 3, 2, 7, 2),
+          Type = "Geheel getal"
+        )
+      )
+    resultaat_berekend <-
+      idsWissen(
+        berekenLSVIbasis(
+          Versie = "Versie 3",
+          Kwaliteitsniveau = "1",
+          Data_habitat,
+          Data_voorwaarden,
+          Data_soortenKenmerken
+        )
+      )
+    expect_equal(
+      (resultaat_berekend[["Resultaat_detail"]] %>%
+         filter(.data$Indicator == "bedekking sleutelsoorten"))$Waarde,
+      c("7", "4", "3", "2", "7", "2")
     )
   })
 })

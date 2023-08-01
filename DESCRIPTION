@@ -1,6 +1,6 @@
 Package: LSVI
 Title: Rekenmodule Lokale Staat Van Instandhouding van habitattypen
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: c(
   person(
     "Els", "Lommelen", email = "els.lommelen@inbo.be",
@@ -44,7 +44,7 @@ Imports:
     xtable
 Suggests:
     knitr
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 VignetteBuilder: knitr
 URL: https://github.com/inbo/LSVI
 BugReports: https://github.com/inbo/LSVI/issues
@@ -95,6 +95,7 @@ Collate:
     's4_maxBedekking2s.R'
     's4_maxBedekkingExcl.R'
     's4_meting.R'
+    's4_scoresom.R'
     'selecteerIndicatoren.R'
     'selecteerKenmerkenInOpname.R'
     'vertaalIntervalUitvoer.R'

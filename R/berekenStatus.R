@@ -51,8 +51,8 @@ berekenStatus <-
             )
         ) %>%
         select(
-          .data$Rijnr,
-          .data$Status
+          "Rijnr",
+          "Status"
         )
     }
 
@@ -78,8 +78,8 @@ berekenStatus <-
             )
         ) %>%
         select(
-          .data$Rijnr,
-          .data$Status
+          "Rijnr",
+          "Status"
         )
     }
 
@@ -106,8 +106,8 @@ berekenStatus <-
       ) %>%
       unnest(.data$Status) %>%
       select(
-        .data$Rijnr,
-        .data$Status
+        "Rijnr",
+        "Status"
       )
 
     return(Statustabel2)

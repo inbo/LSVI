@@ -115,10 +115,10 @@ geefInvoervereisten <- function(Versie = "alle",
       ConnectieLSVIhabitats = ConnectieLSVIhabitats
     ) %>%
     select(
-      .data$Versie,
-      .data$Habitattype,
-      .data$Habitatsubtype,
-      .data$Indicator_beoordelingID
+      "Versie",
+      "Habitattype",
+      "Habitatsubtype",
+      "Indicator_beoordelingID"
     ) %>%
     distinct() %>%
     filter(!is.na(.data$Indicator_beoordelingID))
@@ -226,7 +226,7 @@ geefInvoervereisten <- function(Versie = "alle",
 
   BasisVoorwaarden <- Voorwaarden %>%
     filter(!.data$Id %in% Children) %>%
-    select(.data$Id, .data$BeoordelingID) %>%
+    select("Id", "BeoordelingID") %>%
     rowwise() %>%
     mutate(
       Combinatie = RecFunctie(.data$Id)
@@ -234,21 +234,21 @@ geefInvoervereisten <- function(Versie = "alle",
     left_join(
       Voorwaarden %>%
         select(
-          .data$BeoordelingID,
-          .data$VoorwaardeID1,
-          .data$VoorwaardeID2
+          "BeoordelingID",
+          "VoorwaardeID1",
+          "VoorwaardeID2"
         ),
       by = c("BeoordelingID")
     ) %>%
     select(
-      .data$BeoordelingID,
-      .data$VoorwaardeID1,
-      .data$VoorwaardeID2,
-      .data$Combinatie
+      "BeoordelingID",
+      "VoorwaardeID1",
+      "VoorwaardeID2",
+      "Combinatie"
     ) %>%
     gather("MagWeg", "VoorwaardeID", c("VoorwaardeID1", "VoorwaardeID2")) %>%
     filter(!is.na(.data$VoorwaardeID)) %>%
-    select(.data$BeoordelingID, .data$Combinatie, .data$VoorwaardeID)
+    select("BeoordelingID", "Combinatie", "VoorwaardeID")
 
   VoorwaardenIDs <-
     paste(
@@ -350,18 +350,18 @@ geefInvoervereisten <- function(Versie = "alle",
       ) %>%
       ungroup() %>%                   #volgorde aanpassen
       select(
-        .data$VoorwaardeID, .data$Voorwaarde,
-        .data$Referentiewaarde,
-        .data$Operator, .data$Maximumwaarde, .data$AnalyseVariabele,
-        .data$Eenheid, .data$TypeVariabele,
-        .data$Invoertype, .data$Invoerwaarde,
-        .data$TaxongroepId, .data$TaxongroepNaam,
-        .data$Studiegroepnaam, .data$Studielijstnaam,
-        .data$Studiewaarde,
-        .data$SubAnalyseVariabele, .data$SubEenheid,
-        .data$TypeSubVariabele, .data$SubReferentiewaarde,
-        .data$SubOperator, .data$SubInvoertype,
-        .data$SubInvoerwaarde
+        "VoorwaardeID", "Voorwaarde",
+        "Referentiewaarde",
+        "Operator", "Maximumwaarde", "AnalyseVariabele",
+        "Eenheid", "TypeVariabele",
+        "Invoertype", "Invoerwaarde",
+        "TaxongroepId", "TaxongroepNaam",
+        "Studiegroepnaam", "Studielijstnaam",
+        "Studiewaarde",
+        "SubAnalyseVariabele", "SubEenheid",
+        "TypeSubVariabele", "SubReferentiewaarde",
+        "SubOperator", "SubInvoertype",
+        "SubInvoerwaarde"
       )
   }
 

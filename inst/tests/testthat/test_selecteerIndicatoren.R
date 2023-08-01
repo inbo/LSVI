@@ -6,7 +6,7 @@ library(rlang)
 maakConnectiePool()
 describe("selectie volgens habitattype", {
   AlleIndicatoren <- selecteerIndicatoren() %>%
-    select(.data$Habitatsubtype) %>%
+    select("Habitatsubtype") %>%
     distinct()
   it("Zonder selectie worden alle habitatsubtypen met criteria gegeven", {
     stopifnot(
@@ -22,7 +22,7 @@ describe("selectie volgens habitattype", {
   it("Geselecteerde habitat(sub)typen worden altijd gegeven", {
     EnkeleIndicatoren <-
       selecteerIndicatoren(Habitattype = c("4010", "9130_end")) %>%
-      select(.data$Habitatsubtype) %>%
+      select("Habitatsubtype") %>%
       distinct()
     expect_equal(
       EnkeleIndicatoren$Habitatsubtype,

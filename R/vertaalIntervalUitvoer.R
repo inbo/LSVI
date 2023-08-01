@@ -72,10 +72,10 @@ vertaalIntervalUitvoer <-
           )
       ) %>%
       select(
-        .data$Naam,
-        .data$Waarde,
-        .data$Ondergrens,
-        .data$Bovengrens
+        "Naam",
+        "Waarde",
+        "Ondergrens",
+        "Bovengrens"
       ) %>%
       arrange(
         .data$Naam,
@@ -158,12 +158,13 @@ vertaalIntervalUitvoer <-
                   round(.data$Min, 1),
                   round(.data$Max, 1),
                   sep = " - ")
-              )
+              ),
+            Waarde = as.character(.data$Waarde)
           )
       ) %>%
       select(
-        .data$Rijnr,
-        .data$Waarde
+        "Rijnr",
+        "Waarde"
       )
 
     return(Resultaat)

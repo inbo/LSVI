@@ -1,0 +1,27 @@
+ID;Vegetatielaag;Kenmerk;TypeKenmerk;Waarde;Type;Invoertype;Eenheid
+demo1;alle;Lemna minor L.;soort_Latijn;o;Categorie;TANSLEY MEREN;
+demo1;alle;Phragmites australis (Cav.) Steud.;soort_Latijn;o;Categorie;TANSLEY MEREN;
+demo1;alle;Phalaris arundinacea L.;soort_Latijn;o;Categorie;TANSLEY MEREN;
+demo1;alle;Chara aculeolata Kutz.;soort_Latijn;r;Categorie;TANSLEY MEREN;
+demo1;alle;Chara hispida L.;soort_Latijn;r;Categorie;TANSLEY MEREN;
+demo1;alle;Nitella translucens (Pers.) C. Agardh;soort_Latijn;r;Categorie;TANSLEY MEREN;
+demo1;alle;Groenlandia densa (L.) Fourr.;soort_Latijn;r;Categorie;TANSLEY MEREN;
+demo1;alle;Potamogeton gramineus L.;soort_Latijn;r;Categorie;TANSLEY MEREN;
+demo1;alle;Ranunculus aquatilis L.;soort_Latijn;r;Categorie;TANSLEY MEREN;
+demo1;alle;Apium inundatum (L.) Reichenb. f.;soort_Latijn;r;Categorie;TANSLEY MEREN;
+demo1;alle;Nasturtium officinale R. Brown;soort_Latijn;r;Categorie;TANSLEY MEREN;
+demo1;alle;Equisetum fluviatile L.;soort_Latijn;r;Categorie;TANSLEY MEREN;
+demo2;alle;Lemna minor L.;soort_Latijn;a;Categorie;TANSLEY MEREN;
+demo2;alle;Phragmites australis (Cav.) Steud.;soort_Latijn;a;Categorie;TANSLEY MEREN;
+demo2;alle;Phalaris arundinacea L.;soort_Latijn;a;Categorie;TANSLEY MEREN;
+demo2;alle;Chara aculeolata Kutz.;soort_Latijn;r;Categorie;TANSLEY MEREN;
+demo2;alle;Groenlandia densa (L.) Fourr.;soort_Latijn;r;Categorie;TANSLEY MEREN;
+demo2;alle;Apium inundatum (L.) Reichenb. f.;soort_Latijn;r;Categorie;TANSLEY MEREN;
+demo2;alle;Alternanthera philoxeroides (Mart.) Griseb.;soort_Latijn;o;Categorie;TANSLEY MEREN;
+demo3;alle;Lemna minor L.;soort_Latijn;a;Categorie;TANSLEY MEREN;
+demo3;alle;Phragmites australis (Cav.) Steud.;soort_Latijn;a;Categorie;TANSLEY MEREN;
+demo3;alle;Phalaris arundinacea;soort_Latijn;a;Categorie;TANSLEY MEREN;
+demo3;alle;Chara aculeolata Kutz.;soort_Latijn;a;Categorie;TANSLEY MEREN;
+demo3;alle;Groenlandia densa (L.) Fourr.;soort_Latijn;a;Categorie;TANSLEY MEREN;
+demo3;alle;Apium inundatum (L.) Reichenb. f.;soort_Latijn;r;Categorie;TANSLEY MEREN;
+demo3;alle;Alternanthera philoxeroides (Mart.) Griseb.;soort_Latijn;o;Categorie;TANSLEY MEREN;

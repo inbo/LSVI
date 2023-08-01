@@ -40,7 +40,7 @@ describe("test databank", {
             c("aandeel", "bedekkingExcl", "aandeelKruidlaag", "bedekkingSom",
               "aantal", "bedekking", "bedekkingLaag", "bedekkingLaagExcl",
               "bedekkingLaagPlus", "maxBedekking", "maxBedekkingExcl",
-              "maxBedekking2s", "aantalGroepen")
+              "maxBedekking2s", "aantalGroepen", "scoresom")
       )
     )
   })
@@ -64,15 +64,15 @@ describe("test databank", {
       filter(TypeVariabele != "Geheel getal")
     expect_equal(
       nrow(av_ok),
-      1
+      2
     )
     Refwaarden <-
       dbGetQuery(
         ConnectieLSVIhabitats,
         sprintf(
           "SELECT Referentiewaarde FROM Voorwaarde
-          WHERE AnalyseVariabeleId = '%s'",
-          av_ok$Id
+          WHERE AnalyseVariabeleId in ('%s')",
+          paste(av_ok$Id, collapse = "', '")
         )
       )
     expect_true(
@@ -418,6 +418,53 @@ describe("test databank", {
      )
    })
 
+  it("AnalyseVariabele scoresom heeft typevariabele Geheel getal", {
+    ConnectieLSVIhabitats <-
+      connecteerMetLSVIdb()
+    AV <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        "SELECT AnalyseVariabele.Id, AnalyseVariabele.VariabeleNaam,
+         TypeVariabele.Naam as TypeVariabele
+         FROM AnalyseVariabele INNER JOIN TypeVariabele
+         ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
+         WHERE AnalyseVariabele.VariabeleNaam = 'scoresom'"
+      )
+    av_leeg <- AV %>%
+      filter(TypeVariabele != "Geheel getal")
+    FouteWaarden <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        sprintf(
+          "SELECT Id, Referentiewaarde FROM Voorwaarde
+        WHERE AnalyseVariabeleId in ('%s')",
+          paste(av_leeg$Id, collapse = "','")
+        )
+      )
+    expect_equal(
+      nrow(FouteWaarden),
+      0
+    )
+  })
+
+  it("De waarden van scoresom zijn getallen kleiner dan of gelijk aan 10 (als / 100)", {
+    ConnectieLSVIhabitats <-
+      connecteerMetLSVIdb()
+    Refwaarden <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        "SELECT vw.VoorwaardeNaam, vw.Referentiewaarde
+        FROM Voorwaarde vw
+        INNER JOIN AnalyseVariabele av ON vw.AnalyseVariabeleId = av.Id
+        WHERE av.VariabeleNaam = 'scoresom'"
+      )
+    Refwaarden <- Refwaarden %>%
+      filter(!.data$Referentiewaarde %in% Refwaarden$VoorwaardeNaam)
+    expect_true(
+      all(as.numeric(Refwaarden$Referentiewaarde) / 100 <= 10)
+    )
+  })
+
   it("De waarden van percentages zijn getallen kleiner dan of gelijk aan 100", {
     ConnectieLSVIhabitats <-
       connecteerMetLSVIdb()
@@ -476,7 +523,7 @@ describe("test databank", {
         ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
         WHERE AnalyseVariabele.VariabeleNaam in ('aantal', 'aantalGroepen',
           'aandeel', 'bedekking', 'bedekkingExcl', 'maxBedekking',
-          'maxBedekking2s', 'maxBedekkingExcl')"
+          'maxBedekking2s', 'maxBedekkingExcl', 'scoresom')"
       )
     skip_if_not(nrow(av) > 0, "AV komen niet voor")
     Refwaarden <-
@@ -578,6 +625,26 @@ describe("test databank", {
         INNER JOIN TypeVariabele
           ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
         WHERE TypeVariabele.Naam = 'Categorie'"
+      )
+    expect_true(
+      all(!is.na(av$InvoermaskerId))
+    )
+  })
+
+  it("Voor typevariabele scoresom is een Invoermasker opgegeven", {
+    ConnectieLSVIhabitats <-
+      connecteerMetLSVIdb()
+    av <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        "SELECT Voorwaarde.Id, Voorwaarde.InvoermaskerId,
+        AnalyseVariabele.VariabeleNaam,
+        TypeVariabele.Naam as TypeVariabele
+        FROM Voorwaarde INNER JOIN AnalyseVariabele
+          ON Voorwaarde.AnalyseVariabeleId = AnalyseVariabele.Id
+        INNER JOIN TypeVariabele
+          ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
+        WHERE TypeVariabele.Naam = 'scoresom'"
       )
     expect_true(
       all(!is.na(av$InvoermaskerId))

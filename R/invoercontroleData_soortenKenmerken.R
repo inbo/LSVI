@@ -148,7 +148,7 @@ invoercontroleData_soortenKenmerken <- #nolint
       left_join(
         Taxonlijst %>%
           select(
-            .data$Canonicalname, .data$NBNTaxonVersionKey
+            "Canonicalname", "NBNTaxonVersionKey"
           ) %>%
           distinct(),
         by = c("Canonicalname")
@@ -159,7 +159,7 @@ invoercontroleData_soortenKenmerken <- #nolint
           left_join(
             Taxonlijst %>%
               select(
-                .data$NedNaam, .data$NBNTaxonVersionKey
+                "NedNaam", "NBNTaxonVersionKey"
               ) %>%
               distinct(),
             by = c("Kenmerk" = "NedNaam")

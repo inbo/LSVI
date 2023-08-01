@@ -69,10 +69,10 @@ vertaalInvoerInterval <-
           )
       ) %>%
       select(
-        .data$Naam,
-        .data$Waarde,
-        .data$Ondergrens,
-        .data$Bovengrens
+        "Naam",
+        "Waarde",
+        "Ondergrens",
+        "Bovengrens"
       )
 
     Resultaat <- Dataset %>%
@@ -187,9 +187,9 @@ vertaalInvoerInterval <-
 
     Resultaat <- Resultaat %>%
       select(
-        .data$Rijnr,
-        .data$Min,
-        .data$Max
+        "Rijnr",
+        "Min",
+        "Max"
       )
 
     return(Resultaat)

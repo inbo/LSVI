@@ -277,8 +277,8 @@ geefInfoHabitatfiche <-
         left_join(
           Soortenlijst %>%
             select(
-              .data$TaxongroepId,
-              .data$Soortenlijst
+              "TaxongroepId",
+              "Soortenlijst"
               ),
           by = c("TaxongroepId" = "TaxongroepId")
         ) %>%
@@ -297,17 +297,17 @@ geefInfoHabitatfiche <-
           suffix = c(".habitat", ".beoordeling")
         ) %>%
         select(
-          .data$Versie, .data$Habitattype, .data$Habitatnaam,
-          .data$Habitatsubtype,
-          .data$Habitatsubtypenaam, .data$HabitatsubtypeOmschrijving,
-          .data$Criterium.habitat,
-          .data$Indicator.habitat, .data$Beschrijving, .data$Maatregelen,
-          .data$Opmerkingen.habitat, .data$Referenties.habitat,
-          .data$Soortenlijst,
+          "Versie", "Habitattype", "Habitatnaam",
+          "Habitatsubtype",
+          "Habitatsubtypenaam", "HabitatsubtypeOmschrijving",
+          "Criterium.habitat",
+          "Indicator.habitat", "Beschrijving", "Maatregelen",
+          "Opmerkingen.habitat", "Referenties.habitat",
+          "Soortenlijst",
           Beoordeling = .data$Beoordeling_letterlijk,
-          .data$Criterium.beoordeling,
-          .data$Indicator.beoordeling, .data$Opmerkingen.beoordeling,
-          .data$Referenties.beoordeling, .data$Kwaliteitsniveau
+          "Criterium.beoordeling",
+          "Indicator.beoordeling", "Opmerkingen.beoordeling",
+          "Referenties.beoordeling", "Kwaliteitsniveau"
         )
     } else {
 
@@ -327,17 +327,17 @@ geefInfoHabitatfiche <-
         ) %>%
         mutate(Soortenlijst = NA) %>%
         select(
-          .data$Versie, .data$Habitattype, .data$Habitatnaam,
-          .data$Habitatsubtype,
-          .data$Habitatsubtypenaam, .data$HabitatsubtypeOmschrijving,
-          .data$Criterium.habitat,
-          .data$Indicator.habitat, .data$Beschrijving, .data$Maatregelen,
-          .data$Opmerkingen.habitat, .data$Referenties.habitat,
-          .data$Soortenlijst,
+          "Versie", "Habitattype", "Habitatnaam",
+          "Habitatsubtype",
+          "Habitatsubtypenaam", "HabitatsubtypeOmschrijving",
+          "Criterium.habitat",
+          "Indicator.habitat", "Beschrijving", "Maatregelen",
+          "Opmerkingen.habitat", "Referenties.habitat",
+          "Soortenlijst",
           Beoordeling = .data$Beoordeling_letterlijk,
-          .data$Criterium.beoordeling,
-          .data$Indicator.beoordeling, .data$Opmerkingen.beoordeling,
-          .data$Referenties.beoordeling, .data$Kwaliteitsniveau
+          "Criterium.beoordeling",
+          "Indicator.beoordeling", "Opmerkingen.beoordeling",
+          "Referenties.beoordeling", "Kwaliteitsniveau"
         )
     }
 

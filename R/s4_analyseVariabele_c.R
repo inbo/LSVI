@@ -85,12 +85,12 @@ analyseVariabele_c <- #nolint
             tolower(.data$NbnTaxonVersionKey)
         ) %>%
         select(
-          .data$TaxongroepId,
-          .data$TaxonsubgroepId,
-          .data$TaxonId,
-          .data$SubTaxonId,
-          .data$NbnTaxonVersionKey,
-          .data$TaxonType
+          "TaxongroepId",
+          "TaxonsubgroepId",
+          "TaxonId",
+          "SubTaxonId",
+          "NbnTaxonVersionKey",
+          "TaxonType"
         ) %>%
         distinct()
       setSoortengroep(AnalyseObject) <- Soortengroep
@@ -133,6 +133,10 @@ analyseVariabele_c <- #nolint
       setSubRefMin(AnalyseObject) <- SAV$Min
       setSubRefMax(AnalyseObject) <- SAV$Max
       setSubOperator(AnalyseObject) <- VoorwaardeInfo$SubOperator
+    }
+
+    if (nrow(LIJST) > 0) {
+      setLIJST(AnalyseObject) <- LIJST
     }
 
     return(AnalyseObject)

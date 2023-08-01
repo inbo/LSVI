@@ -30,12 +30,12 @@ Habitatfiche <-
   )
 
 Versie <- geefVersieInfo(ConnectieLSVIhabitats) %>%
-  filter_(~VersieLSVI == VersieRapportdeel)
+  filter(.data$VersieLSVI == VersieRapportdeel)
 
 ```
 
 
-#####Habitatkarakteristieken
+##### Habitatkarakteristieken
 
 ```{r results='asis'}
 
@@ -43,8 +43,8 @@ Habitatkarakteristieken <- Habitatfiche %>%
   select(
     Criterium = .data$Criterium.habitat,
     Indicator = .data$Indicator.habitat,
-    .data$Beschrijving,
-    .data$Maatregelen,
+    "Beschrijving",
+    "Maatregelen",
     Opmerkingen = .data$Opmerkingen.habitat,
     Referenties = .data$Referenties.habitat
   ) %>%
@@ -63,11 +63,11 @@ for (criterium in unique(Habitatkarakteristieken$Criterium)) {
   Habitattabel <- Habitatkarakteristieken %>%
     filter(.data$Criterium == criterium) %>%
     select(
-      .data$Indicator,
-      .data$Beschrijving,
-      .data$Maatregelen,
-      .data$Opmerkingen,
-      .data$Referenties
+      "Indicator",
+      "Beschrijving",
+      "Maatregelen",
+      "Opmerkingen",
+      "Referenties"
     ) %>%
     xtable(digits = ncol(.))
   print(Habitattabel, type = "html", include.rownames = FALSE)
@@ -76,18 +76,18 @@ for (criterium in unique(Habitatkarakteristieken$Criterium)) {
 ```
 
 
-#####Beoordelingsmatrix
+##### Beoordelingsmatrix
 
 ```{r results='asis', message=FALSE, warning=FALSE}
 
 Beoordelingsfiche <- Habitatfiche %>%
   select(
-    .data$Beoordeling,
+    "Beoordeling",
     Criterium = .data$Criterium.beoordeling,
     Indicator = .data$Indicator.beoordeling,
     Opmerkingen = .data$Opmerkingen.beoordeling,
     Referenties = .data$Referenties.beoordeling,
-    .data$Kwaliteitsniveau
+    "Kwaliteitsniveau"
   ) %>%
   distinct() %>%
   inner_join(
@@ -96,7 +96,7 @@ Beoordelingsfiche <- Habitatfiche %>%
                                     Versie$Kwaliteitsniveau2),
                stringsAsFactors = FALSE)
   ) %>%
-  select(-Kwaliteitsniveau) %>%
+  select(-"Kwaliteitsniveau") %>%
   spread(key = Referentieniveau, value = Beoordeling) %>%
   mutate(
     fCriterium =
@@ -116,7 +116,13 @@ for (Criterium in unique(Beoordelingsfiche$Criterium)) {
                             c(Versie$Kwaliteitsniveau1,
                               Versie$Kwaliteitsniveau2)
                           } else if (ncol(Beoordelingsfiche) == 6) {
-                            Versie$Kwaliteitsniveau1
+                            if (
+                              Versie$Kwaliteitsniveau1 == "niet van toepassing"
+                            ) {
+                              Versie$Kwaliteitsniveau2
+                            } else {
+                              Versie$Kwaliteitsniveau1
+                            }
                           },
                           "Opmerkingen", "Referenties")])
   print(Beoordelingsmatrix, type = "html", include.rownames = FALSE)
