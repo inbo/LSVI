@@ -1,7 +1,7 @@
 # LSVI 0.1.2
 
 * toevoeging van regionaal belangrijke biotopen (rbb)
-* toevoeging van habitattype 9120_a
+* toevoeging van habitattype 2190_a
 
 # LSVI 0.1.1
 
