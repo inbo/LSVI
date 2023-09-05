@@ -1,3 +1,7 @@
+# LSVI 0.1.3
+
+* toevoeging van schaal 'BEHEERMONITORINGSCHAAL2021'
+
 # LSVI 0.1.2
 
 * toevoeging van regionaal belangrijke biotopen (rbb)
