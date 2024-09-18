@@ -44,7 +44,7 @@ Imports:
     xtable
 Suggests:
     knitr
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 VignetteBuilder: knitr
 URL: https://github.com/inbo/LSVI
 BugReports: https://github.com/inbo/LSVI/issues
