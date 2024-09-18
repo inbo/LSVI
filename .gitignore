@@ -8,6 +8,7 @@ doc
 *_cache/
 *_files/
 vignettes/*.html
+vignettes/*.R
 inst/*.html
 .git
 inst/doc
