@@ -48,9 +48,9 @@ invoercontroleData_soortenKenmerken <- #nolint
     assert_that(
       all(
         Data_soortenKenmerken$TypeKenmerk %in%
-          c("studiegroep", "soort_nbn", "soort_latijn", "soort_nl", "doodhout")
+          c("studiegroep", "soort_nbn", "soort_latijn", "soort_nl")
       ),
-      msg = "Data_soortenKenmerken$TypeKenmerk moet een van de volgende waarden zijn: studiegroep, soort_nbn, soort_latijn, soort_nl, doodhout" #nolint
+      msg = "Data_soortenKenmerken$TypeKenmerk moet een van de volgende waarden zijn: studiegroep, soort_nbn, soort_latijn, soort_nl" #nolint
     )
     assert_that(has_name(Data_soortenKenmerken, "Waarde"))
     if (!is.character(Data_soortenKenmerken$Waarde)) {

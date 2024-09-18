@@ -44,7 +44,7 @@ setValidity(
       assert_that(
         all(
           tolower(object@Kenmerken$TypeKenmerk) %in%
-            c("studiegroep", "soort_nbn", "doodhout")
+            c("studiegroep", "soort_nbn")
         ),
         msg = "TypeKenmerk moet een van de volgende waarden zijn: studiegroep, soort_nbn" #nolint
       )
