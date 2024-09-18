@@ -3,7 +3,7 @@
 #' @description Deze hulpfunctie voor de s4-klassen 'aantal' en 'bedekking'
 #' selecteert soorten of kenmerken uit een opname die niet tot de soortgroep of
 #' studiegroep van een bepaalde voorwaarde behoren.  Op basis hiervan kan de
-#' s4-klassen maxBedekkingExcl berkend worden (bv. dominantie van een soort:
+#' s4-klassen maxBedekkingExcl berekend worden (bv. dominantie van een soort:
 #' maximale bedekking van soorten in een opname exclusief de sleutelsoorten).
 #'
 #'
