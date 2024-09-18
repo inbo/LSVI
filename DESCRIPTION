@@ -31,19 +31,19 @@ Imports:
     methods,
     odbc,
     pool,
-    readr,
     rgbif,
     rlang,
     rmarkdown,
     RSQLite,
     stringr,
-    testthat,
     tibble,
     tidyr,
-    utils,
-    xtable
+    utils
 Suggests:
-    knitr
+    knitr,
+    readr,
+    testthat,
+    xtable
 RoxygenNote: 7.3.2
 VignetteBuilder: knitr
 URL: https://github.com/inbo/LSVI
