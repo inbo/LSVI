@@ -153,7 +153,9 @@ Deze formule geeft uiteraard maar een benaderende waarde die minder accuraat is 
 
 Bij de analysevariabele `bedekkingExcl` gaat de voorwaarde over de totale bedekking van de soorten/kenmerken die niet in een lijst voorkomen, bv. alle soorten behalve de sleutelsoorten.
 
-Bij voorwaarden met deze analysevariabele worden de soorten/kenmerken geselecteerd op basis van een functie `deselecteerKenmerkenInOpname()`, die in de opname van de gebruiker de soorten/kenmerken schrapt die in de taxonlijst/studielijst voorkomen (en de overblijvende soorten/kenmerken vormen de selectie).  Verder gebeurt de berekening analoog aan deze van de analysevariabele [`bedekking`](#bedekking): met de formule van Fisher wordt de totale bedekking van deze selectie berekend.
+Bij voorwaarden met deze analysevariabele worden de soorten/kenmerken geselecteerd op basis van een functie `deselecteerKenmerkenInOpname()`, die in de opname van de gebruiker de soorten/kenmerken schrapt die in de taxonlijst/studielijst voorkomen (en de overblijvende soorten/kenmerken vormen de selectie).
+Als een taxonlijst én studielijst opgegeven is, berekent de functie de totale bedekking van soorten die niet in de opgegeven taxonlijst staan en wél in de opgegeven vegetatielaag voorkomen (bv. alle soorten uit de kruidlaag behalve de soorten uit de taxonlijst).
+Verder gebeurt de berekening analoog aan deze van de analysevariabele [`bedekking`](#bedekking): met de formule van Fisher wordt de totale bedekking van deze selectie berekend.
 
 ## bedekkingLaag {#bedekkingLaag}
 

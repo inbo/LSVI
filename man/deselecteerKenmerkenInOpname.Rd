@@ -22,7 +22,9 @@ TypeKenmerk, WaardeMin en WaardeMax}
 gedeselecteerd moet worden}
 
 \item{Studiegroep}{dataframe met de lijst kenmerken die uit Kenmerken
-gedeselecteerd moet worden}
+gedeselecteerd moet worden.
+Als ook Soortengroep opgegeven is, geeft Studiegroep aan welke kenmerken
+wel behouden moeten blijven na deselecteren van de soortengroep.}
 
 \item{SubAnalyseVariabele}{heeft waarde 'bedekking' als er een subvoorwaarde
 is voor de bedekking van de geselecteerde soorten of kenmerken}

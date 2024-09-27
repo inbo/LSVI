@@ -5,7 +5,12 @@
 #' AnalyseVariabele BedekkingExcl op basis van opgegeven kenmerken.  Ze is een
 #' nakomeling van de klasse AnalyseVariabele.  Ze berekent de totale bedekking
 #' van soorten die niet in de opgegeven soortenlijst staan (dus alle soorten
-#' behalve soorten uit soorten uit lijst).
+#' behalve soorten uit soorten uit lijst)
+#' of van kenmerken die niet in de opgegeven studielijst staan (ingeval enkel
+#' een studielijst opgegeven is.
+#' Als een soortenlijst én studielijst opgegeven is, berekent ze de totale
+#' bedekking van soorten die niet in de opgegeven soortenlijst staan en wél
+#' in de opgegeven vegetatielaag voorkomen (bv. soorten uit kruidlaag).
 #'
 #' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden
 #' Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax

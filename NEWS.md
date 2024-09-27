@@ -1,3 +1,8 @@
+# LSVI 0.1.4
+
+* toevoeging van functionaliteit om taxa in 1 laag te deselecteren in functie
+deselecteerSoortenKenmerken() (issue #231)
+
 # LSVI 0.1.3
 
 * toevoeging van schaal 'BEHEERMONITORINGSCHAAL2021'

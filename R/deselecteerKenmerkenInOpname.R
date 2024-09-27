@@ -12,7 +12,9 @@
 #' @param Soortengroep dataframe met de soortenlijst die uit Kenmerken
 #' gedeselecteerd moet worden
 #' @param Studiegroep dataframe met de lijst kenmerken die uit Kenmerken
-#' gedeselecteerd moet worden
+#' gedeselecteerd moet worden.
+#' Als ook Soortengroep opgegeven is, geeft Studiegroep aan welke kenmerken
+#' wel behouden moeten blijven na deselecteren van de soortengroep.
 #' @param SubAnalyseVariabele heeft waarde 'bedekking' als er een subvoorwaarde
 #' is voor de bedekking van de geselecteerde soorten of kenmerken
 #' @param SubRefMin minimumwaarde van de grenswaarde voor de bedekking
@@ -53,9 +55,21 @@ deselecteerKenmerkenInOpname <-
           Soortengroep,
           by = c("Kenmerk" = "NbnTaxonVersionKey")
         )
+      if (length(Studiegroep) > 0 & nrow(Resultaat) > 0) {
+        if (max(is.na(Resultaat$Vegetatielaag))) {
+          stop(
+            "Bij Data_soortenKenmerken is niet voor alle soorten de kolom Vegetatielaag ingevuld, waardoor de berekening niet correct kan worden uitgevoerd (dit omdat de vegetatielaag bepaalt of de betreffende soort al dan niet in rekening gebracht moet worden voor het berekenen van de indicator)"  #nolint
+          )
+        } else {
+          Resultaat <- Resultaat %>%
+            filter(
+              tolower(.data$Vegetatielaag) %in% tolower(Studiegroep$Waarde)
+            )
+        }
+      }
     }
 
-    if (length(Studiegroep) > 0) {
+    if (length(Studiegroep) > 0 & !(length(Soortengroep) > 0)) {
 
       Resultaat <- Kenmerken %>%
         filter(.data$TypeKenmerk == "studiegroep") %>%
