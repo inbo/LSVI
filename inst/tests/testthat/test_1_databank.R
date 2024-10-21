@@ -945,7 +945,9 @@ describe("test databank", {
     TMaantal <-
       geefInvoervereisten(ConnectieLSVIhabitats = connecteerMetLSVIdb()) %>%
       filter(
-        AnalyseVariabele %in% c("aantal", "aantalGroepen"),
+        AnalyseVariabele %in% c("aantal", "aantalGroepen")
+      ) %>%
+      filter(
         !(Maximumwaarde == 3 * as.numeric(sub(",", ".", Referentiewaarde)))
       ) %>%
       rowwise() %>%
@@ -971,7 +973,9 @@ describe("test databank", {
           !AnalyseVariabele %in% c("meting_perc", "meting_bedekking"),
         !(TypeVariabele == "Ja/nee" & Maximumwaarde == 1),
         !(Voorwaarde == "aantal geslachten" & Maximumwaarde == 2),
-        !(Voorwaarde == "bosconstantie" & Maximumwaarde == 250),
+        !(Voorwaarde == "bosconstantie" & Maximumwaarde == 250)
+      ) %>%
+      filter(
         !(Maximumwaarde == 3 * as.numeric(sub(",", ".", Referentiewaarde)))
       )
     expect_equal(nrow(TMmeting), 0)
