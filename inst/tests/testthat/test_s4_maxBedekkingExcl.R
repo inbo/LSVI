@@ -55,32 +55,8 @@ describe("s4_maxBedekkingExcl", {
     )
   })
   it("Aan-/afwezig geeft NA en een warning", {
-    expect_equal(
-      berekenWaarde(
-        new(
-          Class = "maxBedekkingExcl",
-          Kenmerken =
-            data.frame(
-              Kenmerk = c("A1", "B2", "C1", "D3", "E1"),
-              TypeKenmerk = "soort_nbn",
-              WaardeMin = 1,
-              WaardeMax = NA,
-              Eenheid = NA,
-              stringsAsFactors = FALSE
-            ),
-          Soortengroep =
-            data.frame(
-              NbnTaxonVersionKey = c("A1", "B1", "C1", "E1"),
-              TaxonId = 1:4,
-              SubTaxonId = 1:4,
-              stringsAsFactors = FALSE
-            )
-        )
-      ),
-      c(NA, NA)
-    )
     expect_warning(
-      berekenWaarde(
+      Testresultaat <- berekenWaarde(
         new(
           Class = "maxBedekkingExcl",
           Kenmerken =
@@ -101,6 +77,10 @@ describe("s4_maxBedekkingExcl", {
             )
         )
       )
+    )
+    expect_equal(
+      Testresultaat,
+      c(NA, NA)
     )
   })
 })

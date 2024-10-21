@@ -30,20 +30,7 @@ load(system.file("vbdata/Resultaat_test4030v2.Rdata", package = "LSVI"))
 describe("ontbreken van soorten of kenmerken", {
   it("geen enkele soort opgeven geeft NA en een warning", {
     expect_warning(
-      berekenLSVIbasis(
-        Versie = "Versie 2.0",
-        Kwaliteitsniveau = "1",
-        Data_habitat,
-        Data_voorwaarden,
-        Data_soortenKenmerken %>%
-          filter(
-            .data$TypeKenmerk != "Soort_Latijn"
-          )
-      ),
-      "Er is geen enkele soort opgegeven"
-    )
-    expect_equal(
-      idsWissen(
+      Testresultaat <- idsWissen(
         berekenLSVIbasis(
           Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
@@ -55,6 +42,10 @@ describe("ontbreken van soorten of kenmerken", {
             )
         )
       ),
+      "Er is geen enkele soort opgegeven"
+    )
+    expect_equal(
+      Testresultaat,
       list(
         Resultaat_criterium = Resultaatv2[["Resultaat_criterium"]] %>%
           mutate(
@@ -216,20 +207,7 @@ describe("ontbreken van soorten of kenmerken", {
 
   it("geen enkel kenmerk opgeven geeft NA en een warning", {
     expect_warning(
-      berekenLSVIbasis(
-        Versie = "Versie 2.0",
-        Kwaliteitsniveau = "1",
-        Data_habitat,
-        Data_voorwaarden,
-        Data_soortenKenmerken %>%
-          filter(
-            .data$TypeKenmerk != "studiegroep"
-          )
-      ),
-      "JR0216, Ts2036 is er geen enkel kenmerk opgegeven van studielijst ouderdomsstadia. Er wordt van uitgegaan dat er voor deze studiegroepen geen observaties uitgevoerd zijn en berekeningen op basis van deze studiegroepen zullen resulteren in NA"  #nolint
-    )
-    expect_equal(
-      idsWissen(
+      Testresultaat <- idsWissen(
         berekenLSVIbasis(
           Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
@@ -241,6 +219,10 @@ describe("ontbreken van soorten of kenmerken", {
             )
         )
       ),
+      "JR0216, Ts2036 is er geen enkel kenmerk opgegeven van studielijst ouderdomsstadia. Er wordt van uitgegaan dat er voor deze studiegroepen geen observaties uitgevoerd zijn en berekeningen op basis van deze studiegroepen zullen resulteren in NA"  #nolint
+    )
+    expect_equal(
+      Testresultaat,
       list(
         Resultaat_criterium = Resultaatv2[["Resultaat_criterium"]] %>%
           mutate(

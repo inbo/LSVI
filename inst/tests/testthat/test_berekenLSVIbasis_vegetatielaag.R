@@ -373,7 +373,7 @@ describe("berekenLSVIbasis vegetatielaag", {
       )
     load(system.file("vbdata/Resultaat_test4030v2.Rdata", package = "LSVI"))
     expect_warning(
-      idsWissen(
+      Testresultaat <- idsWissen(
         berekenLSVIbasis(
           Versie = "Versie 2.0", Kwaliteitsniveau = "1",
           Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
@@ -383,13 +383,7 @@ describe("berekenLSVIbasis vegetatielaag", {
       "Bij Data_soortenKenmerken is niet voor alle soorten de kolom Vegetatielaag ingevuld"  #nolint
     )
     expect_equal(
-      idsWissen(
-        berekenLSVIbasis(
-          Versie = "Versie 2.0", Kwaliteitsniveau = "1",
-          Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
-          Data_soortenKenmerken = Data_soortenKenmerken
-        )
-      ),
+      Testresultaat,
       Resultaatv2
     )
   })

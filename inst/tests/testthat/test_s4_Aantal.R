@@ -126,8 +126,8 @@ describe("s4_Aantal", {
       ),
       2
     )
-    expect_equal(
-      berekenWaarde(
+    expect_warning(
+      Testresultaat <- berekenWaarde(
         new(
           Class = "aantal",
           Kenmerken =
@@ -147,6 +147,10 @@ describe("s4_Aantal", {
             )
         )
       ),
+      "geen enkele soort opgegeven"
+    )
+    expect_equal(
+      Testresultaat,
       NA
     )
     expect_equal(
@@ -615,36 +619,7 @@ describe("s4_Aantal", {
       2
     )
     expect_warning(
-      berekenWaarde(
-        new(
-          Class = "aantal",
-          Kenmerken =
-            data.frame(
-              ID = 1:5,
-              Kenmerk = c("A1", "B2", "C1", "D3", "C1"),
-              TypeKenmerk = "soort_nbn",
-              WaardeMin = 1,
-              WaardeMax = NA,
-              Eenheid = "ja/nee",
-              Vegetatielaag = c(rep("moslaag", 3), rep("kruidlaag", "2")),
-              stringsAsFactors = FALSE
-            ),
-          Soortengroep =
-            data.frame(
-              NbnTaxonVersionKey = c("A1", "B1", "C1", "E1"),
-              TaxonId = 1:4,
-              SubTaxonId = 1:4,
-              stringsAsFactors = FALSE
-            ),
-          SubAnalyseVariabele = "bedekking",
-          SubRefMin = 0.5,
-          SubRefMax = 0.5,
-          SubOperator = ">="
-        )
-      )
-    )
-    expect_equal(
-      berekenWaarde(
+      Testresultaat <- berekenWaarde(
         new(
           Class = "aantal",
           Kenmerken =
@@ -671,6 +646,10 @@ describe("s4_Aantal", {
           SubOperator = ">="
         )
       ),
+      "aan- of afwezigheid aantal"
+    )
+    expect_equal(
+      Testresultaat,
       c(0, 2)
     )
   })
