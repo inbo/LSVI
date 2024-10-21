@@ -688,7 +688,10 @@ describe("test databank", {
     expect_true(
       all(
         (av_cat %>%
-          left_join(lijst, by = c("SubInvoermaskerId" = "LijstId")) %>%
+          left_join(
+            lijst, by = c("SubInvoermaskerId" = "LijstId"),
+            relationship = "many-to-many"
+          ) %>%
           group_by(Id) %>%
           summarise(
             test =
