@@ -100,7 +100,10 @@ describe("berekenLSVIbasis", {
           Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
           Data_habitat,
-          Data_voorwaarden,
+          Data_voorwaarden %>%
+            filter(
+              !Indicator %in% c("vergrassing", "verruiging", "invasieve exoten")
+            ),
           Data_soortenKenmerken
         )
       ),
@@ -112,7 +115,10 @@ describe("berekenLSVIbasis", {
           Versie = "Versie 2.0",
           Kwaliteitsniveau = 1,
           Data_habitat,
-          Data_voorwaarden,
+          Data_voorwaarden %>%
+            filter(
+              !Indicator %in% c("vergrassing", "verruiging", "invasieve exoten")
+            ),
           Data_soortenKenmerken
         )
       ),
@@ -123,7 +129,10 @@ describe("berekenLSVIbasis", {
         Versie = "Versie 2.0",
         Kwaliteitsniveau = "streefwaarde",
         Data_habitat,
-        Data_voorwaarden,
+        Data_voorwaarden %>%
+          filter(
+            !Indicator %in% c("vergrassing", "verruiging", "invasieve exoten")
+          ),
         Data_soortenKenmerken
       ),
       "'streefwaarde' ingevoerd in Kwaliteitsniveau komen niet voor in de databank. Voer hier een van volgende waarden in:" #nolint
@@ -246,6 +255,9 @@ describe("berekenLSVIbasis", {
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_voorwaarden %>%
+            filter(
+              !Indicator %in% c("vergrassing", "verruiging", "invasieve exoten")
+            ) %>%
             mutate(
               Waarde =
                 ifelse(.data$Waarde == "7,5", NA, .data$Waarde)
@@ -367,6 +379,9 @@ describe("berekenLSVIbasis", {
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_voorwaarden %>%
+            filter(
+              !Indicator %in% c("vergrassing", "verruiging", "invasieve exoten")
+            ) %>%
             mutate(
               Waarde =
                 ifelse(.data$Waarde == "f", "F", .data$Waarde)
@@ -391,6 +406,9 @@ describe("berekenLSVIbasis", {
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_voorwaarden %>%
+            filter(
+              !Indicator %in% c("vergrassing", "verruiging", "invasieve exoten")
+            ) %>%
             mutate(
               Waarde =
                 ifelse(.data$Waarde == "f", NA, .data$Waarde)
@@ -629,6 +647,9 @@ describe("berekenLSVIbasis", {
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_voorwaarden %>%
+            filter(
+              !Indicator %in% c("vergrassing", "verruiging", "invasieve exoten")
+            ) %>%
             mutate(
               Type =
                 ifelse(.data$Waarde == "f", "Percentage", .data$Type),
@@ -667,6 +688,9 @@ describe("berekenLSVIbasis", {
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_voorwaarden %>%
+            filter(
+              !Indicator %in% c("vergrassing", "verruiging", "invasieve exoten")
+            ) %>%
             mutate(
               Type =
                 ifelse(.data$Waarde == "f", "Percentage", .data$Type),
@@ -760,7 +784,10 @@ describe("berekenLSVIbasis", {
         Versie = "Versie 2.0",
         Kwaliteitsniveau = "1",
         Data_habitat,
-        Data_voorwaarden,
+        Data_voorwaarden %>%
+          filter(
+            !Indicator %in% c("vergrassing", "verruiging", "invasieve exoten")
+          ),
         Data_soortenKenmerken %>%
           mutate(
             Kenmerk =
@@ -779,7 +806,10 @@ describe("berekenLSVIbasis", {
           Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
           Data_habitat,
-          Data_voorwaarden,
+          Data_voorwaarden %>%
+            filter(
+              !Indicator %in% c("vergrassing", "verruiging", "invasieve exoten")
+            ),
           Data_soortenKenmerken %>%
             mutate(
               Kenmerk =
@@ -804,7 +834,10 @@ describe("berekenLSVIbasis", {
         Versie = "Versie 2.0",
         Kwaliteitsniveau = "1",
         Data_habitat,
-        Data_voorwaarden,
+        Data_voorwaarden %>%
+          filter(
+            !Indicator %in% c("vergrassing", "verruiging", "invasieve exoten")
+          ),
         Data_soortenKenmerken %>%
           mutate(
             TypeKenmerk =
@@ -823,7 +856,10 @@ describe("berekenLSVIbasis", {
           Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
           Data_habitat,
-          Data_voorwaarden,
+          Data_voorwaarden %>%
+            filter(
+              !Indicator %in% c("vergrassing", "verruiging", "invasieve exoten")
+            ),
           Data_soortenKenmerken %>%
             mutate(
               Kenmerk =
@@ -872,6 +908,7 @@ describe("berekenLSVIbasis", {
           Data_habitat,
           Data_voorwaarden =
             Data_voorwaarden2 %>%
+            filter(Indicator != "invasieve exoten") %>%
             bind_rows(
               data.frame(
                 ID = rep(c("JR0216", "Ts2036"), 3),
@@ -1032,6 +1069,8 @@ describe("berekenLSVIbasis", {
           Data_habitat,
           Data_voorwaarden %>%
             filter(
+              !.data$Indicator %in%
+                c("vergrassing", "verruiging", "invasieve exoten"),
               !(.data$ID == "JR0216" & .data$Indicator == "verruiging")
             ),
           Data_soortenKenmerken %>%
@@ -1072,6 +1111,8 @@ describe("berekenLSVIbasis", {
           Data_habitat,
           Data_voorwaarden %>%
             filter(
+              !.data$Indicator %in%
+                c("vergrassing", "verruiging", "invasieve exoten"),
               !(.data$ID == "JR0216" & .data$Indicator == "verruiging")
             ),
           Data_soortenKenmerken %>%
@@ -1112,6 +1153,8 @@ describe("berekenLSVIbasis", {
           Data_habitat,
           Data_voorwaarden %>%
             filter(
+              !.data$Indicator %in%
+                c("vergrassing", "verruiging", "invasieve exoten"),
               !(.data$ID == "JR0216" & .data$Indicator == "verruiging")
             ),
           Data_soortenKenmerken %>%
@@ -1154,6 +1197,10 @@ describe("berekenLSVIbasis", {
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_voorwaarden %>%
+            filter(
+              !.data$Indicator %in%
+                c("vergrassing", "verruiging", "invasieve exoten")
+            ) %>%
             mutate(
               Voorwaarde =
                 ifelse(
@@ -1304,6 +1351,10 @@ describe("berekenLSVIbasis", {
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_voorwaarden %>%
+            filter(
+              !.data$Indicator %in%
+                c("vergrassing", "verruiging", "invasieve exoten")
+            ) %>%
             mutate(
               Voorwaarde =
                 ifelse(
@@ -1454,6 +1505,10 @@ describe("berekenLSVIbasis", {
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_voorwaarden %>%
+            filter(
+              !.data$Indicator %in%
+                c("vergrassing", "verruiging", "invasieve exoten")
+            ) %>%
             bind_rows(
               data.frame(
                 ID = c("JR0216", "Ts2036"),

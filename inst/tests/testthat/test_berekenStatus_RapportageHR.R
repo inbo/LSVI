@@ -28,7 +28,11 @@ describe("bereken status criterium en globaal volgens Rapportage HR", {
           Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
           Data_habitat,
-          Data_voorwaarden,
+          Data_voorwaarden %>%
+            filter(
+              !.data$Indicator %in%
+                c("vergrassing", "verruiging", "invasieve exoten")
+            ),
           Data_soortenKenmerken,
           Aggregatiemethode = "RapportageHR"
         )
@@ -55,6 +59,10 @@ describe("bereken status criterium en globaal volgens Rapportage HR met NA's", {
   it("Correct berekend in geval van NA's voor status van indicatoren", {
 
     data_voorwaarden_na <- Data_voorwaarden %>%
+      filter(
+        !.data$Indicator %in%
+          c("vergrassing", "verruiging", "invasieve exoten")
+      ) %>%
       mutate(
         Waarde = ifelse(
           .data$Voorwaarde == "bedekking verbossing",
