@@ -330,7 +330,7 @@ describe("berekenLSVIbasis vegetatielaag", {
           )
       )
     expect_error(
-      idsWissen(
+      suppressWarnings(
         berekenLSVIbasis(
           Versie = "Versie 2.0", Kwaliteitsniveau = "1",
           Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
@@ -492,7 +492,7 @@ describe("berekenLSVIbasis vegetatielaag", {
         )
       )
     expect_error(
-      idsWissen(
+      suppressWarnings(
         berekenLSVIbasis(
           Versie = "Versie 2.0", Kwaliteitsniveau = "1",
           Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
@@ -549,48 +549,52 @@ describe("berekenLSVIbasis vegetatielaag", {
         system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI")
       )
     expect_equal(
-      idsWissen(
-        berekenLSVIbasis(
-          Versie = "Versie 2.0",
-          Kwaliteitsniveau = "1",
-          Data_habitat,
-          Data_voorwaarden %>%
-            filter(.data$Voorwaarde != "bedekking verbossing"),
-          Data_soortenKenmerken %>%
-            bind_rows(
-              data.frame(
-                ID = c("JR0216", "Ts2036"),
-                Kenmerk = "Quercus robur",
-                TypeKenmerk = "Soort_Latijn",
-                Waarde = "10",
-                Type = "Percentage",
-                Eenheid = "%",
-                Vegetatielaag = "boomlaag",
-                stringsAsFactors = FALSE
+      suppressWarnings(
+        idsWissen(
+          berekenLSVIbasis(
+            Versie = "Versie 2.0",
+            Kwaliteitsniveau = "1",
+            Data_habitat,
+            Data_voorwaarden %>%
+              filter(.data$Voorwaarde != "bedekking verbossing"),
+            Data_soortenKenmerken %>%
+              bind_rows(
+                data.frame(
+                  ID = c("JR0216", "Ts2036"),
+                  Kenmerk = "Quercus robur",
+                  TypeKenmerk = "Soort_Latijn",
+                  Waarde = "10",
+                  Type = "Percentage",
+                  Eenheid = "%",
+                  Vegetatielaag = "boomlaag",
+                  stringsAsFactors = FALSE
+                )
               )
-            )
+          )
         )
       ),
-      idsWissen(
-        berekenLSVIbasis(
-          Versie = "Versie 2.0",
-          Kwaliteitsniveau = "1",
-          Data_habitat,
-          Data_voorwaarden %>%
-            filter(.data$Voorwaarde != "bedekking verbossing"),
-          Data_soortenKenmerken %>%
-            bind_rows(
-              data.frame(
-                ID = rep(c("JR0216", "Ts2036"), 2),
-                Kenmerk = c(rep("Quercus robur", 2), rep("Salix repens", 2)),
-                TypeKenmerk = "Soort_Latijn",
-                Waarde = "10",
-                Type = "Percentage",
-                Eenheid = "%",
-                Vegetatielaag = "boomlaag",
-                stringsAsFactors = FALSE
+      suppressWarnings(
+        idsWissen(
+          berekenLSVIbasis(
+            Versie = "Versie 2.0",
+            Kwaliteitsniveau = "1",
+            Data_habitat,
+            Data_voorwaarden %>%
+              filter(.data$Voorwaarde != "bedekking verbossing"),
+            Data_soortenKenmerken %>%
+              bind_rows(
+                data.frame(
+                  ID = rep(c("JR0216", "Ts2036"), 2),
+                  Kenmerk = c(rep("Quercus robur", 2), rep("Salix repens", 2)),
+                  TypeKenmerk = "Soort_Latijn",
+                  Waarde = "10",
+                  Type = "Percentage",
+                  Eenheid = "%",
+                  Vegetatielaag = "boomlaag",
+                  stringsAsFactors = FALSE
+                )
               )
-            )
+          )
         )
       )
     )

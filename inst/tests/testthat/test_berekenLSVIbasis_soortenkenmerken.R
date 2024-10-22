@@ -506,28 +506,33 @@ describe("samenstelling soortengroepen", {
             )
         )
       ),
-      idsWissen(
-        berekenLSVIbasis(
-          Versie = "Versie 2.0",
-          Kwaliteitsniveau = "1",
-          Data_habitat,
-          Data_voorwaarden %>%
-            filter(!.data$Voorwaarde %in%
-                     c("bedekking verbossing", "bedekking vergrassing",
-                       "bedekking verruiging", "bedekking invasieve exoten")),
-          Data_soortenKenmerken %>%
-            bind_rows(
-              data.frame(
-                ID = c("JR0216", "JR0216", "Ts2036"),
-                Kenmerk = c("Quercus robur", "Quercus pedunculata", "Quercus"),
-                TypeKenmerk = "Soort_Latijn",
-                Waarde = "10",
-                Type = "Percentage",
-                Eenheid = "%",
-                Vegetatielaag = "boomlaag",
-                stringsAsFactors = FALSE
+      suppressWarnings(
+        idsWissen(
+          berekenLSVIbasis(
+            Versie = "Versie 2.0",
+            Kwaliteitsniveau = "1",
+            Data_habitat,
+            Data_voorwaarden %>%
+              filter(!.data$Voorwaarde %in%
+                       c("bedekking verbossing", "bedekking vergrassing",
+                         "bedekking verruiging", "bedekking invasieve exoten")),
+            Data_soortenKenmerken %>%
+              bind_rows(
+                data.frame(
+                  ID = c("JR0216", "JR0216", "Ts2036"),
+                  Kenmerk =
+                    c("Quercus robur L.",
+                      "Quercus pedunculata Ehrh. ex Hoffmann",
+                      "Quercus"),
+                  TypeKenmerk = "Soort_Latijn",
+                  Waarde = "10",
+                  Type = "Percentage",
+                  Eenheid = "%",
+                  Vegetatielaag = "boomlaag",
+                  stringsAsFactors = FALSE
+                )
               )
-            )
+          )
         )
       )
     )
