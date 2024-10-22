@@ -22,6 +22,7 @@ describe("test databank", {
         )
       )
     )
+    dbDisconnect(ConnectieLSVIhabitats)
   })
 
   it(
@@ -43,6 +44,7 @@ describe("test databank", {
               "maxBedekking2s", "aantalGroepen", "scoresom")
       )
     )
+    dbDisconnect(ConnectieLSVIhabitats)
   })
 
   it("AnalyseVariabele aantal bevat enkel gehele getallen", {
@@ -94,6 +96,7 @@ describe("test databank", {
       nrow(FouteWaarden),
       0
     )
+    dbDisconnect(ConnectieLSVIhabitats)
   })
 
   it("AnalyseVariabele bedekking bevat percentages en categorische var", {
@@ -123,6 +126,7 @@ describe("test databank", {
       nrow(FouteWaarden),
       0
     )
+    dbDisconnect(ConnectieLSVIhabitats)
   })
 
   it("AnalyseVariabele aandeel bevat percentages", {
@@ -152,6 +156,7 @@ describe("test databank", {
       nrow(FouteWaarden),
       0
     )
+    dbDisconnect(ConnectieLSVIhabitats)
   })
 
   it("AnalyseVariabele bedekkingExcl bevat percentages", {
@@ -182,6 +187,7 @@ describe("test databank", {
       nrow(FouteWaarden),
       0
     )
+    dbDisconnect(ConnectieLSVIhabitats)
   })
 
   it("AnalyseVariabele bedekkingLaag bevat percentages en categorische var", {
@@ -211,6 +217,7 @@ describe("test databank", {
       nrow(FouteWaarden),
       0
     )
+    dbDisconnect(ConnectieLSVIhabitats)
   })
 
   it("AnalyseVariabele bedekkingLaagExcl bevat percentages en categorische var", { #nolint
@@ -240,6 +247,7 @@ describe("test databank", {
       nrow(FouteWaarden),
       0
     )
+    dbDisconnect(ConnectieLSVIhabitats)
   })
 
   it("AnalyseVariabele bedekkingLaagPlus bevat percentages en categorische var", { #nolint
@@ -269,6 +277,7 @@ describe("test databank", {
       nrow(FouteWaarden),
       0
     )
+    dbDisconnect(ConnectieLSVIhabitats)
   })
 
   it("AnalyseVariabele aandeelKruidlaag bevat percentages", {
@@ -298,6 +307,7 @@ describe("test databank", {
       nrow(FouteWaarden),
       0
     )
+    dbDisconnect(ConnectieLSVIhabitats)
   })
 
   it("AnalyseVariabele bedekkingSom bevat percentages", {
@@ -328,6 +338,7 @@ describe("test databank", {
       nrow(FouteWaarden),
       0
     )
+    dbDisconnect(ConnectieLSVIhabitats)
   })
 
   it("AnalyseVariabele maxBedekking bevat percentages en categorische var", {
@@ -357,6 +368,7 @@ describe("test databank", {
       nrow(FouteWaarden),
       0
     )
+    dbDisconnect(ConnectieLSVIhabitats)
   })
 
   it("AnalyseVariabele maxBedekkingExcl bevat percentages en categorische var"
@@ -387,6 +399,7 @@ describe("test databank", {
       nrow(FouteWaarden),
       0
     )
+    dbDisconnect(ConnectieLSVIhabitats)
   })
 
   it("AnalyseVariabele maxBedekking2s bevat percentages en categorische var", {
@@ -416,6 +429,7 @@ describe("test databank", {
        nrow(FouteWaarden),
        0
      )
+     dbDisconnect(ConnectieLSVIhabitats)
    })
 
   it("AnalyseVariabele scoresom heeft typevariabele Geheel getal", {
@@ -445,6 +459,7 @@ describe("test databank", {
       nrow(FouteWaarden),
       0
     )
+    dbDisconnect(ConnectieLSVIhabitats)
   })
 
   it("De waarden van scoresom zijn getallen kleiner dan of gelijk aan 10 (als / 100)", {
@@ -463,6 +478,7 @@ describe("test databank", {
     expect_true(
       all(as.numeric(Refwaarden$Referentiewaarde) / 100 <= 10)
     )
+    dbDisconnect(ConnectieLSVIhabitats)
   })
 
   it("De waarden van percentages zijn getallen kleiner dan of gelijk aan 100", {
@@ -482,6 +498,7 @@ describe("test databank", {
     expect_true(
       all(as.numeric(RefwaardenPerc$Referentiewaarde) <= 100)
     )
+    dbDisconnect(ConnectieLSVIhabitats)
   })
 
   it("De waarden van categorische var zijn in de databank opgenomen schalen", {
@@ -509,6 +526,7 @@ describe("test databank", {
         )
       )
     }
+    dbDisconnect(ConnectieLSVIhabitats)
   })
 
   it("AnalyseVariabelen hebben telkens een SoortengroepId of StudiegroepId", {
@@ -538,6 +556,7 @@ describe("test databank", {
     expect_true(
       all(!is.na(Refwaarden$TaxongroepId) | !is.na(Refwaarden$StudiegroepId))
     )
+    dbDisconnect(ConnectieLSVIhabitats)
   })
 
   it("AnalyseVariabelen hebben telkens een SoortengroepId en StudiegroepId", {
@@ -567,6 +586,7 @@ describe("test databank", {
     expect_true(
       all(!is.na(Refwaarden$TaxongroepId) & !is.na(Refwaarden$StudiegroepId))
     )
+    dbDisconnect(ConnectieLSVIhabitats)
   })
 
   it("AV bedekkingLaagExcl en bedekkingLaagPlus hebben 2 Soortengroepen", {
@@ -589,6 +609,7 @@ describe("test databank", {
     expect_true(
       all(Aantalgroepen$n == 2)
     )
+    dbDisconnect(ConnectieLSVIhabitats)
   })
 
   it("TypeVariabele Vrije tekst is nergens gebruikt", {
@@ -609,6 +630,7 @@ describe("test databank", {
         nrow(av),
         0
       )
+      dbDisconnect(ConnectieLSVIhabitats)
     })
 
   it("Voor elke categorische variabele is een Invoermasker opgegeven", {
@@ -629,6 +651,7 @@ describe("test databank", {
     expect_true(
       all(!is.na(av$InvoermaskerId))
     )
+    dbDisconnect(ConnectieLSVIhabitats)
   })
 
   it("Voor typevariabele scoresom is een Invoermasker opgegeven", {
@@ -649,6 +672,7 @@ describe("test databank", {
     expect_true(
       all(!is.na(av$InvoermaskerId))
     )
+    dbDisconnect(ConnectieLSVIhabitats)
   })
 
   it(
@@ -699,6 +723,7 @@ describe("test databank", {
           ) %>%
           ungroup())$test)
     )
+    dbDisconnect(ConnectieLSVIhabitats)
   })
 
   it("De subanalysevariabele is enkel gebruikt bij AnalyseVariabelen die dit ondersteunen", { #nolint
@@ -720,6 +745,7 @@ describe("test databank", {
               "bedekkingExcl", "maxBedekking", "maxBedekking2s",
               "maxBedekkingExcl"))
     )
+    dbDisconnect(ConnectieLSVIhabitats)
   })
 
   it("Operator '=' is niet gebruikt tenzij bij type 'ja/nee'", {
@@ -741,11 +767,13 @@ describe("test databank", {
       nrow(av),
       0
     )
+    dbDisconnect(ConnectieLSVIhabitats)
   })
 
   it("Een indicator is een combinatie van AND, OR en voorwaardeID's", {
+    ConnectieLSVIhabitats <- connecteerMetLSVIdb()
     Fouteformule <-
-      geefInvoervereisten(ConnectieLSVIhabitats = connecteerMetLSVIdb()) %>%
+      geefInvoervereisten(ConnectieLSVIhabitats = ConnectieLSVIhabitats) %>%
       mutate(
         Formuletest = str_replace_all(.data$Combinatie, "\\(", ""),
         Formuletest = str_replace_all(.data$Formuletest, "\\)", "")
@@ -756,6 +784,7 @@ describe("test databank", {
         ) == FALSE
       )
     expect_equal(nrow(Fouteformule), 0)
+    dbDisconnect(ConnectieLSVIhabitats)
   })
 
   it("Elke taxonnaam heeft 1 unieke nbn-key", {
@@ -776,6 +805,7 @@ describe("test databank", {
         FROM Taxon t LEFT JOIN TaxonSynoniem ts
         ON t.Id = ts.TaxonId"
       )
+    dbDisconnect(ConnectieLSVIhabitats)
     expect_equal(
       nrow(
         Taxons %>%
