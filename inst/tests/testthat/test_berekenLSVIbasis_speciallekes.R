@@ -52,15 +52,20 @@ describe("twee voorwaarden vergelijken", {
         Verschilscore = 0.5,
         stringsAsFactors = FALSE
       )
-    resultaat_berekend <-
-      idsWissen(
-        berekenLSVIbasis(
-          Versie = "Versie 2.0",
-          Kwaliteitsniveau = "1",
-          Data_habitat,
-          Data_voorwaarden
-        )
-      )
+    WarningMicrorelief <-
+      "De waarde\\(n\\) voor de voorwaarde\\(n\\) goed ontwikkelde structuur, microreliëf aanwezig \\(VoorwaardeID 2205, 2369\\) kunnen niet berekend worden voor opname\\(n\\) 1. Geef de waarde voor deze voorwaarde rechtstreeks in als input van de functie 'berekenLSVIBasis' via tabel 'Data_voorwaarden' \\(zie \\?berekenLSVIbasis voor meer info\\). Vermeld hierbij Criterium = Structuur, Indicator = horizontale structuur, microreliëf en Voorwaarde = goed ontwikkelde structuur, microreliëf aanwezig." #nolint: line_length_linter
+    expect_warning(
+      resultaat_berekend <-
+        idsWissen(
+          berekenLSVIbasis(
+            Versie = "Versie 2.0",
+            Kwaliteitsniveau = "1",
+            Data_habitat,
+            Data_voorwaarden
+          )
+        ),
+      WarningMicrorelief
+    )
     expect_equal(
       resultaat_berekend[["Resultaat_detail"]] %>%
         filter(.data$Indicator == "overgang naar rbbzil"),
@@ -111,15 +116,19 @@ describe("twee voorwaarden vergelijken", {
           "TheoretischMaximum before InvoertypeWaarde"
         )
       ]
-    expect_equal(
-      idsWissen(
+    expect_warning(
+      TestResultaat <- idsWissen(
         berekenLSVIbasis(
           Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_soortenKenmerken = Data_soortenKenmerken
         )
-      )[["Resultaat_detail"]] %>%
+      ),
+      WarningMicrorelief
+    )
+    expect_equal(
+      TestResultaat[["Resultaat_detail"]] %>%
         filter(.data$Indicator == "overgang naar rbbzil"),
       Resultaat2
     )

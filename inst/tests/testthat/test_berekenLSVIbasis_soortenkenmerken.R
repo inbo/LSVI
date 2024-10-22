@@ -27,6 +27,9 @@ Data_soortenKenmerken <- #nolint
 load(system.file("vbdata/Resultaat_test4030.Rdata", package = "LSVI"))
 load(system.file("vbdata/Resultaat_test4030v2.Rdata", package = "LSVI"))
 
+WarningVergrassingVerruiging <-
+  "Volgende records uit Data_voorwaarden kunnen niet gekoppeld worden aan indicatoren uit de databank omdat de criterium-indicator-voorwaarde-combinatie niet voorkomt bij de LSVI-regels van het opgegeven habitattype: <JR0216, Verstoring, vergrassing, bedekking vergrassing> <Ts2036, Verstoring, vergrassing, bedekking vergrassing> <JR0216, Verstoring, verruiging, bedekking verruiging> <Ts2036, Verstoring, verruiging, bedekking verruiging> <JR0216, Verstoring, invasieve exoten, bedekking invasieve exoten> <Ts2036, Verstoring, invasieve exoten, bedekking invasieve exoten>" #nolint: line_length_linter
+
 describe("ontbreken van soorten of kenmerken", {
   it("geen enkele soort opgeven geeft NA en een warning", {
     expect_warning(
@@ -117,8 +120,8 @@ describe("ontbreken van soorten of kenmerken", {
   })
 
   it("als 1 soort opgegeven is, wordt de bedekking van ontbrekende soorten 0", {
-    expect_equal(
-      idsWissen(
+    expect_warning(
+      Testresultaat <- idsWissen(
         berekenLSVIbasis(
           Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
@@ -142,6 +145,10 @@ describe("ontbreken van soorten of kenmerken", {
             )
         )
       ),
+      WarningVergrassingVerruiging
+    )
+    expect_equal(
+      Testresultaat,
       list(
         Resultaat_criterium = Resultaatv2[["Resultaat_criterium"]] %>%
           mutate(
@@ -292,8 +299,8 @@ describe("ontbreken van soorten of kenmerken", {
   })
 
   it("als 1 stadium opgegeven is, wordt de bedekking van ontbrekende stadia 0", { #nolint
-    expect_equal(
-      idsWissen(
+    expect_warning(
+      Testresultaat <- idsWissen(
         berekenLSVIbasis(
           Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
@@ -305,6 +312,10 @@ describe("ontbreken van soorten of kenmerken", {
             )
         )
       ),
+      WarningVergrassingVerruiging
+    )
+    expect_equal(
+      Testresultaat,
       Resultaatv2
     )
   })

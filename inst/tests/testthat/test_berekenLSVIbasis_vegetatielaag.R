@@ -414,14 +414,20 @@ describe("berekenLSVIbasis vegetatielaag", {
                col_character(), col_character())
       )
     load(system.file("vbdata/Resultaat_test4030v2.Rdata", package = "LSVI"))
-    expect_equal(
-      idsWissen(
+    WarningVergrassingVerruiging <-
+      "Volgende records uit Data_voorwaarden kunnen niet gekoppeld worden aan indicatoren uit de databank omdat de criterium-indicator-voorwaarde-combinatie niet voorkomt bij de LSVI-regels van het opgegeven habitattype: <JR0216, Verstoring, vergrassing, bedekking vergrassing> <Ts2036, Verstoring, vergrassing, bedekking vergrassing> <JR0216, Verstoring, verruiging, bedekking verruiging> <Ts2036, Verstoring, verruiging, bedekking verruiging> <JR0216, Verstoring, invasieve exoten, bedekking invasieve exoten> <Ts2036, Verstoring, invasieve exoten, bedekking invasieve exoten>" #nolint: line_length_linter
+    expect_warning(
+      TestResultaat <- idsWissen(
         berekenLSVIbasis(
           Versie = "Versie 2.0", Kwaliteitsniveau = "1",
           Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
           Data_soortenKenmerken = Data_soortenKenmerken
         )
       ),
+      WarningVergrassingVerruiging
+    )
+    expect_equal(
+      TestResultaat,
       Resultaatv2
     )
     Data_voorwaarden <- Data_voorwaarden %>% #nolint
@@ -439,14 +445,17 @@ describe("berekenLSVIbasis vegetatielaag", {
           stringsAsFactors = FALSE
         )
       )
-    Test <-
-      idsWissen(
-        berekenLSVIbasis(
-          Versie = "Versie 2.0", Kwaliteitsniveau = "1",
-          Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
-          Data_soortenKenmerken = Data_soortenKenmerken1
-        )
-      )
+    expect_warning(
+      Test <-
+        idsWissen(
+          berekenLSVIbasis(
+            Versie = "Versie 2.0", Kwaliteitsniveau = "1",
+            Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
+            Data_soortenKenmerken = Data_soortenKenmerken1
+          )
+        ),
+      WarningVergrassingVerruiging
+    )
     ResultaatBerekening <-
       Resultaatv2[["Resultaat_detail"]] %>%
       mutate(
@@ -505,14 +514,17 @@ describe("berekenLSVIbasis vegetatielaag", {
           stringsAsFactors = FALSE
         )
       )
-    Test3 <-
-      idsWissen(
-        berekenLSVIbasis(
-          Versie = "Versie 2.0", Kwaliteitsniveau = "1",
-          Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
-          Data_soortenKenmerken = Data_soortenKenmerken3
-        )
-      )
+    expect_warning(
+      Test3 <-
+        idsWissen(
+          berekenLSVIbasis(
+            Versie = "Versie 2.0", Kwaliteitsniveau = "1",
+            Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
+            Data_soortenKenmerken = Data_soortenKenmerken3
+          )
+        ),
+      WarningVergrassingVerruiging
+    )
     stopifnot(
       all.equal(
         Test3[["Resultaat_detail"]],

@@ -25,13 +25,17 @@ Resultaat <-
 describe("berekenLSVIbasis 2330_bu versie 3", {
 
   it("waarden van voorwaarden correct berekend", {
-    resultaat_berekend <- berekenLSVIbasis(
-          Versie = "Versie 3",
-          Kwaliteitsniveau = "1",
-          Data_habitat,
-          Data_voorwaarden,
-          Data_soortenKenmerken
-        )
+    expect_warning(
+      resultaat_berekend <- berekenLSVIbasis(
+            Versie = "Versie 3",
+            Kwaliteitsniveau = "1",
+            Data_habitat,
+            Data_voorwaarden,
+            Data_soortenKenmerken
+          ),
+      "Volgende records uit Data_voorwaarden kunnen niet gekoppeld worden aan indicatoren uit de databank omdat de criterium-indicator-voorwaarde-combinatie niet voorkomt bij de LSVI-regels van het opgegeven habitattype: <55058, Structuur, korstmosvegetaties, bedekking korstmosvegetaties> <55058, Structuur, horizontale structuur, aantal ontwikkelingsstadia>" #nolint: line_length_linter
+    )
+      
 
     resultaat_berekend_vw <- resultaat_berekend[[3]] %>%
       select(Habitattype, Versie, Criterium, Indicator, Voorwaarde, Waarde)

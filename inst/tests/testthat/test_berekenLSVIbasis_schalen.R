@@ -22,10 +22,13 @@ Data_soortenKenmerken <- #nolint
 
 load(system.file("vbdata/Resultaat_test4030v2.Rdata", package = "LSVI"))
 
+WarningInvasieveExoten <-
+  "Volgende records uit Data_voorwaarden kunnen niet gekoppeld worden aan indicatoren uit de databank omdat de criterium-indicator-voorwaarde-combinatie niet voorkomt bij de LSVI-regels van het opgegeven habitattype: <JR0216, Verstoring, invasieve exoten, bedekking invasieve exoten> <Ts2036, Verstoring, invasieve exoten, bedekking invasieve exoten>" #nolint: line_length_linter
+
 describe("Afhandeling van lokale schaal gebeurt correct", {
   it("lokale schaal wordt herkend en omzetting/berekening gebeurt correct", {
-    expect_equal(
-      (idsWissen(
+    expect_warning(
+      TestResultaatDetail <- (idsWissen(
         berekenLSVIbasis(
           Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
@@ -42,6 +45,10 @@ describe("Afhandeling van lokale schaal gebeurt correct", {
           Data_soortenKenmerken
         )
       ))[["Resultaat_detail"]],
+      WarningInvasieveExoten
+    )
+    expect_equal(
+      TestResultaatDetail,
       Resultaatv2[["Resultaat_detail"]] %>%
         mutate(
           Waarde =
@@ -58,8 +65,8 @@ describe("Afhandeling van lokale schaal gebeurt correct", {
             )
         )
     )
-    expect_equal(
-      idsWissen(
+    expect_warning(
+      TestResultaat <- idsWissen(
         berekenLSVIbasis(
           Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
@@ -76,6 +83,10 @@ describe("Afhandeling van lokale schaal gebeurt correct", {
             )
         )
       ),
+      WarningInvasieveExoten
+    )
+    expect_equal(
+      TestResultaat,
       Resultaatv2
     )
   })

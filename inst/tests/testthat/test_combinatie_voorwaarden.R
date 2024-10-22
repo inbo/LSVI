@@ -18,15 +18,22 @@ data_voorwaarden <-
     stringsAsFactors = FALSE
   )
 
+WarningHorizStructuur <-
+  "De waarde\\(n\\) voor de voorwaarde\\(n\\) oppervlakte moeras in ha, oppervlakte habitatvlek in ha \\(VoorwaardeID 2516, 2500\\) kunnen niet berekend worden voor opname\\(n\\) 1. Geef de waarde voor deze voorwaarde rechtstreeks in als input van de functie 'berekenLSVIBasis' via tabel 'Data_voorwaarden' \\(zie \\?berekenLSVIbasis voor meer info\\). Vermeld hierbij Criterium = Structuur, Indicator = horizontale structuur en Voorwaarde = oppervlakte moeras in ha, oppervlakte habitatvlek in ha." #nolint: line_length_linter
+
 describe("4 voorwaarden combineren", {
   it("combinatie vw sleutelsoorten bij 7150 gebeurt correct", {
-    expect_equal(
-      berekenLSVIbasis(
+    expect_warning(
+      TestResultaat <- berekenLSVIbasis(
         Versie = "Versie 2.0",
         Kwaliteitsniveau = 1,
         data_habitat,
         data_voorwaarden
-      )[["Resultaat_indicator"]] %>%
+      ),
+      WarningHorizStructuur
+    )
+    expect_equal(
+      TestResultaat[["Resultaat_indicator"]] %>%
         filter(Indicator == "sleutelsoorten") %>%
         select(Status_indicator, Verschilscore),
       tibble(
@@ -34,14 +41,18 @@ describe("4 voorwaarden combineren", {
         Verschilscore = -1
       )
     )
-    expect_equal(
-      berekenLSVIbasis(
+    expect_warning(
+      TestResultaat <- berekenLSVIbasis(
         Versie = "Versie 2.0",
         Kwaliteitsniveau = 1,
         data_habitat,
         data_voorwaarden %>%
           mutate(Waarde = Waarde + 1)
-      )[["Resultaat_detail"]] %>%
+      ),
+      WarningHorizStructuur
+    )
+    expect_equal(
+      TestResultaat[["Resultaat_detail"]] %>%
         filter(Indicator == "sleutelsoorten") %>%
         select(Voorwaarde, Waarde, Status_voorwaarde, Verschilscore),
       data.frame(
@@ -56,13 +67,7 @@ describe("4 voorwaarden combineren", {
       )
     )
     expect_equal(
-      berekenLSVIbasis(
-        Versie = "Versie 2.0",
-        Kwaliteitsniveau = 1,
-        data_habitat,
-        data_voorwaarden %>%
-          mutate(Waarde = Waarde + 1)
-      )[["Resultaat_indicator"]] %>%
+      TestResultaat[["Resultaat_indicator"]] %>%
         filter(Indicator == "sleutelsoorten") %>%
         select(Status_indicator, Verschilscore) %>%
         data.frame(),
@@ -72,14 +77,18 @@ describe("4 voorwaarden combineren", {
         stringsAsFactors = FALSE
       )
     )
-    expect_equal(
-      berekenLSVIbasis(
+    expect_warning(
+      TestResultaat <- berekenLSVIbasis(
         Versie = "Versie 2.0",
         Kwaliteitsniveau = 1,
         data_habitat,
         data_voorwaarden %>%
           mutate(Waarde = Waarde + 2)
-      )[["Resultaat_indicator"]] %>%
+      ),
+      WarningHorizStructuur
+    )
+    expect_equal(
+      TestResultaat[["Resultaat_indicator"]] %>%
         filter(Indicator == "sleutelsoorten") %>%
         select(Status_indicator, Verschilscore) %>%
         data.frame(),

@@ -31,14 +31,18 @@ describe("nakijken of er onderscheid gemaakt worden tussen bedekking en grondvla
     ConnectieLSVIhabitats <-
       connecteerMetLSVIdb()
 
-    ResultaatLSVI <- berekenLSVIbasis(
+    expect_warning(
+      ResultaatLSVI <- berekenLSVIbasis(
           ConnectieLSVIhabitats = ConnectieLSVIhabitats,
           Versie = "Versie 3",
           Kwaliteitsniveau = "1",
           Data_habitat,
           Data_voorwaarden,
           Data_soortenKenmerken
-        )
+        ),
+      "De waarde\\(n\\) voor de voorwaarde\\(n\\) schaalgrootte ingrepen \\(ha\\) \\(VoorwaardeID 2550\\) kunnen niet berekend worden voor opname\\(n\\) 4945. Geef de waarde voor deze voorwaarde rechtstreeks in als input van de functie 'berekenLSVIBasis' via tabel 'Data_voorwaarden' \\(zie \\?berekenLSVIbasis voor meer info\\). Vermeld hierbij Criterium = Structuur, Indicator = horizontale structuur - natuurlijke mozaiekstructuur en Voorwaarde = schaalgrootte ingrepen \\(ha\\)."
+    )
+    
 
     resultaat_inv_ex <- ResultaatLSVI[["Resultaat_detail"]] %>%
       select(Indicator, Voorwaarde, Waarde, Status_voorwaarde) %>%

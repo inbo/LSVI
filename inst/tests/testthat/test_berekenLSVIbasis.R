@@ -27,6 +27,9 @@ Data_soortenKenmerken <- #nolint
 load(system.file("vbdata/Resultaat_test4030.Rdata", package = "LSVI"))
 load(system.file("vbdata/Resultaat_test4030v2.Rdata", package = "LSVI"))
 
+WarningVergrassingVerruiging <-
+  "Volgende records uit Data_voorwaarden kunnen niet gekoppeld worden aan indicatoren uit de databank omdat de criterium-indicator-voorwaarde-combinatie niet voorkomt bij de LSVI-regels van het opgegeven habitattype: <JR0216, Verstoring, vergrassing, bedekking vergrassing> <Ts2036, Verstoring, vergrassing, bedekking vergrassing> <JR0216, Verstoring, verruiging, bedekking verruiging> <Ts2036, Verstoring, verruiging, bedekking verruiging> <JR0216, Verstoring, invasieve exoten, bedekking invasieve exoten> <Ts2036, Verstoring, invasieve exoten, bedekking invasieve exoten>" #nolint: line_length_linter
+
 describe("berekenLSVIbasis", {
   it("ConnectieLSVIhabitats is een open DBI-connectie", {
     expect_error(
@@ -42,8 +45,8 @@ describe("berekenLSVIbasis", {
     )
     ConnectieLSVIhabitats <-
       connecteerMetLSVIdb()
-    expect_equal(
-      idsWissen(
+    expect_warning(
+      TestResultaat <- idsWissen(
         berekenLSVIbasis(
           ConnectieLSVIhabitats = ConnectieLSVIhabitats,
           Versie = "Versie 2.0",
@@ -53,13 +56,17 @@ describe("berekenLSVIbasis", {
           Data_soortenKenmerken
         )
       ),
+      WarningVergrassingVerruiging
+    )
+    expect_equal(
+      TestResultaat,
       Resultaatv2
     )
   })
 
   it("parameter versie heeft correct formaat", {
-    expect_equal(
-      idsWissen(
+    expect_warning(
+      TestResultaat <- idsWissen(
         berekenLSVIbasis(
           Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
@@ -68,6 +75,10 @@ describe("berekenLSVIbasis", {
           Data_soortenKenmerken
         )
       ),
+      WarningVergrassingVerruiging
+    )
+    expect_equal(
+      TestResultaat,
       Resultaatv2
     )
     expect_error(
