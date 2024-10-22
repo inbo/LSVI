@@ -1075,18 +1075,18 @@ describe("berekenLSVIbasis", {
             filter(
               !.data$Indicator %in%
                 c("vergrassing", "verruiging", "invasieve exoten"),
-              !(.data$ID == "JR0216" & .data$Indicator == "verruiging")
+              !(.data$ID == "JR0216" & .data$Indicator == "verbossing")
             ),
           Data_soortenKenmerken %>%
             bind_rows(
               data.frame(
                 ID = "JR0216",
-                Kenmerk = "Rubus",
+                Kenmerk = "Quercus",
                 TypeKenmerk = "soort_Latijn",
                 Waarde = "35",
                 Type = "Percentage",
                 Eenheid = "%",
-                Vegetatielaag = "kruidlaag",
+                Vegetatielaag = "boomlaag",
                 stringsAsFactors = FALSE
               )
             )
@@ -1099,7 +1099,7 @@ describe("berekenLSVIbasis", {
           mutate(
             AfkomstWaarde =
               ifelse(
-                .data$ID == "JR0216" & .data$Indicator == "verruiging",
+                .data$ID == "JR0216" & .data$Indicator == "verbossing",
                 "berekend",
                 .data$AfkomstWaarde
               )
@@ -1117,18 +1117,18 @@ describe("berekenLSVIbasis", {
             filter(
               !.data$Indicator %in%
                 c("vergrassing", "verruiging", "invasieve exoten"),
-              !(.data$ID == "JR0216" & .data$Indicator == "verruiging")
+              !(.data$ID == "JR0216" & .data$Indicator == "verbossing")
             ),
           Data_soortenKenmerken %>%
             bind_rows(
               data.frame(
                 ID = "JR0216",
-                Kenmerk = "Rubus fruticosus",
+                Kenmerk = "Quercus robur L.",
                 TypeKenmerk = "soort_Latijn",
                 Waarde = "35",
                 Type = "Percentage",
                 Eenheid = "%",
-                Vegetatielaag = "kruidlaag",
+                Vegetatielaag = "boomlaag",
                 stringsAsFactors = FALSE
               )
             )
@@ -1141,7 +1141,7 @@ describe("berekenLSVIbasis", {
           mutate(
             AfkomstWaarde =
               ifelse(
-                .data$ID == "JR0216" & .data$Indicator == "verruiging",
+                .data$ID == "JR0216" & .data$Indicator == "verbossing",
                 "berekend",
                 .data$AfkomstWaarde
               )
@@ -1149,8 +1149,8 @@ describe("berekenLSVIbasis", {
         Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]]
       )
     )
-    expect_equal(
-      idsWissen(
+    expect_warning(
+      TestResultaat <- idsWissen(
         berekenLSVIbasis(
           Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
@@ -1159,23 +1159,27 @@ describe("berekenLSVIbasis", {
             filter(
               !.data$Indicator %in%
                 c("vergrassing", "verruiging", "invasieve exoten"),
-              !(.data$ID == "JR0216" & .data$Indicator == "verruiging")
+              !(.data$ID == "JR0216" & .data$Indicator == "verbossing")
             ),
           Data_soortenKenmerken %>%
             bind_rows(
               data.frame(
                 ID = "JR0216",
-                Kenmerk = c("Rubus", "Rubus fruticosus"),
+                Kenmerk = c("Quercus", "Quercus robur L."),
                 TypeKenmerk = "soort_Latijn",
-                Waarde = "35",
+                Waarde = c("18,75", "20"),
                 Type = "Percentage",
                 Eenheid = "%",
-                Vegetatielaag = "kruidlaag",
+                Vegetatielaag = "boomlaag",
                 stringsAsFactors = FALSE
               )
             )
         )
       ),
+      "Voor opname JR0216 zijn in de boomlaag 'GENUS Quercus' en 'SPECIES Quercus robur L.' op genusniveau of hoger beschouwd als eenzelfde taxon met aggregatie van de bedekkingen \\(rekening houdend met gedeeltelijke overlap\\)" #nolint: line_length_linter
+    )
+    expect_equal(
+      TestResultaat,
       list(
         Resultaat_criterium = Resultaatv2[["Resultaat_criterium"]],
         Resultaat_indicator = Resultaatv2[["Resultaat_indicator"]],
@@ -1183,7 +1187,7 @@ describe("berekenLSVIbasis", {
           mutate(
             AfkomstWaarde =
               ifelse(
-                .data$ID == "JR0216" & .data$Indicator == "verruiging",
+                .data$ID == "JR0216" & .data$Indicator == "verbossing",
                 "berekend",
                 .data$AfkomstWaarde
               )
