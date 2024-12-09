@@ -39,7 +39,7 @@ Daarnaast bevat het package enkele functies die deze informatie meteen in een ra
 
 Verder bevat het package functies m.b.t. de berekening van de LSVI.  De hoofdfunctie `berekenLSVIbasis()` kan door iedereen gebruikt worden om de LSVI te berekenen op basis van eigen gegevens.  De gebruiker moet wel eerst de gegevens van de veldopnames omzetten naar het formaat dat beschreven is in de helpfunctie van de functie zelf.  Op termijn zullen er ook functies ontwikkeld worden op maat van een specifieke databank of project (met bruikbaarheid afhankelijk van de toegang tot de databank).
 
-Omwille van de complexiteit van de berekening roept berekenLSVIbasis een aantal hulpfuncties op die elk een deel van de controle of berekening uitvoeren.  Voor het gemak bij het ontwikkelen zullen deze voorlopig beschikbaar zijn; op termijn zullen omwille van de overzichtelijkheid enkel de functies beschikbaar gesteld blijven die een meerwaarde bieden voor de gebruiker (en relatief gemakkelijk toegepast kunnen worden).
+Omwille van de complexiteit van de berekening roept `berekenLSVIbasis()` een aantal hulpfuncties op die elk een deel van de controle of berekening uitvoeren.  Voor het gemak bij het ontwikkelen zullen deze voorlopig beschikbaar zijn; op termijn zullen omwille van de overzichtelijkheid enkel de functies beschikbaar gesteld blijven die een meerwaarde bieden voor de gebruiker (en relatief gemakkelijk toegepast kunnen worden).
 
 ##Doelstellingen {#doelstellingen}
 

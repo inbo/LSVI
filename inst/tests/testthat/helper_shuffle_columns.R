@@ -15,15 +15,12 @@ shuffle_columns <- function(invec, movecommand) {
       ba <- movelist[[i]][[2]][2]
       if (A == "before") {
         after <- match(ba, temp) - 1
-      }
-      else if (A == "after") {
+      } else if (A == "after") {
         after <- match(ba, temp)
       }
-    }
-    else if (A == "first") {
+    } else if (A == "first") {
       after <- 0
-    }
-    else if (A == "last") {
+    } else if (A == "last") {
       after <- length(myVec)
     }
     myVec <- append(temp, values = movelist[[i]][[1]], after = after)

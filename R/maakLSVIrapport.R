@@ -48,7 +48,7 @@ maakLSVIrapport <-
   function(Bestandsnaam = "LSVIrapport.html",
            Versie = "alle",
            Habitatgroep = "alle",
-           Habitattype= "alle",
+           Habitattype = "alle",
            ConnectieLSVIhabitats = NULL,
            verbose = TRUE) {
 

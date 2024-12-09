@@ -45,7 +45,7 @@ setMethod(
           teller[2] / vegetatielaag$WaardeMin
         )
 
-    } else{
+    } else {
       #indien bedekking vegetatielaag niet is meegegeven wordt deze berekend
       #op basis van alle soorten in kruidlaag
       soorten_vegetatielaag <- object@Kenmerken %>%

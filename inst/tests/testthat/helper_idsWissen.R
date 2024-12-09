@@ -1,4 +1,4 @@
-#'@importFrom dplyr %>% mutate
+#' @importFrom dplyr %>% mutate
 
 idsWissen <- function(Resultaat) {
   ResultaatDetail <-
