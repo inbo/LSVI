@@ -24,7 +24,7 @@ library(knitr)
 ```{r gegevens_inladen}
 
 if (
-  inherits(params$ConnectieLSVIhabitats, "DBIConnection") |
+  inherits(params$ConnectieLSVIhabitats, "DBIConnection") ||
     inherits(params$ConnectieLSVIhabitats, "Pool")
 ) {
   ConnectieLSVIhabitats <- params$ConnectieLSVIhabitats

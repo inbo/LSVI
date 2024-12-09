@@ -61,7 +61,7 @@ selecteerKenmerkenInOpname <- #nolint
           Soortengroep,
           by = c("Kenmerk" = "NbnTaxonVersionKey")
         )
-      if (length(Studiegroep) > 0 & nrow(Resultaat) > 0) {
+      if (length(Studiegroep) > 0 && nrow(Resultaat) > 0) {
         if (max(is.na(Resultaat$Vegetatielaag))) {
           stop(
             "Bij Data_soortenKenmerken is niet voor alle soorten de kolom Vegetatielaag ingevuld, waardoor de berekening niet correct kan worden uitgevoerd (dit omdat de vegetatielaag bepaalt of de betreffende soort al dan niet in rekening gebracht moet worden voor het berekenen van de indicator)"  #nolint
@@ -109,7 +109,7 @@ selecteerKenmerkenInOpname <- #nolint
         ungroup()
     }
 
-    if (length(Studiegroep) > 0 & !(length(Soortengroep) > 0)) {
+    if (length(Studiegroep) > 0 && !(length(Soortengroep) > 0)) {
       if (!unique(Studiegroep$LijstNaam) %in% Kenmerken$LijstNaam) {
         warning(
           sprintf(
@@ -147,7 +147,7 @@ selecteerKenmerkenInOpname <- #nolint
       return(Resultaat)
     }
 
-    if (!identical(SubAnalyseVariabele, character(0)) &
+    if (!identical(SubAnalyseVariabele, character(0)) &&
         SubAnalyseVariabele %in% c("aandeel", "bedekking")) {
 
       if (SubAnalyseVariabele == "aandeel") {

@@ -69,7 +69,7 @@ deselecteerKenmerkenInOpname <-
       }
     }
 
-    if (length(Studiegroep) > 0 & !(length(Soortengroep) > 0)) {
+    if (length(Studiegroep) > 0 && !(length(Soortengroep) > 0)) {
 
       Resultaat <- Kenmerken %>%
         filter(.data$TypeKenmerk == "studiegroep") %>%

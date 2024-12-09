@@ -17,7 +17,7 @@ maakConnectiePool()
 
 # Inleiding
 
-De functie `berekenLSVIbasis` berekent de Lokale Staat van Instandhouding van habitattypen op basis van opnamen, maar wat gebeurt er eigenlijk onder de motorkap? Dit vignet geeft hier een antwoord op. (Voor inleidende informatie over het gebruik van het package verwijzen we naar het vignet handleiding (`vignette("Handleiding", package = "LSVI")`), en voor het gebruik van deze berekenfunctie verwijzen we naar de help van de functie in kwestie (`?berekenLSVIbasis`.)
+De functie `berekenLSVIbasis()` berekent de Lokale Staat van Instandhouding van habitattypen op basis van opnamen, maar wat gebeurt er eigenlijk onder de motorkap? Dit vignet geeft hier een antwoord op. (Voor inleidende informatie over het gebruik van het package verwijzen we naar het vignet handleiding (`vignette("Handleiding", package = "LSVI")`), en voor het gebruik van deze berekenfunctie verwijzen we naar de help van de functie in kwestie (`?berekenLSVIbasis`.)
 
 ## Beschikbare gegevens en informatie
 

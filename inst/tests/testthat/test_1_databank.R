@@ -462,7 +462,7 @@ describe("test databank", {
     dbDisconnect(ConnectieLSVIhabitats)
   })
 
-  it("De waarden van scoresom zijn getallen kleiner dan of gelijk aan 10 (als / 100)", {
+  it("De waarden van scoresom zijn getallen kleiner dan of gelijk aan 10 (als / 100)", { #nolint: line_length_linter
     ConnectieLSVIhabitats <-
       connecteerMetLSVIdb()
     Refwaarden <-
