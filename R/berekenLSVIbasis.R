@@ -317,7 +317,9 @@ berekenLSVIbasis <- #nolint
       Data_habitat %>%
       left_join(
         Invoervereisten,
-        by = c("Habitattype" = "Habitatsubtype"))
+        by = c("Habitattype" = "Habitatsubtype"),
+        relationship = "many-to-many"
+      )
     records_zonder_fiche <- Resultaat %>%
       filter(is.na(.data$Criterium))
     if (nrow(records_zonder_fiche) > 0) {
