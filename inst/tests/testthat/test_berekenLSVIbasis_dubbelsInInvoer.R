@@ -87,7 +87,7 @@ describe("Data_soortenKenmerken", {
         Data_voorwaarden,
         Data_soortenKenmerkenDubbel
       ),
-      "'Gewone vlier' meermaals opgegeven voor de boomlaag" #nolint
+      "'gewone vlier' meermaals opgegeven voor de boomlaag" #nolint
     )
     Data_soortenKenmerkenDubbel <- Data_soortenKenmerken %>% #nolint
       bind_rows(
@@ -105,7 +105,45 @@ describe("Data_soortenKenmerken", {
         Data_voorwaarden,
         Data_soortenKenmerkenDubbel
       ),
-      "zowel Nederlandse als Latijnse namen gebruikt voor de soort 'Sambucus nigra'" #nolint
+      "Voor opname 1 zijn in de boomlaag meerdere namen / keys gebruikt voor de soort 'gewone vlier' / 'Sambucus nigra'" #nolint
+    )
+  })
+  it("invoer van hoger niveau geeft een warning", {
+    Data_soortenKenmerkenDubbel <- Data_soortenKenmerken %>% #nolint
+      bind_rows(
+        data.frame(
+          ID = "1", Kenmerk = "Sambucus L.",
+          TypeKenmerk = "soort_Latijn", Waarde = "2", Type = "Percentage",
+          Eenheid = "%", Vegetatielaag = "boomlaag", stringsAsFactors = FALSE
+        )
+      )
+    expect_warning(
+      berekenLSVIbasis(
+        Versie = "Versie 2.0",
+        Kwaliteitsniveau = "1",
+        Data_habitat,
+        Data_voorwaarden,
+        Data_soortenKenmerkenDubbel
+      ),
+      "Voor opname 1 zijn in de boomlaag 'SPECIES gewone vlier' en 'GENUS Sambucus L.' op genusniveau of hoger beschouwd als eenzelfde taxon met aggregatie van de bedekkingen" #nolint
+    )
+    Data_soortenKenmerkenDubbel <- Data_soortenKenmerken %>% #nolint
+      bind_rows(
+        data.frame(
+          ID = "1", Kenmerk = "Sambucus nigra var. laciniata L.",
+          TypeKenmerk = "soort_Latijn", Waarde = "2", Type = "Percentage",
+          Eenheid = "%", Vegetatielaag = "boomlaag", stringsAsFactors = FALSE
+        )
+      )
+    expect_warning(
+      berekenLSVIbasis(
+        Versie = "Versie 2.0",
+        Kwaliteitsniveau = "1",
+        Data_habitat,
+        Data_voorwaarden,
+        Data_soortenKenmerkenDubbel
+      ),
+      "Voor opname 1 zijn in de boomlaag 'SPECIES gewone vlier' en 'VARIETY Sambucus nigra var. laciniata L.' op speciesniveau of hoger beschouwd als eenzelfde taxon met aggregatie van de bedekkingen" #nolint
     )
   })
 })

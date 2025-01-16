@@ -451,6 +451,21 @@ migratieSQLserverSQLite <-
       SubAnalyseVariabeleId, SubReferentiewaarde, SubOperator,
       SubInvoermaskerId, Maximumwaarde
     )
+  
+  # toevoegen GbifUsageKey en Rank
+  TaxonTabel <-
+    readr::read_csv2(system.file("databank/TaxonTabel.csv", package = "LSVI"))
+  Taxon <- Taxon %>%
+    left_join(
+      TaxonTabel %>%
+        select(TaxonNameExact, GbifUsageKey, GbifAcceptedUsageKey, Rank),
+      by = c("FloraNaamWetenschappelijk" = "TaxonNameExact")
+    ) %>%  #tijdelijke correctie, maar idealiter komen er geen synoniemen in de lijst voor
+    mutate(
+      GbifUsageKeyFloraNaamWetenschappelijk = GbifUsageKey,
+      GbifUsageKey =
+        ifelse(is.na(GbifAcceptedUsageKey), GbifUsageKey, GbifAcceptedUsageKey)
+    )
 
   NieuweDb <- dbConnect(SQLite(), "inst/databank/LSVIHabitatTypes.sqlite")
   dbWriteTable(NieuweDb, "AnalyseVariabele", AnalyseVariabele)

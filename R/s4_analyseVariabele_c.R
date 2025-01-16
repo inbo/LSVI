@@ -79,17 +79,13 @@ analyseVariabele_c <- #nolint
           Taxongroeplijst = as.character(VoorwaardeInfo$TaxongroepId),
           ConnectieLSVIhabitats = ConnectieLSVIhabitats
         ) %>%
-        mutate(
-          NbnTaxonVersionKey =
-            tolower(.data$NbnTaxonVersionKey)
-        ) %>%
         select(
           "TaxongroepId",
           "TaxonsubgroepId",
           "TaxonId",
-          "SubTaxonId",
-          "NbnTaxonVersionKey",
-          "TaxonType"
+          "TaxonType",
+          "GbifUsageKey",
+          "Rank"
         ) %>%
         distinct()
       setSoortengroep(AnalyseObject) <- Soortengroep

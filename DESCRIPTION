@@ -39,6 +39,7 @@ Imports:
     stringr,
     tibble,
     tidyr,
+    tidyselect,
     utils
 Suggests:
     knitr,

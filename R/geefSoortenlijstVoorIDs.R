@@ -116,6 +116,9 @@ geefSoortenlijstVoorIDs <-
         Taxon.NbnTaxonVersionKey,
         Taxon.FloraNaamWetenschappelijk AS WetNaam,
         Taxon.FloraNaamNederlands As NedNaam,
+        Taxon.GbifUsageKey,
+        Taxon.GbifAcceptedUsageKey,
+        Taxon.Rank,
         TaxonType.Naam AS TaxonType,
         ts.CanonicalNameWithMarker AS WetNaamKort
       FROM Groepen

@@ -4,9 +4,11 @@
 #' AnalyseVariabele bedekkingLaagExcl op basis van opgegeven kenmerken.  Ze is
 #' een nakomeling van de klasse bedekkingLaag.  Ze maakt de berekening op basis
 #' van de studiegroep als deze aanwezig is in de opname, en anders op basis van
-#' de soortengroep, zoals bedekkingLaag. Extra is dat ze bij opgave van 2
-#' taxongroepen de soorten uit de taxongroep met het minste soorten schrapt uit
-#' de taxongroep met het meeste soorten om een nieuwe soortengroep te bekomen.
+#' de soortengroep, zoals bij bedekkingLaag.
+#' Extra is dat ze bij opgave van 2 taxongroepen de soorten uit de taxongroep
+#' met het minste soorten schrapt uit de opgegeven kenmerken,
+#' vooraleer de berekening uitgevoerd wordt op basis van de taxongroep met de
+#' meeste soorten.
 #' (Voordeel hiervan is dat de taxa op genusniveau gedefinieerd kunnen worden,
 #' zodat een door de gebruiker ingevoerde genusnaam niet 'genegeerd' wordt,
 #' terwijl specifieke soorten wel geschrapt kunnen worden.  We nemen bv. om de
@@ -38,15 +40,24 @@ setMethod(
   signature = "bedekkingLaagExcl",
   definition = function(object) {
 
-    Taxongroepen <- object@Soortengroep %>%
-      group_by(.data$TaxonsubgroepId) %>%
-      count() %>%
-      arrange(.data$n)
-    if (nrow(Taxongroepen) == 2) {
-      Schrappen <- object@Soortengroep %>%
-        filter(.data$TaxonsubgroepId == Taxongroepen$TaxonsubgroepId[1])
-      object@Soortengroep <- object@Soortengroep %>%
-        filter(!.data$NbnTaxonVersionKey %in% Schrappen$NbnTaxonVersionKey)
+    if (length(object@Kenmerken > 0)) {
+      Taxongroepen <- object@Soortengroep %>%
+        group_by(.data$TaxonsubgroepId) %>%
+        count() %>%
+        arrange(.data$n)
+      if (nrow(Taxongroepen) == 2) {
+        Schrappen <- object@Soortengroep %>%
+          filter(.data$TaxonsubgroepId == Taxongroepen$TaxonsubgroepId[1])
+        for (Niveau in unique(Schrappen$Rank)) {
+          Kolomnaam <- paste0(toTitleCase(tolower(Niveau)), "Key")
+          object@Kenmerken <- object@Kenmerken %>%
+            anti_join(
+              Schrappen %>%
+                filter(.data$Rank == Niveau),
+              by = setNames("GbifUsageKey", Kolomnaam)
+            )
+        }
+      }
       berekenWaarde(as(object, "bedekkingLaag"))
     } else {
       berekenWaarde(as(object, "bedekkingLaag"))

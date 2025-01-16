@@ -12,17 +12,20 @@ describe("s4_BedekkingExcl", {
           Kenmerken =
             data.frame(
               Kenmerk = c("A1", "B2", "C1", "D3", "E1"),
-              TypeKenmerk = "soort_nbn",
+              TypeKenmerk = "soort_gbif",
               WaardeMin = c(1, 0, 1, 0, 1),
               WaardeMax = 1,
               Eenheid = "%",
+              Rank = "SPECIES",
+              SpeciesKey = c("A1", "B2", "C1", "D3", "E1"),
+              Vegetatielaag = "kruidlaag",
               stringsAsFactors = FALSE
             ),
           Soortengroep =
             data.frame(
-              NbnTaxonVersionKey = c("A1", "B1", "C1", "E1"),
+              GbifUsageKey = c("A1", "B1", "C1", "E1"),
               TaxonId = 1:4,
-              SubTaxonId = 1:4,
+              Rank = "SPECIES",
               stringsAsFactors = FALSE
             )
         )
@@ -36,10 +39,13 @@ describe("s4_BedekkingExcl", {
           Kenmerken =
             data.frame(
               Kenmerk = c("A1", "B2", "C1", "D3", "E1", "X1", "X2", "Y1"),
-              TypeKenmerk = c(rep("soort_nbn", 5), rep("studiegroep", 3)),
+              TypeKenmerk = c(rep("soort_gbif", 5), rep("studiegroep", 3)),
               WaardeMin = c(1, 0, 1, 0, 1, 0, 1, 0),
               WaardeMax = 1,
               Eenheid = "%",
+              Rank = c(rep("SPECIES", 5), rep(NA, 3)),
+              SpeciesKey = c("A1", "B2", "C1", "D3", "E1", rep(NA, 3)),
+              Vegetatielaag = c(rep("kruidlaag", 5), rep(NA, 3)),
               stringsAsFactors = FALSE
             ),
           Studiegroep =
@@ -60,18 +66,21 @@ describe("s4_BedekkingExcl", {
           Kenmerken =
             data.frame(
               Kenmerk = c("A1", "B2", "C1", "D3", "E1"),
-              TypeKenmerk = "soort_nbn",
+              TypeKenmerk = "soort_gbif",
               Vegetatielaag = c("X1", "X2", "Y1", "X1", "Y1"),
               WaardeMin = c(1, 1, 1, 0, 1),
               WaardeMax = 1,
               Eenheid = "%",
+              Rank = "SPECIES",
+              SpeciesKey = c("A1", "B2", "C1", "D3", "E1"),
+              Vegetatielaag = "kruidlaag",
               stringsAsFactors = FALSE
             ),
           Soortengroep =
             data.frame(
-              NbnTaxonVersionKey = c("A1", "B1", "C1", "E1"),
+              GbifUsageKey = c("A1", "B1", "C1", "E1"),
               TaxonId = 1:4,
-              SubTaxonId = 1:4,
+              Rank = "SPECIES",
               stringsAsFactors = FALSE
             ),
           Studiegroep =
@@ -94,17 +103,20 @@ describe("s4_BedekkingExcl", {
           Kenmerken =
             data.frame(
               Kenmerk = c("A1", "B2", "C1", "D3", "E1"),
-              TypeKenmerk = "soort_nbn",
+              TypeKenmerk = "soort_gbif",
               WaardeMin = 1,
               WaardeMax = NA,
               Eenheid = NA,
+              Rank = "SPECIES",
+              SpeciesKey = c("A1", "B2", "C1", "D3", "E1"),
+              Vegetatielaag = "kruidlaag",
               stringsAsFactors = FALSE
             ),
           Soortengroep =
             data.frame(
-              NbnTaxonVersionKey = c("A1", "B1", "C1", "E1"),
+              GbifUsageKey = c("A1", "B1", "C1", "E1"),
               TaxonId = 1:4,
-              SubTaxonId = 1:4,
+              Rank = "SPECIES",
               stringsAsFactors = FALSE
             )
         )

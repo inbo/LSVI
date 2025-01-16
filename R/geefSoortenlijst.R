@@ -32,6 +32,9 @@
 #' groep van taxa binnen eenzelfde indicator).  WetNaam is de volledige
 #' Latijnse naam inclusief auteursnaam, WetNaamKort geeft de verkorte naam
 #' zonder auteursnaam.
+#' Daarnaast heeft de tabel ook de velden GbifUsageKey (unieke ID van Gbif)
+#' en Rank (niveau van taxon en GbifUsageKey) die bij de berekeningen gebruikt
+#' worden om de taxa van de opname te koppelen.
 #'
 #' @examples
 #' # Omwille van de iets langere lange duurtijd van de commando's staat bij
@@ -160,7 +163,8 @@ geefSoortenlijst <-
           "Criterium", "Indicator", "TaxongroepId",
           "Omschrijving",
           "NbnTaxonVersionKey", "WetNaam", "NedNaam",
-          "WetNaamKort", "TaxonType"
+          "WetNaamKort", "TaxonType",
+          "GbifUsageKey", "Rank"
         ) %>%
         distinct()
     }

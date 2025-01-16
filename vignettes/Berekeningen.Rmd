@@ -168,11 +168,11 @@ Bij voorwaarden met deze analysevariabele zal eerst gecheckt worden of kenmerken
 
 ## bedekkingLaagExcl {#bedekkingLaagExcl}
 
-De analysevariabele `bedekkingLaagExcl` is zeer analoog aan [`bedekkingLaag`](#bedekkingLaag), maar lost een taxonlijst-gerelateerd probleem op dat voorkomt bij de taxonlijst van de boomlaag.  Om ervoor te zorgen dat ook in de opname van de gebruiker ingevoerde genera als boom beschouwd worden, bestaat de lijst van bomen en struiken uit genera.  Lagere taxonomische niveaus worden automatisch ook meegenomen (zie [Afhandeling taxonlijsten](#taxonlijsten)).  Er is echter 1 moeilijkheid: _Salix repens_ zou niet meegenomen mogen worden want dit is geen boom (die wel in de struiklaag zou kunnen voorkomen).  Anderzijds zijn er een aantal moeilijk te determineren _Salix_-soorten die evt. als genus in een opname zou kunnen voorkomen, maar die allen bomen zijn.  We gaan ervan uit dat _Salix repens_ wel herkend wordt en dus tot op soortniveau in een opname toegevoegd zal worden, en enkel moeilijk te herkennen _Salix_-soorten als genus toegevoegd worden.  Vanuit die redenering worden '_Salix_ sp.' en de _Salix_-soorten als boom beschouwd, met uitzondering van _Salix repens_.
+De analysevariabele `bedekkingLaagExcl` is zeer analoog aan [`bedekkingLaag`](#bedekkingLaag), maar lost een taxonlijst-gerelateerd probleem op dat voorkomt bij de taxonlijst van de boomlaag.  Om ervoor te zorgen dat ook in de opname van de gebruiker ingevoerde genera als boom beschouwd worden, bestaat de lijst van bomen en struiken in de databank uit genera.  Lagere taxonomische niveaus worden automatisch ook meegenomen omdat hier volgens rank 'genus' geselecteerd wordt (zie [Afhandeling taxonlijsten](#taxonlijsten)).  Er is echter 1 moeilijkheid: _Salix repens_ zou niet meegenomen mogen worden want dit is geen boom (die wel in de struiklaag zou kunnen voorkomen).  Anderzijds zijn er een aantal moeilijk te determineren _Salix_-soorten die evt. als genus in een opname zou kunnen voorkomen, maar die allen bomen zijn.  We gaan ervan uit dat _Salix repens_ wel herkend wordt en dus tot op soortniveau in een opname toegevoegd zal worden, en enkel moeilijk te herkennen _Salix_-soorten als genus toegevoegd worden.  Vanuit die redenering worden '_Salix_ sp.' en de _Salix_-soorten als boom beschouwd, met uitzondering van _Salix repens_.
 
 Dit probleempje heeft aanleiding gegeven voor een nieuwe analysevariabele, die uiteraard ook ruimer gebruikt kan worden.  Bij voorwaarden met deze analysevariabele verwijst het `TaxongroepId` naar een taxonlijst bestaande uit 2 sublijsten: een lange lijst (bv. alle genera van bomen) en een kort lijstje (bv. _Salix repens_).
 
-Bij de berekening zal eerst gecheckt worden of er inderdaad 2 sublijsten zijn, en in dat geval zullen als een eerste stap de taxa van het kortste lijstje geschrapt worden in de lijst van de taxa met het langste lijstje (in een lijst waarin alle mogelijke taxonniveaus toegevoegd zijn).  Daarna zal met de eventueel aangepaste taxonlijst de voorwaarde uitgerekend worden volgens analysevariabele [`bedekkingLaag`](#bedekkingLaag).
+Bij de berekening zal eerst gecheckt worden of er inderdaad 2 sublijsten zijn, en in dat geval zullen eerst de taxa van het kortste lijstje geschrapt worden uit de opname van de gebruiker, waarna de voorwaarde uitgerekend wordt met de lange taxonlijst volgens analysevariabele [`bedekkingLaag`](#bedekkingLaag).
 
 ## bedekkingLaagPlus {#bedekkingLaagPlus}
 
@@ -227,7 +227,7 @@ De analysevariabele `aantalGroepen` gaat specifiek over kenmerken die eigenlijk 
 Bij voorwaarden met deze analysevariabele zal eerst gecheckt worden of kenmerken uit de studielijst voorkomen in de opname van de gebruiker.
 
 - Als dat zo is, dan zal het aantal afgeleid worden van de kenmerken in de studielijst.  (Meer concreet: de berekening gebeurt zoals bij analysevariabele [`aantal`](#aantal) nadat eerst `TaxongroepId` uit de voorwaarden geschrapt is)
-- Als dat niet zo is, dan zal het aantal afgeleid worden op basis van opgegeven taxonlijst.  Concreet zal de originele voorwaarde wat aangepast worden (de studielijst wordt geschrapt en de taxonlijst wordt herwerkt zodat de originele taxonsubgroepen afzonderlijke taxa of soorten worden binnen 1 taxonlijst), waarna de berekening van het aantal groepen/kenmerken kan gebeuren volgens de analysevariabele [`aantal`](#aantal).  (Zoals beschreven in [Afhandeling taxonlijsten](#taxonlijsten) hieronder, zal de aggregatie van de opgegeven soorten - die nu als subsoorten beschouwd worden - gebeuren door de totale bedekking te berekenen en op de resulterende lijst de eventuele subvoorwaarde uit te voeren, waarna het aantal originele taxonsubgroepen - nu hernoemd als soorten - geteld wordt.)
+- Als dat niet zo is, dan zal het aantal afgeleid worden op basis van opgegeven taxonlijst.  Concreet zal de originele voorwaarde wat aangepast worden (de studielijst wordt geschrapt en de taxonlijst wordt herwerkt zodat de originele taxonsubgroepen afzonderlijke taxa of soorten worden binnen 1 taxonlijst), waarna de berekening van het aantal groepen/kenmerken kan gebeuren volgens de analysevariabele [`aantal`](#aantal).  (Zoals beschreven in [Afhandeling taxonlijsten](#taxonlijsten) hieronder, zal de aggregatie van de opgegeven taxa - die nu als subtaxa beschouwd worden - gebeuren door de totale bedekking te berekenen en op de resulterende lijst de eventuele subvoorwaarde uit te voeren, waarna het aantal originele taxonsubgroepen - nu hernoemd als taxa - geteld wordt.)
 
 ## scoresom
 
@@ -240,24 +240,58 @@ De analysevariabele `meting` (of `meting_xxx`) staat in de databank bij voorwaar
 
 # Afhandeling taxonlijsten {#taxonlijsten}
 
-Idealiter worden de door de gebruiker ingevoerde taxonnamen herkend en correct behandeld bij de berekening.  Om dit zo goed mogelijk op te vangen, bevat de databank:
+## Gebruikte taxonlijsten in package
 
-- taxa van meerdere taxonomische niveaus (genera, soorten, ondersoorten,...) en hun onderlinge verwantschap
-- zowel ‘preferred names’ als ‘junior synonyms’ (bij opgevraagde info worden enkel preferred names gegeven, de junior synonyms dienen enkel om door gebruikers ingevoerde namen te herkennen)
+Idealiter worden de door de gebruiker ingevoerde taxonnamen herkend en correct behandeld bij de berekening.  Om dit zo goed mogelijk op te vangen, bevat het package een __generieke taxonlijst__ met:
+
+- taxa van meerdere taxonomische niveaus (genera, soorten, ondersoorten,...)
+- zowel ‘accepted names’ als ‘junior synonyms’
 - Latijnse en Nederlandse namen
-- de binnen INBO gebruikte NbnTaxonVersionKey die een unieke code is voor een taxon
+- voor elk van deze records de taxa van hogere niveaus waartoe ze horen (genus, familie, orde,..) en overeenkomstige Gbif-keys voor alle niveaus, dus een unieke code voor elk taxon (en ingeval van 'junior synonyms' ook de 'accepted name')
+- er wordt gepoogd om deze lijst zo compatibel mogelijk te maken met INBO-databanken die gebruikt worden voor vegetatieopnamen (schrijfwijzen), de lijst is raadpleegbaar op [Zenodo](https://zenodo.org/records/10561497) en na installatie van het package met het commando `readr::read_csv2(system.file("databank/TaxonTabel.csv", package = "LSVI"))`.
+- de taxonomie en voornamelijk synonymy van deze tabel is afgeleid van [Florabank](https://flora.inbo.be), waarmee de taxonomische inzichten van [worldfloraonline.org](https://worldfloraonline.org/) en de Belgische flora gevolgd worden (die soms afwijken van Gbif)
 
-Voor Latijnse namen gebeurt herkenning op basis van genusnaam + soortnaam + evt. subsoortnaam/variëteit/….  Om de koppeling met namen uit de databank toe te laten, worden de door een gebruiker ingevoerde namen deze eerst scriptmatig aangepast naar dit formaat met de functie `parseTaxonnaam()` (waarbij o.a. auteursnamen worden weggelaten zodat verschillen in schrijfwijzen of al dan niet gebruiken van een '.' hierin geen probleem vormen).  Bij Nederlandse namen moet de schrijfwijze wel exact hetzelfde zijn om herkenning toe te laten.
+De indicatoren en voorwaarden in de __databank__ van het package zijn gekoppeld aan __taxonlijsten__ met enkel 'accepted names' met voor elk taxon:
 
-Als de gebruiker een onbekende naam invoert, krijgt hij een waarschuwing en wordt deze naam bij de berekeningen buiten beschouwing gelaten (ook voor bv. de berekening van een totale bedekking van alle soorten of een bepaalde vegetatielaag).  Anders wordt de naam omgezet naar de NbnTaxonVersionKey van de ‘preferred name’, die intern gebruikt wordt voor de verdere berekeningen.  Als gebruiker kan je ook rechtstreeks deze unieke code invoeren (dan gebeurt de hier beschreven stap om de naam te herkennen niet).
+- de Latijnse en Nederlandse naam (voor uitvoer in functies als `geefSoortenlijst()` en `maakLSVIrapport()`)
+- de overeenkomstige Gbif-key
+- de rank van het taxon
 
-Bij het selecteren van soorten uit de opname op basis van een taxonlijst in de databank (met `selecteerKenmerkenInOpname()`, zie  onder [AnalyseVariabele](#AnalyseVariabele)), wordt voor de taxa in de databank eerst gecheckt of ze in de opname voorkomen.  Als een taxon niet gevonden wordt (bv. _Quercus_), wordt gezocht of taxa van een lager niveau wel in opname voorkomen (bv. _Quercus robur_, _Quercus petraea_,...).  Als er meerdere taxa van dit lagere niveau voorkomen, dan worden deze bedekkingen geaggregeerd door middel van de formule van Fisher (zie onder [bedekking](#bedekking)).  Op deze lijst gebeurt de uiteindelijke bewerking als beschreven bij de analysevariabelen (aantallen tellen, bedekkingen aggregeren,...).
+## Herkenning van ingevoerde namen {#herkenning_namen}
 
-Een soortenlijst met toevoeging van deze taxa van lagere niveaus kan opgevraagd worden door bij functies `geefSoortenlijst()` of `geefSoortenlijstVoorIDs()` de parameter `Taxonlijsttype = "alle"` toe te voegen.  In de verkregen lijst zijn de taxa van het hoogste niveau de records waar `TaxonId` en `SubTaxonId` dezelfde waarde hebben.  De taxa van een lager niveau hebben hier een verschillende waarde, en ze hebben dezelfde `TaxonId` als het bijhorend taxon van het hoogste niveau.
+De 'herkenning' van de door een gebruiker ingevoerde namen gebeurt in een eerste stap door een exacte koppeling te maken met de generieke taxonlijst in het package.
+Als dit geen resultaat geeft (bv. doordat een auteursnaam niet exact hetzelfde afgekort is of een '.' ontbreekt), zal geprobeerd worden om een koppeling te maken op basis van de Gbif-tool (d.m.v. het rgbif-package):
 
-Voor enkele analysevariabelen ([`bedekkingLaagPlus`](#bedekkingLaagPlus), [`bedekkingLaagExcl`](#bedekkingLaagExcl) en [`aantalGroepen`](#aantalGroepen)) zijn 2 soortenlijsten nodig voor de berekening.  Dit is opgelost door een lijst te maken (aangeduid met eenzelfde `TaxongroepId`) met 2 sublijsten (elk aangeduid met eenzelfde `TaxonsubgroepId`).  Bij [`bedekkingLaagPlus`](#bedekkingLaagPlus) en [`bedekkingLaagExcl`](#bedekkingLaagExcl) wordt deze lijst op basis van `TaxonsubgroepId` opgesplitst in 2 afzonderlijke lijsten, en de bewerking gebeurt op lijsten zonder sublijsten.  Bij [`aantalGroepen`](#aantalGroepen)) zijn de Id's hernoemd om code van analysevariabele [`aantal`](#aantal) te kunnen herbruiken:
+- voor Latijnse namen met commando `rgbif::name_backbone(...)`
+- voor Nederlandse namen met commando `rgbif::name_lookup(...)$data`
+- voor (in de taxonlijst ontbrekende) gbif-keys met commando `name_usage(...)$data`
 
-- `TaxonsubgroepId` -> `TaxonId` zodanig dat de originele `TaxongroepId`'s aanzien worden als de items (soorten) die geteld moeten worden
+Als deze koppeling gemaakt kan worden, zal geprobeerd worden om toch zoveel mogelijk info uit de generieke taxonlijst in het package (met de taxonomische inzichten uit Florabank) te gebruiken:
+
+- in de eerste plaats wordt geprobeerd om de gevonden Gbif-key te koppelen met de taxonlijst uit het package om de accepted key en de hogere taxonniveaus over te nemen
+- als dit niet lukt, zal ook de accepted key via Gbif opgezocht worden en zal geprobeerd worden om deze te koppelen met de taxonlijst uit het package om de hogere taxonniveaus over te nemen
+- als dit ook niet lukt, zullen de door Gbif voorgestelde hogere taxonniveaus overgenomen worden
+
+Als er geen koppeling gemaakt kan worden, zal dit een error geven zodat de gebruiker die naam kan aanpassen vooraleer de berekeningen gebeuren (om te vermijden dat de lange berekeningen onnodig gebeuren).
+
+Finaal zal de functie `berekenLSVIbasis()` behalve de resultaten ook een tabel `Soortenlijst` teruggeven waaruit afgeleid kan worden hoe de ingevoerde taxa geïnterpreteerd zijn door het package.
+Als de functie Gbif raadpleegt omdat minstens één door de gebruiker ingevoerde naam niet in de taxonlijst voorkomt, dan geeft ze een warning om deze tabel na te kijken.
+Deze waarschuwing komt er enerzijds omdat Gbif bij z'n vertaling geen rekening houdt met auteursnamen of hiermee gerelateerde tussenvoegsels zoals auct., auct. non, pro parte,..., wat tot een fout taxon kan leiden, en anderzijds omdat de synonymy in Gbif soms afwijkt van die van Florabank die doorgaans in het Nederlandse taalgebied gehanteerd wordt.
+Het is dus belangrijk om dit na te kijken en indien nodig de ingevoerde naam aan te passen zodat deze wel correct herkend wordt.
+Te verwachten fouten bij vertaling door Gbif zijn dat het laatste woord (naam van soort of subsoort of ...) genegeerd wordt als een auteursnaam ontbreekt (omdat Gbif het beschouwt als auteursnaam), of dat een taxon breder of enger geïnterpreteerd kan worden doordat dezelfde naam door meerdere auteurs is beschreven met een engere of bredere betekenis (e.g. voor en na opsplitsing in meerdere taxa).
+
+Fouten in de taxonlijst in het package mogen altijd gemeld worden via [een issue](https://github.com/inbo/LSVI/issues) (of aan de beheerder van dit package).
+
+## Ingevoerde namen selecteren voor 'berekeningen'
+
+Bij het selecteren van de voor de voorwaarde relevante namen uit de opname op basis van een taxonlijst in de databank (met `selecteerKenmerkenInOpname()`, zie onder [AnalyseVariabele](#AnalyseVariabele)), worden de taxa in de databank gekoppeld met de tabel `Soortenlijst` met de door gebruiker ingevoerde taxa (zie [Herkenning van ingevoerde namen](#herkenning_namen) hierboven).
+Dit gebeurt door de rank en Gbif-key uit de databank te koppelen aan de records van tabel `Soortenlijst` die in de kolom van de desbetreffende rank een overeenkomstige Gbif-key hebben.
+Als meerdere taxa van een lager niveau voorkomen die dezelfde opgegeven rank hebben (bv. meerdere soorten van hetzelfde genus), dan worden deze bedekkingen geaggregeerd door middel van de formule van Fisher (zie onder [bedekking](#bedekking)).
+Daarna gebeurt op de overgebleven taxa de uiteindelijke bewerking als beschreven bij de analysevariabelen (aantallen tellen, bedekkingen aggregeren,...).
+
+Voor enkele analysevariabelen ([`bedekkingLaagPlus`](#bedekkingLaagPlus), [`bedekkingLaagExcl`](#bedekkingLaagExcl) en [`aantalGroepen`](#aantalGroepen)) zijn 2 soortenlijsten nodig voor de berekening.  Dit is opgelost door een lijst te maken (= lijst van taxa met eenzelfde `TaxongroepId`) met 2 sublijsten (= lijst van taxa met eenzelfde `TaxonsubgroepId`).  Bij [`bedekkingLaagPlus`](#bedekkingLaagPlus) en [`bedekkingLaagExcl`](#bedekkingLaagExcl) wordt deze lijst op basis van `TaxonsubgroepId` opgesplitst in 2 afzonderlijke lijsten, die elk in een aparte bewerking of voorbewerking gebruikt worden (zie onder [bedekkingLaagPlus](#bedekkingLaagPlus) en [bedekkingLaagExcl](#bedekkingLaagExcl)).  Bij [`aantalGroepen`](#aantalGroepen) zijn de Id's hernoemd om code van analysevariabele [`aantal`](#aantal) te kunnen herbruiken:
+
+- `TaxonsubgroepId` -> `TaxonId` zodanig dat de originele `TaxongroepId`'s aanzien worden als de items (soorten) die geteld moeten worden (terwijl bedekkingen van taxa binnen eenzelfde `TaxonId` met de formule van Fisher geaggregeerd worden)
 - `TaxongroepId` -> `TaxonsubgroepId` zodanig dat de nieuwe `TaxonId`'s onder 1 taxonsubgroep vallen
 
 Ook bij andere analysevariabelen kan een taxonlijst opgesplitst zijn in sublijsten, meestal als gevolg van het feit dat deze sublijsten bij andere voorwaarden als aparte lijst gebruikt worden.  In deze gevallen is de opsplitsing in sublijsten een louter praktisch gegeven en heeft het geen invloed op de berekening.

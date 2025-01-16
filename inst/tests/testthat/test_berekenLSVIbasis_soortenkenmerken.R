@@ -495,7 +495,7 @@ describe("samenstelling soortengroepen", {
             bind_rows(
               data.frame(
                 ID = c("JR0216", "Ts2036"),
-                Kenmerk = c("Quercus robur", "Quercus"),
+                Kenmerk = c("Quercus robur L.", "Quercus"),
                 TypeKenmerk = "Soort_Latijn",
                 Waarde = c("19", "10"),
                 Type = "Percentage",
@@ -552,7 +552,9 @@ describe("samenstelling soortengroepen", {
             bind_rows(
               data.frame(
                 ID = c("JR0216", "JR0216", "Ts2036"),
-                Kenmerk = c("Quercus robur", "Quercus pedunculata", "Quercus"),
+                Kenmerk =
+                  c("Quercus robur L.", "Quercus pedunculata Ehrh. ex Hoffmann",
+                    "Quercus"),
                 TypeKenmerk = "Soort_Latijn",
                 Waarde = "10",
                 Type = "Percentage",
@@ -562,7 +564,8 @@ describe("samenstelling soortengroepen", {
               )
             )
         )
-      ), "de synoniemen 'Quercus robur' en 'Quercus pedunculata' beschouwd als eenzelfde taxon" #nolint
+      ),
+      "Voor opname JR0216 zijn in de boomlaag 'SPECIES Quercus robur L.' en 'SPECIES Quercus pedunculata Ehrh. ex Hoffmann' op speciesniveau of hoger beschouwd als eenzelfde taxon met aggregatie van de bedekkingen" #nolint: line_length_linter
     )
   })
   it("synoniemen worden maar eenmaal meegeteld bij aantallen", {
@@ -592,7 +595,7 @@ describe("samenstelling soortengroepen", {
             bind_rows(
               data.frame(
                 ID = c("Ts2036"),
-                Kenmerk = c("Festuca tenuifolia"),
+                Kenmerk = c("Festuca tenuifolia Sibth."),
                 TypeKenmerk = "Soort_Latijn",
                 Waarde = c("10"),
                 Type = "Percentage",

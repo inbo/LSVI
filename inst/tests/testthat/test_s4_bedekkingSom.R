@@ -12,18 +12,21 @@ describe("s4_BedekkingSom", {
           Kenmerken =
             data.frame(
               Kenmerk = c("A1", "B2", "C1", "D3", "E1", "Z"),
-              TypeKenmerk = c(rep("soort_nbn", 5), "studiegroep"),
+              TypeKenmerk = c(rep("soort_gbif", 5), "studiegroep"),
               WaardeMin = c(rep(1, 5), 0.5),
               WaardeMax = 1,
               Eenheid = "%",
+              Rank = c(rep("SPECIES", 5), NA),
+              SpeciesKey = c("A1", "B2", "C1", "D3", "E1", NA),
+              Vegetatielaag = c(rep("kruidlaag", 5), NA),
               LijstNaam = "lijst",
               stringsAsFactors = FALSE
             ),
           Soortengroep =
             data.frame(
-              NbnTaxonVersionKey = c("A1", "B1", "C1", "E1"),
+              GbifUsageKey = c("A1", "B1", "C1", "E1"),
               TaxonId = 1:4,
-              SubTaxonId = 1:4,
+              Rank = "SPECIES",
               stringsAsFactors = FALSE
             ),
           Studiegroep =

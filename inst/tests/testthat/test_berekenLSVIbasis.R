@@ -783,7 +783,7 @@ describe("berekenLSVIbasis", {
       ),
       "Niet alle opgegeven getallen en percentages zijn numerieke waarden"
     )
-    expect_warning(
+    expect_error(
       berekenLSVIbasis(
         Versie = "Versie 2.0",
         Kwaliteitsniveau = "1",
@@ -802,7 +802,7 @@ describe("berekenLSVIbasis", {
               )
           )
       ),
-      "Volgende soortnamen zijn niet teruggevonden in de databank"
+      "Latijnse naam/namen Calla vulgaris geeft/geven geen betrouwbaar resultaat bij het opzoeken van de Gbif-key" #nolint: line_length_linter
     )
     expect_equal(
       idsWissen(
@@ -833,7 +833,7 @@ describe("berekenLSVIbasis", {
       ),
       Resultaatv2
     )
-    expect_warning(
+    expect_error(
       berekenLSVIbasis(
         Versie = "Versie 2.0",
         Kwaliteitsniveau = "1",
@@ -852,7 +852,7 @@ describe("berekenLSVIbasis", {
               )
           )
       ),
-      "Volgende soortnamen zijn niet teruggevonden in de databank"
+      "De Nederlandse naam calluna vulgaris wordt door Gbif gekoppeld aan meerdere taxa." #nolint: line_length_linter
     )
     expect_equal(
       idsWissen(
@@ -869,13 +869,13 @@ describe("berekenLSVIbasis", {
               Kenmerk =
                 ifelse(
                   .data$Kenmerk == "Calluna vulgaris",
-                  "NBNSYS0000003902",
+                  "2882482",
                   .data$Kenmerk
                 ),
               TypeKenmerk =
                 ifelse(
-                  .data$Kenmerk == "NBNSYS0000003902",
-                  "soort_nbn",
+                  .data$Kenmerk == "2882482",
+                  "soort_gbif",
                   .data$TypeKenmerk
                 )
             )
@@ -883,7 +883,7 @@ describe("berekenLSVIbasis", {
       ),
       Resultaatv2
     )
-    expect_warning(
+    expect_error(
       berekenLSVIbasis(
         Versie = "Versie 2.0",
         Kwaliteitsniveau = "1",
@@ -894,12 +894,12 @@ describe("berekenLSVIbasis", {
             TypeKenmerk =
               ifelse(
                 .data$Kenmerk == "Calluna vulgaris",
-                "soort_nbn",
+                "soort_gbif",
                 .data$TypeKenmerk
               )
           )
       ),
-      "Volgende NBNTaxonVersionKeys zijn niet teruggevonden in de databank"
+      "Geef bij een Kenmerk met TypeKenmerk soort_gbif enkel cijfers, geen letters of andere tekens" #nolint: line_length_linter
     )
   })
 

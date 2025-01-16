@@ -30,6 +30,8 @@
 #' do ungroup
 #' @importFrom rlang .data
 #' @importFrom stringr str_c
+#' @importFrom tidyr pivot_longer
+#' @importFrom tidyselect ends_with
 #'
 #'
 selecteerKenmerkenInOpname <- #nolint
@@ -49,7 +51,7 @@ selecteerKenmerkenInOpname <- #nolint
 
     if (length(Soortengroep) > 0) {
       Resultaat <- Kenmerken %>%
-        filter(tolower(.data$TypeKenmerk) == "soort_nbn")
+        filter(tolower(.data$TypeKenmerk) == "soort_gbif")
       if (nrow(Resultaat) == 0) {
         warning(
           "geen enkele soort opgegeven"
@@ -57,9 +59,21 @@ selecteerKenmerkenInOpname <- #nolint
         return(NA)
       }
       Resultaat <- Resultaat %>%
+        select(
+          "Kenmerk", "Eenheid",# "ID", "Waarde", "Type", "Invoertype",
+          "Vegetatielaag", "Rank", "WaardeMin", "WaardeMax",
+          ends_with("Key")
+        ) %>%
+        pivot_longer(
+          ends_with("Key"), names_to = "Niveau", values_to = "GbifKey"
+        ) %>%
+        mutate(
+          Niveau = toupper(gsub("Key", "", .data$Niveau))
+        ) %>%
+        filter(!is.na(.data$GbifKey)) %>%
         inner_join(
           Soortengroep,
-          by = c("Kenmerk" = "NbnTaxonVersionKey")
+          by = c("Niveau" = "Rank", "GbifKey" = "GbifUsageKey")
         )
       if (length(Studiegroep) > 0 && nrow(Resultaat) > 0) {
         if (max(is.na(Resultaat$Vegetatielaag))) {
@@ -74,38 +88,13 @@ selecteerKenmerkenInOpname <- #nolint
         }
       }
 
-      #Als het hogere taxonniveau in de opname zit, wordt het lagere gewist
-      kiesTaxonOfSubtaxons <-
-        function(Dataset) {
-          TaxonData <- Dataset %>%
-            filter(.data$TaxonId == .data$SubTaxonId) %>%
-            group_by(
-              .data$TaxonId, .data$Kenmerk, .data$TypeKenmerk, .data$SubTaxonId,
-              .data$Eenheid
-            ) %>%
-            summarise(
-              WaardeMin = 1.0 - prod(1.0 - .data$WaardeMin, na.rm = FALSE),
-              WaardeMax = 1.0 - prod(1.0 - .data$WaardeMax, na.rm = FALSE)
-            )
-          if (nrow(TaxonData) < 1) {
-            Dataset <- Dataset %>%
-              group_by(.data$TaxonId) %>%
-              summarise(
-                Kenmerk = str_c(.data$Kenmerk, collapse = " & "),
-                TypeKenmerk = unique(.data$TypeKenmerk),
-                WaardeMax = 1.0 - prod((1.0 - .data$WaardeMax), na.rm = TRUE),
-                WaardeMin = 1.0 - prod((1.0 - .data$WaardeMin), na.rm = TRUE),
-                SubTaxonId = mean(.data$TaxonId),
-                Eenheid = unique(.data$Eenheid)
-              )
-            return(Dataset)
-          }
-          return(TaxonData)
-        }
-
       Resultaat <- Resultaat %>%
         group_by(.data$TaxonId, .data$Eenheid) %>%
-        do(kiesTaxonOfSubtaxons(.)) %>%
+        summarise(
+          WaardeMin = 1.0 - prod(1.0 - .data$WaardeMin, na.rm = FALSE),
+          WaardeMax = 1.0 - prod(1.0 - .data$WaardeMax, na.rm = FALSE),
+          Kenmerk = str_c(unique(.data$Kenmerk), collapse = " & ")
+        ) %>%
         ungroup()
     }
 

@@ -70,7 +70,7 @@ groeperende variabele voor een opname is die ook bij Data_habitat opgegeven
 is.  Kenmerk bevat een soortnaam of een naam die voorkomt in de lijst
 gegenereerd door geefUniekeWaarden("StudieItem", "Waarde") en TypeKenmerk
 geeft een beschrijving voor dat kenmerk: 'studiegroep', 'soort_Latijn',
-'soort_NL' of 'soort_NBN'.  Waarde is de geobserveerde bedekking en Type het
+'soort_NL' of 'soort_gbif'.  Waarde is de geobserveerde bedekking en Type het
 soort variabele dat voor de bedekking gebruikt is (zie
 geefUniekeWaarden("TypeVariabele", "Naam") voor de mogelijke waarden).
 Ingeval van een categorische variabele moet bij Invoertype de naam van de

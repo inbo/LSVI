@@ -1,5 +1,9 @@
 # LSVI 0.1.4
 
+* hervorming van de afhandeling van soortenlijsten met gebruik van
+GbifUsageKey en Rank in plaats van een volledige taxonomische boom,
+invoer van GbifUsageKey als 'soort_gbif' wordt toegevoegd en
+invoer van soort_NBN wordt afgebouwd
 * verwijdering van argument Taxonlijsttype in `geefSoortenlijst()` en
 `geefInfoHabitatfiche()`
 * toevoeging van functionaliteit om taxa in 1 laag te deselecteren in functie

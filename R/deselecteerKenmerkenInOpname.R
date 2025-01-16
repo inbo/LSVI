@@ -30,8 +30,10 @@
 #'
 #' @export
 #'
-#' @importFrom dplyr %>% filter anti_join left_join mutate distinct
+#' @importFrom dplyr %>% filter anti_join join_by left_join mutate distinct
 #' @importFrom rlang .data
+#' @importFrom stats setNames
+#' @importFrom tools toTitleCase
 #'
 #'
 deselecteerKenmerkenInOpname <-
@@ -51,12 +53,17 @@ deselecteerKenmerkenInOpname <-
 
     if (length(Soortengroep) > 0) {
       Resultaat <- Kenmerken %>%
-        filter(tolower(.data$TypeKenmerk) == "soort_nbn") %>%
-        anti_join(
-          Soortengroep,
-          by = c("Kenmerk" = "NbnTaxonVersionKey")
-        )
-      if (length(Studiegroep) > 0 & nrow(Resultaat) > 0) {
+        filter(tolower(.data$TypeKenmerk) == "soort_gbif")
+      for (Niveau in unique(Soortengroep$Rank)) {
+        Kolomnaam <- paste0(toTitleCase(tolower(Niveau)), "Key")
+        Resultaat <- Resultaat %>%
+          anti_join(
+            Soortengroep %>%
+              filter(.data$Rank == Niveau),
+            by = setNames("GbifUsageKey", Kolomnaam)
+          )
+      }
+      if (length(Studiegroep) > 0 && nrow(Resultaat) > 0) {
         if (max(is.na(Resultaat$Vegetatielaag))) {
           stop(
             "Bij Data_soortenKenmerken is niet voor alle soorten de kolom Vegetatielaag ingevuld, waardoor de berekening niet correct kan worden uitgevoerd (dit omdat de vegetatielaag bepaalt of de betreffende soort al dan niet in rekening gebracht moet worden voor het berekenen van de indicator)"  #nolint
