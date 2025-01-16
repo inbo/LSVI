@@ -6,7 +6,7 @@
 \usage{
 geefSoortenlijstVoorIDs(
   Taxongroeplijst,
-  Taxonlijsttype = c("LSVIfiche", "alle"),
+  Taxonlijsttype = deprecated(),
   ConnectieLSVIhabitats = NULL
 )
 }
@@ -15,10 +15,11 @@ geefSoortenlijstVoorIDs(
 worden, gescheiden door een komma.  Eventueel mag dit ook een vector zijn
 van TaxongroepId's.}
 
-\item{Taxonlijsttype}{"LSVIfiche" betekent dat de taxonlijst van de
-habitatfiche wordt overgenomen, "alle" betekent dat alle soorten en alle
-taxonomische groepen worden weergegeven die volledig in de groepen vallen
-die aan de parameters voldoen.}
+\item{Taxonlijsttype}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+\code{Taxonlijsttype = "alle"} wordt niet meer ondersteund; deze functie zal
+altijd de soortenlijsten weergeven zoals in de habitatfiche (na herziening
+van de soortafhandeling bevat het package geen volledige taxonomische
+lijsten meer en is die functionaliteit ook overbodig geworden)}
 
 \item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor
 de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
@@ -40,12 +41,9 @@ opgegeven TaxongroepId (en in die zin iets minder gebruiksvriendelijk is).
 Voor een selectie van soortenlijsten op basis van specifieke parameters is
 de functie geefSoortenlijst() een beter alternatief.
 
-Deze functie geeft standaard voor de gespecifieerde taxongroepen per groep
+Deze functie geeft voor de gespecifieerde taxongroepen per groep
 een lijst van alle taxa zoals ze in de LSVI-habitatfiche vermeld zijn
-(genusniveau, soortniveau, subsoort,...).  Op basis van de parameter
-soortenlijsttype kan ook gekozen worden om een volledige lijst te geven van
-deze taxa en alle taxa die hieronder vallen (en opgenomen zijn in de
-onderliggende databank).
+(genusniveau, soortniveau, subsoort,...) en ook de rank van de taxa.
 }
 \examples{
 # Omwille van de iets langere lange duurtijd van de commando's staat bij
@@ -55,7 +53,6 @@ onderliggende databank).
 \dontrun{
 maakConnectiePool()
 geefSoortenlijstVoorIDs("434,88,565")
-geefSoortenlijstVoorIDs("434,88,565","alle")
 library(pool)
 poolClose(ConnectiePool)
 }

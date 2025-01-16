@@ -11,7 +11,7 @@ geefSoortenlijst(
   Criterium = "alle",
   Indicator = "alle",
   Taxonlijstniveau = c("habitattype", "criterium", "indicator", "voorwaarde"),
-  Taxonlijsttype = c("LSVIfiche", "alle"),
+  Taxonlijsttype = deprecated(),
   ConnectieLSVIhabitats = NULL
 )
 }
@@ -47,10 +47,11 @@ is (en welke niveaus weergegeven worden in de soortenlijst), de mogelijke
 waarden zijn 'habitattype', 'criterium', 'indicator' en 'voorwaarde'.
 Default is 'habitattype'.}
 
-\item{Taxonlijsttype}{"LSVIfiche" betekent dat de taxonlijst van de
-habitatfiche wordt overgenomen, "alle" betekent dat alle soorten en alle
-taxonomische groepen worden weergegeven die volledig in de groepen vallen
-die aan de parameters voldoen.}
+\item{Taxonlijsttype}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+\code{Taxonlijsttype = "alle"} wordt niet meer ondersteund; deze functie zal
+altijd de soortenlijsten weergeven zoals in de habitatfiche (na herziening
+van de soortafhandeling bevat het package geen volledige taxonomische
+lijsten meer en is die functionaliteit ook overbodig geworden)}
 
 \item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor
 de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
@@ -77,12 +78,6 @@ met alle soorten per habitat(sub)type, ofwel gegroepeerd per criterium,
 indicator of voorwaarde.  Dit kan opgegeven worden in de parameter
 Taxonlijstniveau.
 
-Ook voor de weergave van de taxa zijn 2 opties: de taxa weergeven zoals in
-de habitatfiches (op soortniveau, genusniveau of hoger niveau, zoals het in
-de habitatfiches vermeld is) of alle taxa op lagere niveaus ook weergeven en
-dus bij soortengroepen alle mogelijke soorten van deze groep weergeven.
-Deze opties kunnen opgegeven worden in de parameter Taxonlijsttype.
-
 De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten als string opgegeven worden.  Default is telkens 'alle', waarbij de soortenlijsten voor alle mogelijke waarden van die parameter weergegeven worden (m.a.w. er is geen selectie voor deze parameter).
 }
 \examples{
@@ -92,8 +87,7 @@ De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten
 # uitgetest worden.
 \dontrun{
 maakConnectiePool()
-geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "LSVIfiche")
-geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "alle")
+geefSoortenlijst(Habitattype = "4030")
 library(pool)
 poolClose(ConnectiePool)
 }

@@ -1,5 +1,7 @@
 # LSVI 0.1.4
 
+* verwijdering van argument Taxonlijsttype in `geefSoortenlijst()` en
+`geefInfoHabitatfiche()`
 * toevoeging van functionaliteit om taxa in 1 laag te deselecteren in functie
 deselecteerSoortenKenmerken() (issue #231)
 

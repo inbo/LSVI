@@ -166,7 +166,6 @@ geefInfoHabitatfiche <-
           Criterium = Criterium,
           Indicator = Indicator,
           Taxonlijstniveau = "indicator",
-          Taxonlijsttype = "LSVIfiche",
           ConnectieLSVIhabitats = ConnectieLSVIhabitats
         ) %>%
         filter(!is.na(.data$WetNaamKort) | !is.na(.data$NedNaam)) %>%

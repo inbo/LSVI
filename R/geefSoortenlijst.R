@@ -13,12 +13,6 @@
 #' indicator of voorwaarde.  Dit kan opgegeven worden in de parameter
 #' Taxonlijstniveau.
 #'
-#' Ook voor de weergave van de taxa zijn 2 opties: de taxa weergeven zoals in
-#' de habitatfiches (op soortniveau, genusniveau of hoger niveau, zoals het in
-#' de habitatfiches vermeld is) of alle taxa op lagere niveaus ook weergeven en
-#' dus bij soortengroepen alle mogelijke soorten van deze groep weergeven.
-#' Deze opties kunnen opgegeven worden in de parameter Taxonlijsttype.
-#'
 #' @template Zoekparameters
 #'
 #' @inheritParams selecteerIndicatoren
@@ -26,10 +20,11 @@
 #' is (en welke niveaus weergegeven worden in de soortenlijst), de mogelijke
 #' waarden zijn 'habitattype', 'criterium', 'indicator' en 'voorwaarde'.
 #' Default is 'habitattype'.
-#' @param Taxonlijsttype "LSVIfiche" betekent dat de taxonlijst van de
-#' habitatfiche wordt overgenomen, "alle" betekent dat alle soorten en alle
-#' taxonomische groepen worden weergegeven die volledig in de groepen vallen
-#' die aan de parameters voldoen.
+#' @param Taxonlijsttype `r lifecycle::badge("deprecated")`
+#' `Taxonlijsttype = "alle"` wordt niet meer ondersteund; deze functie zal
+#' altijd de soortenlijsten weergeven zoals in de habitatfiche (na herziening
+#' van de soortafhandeling bevat het package geen volledige taxonomische
+#' lijsten meer en is die functionaliteit ook overbodig geworden)
 #'
 #' @return Deze functie geeft een tabel met velden Versie, Habitattype,
 #' Habitatsubtype, Criterium, Indicator, evt. Beschrijving, WetNaam,
@@ -45,8 +40,7 @@
 #' # uitgetest worden.
 #' \dontrun{
 #' maakConnectiePool()
-#' geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "LSVIfiche")
-#' geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "alle")
+#' geefSoortenlijst(Habitattype = "4030")
 #' library(pool)
 #' poolClose(ConnectiePool)
 #' }
@@ -56,6 +50,7 @@
 #' @importFrom dplyr %>% select distinct filter group_by summarise ungroup
 #' mutate left_join rename
 #' @importFrom rlang .data
+#' @importFrom lifecycle deprecated is_present
 #'
 #'
 geefSoortenlijst <-
@@ -66,8 +61,22 @@ geefSoortenlijst <-
            Indicator = "alle",
            Taxonlijstniveau =
              c("habitattype", "criterium", "indicator", "voorwaarde"),
-           Taxonlijsttype = c("LSVIfiche", "alle"),
+           Taxonlijsttype = deprecated(),
            ConnectieLSVIhabitats = NULL) {
+    
+    if (is_present(Taxonlijsttype)) {
+      extra_tekst <- ""
+      if (Taxonlijsttype == "alle") {
+        extra_tekst <-
+          " Het is niet meer mogelijk om alle taxa weer te geven die vallen onder de lijsten van de habitatfiches omdat deze info niet meer aanwezig is in het package. De uitvoer bevat enkel de soorten van de LSVI-fiche, geen onderliggende soorten."
+      }
+      warning(
+        sprintf(
+          "Argument Taxonlijsttype van functie geefSoortenlijst() wordt niet meer ondersteund.%s", #nolint: line_length_linter
+          extra_tekst
+        )
+      )
+    }
 
     if (is.null(ConnectieLSVIhabitats)) {
       if (exists("ConnectiePool")) {
@@ -80,7 +89,6 @@ geefSoortenlijst <-
       msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
     )
     match.arg(Taxonlijstniveau)
-    match.arg(Taxonlijsttype)
 
     if (Taxonlijstniveau[1] != "voorwaarde") {
       Selectiegegevens <-
@@ -133,7 +141,7 @@ geefSoortenlijst <-
       Soortenlijst <-
         geefSoortenlijstVoorIDs(
           Taxongroeplijst = SoortengroepIDs$SoortengroepIDs,
-          Taxonlijsttype = Taxonlijsttype,
+          Taxonlijsttype = deprecated(),
           ConnectieLSVIhabitats
         )
 

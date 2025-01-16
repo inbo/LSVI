@@ -77,7 +77,6 @@ analyseVariabele_c <- #nolint
       Soortengroep <-
         geefSoortenlijstVoorIDs(
           Taxongroeplijst = as.character(VoorwaardeInfo$TaxongroepId),
-          Taxonlijsttype = "alle",
           ConnectieLSVIhabitats = ConnectieLSVIhabitats
         ) %>%
         mutate(

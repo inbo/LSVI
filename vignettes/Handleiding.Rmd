@@ -123,14 +123,14 @@ We illustreren dit a.d.h.v de functie `geefSoortenlijst()`.  Als we deze functie
 ```{r}
 library(LSVI)
 maakConnectiePool()
-geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "LSVIfiche")
+geefSoortenlijst(Habitattype = "4030")
 ```
 
 Omdat de tabel te breed is, wordt deze opgesplitst in 3 delen, die onder elkaar weergegeven worden.  Deze tabel wordt ook enkel weergegeven, niet opgeslagen, en op deze manier kunnen we er achteraf geen bewerkingen mee doen.  Beter is om de tabel toe te kennen aan een variabele, we geven hier die variabele de naam `soortenlijst4030`:
 
 ```{r}
 soortenlijst4030 <-
-  geefSoortenlijst(Habitattype = "4030", Taxonlijsttype = "LSVIfiche")
+  geefSoortenlijst(Habitattype = "4030")
 ```
 
 Als je dit commando in je eigen console runt, verschijnt deze variabele in het venster rechtsboven onder de tab Environment (dat een overzicht geeft van alle variabelen).  Bij tabellen kan je deze variabele bekijken door erop te klikken.
