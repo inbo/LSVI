@@ -348,4 +348,3 @@ setReplaceMethod(
     return(object)
   }
 )
-
