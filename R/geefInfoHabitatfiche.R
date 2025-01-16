@@ -142,7 +142,7 @@ geefInfoHabitatfiche <-
         query_beoordelingsfiche
       )
 
-    paste2 <- function(..., sep=", ") {
+    paste2 <- function(..., sep = ", ") {
       L <- list(...)
       L <-
         lapply(
