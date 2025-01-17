@@ -15,6 +15,8 @@
 
 preparseTaxonnaam <- function(Taxonnaam) {
 
+  .Deprecated()
+
   Taxonnaam <- gsub("v\\.d\\.", "v. d.", Taxonnaam)
   Taxonnaam <- gsub("((\\s|\\()v)\\.", "\\1an", Taxonnaam)
   Taxonnaam <- gsub(" auct\\. non ", " ", Taxonnaam)

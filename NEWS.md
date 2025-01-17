@@ -3,7 +3,7 @@
 * hervorming van de afhandeling van soortenlijsten met gebruik van
 GbifUsageKey en Rank in plaats van een volledige taxonomische boom,
 invoer van GbifUsageKey als 'soort_gbif' wordt toegevoegd en
-invoer van soort_NBN wordt afgebouwd
+invoer van soort_NBN wordt afgebouwd, alsook functie `parseTaxonnaam()`
 * extra output 'Soortenlijst' in functie `berekenLSVIbasis()` laat toe om te
 controleren hoe de functie de ingevoerde soorten interpreteert
 * verwijdering van argument Taxonlijsttype in `geefSoortenlijst()` en

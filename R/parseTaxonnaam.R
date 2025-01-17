@@ -22,11 +22,14 @@
 #' parseTaxonnaam("Rosa canina L.")
 #'
 #' @export
+#' @noRd
 #'
 #' @importFrom rgbif name_parse
 #'
 
 parseTaxonnaam <- function(Taxonnaam, ParseType = "canonicalnamewithmarker") {
+
+  .Deprecated("rgbif::name_parse")
 
   if (length(Taxonnaam) == 0) {
     return(as.character("geen soort opgegeven (lege vector)"))

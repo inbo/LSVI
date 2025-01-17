@@ -20,6 +20,8 @@
 postparseTaxonnaam <-
   function(ResultaatParser, ParseType) {
 
+  .Deprecated()
+
   if ("sensu" %in% colnames(ResultaatParser)) {
     ResultaatParser[, c(ParseType)] <-
       trimws(
