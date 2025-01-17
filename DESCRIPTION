@@ -32,6 +32,7 @@ Imports:
     methods,
     odbc,
     pool,
+    readr,
     rgbif,
     rlang,
     rmarkdown,
@@ -43,7 +44,6 @@ Imports:
     utils
 Suggests:
     knitr,
-    readr,
     testthat,
     xtable
 Roxygen: list(markdown = TRUE)

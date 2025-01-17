@@ -3,6 +3,7 @@ context("test databank")
 library(DBI)
 library(dplyr)
 library(stringr)
+library(readr)
 
 describe("test databank", {
   it("Lijstitems hebben een ondergrens en bovengrens", {
@@ -1009,5 +1010,344 @@ describe("test databank", {
         !(Maximumwaarde == 3 * as.numeric(sub(",", ".", Referentiewaarde)))
       )
     expect_equal(nrow(TMmeting), 0)
+  })
+})
+
+describe("test tabel Taxonlijst", {
+  Taxonlijst <-
+    suppressMessages(
+      read_csv2(
+        system.file("databank/TaxonTabel.csv", package = "LSVI"),
+        show_col_types = FALSE
+      )
+    )
+  it("TaxonNameExact is niet uniek", {
+    expect_equal(
+      Taxonlijst %>%
+        count(TaxonNameExact) %>%
+        filter(n > 1) %>%
+        nrow(),
+      0
+    )
+  })
+  it("TaxonNameExact bevat dubieuze naamgeving", {
+    expect_equal(
+      Taxonlijst %>%
+        filter(
+          grepl("nom. rejec.", TaxonNameExact)
+        ) %>%
+        nrow(),
+      0
+    )
+    expect_equal(
+      Taxonlijst %>%
+        filter(
+          grepl(" cf. ", TaxonNameExact)
+        ) %>%
+        nrow(),
+      0
+    )
+    expect_equal(
+      Taxonlijst %>%
+        filter(
+          grepl(" auct. ", TaxonNameExact)
+        ) %>%
+        nrow(),
+      0
+    )
+    expect_equal(
+      Taxonlijst %>%
+        filter(
+          grepl(" non ", TaxonNameExact)
+        ) %>%
+        nrow(),
+      0
+    )
+    expect_equal(
+      Taxonlijst %>%
+        filter(
+          grepl("  ", TaxonNameExact)
+        ) %>%
+        nrow(),
+      0
+    )
+    expect_equal(
+      Taxonlijst %>%
+        filter(
+          grepl(" \\+ ", TaxonNameExact) & .data$Rank != "SPECIESGROUP"
+        ) %>%
+        nrow(),
+      0
+    )
+    expect_equal(
+      Taxonlijst %>%
+        filter(
+          grepl(" gro[eu]p", TaxonNameExact) & Rank != "SPECIESGROUP"
+        ) %>%
+        nrow(),
+      0
+    )
+    expect_equal(
+      Taxonlijst %>%
+        filter(
+          str_count(TaxonNameExact, " ") == 0,
+          !Rank %in% c("PHYLUM", "CLASS", "ORDER", "FAMILY")
+        ) %>%
+        nrow(),
+      0
+    )
+    expect_equal(
+      Taxonlijst %>%
+        filter(
+          str_count(TaxonNameExact, " ") != 0,
+          str_count(TaxonNameExact, " ") != str_count(TaxonNameExact, " \\("),
+          Rank %in% c("PHYLUM", "CLASS", "ORDER", "FAMILY")
+        ) %>%
+        nrow(),
+      0
+    )
+    expect_equal(
+      Taxonlijst %>%
+        filter(
+          str_count(TaxonNameExact, " ") == 1,
+          Rank != "GENUS"
+        ) %>%
+        nrow(),
+      0
+    )
+    trimTaxonName <- function(x) {
+      x <- gsub(" non ", " non", x)
+      x <- gsub(" [Vv]an ", " van", x)
+      x <- gsub("Haller f.", "Hallerf.", x)
+      x <- gsub("Dalla Torre", "DallaTorre", x)
+      x <- gsub("Zhao Xin", "ZhaoXin", x)
+      x <- gsub("'t Hart", "'tHart", x)
+      x <- gsub(" & ", "", x)
+      x <- gsub(", ", "", x)
+      x <- gsub(" ex ", "", x)
+      x <- gsub(" et ", "", x)
+      x <- gsub("[DdL][euo]n? ", "", x)
+      x <- gsub("\\) ", "", x)
+      x <- gsub("( subg\\. )", "\\1 ", x)
+      x <- gsub("( subsp\\. )", "\\1 ", x)
+      x <- gsub("( var\\. )", "\\1 ", x)
+      x <- gsub("( f\\. )", "\\1 ", x)
+      x <- gsub("(sect\\. )", "\\1 ", x)
+      x <- gsub("\\. ", "", x)
+      return(x)
+    }
+    expect_equal(
+      Taxonlijst %>%
+        mutate(
+          TaxonNameTrimmed = trimTaxonName(TaxonNameExact)
+        ) %>%
+        filter(
+          str_count(TaxonNameTrimmed, " ") > 1,
+          Rank == "GENUS"
+        ) %>%
+        nrow(),
+      0
+    )
+    expect_equal(
+      Taxonlijst %>%
+        mutate(
+          TaxonNameTrimmed = trimTaxonName(TaxonNameExact)
+        ) %>%
+        filter(
+          str_count(TaxonNameTrimmed, " ") == 2,
+          !Rank %in% c("SPECIES", "SUBGENUS")
+        ) %>%
+        nrow(),
+      0
+    )
+    expect_equal(
+      Taxonlijst %>%
+        mutate(
+          TaxonNameTrimmed = trimTaxonName(TaxonNameExact)
+        ) %>%
+        filter(
+          str_count(TaxonNameTrimmed, " ") > 2,
+          Rank == "SPECIES"
+        ) %>%
+        nrow(),
+      0
+    )
+    expect_equal(
+      Taxonlijst %>%
+        mutate(
+          TaxonNameTrimmed = trimTaxonName(TaxonNameExact)
+        ) %>%
+        filter(
+          str_count(TaxonNameTrimmed, " ") == 4,
+          !Rank %in% c("SUBSPECIES", "VARIETY", "FORM")
+        ) %>%
+        nrow(),
+      0
+    )
+    expect_equal(
+      Taxonlijst %>%
+        mutate(
+          TaxonNameTrimmed = trimTaxonName(TaxonNameExact)
+        ) %>%
+        filter(
+          str_count(TaxonNameTrimmed, " ") != 4,
+          Rank %in% c("SUBSPECIES", "VARIETY", "FORM")
+        ) %>%
+        nrow(),
+      0
+    )
+  })
+  it("NLNameExact is niet uniek", {
+    expect_equal(
+      Taxonlijst %>%
+        count(NLNameExact) %>%
+        filter(!is.na(NLNameExact), n > 1) %>%
+        nrow(),
+      0
+    )
+  })
+  it("NbnTaxonVersionKey is niet uniek", {
+    expect_equal(
+      Taxonlijst %>%
+        count(NbnTaxonVersionKey) %>%
+        filter(!is.na(NbnTaxonVersionKey), n > 1) %>%
+        nrow(),
+      0
+    )
+  })
+  it("Rank is niet overeenkomstig met de data", {
+    expect_equal(
+      Taxonlijst %>%
+        filter(
+          !is.na(Species),
+          !Rank %in% c("SPECIES", "SUBSPECIES", "VARIETY", "FORM")) %>%
+        nrow(),
+      0
+    )
+    expect_equal(
+      Taxonlijst %>%
+        filter(
+          is.na(Species),
+          Rank %in% c("SPECIES", "SUBSPECIES", "VARIETY", "FORM")
+        ) %>%
+        nrow(),
+      0
+    )
+    expect_equal(
+      Taxonlijst %>%
+        filter(grepl("subsp\\.", TaxonNameExact), Rank != "SUBSPECIES") %>%
+        nrow(),
+      0
+    )
+    expect_equal(
+      Taxonlijst %>%
+        filter(grepl("var\\.", TaxonNameExact), Rank != "VARIETY") %>%
+        nrow(),
+      0
+    )
+    expect_equal(
+      Taxonlijst %>%
+        filter(grepl(" f\\. ", TaxonNameExact), Rank != "FORM") %>%
+        nrow(),
+      0
+    )
+    expect_equal(
+      Taxonlijst %>%
+        filter(
+          Rank %in%
+            c("PHYLUM", "CLASS", "ORDER", "FAMILY", "GENUS", "SUBGENUS"),
+          !is.na(Species)
+        ) %>%
+        nrow(),
+      0
+    )
+    expect_equal(
+      Taxonlijst %>%
+        filter(
+          !Rank %in%
+            c("PHYLUM", "CLASS", "ORDER", "FAMILY", "GENUS", "SUBGENUS"),
+          is.na(Species)
+        ) %>%
+        nrow(),
+      0
+    )
+    expect_equal(
+      Taxonlijst %>%
+        filter(
+          Rank %in% c("PHYLUM", "CLASS", "ORDER", "FAMILY"),
+          !is.na(Genus)
+        ) %>%
+        nrow(),
+      0
+    )
+    expect_equal(
+      Taxonlijst %>%
+        filter(
+          !Rank %in% c("PHYLUM", "CLASS", "ORDER", "FAMILY"),
+          is.na(Genus)
+        ) %>%
+        nrow(),
+      0
+    )
+    expect_equal(
+      Taxonlijst %>%
+        filter(
+          Rank %in% c("PHYLUM", "CLASS", "ORDER"),
+          !is.na(Family)
+        ) %>%
+        nrow(),
+      0
+    )
+    expect_equal(
+      Taxonlijst %>%
+        filter(
+          !Rank %in% c("PHYLUM", "CLASS", "ORDER"),
+          is.na(Family)
+        ) %>%
+        nrow(),
+      0
+    )
+    expect_equal(
+      Taxonlijst %>%
+        filter(
+          Rank %in% c("PHYLUM", "CLASS"),
+          !is.na(Order)
+        ) %>%
+        nrow(),
+      0
+    )
+    expect_equal(
+      Taxonlijst %>%
+        filter(
+          !Rank %in% c("PHYLUM", "CLASS"),
+          is.na(Order)
+        ) %>%
+        nrow(),
+      0
+    )
+  })
+  it("Speciesnaam is niet overeenkomstig in Gbif en TaxonNameExact", {
+    expect_equal(
+      Taxonlijst %>%
+        filter(
+          Rank %in% c("SPECIES", "SUBSPECIES", "VARIETY", "FORM"),
+          grepl("^([^ ]+ [^ ]+)( .*)?", Species) !=
+            grepl("^([^ ]+ [^ ]+)( .*)?", TaxonNameExact)
+        ) %>%
+        nrow(),
+      0
+    )
+  })
+  it("Genusnaam is niet overeenkomstig in Gbif en TaxonNameExact", {
+    expect_equal(
+      Taxonlijst %>%
+        filter(
+          Rank %in% c("GENUS", "SPECIES", "SUBSPECIES", "VARIETY", "FORM"),
+          grepl("^([^ ]+)( .*)?", Genus) !=
+            grepl("^([^ ]+)( .*)?", TaxonNameExact)
+        ) %>%
+        nrow(),
+      0
+    )
   })
 })
