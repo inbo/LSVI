@@ -61,7 +61,7 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
       msg = "Data_soortenKenmerken$TypeKenmerk moet een van de volgende waarden zijn: studiegroep, soort_gbif, soort_latijn, soort_nl" #nolint: line_length_linter
     )
     if (any(Data_soortenKenmerken$TypeKenmerk == "soort_nbn")) {
-      warning("Het gebruik van de NbnTaxonVersionKey (en TypeKenmerk 'soort_nbn') in Data_soortenKenmerken wordt afgebouwd (is deprecated) en zal in de volgende versie van het package LSVI niet meer mogelijk zijn.")
+      warning("Het gebruik van de NbnTaxonVersionKey (en TypeKenmerk 'soort_nbn') in Data_soortenKenmerken wordt afgebouwd (is deprecated) en zal in de volgende versie van het package LSVI niet meer mogelijk zijn.") #nolint: line_length_linter
     }
     assert_that(has_name(Data_soortenKenmerken, "Waarde"))
     if (!is.character(Data_soortenKenmerken$Waarde)) {

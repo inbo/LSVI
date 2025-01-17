@@ -66,12 +66,12 @@ geefSoortenlijst <-
              c("habitattype", "criterium", "indicator", "voorwaarde"),
            Taxonlijsttype = deprecated(),
            ConnectieLSVIhabitats = NULL) {
-    
+
     if (is_present(Taxonlijsttype)) {
       extra_tekst <- ""
       if (Taxonlijsttype == "alle") {
         extra_tekst <-
-          " Het is niet meer mogelijk om alle taxa weer te geven die vallen onder de lijsten van de habitatfiches omdat deze info niet meer aanwezig is in het package. De uitvoer bevat enkel de soorten van de LSVI-fiche, geen onderliggende soorten."
+          " Het is niet meer mogelijk om alle taxa weer te geven die vallen onder de lijsten van de habitatfiches omdat deze info niet meer aanwezig is in het package. De uitvoer bevat enkel de soorten van de LSVI-fiche, geen onderliggende soorten." #nolint: line_length_linter
       }
       warning(
         sprintf(
