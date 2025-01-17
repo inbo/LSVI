@@ -5,12 +5,12 @@ library(dplyr)
 library(rlang)
 
 maakConnectiePool()
-Data_habitat <- #nolint
+Data_habitat <- #nolint: object_name_linter
     read_csv2(
       system.file("vbdata/Test9190habitat.csv", package = "LSVI"),
       col_types = list(col_character(), col_character())
     )
-Data_voorwaarden <- #nolint
+Data_voorwaarden <- #nolint: object_name_linter
   read_csv2(
     system.file("vbdata/Test9190voorwaarden.csv", package = "LSVI"),
     col_types =
@@ -19,7 +19,7 @@ Data_voorwaarden <- #nolint
         col_character(), col_character(), col_character(), col_character()
       )
   )
-Data_soortenKenmerken <- #nolint
+Data_soortenKenmerken <- #nolint: object_name_linter
   read_csv2(
     system.file("vbdata/Test9190soortenKenmerken.csv", package = "LSVI"),
     col_types =
@@ -30,7 +30,7 @@ Data_soortenKenmerken <- #nolint
 
 describe("Data_voorwaarden", {
   it("dubbele invoer geeft een error", {
-    Data_voorwaardenDubbel <- Data_voorwaarden %>% #nolint
+    Data_voorwaardenDubbel <- Data_voorwaarden %>% #nolint: object_name_linter
       bind_rows(
         data.frame(
           ID = "1", Criterium = "Structuur",
@@ -48,7 +48,7 @@ describe("Data_voorwaarden", {
       ),
       " 1 is de voorwaarde 'msa' meermaals opgegeven"
     )
-    Data_voorwaardenDubbel <- Data_voorwaarden %>% #nolint
+    Data_voorwaardenDubbel <- Data_voorwaarden %>% #nolint: object_name_linter
       bind_rows(
         data.frame(
           ID = "1", Criterium = "Structuur",
@@ -71,7 +71,7 @@ describe("Data_voorwaarden", {
 
 describe("Data_soortenKenmerken", {
   it("dubbele invoer geeft een error", {
-    Data_soortenKenmerkenDubbel <- Data_soortenKenmerken %>% #nolint
+    Data_soortenKenmerkenDubbel <- Data_soortenKenmerken %>% #nolint: object_name_linter, line_length_linter
       bind_rows(
         data.frame(
           ID = "1", Kenmerk = "Gewone vlier",
@@ -87,9 +87,9 @@ describe("Data_soortenKenmerken", {
         Data_voorwaarden,
         Data_soortenKenmerkenDubbel
       ),
-      "'gewone vlier' meermaals opgegeven voor de boomlaag" #nolint
+      "'gewone vlier' meermaals opgegeven voor de boomlaag"
     )
-    Data_soortenKenmerkenDubbel <- Data_soortenKenmerken %>% #nolint
+    Data_soortenKenmerkenDubbel <- Data_soortenKenmerken %>% #nolint: object_name_linter, line_length_linter
       bind_rows(
         data.frame(
           ID = "1", Kenmerk = "Sambucus nigra",
@@ -105,11 +105,11 @@ describe("Data_soortenKenmerken", {
         Data_voorwaarden,
         Data_soortenKenmerkenDubbel
       ),
-      "Voor opname 1 zijn in de boomlaag meerdere namen / keys gebruikt voor de soort 'gewone vlier' / 'Sambucus nigra'" #nolint
+      "Voor opname 1 zijn in de boomlaag meerdere namen / keys gebruikt voor de soort 'gewone vlier' / 'Sambucus nigra'" #nolint: line_length_linter
     )
   })
   it("invoer van hoger niveau geeft een warning", {
-    Data_soortenKenmerkenDubbel <- Data_soortenKenmerken %>% #nolint
+    Data_soortenKenmerkenDubbel <- Data_soortenKenmerken %>% #nolint: object_name_linter, line_length_linter
       bind_rows(
         data.frame(
           ID = "1", Kenmerk = "Sambucus L.",
@@ -125,9 +125,9 @@ describe("Data_soortenKenmerken", {
         Data_voorwaarden,
         Data_soortenKenmerkenDubbel
       ),
-      "Voor opname 1 zijn in de boomlaag 'SPECIES gewone vlier' en 'GENUS Sambucus L.' op genusniveau of hoger beschouwd als eenzelfde taxon met aggregatie van de bedekkingen" #nolint
+      "Voor opname 1 zijn in de boomlaag 'SPECIES gewone vlier' en 'GENUS Sambucus L.' op genusniveau of hoger beschouwd als eenzelfde taxon met aggregatie van de bedekkingen" #nolint: line_length_linter
     )
-    Data_soortenKenmerkenDubbel <- Data_soortenKenmerken %>% #nolint
+    Data_soortenKenmerkenDubbel <- Data_soortenKenmerken %>% #nolint: object_name_linter, line_length_linter
       bind_rows(
         data.frame(
           ID = "1", Kenmerk = "Sambucus nigra var. laciniata L.",
@@ -143,7 +143,7 @@ describe("Data_soortenKenmerken", {
         Data_voorwaarden,
         Data_soortenKenmerkenDubbel
       ),
-      "Voor opname 1 zijn in de boomlaag 'SPECIES gewone vlier' en 'VARIETY Sambucus nigra var. laciniata L.' op speciesniveau of hoger beschouwd als eenzelfde taxon met aggregatie van de bedekkingen" #nolint
+      "Voor opname 1 zijn in de boomlaag 'SPECIES gewone vlier' en 'VARIETY Sambucus nigra var. laciniata L.' op speciesniveau of hoger beschouwd als eenzelfde taxon met aggregatie van de bedekkingen" #nolint: line_length_linter
     )
   })
 })

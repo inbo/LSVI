@@ -5,21 +5,21 @@ library(dplyr)
 library(rlang)
 
 maakConnectiePool()
-Data_habitat <- #nolint
+Data_habitat <- #nolint: object_name_linter
     read_csv2(
       system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
       col_types = list(col_character(), col_character(), col_character())
     )
-attr(Data_habitat, "spec") <- NULL #nolint
-Data_voorwaarden2 <- #nolint
+attr(Data_habitat, "spec") <- NULL #nolint: object_name_linter
+Data_voorwaarden2 <- #nolint: object_name_linter
   read_csv2(
     system.file("vbdata/Opname4030voorwaardenv2.csv", package = "LSVI")
   )
-Data_voorwaarden <- #nolint
+Data_voorwaarden <- #nolint: object_name_linter
   read_csv2(
     system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI")
   )
-Data_soortenKenmerken <- #nolint
+Data_soortenKenmerken <- #nolint: object_name_linter
     read_csv2(
       system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI")
     )
@@ -135,7 +135,7 @@ describe("berekenLSVIbasis", {
           ),
         Data_soortenKenmerken
       ),
-      "'streefwaarde' ingevoerd in Kwaliteitsniveau komen niet voor in de databank. Voer hier een van volgende waarden in:" #nolint
+      "'streefwaarde' ingevoerd in Kwaliteitsniveau komen niet voor in de databank. Voer hier een van volgende waarden in:" #nolint: line_length_linter
     )
   })
 
@@ -236,7 +236,7 @@ describe("berekenLSVIbasis", {
           ),
         Data_soortenKenmerken
     ),
-      "Niet alle opgegeven getallen en percentages zijn numerieke waarden" #nolint
+      "Niet alle opgegeven getallen en percentages zijn numerieke waarden"
     )
     expect_error(
       berekenLSVIbasis(
@@ -360,7 +360,7 @@ describe("berekenLSVIbasis", {
           ),
         Data_soortenKenmerken
       ),
-      "Niet voor elke opgegeven categorische variabele is er een numerieke waarde opgenomen in de databank"   #nolint
+      "Niet voor elke opgegeven categorische variabele is er een numerieke waarde opgenomen in de databank"   #nolint: line_length_linter
     )
     expect_warning(
       berekenLSVIbasis(
@@ -374,7 +374,7 @@ describe("berekenLSVIbasis", {
           ),
         Data_soortenKenmerken
       ),
-      "Niet voor elke opgegeven categorische variabele is er een numerieke waarde opgenomen in de databank"   #nolint
+      "Niet voor elke opgegeven categorische variabele is er een numerieke waarde opgenomen in de databank"   #nolint: line_length_linter
     )
     expect_equal(
       idsWissen(
@@ -498,12 +498,12 @@ describe("berekenLSVIbasis", {
           ),
         Data_soortenKenmerken
       ),
-      "Volgende records uit Data_voorwaarden kunnen niet gekoppeld worden aan indicatoren uit de databank omdat de criterium-indicator-voorwaarde-combinatie niet voorkomt bij de LSVI-regels van het opgegeven habitattype:" #nolint
+      "Volgende records uit Data_voorwaarden kunnen niet gekoppeld worden aan indicatoren uit de databank omdat de criterium-indicator-voorwaarde-combinatie niet voorkomt bij de LSVI-regels van het opgegeven habitattype:" #nolint: line_length_linter
     )
   })
 
   it("functie werkt zonder opgave Data_voorwaarden", {
-    Data_soortenKenmerken2 <- #nolint
+    Data_soortenKenmerken2 <- #nolint: object_name_linter
       read_csv2(
         system.file(
           "vbdata/Opname4030soortenKenmerkenv2tot.csv",
@@ -745,7 +745,7 @@ describe("berekenLSVIbasis", {
               )
           )
       ),
-      "Niet voor elke opgegeven categorische variabele is er een numerieke waarde opgenomen in de databank"  #nolint
+      "Niet voor elke opgegeven categorische variabele is er een numerieke waarde opgenomen in de databank"  #nolint: line_length_linter
     )
     expect_warning(
       berekenLSVIbasis(
@@ -763,7 +763,7 @@ describe("berekenLSVIbasis", {
               )
           )
       ),
-      "Niet voor elke opgegeven categorische variabele is er een numerieke waarde opgenomen in de databank" #nolint
+      "Niet voor elke opgegeven categorische variabele is er een numerieke waarde opgenomen in de databank" #nolint: line_length_linter
     )
     expect_error(
       berekenLSVIbasis(
@@ -981,7 +981,7 @@ describe("berekenLSVIbasis", {
               )
             )
       ),
-      "is enkel aan- of afwezigheid opgegeven, geen bedekking. Hierdoor kon het aantal soorten dat aan een welbepaalde voorwaarde voldoet"  #nolint
+      "is enkel aan- of afwezigheid opgegeven, geen bedekking. Hierdoor kon het aantal soorten dat aan een welbepaalde voorwaarde voldoet"  #nolint: line_length_linter
     )
     stopifnot(
       all.equal(

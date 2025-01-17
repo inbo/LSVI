@@ -26,7 +26,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
   assert_that(
     inherits(ConnectieLSVIhabitats, "DBIConnection") |
       inherits(ConnectieLSVIhabitats, "Pool"),
-    msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
+    msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint: line_length_linter
   )
   OndergrensOntbreekt <-
     dbGetQuery(
@@ -181,7 +181,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
         ) %>%
         mutate(
           Probleem =
-            "Referentiewaarde moet geheel getal zijn (of TypeVariabele aanpassen)" #nolint
+            "Referentiewaarde moet geheel getal zijn (of TypeVariabele aanpassen)" #nolint: line_length_linter
         )
     ) %>%
     bind_rows(
@@ -224,7 +224,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
         ) %>%
         mutate(
           Probleem =
-            "Aan een categorische variabele moet een lijst (schaal) gekoppeld zijn." #nolint
+            "Aan een categorische variabele moet een lijst (schaal) gekoppeld zijn." #nolint: line_length_linter
         )
     ) %>%
     bind_rows(
@@ -255,7 +255,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
         ) %>%
         mutate(
           Probleem =
-            "Er moet een soortengroep en studiegroep opgegeven worden (of de AnalyseVariabele aangepast)" #nolint
+            "Er moet een soortengroep en studiegroep opgegeven worden (of de AnalyseVariabele aangepast)" #nolint: line_length_linter
         )
     ) %>%
     bind_rows(
@@ -269,7 +269,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
         ) %>%
         mutate(
           Probleem =
-            "Er moeten 2 soortengroepen opgegeven worden (of de AnalyseVariabele aangepast)" #nolint
+            "Er moeten 2 soortengroepen opgegeven worden (of de AnalyseVariabele aangepast)" #nolint: line_length_linter
         )
     ) %>%
     bind_rows(
@@ -294,7 +294,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
         ) %>%
         mutate(
           Probleem =
-            "Voor deze AnalyseVariabele mag geen subanalysevariabele opgegeven worden" #nolint
+            "Voor deze AnalyseVariabele mag geen subanalysevariabele opgegeven worden" #nolint: line_length_linter
         )
     ) %>%
     bind_rows(
@@ -305,7 +305,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
         ) %>%
         mutate(
           Probleem =
-            "De SubAnalyseVariabele moet ingevuld zijn als er een SubReferentiewaarde opgegeven is: kies je voorwaarde zodanig dat deze niet overlapt met een voorwaarde die gebruikt wordt zonder SubAnalyseVariabele en geef nieuwe voorwaarden door aan BMK" #nolint
+            "De SubAnalyseVariabele moet ingevuld zijn als er een SubReferentiewaarde opgegeven is: kies je voorwaarde zodanig dat deze niet overlapt met een voorwaarde die gebruikt wordt zonder SubAnalyseVariabele en geef nieuwe voorwaarden door aan BMK" #nolint: line_length_linter
         )
     ) %>%
     bind_rows(
@@ -316,7 +316,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
         ) %>%
         mutate(
           Probleem =
-            "De Operator '=' mag niet gebruikt worden, tenzij TypeVariabele 'Ja/nee' is" #nolint
+            "De Operator '=' mag niet gebruikt worden, tenzij TypeVariabele 'Ja/nee' is" #nolint: line_length_linter
         )
     ) %>%
     bind_rows(
@@ -333,7 +333,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
         select(-"Formuletest") %>%
         mutate(
           Probleem =
-            "De formule voor Combinatie is geen combinatie van AND, OR en voorwaardeID's" #nolint
+            "De formule voor Combinatie is geen combinatie van AND, OR en voorwaardeID's" #nolint: line_length_linter
         )
     )
 
@@ -344,7 +344,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
           .data$Probleem ==
             "AnalyseVariabele waarvoor geen code ontwikkeld is" &
             is.na(.data$VoorwaardeID) & .data$Kwaliteitsniveau == 2,
-          "rekenregel van Voorwaarde ontbreekt, beschrijving van ook verwijderen als het de bedoeling is om voorwaarde te verwijderen", #nolint
+          "rekenregel van Voorwaarde ontbreekt, beschrijving van ook verwijderen als het de bedoeling is om voorwaarde te verwijderen", #nolint: line_length_linter
           .data$Probleem
         )
     )

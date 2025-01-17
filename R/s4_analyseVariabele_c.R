@@ -17,7 +17,7 @@
 #'
 #'@noRd
 
-analyseVariabele_c <- #nolint
+analyseVariabele_c <- #nolint: object_name_linter
   function(
     VoorwaardeID,
     Kenmerken,

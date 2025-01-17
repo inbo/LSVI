@@ -6,18 +6,18 @@ library(readr)
 maakConnectiePool()
 describe("twee voorwaarden vergelijken", {
   it("vergelijking wordt correct uitgevoerd", {
-    Data_habitat <- #nolint
+    Data_habitat <- #nolint: object_name_linter
       data.frame(
         ID = 1, Habitattype = "1330_hpr",
         stringsAsFactors = FALSE)
-    Data_voorwaarden <- #nolint
+    Data_voorwaarden <- #nolint: object_name_linter
       data.frame(
         ID = 1, Criterium = "Verstoring", Indicator = "overgang naar rbbzil",
         Voorwaarde = c("bedekking grasachtigen rbbzil",
                        "som van de bedekking sleutelsoorten"),
         Waarde = c(10, 20), Type = "Percentage", Invoertype = NA, Eenheid = "%",
         stringsAsFactors = FALSE)
-    Data_soortenKenmerken <- #nolint
+    Data_soortenKenmerken <- #nolint: object_name_linter
       data.frame(
         ID = 1, Kenmerk = c("Carex hirta", "Carex distans"),
         TypeKenmerk = "soort_Latijn", Waarde = c(10, 20), Type = "Percentage",
@@ -32,11 +32,11 @@ describe("twee voorwaarden vergelijken", {
         Criterium = "Verstoring",
         Indicator = "overgang naar rbbzil",
         Beoordeling =
-          "B: som van de bedekking grasachtigen uit het zilverschoonverbond <= som van de bedekking sleutelsoorten", #nolint
+          "B: som van de bedekking grasachtigen uit het zilverschoonverbond <= som van de bedekking sleutelsoorten", #nolint: line_length_linter
         Kwaliteitsniveau = 1,
         Belang = "zb",
         Voorwaarde =
-          "bedekking grasachtigen rbbzil <= som van de bedekking sleutelsoorten", #nolint
+          "bedekking grasachtigen rbbzil <= som van de bedekking sleutelsoorten", #nolint: line_length_linter
         Referentiewaarde = "20",
         Operator = "<=",
         EenheidRefwaarde = "%",
@@ -136,16 +136,16 @@ describe("twee voorwaarden vergelijken", {
 })
 
 describe("AnalyseVariabele scoresom", {
-  Data_habitat <- #nolint
+  Data_habitat <- #nolint: object_name_linter
     data.frame(
       ID = c("demo1", "demo2", "demo3"),
       Habitattype = "2190_a",
       stringsAsFactors = FALSE)
-  Data_voorwaarden <- #nolint
+  Data_voorwaarden <- #nolint: object_name_linter
     read_csv2(
       system.file("vbdata/data_voorwaarden2190_a.csv", package = "LSVI")
     )
-  Data_soortenKenmerken <- #nolint
+  Data_soortenKenmerken <- #nolint: object_name_linter
     read_csv2(
       system.file("vbdata/data_soortenKenmerken2190_a.csv", package = "LSVI")
     )

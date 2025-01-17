@@ -66,7 +66,7 @@ deselecteerKenmerkenInOpname <-
       if (length(Studiegroep) > 0 && nrow(Resultaat) > 0) {
         if (max(is.na(Resultaat$Vegetatielaag))) {
           stop(
-            "Bij Data_soortenKenmerken is niet voor alle soorten de kolom Vegetatielaag ingevuld, waardoor de berekening niet correct kan worden uitgevoerd (dit omdat de vegetatielaag bepaalt of de betreffende soort al dan niet in rekening gebracht moet worden voor het berekenen van de indicator)"  #nolint
+            "Bij Data_soortenKenmerken is niet voor alle soorten de kolom Vegetatielaag ingevuld, waardoor de berekening niet correct kan worden uitgevoerd (dit omdat de vegetatielaag bepaalt of de betreffende soort al dan niet in rekening gebracht moet worden voor het berekenen van de indicator)"  #nolint: line_length_linter
           )
         } else {
           Resultaat <- Resultaat %>%
@@ -88,7 +88,7 @@ deselecteerKenmerkenInOpname <-
     }
 
     if (!exists("Resultaat")) {
-      stop("Er ontbreekt een soortenlijst of studiegroeplijst in de databank.  Meld deze fout aan de beheerder van dit package.") #nolint
+      stop("Er ontbreekt een soortenlijst of studiegroeplijst in de databank.  Meld deze fout aan de beheerder van dit package.") #nolint: line_length_linter
     }
 
     if (identical(SubAnalyseVariabele, character(0))) {
@@ -102,7 +102,7 @@ deselecteerKenmerkenInOpname <-
     } else {
       stop(
         paste(
-          "Fout in de indicatorendatabank: een analysevariabele met achtervoegsel 'Excl' bevat een subanalysevariabele en dit wordt niet ondersteund in het script.  Meld deze fout aan de beheerder van dit package."  #nolint
+          "Fout in de indicatorendatabank: een analysevariabele met achtervoegsel 'Excl' bevat een subanalysevariabele en dit wordt niet ondersteund in het script.  Meld deze fout aan de beheerder van dit package."  #nolint: line_length_linter
         )
       )
     }

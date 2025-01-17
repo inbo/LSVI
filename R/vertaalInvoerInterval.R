@@ -96,7 +96,7 @@ vertaalInvoerInterval <-
         )
 
       if (max(is.na(Resultaat$Min) & !is.na(Resultaat$Waarde))) {
-        warning("Niet voor elke opgegeven categorische variabele is er een numerieke waarde opgenomen in de databank (zie functie geefVertaallijst(ConnectiePool)), waardoor niet voor elke waarde een berekening gemaakt kan worden. Controleer de spelling van de categorische variabele, of neem contact op met de beheerder van het package om nieuwe numerieke waarden aan te leveren.")  #nolint
+        warning("Niet voor elke opgegeven categorische variabele is er een numerieke waarde opgenomen in de databank (zie functie geefVertaallijst(ConnectiePool)), waardoor niet voor elke waarde een berekening gemaakt kan worden. Controleer de spelling van de categorische variabele, of neem contact op met de beheerder van het package om nieuwe numerieke waarden aan te leveren.")  #nolint: line_length_linter
       }
     }
 
@@ -106,7 +106,7 @@ vertaalInvoerInterval <-
           as.numeric(gsub(",", ".", x)),
           warning = function(w) {
             if (grepl("NAs introduced by coercion", w)) {
-              stop("Niet alle opgegeven getallen en percentages zijn numerieke waarden") #nolint
+              stop("Niet alle opgegeven getallen en percentages zijn numerieke waarden") #nolint: line_length_linter
             } else {
               as.numeric(gsub(",", ".", x))
             }
@@ -166,7 +166,7 @@ vertaalInvoerInterval <-
                 as.numeric(.data$Waarde),
                 warning = function(w) {
                   if (grepl("NAs introduced by coercion", w)) {
-                    stop("Minstens een van de opgegeven Ja/nee-waarden bevat tekst") #nolint
+                    stop("Minstens een van de opgegeven Ja/nee-waarden bevat tekst") #nolint: line_length_linter
                   } else {
                     as.numeric(.data$Waarde)
                   }
@@ -181,7 +181,7 @@ vertaalInvoerInterval <-
 
     if (nrow(ResultaatJaNee) > 0) {
       if (!all(ResultaatJaNee$Min %in% c(0, 1))) {
-        stop("Niet alle opgegeven Ja/nee-waarden bevatten waarden die door R vertaald kunnen worden naar TRUE of FALSE.") #nolint
+        stop("Niet alle opgegeven Ja/nee-waarden bevatten waarden die door R vertaald kunnen worden naar TRUE of FALSE.") #nolint: line_length_linter
       }
     }
 

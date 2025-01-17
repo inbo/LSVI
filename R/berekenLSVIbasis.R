@@ -192,12 +192,12 @@
 #' @importFrom stringr str_split_fixed str_c
 #'
 #'
-berekenLSVIbasis <- #nolint
+berekenLSVIbasis <- #nolint: object_name_linter
   function(
     Versie = "alle",
     Kwaliteitsniveau = "alle",
-    Data_habitat, #nolint
-    Data_voorwaarden = #nolint
+    Data_habitat, #nolint: object_name_linter
+    Data_voorwaarden = #nolint: object_name_linter
       data.frame(
         ID = character(),
         Criterium = character(),
@@ -209,11 +209,11 @@ berekenLSVIbasis <- #nolint
         WaardeMax = double(),
         stringsAsFactors = FALSE
       ),
-    Data_soortenKenmerken = data.frame(ID = character()), #nolint
+    Data_soortenKenmerken = data.frame(ID = character()), #nolint: object_name_linter, line_length_linter
     Aggregatiemethode = "1-out-all-out",
     ConnectieLSVIhabitats = NULL,
     LIJST = geefVertaallijst(ConnectieLSVIhabitats),
-    na.rm = FALSE #nolint
+    na.rm = FALSE #nolint: object_name_linter
   ) {
 
     #controle invoer
@@ -228,7 +228,7 @@ berekenLSVIbasis <- #nolint
     assert_that(
       inherits(ConnectieLSVIhabitats, "DBIConnection") |
         inherits(ConnectieLSVIhabitats, "Pool"),
-      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
+      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint: line_length_linter
     )
     if (class(ConnectieLSVIhabitats)[1] == "Pool") {
       Klasse <-
@@ -242,11 +242,11 @@ berekenLSVIbasis <- #nolint
     Kwaliteitsniveau <-
       invoercontroleKwaliteitsniveau(Kwaliteitsniveau, ConnectieLSVIhabitats)
 
-    Data_habitat <- #nolint
+    Data_habitat <- #nolint: object_name_linter
       invoercontroleData_habitat(Data_habitat, ConnectieLSVIhabitats)
 
     if (nrow(Data_voorwaarden) > 0) {
-      Data_voorwaarden <- #nolint
+      Data_voorwaarden <- #nolint: object_name_linter
         invoercontroleData_voorwaarden(
           Data_voorwaarden,
           ConnectieLSVIhabitats,
@@ -279,7 +279,7 @@ berekenLSVIbasis <- #nolint
     }
 
     if (nrow(Data_soortenKenmerken) > 0) {
-      Data_soortenKenmerken <- #nolint
+      Data_soortenKenmerken <- #nolint: object_name_linter
         invoercontroleData_soortenKenmerken(
           Data_soortenKenmerken,
           ConnectieLSVIhabitats,
@@ -296,7 +296,7 @@ berekenLSVIbasis <- #nolint
       )
     ) {
     stop(
-      "Aggregatiemethode moet een van de volgende waarden zijn: 'RapportageHR' of '1-out-all-out'"   #nolint
+      "Aggregatiemethode moet een van de volgende waarden zijn: 'RapportageHR' of '1-out-all-out'"   #nolint: line_length_linter
     )
   }
 
@@ -374,10 +374,10 @@ berekenLSVIbasis <- #nolint
     if (nrow(records_zonder_fiche) > 0) {
       stop(
         paste0(
-          "Er bestaan geen eenduidige criteria voor de berekening van de LSVI voor habitattype(s) ", #nolint
+          "Er bestaan geen eenduidige criteria voor de berekening van de LSVI voor habitattype(s) ", #nolint: line_length_linter
           paste(records_zonder_fiche$Habitattype, collapse = ", "),
           " voor de opgegeven versie (", Versie,
-          "), geef het juiste subtype op of zoek uit voor welk habitattype er wel fiches zijn" #nolint
+          "), geef het juiste subtype op of zoek uit voor welk habitattype er wel fiches zijn" #nolint: line_length_linter
         )
       )
     }
@@ -386,7 +386,7 @@ berekenLSVIbasis <- #nolint
     if (nrow(Jointest) > 0) {
       warning(
         sprintf(
-          "Volgende records uit Data_voorwaarden kunnen niet gekoppeld worden aan indicatoren uit de databank omdat de criterium-indicator-combinatie niet voorkomt bij de LSVI-regels van het opgegeven habitattype: <%s>", #nolint
+          "Volgende records uit Data_voorwaarden kunnen niet gekoppeld worden aan indicatoren uit de databank omdat de criterium-indicator-combinatie niet voorkomt bij de LSVI-regels van het opgegeven habitattype: <%s>", #nolint: line_length_linter
           Jointest %>%
             summarise(
               Record =
@@ -447,7 +447,7 @@ berekenLSVIbasis <- #nolint
     if (nrow(Jointest) > 0) {
       warning(
         sprintf(
-          "Volgende records uit Data_voorwaarden kunnen niet gekoppeld worden aan indicatoren uit de databank omdat de criterium-indicator-voorwaarde-combinatie niet voorkomt bij de LSVI-regels van het opgegeven habitattype: <%s>", #nolint
+          "Volgende records uit Data_voorwaarden kunnen niet gekoppeld worden aan indicatoren uit de databank omdat de criterium-indicator-voorwaarde-combinatie niet voorkomt bij de LSVI-regels van het opgegeven habitattype: <%s>", #nolint: line_length_linter
           Jointest %>%
             summarise(
               Record =
@@ -521,7 +521,7 @@ berekenLSVIbasis <- #nolint
         if (nrow(GeenSoorten) > 0) {
           warning(
             sprintf(
-              "Er is geen enkele soort opgegeven voor de opname(n) %s. Er wordt van uitgegaan dat hier geen vegetatie-opname gemaakt is en berekeningen op basis van soortenlijsten zullen resulteren in NA (not available). Geef tenminste 1 soort op (evt. met bedekking 0 procent) als er toch een opname gemaakt is",  #nolint
+              "Er is geen enkele soort opgegeven voor de opname(n) %s. Er wordt van uitgegaan dat hier geen vegetatie-opname gemaakt is en berekeningen op basis van soortenlijsten zullen resulteren in NA (not available). Geef tenminste 1 soort op (evt. met bedekking 0 procent) als er toch een opname gemaakt is",  #nolint: line_length_linter
               str_c(unique(GeenSoorten$ID), collapse = ", ")
             )
           )
@@ -544,7 +544,7 @@ berekenLSVIbasis <- #nolint
             )
           warning(
             sprintf(
-              "%s. Er wordt van uitgegaan dat er voor deze studiegroepen geen observaties uitgevoerd zijn en berekeningen op basis van deze studiegroepen zullen resulteren in NA (not available). Geef tenminste 1 kenmerk van deze studiegroep op (evt. met bedekking 0 procent) als deze studiegroep toch bestudeerd is.",  #nolint
+              "%s. Er wordt van uitgegaan dat er voor deze studiegroepen geen observaties uitgevoerd zijn en berekeningen op basis van deze studiegroepen zullen resulteren in NA (not available). Geef tenminste 1 kenmerk van deze studiegroep op (evt. met bedekking 0 procent) als deze studiegroep toch bestudeerd is.",  #nolint: line_length_linter
               Infotekst$Tekst
             )
           )
@@ -573,13 +573,13 @@ berekenLSVIbasis <- #nolint
             Tekst <-
               str_c(
                 Tekst,
-                "kon het aantal soorten dat aan een welbepaalde voorwaarde voldoet (bv. minimum een welbepaalde bedekking heeft), niet met zekerheid bepaald worden. In dit geval is het resultaat als een range weergegeven." #nolint
+                "kon het aantal soorten dat aan een welbepaalde voorwaarde voldoet (bv. minimum een welbepaalde bedekking heeft), niet met zekerheid bepaald worden. In dit geval is het resultaat als een range weergegeven." #nolint: line_length_linter
               )
 
           }
           warning(
             sprintf(
-              "Voor sommige soorten of kenmerken uit opname(n) %s is enkel aan- of afwezigheid opgegeven, geen bedekking. Hierdoor %s",  #nolint
+              "Voor sommige soorten of kenmerken uit opname(n) %s is enkel aan- of afwezigheid opgegeven, geen bedekking. Hierdoor %s",  #nolint: line_length_linter
               str_c(unique(AanOfAfwezigheid$ID), collapse = ", "),
               Tekst
             )
@@ -590,7 +590,7 @@ berekenLSVIbasis <- #nolint
         if (nrow(WarningMeting) > 0) {
           warning(
             sprintf(
-              "De waarde(n) voor de voorwaarde(n) %s (VoorwaardeID %s) kunnen niet berekend worden voor opname(n) %s. Geef de waarde voor deze voorwaarde rechtstreeks in als input van de functie 'berekenLSVIBasis' via tabel 'Data_voorwaarden' (zie ?berekenLSVIbasis voor meer info). Vermeld hierbij Criterium = %s, Indicator = %s en Voorwaarde = %s.",  #nolint
+              "De waarde(n) voor de voorwaarde(n) %s (VoorwaardeID %s) kunnen niet berekend worden voor opname(n) %s. Geef de waarde voor deze voorwaarde rechtstreeks in als input van de functie 'berekenLSVIBasis' via tabel 'Data_voorwaarden' (zie ?berekenLSVIbasis voor meer info). Vermeld hierbij Criterium = %s, Indicator = %s en Voorwaarde = %s.",  #nolint: line_length_linter
               str_c(unique(WarningMeting$Voorwaarde), collapse = ", "),
               str_c(unique(WarningMeting$VoorwaardeID), collapse = ", "),
               str_c(unique(WarningMeting$ID), collapse = ", "),
@@ -637,7 +637,7 @@ berekenLSVIbasis <- #nolint
       if (nrow(Test) > 0) {
         warning(
           sprintf(
-            "De rekenmodule is niet aangepast aan de complexe situatie in de databank die voorkomt bij BeoordelingID = %s.  Meld het probleem aan de beheerder van dit package en geef hierbij minstens deze foutmelding door", #nolint
+            "De rekenmodule is niet aangepast aan de complexe situatie in de databank die voorkomt bij BeoordelingID = %s.  Meld het probleem aan de beheerder van dit package en geef hierbij minstens deze foutmelding door", #nolint: line_length_linter
             x$BeoordelingID
           )
         )

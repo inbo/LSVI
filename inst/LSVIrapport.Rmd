@@ -54,7 +54,7 @@ Indicatoren <-
 
 Uitvoer <- NULL
 
-for (VersieRapportdeel in unique(Indicatoren$Versie)) { #nolint
+for (VersieRapportdeel in unique(Indicatoren$Versie)) {
   Uitvoer <- c(Uitvoer, paste("#", VersieRapportdeel, sep = " "))
   VersieIndicatoren <- Indicatoren %>%
     filter(.data$Versie == VersieRapportdeel) %>%

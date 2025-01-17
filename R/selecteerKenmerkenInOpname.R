@@ -34,7 +34,7 @@
 #' @importFrom tidyselect ends_with
 #'
 #'
-selecteerKenmerkenInOpname <- #nolint
+selecteerKenmerkenInOpname <-
   function(
     Kenmerken,
     Soortengroep,
@@ -78,7 +78,7 @@ selecteerKenmerkenInOpname <- #nolint
       if (length(Studiegroep) > 0 && nrow(Resultaat) > 0) {
         if (max(is.na(Resultaat$Vegetatielaag))) {
           stop(
-            "Bij Data_soortenKenmerken is niet voor alle soorten de kolom Vegetatielaag ingevuld, waardoor de berekening niet correct kan worden uitgevoerd (dit omdat de vegetatielaag bepaalt of de betreffende soort al dan niet in rekening gebracht moet worden voor het berekenen van de indicator)"  #nolint
+            "Bij Data_soortenKenmerken is niet voor alle soorten de kolom Vegetatielaag ingevuld, waardoor de berekening niet correct kan worden uitgevoerd (dit omdat de vegetatielaag bepaalt of de betreffende soort al dan niet in rekening gebracht moet worden voor het berekenen van de indicator)"  #nolint: line_length_linter
           )
         } else {
           Resultaat <- Resultaat %>%
@@ -123,7 +123,7 @@ selecteerKenmerkenInOpname <- #nolint
     }
 
     if (!exists("Resultaat")) {
-      stop("Er ontbreekt een soortenlijst of studiegroeplijst in de databank.  Meld deze fout aan de beheerder van dit package.") #nolint
+      stop("Er ontbreekt een soortenlijst of studiegroeplijst in de databank.  Meld deze fout aan de beheerder van dit package.") #nolint: line_length_linter
     }
 
     if (identical(SubAnalyseVariabele, character(0))) {
@@ -192,7 +192,7 @@ selecteerKenmerkenInOpname <- #nolint
         paste(
           "Onbekende subanalysevariabele",
           SubAnalyseVariabele,
-          "in de indicatorendatabank.  Meld deze fout aan de beheerder van dit package."  #nolint
+          "in de indicatorendatabank.  Meld deze fout aan de beheerder van dit package."  #nolint: line_length_linter
         )
       )
     }

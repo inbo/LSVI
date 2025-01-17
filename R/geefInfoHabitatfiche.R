@@ -63,7 +63,7 @@ geefInfoHabitatfiche <-
     assert_that(
       inherits(ConnectieLSVIhabitats, "DBIConnection") |
         inherits(ConnectieLSVIhabitats, "Pool"),
-      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
+      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint: line_length_linter
     )
 
     Selectiegegevens <-
@@ -350,12 +350,12 @@ geefInfoHabitatfiche <-
       Habitatfiche$Beschrijving <- gsub("_", "", Habitatfiche$Beschrijving)
       Habitatfiche$Maatregelen <-
         gsub("_", "", Habitatfiche$Maatregelen)
-      Habitatfiche$Opmerkingen.habitat <- #nolint
+      Habitatfiche$Opmerkingen.habitat <- #nolint: object_name_linter
         gsub("_", "", Habitatfiche$Opmerkingen.habitat)
       Habitatfiche$Soortenlijst <- gsub("_", "", Habitatfiche$Soortenlijst)
-      Habitatfiche$Opmerkingen.beoordeling <- #nolint
+      Habitatfiche$Opmerkingen.beoordeling <- #nolint: object_name_linter
         gsub("_", "", Habitatfiche$Opmerkingen.beoordeling)
-      Habitatfiche$Beoordeling_letterlijk <- #nolint
+      Habitatfiche$Beoordeling_letterlijk <- #nolint: object_name_linter
         gsub("_", "", Habitatfiche$Beoordeling)
     }
 

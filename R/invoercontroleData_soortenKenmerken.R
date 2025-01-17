@@ -27,8 +27,8 @@
 #'
 #' @export
 #'
-invoercontroleData_soortenKenmerken <- #nolint
-  function(Data_soortenKenmerken, ConnectieLSVIhabitats, LIJST) { #nolint
+invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
+  function(Data_soortenKenmerken, ConnectieLSVIhabitats, LIJST) { #nolint: object_name_linter, line_length_linter
     assert_that(
       inherits(ConnectieLSVIhabitats, "DBIConnection") |
         inherits(ConnectieLSVIhabitats, "Pool"),
@@ -38,19 +38,19 @@ invoercontroleData_soortenKenmerken <- #nolint
     assert_that(inherits(Data_soortenKenmerken, "data.frame"))
     assert_that(has_name(Data_soortenKenmerken, "ID"))
     if (!is.character(Data_soortenKenmerken$ID)) {
-      Data_soortenKenmerken$ID <- as.character(Data_soortenKenmerken$ID) #nolint
+      Data_soortenKenmerken$ID <- as.character(Data_soortenKenmerken$ID) #nolint: object_name_linter, line_length_linter
     }
     assert_that(has_name(Data_soortenKenmerken, "Kenmerk"))
     if (!is.character(Data_soortenKenmerken$Kenmerk)) {
-      Data_soortenKenmerken$Kenmerk <- #nolint
+      Data_soortenKenmerken$Kenmerk <- #nolint: object_name_linter
         as.character(Data_soortenKenmerken$Kenmerk)
     }
     assert_that(has_name(Data_soortenKenmerken, "TypeKenmerk"))
     if (!is.character(Data_soortenKenmerken$TypeKenmerk)) {
-      Data_soortenKenmerken$TypeKenmerk <- #nolint
+      Data_soortenKenmerken$TypeKenmerk <- #nolint: object_name_linter
         as.character(Data_soortenKenmerken$TypeKenmerk)
     }
-    Data_soortenKenmerken$TypeKenmerk <- #nolint
+    Data_soortenKenmerken$TypeKenmerk <- #nolint: object_name_linter
       tolower(Data_soortenKenmerken$TypeKenmerk)
     assert_that(
       all(
@@ -58,29 +58,29 @@ invoercontroleData_soortenKenmerken <- #nolint
           c("studiegroep", "soort_gbif", "soort_latijn", "soort_nl",
             "soort_nbn")
       ),
-      msg = "Data_soortenKenmerken$TypeKenmerk moet een van de volgende waarden zijn: studiegroep, soort_gbif, soort_latijn, soort_nl" #nolint
+      msg = "Data_soortenKenmerken$TypeKenmerk moet een van de volgende waarden zijn: studiegroep, soort_gbif, soort_latijn, soort_nl" #nolint: line_length_linter
     )
     if (any(Data_soortenKenmerken$TypeKenmerk == "soort_nbn")) {
       warning("Het gebruik van de NbnTaxonVersionKey (en TypeKenmerk 'soort_nbn') in Data_soortenKenmerken wordt afgebouwd (is deprecated) en zal in de volgende versie van het package LSVI niet meer mogelijk zijn.")
     }
     assert_that(has_name(Data_soortenKenmerken, "Waarde"))
     if (!is.character(Data_soortenKenmerken$Waarde)) {
-      Data_soortenKenmerken$Waarde <- #nolint
+      Data_soortenKenmerken$Waarde <- #nolint: object_name_linter
         as.character(Data_soortenKenmerken$Waarde)
     }
     assert_that(has_name(Data_soortenKenmerken, "Type"))
     if (!is.character(Data_soortenKenmerken$Type)) {
-      Data_soortenKenmerken$Type <- #nolint
+      Data_soortenKenmerken$Type <- #nolint: object_name_linter
         as.character(Data_soortenKenmerken$Type)
     }
-    Data_soortenKenmerken$Type <- str_to_sentence(Data_soortenKenmerken$Type) #nolint
+    Data_soortenKenmerken$Type <- str_to_sentence(Data_soortenKenmerken$Type) #nolint: object_name_linter, line_length_linter
     controleerInvoerwaarde(
       "Data_soortenKenmerken$Type", Data_soortenKenmerken$Type,
       "TypeVariabele", "Naam", ConnectieLSVIhabitats, Tolower = FALSE
     )
     assert_that(has_name(Data_soortenKenmerken, "Invoertype"))
     if (!is.character(Data_soortenKenmerken$Invoertype)) {
-      Data_soortenKenmerken$Invoertype <- #nolint
+      Data_soortenKenmerken$Invoertype <- #nolint: object_name_linter
         as.character(Data_soortenKenmerken$Invoertype)
     }
     controleerInvoerwaarde(
@@ -92,7 +92,7 @@ invoercontroleData_soortenKenmerken <- #nolint
     )
     assert_that(has_name(Data_soortenKenmerken, "Eenheid"))
     if (!is.character(Data_soortenKenmerken$Eenheid)) {
-      Data_soortenKenmerken$Eenheid <- #nolint
+      Data_soortenKenmerken$Eenheid <- #nolint: object_name_linter
         as.character(Data_soortenKenmerken$Eenheid)
     }
     GeldigeWaarden <-
@@ -112,12 +112,12 @@ invoercontroleData_soortenKenmerken <- #nolint
          Data_soortenKenmerken$Eenheid %in% GeldigeWaarden
         )
       ) {
-      stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Eenheid komen overeen met waarden vermeld in de databank.") #nolint
+      stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Eenheid komen overeen met waarden vermeld in de databank.") #nolint: line_length_linter
     }
 
     assert_that(has_name(Data_soortenKenmerken, "Vegetatielaag"))
     if (!is.character(Data_soortenKenmerken$Vegetatielaag)) {
-      Data_soortenKenmerken$Vegetatielaag <- #nolint
+      Data_soortenKenmerken$Vegetatielaag <- #nolint: object_name_linter
         as.character(tolower(Data_soortenKenmerken$Vegetatielaag))
     }
     controleerInvoerwaarde(
@@ -567,7 +567,7 @@ invoercontroleData_soortenKenmerken <- #nolint
               paste0(
                 "Voor opname ", .data$ID, " zijn in de ", .data$Vegetatielaag,
                 " de synoniemen '", .data$Soorten,
-                "' beschouwd als eenzelfde taxon met aggregatie van de bedekkingen (rekening houdend met gedeeltelijke overlap)", #nolint
+                "' beschouwd als eenzelfde taxon met aggregatie van de bedekkingen (rekening houdend met gedeeltelijke overlap)", #nolint: line_length_linter
                 collapse = NULL
               )
           ) %>%
@@ -702,7 +702,7 @@ invoercontroleData_soortenKenmerken <- #nolint
       )
     if (nrow(VegLaagAfwezig) > 0) {
       warning(
-        "Bij Data_soortenKenmerken is niet voor alle soorten de kolom Vegetatielaag ingevuld"  #nolint
+        "Bij Data_soortenKenmerken is niet voor alle soorten de kolom Vegetatielaag ingevuld"  #nolint: line_length_linter
       )
     }
 

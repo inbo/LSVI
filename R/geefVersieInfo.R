@@ -34,7 +34,7 @@ geefVersieInfo <-
     assert_that(
     inherits(ConnectieLSVIhabitats, "DBIConnection") |
       inherits(ConnectieLSVIhabitats, "Pool"),
-    msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
+    msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint: line_length_linter
   )
 
   query <- "SELECT VersieLSVI, cast(Referentie AS nvarchar(40)) AS Referentie,

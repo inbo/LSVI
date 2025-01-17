@@ -5,21 +5,21 @@ library(dplyr)
 library(rlang)
 
 maakConnectiePool()
-Data_habitat <- #nolint
+Data_habitat <- #nolint: object_name_linter
     read_csv2(
       system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
       col_types = list(col_character(), col_character(), col_character())
     )
-attr(Data_habitat, "spec") <- NULL #nolint
-Data_voorwaarden2 <- #nolint
+attr(Data_habitat, "spec") <- NULL #nolint: object_name_linter
+Data_voorwaarden2 <- #nolint: object_name_linter
   read_csv2(
     system.file("vbdata/Opname4030voorwaardenv2.csv", package = "LSVI")
   )
-Data_voorwaarden <- #nolint
+Data_voorwaarden <- #nolint: object_name_linter
   read_csv2(
     system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI")
   )
-Data_soortenKenmerken <- #nolint
+Data_soortenKenmerken <- #nolint: object_name_linter
     read_csv2(
       system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI")
     )
@@ -226,7 +226,7 @@ describe("ontbreken van soorten of kenmerken", {
             )
         )
       ),
-      "JR0216, Ts2036 is er geen enkel kenmerk opgegeven van studielijst ouderdomsstadia. Er wordt van uitgegaan dat er voor deze studiegroepen geen observaties uitgevoerd zijn en berekeningen op basis van deze studiegroepen zullen resulteren in NA"  #nolint
+      "JR0216, Ts2036 is er geen enkel kenmerk opgegeven van studielijst ouderdomsstadia. Er wordt van uitgegaan dat er voor deze studiegroepen geen observaties uitgevoerd zijn en berekeningen op basis van deze studiegroepen zullen resulteren in NA"  #nolint: line_length_linter
     )
     expect_equal(
       Testresultaat,
@@ -298,7 +298,7 @@ describe("ontbreken van soorten of kenmerken", {
     )
   })
 
-  it("als 1 stadium opgegeven is, wordt de bedekking van ontbrekende stadia 0", { #nolint
+  it("als 1 stadium opgegeven is, wordt de bedekking van ontbrekende stadia 0", { #nolint: line_length_linter
     expect_warning(
       Testresultaat <- idsWissen(
         berekenLSVIbasis(
@@ -322,7 +322,7 @@ describe("ontbreken van soorten of kenmerken", {
 })
 
 describe("samenstelling soortengroepen", {
-  it("bedekkingen op genusniveau en soortniveau geven hetzelfde resultaat (waar dit mag)", { #nolint
+  it("bedekkingen op genusniveau en soortniveau geven hetzelfde resultaat (waar dit mag)", { #nolint: line_length_linter
     expect_equal(
       idsWissen(
         berekenLSVIbasis(

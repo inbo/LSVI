@@ -39,7 +39,7 @@ maakConnectiePool <-
       envir = .GlobalEnv
     ),
     error = function(e) {
-      warning("Het lukt niet om een connectiepool te leggen naar de databank in het package.  Controleer of deze databank lokaal aanwezig is (bestand LSVIHabitatTypes.sqlite in folder Library/LSVI/databank) en test eventueel of een connectie leggen wel lukt met de functie connecteerMetLSVIdb().")  #nolint
+      warning("Het lukt niet om een connectiepool te leggen naar de databank in het package.  Controleer of deze databank lokaal aanwezig is (bestand LSVIHabitatTypes.sqlite in folder Library/LSVI/databank) en test eventueel of een connectie leggen wel lukt met de functie connecteerMetLSVIdb().")  #nolint: line_length_linter
     }
   )
 }
