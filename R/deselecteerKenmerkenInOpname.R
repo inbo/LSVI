@@ -30,7 +30,7 @@
 #'
 #' @export
 #'
-#' @importFrom dplyr %>% filter anti_join join_by left_join mutate distinct
+#' @importFrom dplyr %>% filter anti_join left_join mutate distinct
 #' @importFrom rlang .data
 #' @importFrom stats setNames
 #' @importFrom tools toTitleCase
