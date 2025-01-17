@@ -162,7 +162,7 @@ Gegevens kunnen ook rechtstreeks vanuit een databank ingelezen worden, en ze kun
 
 ###Wat met een list van tabellen?
 
-De functie `berekenLSVIbasis()` geeft gegevens terug in de vorm van een lijst van 4 tabellen.
+De functie `berekenLSVIbasis()` geeft gegevens terug in de vorm van een lijst van 5 tabellen.
 
 ```{r}
 #Eerst worden wat voorbeeldgegevens opgehaald uit het package:
@@ -208,12 +208,14 @@ resultaat$Resultaat_globaal
 resultaat$Resultaat_criterium
 resultaat$Resultaat_indicator
 resultaat$Resultaat_detail
+resultaat$Soortenlijst
 
 # ofwel:
 resultaat[["Resultaat_globaal"]]
 resultaat[["Resultaat_criterium"]]
 resultaat[["Resultaat_indicator"]]
 resultaat[["Resultaat_detail"]]
+resultaat[["Soortenlijst"]]
 ```
 
 Met deze tabellen kan verder gewerkt worden zoals hierboven beschreven is ([Wat met gegenereerde gegevens in tabelvorm?](#gegs_in_tabelvorm)) 

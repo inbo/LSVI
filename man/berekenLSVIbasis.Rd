@@ -108,11 +108,14 @@ gebaseerd zijn, moet hiermee rekening gehouden worden afhankelijk van de
 context waarvoor de resultaten gebruikt worden.}
 }
 \value{
-Deze functie genereert de resultaten in de vorm van een list met 4
+Deze functie genereert de resultaten in de vorm van een list met 5
 tabellen: een eerste met de beoordelingen per kwaliteitsniveau, een tweede
 met de beoordelingen per criterium en kwaliteitsniveau, een derde met de
 beoordelingen per indicator en kwaliteitsniveau, en een vierde met de
 detailgegevens inclusief meetwaarden.
+Een vijfde tabel 'Soortenlijst' bevat de taxonomische info die gebruikt is
+om de opgegeven taxa te koppelen aan de taxa die deel uitmaken van de
+beoordeling.
 }
 \description{
 Deze functie bepaalt de Lokale Staat van Instandhouding en
@@ -140,6 +143,31 @@ verschillende globale indices berekend waarbij de naamgeving aangeeft welk
 aggregatie achtereenvolgens gebruikt werd: index_min_min, index_min_harm en
 index_harm_harm. Een naam met "min" duidt op minimum van de scores als
 aggregatie; bij "harm" werd het harmonisch gemiddelde berekend.
+
+Bij de output zit een tabel 'Soortenlijst' die aangeeft aan welke taxoninfo
+de opgegeven taxa gekoppeld zijn.
+Deze laat dus toe om te controleren of de koppeling juist gebeurd is,
+en of de bovenliggende taxonniveaus kloppen.
+Zoals in vignet berekeningen (\code{vignette("Berekeningen", package = "LSVI")})
+in detail beschreven is,
+wordt na koppeling met de taxonlijst uit het package op ongekoppelde taxa
+een matching toegepast op basis van een Gbif-tool om bij kleine afwijkingen
+toch de ingevoerde soorten te herkennen.
+Op die manier wordt de kans op het herkennen van de soort door het package
+vergroot, maar het heeft als keerzijde dat een taxon door Gbif ten onrechte
+gekoppeld kan worden aan een Gbif-key van een accepted taxon (omdat Gbif
+geen rekening houdt met auteursnamen, 'auct.', 'auct. non', 'non',...).
+Daarom wordt met een warning aangeraden om de Soortenlijst te controleren
+als de Gbif-tool voor de koppeling van minstens één soort gebruikt is
+(dit is aangegeven in veld Koppelmethode, en deze records staan bovenaan).
+Fouten bij gebruik van de Gbif-tool kunnen best opgelost worden door de taxa
+bij invoer te vervangen door de schrijfwijze in de taxonlijst in het package
+(beschikbaar via
+\code{readr::read_csv2(system.file("databank/TaxonTabel.csv", package = "LSVI"))}
+of op \href{https://zenodo.org/records/10561497}{Zenodo}).
+Fouten in deze taxonlijst mogen gemeld worden via
+\href{https://github.com/inbo/LSVI/issues}{een issue} (of aan de beheerder van
+het package).
 }
 \examples{
 # Omwille van de iets langere lange duurtijd van de commando's staat bij
@@ -162,6 +190,27 @@ Data_soortenKenmerken <-
 berekenLSVIbasis(Versie = "Versie 2.0",
                  Kwaliteitsniveau = "1", Data_habitat,
                  Data_voorwaarden, Data_soortenKenmerken)
+
+# Hoe testen welke soorten aan welke indicatoren gekoppeld worden?
+library(tidyverse)
+berekenLSVIbasis(
+  Versie = "Versie 2.0",
+  Kwaliteitsniveau = "1", Data_habitat,
+  Data_voorwaarden, Data_soortenKenmerken
+ )[["Soortenlijst"]] \%>\%
+   pivot_longer(
+     ends_with("Key"), names_to = "Niveau", values_to = "GbifKey"
+   ) \%>\%
+   mutate(
+     Niveau = toupper(gsub("Key", "", .data$Niveau))
+   ) \%>\%
+   filter(!is.na(.data$GbifKey)) \%>\%
+   inner_join(
+     geefSoortenlijst(
+       Versie = "Versie 2.0", Habitattype = "4030",
+       Taxonlijstniveau = "indicator"),
+     by = c("Niveau" = "Rank", "GbifKey" = "GbifUsageKey")
+   )
 }
 
 }

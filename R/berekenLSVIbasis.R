@@ -26,6 +26,31 @@
 #' index_harm_harm. Een naam met "min" duidt op minimum van de scores als
 #' aggregatie; bij "harm" werd het harmonisch gemiddelde berekend.
 #'
+#' Bij de output zit een tabel 'Soortenlijst' die aangeeft aan welke taxoninfo
+#' de opgegeven taxa gekoppeld zijn.
+#' Deze laat dus toe om te controleren of de koppeling juist gebeurd is,
+#' en of de bovenliggende taxonniveaus kloppen.
+#' Zoals in vignet berekeningen (`vignette("Berekeningen", package = "LSVI")`)
+#' in detail beschreven is,
+#' wordt na koppeling met de taxonlijst uit het package op ongekoppelde taxa
+#' een matching toegepast op basis van een Gbif-tool om bij kleine afwijkingen
+#' toch de ingevoerde soorten te herkennen.
+#' Op die manier wordt de kans op het herkennen van de soort door het package
+#' vergroot, maar het heeft als keerzijde dat een taxon door Gbif ten onrechte
+#' gekoppeld kan worden aan een Gbif-key van een accepted taxon (omdat Gbif
+#' geen rekening houdt met auteursnamen, 'auct.', 'auct. non', 'non',...).
+#' Daarom wordt met een warning aangeraden om de Soortenlijst te controleren
+#' als de Gbif-tool voor de koppeling van minstens één soort gebruikt is
+#' (dit is aangegeven in veld Koppelmethode, en deze records staan bovenaan).
+#' Fouten bij gebruik van de Gbif-tool kunnen best opgelost worden door de taxa
+#' bij invoer te vervangen door de schrijfwijze in de taxonlijst in het package
+#' (beschikbaar via
+#' `readr::read_csv2(system.file("databank/TaxonTabel.csv", package = "LSVI"))`
+#' of op [Zenodo](https://zenodo.org/records/10561497)).
+#' Fouten in deze taxonlijst mogen gemeld worden via
+#' [een issue](https://github.com/inbo/LSVI/issues) (of aan de beheerder van
+#' het package).
+#'
 #' @inheritParams selecteerIndicatoren
 #' @param Versie De versie van het LSVI-rapport op basis waarvan de berekening
 #' gemaakt wordt, bv. "Versie 2.0" of "Versie 3".  Bij de default "alle" wordt
@@ -105,11 +130,14 @@
 #' gebaseerd zijn, moet hiermee rekening gehouden worden afhankelijk van de
 #' context waarvoor de resultaten gebruikt worden.
 #'
-#' @return Deze functie genereert de resultaten in de vorm van een list met 4
+#' @return Deze functie genereert de resultaten in de vorm van een list met 5
 #' tabellen: een eerste met de beoordelingen per kwaliteitsniveau, een tweede
 #' met de beoordelingen per criterium en kwaliteitsniveau, een derde met de
 #' beoordelingen per indicator en kwaliteitsniveau, en een vierde met de
 #' detailgegevens inclusief meetwaarden.
+#' Een vijfde tabel 'Soortenlijst' bevat de taxonomische info die gebruikt is
+#' om de opgegeven taxa te koppelen aan de taxa die deel uitmaken van de
+#' beoordeling.
 #'
 #' @examples
 #' # Omwille van de iets langere lange duurtijd van de commando's staat bij
@@ -132,12 +160,33 @@
 #' berekenLSVIbasis(Versie = "Versie 2.0",
 #'                  Kwaliteitsniveau = "1", Data_habitat,
 #'                  Data_voorwaarden, Data_soortenKenmerken)
+#'
+#' # Hoe testen welke soorten aan welke indicatoren gekoppeld worden?
+#' library(tidyverse)
+#' berekenLSVIbasis(
+#'   Versie = "Versie 2.0",
+#'   Kwaliteitsniveau = "1", Data_habitat,
+#'   Data_voorwaarden, Data_soortenKenmerken
+#'  )[["Soortenlijst"]] %>%
+#'    pivot_longer(
+#'      ends_with("Key"), names_to = "Niveau", values_to = "GbifKey"
+#'    ) %>%
+#'    mutate(
+#'      Niveau = toupper(gsub("Key", "", .data$Niveau))
+#'    ) %>%
+#'    filter(!is.na(.data$GbifKey)) %>%
+#'    inner_join(
+#'      geefSoortenlijst(
+#'        Versie = "Versie 2.0", Habitattype = "4030",
+#'        Taxonlijstniveau = "indicator"),
+#'      by = c("Niveau" = "Rank", "GbifKey" = "GbifUsageKey")
+#'    )
 #' }
 #'
 #' @export
 #'
 #' @importFrom dplyr %>% select distinct n filter mutate row_number rename
-#' left_join summarise group_by ungroup rowwise bind_rows arrange transmute
+#' left_join summarise group_by ungroup rowwise bind_rows arrange desc transmute
 #' @importFrom assertthat assert_that has_name
 #' @importFrom rlang .data
 #' @importFrom stringr str_split_fixed str_c
@@ -946,12 +995,37 @@ berekenLSVIbasis <- #nolint
       left_join(resultaat_globaal_index,
                 by = c("ID", "Habitattype", "Versie", "Kwaliteitsniveau"))
 
+    if (nrow(Data_soortenKenmerken) > 0) {
+      Soortenlijst <- Data_soortenKenmerken %>%
+        filter(.data$TypeKenmerk == "soort_gbif") %>%
+        select(
+          "Kenmerk", "GbifUsageKey", "Rank", "GbifAcceptedUsageKey",
+          "Koppelmethode", "GbifMatchType", "GbifConfidence",
+          "Kingdom", "Phylum", "Order", "Family", "Genus", "Species",
+          "KingdomKey", "PhylumKey", "OrderKey", "FamilyKey", "GenusKey",
+          "SpeciesKey"
+        ) %>%
+        distinct() %>%
+        arrange(
+          desc(tolower(.data$Koppelmethode)), desc(.data$GbifMatchType),
+          .data$GbifConfidence
+        )
+      if (!all(Soortenlijst$Koppelmethode == "exacte naam in LSVI-package")) {
+        warning(
+          "Sommige soorten konden niet exact gematcht worden met de taxonlijst in het package en zijn via gbif gematcht. Controleer in de soortenlijst in het resultaat of deze matching juist gebeurd is." #nolint: line_length_linter
+        )
+      }
+    } else {
+      Soortenlijst <- NA
+    }
+
     return(
       list(
         Resultaat_criterium = resultaat_criterium,
         Resultaat_indicator = resultaat_indicator,
         Resultaat_detail = resultaat_detail,
-        Resultaat_globaal = resultaat_globaal
+        Resultaat_globaal = resultaat_globaal,
+        Soortenlijst = Soortenlijst
       )
     )
   }
