@@ -129,10 +129,10 @@ migratieSQLserverSQLite <-
       unique(
         c(
           (
-            CombinerenVoorwaarden %>% filter(!is.na(VoorwaardeID1))
+            CombinerenVoorwaarden %>% filter(!is.na(.data$VoorwaardeID1))
           )$VoorwaardeID1,
           (
-            CombinerenVoorwaarden %>% filter(!is.na(VoorwaardeID2))
+            CombinerenVoorwaarden %>% filter(!is.na(.data$VoorwaardeID2))
           )$VoorwaardeID2
         )
       ),
@@ -356,11 +356,11 @@ migratieSQLserverSQLite <-
     mutate(
       AantalSoorten =
         ifelse(
-          !is.na(TaxongroepId),
+          !is.na(.data$TaxongroepId),
           nrow(
             dbGetQuery(
               ConnectiePool,
-              sprintf(Querytekst, as.character(TaxongroepId))
+              sprintf(Querytekst, as.character(.data$TaxongroepId))
             ) %>%
               distinct()
           ),
@@ -370,10 +370,11 @@ migratieSQLserverSQLite <-
     ungroup() %>%
     left_join(StudieItem, by = "StudiegroepId", suffix = c("", ".studie")) %>%
     group_by(
-      Id, VoorwaardeNaam, ExtraInfo, AnalyseVariabeleId, Referentiewaarde,
-      Operator, InvoermaskerId, TaxongroepId, StudiegroepId,
-      SubAnalyseVariabeleId, SubReferentiewaarde, SubOperator,
-      SubInvoermaskerId, AantalSoorten
+      .data$Id, .data$VoorwaardeNaam, .data$ExtraInfo, .data$AnalyseVariabeleId,
+      .data$Referentiewaarde, .data$Operator, .data$InvoermaskerId,
+      .data$TaxongroepId, .data$StudiegroepId, .data$SubAnalyseVariabeleId,
+      .data$SubReferentiewaarde, .data$SubOperator, .data$SubInvoermaskerId,
+      .data$AantalSoorten
     ) %>%
     summarise(AantalKenmerken = n()) %>%
     ungroup() %>%
@@ -382,74 +383,80 @@ migratieSQLserverSQLite <-
     mutate(
       Maximumwaarde =
         ifelse(
-          VariabeleNaam %in% c("aandeel", "aandeelKruidlaag", "meting_perc"),
+          .data$VariabeleNaam %in%
+            c("aandeel", "aandeelKruidlaag", "meting_perc"),
           1,
           NA
         ),
       Maximumwaarde =
         ifelse(
-          grepl("bedekking", tolower(VariabeleNaam)), 1, Maximumwaarde
+          grepl("bedekking", tolower(.data$VariabeleNaam)),
+          1, .data$Maximumwaarde
         ),
       Maximumwaarde =
         ifelse(
-          grepl("meting", VariabeleNaam) & Naam == "Categorie", 1, Maximumwaarde
+          grepl("meting", .data$VariabeleNaam) & .data$Naam == "Categorie",
+          1, .data$Maximumwaarde
         ),
       Maximumwaarde =
         ifelse(
-          grepl("meting", VariabeleNaam) & Naam == "Ja/nee", 1, Maximumwaarde
+          grepl("meting", .data$VariabeleNaam) & .data$Naam == "Ja/nee",
+          1, .data$Maximumwaarde
         ),
       Maximumwaarde =
         ifelse(
-          grepl("meting", VariabeleNaam) &
-            VoorwaardeNaam == "aantal geslachten",
-          2, Maximumwaarde
+          grepl("meting", .data$VariabeleNaam) &
+            .data$VoorwaardeNaam == "aantal geslachten",
+          2, .data$Maximumwaarde
         ),
       Maximumwaarde =
         ifelse(
-          grepl("meting", VariabeleNaam) & VoorwaardeNaam == "bosconstantie",
-          250, Maximumwaarde
+          grepl("meting", .data$VariabeleNaam) &
+            .data$VoorwaardeNaam == "bosconstantie",
+          250, .data$Maximumwaarde
         ),
       Maximumwaarde =
         ifelse(
-          VariabeleNaam == "aantal" & !is.na(TaxongroepId),
-          AantalSoorten,
-          Maximumwaarde
+          .data$VariabeleNaam == "aantal" & !is.na(.data$TaxongroepId),
+          .data$AantalSoorten,
+          .data$Maximumwaarde
         ),
       Maximumwaarde =
         ifelse(
-          VariabeleNaam == "aantal" & is.na(TaxongroepId) &
-            !is.na(StudiegroepId),
-          AantalKenmerken,
-          Maximumwaarde
+          .data$VariabeleNaam == "aantal" & is.na(.data$TaxongroepId) &
+            !is.na(.data$StudiegroepId),
+          .data$AantalKenmerken,
+          .data$Maximumwaarde
         ),
       Maximumwaarde =
         ifelse(
-          VariabeleNaam == "aantalGroepen" & !is.na(StudiegroepId),
-          AantalKenmerken,
-          Maximumwaarde
+          .data$VariabeleNaam == "aantalGroepen" & !is.na(.data$StudiegroepId),
+          .data$AantalKenmerken,
+          .data$Maximumwaarde
         ),
       Maximumwaarde =
         ifelse(
-          grepl("meting", VariabeleNaam) &
-            Naam != "Ja/nee" &
-            !VariabeleNaam %in% c("meting_perc", "meting_bedekking") |
-            VariabeleNaam == "aantal",
-          pmin(3 * as.numeric(sub(",", ".", Referentiewaarde)), Maximumwaarde,
+          grepl("meting", .data$VariabeleNaam) &
+            .data$Naam != "Ja/nee" &
+            !.data$VariabeleNaam %in% c("meting_perc", "meting_bedekking") |
+            .data$VariabeleNaam == "aantal",
+          pmin(3 * as.numeric(sub(",", ".", .data$Referentiewaarde)),
+               .data$Maximumwaarde,
                na.rm = TRUE),
-          Maximumwaarde
+          .data$Maximumwaarde
         ),
       Maximumwaarde =
         ifelse(
-          VariabeleNaam == "scoresom",
-          ifelse(Referentiewaarde == 6, 15, 11),
-          Maximumwaarde
+          .data$VariabeleNaam == "scoresom",
+          ifelse(.data$Referentiewaarde == 6, 15, 11),
+          .data$Maximumwaarde
         )
     ) %>%
     select(
-      Id, VoorwaardeNaam, ExtraInfo, AnalyseVariabeleId, Referentiewaarde,
-      Operator, InvoermaskerId, TaxongroepId, StudiegroepId,
-      SubAnalyseVariabeleId, SubReferentiewaarde, SubOperator,
-      SubInvoermaskerId, Maximumwaarde
+      "Id", "VoorwaardeNaam", "ExtraInfo", "AnalyseVariabeleId",
+      "Referentiewaarde", "Operator", "InvoermaskerId", "TaxongroepId",
+      "StudiegroepId", "SubAnalyseVariabeleId", "SubReferentiewaarde",
+      "SubOperator", "SubInvoermaskerId", "Maximumwaarde"
     )
 
   NieuweDb <- dbConnect(SQLite(), "inst/databank/LSVIHabitatTypes.sqlite")
