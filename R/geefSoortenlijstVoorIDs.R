@@ -61,7 +61,7 @@ geefSoortenlijstVoorIDs <-
     assert_that(
       inherits(ConnectieLSVIhabitats, "DBIConnection") |
         inherits(ConnectieLSVIhabitats, "Pool"),
-      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
+      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint: line_length_linter
     )
     assert_that(is.character(Taxongroeplijst))
     if (!is.string(Taxongroeplijst)) {
@@ -70,7 +70,7 @@ geefSoortenlijstVoorIDs <-
     assert_that(is.string(Taxongroeplijst))
     assert_that(noNA(Taxongroeplijst))
     if (!grepl("^([[:digit:]]+,)*[[:digit:]]+$", Taxongroeplijst)) {
-      stop("Taxongroeplijst bestaat niet uit een reeks getallen gescheiden door een komma") #nolint
+      stop("Taxongroeplijst bestaat niet uit een reeks getallen gescheiden door een komma") #nolint: line_length_linter
     }
     match.arg(Taxonlijsttype)
 

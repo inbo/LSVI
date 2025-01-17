@@ -49,7 +49,7 @@ migratieSQLserverSQLite <-
   Indicator <-
     dbGetQuery(ConnectiePool, "SELECT Id, CriteriumId, Naam FROM Indicator")
 
-  Indicator_habitat <- #nolint
+  Indicator_habitat <- #nolint: object_name_linter
     dbGetQuery(
       ConnectiePool,
       sprintf(
@@ -66,7 +66,7 @@ migratieSQLserverSQLite <-
       )
     )
 
-  Indicator_habitatId <- #nolint
+  Indicator_habitatId <- #nolint: object_name_linter
     (Indicator_habitat %>% summarise(Id = paste0(Id, collapse = ",")))$Id
 
   IndicatortabellenKoppeling <-
@@ -80,11 +80,11 @@ migratieSQLserverSQLite <-
       )
     )
 
-  Indicator_beoordelingId <- #nolint
+  Indicator_beoordelingId <- #nolint: object_name_linter
     (IndicatortabellenKoppeling %>%
        summarise(Id = paste0(Indicator_beoordelingId, collapse = ",")))$Id
 
-  Indicator_beoordeling <- #nolint
+  Indicator_beoordeling <- #nolint: object_name_linter
     dbGetQuery(
       ConnectiePool,
       sprintf(

@@ -43,14 +43,14 @@ combinerenVerschilscore <-
     Formuletest <- str_replace_all(Formuletest, "\\)", "")
     assert_that(
       str_detect(Formuletest, "^(\\d+(( (AND|OR|<=|<|>|>=) \\d+))*)$"),
-      msg = "Een van de formules onder CombinerenVoorwaarden bevat andere tekens dan getallen en operatoren. Meld dit probleem aan de beheerder van het package." #nolint
+      msg = "Een van de formules onder CombinerenVoorwaarden bevat andere tekens dan getallen en operatoren. Meld dit probleem aan de beheerder van het package." #nolint: line_length_linter
     )
     if (str_detect(Formuletest, "^(\\d+(( (AND|OR) \\d+))*)$")) {
       assert_that(
         all(
           as.integer(str_extract_all(Formule, "\\d+")[[1]]) %in% VoorwaardeID
         ),
-        msg = "Een van de formules onder CombinerenVoorwaarden bevat andere getallen dan de overeenkomstige voorwaardeID's. Meld dit probleem aan de beheerder van het package." #nolint
+        msg = "Een van de formules onder CombinerenVoorwaarden bevat andere getallen dan de overeenkomstige voorwaardeID's. Meld dit probleem aan de beheerder van het package." #nolint: line_length_linter
       )
     }
 

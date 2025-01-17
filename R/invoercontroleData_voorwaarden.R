@@ -18,25 +18,25 @@
 #'
 #' @export
 #'
-invoercontroleData_voorwaarden <- #nolint
-  function(Data_voorwaarden, ConnectieLSVIhabitats, LIJST) { #nolint
+invoercontroleData_voorwaarden <- #nolint: object_name_linter
+  function(Data_voorwaarden, ConnectieLSVIhabitats, LIJST) { #nolint: object_name_linter, line_length_linter
     assert_that(inherits(Data_voorwaarden, "data.frame"))
     assert_that(has_name(Data_voorwaarden, "ID"))
     if (!is.character(Data_voorwaarden$ID)) {
-      Data_voorwaarden$ID <- as.character(Data_voorwaarden$ID) #nolint
+      Data_voorwaarden$ID <- as.character(Data_voorwaarden$ID) #nolint: object_name_linter, line_length_linter
     }
     assert_that(has_name(Data_voorwaarden, "Criterium"))
     if (!is.character(Data_voorwaarden$Criterium)) {
-      Data_voorwaarden$Criterium <- as.character(Data_voorwaarden$Criterium) #nolint
+      Data_voorwaarden$Criterium <- as.character(Data_voorwaarden$Criterium) #nolint: object_name_linter, line_length_linter
     }
-    Data_voorwaarden$Criterium <- str_to_sentence(Data_voorwaarden$Criterium) #nolint
+    Data_voorwaarden$Criterium <- str_to_sentence(Data_voorwaarden$Criterium) #nolint: object_name_linter, line_length_linter
     controleerInvoerwaarde(
       "Data_voorwaarden$Criterium", Data_voorwaarden$Criterium,
       "Criterium", "Naam", ConnectieLSVIhabitats, Tolower = FALSE
     )
     assert_that(has_name(Data_voorwaarden, "Indicator"))
     if (!is.character(Data_voorwaarden$Indicator)) {
-      Data_voorwaarden$Indicator <- as.character(Data_voorwaarden$Indicator) #nolint
+      Data_voorwaarden$Indicator <- as.character(Data_voorwaarden$Indicator) #nolint: object_name_linter, line_length_linter
     }
     controleerInvoerwaarde(
       "Data_voorwaarden$Indicator", Data_voorwaarden$Indicator,
@@ -44,7 +44,7 @@ invoercontroleData_voorwaarden <- #nolint
     )
     assert_that(has_name(Data_voorwaarden, "Voorwaarde"))
     if (!is.character(Data_voorwaarden$Voorwaarde)) {
-      Data_voorwaarden$Voorwaarde <- as.character(Data_voorwaarden$Voorwaarde) #nolint
+      Data_voorwaarden$Voorwaarde <- as.character(Data_voorwaarden$Voorwaarde) #nolint: object_name_linter, line_length_linter
     }
     uitbreidingTolower <- function(x) {
       tryCatch(
@@ -57,7 +57,7 @@ invoercontroleData_voorwaarden <- #nolint
         }
       )
     }
-    Data_voorwaarden$Voorwaarde <- #nolint
+    Data_voorwaarden$Voorwaarde <- #nolint: object_name_linter
       uitbreidingTolower(Data_voorwaarden$Voorwaarde)
     controleerInvoerwaarde(
       "Data_voorwaarden$Voorwaarde",
@@ -66,7 +66,7 @@ invoercontroleData_voorwaarden <- #nolint
     )
     assert_that(has_name(Data_voorwaarden, "Waarde"))
     if (!is.character(Data_voorwaarden$Waarde)) {
-      Data_voorwaarden$Waarde <- as.character(Data_voorwaarden$Waarde) #nolint
+      Data_voorwaarden$Waarde <- as.character(Data_voorwaarden$Waarde) #nolint: object_name_linter, line_length_linter
     }
 
     Dubbels <- Data_voorwaarden %>%
@@ -102,7 +102,7 @@ invoercontroleData_voorwaarden <- #nolint
 
     if (nrow(data_voorwaarden_na) > 0) {
       if (!all(data_voorwaarden_na$Waarde %in% c("TRUE", "FALSE"))) {
-        stop("Als je in de tabel Data_voorwaarden de kolom voorwaarde leeg laat, wordt ervan uitgegaan dat je de indicator rechtstreeks ingeschat hebt.  In dit geval mag je in de kolom Waarde enkel 'TRUE' (gunstig) of 'FALSE' (ongunstig) ingeven.  Voor minstens 1 record heb je Voorwaarde leeggelaten en bij Waarde een andere waarde dan TRUE of FALSE opgegeven") #nolint
+        stop("Als je in de tabel Data_voorwaarden de kolom voorwaarde leeg laat, wordt ervan uitgegaan dat je de indicator rechtstreeks ingeschat hebt.  In dit geval mag je in de kolom Waarde enkel 'TRUE' (gunstig) of 'FALSE' (ongunstig) ingeven.  Voor minstens 1 record heb je Voorwaarde leeggelaten en bij Waarde een andere waarde dan TRUE of FALSE opgegeven") #nolint: line_length_linter
       }
       DubbeleIndicatoren <- data_voorwaarden_na %>%
         inner_join(
@@ -121,7 +121,7 @@ invoercontroleData_voorwaarden <- #nolint
               paste0(
                 "Voor opname(n) ", .data$Opname, " is de indicator '",
                 .data$Indicator,
-                "' tweemaal opgegeven: rechtstreeks ingeschat als indicator (TRUE/FALSE) en door het opgeven van concrete waarden voor een van de voorwaarden", #nolint
+                "' tweemaal opgegeven: rechtstreeks ingeschat als indicator (TRUE/FALSE) en door het opgeven van concrete waarden voor een van de voorwaarden", #nolint: line_length_linter
                 collapse = NULL
               )
           ) %>%

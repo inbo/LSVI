@@ -5,32 +5,31 @@ library(dplyr)
 library(rlang)
 
 maakConnectiePool()
-Data_habitat <- #nolint
-    read_csv2(
-      system.file("vbdata/Test9190habitat.csv", package = "LSVI"),
-      col_types = list(col_character(), col_character())
-    )
-Data_voorwaarden <- #nolint
+Data_habitat <- #nolint: object_name_linter
+  read_csv2(
+    system.file("vbdata/Test9190habitat.csv", package = "LSVI"),
+    col_types = list(col_character(), col_character())
+  )
+Data_voorwaarden <- #nolint: object_name_linter
   read_csv2(
     system.file("vbdata/Test9190voorwaarden.csv", package = "LSVI"),
-    col_types =
-      list(
-        col_character(), col_character(), col_character(), col_character(),
-        col_character(), col_character(), col_character(), col_character()
-      )
+    col_types = list(
+      col_character(), col_character(), col_character(), col_character(),
+      col_character(), col_character(), col_character(), col_character()
+    )
   )
-Data_soortenKenmerken <- #nolint
+Data_soortenKenmerken <- #nolint: object_name_linter
   read_csv2(
     system.file("vbdata/Test9190soortenKenmerken.csv", package = "LSVI"),
-    col_types =
-      list(col_character(), col_character(), col_character(),
-           col_character(), col_character(), col_character(),
-           col_character(), col_character())
+    col_types = list(
+      col_character(), col_character(), col_character(), col_character(),
+      col_character(), col_character(), col_character(), col_character()
+    )
   )
 
 describe("Data_voorwaarden", {
   it("dubbele invoer geeft een error", {
-    Data_voorwaardenDubbel <- Data_voorwaarden %>% #nolint
+    Data_voorwaardenDubbel <- Data_voorwaarden %>% #nolint: object_name_linter
       bind_rows(
         data.frame(
           ID = "1", Criterium = "Structuur",
@@ -48,7 +47,7 @@ describe("Data_voorwaarden", {
       ),
       " 1 is de voorwaarde 'msa' meermaals opgegeven"
     )
-    Data_voorwaardenDubbel <- Data_voorwaarden %>% #nolint
+    Data_voorwaardenDubbel <- Data_voorwaarden %>% #nolint: object_name_linter
       bind_rows(
         data.frame(
           ID = "1", Criterium = "Structuur",
@@ -71,7 +70,7 @@ describe("Data_voorwaarden", {
 
 describe("Data_soortenKenmerken", {
   it("dubbele invoer geeft een error", {
-    Data_soortenKenmerkenDubbel <- Data_soortenKenmerken %>% #nolint
+    Data_soortenKenmerkenDubbel <- Data_soortenKenmerken %>% #nolint: object_name_linter, line_length_linter
       bind_rows(
         data.frame(
           ID = "1", Kenmerk = "Gewone vlier",
@@ -87,9 +86,9 @@ describe("Data_soortenKenmerken", {
         Data_voorwaarden,
         Data_soortenKenmerkenDubbel
       ),
-      "'Gewone vlier' meermaals opgegeven voor de boomlaag" #nolint
+      "'Gewone vlier' meermaals opgegeven voor de boomlaag"
     )
-    Data_soortenKenmerkenDubbel <- Data_soortenKenmerken %>% #nolint
+    Data_soortenKenmerkenDubbel <- Data_soortenKenmerken %>% #nolint: object_name_linter, line_length_linter
       bind_rows(
         data.frame(
           ID = "1", Kenmerk = "Sambucus nigra",
@@ -105,7 +104,7 @@ describe("Data_soortenKenmerken", {
         Data_voorwaarden,
         Data_soortenKenmerkenDubbel
       ),
-      "zowel Nederlandse als Latijnse namen gebruikt voor de soort 'Sambucus nigra'" #nolint
+      "zowel Nederlandse als Latijnse namen gebruikt voor de soort 'Sambucus nigra'" #nolint: line_length_linter
     )
   })
 })

@@ -54,7 +54,7 @@ setMethod(
     if (sum(is.na(Resultaat$WaardeMin)) < sum(is.na(Resultaat$WaardeMax))) {
       MaxBedekkingMin <- NA
       MaxBedekkingMax <- NA
-      warning("aan- of afwezigheid bedekking") #nolint
+      warning("aan- of afwezigheid bedekking")
     } else if (nrow(Resultaat) > 0) {
 
       MaxBedekkingMin <- max(Resultaat$WaardeMin)

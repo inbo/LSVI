@@ -9,13 +9,13 @@ maakConnectiePool()
 
 describe("berekenLSVIbasis vegetatielaag", {
   it("de vegetatielagen worden correct geselecteerd", {
-    Data_habitat <- #nolint
+    Data_habitat <- #nolint: object_name_linter
       read_csv2(
         system.file("vbdata/Test9190habitat.csv", package = "LSVI"),
         col_types = list(col_character(), col_character())
       )
-    attr(Data_habitat, "spec") <- NULL #nolint
-    Data_voorwaarden <- #nolint
+    attr(Data_habitat, "spec") <- NULL #nolint: object_name_linter
+    Data_voorwaarden <- #nolint: object_name_linter
       read_csv2(
         system.file("vbdata/Test9190voorwaarden.csv", package = "LSVI"),
         col_types =
@@ -24,7 +24,7 @@ describe("berekenLSVIbasis vegetatielaag", {
             col_character(), col_character(), col_character(), col_character()
           )
       )
-    Data_soortenKenmerken <- #nolint
+    Data_soortenKenmerken <- #nolint: object_name_linter
       read_csv2(
         system.file("vbdata/Test9190soortenKenmerken.csv", package = "LSVI"),
         col_types =
@@ -298,13 +298,13 @@ describe("berekenLSVIbasis vegetatielaag", {
   })
 
   it("de functie geeft een warning of error als een vegetatielaag ontbreekt", {
-    Data_habitat <- #nolint
+    Data_habitat <- #nolint: object_name_linter
       read_csv2(
         system.file("vbdata/Test9190habitat.csv", package = "LSVI"),
         col_types = list(col_character(), col_character())
       )
-    attr(Data_habitat, "spec") <- NULL #nolint
-    Data_voorwaarden <- #nolint
+    attr(Data_habitat, "spec") <- NULL #nolint: object_name_linter
+    Data_voorwaarden <- #nolint: object_name_linter
       read_csv2(
         system.file("vbdata/Test9190voorwaarden.csv", package = "LSVI"),
         col_types =
@@ -313,7 +313,7 @@ describe("berekenLSVIbasis vegetatielaag", {
             col_character(), col_character(), col_character(), col_character()
           )
       )
-    Data_soortenKenmerken <- #nolint
+    Data_soortenKenmerken <- #nolint: object_name_linter
       read_csv2(
         system.file("vbdata/Test9190soortenKenmerken.csv", package = "LSVI"),
         col_types =
@@ -337,16 +337,16 @@ describe("berekenLSVIbasis vegetatielaag", {
           Data_soortenKenmerken = Data_soortenKenmerken
         )
       ),
-      "Bij Data_soortenKenmerken is niet voor alle soorten de kolom Vegetatielaag ingevuld"  #nolint
+      "Bij Data_soortenKenmerken is niet voor alle soorten de kolom Vegetatielaag ingevuld"  #nolint: line_length_linter
     )
 
-    Data_habitat <- #nolint
+    Data_habitat <- #nolint: object_name_linter
       read_csv2(
         system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
         col_types = list(col_character(), col_character(), col_character())
       )
-    attr(Data_habitat, "spec") <- NULL #nolint
-    Data_voorwaarden <- #nolint
+    attr(Data_habitat, "spec") <- NULL #nolint: object_name_linter
+    Data_voorwaarden <- #nolint: object_name_linter
       read_csv2(
         system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI"),
         col_types =
@@ -355,7 +355,7 @@ describe("berekenLSVIbasis vegetatielaag", {
             col_character(), col_character(), col_character(), col_character()
           )
       )
-    Data_soortenKenmerken <- #nolint
+    Data_soortenKenmerken <- #nolint: object_name_linter
       read_csv2(
         system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI"),
         col_types =
@@ -380,7 +380,7 @@ describe("berekenLSVIbasis vegetatielaag", {
           Data_soortenKenmerken = Data_soortenKenmerken
         )
       ),
-      "Bij Data_soortenKenmerken is niet voor alle soorten de kolom Vegetatielaag ingevuld"  #nolint
+      "Bij Data_soortenKenmerken is niet voor alle soorten de kolom Vegetatielaag ingevuld"  #nolint: line_length_linter
     )
     expect_equal(
       Testresultaat,
@@ -389,13 +389,13 @@ describe("berekenLSVIbasis vegetatielaag", {
   })
 
   it("s4-klasse bedekkingLaag werkt correct", {
-    Data_habitat <- #nolint
+    Data_habitat <- #nolint: object_name_linter
       read_csv2(
         system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
         col_types = list(col_character(), col_character(), col_character())
       )
-    attr(Data_habitat, "spec") <- NULL #nolint
-    Data_voorwaarden <- #nolint
+    attr(Data_habitat, "spec") <- NULL #nolint: object_name_linter
+    Data_voorwaarden <- #nolint: object_name_linter
       read_csv2(
         system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI"),
         col_types =
@@ -405,7 +405,7 @@ describe("berekenLSVIbasis vegetatielaag", {
             col_character(), col_character()
           )
       )
-    Data_soortenKenmerken <- #nolint
+    Data_soortenKenmerken <- #nolint: object_name_linter
       read_csv2(
         system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI"),
         col_types =
@@ -430,9 +430,9 @@ describe("berekenLSVIbasis vegetatielaag", {
       TestResultaat,
       Resultaatv2
     )
-    Data_voorwaarden <- Data_voorwaarden %>% #nolint
+    Data_voorwaarden <- Data_voorwaarden %>% #nolint: object_name_linter
       filter(.data$Voorwaarde != "bedekking verbossing")
-    Data_soortenKenmerken1 <- Data_soortenKenmerken %>% #nolint
+    Data_soortenKenmerken1 <- Data_soortenKenmerken %>% #nolint: object_name_linter, line_length_linter
       bind_rows(
         data.frame(
           ID = c("JR0216", "Ts2036"),
@@ -478,7 +478,7 @@ describe("berekenLSVIbasis vegetatielaag", {
         ResultaatBerekening
       )
     )
-    Data_soortenKenmerken2 <- Data_soortenKenmerken %>% #nolint
+    Data_soortenKenmerken2 <- Data_soortenKenmerken %>% #nolint: object_name_linter, line_length_linter
       bind_rows(
         data.frame(
           ID = c("JR0216", "Ts2036"),
@@ -499,9 +499,9 @@ describe("berekenLSVIbasis vegetatielaag", {
           Data_soortenKenmerken = Data_soortenKenmerken2
         )
       ),
-      "Bij Data_soortenKenmerken is niet voor alle soorten de kolom Vegetatielaag ingevuld"  #nolint
+      "Bij Data_soortenKenmerken is niet voor alle soorten de kolom Vegetatielaag ingevuld"  #nolint: line_length_linter
     )
-    Data_soortenKenmerken3 <- Data_soortenKenmerken %>% #nolint
+    Data_soortenKenmerken3 <- Data_soortenKenmerken %>% #nolint: object_name_linter, line_length_linter
       bind_rows(
         data.frame(
           ID = c("JR0216", "Ts2036"),
@@ -534,17 +534,17 @@ describe("berekenLSVIbasis vegetatielaag", {
   })
 
   it("bij verbossing wordt Salix repens niet meegeteld als boom", {
-    Data_habitat <- #nolint
+    Data_habitat <- #nolint: object_name_linter
       read_csv2(
         system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
         col_types = list(col_character(), col_character(), col_character())
       )
-    attr(Data_habitat, "spec") <- NULL #nolint
-    Data_voorwaarden <- #nolint
+    attr(Data_habitat, "spec") <- NULL #nolint: object_name_linter
+    Data_voorwaarden <- #nolint: object_name_linter
       read_csv2(
         system.file("vbdata/Opname4030voorwaardenv2.csv", package = "LSVI")
       )
-    Data_soortenKenmerken <- #nolint
+    Data_soortenKenmerken <- #nolint: object_name_linter
       read_csv2(
         system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI")
       )

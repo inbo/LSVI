@@ -220,7 +220,7 @@ describe("test databank", {
     dbDisconnect(ConnectieLSVIhabitats)
   })
 
-  it("AnalyseVariabele bedekkingLaagExcl bevat percentages en categorische var", { #nolint
+  it("AnalyseVariabele bedekkingLaagExcl bevat percentages en categorische var", { #nolint: line_length_linter
     ConnectieLSVIhabitats <-
       connecteerMetLSVIdb()
     av <-
@@ -250,7 +250,7 @@ describe("test databank", {
     dbDisconnect(ConnectieLSVIhabitats)
   })
 
-  it("AnalyseVariabele bedekkingLaagPlus bevat percentages en categorische var", { #nolint
+  it("AnalyseVariabele bedekkingLaagPlus bevat percentages en categorische var", { #nolint: line_length_linter
     ConnectieLSVIhabitats <-
       connecteerMetLSVIdb()
     av <-
@@ -726,7 +726,7 @@ describe("test databank", {
     dbDisconnect(ConnectieLSVIhabitats)
   })
 
-  it("De subanalysevariabele is enkel gebruikt bij AnalyseVariabelen die dit ondersteunen", { #nolint
+  it("De subanalysevariabele is enkel gebruikt bij AnalyseVariabelen die dit ondersteunen", { #nolint: line_length_linter
     ConnectieLSVIhabitats <-
       connecteerMetLSVIdb()
     av <-

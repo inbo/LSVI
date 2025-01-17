@@ -46,7 +46,7 @@ setValidity(
           tolower(object@Kenmerken$TypeKenmerk) %in%
             c("studiegroep", "soort_nbn")
         ),
-        msg = "TypeKenmerk moet een van de volgende waarden zijn: studiegroep, soort_nbn" #nolint
+        msg = "TypeKenmerk moet een van de volgende waarden zijn: studiegroep, soort_nbn" #nolint: line_length_linter
       )
     }
     return(TRUE)

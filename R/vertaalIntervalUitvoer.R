@@ -129,7 +129,7 @@ vertaalIntervalUitvoer <-
         )
 
       if (max(is.na(Resultaat$Waarde) & !is.na(Resultaat$Max))) {
-        warning("Er ging iets mis bij de omzetting van het berekend resultaat naar een categorische waarde (functie vertaalIntervalUitvoer).")  #nolint
+        warning("Er ging iets mis bij de omzetting van het berekend resultaat naar een categorische waarde (functie vertaalIntervalUitvoer).")  #nolint: line_length_linter
       }
     }
 

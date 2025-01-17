@@ -37,7 +37,7 @@ controleerInvoerwaarde <-
     if (length(FouteInvoer) > 0) {
       stop(
         sprintf(
-          "De waarde(n) '%s' ingevoerd in %s komen niet voor in de databank. Voer hier een van volgende waarden in: %s", #nolint
+          "De waarde(n) '%s' ingevoerd in %s komen niet voor in de databank. Voer hier een van volgende waarden in: %s", #nolint: line_length_linter
           paste0(FouteInvoer, collapse = "','"),
           Beschrijving,
           paste0(Databankwaarden, collapse = ", ")
