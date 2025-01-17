@@ -1,5 +1,5 @@
 # Deze functie zorgt voor de migratie van (een deel van) de databank op
-# SQL-server naar een SQLite-databank in het package zelf in de map inst/data
+# SQL-server naar een SQLite-databank in het package zelf in map inst/databank
 
 library(DBI)
 library(RSQLite)

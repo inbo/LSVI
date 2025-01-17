@@ -328,7 +328,7 @@ Voor de aggregatie naar hogere niveaus (criterium en volledige opname) worden de
 
 Eerst worden verschilscores voor elk van de voorwaarden berekend met de functie `berekenVerschilscores()`:
 
-- theoretisch maximum bepalen voor de voorwaarde:<!--zou idealiter in de databank toegevoegd worden-->
+- theoretisch maximum is weergegeven in de databank en wordt bepaald als volgt:
     - voor bedekkingen en aandelen is dit 1 of 100 % (ook als de grenswaarde een categorische variabele is)
     - voor het aantal soorten/kenmerken is dit het minimum van:
         - het aantal soorten/kenmerken van de lijst in de databank
