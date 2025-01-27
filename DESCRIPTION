@@ -25,12 +25,12 @@ Encoding: UTF-8
 Imports:
     assertthat,
     DBI,
-    plyr,
     dplyr,
     lazyeval,
     lifecycle,
     methods,
     odbc,
+    plyr,
     pool,
     purrr,
     readr,
@@ -38,6 +38,7 @@ Imports:
     rlang,
     rmarkdown,
     RSQLite,
+    stats,
     stringr,
     tibble,
     tidyr,
@@ -80,6 +81,7 @@ Collate:
     'maakConnectiePoolServer.R'
     'maakHabitatfiches.R'
     'maakLSVIrapport.R'
+    'map_taxa_from_vernacular.R'
     'parseTaxonnaam.R'
     'postparseTaxonnaam.R'
     'preparseTaxonnaam.R'
