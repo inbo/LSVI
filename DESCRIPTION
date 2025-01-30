@@ -26,7 +26,6 @@ Imports:
     assertthat,
     DBI,
     dplyr,
-    lazyeval,
     lifecycle,
     methods,
     odbc,
