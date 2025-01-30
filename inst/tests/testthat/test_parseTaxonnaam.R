@@ -2,6 +2,10 @@ context("test parseTaxonnaam")
 
 describe("parseTaxonnaam", {
   it("Taxonnamen worden correct geparst", {
+    expect_warning(
+      parseTaxonnaam("Salix repens L."),
+      "'parseTaxonnaam' is deprecated."
+    )
     expect_equal(
       parseTaxonnaam("Salix repens L. subsp. galeifolia Neumann ex Rech. f."),
       "Salix repens subsp. galeifolia"
