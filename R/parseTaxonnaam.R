@@ -1,6 +1,12 @@
 #' @title Vereenvoudig de soortnaam door de auteurs te verwijderen
 #'
-#' @description Deze functie vereenvoudigt de opgegeven taxonna(a)m(en) door
+#' @description
+#' __Deze functie wordt niet meer onderhouden en zal bij een volgende versie
+#' van dit package verdwijnen.
+#' Voor een functie met gelijkaardige functionaliteit verwijzen we naar
+#' `rgbif::name_parse()` waarrond `parseTaxonnaam()` een wrapper is.__
+#'
+#' Deze functie vereenvoudigt de opgegeven taxonna(a)m(en) door
 #' de auteursnaam te verwijderen.  Ze is gebaseerd op de functie name_parse
 #' uit het package rgbif, maar ze vangt enkele specifieke situaties uit de
 #' INBO-plantenlijsten wel op die de originele functie niet correct opvangt, bv.
@@ -22,7 +28,7 @@
 #' parseTaxonnaam("Rosa canina L.")
 #'
 #' @export
-#' @noRd
+#' @rdname package-deprecated
 #'
 #' @importFrom rgbif name_parse
 #'

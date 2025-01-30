@@ -19,6 +19,11 @@ Deze functie geeft de vereenvoudigde naam of namen terug (als string
 of vector van strings)
 }
 \description{
+\strong{Deze functie wordt niet meer onderhouden en zal bij een volgende versie
+van dit package verdwijnen.
+Voor een functie met gelijkaardige functionaliteit verwijzen we naar
+\code{rgbif::name_parse()} waarrond \code{parseTaxonnaam()} een wrapper is.}
+
 Deze functie vereenvoudigt de opgegeven taxonna(a)m(en) door
 de auteursnaam te verwijderen.  Ze is gebaseerd op de functie name_parse
 uit het package rgbif, maar ze vangt enkele specifieke situaties uit de
