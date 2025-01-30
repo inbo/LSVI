@@ -177,6 +177,7 @@ map_taxa_from_vernacular <- function(
 
   # Match vernacular names to get taxonomic info
   matched_names_df <- vernacular_name_df %>%
+    mutate(id = seq_along(.data[[vernacular_name_col]])) %>%
 
     # group  by vernacular name and compact the data
     group_by(across(all_of(c(vernacular_name_col, group_cols)))) %>%
