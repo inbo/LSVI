@@ -217,7 +217,13 @@ map_taxa_from_vernacular <- function(
     # Add other columns from input df
     right_join(vernacular_name_df,
                by = c(vernacular_name_col, group_cols)
-    ) %>%
+    )
+  
+  # only keep out_cols that are present
+  # (e.g. synonym and acceptedKey may be absent)
+  out_cols <- out_cols[out_cols %in% colnames(out_df)]
+
+  out_df <- out_df %>%
 
     # Set desired column(s) at the right side
     select(all_of(names(vernacular_name_df)), all_of(out_cols)) %>%
