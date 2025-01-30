@@ -98,12 +98,14 @@ for (VersieRapportdeel in unique(Indicatoren$Versie)) {
               sep = ""
             )
           )
-        if (HabitatsubtypeFiche != Habitat) {
-          Uitvoer <-
-            c(Uitvoer,
-              paste("#### Habitatsubtype ", HabitatsubtypeFiche,
-                    Habitatsubtypenaam, "\n", sep = ""))
-        }
+        Uitvoer <-
+          c(
+            Uitvoer,
+            paste(
+              "#### Habitatsubtype ", HabitatsubtypeFiche,
+              Habitatsubtypenaam, "\n", sep = ""
+            )[HabitatsubtypeFiche != Habitat]
+          )
         Uitvoer <-
           c(Uitvoer,
             knit_child("Habitatfiche.Rmd"))
