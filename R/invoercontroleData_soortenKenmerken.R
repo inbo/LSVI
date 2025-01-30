@@ -291,13 +291,15 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
       ) %>%
       distinct(.data$Kenmerk)
     if (nrow(GbifNL) > 0) {
-      GbifNL <- data.frame( #extra record toevoegen omdat map_taxa_from_vernacular() vastloopt als eerste onbekend is
+      # extra record toevoegen omdat map_taxa_from_vernacular() vastloopt
+      # als eerste record onbekende soort is
+      GbifNL <- data.frame(
         Kenmerk = "Eekhoorn", Kingdom = "Animalia", Class = "Mammalia"
       ) %>%
         bind_rows(
           merge(
             GbifNL,
-            data.frame(Kingdom = c("Plantae", "Fungi")) #, Class = NA_character_)
+            data.frame(Kingdom = c("Plantae", "Fungi"))
           )
         )
       GbifNL <- map_taxa_from_vernacular(
