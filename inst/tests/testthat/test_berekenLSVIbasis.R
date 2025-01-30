@@ -852,7 +852,7 @@ describe("berekenLSVIbasis", {
               )
           )
       ),
-      "De Nederlandse naam calluna vulgaris wordt door Gbif gekoppeld aan meerdere taxa." #nolint: line_length_linter
+      "Volgende soortnamen of keys zijn niet teruggevonden in de databank of Gbif: calluna vulgaris.  Check de spelling en/of ga na of de gebruikte taxonomie nog gangbaar is." #nolint: line_length_linter
     )
     expect_equal(
       idsWissen(

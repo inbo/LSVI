@@ -19,7 +19,7 @@
 #'   select
 #' @importFrom purrr map map_dbl
 #' @importFrom readr read_csv2
-#' @importFrom rgbif name_backbone_checklist name_lookup name_usage
+#' @importFrom rgbif name_backbone_checklist name_usage
 #' @importFrom rlang .data sym
 #' @importFrom stringr str_to_sentence
 #' @importFrom tidyr unnest_wider
@@ -283,52 +283,87 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
         )
     }
 
-    geefGbifNl <- function(NlNaam) {
-      GbifUitvoer <- name_lookup(NlNaam)$data
-      Poging1 <- GbifUitvoer %>%
-        filter(!.data$synonym) %>%
-        distinct(.data$nubKey)
-      if (nrow(Poging1) == 1) {
-        return(Poging1$nubKey)
-      }
-      if (nrow(Poging1) > 1) {
-        stop(
-          sprintf(
-            "De Nederlandse naam %s wordt door Gbif gekoppeld aan meerdere taxa.
-            Test evt. met rgbif::name_lookup('%s')$data welke opties er zijn,
-            en geef een ondubbelzinnige naam of evt. gbif-key als invoer.",
-            NlNaam, NlNaam
+    # Nederlandse namen opzoeken via rgbif
+    GbifNL <- KenmerkenSoort %>%
+      filter(
+        is.na(.data$AcceptedKey),
+        tolower(.data$TypeKenmerk) == "soort_nl"
+      ) %>%
+      distinct(.data$Kenmerk)
+    if (nrow(GbifNL) > 0) {
+      GbifNL <- data.frame( #extra record toevoegen omdat map_taxa_from_vernacular() vastloopt als eerste onbekend is
+        Kenmerk = "Eekhoorn", Kingdom = "Animalia", Class = "Mammalia"
+      ) %>%
+        bind_rows(
+          merge(
+            GbifNL,
+            data.frame(Kingdom = c("Plantae", "Fungi")) #, Class = NA_character_)
           )
         )
-      }
-      if (nrow(Poging1) == 0) {
-        Poging2 <- GbifUitvoer %>%
-          filter(.data$synonym) %>%
-          distinct(.data$acceptedKey)
-        if (nrow(Poging2) == 1) {
-          return(Poging2$acceptedKey)
-        }
-        if (nrow(Poging1) > 1) {
-          stop(
-            sprintf(
-              "De Nederlandse naam %s wordt door Gbif gekoppeld aan meerdere
-              accepted taxa.
-              Test evt. met rgbif::name_lookup('%s')$data welke opties er zijn,
-              en geef een ondubbelzinnige naam of evt. gbif-key als invoer.",
-              NlNaam, NlNaam
-            )
+      GbifNL <- map_taxa_from_vernacular(
+        vernacular_name_df = GbifNL,
+        vernacular_name_col = "Kenmerk",
+        out_cols = c("scientificName", "nubKey", "synonym", "acceptedKey"),
+        filter_cols = list(kingdom = "Kingdom"),
+        lang = "nld",
+        limit = 1000,
+        increment = 250
+      ) %>%
+        filter(!is.na(.data$scientificName), .data$Kenmerk != "Eekhoorn")
+      if (all(c("synonym", "acceptedKey") %in% colnames(GbifNL))) {
+        GbifNL <- GbifNL %>%
+          mutate(
+            GbifAcceptedUsageKey =
+              ifelse(
+                is.na(.data$synonym) | !.data$synonym,
+                NA, .data$acceptedUsageKey
+              )
           )
-        }
-        if (nrow(Poging1) == 0) {
-          stop(
-            sprintf(
-              "%s wordt niet door Gbif herkend, overweeg om een Latijnse naam
-              of gbif-key te geven voor dit taxon.",
-              NlNaam
-            )
-          )
-        }
+      } else {
+        GbifNL$GbifAcceptedUsageKey <- NA_integer_
       }
+      GbifNL <- GbifNL %>%
+        transmute(
+          .data$Kenmerk,
+          GbifUsageKey = .data$nubKey,
+          .data$GbifAcceptedUsageKey
+        ) %>%
+        # Met info uit package proberen te koppelen via usagekey
+        left_join(
+          Taxonlijst %>%
+            select(
+              -"TaxonNameExact", -"ScientificNameExact", -"GbifConfidence",
+              -"GbifMatchType", -"NLNameExact"
+            ),
+          by = "GbifUsageKey",
+          suffix = c("MagWeg", "")
+        )
+      GbifNL <- GbifNL %>%
+        filter(!is.na(.data$AcceptedKey)) %>%
+        mutate(
+          Koppelmethode = "Gbif-usagekey opgezocht voor Nederlandse naam",
+          GbifAcceptedUsageKeyMagWeg = NULL
+        ) %>%
+        bind_rows(
+          GbifNL %>%
+            filter(is.na(.data$AcceptedKey)) %>%
+            select(
+              "Kenmerk", "GbifUsageKey", "GbifAcceptedUsageKey"
+            ) %>%
+            left_join(
+              Taxonlijst %>%
+                select(
+                  -"TaxonNameExact", -"ScientificNameExact", -"GbifConfidence",
+                  -"GbifMatchType", -"NLNameExact", -"GbifUsageKey"
+                ),
+              by = "GbifAcceptedUsageKey"
+            ) %>%
+            mutate(
+              Koppelmethode =
+                "Gbif-acceptedkey opgezocht voor Nederlandse naam",
+              AcceptedKey = .data$GbifAcceptedUsageKey
+            )
+        )
     }
     geefGbifKey <- function(Key) {
       if (grepl("\\D", Key)) {
@@ -374,20 +409,9 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
             "ID", "Kenmerk", "TypeKenmerk", "Waarde", "Type", "Invoertype",
             "Eenheid", "Vegetatielaag"
           ) %>%
-          mutate(
-            AcceptedKey = map_dbl(.data$Kenmerk, geefGbifNl)
-          ) %>%
           left_join(
-            Taxonlijst %>%
-              select(
-                -"TaxonNameExact", -"ScientificNameExact",
-                -"GbifConfidence", -"GbifMatchType", -"NLNameExact",
-                -"AcceptedKey"
-              ) %>%
-              mutate(
-                Koppelmethode = "Gbif-acceptedkey opgezocht voor NL naam"
-              ),
-            by = c("AcceptedKey" = "GbifUsageKey")
+            GbifNL,
+            by = "Kenmerk"
           )
       ) %>%
       bind_rows(
