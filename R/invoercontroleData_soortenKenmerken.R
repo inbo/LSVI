@@ -160,7 +160,10 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
       filter(tolower(.data$TypeKenmerk) == "soort_latijn") %>%
       left_join(
         Taxonlijst %>%
-          select(-"ScientificNameExact", -"NLNameExact", -"NbnTaxonVersionKey"),
+          select(
+            -"ScientificNameExact", -"NLNameExact", -"NbnTaxonVersionKey"
+          ) %>%
+          distinct(),
         by = c("Kenmerk" = "TaxonNameExact")
       ) %>%
       bind_rows(
@@ -175,6 +178,7 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
                 -"ScientificNameExact", -"TaxonNameExact", -"NbnTaxonVersionKey"
               ) %>%
               filter(!is.na(.data$NLNameExact)) %>%
+              distinct() %>%
               mutate(
                 NLNameExact = tolower(.data$NLNameExact)
               ),
@@ -192,7 +196,8 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
               select(
                 -"ScientificNameExact", -"TaxonNameExact", -"NLNameExact",
                 -"NbnTaxonVersionKey"
-              ),
+              ) %>%
+              distinct(),
             by = c("Kenmerk")
           )
       ) %>%
@@ -204,7 +209,10 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
               mutate(
                 Kenmerk = as.character(.data$NbnTaxonVersionKey)
               ) %>%
-              select(-"ScientificNameExact", -"TaxonNameExact", -"NLNameExact"),
+              select(
+                -"ScientificNameExact", -"TaxonNameExact", -"NLNameExact"
+              ) %>%
+              distinct(),
             by = c("Kenmerk")
           )
       ) %>%
@@ -237,8 +245,9 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
           Taxonlijst %>%
             select(
               -"TaxonNameExact", -"ScientificNameExact", -"GbifConfidence",
-              -"GbifMatchType", -"NLNameExact"
-            ),
+              -"GbifMatchType", -"NLNameExact", -"NbnTaxonVersionKey"
+            ) %>%
+            distinct(),
           by = "GbifUsageKey",
           suffix = c("MagWeg", "")
         )
@@ -272,13 +281,14 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
               Taxonlijst %>%
                 select(
                   -"TaxonNameExact", -"ScientificNameExact", -"GbifConfidence",
-                  -"GbifMatchType", -"NLNameExact", -"GbifUsageKey"
-                ),
-              by = "GbifAcceptedUsageKey"
+                  -"GbifMatchType", -"NLNameExact", -"NbnTaxonVersionKey",
+                  -"GbifAcceptedUsageKey"
+                ) %>%
+                distinct(),
+              by = c("GbifAcceptedUsageKey" = "GbifUsageKey")
             ) %>%
             mutate(
-              Koppelmethode = "Gbif-acceptedkey opgezocht voor Latijnse naam",
-              AcceptedKey = .data$GbifAcceptedUsageKey
+              Koppelmethode = "Gbif-acceptedkey opgezocht voor Latijnse naam"
             )
         )
     }
@@ -335,8 +345,9 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
           Taxonlijst %>%
             select(
               -"TaxonNameExact", -"ScientificNameExact", -"GbifConfidence",
-              -"GbifMatchType", -"NLNameExact"
-            ),
+              -"GbifMatchType", -"NLNameExact", -"NbnTaxonVersionKey"
+            ) %>%
+            distinct(),
           by = "GbifUsageKey",
           suffix = c("MagWeg", "")
         )
@@ -356,14 +367,15 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
               Taxonlijst %>%
                 select(
                   -"TaxonNameExact", -"ScientificNameExact", -"GbifConfidence",
-                  -"GbifMatchType", -"NLNameExact", -"GbifUsageKey"
-                ),
-              by = "GbifAcceptedUsageKey"
+                  -"GbifMatchType", -"NLNameExact", -"NbnTaxonVersionKey",
+                  -"GbifAcceptedUsageKey"
+                ) %>%
+                distinct(),
+              by = c("GbifAcceptedUsageKey" = "GbifUsageKey")
             ) %>%
             mutate(
               Koppelmethode =
-                "Gbif-acceptedkey opgezocht voor Nederlandse naam",
-              AcceptedKey = .data$GbifAcceptedUsageKey
+                "Gbif-acceptedkey opgezocht voor Nederlandse naam"
             )
         )
     }
@@ -434,8 +446,9 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
               select(
                 -"TaxonNameExact", -"ScientificNameExact",
                 -"GbifConfidence", -"GbifMatchType", -"NLNameExact",
-                -"AcceptedKey"
+                -"AcceptedKey", -"NbnTaxonVersionKey"
               ) %>%
+              distinct() %>%
               mutate(
                 Koppelmethode = "Gbif-acceptedkey opgezocht voor gbif-key"
               ),

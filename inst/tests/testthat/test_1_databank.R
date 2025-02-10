@@ -1350,4 +1350,55 @@ describe("test tabel Taxonlijst", {
       0
     )
   })
+  it("Taxonlijst bevat geen dubbels (m.u.v. namen die synoniem zijn)", {
+    expect_equal(
+      Taxonlijst %>%
+        select(
+          -"TaxonNameExact", -"ScientificNameExact", -"GbifConfidence",
+          -"GbifMatchType", -"NLNameExact", -"NbnTaxonVersionKey"
+        ) %>%
+        distinct() %>%
+        count(GbifUsageKey) %>%
+        filter(n > 1) %>%
+        nrow(),
+      0
+    )
+    expect_equal(
+      Taxonlijst %>%
+        select(
+          -"ScientificNameExact", -"GbifConfidence",
+          -"GbifMatchType", -"NLNameExact", -"NbnTaxonVersionKey"
+        ) %>%
+        distinct() %>%
+        count(TaxonNameExact) %>%
+        filter(n > 1) %>%
+        nrow(),
+      0
+    )
+    expect_equal(
+      Taxonlijst %>%
+        select(
+          -"TaxonNameExact", -"ScientificNameExact", -"GbifConfidence",
+          -"GbifMatchType", -"NLNameExact"
+        ) %>%
+        distinct() %>%
+        count(NbnTaxonVersionKey) %>%
+        filter(n > 1, !is.na(NbnTaxonVersionKey)) %>%
+        nrow(),
+      0
+    )
+    expect_equal(
+      Taxonlijst %>%
+        mutate(NLNameExact = tolower(NLNameExact)) %>%
+        select(
+          -"TaxonNameExact", -"ScientificNameExact", -"GbifConfidence",
+          -"GbifMatchType", -"NbnTaxonVersionKey"
+        ) %>%
+        distinct() %>%
+        count(NLNameExact) %>%
+        filter(n > 1, !is.na(NLNameExact)) %>%
+        nrow(),
+      0
+    )
+  })
 })
