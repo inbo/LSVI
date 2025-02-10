@@ -1013,7 +1013,7 @@ berekenLSVIbasis <- #nolint: object_name_linter
           desc(tolower(.data$Koppelmethode)), desc(.data$GbifMatchType),
           .data$GbifConfidence
         )
-      if (!all(Soortenlijst$Koppelmethode == "exacte naam in LSVI-package")) {
+      if (!all(Soortenlijst$Koppelmethode == "exacte naam/key in LSVI-package")) {
         warning(
           "Sommige soorten konden niet exact gematcht worden met de taxonlijst in het package en zijn via gbif gematcht. Controleer in de soortenlijst in het resultaat of deze matching juist gebeurd is." #nolint: line_length_linter
         )
