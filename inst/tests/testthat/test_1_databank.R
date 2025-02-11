@@ -58,7 +58,8 @@ describe("test databank", {
           TypeVariabele.Naam as TypeVariabele
         FROM AnalyseVariabele INNER JOIN TypeVariabele
         ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
-        WHERE AnalyseVariabele.VariabeleNaam in ('aantal', 'aantalGroepen')"
+        WHERE AnalyseVariabele.VariabeleNaam in ('aantal', 'aantalGroepen',
+          'scoresom')"
       )
     skip_if_not(nrow(av) > 0, "aantal komt niet voor")
     av_ok <- av %>%
@@ -67,7 +68,7 @@ describe("test databank", {
       filter(TypeVariabele != "Geheel getal")
     expect_equal(
       nrow(av_ok),
-      2
+      3
     )
     Refwaarden <-
       dbGetQuery(
@@ -1131,6 +1132,12 @@ describe("test databank", {
         !(Maximumwaarde == 3 * as.numeric(sub(",", ".", Referentiewaarde)))
       )
     expect_equal(nrow(TMmeting), 0)
+  })
+  it("Functie logDatabankfouten() geeft nog problemen", {
+    Databankfouten <-
+      logDatabankfouten(ConnectieLSVIhabitats = connecteerMetLSVIdb())
+    expect_equal(nrow(Databankfouten[[1]]), 0)
+    expect_equal(nrow(Databankfouten[[2]]), 0)
   })
 })
 
