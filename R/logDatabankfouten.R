@@ -65,7 +65,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
       WHERE NOT VariabeleNaam in ('aantal', 'aandeel', 'aandeelKruidlaag',
         'bedekking', 'maxBedekking', 'maxBedekkingExcl', 'bedekkingLaag',
         'bedekkingSom', 'bedekkingExcl', 'maxBedekking2s', 'bedekkingLaagExcl',
-        'bedekkingLaagPlus', 'aantalGroepen')
+        'bedekkingLaagPlus', 'aantalGroepen', 'scoresom')
       AND NOT VariabeleNaam LIKE 'meting%'"
     ) %>%
     transmute(
@@ -90,12 +90,12 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
         c("aantal", "aandeel", "aandeelKruidlaag", "bedekking", "bedekkingLaag",
           "maxBedekking", "maxBedekkingExcl", "bedekkingSom", "bedekkingExcl",
           "maxBedekking2s", "bedekkingLaagExcl", "bedekkingLaagPlus",
-          "aantalGroepen"),
+          "aantalGroepen", "scoresom"),
       !grepl("^meting", .data$AnalyseVariabele)
     )
   TypeAantalNietGeheelGetal <- Invoervereisten %>%
     filter(
-      .data$AnalyseVariabele %in% c("aantal", "aantalGroepen") &
+      .data$AnalyseVariabele %in% c("aantal", "aantalGroepen", "scoresom") &
         .data$TypeVariabele != "Geheel getal"
     )
   TypeBedekkingFout <- Invoervereisten %>%
@@ -233,7 +233,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
           .data$AnalyseVariabele %in%
             c("aandeel", "aantal", "aantalGroepen", "bedekking",
               "bedekkingExcl", "maxBedekking", "maxBedekking2s",
-              "maxBedekkingExcl")
+              "maxBedekkingExcl", "scoresom")
         ) %>%
         filter(
           is.na(.data$TaxongroepId) & is.na(.data$Studiegroepnaam)
@@ -290,7 +290,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
             !.data$AnalyseVariabele %in%
             c("aantal", "aandeel", "aandeelKruidlaag", "bedekking",
               "bedekkingExcl", "maxBedekking", "maxBedekking2s",
-              "maxBedekkingExcl")
+              "maxBedekkingExcl", "scoresom")
         ) %>%
         mutate(
           Probleem =
