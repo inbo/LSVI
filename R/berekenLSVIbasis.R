@@ -319,7 +319,8 @@ berekenLSVIbasis <- #nolint: object_name_linter
     Resultaat <-
       Data_habitat %>%
       left_join(
-        Invoervereisten,
+        Invoervereisten %>%
+          select(-"Habitattype"),
         by = c("Habitattype" = "Habitatsubtype"),
         relationship = "many-to-many"
       )
@@ -632,7 +633,6 @@ berekenLSVIbasis <- #nolint: object_name_linter
         .data$ID,
         .data$Habitattype,
         .data$Versie,
-        .data$Habitattype.y,
         .data$Criterium,
         .data$Indicator,
         .data$Beoordeling,
@@ -722,7 +722,6 @@ berekenLSVIbasis <- #nolint: object_name_linter
         .data$Habitattype,   #en hier zouden extra gegevens uit Data_habitat
                              #moeten toegevoegd worden
         .data$Versie,
-        .data$Habitattype.y,
         .data$Criterium,
         .data$Indicator,
         .data$Beoordeling,
@@ -752,7 +751,6 @@ berekenLSVIbasis <- #nolint: object_name_linter
             .data$Habitattype,   #en hier zouden extra gegevens uit Data_habitat
                                   #moeten toegevoegd worden
             .data$Versie,
-            .data$Habitattype.y,
             .data$Criterium,
             .data$Indicator,
             .data$Beoordeling,

@@ -28,7 +28,6 @@ describe("twee voorwaarden vergelijken", {
         ID = "1",
         Habitattype = "1330_hpr",
         Versie = "Versie 2.0",
-        Habitattype.y = "1330",
         Criterium = "Verstoring",
         Indicator = "overgang naar rbbzil",
         Beoordeling =
@@ -78,7 +77,7 @@ describe("twee voorwaarden vergelijken", {
       ),
       Resultaat %>%
         select(
-          ID, Habitattype, Versie, Habitattype.y, Criterium, Indicator,
+          ID, Habitattype, Versie, Criterium, Indicator,
           Beoordeling, Belang, Kwaliteitsniveau
         ) %>%
         mutate(
