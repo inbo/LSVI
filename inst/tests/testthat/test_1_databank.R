@@ -963,6 +963,127 @@ describe("test databank", {
     )
   })
 
+  it("Elke taxonnaam heeft een GbifUsageKey en Rank", {
+    ConnectieLSVIhabitats <-
+      connecteerMetLSVIdb()
+    Taxons <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        "SELECT t.FloraNaamWetenschappelijk AS tflorawet,
+          t.FloraNaamNederlands AS tfloranl,
+          t.NbnNaam AS tnbn, t.NbnNaamVolledig AS tnbnvol,
+          ts.FloraNaamWetenschappelijk AS tsflorawet,
+          ts.FloraNaamNederlands AS tsfloranl,
+          ts.NbnNaam AS tsnbn, ts.NbnNaamVolledig AS tsnbnvol,
+          t.GbifUsageKey, t.Rank
+        FROM Taxon t LEFT JOIN TaxonSynoniem ts
+        ON t.Id = ts.TaxonId"
+      )
+    dbDisconnect(ConnectieLSVIhabitats)
+    expect_equal(
+      nrow(
+        Taxons %>%
+          filter(is.na(GbifUsageKey))
+      ),
+      0
+    )
+    expect_equal(
+      nrow(
+        Taxons %>%
+          select(GbifUsageKey, tflorawet) %>%
+          distinct() %>%
+          group_by(tflorawet) %>%
+          count(GbifUsageKey) %>%
+          filter(n > 1)
+      ),
+      0
+    )
+    expect_equal(
+      nrow(
+        Taxons %>%
+          select(GbifUsageKey, tfloranl) %>%
+          distinct() %>%
+          group_by(tfloranl) %>%
+          count(GbifUsageKey) %>%
+          filter(n > 1)
+      ),
+      0
+    )
+    expect_equal(
+      nrow(
+        Taxons %>%
+          select(GbifUsageKey, tsflorawet) %>%
+          distinct() %>%
+          group_by(tsflorawet) %>%
+          count(GbifUsageKey) %>%
+          filter(n > 1)
+      ),
+      0
+    )
+    expect_equal(
+      nrow(
+        Taxons %>%
+          select(GbifUsageKey, tsfloranl) %>%
+          distinct() %>%
+          group_by(tsfloranl) %>%
+          count(GbifUsageKey) %>%
+          filter(n > 1)
+      ),
+      0
+    )
+    expect_equal(
+      nrow(
+        Taxons %>%
+          filter(is.na(Rank))
+      ),
+      0
+    )
+    expect_equal(
+      nrow(
+        Taxons %>%
+          select(Rank, tflorawet) %>%
+          distinct() %>%
+          group_by(tflorawet) %>%
+          count(Rank) %>%
+          filter(n > 1)
+      ),
+      0
+    )
+    expect_equal(
+      nrow(
+        Taxons %>%
+          select(Rank, tfloranl) %>%
+          distinct() %>%
+          group_by(tfloranl) %>%
+          count(Rank) %>%
+          filter(n > 1)
+      ),
+      0
+    )
+    expect_equal(
+      nrow(
+        Taxons %>%
+          select(Rank, tsflorawet) %>%
+          distinct() %>%
+          group_by(tsflorawet) %>%
+          count(Rank) %>%
+          filter(n > 1)
+      ),
+      0
+    )
+    expect_equal(
+      nrow(
+        Taxons %>%
+          select(Rank, tsfloranl) %>%
+          distinct() %>%
+          group_by(tsfloranl) %>%
+          count(Rank) %>%
+          filter(n > 1)
+      ),
+      0
+    )
+  })
+
   it("Het theoretisch maximum (Maximumwaarde) is correct berekend", {
     TMbedekkingaandeel <-
       geefInvoervereisten(ConnectieLSVIhabitats = connecteerMetLSVIdb()) %>%
