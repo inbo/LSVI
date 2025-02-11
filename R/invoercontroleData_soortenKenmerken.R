@@ -257,10 +257,10 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
         stop(
           paste0(
             "Latijnse naam/namen ",
-            paste(unique(Onbetrouwbaar$Kenmerk), sep = ", "),
+            paste(unique(Onbetrouwbaar$Kenmerk), collapse = ", "),
             " geeft/geven geen betrouwbaar resultaat bij het opzoeken van de",
             " Gbif-key met functie rgbif::name_backbone(). Check de spelling",
-            " en kijk na of het een Latijnse naam is."
+            " en kijk na of het een Latijnse naam (inclusief auteursnaam) is."
           )
         )
       }
