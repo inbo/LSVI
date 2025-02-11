@@ -1567,7 +1567,6 @@ describe("berekenLSVIbasis", {
                   "Matig?(Waarschijnlijk soorten over het hoofd gezien)"
                 ),
               Versie = "Versie 2.0",
-              Habitattype.y = "4030",
               Criterium = "Vegetatie",
               Indicator = "sleutelsoorten",
               Beoordeling =

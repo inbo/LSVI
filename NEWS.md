@@ -6,6 +6,8 @@ invoer van GbifUsageKey als 'soort_gbif' wordt toegevoegd en
 invoer van soort_NBN wordt afgebouwd, alsook functie `parseTaxonnaam()`
 * extra output 'Soortenlijst' in functie `berekenLSVIbasis()` laat toe om te
 controleren hoe de functie de ingevoerde soorten interpreteert
+* veld habitattype.y verwijderd in output van tabellen van functie
+`berekenLSVIbasis()`
 * verwijdering van argument Taxonlijsttype in `geefSoortenlijst()` en
 `geefInfoHabitatfiche()`
 * toevoeging van functionaliteit om taxa in 1 laag te deselecteren in functie

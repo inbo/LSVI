@@ -62,7 +62,7 @@ describe("berekenLSVIbasis vegetatielaag", {
             col_types =
               list(
                 col_character(), col_character(), col_character(),
-                col_character(), col_character(), col_character(),
+                col_character(), col_character(),
                 col_character(), col_character(), col_character(),
                 col_integer(), col_logical(), col_double()
               )
@@ -77,7 +77,7 @@ describe("berekenLSVIbasis vegetatielaag", {
             col_types =
               list(
                 col_character(), col_character(), col_character(),
-                col_character(), col_character(), col_character(),
+                col_character(), col_character(),
                 col_character(), col_character(), col_integer(),
                 col_character(), col_character(), col_character(),
                 col_character(), col_character(), col_character(),
