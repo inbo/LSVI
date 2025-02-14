@@ -72,7 +72,7 @@ install.packages("LSVI")
 ```
 
 Voordeel van bovenstaande installatie-methode is dat het package mee bijgewerkt wordt bij het commando `update.packages()`.
-Voor onderstaande methodes moet het commando bij elke nieuwe installatie van R opnieuw gerund worden (en als dit vergeten wordt, geeft gebruiken van het package mogelijk problemen.)
+Voor onderstaande methodes moet het commando bij elke nieuwe installatie van R opnieuw gerund worden (en als dit vergeten wordt, geeft gebruiken van het package mogelijk problemen).
 
 Een andere optie is om het package vanaf Github te installeren (ook hier eerst alle R-sessies sluiten en een nieuwe versie starten):
 
