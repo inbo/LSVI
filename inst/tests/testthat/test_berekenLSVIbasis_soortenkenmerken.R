@@ -337,7 +337,7 @@ describe("samenstelling soortengroepen", {
             bind_rows(
               data.frame(
                 ID = c("JR0216", "Ts2036"),
-                Kenmerk = "Quercus",
+                Kenmerk = "Quercus L.",
                 TypeKenmerk = "Soort_Latijn",
                 Waarde = "10",
                 Type = "Percentage",
@@ -361,7 +361,7 @@ describe("samenstelling soortengroepen", {
             bind_rows(
               data.frame(
                 ID = c("JR0216", "Ts2036"),
-                Kenmerk = "Quercus robur",
+                Kenmerk = "Quercus robur L.",
                 TypeKenmerk = "Soort_Latijn",
                 Waarde = "10",
                 Type = "Percentage",
@@ -389,7 +389,7 @@ describe("samenstelling soortengroepen", {
             bind_rows(
               data.frame(
                 ID = c("JR0216", "Ts2036", "Ts2036"),
-                Kenmerk = "Quercus",
+                Kenmerk = "Quercus L.",
                 TypeKenmerk = "Soort_Latijn",
                 Waarde = "10",
                 Type = "Percentage",
@@ -399,7 +399,7 @@ describe("samenstelling soortengroepen", {
               )
             )
         )
-      ), "'Quercus' meermaals opgegeven voor de boomlaag"
+      ), "'Quercus L.' meermaals opgegeven voor de boomlaag"
     )
     expect_error(
       idsWissen(
@@ -415,7 +415,7 @@ describe("samenstelling soortengroepen", {
             bind_rows(
               data.frame(
                 ID = c("JR0216", "Ts2036", "Ts2036"),
-                Kenmerk = "Quercus",
+                Kenmerk = "Quercus L.",
                 TypeKenmerk = "Soort_Latijn",
                 Waarde = c("10", "10", "20"),
                 Type = "Percentage",
@@ -425,7 +425,7 @@ describe("samenstelling soortengroepen", {
               )
             )
         )
-      ), "'Quercus' meermaals opgegeven voor de boomlaag"
+      ), "'Quercus L.' meermaals opgegeven voor de boomlaag"
     )
   })
   it("bedekkingen van lagere taxa worden geaggregeerd tot hoger taxon", {
@@ -443,7 +443,7 @@ describe("samenstelling soortengroepen", {
             bind_rows(
               data.frame(
                 ID = c("JR0216", "Ts2036"),
-                Kenmerk = "Quercus",
+                Kenmerk = "Quercus L.",
                 TypeKenmerk = "Soort_Latijn",
                 Waarde = c("19", "10"),
                 Type = "Percentage",
@@ -467,7 +467,8 @@ describe("samenstelling soortengroepen", {
             bind_rows(
               data.frame(
                 ID = c("JR0216", "JR0216", "Ts2036"),
-                Kenmerk = c("Quercus robur", "Quercus rubra", "Quercus"),
+                Kenmerk =
+                  c("Quercus robur L.", "Quercus rubra L.", "Quercus L."),
                 TypeKenmerk = "Soort_Latijn",
                 Waarde = "10",
                 Type = "Percentage",
@@ -495,7 +496,7 @@ describe("samenstelling soortengroepen", {
             bind_rows(
               data.frame(
                 ID = c("JR0216", "Ts2036"),
-                Kenmerk = c("Quercus robur L.", "Quercus"),
+                Kenmerk = c("Quercus robur L.", "Quercus L."),
                 TypeKenmerk = "Soort_Latijn",
                 Waarde = c("19", "10"),
                 Type = "Percentage",
@@ -523,7 +524,7 @@ describe("samenstelling soortengroepen", {
                   Kenmerk =
                     c("Quercus robur L.",
                       "Quercus pedunculata Ehrh. ex Hoffmann",
-                      "Quercus"),
+                      "Quercus L."),
                   TypeKenmerk = "Soort_Latijn",
                   Waarde = "10",
                   Type = "Percentage",
@@ -554,7 +555,7 @@ describe("samenstelling soortengroepen", {
                 ID = c("JR0216", "JR0216", "Ts2036"),
                 Kenmerk =
                   c("Quercus robur L.", "Quercus pedunculata Ehrh. ex Hoffmann",
-                    "Quercus"),
+                    "Quercus L."),
                 TypeKenmerk = "Soort_Latijn",
                 Waarde = "10",
                 Type = "Percentage",

@@ -366,7 +366,7 @@ describe("berekenLSVIbasis vegetatielaag", {
       mutate(
         Vegetatielaag =
           ifelse(
-            .data$Kenmerk == "Festuca filiformis",
+            .data$Kenmerk == "Festuca filiformis Pourr.",
             NA,
             .data$Vegetatielaag
           )

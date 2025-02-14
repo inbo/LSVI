@@ -796,7 +796,7 @@ describe("berekenLSVIbasis", {
           mutate(
             Kenmerk =
               ifelse(
-                .data$Kenmerk == "Calluna vulgaris",
+                .data$Kenmerk == "Calluna vulgaris (L.) Hull",
                 "Calla vulgaris",
                 .data$Kenmerk
               )
@@ -818,7 +818,7 @@ describe("berekenLSVIbasis", {
             mutate(
               Kenmerk =
                 ifelse(
-                  .data$Kenmerk == "Calluna vulgaris",
+                  .data$Kenmerk == "Calluna vulgaris (L.) Hull",
                   "Struikhei",
                   .data$Kenmerk
                 ),
@@ -846,13 +846,13 @@ describe("berekenLSVIbasis", {
           mutate(
             TypeKenmerk =
               ifelse(
-                .data$Kenmerk == "Calluna vulgaris",
+                .data$Kenmerk == "Calluna vulgaris (L.) Hull",
                 "soort_NL",
                 .data$TypeKenmerk
               )
           )
       ),
-      "Volgende soortnamen of keys zijn niet teruggevonden in de databank of Gbif: calluna vulgaris.  Check de spelling en/of ga na of de gebruikte taxonomie nog gangbaar is." #nolint: line_length_linter
+      "Volgende soortnamen of keys zijn niet teruggevonden in de databank of Gbif: calluna vulgaris \\(l.\\) hull.  Check de spelling en/of ga na of de gebruikte taxonomie nog gangbaar is." #nolint: line_length_linter
     )
     expect_equal(
       idsWissen(
@@ -868,7 +868,7 @@ describe("berekenLSVIbasis", {
             mutate(
               Kenmerk =
                 ifelse(
-                  .data$Kenmerk == "Calluna vulgaris",
+                  .data$Kenmerk == "Calluna vulgaris (L.) Hull",
                   "2882482",
                   .data$Kenmerk
                 ),
@@ -893,7 +893,7 @@ describe("berekenLSVIbasis", {
           mutate(
             TypeKenmerk =
               ifelse(
-                .data$Kenmerk == "Calluna vulgaris",
+                .data$Kenmerk == "Calluna vulgaris (L.) Hull",
                 "soort_gbif",
                 .data$TypeKenmerk
               )
@@ -1081,7 +1081,7 @@ describe("berekenLSVIbasis", {
             bind_rows(
               data.frame(
                 ID = "JR0216",
-                Kenmerk = "Quercus",
+                Kenmerk = "Quercus L.",
                 TypeKenmerk = "soort_Latijn",
                 Waarde = "35",
                 Type = "Percentage",
