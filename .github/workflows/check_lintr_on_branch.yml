@@ -1,0 +1,14 @@
+on:
+  push:
+    branches-ignore:
+      - main
+      - ghpages
+
+name: "check lintr"
+
+jobs:
+  check-package:
+    runs-on: ubuntu-latest
+    name: "check lintr"
+    steps:
+      - uses: inbo/actions/lint_pkg@main
