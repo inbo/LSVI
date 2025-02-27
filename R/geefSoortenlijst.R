@@ -2,10 +2,11 @@
 #'
 #' @description Deze functie genereert soortenlijsten (met wetenschappelijke en
 #' Nederlandse namen) die gebruikt worden voor de bepaling van de Lokale Staat
-#' van Instandhouding van de opgegeven parameters.  In feite genereert ze een
-#' tabel met velden Versie, Habitattype, Habitatsubtype, WetNaam, WetNaamKort
-#' en NedNaam en evt. Criterium, Indicator en/of Beschrijving waarin de
-#' gespecificeerde parameters uitgeselecteerd zijn en waar voor andere
+#' van Instandhouding van de opgegeven parameters.
+#' In feite genereert ze een tabel met velden `Versie`, `Habitattype`,
+#' `Habitatsubtype`, `WetNaam`, `WetNaamKort` en `NedNaam` en evt. `Criterium`,
+#' `Indicator` en/of `Beschrijving` waarin de
+#' gespecifieerde parameters uitgeselecteerd zijn en waar voor andere
 #' parameters alle waarden uit de databank weergegeven zijn.
 #'
 #' Voor de vorm van de soortenlijst zijn er meerdere opties: een soortenlijst
@@ -26,15 +27,15 @@
 #' van de soortafhandeling bevat het package geen volledige taxonomische
 #' lijsten meer en is die functionaliteit ook overbodig geworden)
 #'
-#' @return Deze functie geeft een tabel met velden Versie, Habitattype,
-#' Habitatsubtype, Criterium, Indicator, evt. Beschrijving, WetNaam,
-#' WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een
-#' groep van taxa binnen eenzelfde indicator).  WetNaam is de volledige
-#' Latijnse naam inclusief auteursnaam, WetNaamKort geeft de verkorte naam
+#' @return Deze functie geeft een tabel met velden `Versie`, `Habitattype`,
+#' `Habitatsubtype`, `Criterium`, `Indicator`, evt. `Beschrijving`, `WetNaam`,
+#' `WetNaamKort` en `NedNaam` (waarbij `Beschrijving` een omschrijving is voor
+#' een groep van taxa binnen eenzelfde indicator).  `WetNaam` is de volledige
+#' Latijnse naam inclusief auteursnaam, `WetNaamKort` geeft de verkorte naam
 #' zonder auteursnaam.
-#' Daarnaast heeft de tabel ook de velden GbifUsageKey (unieke ID van Gbif)
-#' en Rank (niveau van taxon en GbifUsageKey) die bij de berekeningen gebruikt
-#' worden om de taxa van de opname te koppelen.
+#' Daarnaast heeft de tabel ook de velden `GbifUsageKey` (unieke ID van Gbif)
+#' en `Rank` (niveau van taxon en `GbifUsageKey`) die bij de berekeningen
+#' gebruikt worden om de taxa van de opname te koppelen.
 #'
 #' @examples
 #' # Omwille van de iets langere lange duurtijd van de commando's staat bij

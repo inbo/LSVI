@@ -1,13 +1,13 @@
 #' @title Controle van de ingevoerde opname
 #'
-#' @description Deze hulpfunctie voor de s4-klassen 'aantal' en 'bedekking'
+#' @description Deze hulpfunctie voor de s4-klassen `aantal` en `bedekking`
 #' zoekt soorten of kenmerken uit de voorwaarde in de opname en maakt een
 #' lijstje van de soorten die voldoen en in de opname voorkomen.  Op basis
 #' hiervan kunnen de s4-klassen het totale aantal of de bedekking berekenen.
 #'
 #'
 #' @param Kenmerken dataframe met alle opgegeven kenmerken, met velden
-#' Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
+#' `Vegetatielaag`, `Kenmerk`, `TypeKenmerk`, `WaardeMin` en `WaardeMax`
 #' @param Soortengroep dataframe met de soortenlijst die uit Kenmerken gehaald
 #' moet worden
 #' @param Studiegroep dataframe met de lijst kenmerken die uit Kenmerken

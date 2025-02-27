@@ -1,7 +1,7 @@
 #' Zoek gbif-info voor Nederlandse (of anderstalige) naam
 #'
-#' Functie map_taxa_from_vernacular() die Ward ontwikkeld heeft,
-#' een wrapper rond rgbif::name_lookup().
+#' Functie `map_taxa_from_vernacular()` die Ward ontwikkeld heeft,
+#' een wrapper rond `rgbif::name_lookup()`.
 #' https://github.com/inbo/mbag-mas/blob/main/source/R/taxon_mapping.R
 #' Voorlopig voegen we deze kopie toe als interne functie die aangeroepen wordt,
 #' hopelijk kan dit later vervangen worden door een externe dependency.

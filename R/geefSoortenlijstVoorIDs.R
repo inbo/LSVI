@@ -5,9 +5,9 @@
 #' bepaling van de Lokale Staat van Instandhouding.  Het is in feite een
 #' hulpfunctie die voor verschillende andere functies gebruikt wordt en die de
 #' complexe zoekfunctie in de tabellen met soorten uitvoert op basis van een
-#' opgegeven TaxongroepId (en in die zin iets minder gebruiksvriendelijk is).
+#' opgegeven `TaxongroepId` (en in die zin iets minder gebruiksvriendelijk is).
 #' Voor een selectie van soortenlijsten op basis van specifieke parameters is
-#' de functie geefSoortenlijst() een beter alternatief.
+#' de functie `geefSoortenlijst()` een beter alternatief.
 #'
 #' Deze functie geeft voor de gespecifieerde taxongroepen per groep
 #' een lijst van alle taxa zoals ze in de LSVI-habitatfiche vermeld zijn
@@ -15,14 +15,14 @@
 #'
 #' @inheritParams selecteerIndicatoren
 #' @inheritParams geefSoortenlijst
-#' @param Taxongroeplijst string waarin de TaxongroepId's na elkaar weergegeven
-#' worden, gescheiden door een komma.  Eventueel mag dit ook een vector zijn
-#' van TaxongroepId's.
+#' @param Taxongroeplijst string waarin de `TaxongroepId`'s na elkaar
+#' weergegeven worden, gescheiden door een komma.
+#' Eventueel mag dit ook een vector zijn van `TaxongroepId`'s.
 #'
-#' @return Deze functie geeft een tabel met velden TaxongroepId, evt.
-#' Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een
-#' omschrijving is voor een groep van taxons binnen eenzelfde indicator).
-#' WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort
+#' @return Deze functie geeft een tabel met velden `TaxongroepId`, evt.
+#' `Beschrijving`, `WetNaam`, `WetNaamKort` en `NedNaam` (waarbij `Beschrijving`
+#' een omschrijving is voor een groep van taxons binnen eenzelfde indicator).
+#' `WetNaam` is de volledige Latijnse naam inclusief auteursnaam, `WetNaamKort`
 #' geeft de verkorte naam zonder auteursnaam.
 #'
 #' @examples

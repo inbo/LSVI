@@ -1,10 +1,11 @@
 #' S4-klasse die de totale bedekking van een vegetatielaag berekent
 #'
-#' Deze klasse bedekkingLaagExcl staat in voor de berekening van waarden voor
-#' AnalyseVariabele bedekkingLaagExcl op basis van opgegeven kenmerken.  Ze is
-#' een nakomeling van de klasse bedekkingLaag.  Ze maakt de berekening op basis
+#' Deze klasse `bedekkingLaagExcl` staat in voor de berekening van waarden voor
+#' `AnalyseVariabele` `bedekkingLaagExcl` op basis van opgegeven kenmerken.
+#' Ze is een nakomeling van de klasse `bedekkingLaag`.
+#' Ze maakt de berekening op basis
 #' van de studiegroep als deze aanwezig is in de opname, en anders op basis van
-#' de soortengroep, zoals bij bedekkingLaag.
+#' de soortengroep, zoals bij `bedekkingLaag`.
 #' Extra is dat ze bij opgave van 2 taxongroepen de soorten uit de taxongroep
 #' met het minste soorten schrapt uit de opgegeven kenmerken,
 #' vooraleer de berekening uitgevoerd wordt op basis van de taxongroep met de
@@ -20,7 +21,7 @@
 #' Salix-soorten worden wel meegeteld.)
 #'
 #' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden
-#' Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
+#' `Vegetatielaag`, `Kenmerk`, `TypeKenmerk`, `WaardeMin` en `WaardeMax`
 #'
 #' @importFrom methods setClass setMethod as
 #' @importFrom dplyr %>% arrange count filter group_by

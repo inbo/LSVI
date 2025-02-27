@@ -30,7 +30,7 @@ De gebruiker kan per opname 3 typen informatie invoeren:
 De achterliggende databank bevat ook 3 soorten informatie (op te vragen met de functie `geefInvoervereisten()`):
 
 - indicatoren en voorwaarden per habitattype (op basis waarvan de LSVI bepaald wordt)
-- een grenswaarde ('Referentiewaarde') en operator voor elke voorwaarde (die aangeeft wanneer de staat gunstig of goed is)
+- een grenswaarde (`Referentiewaarde`) en operator voor elke voorwaarde (die aangeeft wanneer de staat gunstig of goed is)
 - rekenregels (= alle nodige info om een voorwaarde te kunnen berekenen)
 
 ```{r}
@@ -56,7 +56,7 @@ Deze workflow geeft dus voorrang aan rechtstreeks ingeschatte indicatoren en voo
 
 In wat volgt, wordt dieper ingegaan op de onderdelen waarin relevante 'berekeningen' gebeuren of die mogelijk vragen zouden kunnen oproepen:
 
-- hoe worden die rekenregels precies uitgevoerd, wat betekent die 'AnalyseVariabele'?
+- hoe worden die rekenregels precies uitgevoerd, wat betekent die `AnalyseVariabele`?
 - hoe werkt dat precies met die soortenlijsten, wat gebeurt er als ik niet exact dezelfde naam opgeef?
 - wat als ik niet dezelfde schaal gebruik als de grenswaarde, hoe gebeurt die omzetting?
 - hoe wordt de status precies bepaald?
@@ -101,9 +101,9 @@ Scriptmatig wordt dus gecheckt welke variabelen ('rekenregels') in de databank i
 
 ## Rekenregels
 
-De belangrijkste variabele in de rekenregels is `AnalyseVariabele`.  Deze verwijst rechtstreeks naar een welbepaald script dat leidt tot de bepaling van de LSVI voor die voorwaarde.  Er zijn enkele basisscripts, zoals bv. AnalyseVariabelen `aantal` en `bedekking`, die een globale workflow bevatten die door de meeste scripts min of meer overgenomen wordt.  De afgeleide scripts ('nakomelingen' van `aantal` of `bedekking`) doen vaak dezelfde handeling maar voorafgegaan en/of gevolgd door een extra handeling.  Zo berekent `bedekking` de totale bedekking van alle opgegeven soorten die in de taxonlijst staan (rekening houdend met overlap), terwijl `bedekkingLaag` eerst checkt of er een totale bedekking ingeschat is voor de opgegeven laag.  Indien niet, dan gebruikt ze de procedure van `bedekking` om de totale bedekking te berekenen voor alle soorten die in deze vegetatielaag voorkomen (op basis van een taxonlijst die bv. alle bomen (voor boomlaag) of alle mossen (voor moslaag) bevat).
+De belangrijkste variabele in de rekenregels is `AnalyseVariabele`.  Deze verwijst rechtstreeks naar een welbepaald script dat leidt tot de bepaling van de LSVI voor die voorwaarde.  Er zijn enkele basisscripts, zoals bv. `AnalyseVariabele`n `aantal` en `bedekking`, die een globale workflow bevatten die door de meeste scripts min of meer overgenomen wordt.  De afgeleide scripts ("nakomelingen" van `aantal` of `bedekking`) doen vaak dezelfde handeling maar voorafgegaan en/of gevolgd door een extra handeling.  Zo berekent `bedekking` de totale bedekking van alle opgegeven soorten die in de taxonlijst staan (rekening houdend met overlap), terwijl `bedekkingLaag` eerst checkt of er een totale bedekking ingeschat is voor de opgegeven laag.  Indien niet, dan gebruikt ze de procedure van `bedekking` om de totale bedekking te berekenen voor alle soorten die in deze vegetatielaag voorkomen (op basis van een taxonlijst die bv. alle bomen (voor boomlaag) of alle mossen (voor moslaag) bevat).
 
-Bij de verschillende analysevariabelen kan het gebruik of de interpretatie van de variabelen in de databank afwijkend zijn.  Zo berekent bijvoorbeeld de AnalyseVariabele `bedekkingExcl` de totale bedekking van alle soorten van de opname behalve deze die in de taxonlijst vermeld staan (terwijl bij andere berekeningen de soorten in de taxonlijst net wel in beschouwing genomen worden).  Om een berekening ten volle te begrijpen, is het dus belangrijk om de beschrijvingen van de berekeningswijzen voor de verschillende analysevariabelen verderop in dit hoofdstuk door te nemen.  Het deel van de workflow dat ze bijna allemaal gemeenschappelijk hebben, is beschreven in een eerste onderdeeltje [AnalyseVariabele](#AnalyseVariabele).
+Bij de verschillende analysevariabelen kan het gebruik of de interpretatie van de variabelen in de databank afwijkend zijn.  Zo berekent bijvoorbeeld de `AnalyseVariabele` `bedekkingExcl` de totale bedekking van alle soorten van de opname behalve deze die in de taxonlijst vermeld staan (terwijl bij andere berekeningen de soorten in de taxonlijst net wel in beschouwing genomen worden).  Om een berekening ten volle te begrijpen, is het dus belangrijk om de beschrijvingen van de berekeningswijzen voor de verschillende analysevariabelen verderop in dit hoofdstuk door te nemen.  Het deel van de workflow dat ze bijna allemaal gemeenschappelijk hebben, is beschreven in een eerste onderdeeltje [`AnalyseVariabele`](#analysevariabele).
 
 Meestal is er ook een variabele `TaxongroepId` of een studielijst (variabelen `Studielijstnaam` en `Studiewaarde`) toegevoegd.  Deze verwijzen naar de voor de voorwaarde relevante soortenlijst(en) of kenmerken.  Een voorbeeld van een studielijst zijn de ouderdomsklassen van heide.  Idee is dat de gebruiker voor elk van de kenmerken (in dit geval ouderdomsklassen) een  waarde (in dit geval bedekking) opgeeft, en op basis hiervan wordt bv. 'berekend' hoeveel klassen er minstens frequent aanwezig zijn.  Voor de studielijsten staan de kenmerken rechtstreeks opgesomd onder `Studiewaarde`.
 
@@ -122,7 +122,7 @@ Tenslotte zijn er nog een aantal variabelen die verschillen in gebruikte schalen
 
 ## AnalyseVariabele {#AnalyseVariabele}
 
-Bij het berekenen van een AnalyseVariabele wordt vaak de (interne) functie `selecteerKenmerkenInOpname()` aangeroepen om de soorten/kenmerken uit de opname van de gebruiker te selecteren.  Om de workflow van deze functie niet te herhalen in elk van onderstaande analysevariabelen (berekeningswijzen), bespreken we hem hier apart.
+Bij het berekenen van een `AnalyseVariabele` wordt vaak de (interne) functie `selecteerKenmerkenInOpname()` aangeroepen om de soorten of kenmerken uit de opname van de gebruiker te selecteren.  Om de workflow van deze functie niet te herhalen in elk van onderstaande analysevariabelen (berekeningswijzen), bespreken we hem hier apart.
 
 In te voeren parameters voor deze functie zijn de door de gebruiker ingevoerde opname (soorten en/of kenmerken) en de velden die in de databank gedefinieerd zijn voor de voorwaarde.  De workflow van de functie is als volgt:
 
@@ -346,12 +346,12 @@ die bij `geefInvoervereisten()` in het veld `Combinatie` weergegeven is (meestal
 
 Voor de aggregatie naar het criterium worden deze resultaten op 2 manieren verder geaggregeerd:
 
-- een strenge beoordeling waarbij de redenering van de AND-operator gevolgd wordt, dus door het minimum te nemen (= index_min)
-- een minder strenge beoordeling waarbij het harmonisch gemiddelde van de verschilscores genomen wordt (=index_harm)
+- een strenge beoordeling waarbij de redenering van de AND-operator gevolgd wordt, dus door het minimum te nemen (= `index_min`)
+- een minder strenge beoordeling waarbij het harmonisch gemiddelde van de verschilscores genomen wordt (=`index_harm`)
 
 Voor de aggregatie naar de volledige opname worden dezelfde 2 aggregatiemethoden opnieuw gebruikt uitgaande van de geaggregeerde resultaten op criteriumniveau.  
 Doordat de verschilscore index_min volgens de 2 methoden geaggregeerd wordt, resulteert dat in 3 verschillende eindscores van streng naar liberaal:
 
-- index_min_min: telkens het minimum genomen, dus de strengste beoordeling
-- index_min_harm: het harmonisch gemiddelde genomen van index_min
-- index_harm_harm: het harmonisch gemiddelde genomen van index_harm, dus de minst strenge beoordeling
+- `index_min_min`: telkens het minimum genomen, dus de strengste beoordeling
+- `index_min_harm`: het harmonisch gemiddelde genomen van `index_min`
+- `index_harm_harm`: het harmonisch gemiddelde genomen van `index_harm`, dus de minst strenge beoordeling

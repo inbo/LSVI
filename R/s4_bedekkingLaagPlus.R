@@ -1,19 +1,20 @@
 #' S4-klasse die de totale bedekking van een vegetatielaag en taxongroep
 #' berekent
 #'
-#' Deze klasse bedekkingLaagPlus staat in voor de berekening van waarden voor
-#' AnalyseVariabele bedekkingLaagPlus op basis van opgegeven kenmerken.  Ze is
-#' een nakomeling van de klasse bedekkingLaag.  Verschillend van bedekkingLaag
+#' Deze klasse `bedekkingLaagPlus` staat in voor de berekening van waarden voor
+#' `AnalyseVariabele` `bedekkingLaagPlus` op basis van opgegeven kenmerken.
+#' Ze is een nakomeling van de klasse `bedekkingLaag`.
+#' Verschillend van `bedekkingLaag`
 #' wordt ze gebruikt als de totale bedekking van een vegetatielaag en een
 #' taxongroep berekend moet worden, bv. de totale bedekking van de moslaag en
 #' klimop.  Bij het samenvoegen van de bedekkingen maakt ze gebruik van de
 #' formule van Ficher (die rekening houdt met een gedeeltelijke overlap).
 #' De berekening van de bedekking van de vegetatielaag maakt ze, zoals de
-#' klasse bedekkingLaag, op basis van de studiegroep als deze aanwezig is in de
-#' opname, en anders op basis van de soortengroep.
+#' klasse `bedekkingLaag`, op basis van de studiegroep als deze aanwezig is in
+#' de opname, en anders op basis van de soortengroep.
 #'
 #' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden
-#' Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
+#' `Vegetatielaag`, `Kenmerk`, `TypeKenmerk`, `WaardeMin` en `WaardeMax`
 #'
 #' @importFrom methods setClass setMethod as
 #' @importFrom dplyr %>% arrange count filter group_by

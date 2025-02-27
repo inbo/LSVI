@@ -1,13 +1,13 @@
-#' Invoercontrole voor dataframe Data_soortenKenmerken
+#' Invoercontrole voor dataframe `Data_soortenKenmerken`
 #'
 #' Om te vermijden dat we meermaals dezelfde invoercontrole moeten uitvoeren en
 #' om de hoofdscripts overzichtelijk te houden, maken we voor elke
 #' invoercontrole een aparte hulpfunctie aan, die we kunnen aanroepen.  Deze
 #' wordt NIET geëxporteerd, dus deze functies kunnen niet als commando gerund
 #' worden (maar worden wel gerund als de functie waarin ze voorkomen,
-#' aangeroepen wordt).  Ingeval van Data_soortenKenmerken is ook het koppelen
-#' van soortnamen aan GbifUsageKeys van verschillende niveaus
-#' (van Kingdom tot Subspecies, Form of Variety)
+#' aangeroepen wordt).  Ingeval van `invoercontroleData_soortenKenmerken()`
+#' is ook het koppelen van soortnamen aan `GbifUsageKeys` van verschillende
+#' niveaus (van `"Kingdom"` tot `"Subspecies"`, `"Form"` of `"Variety"`)
 #' en de omzettingen van bedekkingen naar een interval opgenomen in de functie.
 #'
 #' @param Data_soortenKenmerken dataframe waarop invoercontrole moet gebeuren.

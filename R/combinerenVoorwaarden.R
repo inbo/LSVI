@@ -5,13 +5,13 @@
 #'
 #' @param Formule string van ID's gecombineerd met EN en OF, bijvoorbeeld
 #' '(720 EN 721) OF 15'
-#' @param VoorwaardeID vector van alle voorwaardeID's die voorkomen in de
-#' Formule
-#' @param Status vector met voor elke VoorwaardeID een overeenkomstige logische
-#' waarde status (TRUE of FALSE)
+#' @param VoorwaardeID vector van alle `VoorwaardeID`'s die voorkomen in de
+#' `Formule`
+#' @param Status vector met voor elke `VoorwaardeID` een overeenkomstige
+#' logische waarde status (TRUE of FALSE)
 #'
-#' @return logische waarde TRUE/FALSE die de uitkomst van de Formule is
-#' (gecombineerd met VoorwaardeID en Status)
+#' @return logische waarde TRUE/FALSE die de uitkomst van de `Formule` is
+#' (gecombineerd met `VoorwaardeID` en `Status`)
 #'
 #' @examples
 #' #onderstaand voorbeeld geeft problemen bij het testen van het package door

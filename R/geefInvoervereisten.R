@@ -2,24 +2,25 @@
 #'
 #' @description Deze functie geeft alle informatie die nodig is om
 #' veldobservaties klaar te maken voor de berekening van de de Lokale Staat van
-#' Instandhouding met de functie berekenLSVI(), alsook de berekeningsregels die
-#' gebruikt worden.  Allereerst geeft ze de 'Voorwaarde' die vermeld moet
-#' worden bij de observaties (zie Data_voorwaarden bij berekenLSVIbasis), samen
+#' Instandhouding met de functie `berekenLSVIbasis()`, alsook de
+#' berekeningsregels die gebruikt worden.
+#' Allereerst geeft ze de `Voorwaarde` die vermeld moet worden bij de
+#' observaties (zie `Data_voorwaarden` bij `berekenLSVIbasis()`), samen
 #' met informatie uit de LSVI-tabellen (vnl. beoordelingsmatrix) en een
-#' beschrijving van de voorwaarde ('Voorwaarde') die zou moeten toelaten om de
+#' beschrijving van de voorwaarde (`Voorwaarde`) die zou moeten toelaten om de
 #' koppeling te maken.
 #'
-#' Verder geeft ze informatie over de Waarde die verwacht wordt in de functie
-#' berekenLSVIbasis().  AnalyseVariabele is een korte omschrijving voor de
+#' Verder geeft ze informatie over de `Waarde` die verwacht wordt in de functie
+#' `berekenLSVIbasis()`.  `AnalyseVariabele` is een korte omschrijving voor de
 #' variabele waarde, bv. 'aantal' staat voor het aantal soorten of klassen en
 #' 'bedekking' voor de totale bedekking van de lijst soorten of klassen.
-#' 'Referentiewaarde' en 'Operator' geven respectievelijk de grenswaarde en de
+#' `Referentiewaarde` en `Operator` geven respectievelijk de grenswaarde en de
 #' vergelijking aan op basis waarvan de beoordeling van de waarde zal gebeuren.
-#' Voor elke AnalyseVariabele wordt informatie gegeven over het formaat dat
-#' verwacht wordt voor Waarde: de 'Eenheid' (die niet opgenomen moet worden in
+#' Voor elke `AnalyseVariabele` wordt informatie gegeven over het formaat dat
+#' verwacht wordt voor Waarde: de `Eenheid` (die niet opgenomen moet worden in
 #' Waarde maar wel de grootte-orde van het verwachte getal aangeeft), het
-#' formaat van de variabele ('TypeVariabele'), en bij categorische variabelen
-#' het 'Invoertype' en de 'Invoerwaarde' (een naam voor de categorische
+#' formaat van de variabele (`TypeVariabele`), en bij categorische variabelen
+#' het `Invoertype` en de `Invoerwaarde` (een naam voor de categorische
 #' variabele en de mogelijke waarden die deze kan aannemen).
 #'
 #' Waar nodig, wordt een soortengroep of studiegroep opgegeven.  Een
@@ -28,18 +29,21 @@
 #' moet berekend worden.  Voorbeelden zijn groeiklassen, vegetatielagen, ...
 #' Omwille van de overzichtelijkheid van de tabel is voor de Soortengroep enkel
 #' een ID gegeven, de volledige lijst kan opgevraagd worden met de functie
-#' geefSoortenlijstInvoerniveau.
+#' `geefSoortenlijstInvoerniveau()`.
 #'
-#' Ingeval van de AnalyseVariabele aantal kan er ook een SubAnalyseVariabele
-#' vermeld zijn, meestal 'bedekking', die aangeeft aan welke voorwaarde elke
-#' soort of klasse afzonderlijk moet voldoen.  Aan deze SubAnalysevariabele
-#' zijn dezelfde velden gekoppeld als aan AnalyseVariabele, nl.
-#' SubReferentiewaarde, SubOperator, SubEenheid, TypeSubVariabele,
-#' SubInvoertype en SubInvoerwaarde.  Bijvoorbeeld, bij de voorwaarde 'minimum
-#' 5 soorten minimum talrijk aanwezig' zal de AnalyseVariabele 'aantal' zijn,
-#' de Referentiewaarde '5', de Operator '>=', TypeVariabele 'Geheel getal',
-#' SubAnalysevariabele 'bedekking', SubReferentiewaarde 'T', SubOperator '>=',
-#' TypeSubVariabele 'Categorie' en SubInvoertype 'Beheermonitoringsschaal 2017'.
+#' Ingeval van de `AnalyseVariabele` `aantal` kan er ook een
+#' `SubAnalyseVariabele`
+#' vermeld zijn, meestal `bedekking`, die aangeeft aan welke voorwaarde elke
+#' soort of klasse afzonderlijk moet voldoen.  Aan deze `SubAnalysevariabele`
+#' zijn dezelfde velden gekoppeld als aan `AnalyseVariabele`, nl.
+#' `SubReferentiewaarde`, `SubOperator`, `SubEenheid`, `TypeSubVariabele`,
+#' `SubInvoertype` en `SubInvoerwaarde`.
+#' Bijvoorbeeld, bij de voorwaarde "minimum 5 soorten minimum talrijk aanwezig"
+#' zal de `AnalyseVariabele` `aantal` zijn, de `Referentiewaarde` "5",
+#' de `Operator` ">=", `TypeVariabele` "Geheel getal", `SubAnalysevariabele`
+#' "bedekking", `SubReferentiewaarde` "T", `SubOperator` ">=",
+#' `TypeSubVariabele` "Categorie" en `SubInvoertype` "Beheermonitoringsschaal
+#' 2017".
 #'
 #'
 #' @inheritParams selecteerIndicatoren

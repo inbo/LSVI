@@ -4,29 +4,30 @@
 #' biotische indices op basis van gegevens, die in het juiste formaat moeten
 #' aangeleverd worden.  Zie hiervoor de beschrijving bij de parameters
 #' ('Arguments') en de tabellen van het voorbeeld.  In principe is enkel de
-#' parameter Data_habitat verplicht om op te geven, maar extra datasets zijn
+#' parameter `Data_habitat` verplicht om op te geven, maar extra datasets zijn
 #' uiteraard wel nodig om een resultaat te bekomen.  Welke datasets relevant
 #' zijn, is afhankelijk van de opgegeven habitattypes: voor een aantal
 #' habitattypes kan een tabel met observaties en hun bedekking of aanwezigheid
-#' (=parameter 'Data_soortenKenmerken') volstaan, voor bossen zijn bv.
+#' (=parameter `Data_soortenKenmerken`) volstaan, voor bossen zijn bv.
 #' bijkomend gegevens nodig over dood hout.
 #'
-#' De Lokale Staat van Instandhouding wordt weergegeven in de kolom 'Status'
+#' De Lokale Staat van Instandhouding wordt weergegeven in de kolom `Status`
 #' met als mogelijke waarden TRUE (= gunstig) en FALSE (= ongunstig).
 #'
 #' De biotische indices zijn afgeleid van het verschil tussen een geobserveerde
 #' waarde en de referentiewaarde voor elke indicator. Deze verschillen werden
-#' herschaald tussen +1 en -1, waarbij een positieve en negatieve waarde
+#' herschaald tussen `+1` en `-1`, waarbij een positieve en negatieve waarde
 #' overeenkomt met respectievelijk een gunstige en ongunstige score. Deze
 #' verschilscores per indicator worden geaggregeerd, eerst voor de indicatoren
 #' die tot eenzelfde criterium behoren, vervolgens worden deze geaggregeerde
 #' scores verder geaggregeerd om tot een globale index te komen. Er worden drie
 #' verschillende globale indices berekend waarbij de naamgeving aangeeft welk
-#' aggregatie achtereenvolgens gebruikt werd: index_min_min, index_min_harm en
-#' index_harm_harm. Een naam met "min" duidt op minimum van de scores als
-#' aggregatie; bij "harm" werd het harmonisch gemiddelde berekend.
+#' aggregatie achtereenvolgens gebruikt werd: `"index_min_min"`,
+#' `"index_min_harm"` en `"index_harm_harm"`.
+#' Een naam met `"min"` duidt op minimum van de scores als
+#' aggregatie; bij `"harm"` werd het harmonisch gemiddelde berekend.
 #'
-#' Bij de output zit een tabel 'Soortenlijst' die aangeeft aan welke taxoninfo
+#' Bij de output zit een tabel `Soortenlijst` die aangeeft aan welke taxoninfo
 #' de opgegeven taxa gekoppeld zijn.
 #' Deze laat dus toe om te controleren of de koppeling juist gebeurd is,
 #' en of de bovenliggende taxonniveaus kloppen.
@@ -39,9 +40,9 @@
 #' vergroot, maar het heeft als keerzijde dat een taxon door Gbif ten onrechte
 #' gekoppeld kan worden aan een Gbif-key van een accepted taxon (omdat Gbif
 #' geen rekening houdt met auteursnamen, 'auct.', 'auct. non', 'non',...).
-#' Daarom wordt met een warning aangeraden om de Soortenlijst te controleren
+#' Daarom wordt met een warning aangeraden om de `Soortenlijst` te controleren
 #' als de Gbif-tool voor de koppeling van minstens één soort gebruikt is
-#' (dit is aangegeven in veld Koppelmethode, en deze records staan bovenaan).
+#' (dit is aangegeven in veld `Koppelmethode`, en deze records staan bovenaan).
 #' Fouten bij gebruik van de Gbif-tool kunnen best opgelost worden door de taxa
 #' bij invoer te vervangen door de schrijfwijze in de taxonlijst in het package
 #' (beschikbaar via
@@ -65,50 +66,56 @@
 #' streefwaarde (uiteindelijk niet opgenomen in rapport).  De betekenissen van
 #' de 2 kwaliteitsniveaus voor de verschillende versies is weergegeven in de
 #' tabel Versie in de databank en kan opgevraagd met de functie
-#' geefVersieInfo().  Geef als parameter Kwaliteitsniveau op op basis van welk
+#' `geefVersieInfo()`.  Geef als parameter Kwaliteitsniveau op op basis van welk
 #' kwaliteitsniveau de berekening gemaakt moet worden.  (Strikt genomen is de
 #' berekening van de LSVI de berekening volgens kwaliteitsniveau 1.)
 #' @param Data_habitat Een opsomming van de te analyseren opnamen met opgave
 #' van het aanwezige habitattype (= het habitattype volgens welke criteria de
 #' beoordeling moet gebeuren).  Deze info moet doorgegeven worden in de vorm
-#' van een dataframe met minimum de velden ID en Habitattype, waarbij ID een
-#' groeperende variabele is voor een opname (plaats en tijdstip).  Habitattype
+#' van een dataframe met minimum de velden `ID` en `Habitattype`, waarbij `ID`
+#' een groeperende variabele is voor een opname (plaats en tijdstip).
+#' `Habitattype`
 #' moet overeenkomen met de naamgeving in de LSVI-databank (op te zoeken door
-#' geefUniekeWaarden("Habitattype", "Code")).  Eventuele extra velden zullen
+#' `geefUniekeWaarden("Habitattype", "Code")`).  Eventuele extra velden zullen
 #' overgenomen worden bij de uitvoer.
 #' @param Data_voorwaarden Gegevens over de opgemeten indicatoren in de vorm
-#' van een data.frame met velden ID, Criterium, Indicator, Voorwaarde, Waarde,
-#' Type, Invoertype en Eenheid, waarbij ID de groeperende variabele voor een
-#' opname is die ook bij Data_habitat opgegeven is.  Criterium, Indicator en
-#' Voorwaarde moeten overeenkomen met de waarde in de databank (op te zoeken
-#' via de functie geefInvoervereisten()).  Waarde is de waarde die voor die
+#' van een dataframe met velden `ID`, `Criterium`, `Indicator`, `Voorwaarde`,
+#' `Waarde`, `Type`, `Invoertype` en `Eenheid`, waarbij `ID` de groeperende
+#' variabele voor een opname is die ook bij `Data_habitat` opgegeven is.
+#' `Criterium`, `Indicator` en
+#' `Voorwaarde` moeten overeenkomen met de waarde in de databank (op te zoeken
+#' via de functie `geefInvoervereisten()`).  `Waarde` is de waarde die voor die
 #' voorwaarde geobserveerd of gemeten is en Type het soort variabele (zie
-#' geefUniekeWaarden("TypeVariabele", "Naam") voor de mogelijke waarden).
-#' Ingeval van een categorische variabele moet bij Invoertype de naam van de
+#' `geefUniekeWaarden("TypeVariabele", "Naam")` voor de mogelijke waarden).
+#' Ingeval van een categorische variabele moet bij `Invoertype` de naam van de
 #' lijst opgegeven worden waaruit deze waarde komt (bv. welke schaal gebruikt
-#' is, zie geefUniekeWaarden("Lijst", "Naam") voor alle mogelijkheden).  Als
+#' is, zie `geefUniekeWaarden("Lijst", "Naam")` voor alle mogelijkheden).  Als
 #' een indicator rechtstreeks op het veld ingeschat is, kan deze ingevoerd
 #' worden door in deze tabel de kolom voorwaarde leeg te laten (wat in R
 #' aangeduid wordt door NA) en als waarde "TRUE" of "FALSE" in te geven.  In
-#' dit geval moeten Type, Invoertype en Eenheid niet ingevoerd worden.
+#' dit geval moeten `Type`, `Invoertype` en `Eenheid` niet ingevoerd worden.
 #' @param Data_soortenKenmerken Gegevens van soorten en kenmerken en hun
 #' bedekking (m.a.w. enkel kenmerken waarvan een bedekking gemeten is, horen
-#' in deze tabel).  Deze dataframe moet de velden ID, Vegetatielaag, Kenmerk,
-#' TypeKenmerk, Waarde, Type, Invoertype en Eenheid bevatten, waarbij ID de
-#' groeperende variabele voor een opname is die ook bij Data_habitat opgegeven
-#' is.  Kenmerk bevat een soortnaam of een naam die voorkomt in de lijst
-#' gegenereerd door geefUniekeWaarden("StudieItem", "Waarde") en TypeKenmerk
-#' geeft een beschrijving voor dat kenmerk: 'studiegroep', 'soort_Latijn',
-#' 'soort_NL' of 'soort_gbif'.  Waarde is de geobserveerde bedekking en Type het
+#' in deze tabel).
+#' Deze dataframe moet de velden `ID`, `Vegetatielaag`, `Kenmerk`,
+#' `TypeKenmerk`, `Waarde`, `Type`, `Invoertype` en `Eenheid` bevatten, waarbij
+#' `ID` de groeperende variabele voor een opname is die ook bij `Data_habitat`
+#' opgegeven is.
+#' `Kenmerk` bevat een soortnaam of een naam die voorkomt in de lijst
+#' gegenereerd door `geefUniekeWaarden("StudieItem", "Waarde")` en `TypeKenmerk`
+#' geeft een beschrijving voor dat kenmerk: `"studiegroep"`, `"soort_Latijn"`,
+#' `"soort_NL"` of `"soort_gbif"`.
+#' `Waarde` is de geobserveerde bedekking en `Type` het
 #' soort variabele dat voor de bedekking gebruikt is (zie
-#' geefUniekeWaarden("TypeVariabele", "Naam") voor de mogelijke waarden).
-#' Ingeval van een categorische variabele moet bij Invoertype de naam van de
+#' `geefUniekeWaarden("TypeVariabele", "Naam")` voor de mogelijke waarden).
+#' Ingeval van een categorische variabele moet bij `Invoertype` de naam van de
 #' lijst opgegeven worden welke schaal gebruikt is
-#' (zie geefUniekeWaarden("Lijst", "Naam") voor alle mogelijkheden).
+#' (zie `geefUniekeWaarden("Lijst", "Naam")` voor alle mogelijkheden).
 #' @param LIJST Dataframe met lijst die weergeeft hoe de vertaling moet
 #' gebeuren van categorische variabelen naar numerieke waarden (en omgekeerd).
 #' Default worden deze waarden uit de databank met LSVI-indicatoren gehaald
-#' d.m.v. de functie vertaalInvoerInterval().  Aangeraden wordt om deze default
+#' d.m.v. de functie `vertaalInvoerInterval()`.
+#' Aangeraden wordt om deze default
 #' te gebruiken (dus parameter niet expliciet invullen), of deze waar nodig aan
 #' te vullen met eigen schalen.  Omdat er ook een omzetting moet gebeuren voor
 #' grenswaarden uit de databank, kan het niet doorgeven van een gedeelte van
@@ -124,7 +131,8 @@
 #' Hierdoor zal de indexberekening resulteren in een NA zodra één van de
 #' indicatoren NA is. Voor de berekening van de status zal dit enkel resulteren
 #' in een NA indien minstens één van de indicatoren NA is en minstens één
-#' van de indicatoren status TRUE (= gunstig) heeft. Indien na.rm = TRUE worden
+#' van de indicatoren status TRUE (= gunstig) heeft. Indien `na.rm = TRUE`
+#' worden
 #' eventuele NA-waarden verwijderd zodat status en de indices een resultaat
 #' hebben. Doordat deze dan mogelijk niet op de volledige set van indicatoren
 #' gebaseerd zijn, moet hiermee rekening gehouden worden afhankelijk van de
@@ -135,7 +143,7 @@
 #' met de beoordelingen per criterium en kwaliteitsniveau, een derde met de
 #' beoordelingen per indicator en kwaliteitsniveau, en een vierde met de
 #' detailgegevens inclusief meetwaarden.
-#' Een vijfde tabel 'Soortenlijst' bevat de taxonomische info die gebruikt is
+#' Een vijfde tabel `Soortenlijst` bevat de taxonomische info die gebruikt is
 #' om de opgegeven taxa te koppelen aan de taxa die deel uitmaken van de
 #' beoordeling.
 #'

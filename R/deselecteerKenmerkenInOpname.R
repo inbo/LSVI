@@ -1,15 +1,15 @@
 #' @title Controle van de ingevoerde opname
 #'
-#' @description Deze hulpfunctie voor de s4-klassen 'aantal' en 'bedekking'
+#' @description Deze hulpfunctie voor de s4-klassen `aantal` en `bedekking`
 #' selecteert soorten of kenmerken uit een opname die niet tot de soortgroep of
 #' studiegroep van een bepaalde voorwaarde behoren.  Op basis hiervan kunnen de
-#' s4-klassen bedekkingExcl en maxBedekkingExcl berekend worden
+#' s4-klassen `bedekkingExcl` en `maxBedekkingExcl` berekend worden
 #' (bv. dominantie van een soort:
 #' maximale bedekking van soorten in een opname exclusief de sleutelsoorten).
 #'
 #'
-#' @param Kenmerken dataframe met alle opgegeven kenmerken, met velden Kenmerk,
-#' TypeKenmerk, WaardeMin en WaardeMax
+#' @param Kenmerken dataframe met alle opgegeven kenmerken, met velden
+#' `Kenmerk`, `TypeKenmerk`, `WaardeMin` en `WaardeMax`
 #' @param Soortengroep dataframe met de soortenlijst die uit Kenmerken
 #' gedeselecteerd moet worden
 #' @param Studiegroep dataframe met de lijst kenmerken die uit Kenmerken
