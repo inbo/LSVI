@@ -6,9 +6,9 @@
 #'
 #' @param Formule string van ID's gecombineerd met EN en OF, bijvoorbeeld
 #' '(720 EN 721) OF 15'
-#' @param VoorwaardeID vector van alle voorwaardeID's die voorkomen in de
-#' Formule
-#' @param Verschilscore vector met voor elke VoorwaardeID een overeenkomstige
+#' @param VoorwaardeID vector van alle `VoorwaardeID`'s die voorkomen in de
+#' `Formule`
+#' @param Verschilscore vector met voor elke `VoorwaardeID` een overeenkomstige
 #' verschilscore
 #'
 #' @return gecombineerde verschilscore waarbij EN gecombineerd wordt via het

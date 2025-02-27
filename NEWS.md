@@ -3,11 +3,11 @@
 * veld habitattype.y verwijderd in output van tabellen van functie
 `berekenLSVIbasis()`
 * toevoeging van functionaliteit om taxa in 1 laag te deselecteren in functie
-deselecteerSoortenKenmerken() (issue #231)
+`deselecteerSoortenKenmerken()` (issue #231)
 
 # LSVI 0.1.3
 
-* toevoeging van schaal 'BEHEERMONITORINGSCHAAL2021'
+* toevoeging van schaal `BEHEERMONITORINGSCHAAL2021`
 
 # LSVI 0.1.2
 

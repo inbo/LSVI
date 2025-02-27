@@ -6,7 +6,7 @@
 #' kunnen gebruiken.  Deze connectiepool moet eenmalig aangemaakt worden, en
 #' functies zullen automatisch deze connectiepool gebruiken om te connecteren
 #' met de databank.  Alternatief is om een connectie aan te maken met de
-#' functie connecteerMetLSVIdb() en deze bij elke functie mee te geven.
+#' functie `connecteerMetLSVIdb()` en deze bij elke functie mee te geven.
 #'
 #' @return Deze functie maakt een Environment-object aan dat de connecties
 #' regelt met de betreffende databank.

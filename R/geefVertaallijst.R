@@ -3,7 +3,8 @@
 #' @description Deze functie haalt een lijst uit de databank van de gebruikte
 #' schalen (bv. Tansley-schaal en beheermonitoringschaal uit 2017) met telkens
 #' de verschillende mogelijke categorieën en een overeenkomstige
-#' bedekkingswaarde.  De functie berekenLSVIbasis gebruikt deze waarden om de
+#' bedekkingswaarde.
+#' De functie `berekenLSVIbasis()` gebruikt deze waarden om de
 #' nodige omzettingen te doen tussen deze verschillende schalen
 #'
 #' @inheritParams berekenLSVIbasis

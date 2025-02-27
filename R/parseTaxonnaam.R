@@ -12,8 +12,8 @@
 #' worden (String)
 #'
 #' @param ParseType Welk type parsing teruggegeven moet worden.  Standaard is
-#' dit 'canonicalnamewithmarker', andere opties zijn 'canonicalname' en
-#' 'canonicalnamecomplete'
+#' dit `"canonicalnamewithmarker"`, andere opties zijn `"canonicalname"` en
+#' `"canonicalnamecomplete"`
 #'
 #' @return Deze functie geeft de vereenvoudigde naam of namen terug (als string
 #' of vector van strings)

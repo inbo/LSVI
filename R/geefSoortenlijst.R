@@ -2,10 +2,11 @@
 #'
 #' @description Deze functie genereert soortenlijsten (met wetenschappelijke en
 #' Nederlandse namen) die gebruikt worden voor de bepaling van de Lokale Staat
-#' van Instandhouding van de opgegeven parameters.  In feite genereert ze een
-#' tabel met velden Versie, Habitattype, Habitatsubtype, WetNaam, WetNaamKort
-#' en NedNaam en evt. Criterium, Indicator en/of Beschrijving waarin de
-#' gespecificeerde parameters uitgeselecteerd zijn en waar voor andere
+#' van Instandhouding van de opgegeven parameters.
+#' In feite genereert ze een tabel met velden `Versie`, `Habitattype`,
+#' `Habitatsubtype`, `WetNaam`, `WetNaamKort` en `NedNaam` en evt. `Criterium`,
+#' `Indicator` en/of `Beschrijving` waarin de
+#' gespecifieerde parameters uitgeselecteerd zijn en waar voor andere
 #' parameters alle waarden uit de databank weergegeven zijn.
 #'
 #' Voor de vorm van de soortenlijst zijn er meerdere opties: een soortenlijst
@@ -31,11 +32,11 @@
 #' taxonomische groepen worden weergegeven die volledig in de groepen vallen
 #' die aan de parameters voldoen.
 #'
-#' @return Deze functie geeft een tabel met velden Versie, Habitattype,
-#' Habitatsubtype, Criterium, Indicator, evt. Beschrijving, WetNaam,
-#' WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een
-#' groep van taxa binnen eenzelfde indicator).  WetNaam is de volledige
-#' Latijnse naam inclusief auteursnaam, WetNaamKort geeft de verkorte naam
+#' @return Deze functie geeft een tabel met velden `Versie`, `Habitattype`,
+#' `Habitatsubtype`, `Criterium`, `Indicator`, evt. `Beschrijving`, `WetNaam`,
+#' `WetNaamKort` en `NedNaam` (waarbij `Beschrijving` een omschrijving is voor
+#' een groep van taxa binnen eenzelfde indicator).  `WetNaam` is de volledige
+#' Latijnse naam inclusief auteursnaam, `WetNaamKort` geeft de verkorte naam
 #' zonder auteursnaam.
 #'
 #' @examples

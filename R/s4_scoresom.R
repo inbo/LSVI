@@ -1,11 +1,11 @@
 #' S4-klasse die de som van de toegekende klasses berekent
 #'
-#' Deze klasse Scoresom staat in voor de berekening van waarden voor
-#' AnalyseVariabele Scoresom op basis van opgegeven kenmerken.  Ze is een
-#' nakomeling van de klasse AnalyseVariabele.
+#' Deze klasse `Scoresom` staat in voor de berekening van waarden voor
+#' `AnalyseVariabele` `Scoresom` op basis van opgegeven kenmerken.  Ze is een
+#' nakomeling van de klasse `AnalyseVariabele`.
 #'
 #' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden
-#' Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
+#' `Vegetatielaag`, `Kenmerk`, `TypeKenmerk`, `WaardeMin` en `WaardeMax`
 #'
 #' @importFrom methods setClass setMethod
 #' @importFrom dplyr %>% filter left_join transmute

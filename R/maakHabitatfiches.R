@@ -5,9 +5,9 @@
 #' de bepaling van de Lokale Staat van Instandhouding van de habitattypes die
 #' voldoen aan de opgegeven parameters.  (Om een tabel te genereren met deze
 #' informatie om zelf een fiche te kunnen samenstellen, wordt verwezen naar de
-#' functie geefInfoHabitatfiche().  Om een rapport samen te stellen met alle
+#' functie `geefInfoHabitatfiche()`.  Om een rapport samen te stellen met alle
 #' fiches na elkaar in 1 document, wordt verwezen naar de functie
-#' maakLSVIrapport())
+#' `maakLSVIrapport()`)
 #'
 #' @template Zoekparameters
 #'
@@ -16,7 +16,7 @@
 #' boodschappen niet onnodig gegeven worden
 #'
 #' @return Deze functie genereert een rapport met habitatfiches in de vorm van
-#' een html-file die in de working directory opgeslagen wordt.
+#' een `html`-bestand dat in de working directory opgeslagen wordt.
 #'
 #' @examples
 #' # Omwille van de iets langere lange duurtijd van het commando staat bij
