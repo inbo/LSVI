@@ -5,8 +5,9 @@
 #' Ze is een nakomeling van de klasse `aantal`.
 #' Ze telt het aantal kenmerken dat
 #' opgegeven is, en als deze niet opgegeven zijn, bepaalt ze eerst waarden voor
-#' de studieitems op basis van de soortenlijst.  Het gaat hier over
-#' studiegroepen als levensvormen of groeivormen, en voorbeelden van studieitems
+#' de kenmerken op basis van de soortenlijsten die aan de kenmerken hangen.
+#' Het gaat hier over
+#' studiegroepen als levensvormen of groeivormen, en voorbeelden van kenmerken
 #' zijn helofyten of dwergstruiken.
 #'
 #' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden

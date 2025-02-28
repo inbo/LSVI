@@ -1,4 +1,4 @@
-#' S4-klasse die aandeel bedekking soorten binnen de kruidlaag berekend
+#' S4-klasse die aandeel bedekking soorten binnen de kruidlaag berekent
 #'
 #' Deze klasse `AandeelKruidlaag` staat in voor de berekening van waarden voor
 #' `TypeVariabele` `AandeelKruidlaag` op basis van opgegeven kenmerken.

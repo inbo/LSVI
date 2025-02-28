@@ -10,7 +10,8 @@
 #' @param Invoerwaarden De waarden die de gebruiker ingevoerd heeft
 #' @inheritParams geefUniekeWaarden
 #' @param Tolower default (als TRUE) wordt `tolower()` uitgevoerd op de
-#' invoerwaarden en databankwaarden vooraleer de vergelijking uitgevoerd wordt,
+#' invoerwaarden en gegevens uit de databank vooraleer de vergelijking
+#' uitgevoerd wordt,
 #' FALSE zorgt dat dit niet uitgevoerd wordt, maar idealiter worden deze stap
 #' voor stap vervangen door `Tolower = TRUE`
 #'

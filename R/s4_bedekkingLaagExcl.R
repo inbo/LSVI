@@ -13,12 +13,12 @@
 #' (Voordeel hiervan is dat de taxa op genusniveau gedefinieerd kunnen worden,
 #' zodat een door de gebruiker ingevoerde genusnaam niet "genegeerd" wordt,
 #' terwijl specifieke soorten wel geschrapt kunnen worden.  We nemen bv. om de
-#' bedekking van de boom- en struiklaag te berekenen, het genus Salix mee,
-#' m.u.v. Salix repens.  Als de gebruiker een moeilijke Salix-soort tot op
+#' bedekking van de boom- en struiklaag te berekenen, het genus _Salix_ mee,
+#' m.u.v. _Salix repens_.  Als de gebruiker een moeilijke _Salix_-soort tot op
 #' genusniveau gedetermineerd heeft, wordt deze als boom meegeteld om de
 #' totale bedekking van de boom- en struiklaag te berekenen.  Geeft de
-#' gebruiker Salix repens mee, dan wordt deze niet meegeteld.  Alle andere
-#' Salix-soorten worden wel meegeteld.)
+#' gebruiker _Salix repens_ mee, dan wordt deze niet meegeteld.  Alle andere
+#' _Salix_-soorten worden wel meegeteld.)
 #'
 #' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden
 #' `Vegetatielaag`, `Kenmerk`, `TypeKenmerk`, `WaardeMin` en `WaardeMax`

@@ -1,10 +1,11 @@
 #' @title combineert de Status van voorwaarden via de opgegeven formule
 #'
-#' @description Technische hulpfunctie die in een formule de ID's vervangt door
-#' opgegeven logische waarden en het resultaat van de formule teruggeeft.
+#' @description Technische hulpfunctie die in een formule de `VoorwaardeID`'s
+#' vervangt door opgegeven logische waarden en het resultaat van de formule
+#' teruggeeft.
 #'
-#' @param Formule string van ID's gecombineerd met EN en OF, bijvoorbeeld
-#' '(720 EN 721) OF 15'
+#' @param Formule string van `VoorwaardeID`'s gecombineerd met EN en OF,
+#' bijvoorbeeld "(720 EN 721) OF 15"
 #' @param VoorwaardeID vector van alle `VoorwaardeID`'s die voorkomen in de
 #' `Formule`
 #' @param Status vector met voor elke `VoorwaardeID` een overeenkomstige

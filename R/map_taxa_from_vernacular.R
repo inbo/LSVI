@@ -1,4 +1,4 @@
-#' Zoek gbif-info voor Nederlandse (of anderstalige) naam
+#' Zoek Gbif-info voor Nederlandse (of anderstalige) naam
 #'
 #' Functie `map_taxa_from_vernacular()` die Ward ontwikkeld heeft,
 #' een wrapper rond `rgbif::name_lookup()`.
@@ -218,7 +218,7 @@ map_taxa_from_vernacular <- function(
     right_join(vernacular_name_df,
                by = c(vernacular_name_col, group_cols)
     )
-  
+
   # only keep out_cols that are present
   # (e.g. synonym and acceptedKey may be absent)
   out_cols <- out_cols[out_cols %in% colnames(out_df)]

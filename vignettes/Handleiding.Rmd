@@ -19,7 +19,7 @@ Deze handleiding is bedoeld voor iedereen die met het package LSVI zal werken.  
 
 De handleiding is zo opgesteld dat ze voor beide groepen de relevante informatie bevat om aan de slag te gaan.  Enkele hoofdstukken gaan over de opbouw en het gebruik van het package, en deze zijn zinvol om te lezen voor alle gebruikers:
 
-- [Doelstellingen en inhoud package](#doelstellingen_inhoud): de globale opbouw van de databank en het package, met extra terminologie die in het package gebruikt is en ook een ruw overzicht van de inhoud (groepen van functies).  In een tweede onderdeel wordt dieper ingegaan op de doelstelling: een package van en voor LSVI-gebruikers.  In feite bevat dit deel alle informatie die niet specifiek over het gebruik van de code zelf gaat.
+- [Doelstellingen en inhoud package](#doelstellingen_inhoud): de globale opbouw van de databank en het package, met extra terminologie die in het package gebruikt is en ook een ruw overzicht van de inhoud (groepen van functies).  In een tweede onderdeel wordt dieper ingegaan op de doelstelling: een package van en voor onderzoekers die LSVI van habitattypes bestuderen.  In feite bevat dit deel alle informatie die niet specifiek over het gebruik van de code zelf gaat.
 - [Installatie van het package](#installatie_package)
 - [Gebruik basisfuncties, onderdeel Basis van LSVI-package](#basis_LSVI): hoe de functies in het LSVI-package gebruiken
 
@@ -33,7 +33,7 @@ Doelstellingen van het package LSVI zijn om de informatie in verband met het bep
 
 De __databank__ bevat alle informatie uit de LSVI-rapporten van de habitattypen, waarbij de verschillende versies van de rapporten naast elkaar opgeslagen zijn en dus afzonderlijk geraadpleegd of gebruikt kunnen worden.  Behalve de teksten die letterlijk uit de rapporten overgenomen zijn, bevat de databank ook informatie in een vorm die door het package gebruikt kan worden om de informatie op de juiste manier uit de databank te halen of om berekeningen te maken.  Zo is voor elke beoordeling van een indicator een opsplitsing gemaakt in "voorwaarden": de elementaire onderdelen die deel uitmaken van deze beoordeling en die herleid kunnen worden tot een statement dat door een computer geëvalueerd kan worden.  Vaak zijn deze voorwaarden de onderdelen die in de rapporten gescheiden zijn door "en" en/of "of", soms is de opsplitsing ook gemaakt uit louter technische noodzaak (bv. $10% < x < 50%$ wordt vervangen door de voorwaarden $x > 10%$ en $x < 50%$).  Voor elk van deze voorwaarden is gedetailleerde informatie opgenomen over de variabele die nodig is om deze beoordeling te kunnen maken, die enerzijds bedoeld is om de gebruiker te informeren en anderzijds om de LSVI-berekening gemakkelijk te kunnen automatiseren.
 
-De aard (complexiteit) van de informatie in de LSVI-rapporten en de vereiste om ook als basis te dienen voor de rekenmodule hebben geleid tot een eerder complexe databankstructuur.  We hebben dit opgevangen door in het __package__ functies voorzien die louter dienen om de databank te bevragen: met de functies `geefVersieInfo()`, `geefInfoHabitatfiche()`, `geefSoortenlijst()` en `geefInvoervereisten()` samen kan alle info uit de databank opgevraagd worden.  Ze focussen respectievelijk op informatie over de versies van de rapporten (`geefVersieInfo()`), de letterlijke info uit de LSVI-rapporten (`geefInfoHabitatfiche()`), de soortenlijsten die aan de habitattypes/indicatoren hangen (`geefSoortenlijst()`) en de info over de voorwaarden die nodig zijn voor de berekening (`geefInvoervereisten()`).
+De aard (complexiteit) van de informatie in de LSVI-rapporten en de vereiste om ook als basis te dienen voor de rekenmodule hebben geleid tot een eerder complexe databankstructuur.  We hebben dit opgevangen door in het __package__ functies voorzien die louter dienen om de databank te bevragen: met de functies `geefVersieInfo()`, `geefInfoHabitatfiche()`, `geefSoortenlijst()` en `geefInvoervereisten()` samen kan alle info uit de databank opgevraagd worden.  Ze focussen respectievelijk op informatie over de versies van de rapporten (`geefVersieInfo()`), de letterlijke info uit de LSVI-rapporten (`geefInfoHabitatfiche()`), de soortenlijsten die aan de habitattypes of indicatoren hangen (`geefSoortenlijst()`) en de info over de voorwaarden die nodig zijn voor de berekening (`geefInvoervereisten()`).
 
 Daarnaast bevat het package enkele functies die deze informatie meteen in een rapport giet: `maakLSVIrapport()` genereert een rapport waarin de habitatfiches van de geselecteerde gegevens na elkaar weergegeven worden (inclusief titels), en `maakHabitatfiches()` slaat elke habitatfiche op in een apart bestand.
 
@@ -74,7 +74,7 @@ install.packages("LSVI")
 Voordeel van bovenstaande installatie-methode is dat het package mee bijgewerkt wordt bij het commando `update.packages()`.
 Voor onderstaande methodes moet het commando bij elke nieuwe installatie van R opnieuw gerund worden (en als dit vergeten wordt, geeft gebruiken van het package mogelijk problemen).
 
-Een andere optie is om het package vanaf Github te installeren (ook hier eerst alle R-sessies sluiten en een nieuwe versie starten):
+Een andere optie is om het package vanaf GitHub te installeren (ook hier eerst alle R-sessies sluiten en een nieuwe versie starten):
 
 ```{r eval = FALSE}
 install.packages("remotes")
@@ -134,7 +134,7 @@ _(Leeswijzer: info over het gebruik van de functies in het LSVI-package staat on
 
 Vaak genereert een functie gegevens in de vorm van een tabel.  Hoe kan je hier nu mee verdergaan?  
 
-We illustreren dit a.d.h.v de functie `geefSoortenlijst()`.  Als we deze functie op zich gebruiken zoals in het voorbeeld in de documentatie is weergegeven, dan wordt de uitvoer weergegeven in de R-console:
+We illustreren dit a.d.h.v. de functie `geefSoortenlijst()`.  Als we deze functie op zich gebruiken zoals in het voorbeeld in de documentatie is weergegeven, dan wordt de uitvoer weergegeven in de R-console:
 
 ```{r}
 library(LSVI)
@@ -172,7 +172,7 @@ library(readr)
 Dataset <- read_csv2("Gegevens.csv")
 ```
 
-Je steekt dus de gegevens uit je bestand `Gegevens.csv` in de variabele `Dataset`.  (Het laden van de library readr is enkel nodig als je dit nog niet eerder gedaan hebt sinds je R opgestart hebt.)
+Je steekt dus de gegevens uit je bestand `Gegevens.csv` in de variabele `Dataset`.  (Het laden van package readr met commando `library(readr)` is enkel nodig als je dit nog niet eerder gedaan hebt sinds je R opgestart hebt.)
 
 Gegevens kunnen ook rechtstreeks vanuit een databank ingelezen worden, en ze kunnen in R naar het gewenste formaat omgezet worden.  Een volledige uitleg hierover zou ons echter te ver leiden.  Toch interesse om hier meer over te leren?  Neem dan contact op met een collega van BMK.
 

@@ -8,7 +8,7 @@
 #' wordt ze gebruikt als de totale bedekking van een vegetatielaag en een
 #' taxongroep berekend moet worden, bv. de totale bedekking van de moslaag en
 #' klimop.  Bij het samenvoegen van de bedekkingen maakt ze gebruik van de
-#' formule van Ficher (die rekening houdt met een gedeeltelijke overlap).
+#' formule van Fisher (die rekening houdt met een gedeeltelijke overlap).
 #' De berekening van de bedekking van de vegetatielaag maakt ze, zoals de
 #' klasse `bedekkingLaag`, op basis van de studiegroep als deze aanwezig is in
 #' de opname, en anders op basis van de soortengroep.

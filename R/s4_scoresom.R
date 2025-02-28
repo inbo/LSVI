@@ -1,4 +1,4 @@
-#' S4-klasse die de som van de toegekende klasses berekent
+#' S4-klasse die de som van de toegekende klassen berekent
 #'
 #' Deze klasse `Scoresom` staat in voor de berekening van waarden voor
 #' `AnalyseVariabele` `Scoresom` op basis van opgegeven kenmerken.  Ze is een

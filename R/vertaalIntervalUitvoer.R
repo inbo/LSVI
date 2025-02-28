@@ -12,7 +12,7 @@
 #' @param LIJST Dataframe met lijst die weergeeft hoe de vertaling moet
 #' gebeuren van numerieke waarden naar categorische variabelen.  Verschillend
 #' van andere functies die dezelfde lijst gebruiken, mogen hier geen
-#' overlappende categorieen voorkomen binnen eenzelfde schaal.  Om zulke lijst
+#' overlappende categorieën voorkomen binnen eenzelfde schaal.  Om zulke lijst
 #' te bekomen, moeten uit de lijst gegenereerd door de functie
 #' `vertaalInvoerInterval()` de records met Basisschaal 1 gefilterd worden.
 #' @inheritParams berekenLSVIbasis
