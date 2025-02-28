@@ -19,8 +19,8 @@
 #' @inheritParams selecteerIndicatoren
 #' @param Taxonlijstniveau Geeft aan op welk niveau de soortenlijst gegroepeerd
 #' is (en welke niveaus weergegeven worden in de soortenlijst), de mogelijke
-#' waarden zijn 'habitattype', 'criterium', 'indicator' en 'voorwaarde'.
-#' Default is 'habitattype'.
+#' waarden zijn "habitattype", "criterium", "indicator" en "voorwaarde".
+#' Default is "habitattype".
 #' @param Taxonlijsttype `r lifecycle::badge("deprecated")`
 #' `Taxonlijsttype = "alle"` wordt niet meer ondersteund; deze functie zal
 #' altijd de soortenlijsten weergeven zoals in de habitatfiche (na herziening

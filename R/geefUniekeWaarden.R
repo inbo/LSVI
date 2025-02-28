@@ -6,7 +6,7 @@
 #' databank met LSVI-indicatoren staan, voorafgegaan door de (toegevoegde)
 #' waarde "alle".  Deze functie wordt in verschillende functies van het package
 #' gebruikt om de invoer van parameters te controleren (waar de mogelijke
-#' invoer bestaat uit 'alle' of een item uit het veld).  In enkele gevallen
+#' invoer bestaat uit "alle" of een item uit het veld).  In enkele gevallen
 #' wordt dit commando in de documentatie vermeld zodat ook de gebruiker in die
 #' specifieke gevallen de lijst met mogelijke invoerwaarden op een eenvoudige
 #' manier kan opvragen.

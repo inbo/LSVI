@@ -11,7 +11,7 @@
 #' vooraleer de berekening uitgevoerd wordt op basis van de taxongroep met de
 #' meeste soorten.
 #' (Voordeel hiervan is dat de taxa op genusniveau gedefinieerd kunnen worden,
-#' zodat een door de gebruiker ingevoerde genusnaam niet 'genegeerd' wordt,
+#' zodat een door de gebruiker ingevoerde genusnaam niet "genegeerd" wordt,
 #' terwijl specifieke soorten wel geschrapt kunnen worden.  We nemen bv. om de
 #' bedekking van de boom- en struiklaag te berekenen, het genus Salix mee,
 #' m.u.v. Salix repens.  Als de gebruiker een moeilijke Salix-soort tot op

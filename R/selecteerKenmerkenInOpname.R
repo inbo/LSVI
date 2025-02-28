@@ -12,7 +12,7 @@
 #' moet worden
 #' @param Studiegroep dataframe met de lijst kenmerken die uit Kenmerken
 #' gehaald moet worden
-#' @param SubAnalyseVariabele heeft waarde 'bedekking' als er een subvoorwaarde
+#' @param SubAnalyseVariabele heeft waarde "bedekking" als er een subvoorwaarde
 #' is voor de bedekking van de geselecteerde soorten of kenmerken
 #' @param SubRefMin minimumwaarde van de grenswaarde voor de bedekking
 #' @param SubRefMax maximumwaarde van de grenswaarde voor de bedekking

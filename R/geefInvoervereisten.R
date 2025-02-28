@@ -12,8 +12,8 @@
 #'
 #' Verder geeft ze informatie over de `Waarde` die verwacht wordt in de functie
 #' `berekenLSVIbasis()`.  `AnalyseVariabele` is een korte omschrijving voor de
-#' variabele waarde, bv. 'aantal' staat voor het aantal soorten of klassen en
-#' 'bedekking' voor de totale bedekking van de lijst soorten of klassen.
+#' variabele waarde, bv. "aantal" staat voor het aantal soorten of klassen en
+#' "bedekking" voor de totale bedekking van de lijst soorten of klassen.
 #' `Referentiewaarde` en `Operator` geven respectievelijk de grenswaarde en de
 #' vergelijking aan op basis waarvan de beoordeling van de waarde zal gebeuren.
 #' Voor elke `AnalyseVariabele` wordt informatie gegeven over het formaat dat
@@ -49,8 +49,8 @@
 #' @inheritParams selecteerIndicatoren
 #' @inheritParams berekenLSVIbasis
 #' @param Weergave Wat moet er in de tabel weergegeven worden?  De default
-#' 'basis' geeft een meer overzichtelijke tabel waarbij mogelijke invoerwaarden
-#' gescheiden door een komma in 1 cel weergegeven worden, 'uitgebreid' geeft
+#' "basis" geeft een meer overzichtelijke tabel waarbij mogelijke invoerwaarden
+#' gescheiden door een komma in 1 cel weergegeven worden, "uitgebreid" geeft
 #' deze invoerwaarden met alle bijhorende informatie weer in aparte records,
 #' waardoor de tabel groot en onoverzichtelijk is.
 #'
