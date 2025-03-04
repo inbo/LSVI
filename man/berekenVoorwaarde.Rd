@@ -19,17 +19,18 @@ berekenVoorwaarde(
 voorwaarde die moet berekend worden}
 
 \item{Kenmerken}{Dataframe met soorten of kenmerken en hun bedekking voor 1
-opname met minimum de velden ID, Vegetatielaag, Kenmerk, TypeKenmerk,
-Waarde, Type, Invoertype en Eenheid (data identiek aan Data_soortenKenmerken
-in berekenLSVIbasis)}
+opname met minimum de velden \code{ID}, \code{Vegetatielaag}, \code{Kenmerk}, \code{TypeKenmerk},
+\code{Waarde}, \code{Type}, \code{Invoertype} en \code{Eenheid} (data identiek aan
+\code{Data_soortenKenmerken} in \code{berekenLSVIbasis()})}
 
 \item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor
-de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
+de LSVI van habitats, in te stellen d.m.v. functie \code{connecteerMetLSVIdb()}.}
 
 \item{LIJST}{Dataframe met lijst die weergeeft hoe de vertaling moet
 gebeuren van categorische variabelen naar numerieke waarden (en omgekeerd).
 Default worden deze waarden uit de databank met LSVI-indicatoren gehaald
-d.m.v. de functie vertaalInvoerInterval().  Aangeraden wordt om deze default
+d.m.v. de functie \code{vertaalInvoerInterval()}.
+Aangeraden wordt om deze default
 te gebruiken (dus parameter niet expliciet invullen), of deze waar nodig aan
 te vullen met eigen schalen.  Omdat er ook een omzetting moet gebeuren voor
 grenswaarden uit de databank, kan het niet doorgeven van een gedeelte van
@@ -45,11 +46,11 @@ bv. bedekkingen volgens de beheermonitoringschaal of Tansley-schaal.)
 }
 \description{
 Deze hulpfunctie berekent de waarde voor een opgegeven voorwaarde
-(verwijzend naar de 'rekenregels' in de LSVI-indicatorendatabank) op basis
+(verwijzend naar de "rekenregels" in de LSVI-indicatorendatabank) op basis
 van opgegeven datasets.  Ze doet dit voor 1 enkele voorwaarde en 1 enkele
-opname (datum + locatie).  Deze functie test NIET of de datasets zich
+opname (datum en locatie).  Deze functie test NIET of de datasets zich
 beperken tot een enkele opname, dus het is aan de gebruiker om enkel
 gegevens van 1 locatie mee te geven.  Voor een berekening van meerdere
 opnamen (en ook de volledige LSVI i.p.v. enkel 1 voorwaarde) verwijzen we
-naar de functie berekenLSVIbasis.
+naar de functie \code{berekenLSVIbasis()}.
 }

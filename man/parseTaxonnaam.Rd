@@ -11,8 +11,8 @@ parseTaxonnaam(Taxonnaam, ParseType = "canonicalnamewithmarker")
 worden (String)}
 
 \item{ParseType}{Welk type parsing teruggegeven moet worden.  Standaard is
-dit 'canonicalnamewithmarker', andere opties zijn 'canonicalname' en
-'canonicalnamecomplete'}
+dit \code{"canonicalnamewithmarker"}, andere opties zijn \code{"canonicalname"} en
+\code{"canonicalnamecomplete"}}
 }
 \value{
 Deze functie geeft de vereenvoudigde naam of namen terug (als string

@@ -2,7 +2,7 @@
 % Please edit documentation in R/invoercontroleData_soortenKenmerken.R
 \name{invoercontroleData_soortenKenmerken}
 \alias{invoercontroleData_soortenKenmerken}
-\title{Invoercontrole voor dataframe Data_soortenKenmerken}
+\title{Invoercontrole voor dataframe \code{Data_soortenKenmerken}}
 \usage{
 invoercontroleData_soortenKenmerken(
   Data_soortenKenmerken,
@@ -14,12 +14,13 @@ invoercontroleData_soortenKenmerken(
 \item{Data_soortenKenmerken}{dataframe waarop invoercontrole moet gebeuren.}
 
 \item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor
-de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
+de LSVI van habitats, in te stellen d.m.v. functie \code{connecteerMetLSVIdb()}.}
 
 \item{LIJST}{Dataframe met lijst die weergeeft hoe de vertaling moet
 gebeuren van categorische variabelen naar numerieke waarden (en omgekeerd).
 Default worden deze waarden uit de databank met LSVI-indicatoren gehaald
-d.m.v. de functie vertaalInvoerInterval().  Aangeraden wordt om deze default
+d.m.v. de functie \code{vertaalInvoerInterval()}.
+Aangeraden wordt om deze default
 te gebruiken (dus parameter niet expliciet invullen), of deze waar nodig aan
 te vullen met eigen schalen.  Omdat er ook een omzetting moet gebeuren voor
 grenswaarden uit de databank, kan het niet doorgeven van een gedeelte van

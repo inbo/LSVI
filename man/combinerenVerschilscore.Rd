@@ -8,13 +8,13 @@ logische operatoren gelinkt zijn}
 combinerenVerschilscore(Formule, VoorwaardeID, Verschilscore)
 }
 \arguments{
-\item{Formule}{string van ID's gecombineerd met EN en OF, bijvoorbeeld
-'(720 EN 721) OF 15'}
+\item{Formule}{string van \code{VoorwaardeID}'s gecombineerd met EN en OF,
+bijvoorbeeld "(720 EN 721) OF 15"}
 
-\item{VoorwaardeID}{vector van alle voorwaardeID's die voorkomen in de
-Formule}
+\item{VoorwaardeID}{vector van alle \code{VoorwaardeID}'s die voorkomen in de
+\code{Formule}}
 
-\item{Verschilscore}{vector met voor elke VoorwaardeID een overeenkomstige
+\item{Verschilscore}{vector met voor elke \code{VoorwaardeID} een overeenkomstige
 verschilscore}
 }
 \value{
@@ -23,8 +23,8 @@ minimum van beide verschilscores en OF gecombineerd wordt via het maximum
 van beide verschilscores
 }
 \description{
-Technische hulpfunctie die in een formule de ID's vervangt door
-opgegeven logische waarden en het resultaat van de formule teruggeeft.
+Technische hulpfunctie die in een formule de \code{VoorwaardeID}'s
+vervangt door opgegeven waarden en het resultaat van de formule teruggeeft.
 }
 \examples{
 #onderstaand voorbeeld geeft problemen bij het testen van het package door
