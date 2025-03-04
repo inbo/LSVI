@@ -14,7 +14,7 @@ geefUniekeWaarden(Tabelnaam, Veldnaam, ConnectieLSVIhabitats = NULL)
 waarvan de waarden moeten opgezocht worden (String)}
 
 \item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor
-de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
+de LSVI van habitats, in te stellen d.m.v. functie \code{connecteerMetLSVIdb()}.}
 }
 \value{
 Deze functie geeft een vector bestaande uit "alle" en de
@@ -22,11 +22,11 @@ verschillende waarden uit de gespecifieerde tabel.
 }
 \description{
 Deze hulpfunctie geeft een vector met alle verschillende
-waarden die in een gespecificeerd veld van een gespecificeerde tabel in de
+waarden die in een gespecifieerd veld van een gespecificeerde tabel in de
 databank met LSVI-indicatoren staan, voorafgegaan door de (toegevoegde)
 waarde "alle".  Deze functie wordt in verschillende functies van het package
 gebruikt om de invoer van parameters te controleren (waar de mogelijke
-invoer bestaat uit 'alle' of een item uit het veld).  In enkele gevallen
+invoer bestaat uit "alle" of een item uit het veld).  In enkele gevallen
 wordt dit commando in de documentatie vermeld zodat ook de gebruiker in die
 specifieke gevallen de lijst met mogelijke invoerwaarden op een eenvoudige
 manier kan opvragen.

@@ -7,14 +7,15 @@
 berekenStatus(Statustabel)
 }
 \arguments{
-\item{Statustabel}{Dataframe met velden Rijnr, RefMin, RefMax, Operator,
-WaardeMin en WaardeMax.}
+\item{Statustabel}{Dataframe met velden \code{Rijnr}, \code{RefMin}, \code{RefMax},
+\code{Operator}, \code{WaardeMin} en \code{WaardeMax}.}
 }
 \value{
-Deze functie geeft een tabel terug met velden Rijnr en Status
+Deze functie geeft een tabel terug met velden \code{Rijnr} en \code{Status}
 }
 \description{
 Deze functie, die bedoeld is als hulpfunctie voor de
-hoofdfunctie berekenLSVIbasis, evalueert de status van de records van een
-opgegeven 'statustabel' met velden Waarde, Referentiewaarde en Operator.
+hoofdfunctie \code{berekenLSVIbasis()}, evalueert de status van de records van een
+opgegeven \code{Statustabel} met velden \code{Waarde}, \code{Referentiewaarde} en
+\code{Operator}.
 }

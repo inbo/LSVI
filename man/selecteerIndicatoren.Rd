@@ -18,20 +18,20 @@ selecteerIndicatoren(
 \item{Versie}{De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".
 Bij de default "alle" worden de gegevens voor de verschillende versies
 gegeven.  De mogelijke waarden kunnen opgevraagd worden via
-geefUniekeWaarden("Versie", "VersieLSVI") of geefVersieInfo().}
+\code{geefUniekeWaarden("Versie", "VersieLSVI")} of \code{geefVersieInfo()}.}
 
 \item{Habitatgroep}{Parameter waarmee alle habitats van een bepaalde
 habitatgroep kunnen geselecteerd worden, bv. "Bossen", "Heiden",
 "(Half-)natuurlijke graslanden", "Zoete en brakke wateren",...   en "alle"
 (=default).  Deze waarde moet niet gespecifieerd worden als een bepaald
 habitat(sub)type geselecteerd wordt.  De mogelijke waarden kunnen opgevraagd
-worden via geefUniekeWaarden("Habitatgroep", "Naam").}
+worden via \code{geefUniekeWaarden("Habitatgroep", "Naam")}.}
 
 \item{Habitattype}{Parameter waarmee een habitattype of habitatsubtype kan
 geselecteerd worden.  Als dit een habitattype betreft met meerdere subtypes,
 zullen de gegevens van alle subtypes van dit habitattype weergegeven worden.
 De mogelijke waarden kunnen opgevraagd worden via
-geefUniekeWaarden("Habitattype", "Code").  Er is voor deze parameter ook de
+\code{geefUniekeWaarden("Habitattype", "Code")}.  Er is voor deze parameter ook de
 mogelijkheid om een vector van meerdere habitat(sub)typen op te geven.}
 
 \item{Criterium}{Het LSVI-criterium waarvoor de gegevens geselecteerd
@@ -39,19 +39,19 @@ worden: "Vegetatie", "Structuur", "Verstoring" of "alle".}
 
 \item{Indicator}{De indicator waarvoor de gegevens uit de databank gehaald
 worden.  De mogelijke waarden kunnen opgevraagd worden via
-geefUniekeWaarden("Indicator", "Naam").}
+\code{geefUniekeWaarden("Indicator", "Naam")}.}
 
-\item{HabitatnamenToevoegen}{Moeten de namen van de habitattypen en
-habitatsubtypen toegevoegd worden als extra kolommen?  (Bij FALSE worden
+\item{HabitatnamenToevoegen}{Moeten de namen van de habitattypes en
+habitatsubtypes toegevoegd worden als extra kolommen?  (Bij FALSE worden
 enkel de habitatcodes toegevoegd, niet de volledige namen.)}
 
 \item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor
-de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
+de LSVI van habitats, in te stellen d.m.v. functie \code{connecteerMetLSVIdb()}.}
 }
 \value{
-Deze functie geeft een tabel met velden Versie, Habitattype,
-Habitatsubtype, Criterium, Indicator, Indicator_habitatID, TaxongroepId en
-Indicator_beoordelingID.
+Deze functie geeft een tabel met velden \code{Versie}, \code{Habitattype},
+\code{Habitatsubtype}, \code{Criterium}, \code{Indicator}, \code{Indicator_habitatID},
+\code{TaxongroepId} en \code{Indicator_beoordelingID}.
 }
 \description{
 Deze hulpfunctie selecteert de indicatoren die gebruikt worden
@@ -60,7 +60,7 @@ parameters.  Ze is bedoeld om te gebruiken als bouwsteen in andere functies
 waar de gegevens voor bijvoorbeeld een welbepaalde versie of welbepaalde
 habitattypes geselecteerd moeten kunnen worden.
 
-De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten als string opgegeven worden.  Default is telkens 'alle', waarbij de soortenlijsten voor alle mogelijke waarden van die parameter weergegeven worden (m.a.w. er is geen selectie voor deze parameter).
+De parameters kunnen enkel de hieronder gespecifieerde waarden bevatten en moeten als string opgegeven worden.  Default is telkens "alle", waarbij de soortenlijsten voor alle mogelijke waarden van die parameter weergegeven worden (m.a.w. er is geen selectie voor deze parameter).
 }
 \examples{
 # Omwille van de iets langere lange duurtijd van de commando's staat bij

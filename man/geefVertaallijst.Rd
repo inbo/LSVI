@@ -8,7 +8,7 @@ geefVertaallijst(ConnectieLSVIhabitats)
 }
 \arguments{
 \item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor
-de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
+de LSVI van habitats, in te stellen d.m.v. functie \code{connecteerMetLSVIdb()}.}
 }
 \value{
 Dataframe met Naam, Waarde, Volgnummer, Omschrijving, Ondergrens,
@@ -19,6 +19,7 @@ afkomstig is van het delen van het percentage door 100)
 Deze functie haalt een lijst uit de databank van de gebruikte
 schalen (bv. Tansley-schaal en beheermonitoringschaal uit 2017) met telkens
 de verschillende mogelijke categorieën en een overeenkomstige
-bedekkingswaarde.  De functie berekenLSVIbasis gebruikt deze waarden om de
+bedekkingswaarde.
+De functie \code{berekenLSVIbasis()} gebruikt deze waarden om de
 nodige omzettingen te doen tussen deze verschillende schalen
 }
