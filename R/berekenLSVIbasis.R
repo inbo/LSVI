@@ -28,34 +28,6 @@
 #' Een naam met `"min"` duidt op minimum van de scores als
 #' aggregatie; bij `"harm"` werd het harmonisch gemiddelde berekend.
 #'
-<<<<<<< HEAD
-=======
-#' Bij de output zit een tabel `Soortenlijst` die aangeeft aan welke taxoninfo
-#' de opgegeven taxa gekoppeld zijn.
-#' Deze laat dus toe om te controleren of de koppeling juist gebeurd is,
-#' en of de bovenliggende taxonniveaus kloppen.
-#' Zoals in vignet berekeningen (`vignette("Berekeningen", package = "LSVI")`)
-#' in detail beschreven is,
-#' wordt na koppeling met de taxonlijst uit het package op ongekoppelde taxa
-#' een matching toegepast op basis van een Gbif-tool om bij kleine afwijkingen
-#' toch de ingevoerde soorten te herkennen.
-#' Op die manier wordt de kans op het herkennen van de soort door het package
-#' vergroot, maar het heeft als keerzijde dat een taxon door Gbif ten onrechte
-#' gekoppeld kan worden aan een Gbif-key van een accepted taxon (omdat Gbif
-#' geen rekening houdt met auteursnamen, "auct.", "auct. non", "non",...).
-#' Daarom wordt met een warning aangeraden om de `Soortenlijst` te controleren
-#' als de Gbif-tool voor de koppeling van minstens één soort gebruikt is
-#' (dit is aangegeven in veld `Koppelmethode`, en deze records staan bovenaan).
-#' Fouten bij gebruik van de Gbif-tool kunnen best opgelost worden door de taxa
-#' bij invoer te vervangen door de schrijfwijze in de taxonlijst in het package
-#' (beschikbaar via
-#' `readr::read_csv2(system.file("databank/TaxonTabel.csv", package = "LSVI"))`
-#' of op [Zenodo](https://zenodo.org/records/10561497)).
-#' Fouten in deze taxonlijst mogen gemeld worden via
-#' [een issue](https://github.com/inbo/LSVI/issues) (of aan de beheerder van
-#' het package).
-#'
->>>>>>> 3013c81 (spelling: voeg `quotes` toe bij functienamen, objectnamen, code,...)
 #' @inheritParams selecteerIndicatoren
 #' @param Versie De versie van het LSVI-rapport op basis waarvan de berekening
 #' gemaakt wordt, bv. "Versie 2.0" of "Versie 3".  Bij de default "alle" wordt
@@ -100,15 +72,6 @@
 #' dit geval moeten `Type`, `Invoertype` en `Eenheid` niet ingevoerd worden.
 #' @param Data_soortenKenmerken Gegevens van soorten en kenmerken en hun
 #' bedekking (m.a.w. enkel kenmerken waarvan een bedekking gemeten is, horen
-<<<<<<< HEAD
-#' in deze tabel).  Deze dataframe moet de velden ID, Vegetatielaag, Kenmerk,
-#' TypeKenmerk, Waarde, Type, Invoertype en Eenheid bevatten, waarbij ID de
-#' groeperende variabele voor een opname is die ook bij Data_habitat opgegeven
-#' is.  Kenmerk bevat een soortnaam of een naam die voorkomt in de lijst
-#' gegenereerd door geefUniekeWaarden("StudieItem", "Waarde") en TypeKenmerk
-#' geeft een beschrijving voor dat kenmerk: 'studiegroep', 'soort_Latijn',
-#' 'soort_NL' of 'soort_NBN'.  Waarde is de geobserveerde bedekking en Type het
-=======
 #' in deze tabel).
 #' Deze dataframe moet de velden `ID`, `Vegetatielaag`, `Kenmerk`,
 #' `TypeKenmerk`, `Waarde`, `Type`, `Invoertype` en `Eenheid` bevatten, waarbij
@@ -119,7 +82,6 @@
 #' geeft een beschrijving voor dat kenmerk: `"studiegroep"`, `"soort_Latijn"`,
 #' `"soort_NL"` of `"soort_gbif"`.
 #' `Waarde` is de geobserveerde bedekking en `Type` het
->>>>>>> 3013c81 (spelling: voeg `quotes` toe bij functienamen, objectnamen, code,...)
 #' soort variabele dat voor de bedekking gebruikt is (zie
 #' `geefUniekeWaarden("TypeVariabele", "Naam")` voor de mogelijke waarden).
 #' Ingeval van een categorische variabele moet bij `Invoertype` de naam van de
