@@ -14,6 +14,8 @@
 #' `berekenLSVIbasis()`.  `AnalyseVariabele` is een korte omschrijving voor de
 #' variabele waarde, bv. "aantal" staat voor het aantal soorten of klassen en
 #' "bedekking" voor de totale bedekking van de lijst soorten of klassen.
+#' (Zie `vignette("berekeningen", package = "LSVI")` voor een uitgebreide
+#' beschrijving van de achterliggende berekeningen.)
 #' `Referentiewaarde` en `Operator` geven respectievelijk de grenswaarde en de
 #' vergelijking aan op basis waarvan de beoordeling van de waarde zal gebeuren.
 #' Voor elke `AnalyseVariabele` wordt informatie gegeven over het formaat dat
