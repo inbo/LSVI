@@ -2,6 +2,7 @@
 -bestand
 -bestanden
 -functie
+-functies
 -soort
 -soorten
 1-out-all-out
@@ -51,6 +52,7 @@ R-projecten
 R-sessies
 RMarkdown
 RapportageHR
+Rmd
 S4-klasse
 SQLite-databank
 Salix
@@ -60,6 +62,7 @@ Tansley
 Tansley-schaal
 Tansley-waarden
 Vanherck
+abundanties
 accepted
 aan-/afwezigheid
 beheermonitoringschaal
@@ -67,12 +70,14 @@ boom-
 bosconstantie
 boven-
 codominant
+connectiepool
 constructor
 databankfouten
 databankserver
 databankstructuur
 defaultwaarde
 defaultwaarden
+dependency
 description-file
 distance-to-target
 gedeselecteerd
@@ -92,9 +97,11 @@ lijstscheidingsteken
 names
 milieukarakteristieken
 natuurdoeltypen
+odbc-connectie
 ongekoppelde
 ouderdomsstadia
 packagenaam
+parsing
 path
 pioniersstatium
 queries
@@ -103,6 +110,7 @@ repens
 rgbif-package
 s4-klasse
 s4-klassen
+soortgroepnamen
 specifiëren
 sublijsten
 subsoort

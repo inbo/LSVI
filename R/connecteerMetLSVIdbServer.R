@@ -12,7 +12,7 @@
 #' `D0122_00_LSVIHabitatTypes`)
 #'
 #' @return Deze functie geeft een open odbc-connectie naar de databank
-#' `D0122_00_LSVIHabitatTypes` op de Amazon-server van INBO.
+#' `D0122_00_LSVIHabitatTypes` op de databankserver van INBO.
 #'
 #' @noRd
 #'

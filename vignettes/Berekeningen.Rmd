@@ -286,7 +286,7 @@ Om de status van een voorwaarde te berekenen, worden de onder- en bovengrenzen m
 
 Het resultaat is telkens een logische waarde die aangeeft of de voorwaarde gunstig (TRUE) of ongunstig (FALSE) scoort.
 
-Om de status van een indicator te berekenen, wordt de aggregatie uitgevoerd die bij `geefInvoervereisten()` in het veld `Combinatie` weergegeven is (meestal een combinatie van voorwaarden met operatoren AND en OR), waarbij de resultaten TRUE/FALSE ingevuld worden bij de respectievelijke voorwaarden (gebruik makend van functie `combinerenVoorwaarden()`).
+Om de status van een indicator te berekenen, wordt de aggregatie uitgevoerd die bij `geefInvoervereisten()` in het veld `Combinatie` weergegeven is (meestal een combinatie van voorwaarden met operatoren AND en OR), waarbij de resultaten TRUE of FALSE ingevuld worden bij de respectievelijke voorwaarden (gebruik makend van functie `combinerenVoorwaarden()`).
 
 Voor de aggregatie naar hogere niveaus (criterium en volledige opname) worden deze resultaten normaal verder geaggregeerd met een AND-operator (als parameter aggregatiemethode de default `1-out-all-out` is).  Als een gebruiker kiest voor de aggregatiemethode `RapportageHR`, dan wordt rekening gehouden met het feit of een indicator belangrijk (`Belang` = "b") of zeer belangrijk is (`Belang` = "zb").  De beoordeling is gunstig (TRUE) als meer dan 50 procent van de indicatoren gunstig zijn EN als geen enkele zeer belangrijke indicator ongunstig is.
 
