@@ -11,7 +11,7 @@
 #' @param Status vector met voor elke `VoorwaardeID` een overeenkomstige
 #' logische waarde status (TRUE of FALSE)
 #'
-#' @return logische waarde TRUE/FALSE die de uitkomst van de `Formule` is
+#' @return logische waarde (TRUE of FALSE) die de uitkomst van de `Formule` is
 #' (gecombineerd met `VoorwaardeID` en `Status`)
 #'
 #' @examples

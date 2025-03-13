@@ -17,7 +17,7 @@ bijvoorbeeld "(720 EN 721) OF 15"}
 logische waarde status (TRUE of FALSE)}
 }
 \value{
-logische waarde TRUE/FALSE die de uitkomst van de \code{Formule} is
+logische waarde (TRUE of FALSE) die de uitkomst van de \code{Formule} is
 (gecombineerd met \code{VoorwaardeID} en \code{Status})
 }
 \description{
