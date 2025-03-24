@@ -181,7 +181,7 @@ Gegevens kunnen ook rechtstreeks vanuit een databank ingelezen worden, en ze kun
 De functie `berekenLSVIbasis()` geeft gegevens terug in de vorm van een lijst van 4 tabellen.
 
 ```{r}
-#Eerst worden wat voorbeeldgegevens opgehaald uit het package:
+# Eerst worden wat voorbeeldgegevens opgehaald uit het package:
 library(readr)
 data_habitat <-
   read_csv2(
@@ -197,7 +197,7 @@ data_soorten_kenmerken <-
     system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI")
   )
 
-#En hier gebeurt de berekening zelf:
+# En hier gebeurt de berekening zelf:
 berekenLSVIbasis(
   Versie = "Versie 2.0",
   Kwaliteitsniveau = "1", data_habitat,
@@ -246,13 +246,13 @@ Om de functies van het LSVI-package te gebruiken, heb je een connectie nodig met
 ```{r eval=FALSE}
 library(LSVI)
 maakConnectiePool()
-#Nu kan je alle functies gebruiken zonder expliciet het argument
-#ConnectieLSVIhabitats op te geven, bv.
+# Nu kan je alle functies gebruiken zonder expliciet het argument
+# ConnectieLSVIhabitats op te geven, bv.
 geefVersieInfo()
 geefSoortenlijst(Habitattype = "4030")
 
-#En als je geen functies meer nodig hebt uit het LSVI-package, kan je de
-#ConnectiePool afsluiten en verwijderen:
+# En als je geen functies meer nodig hebt uit het LSVI-package, kan je de
+# ConnectiePool afsluiten en verwijderen:
 library(pool)
 poolClose(ConnectiePool)
 rm(ConnectiePool)
@@ -263,11 +263,11 @@ rm(ConnectiePool)
 ```{r eval=FALSE}
 library(LSVI)
 Connectie <- connecteerMetLSVIdb()
-#Nu moet je bij elke functie opnieuw deze connectie meegeven
+# Nu moet je bij elke functie opnieuw deze connectie meegeven
 geefVersieInfo(ConnectieLSVIhabitats = Connectie)
 geefSoortenlijst(Habitattype = "4030", ConnectieLSVIhabitats = Connectie)
 
-#De connectie sluiten kan met dbDisconnect uit het DBI-package:
+# De connectie sluiten kan met dbDisconnect uit het DBI-package:
 library(DBI)
 dbDisconnect(Connectie)
 ```
