@@ -148,7 +148,7 @@ selecteerKenmerkenInOpname <-
     }
 
     if (!identical(SubAnalyseVariabele, character(0)) &&
-        SubAnalyseVariabele %in% c("aandeel", "bedekking")) {
+          SubAnalyseVariabele %in% c("aandeel", "bedekking")) {
 
       if (SubAnalyseVariabele == "aandeel") {
         Resultaat <- Resultaat %>%
@@ -180,7 +180,7 @@ selecteerKenmerkenInOpname <-
                 "WaardeMin",
                 "WaardeMax"
               )
-              ]
+            ]
           )
 
         Resultaat <- Resultaat %>%

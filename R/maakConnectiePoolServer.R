@@ -20,18 +20,18 @@
 maakConnectiePoolServer <-
   function(Server = "INBO-SQL07-PRD.inbo.be",
            Databank = "D0122_00_LSVIHabitatTypes") {
-  assert_that(is.string(Server))
-  assert_that(is.string(Databank))
+    assert_that(is.string(Server))
+    assert_that(is.string(Databank))
 
-  assign(
-    "ConnectiePool",
-    dbPool(
-      drv = odbc(),
-      Driver = "SQL Server",
-      Database = Databank,
-      Server = Server,
-      Trusted_Connection = "TRUE"
-    ),
-    envir = .GlobalEnv
-  )
-}
+    assign(
+      "ConnectiePool",
+      dbPool(
+        drv = odbc(),
+        Driver = "SQL Server",
+        Database = Databank,
+        Server = Server,
+        Trusted_Connection = "TRUE"
+      ),
+      envir = .GlobalEnv
+    )
+  }

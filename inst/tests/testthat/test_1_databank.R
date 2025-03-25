@@ -25,9 +25,7 @@ describe("test databank", {
     dbDisconnect(ConnectieLSVIhabitats)
   })
 
-  it(
-    "In de databank zitten enkel AnalyseVariabelen waarvoor code ontwikkeld is"
-    , {
+  it("In de databank zitten enkel AnalyseVariabelen waarvoor code ontwikkeld is", { #nolint: line_length_linter
     ConnectieLSVIhabitats <-
       connecteerMetLSVIdb()
     av <-
@@ -37,11 +35,12 @@ describe("test databank", {
       ) %>%
       filter(!grepl("^meting", .data$VariabeleNaam))
     expect_true(
-      all(av$VariabeleNaam %in%
-            c("aandeel", "bedekkingExcl", "aandeelKruidlaag", "bedekkingSom",
-              "aantal", "bedekking", "bedekkingLaag", "bedekkingLaagExcl",
-              "bedekkingLaagPlus", "maxBedekking", "maxBedekkingExcl",
-              "maxBedekking2s", "aantalGroepen", "scoresom")
+      all(
+        av$VariabeleNaam %in%
+          c("aandeel", "bedekkingExcl", "aandeelKruidlaag", "bedekkingSom",
+            "aantal", "bedekking", "bedekkingLaag", "bedekkingLaagExcl",
+            "bedekkingLaagPlus", "maxBedekking", "maxBedekkingExcl",
+            "maxBedekking2s", "aantalGroepen", "scoresom")
       )
     )
     dbDisconnect(ConnectieLSVIhabitats)
@@ -372,8 +371,7 @@ describe("test databank", {
     dbDisconnect(ConnectieLSVIhabitats)
   })
 
-  it("AnalyseVariabele maxBedekkingExcl bevat percentages en categorische var"
-     , {
+  it("AnalyseVariabele maxBedekkingExcl bevat percentages en categorische var" , { #nolint: line_length_linter
     ConnectieLSVIhabitats <-
       connecteerMetLSVIdb()
     av <-
@@ -404,34 +402,34 @@ describe("test databank", {
   })
 
   it("AnalyseVariabele maxBedekking2s bevat percentages en categorische var", {
-     ConnectieLSVIhabitats <-
-       connecteerMetLSVIdb()
-     AV <-
-       dbGetQuery(
-         ConnectieLSVIhabitats,
-         "SELECT AnalyseVariabele.Id, AnalyseVariabele.VariabeleNaam,
-         TypeVariabele.Naam as TypeVariabele
-         FROM AnalyseVariabele INNER JOIN TypeVariabele
-         ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
-         WHERE AnalyseVariabele.VariabeleNaam = 'maxBedekking2s'"
-       )
-     av_leeg <- AV %>%
-       filter(!TypeVariabele %in% c("Percentage", "Categorie"))
-     FouteWaarden <-
-       dbGetQuery(
-         ConnectieLSVIhabitats,
-         sprintf(
-           "SELECT Id, Referentiewaarde FROM Voorwaarde
-        WHERE AnalyseVariabeleId in ('%s')",
-           paste(av_leeg$Id, collapse = "','")
-         )
-       )
-     expect_equal(
-       nrow(FouteWaarden),
-       0
-     )
-     dbDisconnect(ConnectieLSVIhabitats)
-   })
+    ConnectieLSVIhabitats <-
+      connecteerMetLSVIdb()
+    AV <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        "SELECT AnalyseVariabele.Id, AnalyseVariabele.VariabeleNaam,
+        TypeVariabele.Naam as TypeVariabele
+        FROM AnalyseVariabele INNER JOIN TypeVariabele
+        ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
+        WHERE AnalyseVariabele.VariabeleNaam = 'maxBedekking2s'"
+      )
+    av_leeg <- AV %>%
+      filter(!TypeVariabele %in% c("Percentage", "Categorie"))
+    FouteWaarden <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        sprintf(
+          "SELECT Id, Referentiewaarde FROM Voorwaarde
+           WHERE AnalyseVariabeleId in ('%s')",
+          paste(av_leeg$Id, collapse = "','")
+        )
+      )
+    expect_equal(
+      nrow(FouteWaarden),
+      0
+    )
+    dbDisconnect(ConnectieLSVIhabitats)
+  })
 
   it("AnalyseVariabele scoresom heeft typevariabele Geheel getal", {
     ConnectieLSVIhabitats <-
@@ -614,25 +612,25 @@ describe("test databank", {
   })
 
   it("TypeVariabele Vrije tekst is nergens gebruikt", {
-      ConnectieLSVIhabitats <-
-        connecteerMetLSVIdb()
-      av <-
-        dbGetQuery(
-          ConnectieLSVIhabitats,
-          "SELECT Voorwaarde.Id, AnalyseVariabele.VariabeleNaam,
-        TypeVariabele.Naam as TypeVariabele
-        FROM Voorwaarde INNER JOIN AnalyseVariabele
-          ON Voorwaarde.AnalyseVariabeleId = AnalyseVariabele.Id
-        INNER JOIN TypeVariabele
-          ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
-        WHERE TypeVariabele.Naam = 'Vrije tekst'"
-        )
-      expect_equal(
-        nrow(av),
-        0
+    ConnectieLSVIhabitats <-
+      connecteerMetLSVIdb()
+    av <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        "SELECT Voorwaarde.Id, AnalyseVariabele.VariabeleNaam,
+      TypeVariabele.Naam as TypeVariabele
+      FROM Voorwaarde INNER JOIN AnalyseVariabele
+        ON Voorwaarde.AnalyseVariabeleId = AnalyseVariabele.Id
+      INNER JOIN TypeVariabele
+        ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
+      WHERE TypeVariabele.Naam = 'Vrije tekst'"
       )
-      dbDisconnect(ConnectieLSVIhabitats)
-    })
+    expect_equal(
+      nrow(av),
+      0
+    )
+    dbDisconnect(ConnectieLSVIhabitats)
+  })
 
   it("Voor elke categorische variabele is een Invoermasker opgegeven", {
     ConnectieLSVIhabitats <-
@@ -676,9 +674,7 @@ describe("test databank", {
     dbDisconnect(ConnectieLSVIhabitats)
   })
 
-  it(
-    "De subanalysevariabele is overal correct ingevoerd (bedekking of aandeel)"
-    , {
+  it("De subanalysevariabele is overal correct ingevoerd (bedekking of aandeel)", { #nolint: line_length_linter
     ConnectieLSVIhabitats <-
       connecteerMetLSVIdb()
     av <-
@@ -722,7 +718,8 @@ describe("test databank", {
             test =
               max(grepl(tolower(unique(SubReferentiewaarde)), tolower(Waarde)))
           ) %>%
-          ungroup())$test)
+          ungroup())$test
+      )
     )
     dbDisconnect(ConnectieLSVIhabitats)
   })
@@ -969,7 +966,7 @@ describe("test databank", {
       filter(
         AnalyseVariabele %in%
           c("aandeel", "aandeelKruidlaag", "bedekking", "meting_perc") |
-        grepl("bedekking", tolower(AnalyseVariabele))
+          grepl("bedekking", tolower(AnalyseVariabele))
       ) %>%
       filter(Maximumwaarde != 1)
     expect_equal(nrow(TMbedekkingaandeel), 0)

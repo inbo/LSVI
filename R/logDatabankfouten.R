@@ -288,9 +288,9 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
         filter(
           !is.na(.data$SubAnalyseVariabele) &
             !.data$AnalyseVariabele %in%
-            c("aantal", "aandeel", "aandeelKruidlaag", "bedekking",
-              "bedekkingExcl", "maxBedekking", "maxBedekking2s",
-              "maxBedekkingExcl", "scoresom")
+              c("aantal", "aandeel", "aandeelKruidlaag", "bedekking",
+                "bedekkingExcl", "maxBedekking", "maxBedekking2s",
+                "maxBedekkingExcl", "scoresom")
         ) %>%
         mutate(
           Probleem =

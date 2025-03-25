@@ -89,21 +89,22 @@ berekenStatus <-
       group_by(.data$Operator) %>%
       do(
         Status =
-          switch(unique(.data$Operator),
-                 "<" = berekenStatusWaarde(
-                   .[c("Rijnr", "WaardeMax", "Operator", "RefMin")]
-                 ),
-                 "<=" = berekenStatusWaarde(
-                   .[c("Rijnr", "WaardeMax", "Operator", "RefMax")]
-                 ),
-                 ">" = berekenStatusWaarde(
-                   .[c("Rijnr", "WaardeMin", "Operator", "RefMax")]
-                 ),
-                 ">=" = berekenStatusWaarde(
-                   .[c("Rijnr", "WaardeMin", "Operator", "RefMin")]
-                 ),
-                 "=" = berekenStatusGelijkheid(.)
-        )
+          switch(
+            unique(.data$Operator),
+            "<" = berekenStatusWaarde(
+              .[c("Rijnr", "WaardeMax", "Operator", "RefMin")]
+            ),
+            "<=" = berekenStatusWaarde(
+              .[c("Rijnr", "WaardeMax", "Operator", "RefMax")]
+            ),
+            ">" = berekenStatusWaarde(
+              .[c("Rijnr", "WaardeMin", "Operator", "RefMax")]
+            ),
+            ">=" = berekenStatusWaarde(
+              .[c("Rijnr", "WaardeMin", "Operator", "RefMin")]
+            ),
+            "=" = berekenStatusGelijkheid(.)
+          )
       ) %>%
       unnest(.data$Status) %>%
       select(

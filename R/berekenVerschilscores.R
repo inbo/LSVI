@@ -50,7 +50,7 @@ berekenVerschilscores <-
                   is.na(Statustabel$WaardeMax),
                 c("WaardeMax")] <-
       Statustabel[Statustabel$TypeVariabele == "Ja/nee" &
-                    is.na(Statustabel$WaardeMax),
+                  is.na(Statustabel$WaardeMax),
                   c("WaardeMin")]
     #geval aanwezigheid specifieke sleutelsoort?
     #afh van hoe ingevoerd in databank, mag misschien weg

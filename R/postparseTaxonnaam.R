@@ -17,8 +17,7 @@
 #' @noRd
 #'
 
-postparseTaxonnaam <-
-  function(ResultaatParser, ParseType) {
+postparseTaxonnaam <- function(ResultaatParser, ParseType) {
 
   if ("sensu" %in% colnames(ResultaatParser)) {
     ResultaatParser[, c(ParseType)] <-

@@ -158,7 +158,8 @@ vertaalIntervalUitvoer <-
                 paste(
                   round(.data$Min, 1),
                   round(.data$Max, 1),
-                  sep = " - ")
+                  sep = " - "
+                )
               ),
             Waarde = as.character(.data$Waarde)
           )

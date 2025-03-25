@@ -412,9 +412,7 @@ describe("s4_Aantal", {
     )
   })
 
-  it(
-    "De aggregatie van bedekkingen/grondvlakaandelen bij subsoorten gebeurt correct" #nolint: line_length_linter
-    , {
+  it("De aggregatie van bedekkingen/grondvlakaandelen bij subsoorten gebeurt correct", { #nolint: line_length_linter
     expect_equal(
       berekenWaarde(
         new(

@@ -9,20 +9,26 @@ describe("twee voorwaarden vergelijken", {
     Data_habitat <- #nolint: object_name_linter
       data.frame(
         ID = 1, Habitattype = "1330_hpr",
-        stringsAsFactors = FALSE)
+        stringsAsFactors = FALSE
+      )
     Data_voorwaarden <- #nolint: object_name_linter
       data.frame(
         ID = 1, Criterium = "Verstoring", Indicator = "overgang naar rbbzil",
-        Voorwaarde = c("bedekking grasachtigen rbbzil",
-                       "som van de bedekking sleutelsoorten"),
+        Voorwaarde =
+          c(
+            "bedekking grasachtigen rbbzil",
+            "som van de bedekking sleutelsoorten"
+          ),
         Waarde = c(10, 20), Type = "Percentage", Invoertype = NA, Eenheid = "%",
-        stringsAsFactors = FALSE)
+        stringsAsFactors = FALSE
+      )
     Data_soortenKenmerken <- #nolint: object_name_linter
       data.frame(
         ID = 1, Kenmerk = c("Carex hirta", "Carex distans"),
         TypeKenmerk = "soort_Latijn", Waarde = c(10, 20), Type = "Percentage",
         Invoertype = NA, Eenheid = "%", Vegetatielaag = NA,
-        stringsAsFactors = FALSE)
+        stringsAsFactors = FALSE
+      )
     Resultaat <-
       data.frame(
         ID = "1",
@@ -139,7 +145,8 @@ describe("AnalyseVariabele scoresom", {
     data.frame(
       ID = c("demo1", "demo2", "demo3"),
       Habitattype = "2190_a",
-      stringsAsFactors = FALSE)
+      stringsAsFactors = FALSE
+    )
   Data_voorwaarden <- #nolint: object_name_linter
     read_csv2(
       system.file("vbdata/data_voorwaarden2190_a.csv", package = "LSVI")
@@ -161,7 +168,7 @@ describe("AnalyseVariabele scoresom", {
       )
     expect_equal(
       (resultaat_berekend[["Resultaat_detail"]] %>%
-        filter(.data$Indicator == "bedekking sleutelsoorten"))$Waarde,
+         filter(.data$Indicator == "bedekking sleutelsoorten"))$Waarde,
       c("6", "3", "2", "1", "8", "1")
     )
     expect_equal(

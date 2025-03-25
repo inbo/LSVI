@@ -6,10 +6,10 @@ library(rlang)
 
 maakConnectiePool()
 Data_habitat <- #nolint: object_name_linter
-    read_csv2(
-      system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
-      col_types = list(col_character(), col_character(), col_character())
-    )
+  read_csv2(
+    system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
+    col_types = list(col_character(), col_character(), col_character())
+  )
 attr(Data_habitat, "spec") <- NULL #nolint: object_name_linter
 Data_voorwaarden2 <- #nolint: object_name_linter
   read_csv2(
@@ -20,9 +20,9 @@ Data_voorwaarden <- #nolint: object_name_linter
     system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI")
   )
 Data_soortenKenmerken <- #nolint: object_name_linter
-    read_csv2(
-      system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI")
-    )
+  read_csv2(
+    system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI")
+  )
 
 load(system.file("vbdata/Resultaat_test4030.Rdata", package = "LSVI"))
 load(system.file("vbdata/Resultaat_test4030v2.Rdata", package = "LSVI"))

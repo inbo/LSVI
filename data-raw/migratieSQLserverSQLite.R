@@ -7,8 +7,7 @@ library(LSVI)
 library(dplyr)
 library(purrr)
 
-migratieSQLserverSQLite <-
-  function() {
+migratieSQLserverSQLite <- function() {
   #Tabellen ophalen uit SQLserver
   Habitatgroep <-
     dbGetQuery(ConnectiePool, "SELECT Id, Naam FROM Habitatgroep")
@@ -25,20 +24,19 @@ migratieSQLserverSQLite <-
     )       #Hier zitten enkele lege velden bij,
             #en enkele die mogelijk overbodig zijn, nog na te kijken!
 
-  HabitattypeId <- (Habitattype %>%
-    #filter(Code %in% VectorHabitattypes) %>%
-    summarise(Id = paste0(Id, collapse = ",")))$Id
+  HabitattypeId <-
+    (Habitattype %>%
+      summarise(Id = paste0(Id, collapse = ","))
+    )$Id
 
   Versie <-
     dbGetQuery(
       ConnectiePool,
-      #sprintf(
-        "SELECT Id, VersieLSVI,
-        cast(Referentie AS nvarchar(30)) AS Referentie,
-        cast(Beschrijving AS nvarchar(120)) AS Beschrijving,
-        Kwaliteitsniveau1, Kwaliteitsniveau2
-        FROM Versie"
-      #)
+      "SELECT Id, VersieLSVI,
+      cast(Referentie AS nvarchar(30)) AS Referentie,
+      cast(Beschrijving AS nvarchar(120)) AS Beschrijving,
+      Kwaliteitsniveau1, Kwaliteitsniveau2
+      FROM Versie"
     )
 
   VersieId <- (Versie %>% summarise(Id = paste0(Id, collapse = ",")))$Id
@@ -82,7 +80,8 @@ migratieSQLserverSQLite <-
 
   Indicator_beoordelingId <- #nolint: object_name_linter
     (IndicatortabellenKoppeling %>%
-       summarise(Id = paste0(Indicator_beoordelingId, collapse = ",")))$Id
+      summarise(Id = paste0(Indicator_beoordelingId, collapse = ","))
+    )$Id
 
   Indicator_beoordeling <- #nolint: object_name_linter
     dbGetQuery(

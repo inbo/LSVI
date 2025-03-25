@@ -62,7 +62,8 @@ maakHabitatfiches <-
         Habitatgroep = Habitatgroep,
         Habitattype = Habitattype,
         HabitatnamenToevoegen = TRUE,
-        ConnectieLSVIhabitats = ConnectieLSVIhabitats)
+        ConnectieLSVIhabitats = ConnectieLSVIhabitats
+      )
 
     for (versie in unique(Indicatoren$Versie)) {
       for (habitatsubtype in unique(as.character(Indicatoren$Habitatsubtype))) {

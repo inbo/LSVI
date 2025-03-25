@@ -185,19 +185,19 @@ describe("berekenLSVIbasis vegetatielaag", {
     BerekendRes3 <-
       idsWissen(
         berekenLSVIbasis(
-            Versie = "Versie 2.0", Kwaliteitsniveau = "1",
-            Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
-            Data_soortenKenmerken =
-              Data_soortenKenmerken %>%
-              mutate(
-                Vegetatielaag =
-                  ifelse(
-                    Vegetatielaag == "struiklaag",
-                    "kruidlaag",
-                    .data$Vegetatielaag
-                  )
-              )
-          )
+          Versie = "Versie 2.0", Kwaliteitsniveau = "1",
+          Data_habitat = Data_habitat, Data_voorwaarden = Data_voorwaarden,
+          Data_soortenKenmerken =
+            Data_soortenKenmerken %>%
+            mutate(
+              Vegetatielaag =
+                ifelse(
+                  Vegetatielaag == "struiklaag",
+                  "kruidlaag",
+                  .data$Vegetatielaag
+                )
+            )
+        )
       )
     stopifnot(
       all.equal(
@@ -409,9 +409,11 @@ describe("berekenLSVIbasis vegetatielaag", {
       read_csv2(
         system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI"),
         col_types =
-          list(col_character(), col_character(), col_character(),
-               col_character(), col_character(), col_character(),
-               col_character(), col_character())
+          list(
+            col_character(), col_character(), col_character(),
+            col_character(), col_character(), col_character(),
+            col_character(), col_character()
+          )
       )
     load(system.file("vbdata/Resultaat_test4030v2.Rdata", package = "LSVI"))
     WarningVergrassingVerruiging <-

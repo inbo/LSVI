@@ -98,9 +98,9 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
 
     if (
       !all(
-         Data_soortenKenmerken$Eenheid %in% GeldigeWaarden
-        )
-      ) {
+        Data_soortenKenmerken$Eenheid %in% GeldigeWaarden
+      )
+    ) {
       stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Eenheid komen overeen met waarden vermeld in de databank.") #nolint: line_length_linter
     }
 
@@ -391,7 +391,7 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
         Kenmerken[
           , c("Rijnr", "Type", "Waarde",
               "Eenheid", "Invoertype")
-          ],
+        ],
         LIJST,
         ConnectieLSVIhabitats
       ) %>%
