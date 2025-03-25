@@ -61,32 +61,32 @@ describe("s4_Aandeel", {
     )
   })
   it("Geen bomen in plot geeft resultaat 0", {
-      expect_equal(
-        berekenWaarde(
-          new(
-            Class = "aandeel",
-            Kenmerken =
-              data.frame(
-                Kenmerk = c("B2", "D3"),
-                TypeKenmerk = "soort_gbif",
-                WaardeMin = 0,
-                WaardeMax = 0.1,
-                Eenheid = "%",
-                Rank = "SPECIES",
-                SpeciesKey = c("B2", "D3"),
-                Vegetatielaag = "boomlaag",
-                stringsAsFactors = FALSE
-              ),
-            Soortengroep =
-              data.frame(
-                GbifUsageKey = c("A1", "B1", "C1", "E1"),
-                TaxonId = 1:4,
-                Rank = "SPECIES",
-                stringsAsFactors = FALSE
-              )
-          )
-        ),
-        0
-      )
+    expect_equal(
+      berekenWaarde(
+        new(
+          Class = "aandeel",
+          Kenmerken =
+            data.frame(
+              Kenmerk = c("B2", "D3"),
+              TypeKenmerk = "soort_gbif",
+              WaardeMin = 0,
+              WaardeMax = 0.1,
+              Eenheid = "%",
+              Rank = "SPECIES",
+              SpeciesKey = c("B2", "D3"),
+              Vegetatielaag = "boomlaag",
+              stringsAsFactors = FALSE
+            ),
+          Soortengroep =
+            data.frame(
+              GbifUsageKey = c("A1", "B1", "C1", "E1"),
+              TaxonId = 1:4,
+              Rank = "SPECIES",
+              stringsAsFactors = FALSE
+            )
+        )
+      ),
+      0
+    )
   })
 })

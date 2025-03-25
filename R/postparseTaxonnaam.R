@@ -17,8 +17,7 @@
 #' @noRd
 #'
 
-postparseTaxonnaam <-
-  function(ResultaatParser, ParseType) {
+postparseTaxonnaam <- function(ResultaatParser, ParseType) {
 
   .Deprecated()
 

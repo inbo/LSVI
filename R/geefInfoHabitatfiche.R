@@ -105,10 +105,10 @@ geefInfoHabitatfiche <-
       paste(
         unique(
           (Selectiegegevens %>%
-             filter(
-               !is.na(.data$Indicator_beoordelingID)
-             )
-           )$Indicator_beoordelingID
+            filter(
+              !is.na(.data$Indicator_beoordelingID)
+            )
+          )$Indicator_beoordelingID
         ),
         collapse = "','"
       )
@@ -279,7 +279,7 @@ geefInfoHabitatfiche <-
             select(
               "TaxongroepId",
               "Soortenlijst"
-              ),
+            ),
           by = c("TaxongroepId" = "TaxongroepId")
         ) %>%
         mutate(

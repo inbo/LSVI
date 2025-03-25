@@ -33,7 +33,7 @@ setMethod(
     #en geven een warning als de opties niet hetzelfde resultaat opleveren
     if (
       (sum(is.na(Kenmerken$WaardeMin)) < sum(is.na(Kenmerken$WaardeMax))) &
-      !identical(object@SubAnalyseVariabele, character(0))
+        !identical(object@SubAnalyseVariabele, character(0))
     ) {
       Kenmerken <-
         Kenmerken %>%
@@ -47,12 +47,12 @@ setMethod(
         )
       Problemen <-
         (Kenmerken %>%
-           mutate(
-             Rijnummers = row_number(.data$ID)
-           ) %>%
-           filter(
-             is.na(.data$WaardeMax) & .data$WaardeMin == 1
-           )
+          mutate(
+            Rijnummers = row_number(.data$ID)
+          ) %>%
+          filter(
+            is.na(.data$WaardeMax) & .data$WaardeMin == 1
+          )
         )$Rijnummers
 
       KenmerkenMax <- Kenmerken

@@ -185,7 +185,7 @@ invoercontroleData_voorwaarden <- #nolint: object_name_linter
         vertaalInvoerInterval(
           data_voorwaarden_niet_na[
             , c("Rijnr", "Type", "Waarde", "Eenheid", "Invoertype")
-            ],
+          ],
           LIJST,
           ConnectieLSVIhabitats
         ) %>%

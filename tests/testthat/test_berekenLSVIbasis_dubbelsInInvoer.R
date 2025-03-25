@@ -6,10 +6,10 @@ library(rlang)
 
 maakConnectiePool()
 Data_habitat <- #nolint: object_name_linter
-    read_csv2(
-      system.file("vbdata/Test9190habitat.csv", package = "LSVI"),
-      col_types = list(col_character(), col_character())
-    )
+  read_csv2(
+    system.file("vbdata/Test9190habitat.csv", package = "LSVI"),
+    col_types = list(col_character(), col_character())
+  )
 Data_voorwaarden <- #nolint: object_name_linter
   read_csv2(
     system.file("vbdata/Test9190voorwaarden.csv", package = "LSVI"),

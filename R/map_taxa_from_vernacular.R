@@ -18,7 +18,7 @@
 #' @importFrom tidyselect all_of where
 #'
 get_df_structure <- function(df_list) {
-# Function to determine the structure of the data frames in a list
+  # Function to determine the structure of the data frames in a list
 
   non_na_df <- df_list %>% compact() %>% first()
   empty_df <- map(non_na_df, ~ NA)
@@ -96,12 +96,16 @@ match_vernacular_name <- function(
   # Loop until match is found or limit reaches maximum of 3000
   while (isFALSE(stop_loop) && limit < 3000) {
     # Lookup vernacular names in GBIF backbone
-    gbif_lookup <- do.call(
-      name_lookup,
-      c(list(vernacular_name),
-        list(datasetKey = "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c"),
-        list(limit = limit),
-        dots))
+    gbif_lookup <-
+      do.call(
+        name_lookup,
+        c(
+          list(vernacular_name),
+          list(datasetKey = "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c"),
+          list(limit = limit),
+          dots
+        )
+      )
 
     # Return taxon data frame if match found
     if (nrow(gbif_lookup$data) > 0) {
@@ -118,8 +122,7 @@ match_vernacular_name <- function(
         filter_cols <- filter_cols[!filter_cols %in% cols_to_remove]
 
         # Create the join condition dynamically
-        join_condition <- setNames(names(filter_cols),
-                                          unlist(filter_cols))
+        join_condition <- setNames(names(filter_cols), unlist(filter_cols))
 
         # Perform the inner join to select taxon data
         taxon_data <- vernacular_name_df %>%
@@ -186,13 +189,16 @@ map_taxa_from_vernacular <- function(
     nest(match_df = all_of(c(vernacular_name_col, group_cols))) %>%
 
     # find scientific name for each (distinct) vernacular name
-    mutate(taxon_df = map(
-      .data$match_df,
-      match_vernacular_name,
-      filter_cols = filter_cols,
-      lang = lang,
-      increment = increment,
-      ...)) %>%
+    mutate(
+      taxon_df = map(
+        .data$match_df,
+        match_vernacular_name,
+        filter_cols = filter_cols,
+        lang = lang,
+        increment = increment,
+        ...
+      )
+    ) %>%
     unnest("match_df") %>%
 
     # Remove unneeded columns
@@ -215,8 +221,9 @@ map_taxa_from_vernacular <- function(
     ungroup() %>%
 
     # Add other columns from input df
-    right_join(vernacular_name_df,
-               by = c(vernacular_name_col, group_cols)
+    right_join(
+      vernacular_name_df,
+      by = c(vernacular_name_col, group_cols)
     )
 
   # only keep out_cols that are present

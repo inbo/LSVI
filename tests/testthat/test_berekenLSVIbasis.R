@@ -6,10 +6,10 @@ library(rlang)
 
 maakConnectiePool()
 Data_habitat <- #nolint: object_name_linter
-    read_csv2(
-      system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
-      col_types = list(col_character(), col_character(), col_character())
-    )
+  read_csv2(
+    system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
+    col_types = list(col_character(), col_character(), col_character())
+  )
 attr(Data_habitat, "spec") <- NULL #nolint: object_name_linter
 Data_voorwaarden2 <- #nolint: object_name_linter
   read_csv2(
@@ -20,9 +20,9 @@ Data_voorwaarden <- #nolint: object_name_linter
     system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI")
   )
 Data_soortenKenmerken <- #nolint: object_name_linter
-    read_csv2(
-      system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI")
-    )
+  read_csv2(
+    system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI")
+  )
 
 load(system.file("vbdata/Resultaat_test4030.Rdata", package = "LSVI"))
 load(system.file("vbdata/Resultaat_test4030v2.Rdata", package = "LSVI"))
@@ -235,7 +235,7 @@ describe("berekenLSVIbasis", {
               ifelse(.data$Waarde == 35, "drie", .data$Waarde)
           ),
         Data_soortenKenmerken
-    ),
+      ),
       "Niet alle opgegeven getallen en percentages zijn numerieke waarden"
     )
     expect_error(
@@ -399,10 +399,11 @@ describe("berekenLSVIbasis", {
         Resultaat_detail =
           Resultaatv2[["Resultaat_detail"]] %>%
           mutate(
-            Waarde =
-              ifelse(.data$Waarde == "f", "F", .data$Waarde)
+            Waarde = ifelse(.data$Waarde == "f", "F", .data$Waarde)
           ),
-        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]]))
+        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]]
+      )
+    )
     expect_equal(
       idsWissen(
         berekenLSVIbasis(
@@ -456,10 +457,8 @@ describe("berekenLSVIbasis", {
           mutate(
             Status_voorwaarde =
               ifelse(.data$Waarde == "f", NA, .data$Status_voorwaarde),
-            Waarde =
-              ifelse(.data$Waarde == "f", NA, .data$Waarde),
-            Verschilscore =
-              ifelse(.data$Waarde == "f", NA, .data$Verschilscore)
+            Waarde = ifelse(.data$Waarde == "f", NA, .data$Waarde),
+            Verschilscore = ifelse(.data$Waarde == "f", NA, .data$Verschilscore)
           ),
         Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]] %>%
           mutate(
@@ -481,7 +480,9 @@ describe("berekenLSVIbasis", {
                 NA,
                 .data$Index_harm_harm
               )
-          )))
+          )
+      )
+    )
     expect_warning(
       berekenLSVIbasis(
         Versie = "Versie 2.0",
@@ -552,14 +553,14 @@ describe("berekenLSVIbasis", {
           names(Resultaatv2detail),
           "TheoretischMaximum before EenheidWaarde"
         )
-        ]
+      ]
     Resultaatv2detail <-
       Resultaatv2detail[
         shuffle_columns(
           names(Resultaatv2detail),
           "TheoretischMaximum before InvoertypeWaarde"
         )
-        ]
+      ]
     stopifnot(
       all.equal(
         resultaat_berekening[["Resultaat_detail"]],
@@ -680,10 +681,10 @@ describe("berekenLSVIbasis", {
                 .data$Waarde == "f" & .data$TypeWaarde == "Percentage",
                 100, .data$TheoretischMaximum
               ),
-            Waarde =
-              ifelse(.data$Waarde == "f", "2,5-5", .data$Waarde)
+            Waarde = ifelse(.data$Waarde == "f", "2,5-5", .data$Waarde)
           ),
-        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]])
+        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]]
+      )
     )
     expect_equal(
       idsWissen(
@@ -721,10 +722,10 @@ describe("berekenLSVIbasis", {
                 .data$Waarde == "f" & .data$TypeWaarde == "Percentage",
                 100, .data$TheoretischMaximum
               ),
-            Waarde =
-              ifelse(.data$Waarde == "f", "2,5 - 5", .data$Waarde)
+            Waarde = ifelse(.data$Waarde == "f", "2,5 - 5", .data$Waarde)
           ),
-        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]])
+        Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]]
+      )
     )
   })
 
@@ -979,8 +980,8 @@ describe("berekenLSVIbasis", {
                     .data$Type
                   )
               )
-            )
-      ),
+          )
+        ),
       "is enkel aan- of afwezigheid opgegeven, geen bedekking. Hierdoor kon het aantal soorten dat aan een welbepaalde voorwaarde voldoet"  #nolint: line_length_linter
     )
     stopifnot(

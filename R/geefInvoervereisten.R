@@ -133,10 +133,10 @@ geefInvoervereisten <- function(Versie = "alle",
     paste(
       unique(
         (Selectiewaarden %>%
-           filter(
-             !is.na(.data$Indicator_beoordelingID)
-           )
-         )$Indicator_beoordelingID
+          filter(
+            !is.na(.data$Indicator_beoordelingID)
+          )
+        )$Indicator_beoordelingID
       ),
       collapse = "','"
     )
@@ -176,12 +176,14 @@ geefInvoervereisten <- function(Versie = "alle",
     )
 
   query_combineren_voorwaarden <-
-    sprintf("SELECT CV.Id, CV.BeoordelingId AS BeoordelingID,
+    sprintf(
+      "SELECT CV.Id, CV.BeoordelingId AS BeoordelingID,
               CV.VoorwaardeID1, CV.VoorwaardeID2,
               CV.ChildID1, CV.ChildID2, CV.BewerkingOperator
             FROM CombinerenVoorwaarden CV
             WHERE CV.BeoordelingId in ('%s')",
-              BeoordelingIDs)
+      BeoordelingIDs
+    )
 
   Voorwaarden <-
     dbGetQuery(ConnectieLSVIhabitats, query_combineren_voorwaarden) %>%

@@ -6,17 +6,17 @@ library(rlang)
 maakConnectiePool()
 
 Data_habitat <- #nolint: object_name_linter
-    read_csv2(
-      system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
-      col_types = list(col_character(), col_character(), col_character())
-    )
+  read_csv2(
+    system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
+    col_types = list(col_character(), col_character(), col_character())
+  )
 attr(Data_habitat, "spec") <- NULL #nolint: object_name_linter
 Data_voorwaarden <- #nolint: object_name_linter
-    read_csv2(system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI"))
+  read_csv2(system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI"))
 Data_soortenKenmerken <- #nolint: object_name_linter
-    read_csv2(
-      system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI")
-    )
+  read_csv2(
+    system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI")
+  )
 
 load(system.file("vbdata/Resultaat_test4030v2.Rdata", package = "LSVI"))
 
@@ -68,27 +68,27 @@ describe("bereken status criterium en globaal volgens Rapportage HR met NA's", {
           .data$Voorwaarde == "bedekking verbossing",
           NA,
           .data$Waarde
-          )
+        )
       )
 
     Resultaat <- berekenLSVIbasis(
-          Versie = "Versie 2.0",
-          Kwaliteitsniveau = "1",
-          Data_habitat,
-          data_voorwaarden_na,
-          Data_soortenKenmerken,
-          Aggregatiemethode = "RapportageHR"
-        )
+      Versie = "Versie 2.0",
+      Kwaliteitsniveau = "1",
+      Data_habitat,
+      data_voorwaarden_na,
+      Data_soortenKenmerken,
+      Aggregatiemethode = "RapportageHR"
+    )
 
     resultaat_negeer_na <- berekenLSVIbasis(
-          Versie = "Versie 2.0",
-          Kwaliteitsniveau = "1",
-          Data_habitat,
-          data_voorwaarden_na,
-          Data_soortenKenmerken,
-          Aggregatiemethode = "RapportageHR",
-          na.rm = TRUE
-        )
+      Versie = "Versie 2.0",
+      Kwaliteitsniveau = "1",
+      Data_habitat,
+      data_voorwaarden_na,
+      Data_soortenKenmerken,
+      Aggregatiemethode = "RapportageHR",
+      na.rm = TRUE
+    )
 
     expect_equal(
       Resultaat$Resultaat_globaal %>%
@@ -103,12 +103,13 @@ describe("bereken status criterium en globaal volgens Rapportage HR met NA's", {
         select(ID, Criterium, Status_criterium),
       Resultaatv2$Resultaat_criterium %>%
         select(ID, Criterium, Status_criterium) %>%
-        mutate(Status_criterium = ifelse(
-          .data$Criterium == "Verstoring",
-          NA,
-          .data$Status_criterium
+        mutate(
+          Status_criterium = ifelse(
+            .data$Criterium == "Verstoring",
+            NA,
+            .data$Status_criterium
           )
-          )
+        )
     )
 
     expect_equal(
@@ -116,10 +117,14 @@ describe("bereken status criterium en globaal volgens Rapportage HR met NA's", {
         select(ID, Criterium, Status_criterium),
       Resultaatv2$Resultaat_criterium %>%
         select(ID, Criterium, Status_criterium) %>%
-        mutate(Status_criterium = ifelse(
-          .data$Criterium == "Verstoring" & .data$ID == "JR0216",
-          TRUE,
-          .data$Status_criterium))
+        mutate(
+          Status_criterium =
+            ifelse(
+              .data$Criterium == "Verstoring" & .data$ID == "JR0216",
+              TRUE,
+              .data$Status_criterium
+            )
+        )
     )
   })
 })

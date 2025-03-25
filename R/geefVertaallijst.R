@@ -19,8 +19,7 @@
 #'
 #' @export
 
-geefVertaallijst <-
-  function(ConnectieLSVIhabitats) {
+geefVertaallijst <- function(ConnectieLSVIhabitats) {
 
   assert_that(
     inherits(ConnectieLSVIhabitats, "DBIConnection") |

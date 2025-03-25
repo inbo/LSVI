@@ -109,9 +109,9 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
 
     if (
       !all(
-         Data_soortenKenmerken$Eenheid %in% GeldigeWaarden
-        )
-      ) {
+        Data_soortenKenmerken$Eenheid %in% GeldigeWaarden
+      )
+    ) {
       stop("Niet alle waarden vermeld onder Data_soortenKenmerken$Eenheid komen overeen met waarden vermeld in de databank.") #nolint: line_length_linter
     }
 
@@ -619,8 +619,9 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
 
     # Warning als (overlappende) taxa van verschillende niveaus opgegeven zijn
     Niveaus <- c("SUBSPECIES", "VARIETY", "FORM")
-    for (Niveau in c("SPECIES", "GENUS", "FAMILY", "ORDER", "CLASS", "PHYLUM")
-         ) {
+    for (
+      Niveau in c("SPECIES", "GENUS", "FAMILY", "ORDER", "CLASS", "PHYLUM")
+    ) {
       Niveaus <- c(Niveaus, Niveau)
       Kolomnaam <- paste0(toTitleCase(tolower(Niveau)), "Key")
       Synoniemen <- KenmerkenSoort %>%
@@ -788,7 +789,7 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
         Kenmerken[
           , c("Rijnr", "Type", "Waarde",
               "Eenheid", "Invoertype")
-          ],
+        ],
         LIJST,
         ConnectieLSVIhabitats
       ) %>%

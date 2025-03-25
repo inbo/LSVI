@@ -26,18 +26,18 @@ connecteerMetLSVIdbServer <-
   function(Server = "INBO-SQL07-PRD.inbo.be",
            Databank = "D0122_00_LSVIHabitatTypes") {
 
-  assert_that(is.string(Server))
-  assert_that(is.string(Databank))
+    assert_that(is.string(Server))
+    assert_that(is.string(Databank))
 
-  ConnectieLSVIhabitats <-
-    dbConnect(
-      odbc(),
-      Driver = "SQL Server",
-      Server = Server,
-      Database = Databank,
-      Trusted_Connection = "True",
-      encoding = "UTF-8"
-    )
+    ConnectieLSVIhabitats <-
+      dbConnect(
+        odbc(),
+        Driver = "SQL Server",
+        Server = Server,
+        Database = Databank,
+        Trusted_Connection = "True",
+        encoding = "UTF-8"
+      )
 
-  return(ConnectieLSVIhabitats)
-}
+    return(ConnectieLSVIhabitats)
+  }

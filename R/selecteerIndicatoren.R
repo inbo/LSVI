@@ -141,8 +141,9 @@ selecteerIndicatoren <-
         sprintf(
           "(Habitatselectie.HabitatsubtypeId = Indicator_habitat.HabitattypeID
             OR Habitatselectie.HabitattypeId = Indicator_habitat.HabitattypeID)
-          WHERE (Ht1.Code in ('%s') OR Ht2.Code in ('%s'))",
-        Habitattypen, Habitattypen)
+            WHERE (Ht1.Code in ('%s') OR Ht2.Code in ('%s'))",
+          Habitattypen, Habitattypen
+        )
     }
 
     query <-

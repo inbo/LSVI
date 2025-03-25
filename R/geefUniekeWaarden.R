@@ -54,9 +54,7 @@
 #'
 
 geefUniekeWaarden <-
-  function(Tabelnaam,
-           Veldnaam,
-           ConnectieLSVIhabitats = NULL) {
+  function(Tabelnaam, Veldnaam, ConnectieLSVIhabitats = NULL) {
 
     if (is.null(ConnectieLSVIhabitats)) {
       if (exists("ConnectiePool")) {
@@ -64,18 +62,18 @@ geefUniekeWaarden <-
       }
     }
     assert_that(
-    inherits(ConnectieLSVIhabitats, "DBIConnection") |
-      inherits(ConnectieLSVIhabitats, "Pool"),
-    msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint: line_length_linter
-  )
-  assert_that(is.string(Tabelnaam))
-  assert_that(noNA(Tabelnaam))
-  assert_that(is.string(Veldnaam))
-  assert_that(noNA(Veldnaam))
+      inherits(ConnectieLSVIhabitats, "DBIConnection") |
+        inherits(ConnectieLSVIhabitats, "Pool"),
+      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint: line_length_linter
+    )
+    assert_that(is.string(Tabelnaam))
+    assert_that(noNA(Tabelnaam))
+    assert_that(is.string(Veldnaam))
+    assert_that(noNA(Veldnaam))
 
-  query <- sprintf("SELECT %s FROM %s", Veldnaam, Tabelnaam)
-  Waarden <- dbGetQuery(ConnectieLSVIhabitats, query)
-  UniekeWaarden <- c("alle", unique(Waarden[, Veldnaam]))
+    query <- sprintf("SELECT %s FROM %s", Veldnaam, Tabelnaam)
+    Waarden <- dbGetQuery(ConnectieLSVIhabitats, query)
+    UniekeWaarden <- c("alle", unique(Waarden[, Veldnaam]))
 
-  return(UniekeWaarden)
-}
+    return(UniekeWaarden)
+  }

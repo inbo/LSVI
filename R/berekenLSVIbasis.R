@@ -304,13 +304,13 @@ berekenLSVIbasis <- #nolint: object_name_linter
     assert_that(is.string(Aggregatiemethode))
     if (
       !(Aggregatiemethode %in%
-      c("RapportageHR", "1-out-all-out")
+          c("RapportageHR", "1-out-all-out")
       )
     ) {
-    stop(
-      "Aggregatiemethode moet een van de volgende waarden zijn: 'RapportageHR' of '1-out-all-out'"   #nolint: line_length_linter
-    )
-  }
+      stop(
+        "Aggregatiemethode moet een van de volgende waarden zijn: 'RapportageHR' of '1-out-all-out'"   #nolint: line_length_linter
+      )
+    }
 
 
 
@@ -351,10 +351,11 @@ berekenLSVIbasis <- #nolint: object_name_linter
     IntervalVereisten <-
       vertaalInvoerInterval(
         (Invoervereisten %>%
-          filter(!.data$Referentiewaarde %in% Invoervereisten$Voorwaarde))[
+          filter(!.data$Referentiewaarde %in% Invoervereisten$Voorwaarde)
+        )[
           , c("Rijnr", "TypeVariabele", "Referentiewaarde",
               "Eenheid", "Invoertype")
-          ],
+        ],
         LIJST,
         ConnectieLSVIhabitats
       ) %>%
@@ -623,7 +624,7 @@ berekenLSVIbasis <- #nolint: object_name_linter
             BerekendResultaat[
               , c("Rijnr", "Type", "WaardeMin", "WaardeMax",
                   "Eenheid.vw", "Invoertype.vw")
-              ],
+            ],
             LIJST %>%
               filter(.data$Basisschaal == TRUE),
             ConnectieLSVIhabitats
@@ -718,7 +719,7 @@ berekenLSVIbasis <- #nolint: object_name_linter
       berekenStatus(
         Resultaat[
           , c("Rijnr", "RefMin", "RefMax", "Operator", "WaardeMin", "WaardeMax")
-          ]
+        ]
       )
 
     Verschilscores <-
@@ -726,7 +727,7 @@ berekenLSVIbasis <- #nolint: object_name_linter
         Resultaat[
           , c("Rijnr", "RefMin", "RefMax", "Operator", "WaardeMin",
               "WaardeMax", "TheoretischMaximum", "TypeVariabele")
-          ]
+        ]
       )
 
     Resultaat <- Resultaat %>%
@@ -746,8 +747,8 @@ berekenLSVIbasis <- #nolint: object_name_linter
         WaardeMax = NULL,
         AnalyseVariabele = NULL,
         TheoretischMaximum = ifelse(.data$Type == "Percentage",
-                                .data$TheoretischMaximum * 100,
-                                .data$TheoretischMaximum)
+                                    .data$TheoretischMaximum * 100,
+                                    .data$TheoretischMaximum)
       ) %>%
       rename(
         TypeRefwaarde = .data$TypeVariabele,
@@ -841,26 +842,27 @@ berekenLSVIbasis <- #nolint: object_name_linter
         nInd = ifelse(
           na.rm,
           sum(!is.na(.data$Status_indicator)),
-          n()),
+          n()
+        ),
         # tijdelijke hulpvariabele: aantal zb-indicatoren ongunstig
         nIndZb_ongunstig = sum(
-                  ifelse(
-                    .data$Belang == "zb",
-                    .data$Status_indicator == FALSE,
-                    0
-                  ),
-                  na.rm = na.rm
-                  ),
+          ifelse(
+            .data$Belang == "zb",
+            .data$Status_indicator == FALSE,
+            0
+          ),
+          na.rm = na.rm
+        ),
         # tijdelijke hulpvariabele: aantal indicatoren gunstig
         nInd_gunstig = sum(
           .data$Status_indicator == TRUE,
           na.rm = TRUE
-          ),
+        ),
         # tijdelijke hulpvariabele: aantal indicatoren ongunstig
         nInd_ongunstig = sum(
           .data$Status_indicator == FALSE,
           na.rm = TRUE
-          ),
+        ),
         Status_criterium =
           ifelse(
             Aggregatiemethode == "1-out-all-out",
@@ -947,26 +949,27 @@ berekenLSVIbasis <- #nolint: object_name_linter
         nInd = ifelse(
           na.rm,
           sum(!is.na(.data$Status_indicator)),
-          n()),
+          n()
+        ),
         # tijdelijke hulpvariabele: aantal zb-indicatoren ongunstig
         nIndZb_ongunstig = sum(
-                  ifelse(
-                    .data$Belang == "zb",
-                    .data$Status_indicator == FALSE,
-                    0
-                  ),
-                  na.rm = na.rm
-                  ),
+          ifelse(
+            .data$Belang == "zb",
+            .data$Status_indicator == FALSE,
+            0
+          ),
+          na.rm = na.rm
+        ),
         # tijdelijke hulpvariabele: aantal indicatoren gunstig
         nInd_gunstig = sum(
           .data$Status_indicator == TRUE,
           na.rm = TRUE
-          ),
+        ),
         # tijdelijke hulpvariabele: aantal indicatoren ongunstig
         nInd_ongunstig = sum(
           .data$Status_indicator == FALSE,
           na.rm = TRUE
-          ),
+        ),
         Status =
           ifelse(
             Aggregatiemethode == "1-out-all-out",

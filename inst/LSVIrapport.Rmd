@@ -84,17 +84,18 @@ for (VersieRapportdeel in unique(Indicatoren$Versie)) {
             is.na(
               unique(
                 (Subsubset %>%
-                   filter(.data$Habitatsubtype == HabitatsubtypeFiche)
-                 )$Habitatsubtypenaam)
-              ),
+                    filter(.data$Habitatsubtype == HabitatsubtypeFiche)
+                )$Habitatsubtypenaam
+              )
+            ),
             "",
             paste(
               ": ",
               unique(
                 (Subsubset %>%
-                   filter(.data$Habitatsubtype == HabitatsubtypeFiche)
-                 )$Habitatsubtypenaam
-                ),
+                    filter(.data$Habitatsubtype == HabitatsubtypeFiche)
+                )$Habitatsubtypenaam
+              ),
               sep = ""
             )
           )

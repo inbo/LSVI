@@ -102,7 +102,8 @@ geefSoortenlijst <-
           Habitattype = Habitattype,
           Criterium = Criterium,
           Indicator = Indicator,
-          ConnectieLSVIhabitats = ConnectieLSVIhabitats)
+          ConnectieLSVIhabitats = ConnectieLSVIhabitats
+        )
     } else {
       Selectiegegevens <-
         geefInvoervereisten(
@@ -111,7 +112,8 @@ geefSoortenlijst <-
           Habitattype = Habitattype,
           Criterium = Criterium,
           Indicator = Indicator,
-          ConnectieLSVIhabitats = ConnectieLSVIhabitats) %>%
+          ConnectieLSVIhabitats = ConnectieLSVIhabitats
+        ) %>%
         select(
           "Versie", "Habitattype", "Habitatsubtype",
           "Criterium", "Indicator", "Beoordeling",

@@ -24,8 +24,7 @@
 #' @importFrom odbc odbc
 #'
 
-maakConnectiePool <-
-  function() {
+maakConnectiePool <- function() {
 
   tryCatch(
     assign(

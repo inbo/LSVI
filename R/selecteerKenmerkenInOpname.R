@@ -60,7 +60,7 @@ selecteerKenmerkenInOpname <-
       }
       Resultaat <- Resultaat %>%
         select(
-          "Kenmerk", "Eenheid",# "ID", "Waarde", "Type", "Invoertype",
+          "Kenmerk", "Eenheid",
           "Vegetatielaag", "Rank", "WaardeMin", "WaardeMax",
           ends_with("Key")
         ) %>%
@@ -137,7 +137,7 @@ selecteerKenmerkenInOpname <-
     }
 
     if (!identical(SubAnalyseVariabele, character(0)) &&
-        SubAnalyseVariabele %in% c("aandeel", "bedekking")) {
+          SubAnalyseVariabele %in% c("aandeel", "bedekking")) {
 
       if (SubAnalyseVariabele == "aandeel") {
         Resultaat <- Resultaat %>%
@@ -169,7 +169,7 @@ selecteerKenmerkenInOpname <-
                 "WaardeMin",
                 "WaardeMax"
               )
-              ]
+            ]
           )
 
         Resultaat <- Resultaat %>%
