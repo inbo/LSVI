@@ -161,9 +161,9 @@ write_csv2(soortenlijst4030, "C:/R/soortenlijst4030.csv")
 ```
 
 We hebben hier het absolute path (`C:/R`) weergegeven, een andere mogelijkheid is om het path relatief ten opzichte van de 'working directory' weer te geven.
-Dit is de map waarin je aan 't werken bent.
-Je kan deze working directory zelf bepalen door het commando `setwd("C:/.../mijn_werkmap")`.
-Als je in een project werkt waarin je al je scripts opslaat (aan te raden), dan is de root van dit project automatisch je working directory.
+Dit is de map waarin je aan 't werken bent, bijvoorbeeld de hoofdfolder van je project of een subfolder waarin je je scripts en data opslaat.
+Je kan deze working directory zelf instellen door het commando `setwd("C:/.../mijn_werkmap")` (wat je telkens moet herhalen na opstarten van R).
+In RStudio kan je ook een 'R-project' aanmaken voor een nieuwe of bestaande folder (aan te raden als je meerdere scripts hebt), en na het openen van dit project is de root van dit project automatisch je working directory.
 
 
 ### Hoe eigen gegevens inlezen in R?
