@@ -160,9 +160,10 @@ library(readr)
 write_csv2(soortenlijst4030, "C:/R/soortenlijst4030.csv")
 ```
 
-We hebben hier het absolute path (`C:/R`) weergegeven, een andere mogelijkheid is om het path relatief ten opzichte van de 'working directory' weer te geven.  Dit is de map waarin je aan 't werken bent.  Je kan deze working directory zelf bepalen door het commando `setwd("C:/.../mijn_werkmap")`.
-Her gebruik van `setwd()` is echter niet meer aangeraden, een alternatief biedt de package "[`here`](https://here.r-lib.org)" met onder meer de functie `here::here()`.
-Als je in een project werkt waarin je al je scripts opslaat (aan te raden), dan is de root van dit project automatisch je working directory, en je kan met `here::here()` navigeren (bv. `here::here("..", "relative", "path", "to", "file.txt")`).
+We hebben hier het absolute path (`C:/R`) weergegeven, een andere mogelijkheid is om het path relatief ten opzichte van de 'working directory' weer te geven.
+Dit is de map waarin je aan 't werken bent.
+Je kan deze working directory zelf bepalen door het commando `setwd("C:/.../mijn_werkmap")`.
+Als je in een project werkt waarin je al je scripts opslaat (aan te raden), dan is de root van dit project automatisch je working directory.
 
 
 ### Hoe eigen gegevens inlezen in R?
