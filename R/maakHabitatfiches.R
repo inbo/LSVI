@@ -80,13 +80,12 @@ maakHabitatfiches <-
               ConnectieLSVIhabitats = ConnectieLSVIhabitats,
               Versie = versie,
               Habitatsubtype = habitatsubtype,
-              Habitatnaam =
-                unique(
-                  Indicatoren[
-                    Indicatoren$Habitatsubtype == habitatsubtype,
-                    "Habitatsubtypenaam"
-                  ]
-                )
+              Habitatnaam = unique(
+                Indicatoren[
+                  Indicatoren$Habitatsubtype == habitatsubtype,
+                  "Habitatsubtypenaam"
+                ]
+              )
             ),
           output_file = Bestandnaam,
           output_dir = getwd()

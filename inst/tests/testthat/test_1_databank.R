@@ -980,17 +980,16 @@ describe("test databank", {
       ) %>%
       rowwise() %>%
       mutate(
-        AantalSoortenKenmerken =
-          ifelse(
-            !is.na(TaxongroepId),
-            nrow(
-              geefSoortenlijstVoorIDs(
-                as.character(TaxongroepId),
-                ConnectieLSVIhabitats = connecteerMetLSVIdb()
-              )
-            ),
-            str_count(Studiewaarde, ",") + 1
-          )
+        AantalSoortenKenmerken = ifelse(
+          !is.na(TaxongroepId),
+          nrow(
+            geefSoortenlijstVoorIDs(
+              as.character(TaxongroepId),
+              ConnectieLSVIhabitats = connecteerMetLSVIdb()
+            )
+          ),
+          str_count(Studiewaarde, ",") + 1
+        )
       ) %>%
       filter(Maximumwaarde != AantalSoortenKenmerken)
     expect_equal(nrow(TMaantal), 0)

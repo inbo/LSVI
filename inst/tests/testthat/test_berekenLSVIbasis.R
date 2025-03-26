@@ -270,81 +270,68 @@ describe("berekenLSVIbasis", {
         )
       ),
       list(
-        Resultaat_criterium =
-          Resultaatv2[["Resultaat_criterium"]] %>%
+        Resultaat_criterium = Resultaatv2[["Resultaat_criterium"]] %>%
           mutate(
-            Status_criterium =
-              ifelse(
-                .data$Criterium == "Verstoring" & .data$ID == "Ts2036",
-                NA,
-                .data$Status_criterium
-              ),
-            Index_min_criterium =
-              ifelse(
-                .data$Criterium == "Verstoring" & .data$ID == "Ts2036",
-                NA,
-                .data$Index_min_criterium
-              ),
-            Index_harm_criterium =
-              ifelse(
-                .data$Criterium == "Verstoring" & .data$ID == "Ts2036",
-                NA,
-                .data$Index_harm_criterium
-              )
+            Status_criterium = ifelse(
+              .data$Criterium == "Verstoring" & .data$ID == "Ts2036",
+              NA,
+              .data$Status_criterium
+            ),
+            Index_min_criterium = ifelse(
+              .data$Criterium == "Verstoring" & .data$ID == "Ts2036",
+              NA,
+              .data$Index_min_criterium
+            ),
+            Index_harm_criterium = ifelse(
+              .data$Criterium == "Verstoring" & .data$ID == "Ts2036",
+              NA,
+              .data$Index_harm_criterium
+            )
           ),
-        Resultaat_indicator =
-          Resultaatv2[["Resultaat_indicator"]] %>%
+        Resultaat_indicator = Resultaatv2[["Resultaat_indicator"]] %>%
           mutate(
-            Status_indicator =
-              ifelse(
-                .data$Indicator == "verbossing" & .data$ID == "Ts2036",
-                NA,
-                .data$Status_indicator
-              ),
-            Verschilscore =
-              ifelse(
-                .data$Indicator == "verbossing" & .data$ID == "Ts2036",
-                NA,
-                .data$Verschilscore
-              )
+            Status_indicator = ifelse(
+              .data$Indicator == "verbossing" & .data$ID == "Ts2036",
+              NA,
+              .data$Status_indicator
+            ),
+            Verschilscore = ifelse(
+              .data$Indicator == "verbossing" & .data$ID == "Ts2036",
+              NA,
+              .data$Verschilscore
+            )
           ),
-        Resultaat_detail =
-          Resultaatv2[["Resultaat_detail"]] %>%
+        Resultaat_detail = Resultaatv2[["Resultaat_detail"]] %>%
           mutate(
             Waarde = ifelse(.data$Waarde == "7,5", NA, .data$Waarde),
-            Status_voorwaarde =
-              ifelse(
-                .data$Indicator == "verbossing" & .data$ID == "Ts2036",
-                NA,
-                .data$Status_voorwaarde
-              ),
-            Verschilscore =
-              ifelse(
-                .data$Indicator == "verbossing" & .data$ID == "Ts2036",
-                NA,
-                .data$Verschilscore
-              )
+            Status_voorwaarde = ifelse(
+              .data$Indicator == "verbossing" & .data$ID == "Ts2036",
+              NA,
+              .data$Status_voorwaarde
+            ),
+            Verschilscore = ifelse(
+              .data$Indicator == "verbossing" & .data$ID == "Ts2036",
+              NA,
+              .data$Verschilscore
+            )
           ),
         Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]] %>%
           mutate(
-            Index_min_min =
-              ifelse(
-                .data$ID == "Ts2036",
-                NA,
-                Index_min_min
-              ),
-            Index_min_harm =
-              ifelse(
-                .data$ID == "Ts2036",
-                NA,
-                Index_min_harm
-              ),
-            Index_harm_harm =
-              ifelse(
-                .data$ID == "Ts2036",
-                NA,
-                Index_harm_harm
-              )
+            Index_min_min = ifelse(
+              .data$ID == "Ts2036",
+              NA,
+              Index_min_min
+            ),
+            Index_min_harm = ifelse(
+              .data$ID == "Ts2036",
+              NA,
+              Index_min_harm
+            ),
+            Index_harm_harm = ifelse(
+              .data$ID == "Ts2036",
+              NA,
+              Index_harm_harm
+            )
           )
       )
     )
@@ -415,8 +402,7 @@ describe("berekenLSVIbasis", {
               !Indicator %in% c("vergrassing", "verruiging", "invasieve exoten")
             ) %>%
             mutate(
-              Waarde =
-                ifelse(.data$Waarde == "f", NA, .data$Waarde)
+              Waarde = ifelse(.data$Waarde == "f", NA, .data$Waarde)
             ),
           Data_soortenKenmerken
         )
@@ -424,62 +410,55 @@ describe("berekenLSVIbasis", {
       list(
         Resultaat_criterium = Resultaatv2[["Resultaat_criterium"]] %>%
           mutate(
-            Index_min_criterium =
-              ifelse(
-                .data$Criterium == "Structuur" & .data$ID == "JR0216",
-                NA,
-                .data$Index_min_criterium
-              ),
-            Index_harm_criterium =
-              ifelse(
-                .data$Criterium == "Structuur" & .data$ID == "JR0216",
-                NA,
-                .data$Index_harm_criterium
-              )
+            Index_min_criterium = ifelse(
+              .data$Criterium == "Structuur" & .data$ID == "JR0216",
+              NA,
+              .data$Index_min_criterium
+            ),
+            Index_harm_criterium = ifelse(
+              .data$Criterium == "Structuur" & .data$ID == "JR0216",
+              NA,
+              .data$Index_harm_criterium
+            )
           ),
         Resultaat_indicator = Resultaatv2[["Resultaat_indicator"]] %>%
           mutate(
-            Status_indicator =
-              ifelse(
-                .data$Indicator == "dwergstruiken" & .data$ID == "JR0216",
-                NA,
-                .data$Status_indicator
-              ),
-            Verschilscore =
-              ifelse(
-                .data$Indicator == "dwergstruiken" & .data$ID == "JR0216",
-                NA,
-                .data$Verschilscore
-              )
+            Status_indicator = ifelse(
+              .data$Indicator == "dwergstruiken" & .data$ID == "JR0216",
+              NA,
+              .data$Status_indicator
+            ),
+            Verschilscore = ifelse(
+              .data$Indicator == "dwergstruiken" & .data$ID == "JR0216",
+              NA,
+              .data$Verschilscore
+            )
           ),
-        Resultaat_detail =
-          Resultaatv2[["Resultaat_detail"]] %>%
+        Resultaat_detail = Resultaatv2[["Resultaat_detail"]] %>%
           mutate(
-            Status_voorwaarde =
-              ifelse(.data$Waarde == "f", NA, .data$Status_voorwaarde),
+            Status_voorwaarde = ifelse(
+              .data$Waarde == "f", NA, .data$Status_voorwaarde
+            ),
             Waarde = ifelse(.data$Waarde == "f", NA, .data$Waarde),
             Verschilscore = ifelse(.data$Waarde == "f", NA, .data$Verschilscore)
           ),
         Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]] %>%
           mutate(
-            Index_min_min =
-              ifelse(
-                .data$ID == "JR0216",
-                NA,
-                .data$Index_min_min
-              ),
-            Index_min_harm =
-              ifelse(
-                .data$ID == "JR0216",
-                NA,
-                .data$Index_min_harm
-              ),
-            Index_harm_harm =
-              ifelse(
-                .data$ID == "JR0216",
-                NA,
-                .data$Index_harm_harm
-              )
+            Index_min_min = ifelse(
+              .data$ID == "JR0216",
+              NA,
+              .data$Index_min_min
+            ),
+            Index_min_harm = ifelse(
+              .data$ID == "JR0216",
+              NA,
+              .data$Index_min_harm
+            ),
+            Index_harm_harm = ifelse(
+              .data$ID == "JR0216",
+              NA,
+              .data$Index_harm_harm
+            )
           )
       )
     )
@@ -672,15 +651,16 @@ describe("berekenLSVIbasis", {
         Resultaat_detail =
           Resultaatv2[["Resultaat_detail"]] %>%
           mutate(
-            TypeWaarde =
-              ifelse(.data$Waarde == "f", "Percentage", .data$TypeWaarde),
-            InvoertypeWaarde =
-              ifelse(.data$Waarde == "f", NA, .data$InvoertypeWaarde),
-            TheoretischMaximum =
-              ifelse(
-                .data$Waarde == "f" & .data$TypeWaarde == "Percentage",
-                100, .data$TheoretischMaximum
-              ),
+            TypeWaarde = ifelse(
+              .data$Waarde == "f", "Percentage", .data$TypeWaarde
+            ),
+            InvoertypeWaarde = ifelse(
+              .data$Waarde == "f", NA, .data$InvoertypeWaarde
+            ),
+            TheoretischMaximum = ifelse(
+              .data$Waarde == "f" & .data$TypeWaarde == "Percentage",
+              100, .data$TheoretischMaximum
+            ),
             Waarde = ifelse(.data$Waarde == "f", "2,5-5", .data$Waarde)
           ),
         Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]]
@@ -713,15 +693,16 @@ describe("berekenLSVIbasis", {
         Resultaat_detail =
           Resultaatv2[["Resultaat_detail"]] %>%
           mutate(
-            TypeWaarde =
-              ifelse(.data$Waarde == "f", "Percentage", .data$TypeWaarde),
-            InvoertypeWaarde =
-              ifelse(.data$Waarde == "f", NA, .data$InvoertypeWaarde),
-            TheoretischMaximum =
-              ifelse(
-                .data$Waarde == "f" & .data$TypeWaarde == "Percentage",
-                100, .data$TheoretischMaximum
-              ),
+            TypeWaarde = ifelse(
+              .data$Waarde == "f", "Percentage", .data$TypeWaarde
+            ),
+            InvoertypeWaarde = ifelse(
+              .data$Waarde == "f", NA, .data$InvoertypeWaarde
+            ),
+            TheoretischMaximum = ifelse(
+              .data$Waarde == "f" & .data$TypeWaarde == "Percentage",
+              100, .data$TheoretischMaximum
+            ),
             Waarde = ifelse(.data$Waarde == "f", "2,5 - 5", .data$Waarde)
           ),
         Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]]

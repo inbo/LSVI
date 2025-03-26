@@ -188,18 +188,17 @@ geefInvoervereisten <- function(Versie = "alle",
   Voorwaarden <-
     dbGetQuery(ConnectieLSVIhabitats, query_combineren_voorwaarden) %>%
     mutate(
-      Combinatie =
+      Combinatie = ifelse(
+        is.na(.data$VoorwaardeID1),
+        ifelse(is.na(.data$VoorwaardeID2), "", .data$VoorwaardeID2),
         ifelse(
-          is.na(.data$VoorwaardeID1),
-          ifelse(is.na(.data$VoorwaardeID2), "", .data$VoorwaardeID2),
-          ifelse(
-            is.na(.data$VoorwaardeID2),
-            .data$VoorwaardeID1,
-            paste(
-              .data$VoorwaardeID1, .data$BewerkingOperator, .data$VoorwaardeID2
-            )
+          is.na(.data$VoorwaardeID2),
+          .data$VoorwaardeID1,
+          paste(
+            .data$VoorwaardeID1, .data$BewerkingOperator, .data$VoorwaardeID2
           )
         )
+      )
     ) %>%
     distinct()
 

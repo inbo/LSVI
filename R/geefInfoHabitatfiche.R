@@ -177,16 +177,15 @@ geefInfoHabitatfiche <-
           Habitatsubtype = NULL,
           Indicator_habitatID = NULL,
           Indicator_beoordelingID = NULL,
-          TotNaam =
+          TotNaam = ifelse(
+            is.na(.data$WetNaamKort),
+            .data$NedNaam,
             ifelse(
-              is.na(.data$WetNaamKort),
-              .data$NedNaam,
-              ifelse(
-                is.na(.data$NedNaam),
-                sprintf("_%s_", .data$WetNaamKort),
-                sprintf("%s (_%s_)", .data$NedNaam, .data$WetNaamKort)
-              )
+              is.na(.data$NedNaam),
+              sprintf("_%s_", .data$WetNaamKort),
+              sprintf("%s (_%s_)", .data$NedNaam, .data$WetNaamKort)
             )
+          )
         ) %>%
         distinct() %>%
         arrange(.data$TotNaam)

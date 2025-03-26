@@ -13,12 +13,11 @@ Data_habitat <- #nolint: object_name_linter
 Data_voorwaarden <- #nolint: object_name_linter
   read_csv2(
     system.file("vbdata/data_voorwaarden9130.csv", package = "LSVI"),
-    col_types =
-      list(
-        col_character(), col_character(), col_character(), col_character(),
-        col_character(), col_character(), col_character(), col_logical(),
-        col_character(), col_character(), col_character()
-      )
+    col_types = list(
+      col_character(), col_character(), col_character(), col_character(),
+      col_character(), col_character(), col_character(), col_logical(),
+      col_character(), col_character(), col_character()
+    )
   )
 
 Data_soortenKenmerken <- #nolint: object_name_linter

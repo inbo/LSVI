@@ -229,18 +229,16 @@ selecteerIndicatoren <-
     Selectiegegevens <-
       dbGetQuery(ConnectieLSVIhabitats, query) %>%
       mutate(
-        Habitattype =
-          ifelse(
-            rep(is.numeric(.data$Habitattype), length(.data$Habitattype)),
-            as.character(.data$Habitattype),
-            .data$Habitattype
-          ),
-        Habitatsubtype =
-          ifelse(
-            rep(is.numeric(.data$Habitatsubtype), length(.data$Habitatsubtype)),
-            as.character(.data$Habitatsubtype),
-            .data$Habitatsubtype
-          )
+        Habitattype = ifelse(
+          rep(is.numeric(.data$Habitattype), length(.data$Habitattype)),
+          as.character(.data$Habitattype),
+          .data$Habitattype
+        ),
+        Habitatsubtype = ifelse(
+          rep(is.numeric(.data$Habitatsubtype), length(.data$Habitatsubtype)),
+          as.character(.data$Habitatsubtype),
+          .data$Habitatsubtype
+        )
       )
 
 

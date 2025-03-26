@@ -21,8 +21,7 @@ migratieSQLserverSQLite <- function() {
       cast(Referentie AS nvarchar(30)) AS Referentie,
       cast(Opmerking AS nvarchar(400)) AS Opmerking, GroepVrij
       FROM Habitattype"
-    )       #Hier zitten enkele lege velden bij,
-            #en enkele die mogelijk overbodig zijn, nog na te kijken!
+    )   #Veld Omschrijving is overal leeg, misschien niet nodig om te behouden?
 
   HabitattypeId <-
     (Habitattype %>%

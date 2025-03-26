@@ -14,11 +14,10 @@ describe("twee voorwaarden vergelijken", {
     Data_voorwaarden <- #nolint: object_name_linter
       data.frame(
         ID = 1, Criterium = "Verstoring", Indicator = "overgang naar rbbzil",
-        Voorwaarde =
-          c(
-            "bedekking grasachtigen rbbzil",
-            "som van de bedekking sleutelsoorten"
-          ),
+        Voorwaarde = c(
+          "bedekking grasachtigen rbbzil",
+          "som van de bedekking sleutelsoorten"
+        ),
         Waarde = c(10, 20), Type = "Percentage", Invoertype = NA, Eenheid = "%",
         stringsAsFactors = FALSE
       )

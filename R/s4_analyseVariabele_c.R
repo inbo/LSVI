@@ -56,12 +56,11 @@ analyseVariabele_c <- #nolint: object_name_linter
         queryVoorwaarde
       ) %>%
       mutate(
-        TypeAnalyseVariabele =
-          ifelse(
-            grepl("meting", .data$TypeAnalyseVariabele),
-            "meting",
-            .data$TypeAnalyseVariabele
-          )
+        TypeAnalyseVariabele = ifelse(
+          grepl("meting", .data$TypeAnalyseVariabele),
+          "meting",
+          .data$TypeAnalyseVariabele
+        )
       )
 
     AnalyseObject <-

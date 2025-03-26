@@ -37,9 +37,9 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
       WHERE LijstItem.Ondergrens is NULL"
     ) %>%
     transmute(
-      Item =
-        paste("Schaal: ", .data$Lijstnaam, "; Waarde: ",
-              .data$Waarde, sep = ""),
+      Item = paste(
+        "Schaal: ", .data$Lijstnaam, "; Waarde: ", .data$Waarde, sep = ""
+      ),
       Categorie = "Ondergrens ontbreekt"
     )
   BovengrensOntbreekt <-
@@ -51,9 +51,9 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
       WHERE LijstItem.Bovengrens is NULL"
     ) %>%
     transmute(
-      Item =
-        paste("Schaal: ", .data$Lijstnaam, "; Waarde: ",
-              .data$Waarde, sep = ""),
+      Item = paste(
+        "Schaal: ", .data$Lijstnaam, "; Waarde: ", .data$Waarde, sep = ""
+      ),
       Categorie = "Bovengrens ontbreekt"
     )
   OnbekendeAV <-
