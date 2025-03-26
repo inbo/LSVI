@@ -191,7 +191,7 @@ describe("AnalyseVariabele scoresom", {
     )
   })
   it("opgeven van voorwaarde geeft correct resultaat", {
-    Data_voorwaarden <- Data_voorwaarden %>%
+    Data_voorwaarden <- Data_voorwaarden %>%    #nolint: object_name_linter
       bind_rows(
         data.frame(
           ID = c("demo1", "demo1", "demo2", "demo2", "demo3", "demo3"),

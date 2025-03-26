@@ -288,7 +288,7 @@ berekenLSVIbasis <- #nolint: object_name_linter
 
     assert_that(inherits(Data_soortenKenmerken, "data.frame"))
     # zorgen dat het echte dataframe is, afgeleid object geeft problemen met s4
-    Data_soortenKenmerken <- as.data.frame(Data_soortenKenmerken)
+    Data_soortenKenmerken <- as.data.frame(Data_soortenKenmerken) #nolint: object_name_linter, line_length_linter
     if (nrow(Data_soortenKenmerken) > 0) {
       Data_soortenKenmerken <- #nolint: object_name_linter
         invoercontroleData_soortenKenmerken(
