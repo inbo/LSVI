@@ -140,12 +140,11 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
         )
       ) %>%
       mutate(
-        AcceptedKey =
-          ifelse(
-            is.na(.data$GbifAcceptedUsageKey),
-            .data$GbifUsageKey,
-            .data$GbifAcceptedUsageKey
-          ),
+        AcceptedKey = ifelse(
+          is.na(.data$GbifAcceptedUsageKey),
+          .data$GbifUsageKey,
+          .data$GbifAcceptedUsageKey
+        ),
         # voor de verdere code zijn volgende kolommen nodig,
         # maar in de lijst staan enkel exacte matches en die is gecontroleerd op
         # juistheid, dus deze waarden meegeven aan gebruiker is niet nodig

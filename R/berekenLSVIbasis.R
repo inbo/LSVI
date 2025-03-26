@@ -206,18 +206,17 @@ berekenLSVIbasis <- #nolint: object_name_linter
     Versie = "alle",
     Kwaliteitsniveau = "alle",
     Data_habitat, #nolint: object_name_linter
-    Data_voorwaarden = #nolint: object_name_linter
-      data.frame(
-        ID = character(),
-        Criterium = character(),
-        Indicator = character(),
-        Voorwaarde = character(),
-        Waarde = character(),
-        Type = character(),
-        WaardeMin = double(),
-        WaardeMax = double(),
-        stringsAsFactors = FALSE
-      ),
+    Data_voorwaarden = data.frame( #nolint: object_name_linter
+      ID = character(),
+      Criterium = character(),
+      Indicator = character(),
+      Voorwaarde = character(),
+      Waarde = character(),
+      Type = character(),
+      WaardeMin = double(),
+      WaardeMax = double(),
+      stringsAsFactors = FALSE
+    ),
     Data_soortenKenmerken = data.frame(ID = character()), #nolint: object_name_linter, line_length_linter
     Aggregatiemethode = "1-out-all-out",
     ConnectieLSVIhabitats = NULL,
@@ -351,7 +350,7 @@ berekenLSVIbasis <- #nolint: object_name_linter
     IntervalVereisten <-
       vertaalInvoerInterval(
         (Invoervereisten %>%
-          filter(!.data$Referentiewaarde %in% Invoervereisten$Voorwaarde)
+            filter(!.data$Referentiewaarde %in% Invoervereisten$Voorwaarde)
         )[
           , c("Rijnr", "TypeVariabele", "Referentiewaarde",
               "Eenheid", "Invoertype")
@@ -482,8 +481,9 @@ berekenLSVIbasis <- #nolint: object_name_linter
       Resultaat %>%
       left_join(
         data_voorwaarden_niet_na,
-        by =
-          c("ID", "Criterium", "Indicator", "Voorwaarde.lower" = "Voorwaarde"),
+        by = c(
+          "ID", "Criterium", "Indicator", "Voorwaarde.lower" = "Voorwaarde"
+        ),
         suffix = c("", ".vw")
       ) %>%
       mutate(

@@ -38,22 +38,20 @@ setMethod(
       Kenmerken <-
         Kenmerken %>%
         mutate(
-          WaardeMax =
-            ifelse(
-              is.na(.data$WaardeMax) & .data$WaardeMin == 0,
-              0,
-              .data$WaardeMax
-            )
-        )
-      Problemen <-
-        (Kenmerken %>%
-          mutate(
-            Rijnummers = row_number(.data$ID)
-          ) %>%
-          filter(
-            is.na(.data$WaardeMax) & .data$WaardeMin == 1
+          WaardeMax = ifelse(
+            is.na(.data$WaardeMax) & .data$WaardeMin == 0,
+            0,
+            .data$WaardeMax
           )
-        )$Rijnummers
+        )
+      Problemen <- (Kenmerken %>%
+        mutate(
+          Rijnummers = row_number(.data$ID)
+        ) %>%
+        filter(
+          is.na(.data$WaardeMax) & .data$WaardeMin == 1
+        )
+      )$Rijnummers
 
       KenmerkenMax <- Kenmerken
       if (length(Problemen) > 0) {

@@ -43,8 +43,8 @@ dbDisconnect(con)
 taxontabel <- taxontabel %>%
   distinct() %>%
   mutate(
-    Conf = GbifConfidence - 20 * (GbifMatchType == "NONE")
-      - 10 * (GbifMatchType == "FUZZY")
+    Conf = GbifConfidence - 20 * (GbifMatchType == "NONE") -
+      10 * (GbifMatchType == "FUZZY")
   ) %>%
   group_by(TaxonNameExact) %>%
   mutate(
