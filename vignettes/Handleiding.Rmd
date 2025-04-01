@@ -45,7 +45,7 @@ Omwille van de complexiteit van de berekening roept `berekenLSVIbasis()` een aan
 
 Momenteel bevat het package enkel een basisfunctionaliteit: zoekfuncties om alle onderdelen van de databank weer te geven in een naar ons gevoel logische groepering, en de basisfunctie voor de berekening van de LSVI.  In de toekomst zouden ook `berekenLSVI...`-functies toegevoegd kunnen worden voor de verwerking van specifieke gegevens zoals Fieldmap-gegevens (o.a. opnamen in bossen) of de habitatgegevens van het kwaliteitsmeetnet in INBOVEG.
 
-De doelstelling is om het package op deze manier stap voor stap verder uit te breiden met nieuwe functionaliteiten op vraag van gebruikers, in het kader van projecten, naar aanleiding van nieuwe berekeningswijzen voor de LSVI,...  We verwachten hiervoor input van de gebruikers (hoe moet de berekening gebeuren,...).  Ook hopen we dat alle scripts die in het kader van de LSVI ontwikkeld worden, uiteindelijk hun weg vinden naar dit package (zie ook de laatste paragraaf van dit onderdeel).  Op die manier is er één plaats waar iedereen voor LSVI-informatie en -berekeningen terecht kan, kan iedereen alle eerder ontwikkelde berekeningsmethoden voor de LSVI op zijn/haar gegevens toepassen en vermijden we binnen INBO een wildgroei van berekeningsmethoden met licht afwijkende resultaten.
+De doelstelling is om het package op deze manier stap voor stap verder uit te breiden met nieuwe functionaliteiten op vraag van gebruikers, in het kader van projecten, naar aanleiding van nieuwe berekeningswijzen voor de LSVI,...  We verwachten hiervoor input van de gebruikers (hoe moet de berekening gebeuren,...).  Ook hopen we dat alle scripts die in het kader van de LSVI ontwikkeld worden, uiteindelijk hun weg vinden naar dit package (zie ook de laatste paragraaf van dit onderdeel).  Op die manier is er één plaats waar iedereen voor LSVI-informatie en -berekeningen terecht kan, kan iedereen alle eerder ontwikkelde berekeningsmethoden voor de LSVI op zijn/haar gegevens toepassen en vermijden we binnen INBO een "wildgroei" van berekeningsmethoden met licht afwijkende resultaten.
 
 We testen de functies die we ontwikkelen, maar we zien ook wel eens iets over het hoofd.  Het is dus (zeker in het begin) mogelijk dat er nog foutjes in geslopen zijn, dat de functies niet in alle omstandigheden een correct resultaat (of correcte foutmelding) geven, of dat een functie zich "irritant" gedraagt (bv. foutmelding geven als je een hoofdletter ingeeft i.p.v. een kleine letter op een plaats waar dit verschil niet relevant is).  __Als je deze of andere problemen tegenkomt, meld ze ons dan a.u.b.__ (en ga er niet van uit dat je collega's dat doen).  Geef dan bij voorkeur het script door waarbij het misloopt (waar van toepassing inclusief de gegevens of een suggestie voor het resultaat), dit helpt ons om het probleem te situeren en aan te pakken.  Ook alle andere feedback is trouwens welkom.
 
@@ -160,7 +160,10 @@ library(readr)
 write_csv2(soortenlijst4030, "C:/R/soortenlijst4030.csv")
 ```
 
-We hebben hier het absolute path (`C:/R`) weergegeven, een andere mogelijkheid is om het path relatief ten opzichte van de `working directory` weer te geven.  Dit is de map waarin je aan 't werken bent.  Je kan deze `working directory` zelf bepalen door het commando `setwd("C:/.../mijn_werkmap")`.  Als je in een project werkt waarin je al je scripts opslaat (aan te raden), dan is de root van dit project automatisch je `working directory`.
+We hebben hier het absolute path (`C:/R`) weergegeven, een andere mogelijkheid is om het path relatief ten opzichte van de 'working directory' weer te geven.
+Dit is de map waarin je aan 't werken bent, bijvoorbeeld de hoofdfolder van je project of een subfolder waarin je je scripts en data opslaat.
+Je kan deze working directory zelf instellen door het commando `setwd("C:/.../mijn_werkmap")` (wat je telkens moet herhalen na opstarten van R).
+In RStudio kan je ook een 'R-project' aanmaken voor een nieuwe of bestaande folder (aan te raden als je meerdere scripts hebt), en na het openen van dit project is de root van dit project automatisch je working directory.
 
 
 ### Hoe eigen gegevens inlezen in R?
@@ -181,7 +184,7 @@ Gegevens kunnen ook rechtstreeks vanuit een databank ingelezen worden, en ze kun
 De functie `berekenLSVIbasis()` geeft gegevens terug in de vorm van een lijst van 5 tabellen.
 
 ```{r}
-#Eerst worden wat voorbeeldgegevens opgehaald uit het package:
+# Eerst worden wat voorbeeldgegevens opgehaald uit het package:
 library(readr)
 data_habitat <-
   read_csv2(
@@ -197,7 +200,7 @@ data_soorten_kenmerken <-
     system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI")
   )
 
-#En hier gebeurt de berekening zelf:
+# En hier gebeurt de berekening zelf:
 berekenLSVIbasis(
   Versie = "Versie 2.0",
   Kwaliteitsniveau = "1", data_habitat,
@@ -248,13 +251,13 @@ Om de functies van het LSVI-package te gebruiken, heb je een connectie nodig met
 ```{r eval=FALSE}
 library(LSVI)
 maakConnectiePool()
-#Nu kan je alle functies gebruiken zonder expliciet het argument
-#ConnectieLSVIhabitats op te geven, bv.
+# Nu kan je alle functies gebruiken zonder expliciet het argument
+# ConnectieLSVIhabitats op te geven, bv.
 geefVersieInfo()
 geefSoortenlijst(Habitattype = "4030")
 
-#En als je geen functies meer nodig hebt uit het LSVI-package, kan je de
-#ConnectiePool afsluiten en verwijderen:
+# En als je geen functies meer nodig hebt uit het LSVI-package, kan je de
+# ConnectiePool afsluiten en verwijderen:
 library(pool)
 poolClose(ConnectiePool)
 rm(ConnectiePool)
@@ -265,11 +268,11 @@ rm(ConnectiePool)
 ```{r eval=FALSE}
 library(LSVI)
 Connectie <- connecteerMetLSVIdb()
-#Nu moet je bij elke functie opnieuw deze connectie meegeven
+# Nu moet je bij elke functie opnieuw deze connectie meegeven
 geefVersieInfo(ConnectieLSVIhabitats = Connectie)
 geefSoortenlijst(Habitattype = "4030", ConnectieLSVIhabitats = Connectie)
 
-#De connectie sluiten kan met dbDisconnect uit het DBI-package:
+# De connectie sluiten kan met dbDisconnect uit het DBI-package:
 library(DBI)
 dbDisconnect(Connectie)
 ```
@@ -283,7 +286,7 @@ De functies kunnen min of meer in groepen ingedeeld worden op basis van het eers
 - `berekenXXX`: deze functies voeren berekeningen uit m.b.t. de LSVI op basis van opgegeven veldgegevens
 - andere (`selecteerXXX`, `vertaalXXX` en `connecteerXXX`): hulpfuncties die eventueel relevant kunnen zijn voor gevorderde R-gebruikers
 
-Voor de functies van voornamelijk de eerste twee groepen zijn er een aantal argumenten die facultatief meegegeven kunnen worden: `Versie`, `Habitatgroep`, `Habitattype`, `Criterium` en `Indicator`.  Door hiervoor waarden op te geven, kunnen de relevante gegevens uit de databank geselecteerd worden.  Voor de argumenten waarvoor geen specifieke waarden opgegeven zijn, wordt de default "alle" gebruikt, waardoor alle beschikbare gegevens voor dat argument uit de databank gehaald worden.
+Voor de functies van voornamelijk de eerste twee groepen zijn er een aantal argumenten die facultatief meegegeven kunnen worden: `Versie`, `Habitatgroep`, `Habitattype`, `Criterium` en `Indicator`.  Door hiervoor waarden op te geven, kunnen de relevante gegevens uit de databank geselecteerd worden.  Voor de argumenten waarvoor geen specifieke waarden opgegeven zijn, wordt de default `"alle"` gebruikt, waardoor alle beschikbare gegevens voor dat argument uit de databank gehaald worden.
 
 Voor een overzicht van de belangrijkste beschikbare functies verwijzen we naar een eerder hoofdstuk in deze handleiding (
 [Doelstellingen en inhoud package](#doelstellingen_inhoud)) en voor de gedetailleerde beschrijving verwijzen we naar de [documentatie van de functies zelf](https://inbo.github.io/LSVI/reference/index.html).  In deze documentatie wordt verwezen naar hulpfuncties waar het relevant is om deze te gebruiken.  
