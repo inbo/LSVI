@@ -198,7 +198,7 @@
 #' @importFrom dplyr %>% select distinct n filter mutate row_number rename
 #' left_join summarise group_by ungroup rowwise bind_rows arrange desc transmute
 #' @importFrom assertthat assert_that has_name
-#' @importFrom rlang .data
+#' @importFrom rlang !!! .data syms
 #' @importFrom stringr str_split_fixed str_c
 #'
 #'
@@ -253,6 +253,7 @@ berekenLSVIbasis <- #nolint: object_name_linter
 
     Data_habitat <- #nolint: object_name_linter
       invoercontroleData_habitat(Data_habitat, ConnectieLSVIhabitats)
+    KolommenDataHabitat <- colnames(Data_habitat)
 
     if (nrow(Data_voorwaarden) > 0) {
       Data_voorwaarden <- #nolint: object_name_linter
@@ -778,9 +779,7 @@ berekenLSVIbasis <- #nolint: object_name_linter
     #resultaten op niveau van indicator afleiden
     resultaat_indicator <- Resultaat %>%
       group_by(
-        .data$ID,
-        .data$Habitattype,   #en hier zouden extra gegevens uit Data_habitat
-                             #moeten toegevoegd worden
+        !!!syms(KolommenDataHabitat),
         .data$Versie,
         .data$Criterium,
         .data$Indicator,
@@ -807,9 +806,7 @@ berekenLSVIbasis <- #nolint: object_name_linter
       bind_rows(
         resultaat_opname_indicator %>%
           transmute(
-            .data$ID,
-            .data$Habitattype,   #en hier zouden extra gegevens uit Data_habitat
-                                  #moeten toegevoegd worden
+            !!!syms(KolommenDataHabitat),
             .data$Versie,
             .data$Criterium,
             .data$Indicator,
@@ -832,8 +829,7 @@ berekenLSVIbasis <- #nolint: object_name_linter
     #resultaten op niveau van criterium afleiden
     resultaat_criterium <- resultaat_indicator %>%
       group_by(
-        .data$ID,
-        .data$Habitattype,
+        !!!syms(KolommenDataHabitat),
         .data$Versie,
         .data$Criterium,
         .data$Kwaliteitsniveau
@@ -940,8 +936,7 @@ berekenLSVIbasis <- #nolint: object_name_linter
 
     resultaat_globaal_status <- resultaat_indicator %>%
       group_by(
-        .data$ID,
-        .data$Habitattype,
+        !!!syms(KolommenDataHabitat),
         .data$Versie,
         .data$Kwaliteitsniveau
       ) %>%
