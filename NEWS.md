@@ -4,6 +4,8 @@
 `berekenLSVIbasis()`
 * toevoeging van functionaliteit om taxa in 1 laag te deselecteren in functie
 `deselecteerSoortenKenmerken()` (issue #231)
+* bij `berekenLSVIbasis()` worden de extra kolommen uit `Data_habitat`
+toegevoegd aan de uitvoer van de functie
 
 # LSVI 0.1.3
 
