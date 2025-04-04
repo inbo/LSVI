@@ -3,7 +3,8 @@
 #' @description Deze functie bepaalt de Lokale Staat van Instandhouding en
 #' biotische indices op basis van gegevens, die in het juiste formaat moeten
 #' aangeleverd worden.  Zie hiervoor de beschrijving bij de parameters
-#' (["Arguments"](https://inbo.github.io/LSVI/reference/berekenLSVIbasis.html#arguments))
+#' (["Arguments"
+#' ](https://inbo.github.io/LSVI/reference/berekenLSVIbasis.html#arguments))
 #' en de tabellen van het voorbeeld.  In principe is enkel de
 #' parameter `Data_habitat` verplicht om op te geven, maar extra datasets zijn
 #' uiteraard wel nodig om een resultaat te bekomen.  Welke datasets relevant
