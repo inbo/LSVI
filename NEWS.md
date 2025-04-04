@@ -1,4 +1,4 @@
-# LSVI 0.1.4
+# LSVI 0.2.0
 
 * hervorming van de afhandeling van soortenlijsten met gebruik van
 `GbifUsageKey` en `Rank` in plaats van een volledige taxonomische boom,
