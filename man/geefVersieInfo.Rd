@@ -9,7 +9,7 @@ geefVersieInfo(ConnectieLSVIhabitats = NULL)
 }
 \arguments{
 \item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor
-de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
+de LSVI van habitats, in te stellen d.m.v. functie \code{connecteerMetLSVIdb()}.}
 }
 \value{
 Deze functie geeft de tabel Versie uit de databank.

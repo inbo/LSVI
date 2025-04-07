@@ -1,8 +1,8 @@
 #' @title parseTaxonnaam deel 1
 #'
 #' @description Deze functie bevat het eerste deel van de functie
-#' parseTaxonnaam, namelijk de omzettingen van de naam die moeten gebeuren
-#' voor het parsen door de gbif-service.
+#' `parseTaxonnaam()`, namelijk de omzettingen van de naam die moeten gebeuren
+#' voor het parsen door de Gbif-service.
 #'
 #' @param Taxonnaam Wetenschappelijke naam of namen die vereenvoudigd moeten
 #' worden (String)
@@ -14,6 +14,8 @@
 #'
 
 preparseTaxonnaam <- function(Taxonnaam) {
+
+  .Deprecated()
 
   Taxonnaam <- gsub("v\\.d\\.", "v. d.", Taxonnaam)
   Taxonnaam <- gsub("((\\s|\\()v)\\.", "\\1an", Taxonnaam)

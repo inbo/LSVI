@@ -1,4 +1,4 @@
 library(testthat)
 library(LSVI)
 
-test_package("LSVI")
+test_check("LSVI")

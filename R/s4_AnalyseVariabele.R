@@ -1,13 +1,14 @@
 #' S4-klasse waarin de generieke onderdelen gedefinieerd worden die voor alle
 #' afgeleide klassen gelden (bv. aantal, bedekking,...)
 #'
-#' Deze virtuele klasse Waarde geeft de mogelijkheid om een aantal klassen en
-#' methoden die gelijk zijn voor alle verschillende analysevariabelen, maar
-#' eenmaal te moeten aanmaken.  Idee is dat voor elke afgeleide klasse minstens
-#' de methode berekenWaarde aangemaakt wordt.
+#' Deze virtuele klasse `AnalyseVariabele` geeft de mogelijkheid om een aantal
+#' klassen en methoden die gelijk zijn voor alle verschillende
+#' analysevariabelen, maar eenmaal te moeten aanmaken.
+#' Idee is dat voor elke afgeleide klasse minstens
+#' de methode `berekenWaarde` aangemaakt wordt.
 #'
 #' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden
-#' Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
+#' `Vegetatielaag`, `Kenmerk`, `TypeKenmerk`, `WaardeMin` en `WaardeMax`
 #'
 #' @noRd
 #'
@@ -44,9 +45,9 @@ setValidity(
       assert_that(
         all(
           tolower(object@Kenmerken$TypeKenmerk) %in%
-            c("studiegroep", "soort_nbn", "doodhout")
+            c("studiegroep", "soort_gbif")
         ),
-        msg = "TypeKenmerk moet een van de volgende waarden zijn: studiegroep, soort_nbn" #nolint
+        msg = "TypeKenmerk moet een van de volgende waarden zijn: studiegroep, soort_gbif" #nolint: line_length_linter
       )
     }
     return(TRUE)
@@ -348,4 +349,3 @@ setReplaceMethod(
     return(object)
   }
 )
-

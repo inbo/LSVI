@@ -110,21 +110,25 @@ Beoordelingsfiche <- Habitatfiche %>%
 for (Criterium in unique(Beoordelingsfiche$Criterium)) {
   cat("__", Criterium, "__", sep = "")
   Beoordelingsmatrix <-
-    xtable(Beoordelingsfiche[Beoordelingsfiche$Criterium == Criterium,
-                        c("Indicator",
-                          if (ncol(Beoordelingsfiche) == 7) {
-                            c(Versie$Kwaliteitsniveau1,
-                              Versie$Kwaliteitsniveau2)
-                          } else if (ncol(Beoordelingsfiche) == 6) {
-                            if (
-                              Versie$Kwaliteitsniveau1 == "niet van toepassing"
-                            ) {
-                              Versie$Kwaliteitsniveau2
-                            } else {
-                              Versie$Kwaliteitsniveau1
-                            }
-                          },
-                          "Opmerkingen", "Referenties")])
+    xtable(
+      Beoordelingsfiche[
+        Beoordelingsfiche$Criterium == Criterium,
+        c(
+          "Indicator",
+          if (ncol(Beoordelingsfiche) == 7) {
+            c(Versie$Kwaliteitsniveau1, Versie$Kwaliteitsniveau2)
+          } else if (ncol(Beoordelingsfiche) == 6) {
+            if (Versie$Kwaliteitsniveau1 == "niet van toepassing") {
+              Versie$Kwaliteitsniveau2
+            } else {
+              Versie$Kwaliteitsniveau1
+            }
+          },
+          "Opmerkingen",
+          "Referenties"
+        )
+      ]
+    )
   print(Beoordelingsmatrix, type = "html", include.rownames = FALSE)
 }
 ```

@@ -16,7 +16,7 @@ toegevoegde databank met LSVI-indicatoren, wat nodig is om de functies te
 kunnen gebruiken.  Deze connectie moet als argument meegegeven worden bij
 elke functie functie die informatie uit de databank ophaalt.  Alternatief is
 om eenmalig een connectiepool aan te maken met de functie
-maakConnectiePool().
+\code{maakConnectiePool()}.
 }
 \examples{
 library(LSVI)

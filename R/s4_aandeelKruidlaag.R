@@ -1,11 +1,11 @@
-#' S4-klasse die aandeel bedekking soorten binnen de kruidlaag berekend
+#' S4-klasse die aandeel bedekking soorten binnen de kruidlaag berekent
 #'
-#' Deze klasse AandeelKruidlaag staat in voor de berekening van waarden voor
-#' TypeVariabele AandeelKruidlaag op basis van opgegeven kenmerken.  Ze is een
-#' nakomeling van de klasse bedekking.
+#' Deze klasse `AandeelKruidlaag` staat in voor de berekening van waarden voor
+#' `TypeVariabele` `AandeelKruidlaag` op basis van opgegeven kenmerken.
+#' Ze is een nakomeling van de klasse `bedekking`.
 #'
-#' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden Kenmerk,
-#' TypeKenmerk, WaardeMin en WaardeMax
+#' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden `Kenmerk`,
+#' `TypeKenmerk`, `WaardeMin` en `WaardeMax`
 #'
 #' @importFrom methods setClass setMethod
 #'
@@ -45,12 +45,13 @@ setMethod(
           teller[2] / vegetatielaag$WaardeMin
         )
 
-    } else{
+    } else {
       #indien bedekking vegetatielaag niet is meegegeven wordt deze berekend
       #op basis van alle soorten in kruidlaag
       soorten_vegetatielaag <- object@Kenmerken %>%
         filter(
-          tolower(.data$Vegetatielaag)  %in% tolower(object@Studiegroep$Waarde))
+          tolower(.data$Vegetatielaag) %in% tolower(object@Studiegroep$Waarde)
+        )
 
       BedekkingMin <-
         (1.0 - prod((1.0 - soorten_vegetatielaag$WaardeMin), na.rm = TRUE))

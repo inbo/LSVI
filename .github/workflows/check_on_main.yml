@@ -1,0 +1,130 @@
+on:
+  push:
+    branches:
+      - main
+
+name: "check package on main"
+
+jobs:
+  check-package:
+    runs-on: ubuntu-latest
+    name: "check package"
+
+    env:
+      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
+      _R_CHECK_SYSTEM_CLOCK_: false
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      ORCID_TOKEN: ${{ secrets.ORCID_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: release
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - name: Install system dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y --no-install-recommends libcurl4-openssl-dev \
+            libfontconfig1-dev libfreetype6-dev libfribidi-dev libharfbuzz-dev \
+            libjpeg-dev libmagick++-dev libpng-dev libpoppler-cpp-dev \
+            libsecret-1-dev libtiff5-dev
+
+      - name: Install dependencies
+        run: |
+          install.packages('remotes')
+          remotes::install_deps(dependencies = TRUE)
+          remotes::install_cran("rcmdcheck")
+          remotes::install_github("inbo/checklist")
+          remotes::install_cran("covr")
+        shell: Rscript {0}
+
+      - name: Session info
+        run: |
+          options(width = 100)
+          pkgs <- installed.packages()[, "Package"]
+          sessioninfo::session_info(pkgs, include_base = TRUE)
+        shell: Rscript {0}
+
+      - name: Check spelling
+        run: |
+          x <- checklist::check_spelling()
+          print(x)
+          if(length(x$.__enclos_env__$private$spelling$message) > 0) {
+            stop("The spelling is not always correct. Please check the error message below.")
+          }
+        shell: Rscript {0}
+
+      - name: Check
+        env:
+          _R_CHECK_CRAN_INCOMING_: false
+        run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
+        shell: Rscript {0}
+
+      - name: Show testthat output
+        if: always()
+        run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
+        shell: bash
+
+      - name: Upload check results
+        if: failure()
+        uses: actions/upload-artifact@master
+        with:
+          name: ${{ runner.os }}-r${{ matrix.config.r }}-results
+          path: check
+
+      - name: Check documentation and description
+        run: |
+          x <- checklist::check_description()
+          x <- checklist::check_documentation(x)
+          print(x)
+          print("errors description")
+          print(x$.__enclos_env__$private$errors$DESCRIPTION)
+          print("errors documentation")
+          print(x$.__enclos_env__$private$errors$documentation)
+          if(length(x$.__enclos_env__$private$errors$DESCRIPTION) > 0 |
+              length(x$.__enclos_env__$private$errors$documentation) > 0 |
+              length(x$.__enclos_env__$private$warnings) != length(x$.__enclos_env__$private$allowed_warnings) |
+              length(x$.__enclos_env__$private$notes) != length(x$.__enclos_env__$private$allowed_notes)
+          ) {
+           stop("The documentation and description is not always correct. Please check the error message above.")
+          }
+        shell: Rscript {0}
+
+      - name: Check code coverage
+        run: covr::codecov(quiet = FALSE)
+        shell: Rscript {0}
+
+      - name: build pkgdown website
+        run: |
+          Rscript --no-save --no-restore -e 'pkgdown::build_site()'
+
+      - name: updating tag
+        run: |
+          git config user.email "els.lommelen@inbo.be"
+          git config user.name "ElsLommelen"
+          git rev-parse --abbrev-ref origin/HEAD | sed 's/origin\///' | xargs git checkout
+          Rscript --no-save --no-restore -e 'checklist::set_tag()'
+          git push --tags
+
+      - name: push pkgdown website
+        run: |
+          cp -R docs ../docs
+          if [ -z  "$(git branch -r | grep origin/gh-pages)" ]; then
+            git checkout --orphan gh-pages
+            git rm -rf --quiet .
+            git commit --allow-empty -m "Initializing gh-pages branch"
+          else
+            git checkout -b gh-pages
+            git rm -rf --quiet .
+            rm -R *
+          fi
+          cp -R ../docs/. .
+          rm -rf docs .github check
+          git add --all
+          git commit --amend -m "Automated update of gh-pages website"
+          git push --force --set-upstream origin gh-pages
+

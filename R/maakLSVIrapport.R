@@ -4,18 +4,18 @@
 #' gebruikt worden voor de bepaling van de Lokale Staat van Instandhouding van
 #' de habitat(sub)types die voldoen aan de opgegeven parameters.  (Om een tabel
 #' te genereren met deze informatie om zelf een rapport te kunnen samenstellen,
-#' wordt verwezen naar de functie geefInfoHabitatfiche().)
+#' wordt verwezen naar de functie `geefInfoHabitatfiche()`.)
 #'
 #' @template Zoekparameters
 #'
-#' @param Bestandsnaam Een naam voor het html-bestand dat gegenereerd wordt,
-#' bestaande uit een string die eindigt op '.html'
+#' @param Bestandsnaam Een naam voor het `html`-bestand dat gegenereerd wordt,
+#' bestaande uit een string die eindigt op `.html`
 #' @inheritParams selecteerIndicatoren
 #' @param verbose geeft de toestand van het systeem aan, om te zorgen dat
 #' boodschappen niet onnodig gegeven worden
 #'
-#' @return Deze functie genereert habitatfiches in de vorm van html-files die
-#' in de working directory opgeslagen worden.
+#' @return Deze functie genereert habitatfiches in de vorm van `html`-bestanden
+#' die in de working directory opgeslagen worden.
 #'
 #' @examples
 #' # Omwille van de iets langere lange duurtijd van de commando's staat bij
@@ -48,7 +48,7 @@ maakLSVIrapport <-
   function(Bestandsnaam = "LSVIrapport.html",
            Versie = "alle",
            Habitatgroep = "alle",
-           Habitattype= "alle",
+           Habitattype = "alle",
            ConnectieLSVIhabitats = NULL,
            verbose = TRUE) {
 
@@ -60,7 +60,7 @@ maakLSVIrapport <-
     assert_that(
       inherits(ConnectieLSVIhabitats, "DBIConnection") |
         inherits(ConnectieLSVIhabitats, "Pool"),
-      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
+      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint: line_length_linter
     )
     assert_that(is.flag(verbose))
     assert_that(noNA(verbose))

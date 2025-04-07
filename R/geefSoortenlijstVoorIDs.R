@@ -5,27 +5,24 @@
 #' bepaling van de Lokale Staat van Instandhouding.  Het is in feite een
 #' hulpfunctie die voor verschillende andere functies gebruikt wordt en die de
 #' complexe zoekfunctie in de tabellen met soorten uitvoert op basis van een
-#' opgegeven TaxongroepId (en in die zin iets minder gebruiksvriendelijk is).
+#' opgegeven `TaxongroepId` (en in die zin iets minder gebruiksvriendelijk is).
 #' Voor een selectie van soortenlijsten op basis van specifieke parameters is
-#' de functie geefSoortenlijst() een beter alternatief.
+#' de functie `geefSoortenlijst()` een beter alternatief.
 #'
-#' Deze functie geeft standaard voor de gespecifieerde taxongroepen per groep
+#' Deze functie geeft voor de gespecifieerde taxongroepen per groep
 #' een lijst van alle taxa zoals ze in de LSVI-habitatfiche vermeld zijn
-#' (genusniveau, soortniveau, subsoort,...).  Op basis van de parameter
-#' soortenlijsttype kan ook gekozen worden om een volledige lijst te geven van
-#' deze taxa en alle taxa die hieronder vallen (en opgenomen zijn in de
-#' onderliggende databank).
+#' (genusniveau, soortniveau, subsoort,...) en ook de rank van de taxa.
 #'
 #' @inheritParams selecteerIndicatoren
 #' @inheritParams geefSoortenlijst
-#' @param Taxongroeplijst string waarin de TaxongroepId's na elkaar weergegeven
-#' worden, gescheiden door een komma.  Eventueel mag dit ook een vector zijn
-#' van TaxongroepId's.
+#' @param Taxongroeplijst string waarin de `TaxongroepId`'s na elkaar
+#' weergegeven worden, gescheiden door een komma.
+#' Eventueel mag dit ook een vector zijn van `TaxongroepId`'s.
 #'
-#' @return Deze functie geeft een tabel met velden TaxongroepId, evt.
-#' Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een
-#' omschrijving is voor een groep van taxons binnen eenzelfde indicator).
-#' WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort
+#' @return Deze functie geeft een tabel met velden `TaxongroepId`, evt.
+#' `Beschrijving`, `WetNaam`, `WetNaamKort` en `NedNaam` (waarbij `Beschrijving`
+#' een omschrijving is voor een groep van taxons binnen eenzelfde indicator).
+#' `WetNaam` is de volledige Latijnse naam inclusief auteursnaam, `WetNaamKort`
 #' geeft de verkorte naam zonder auteursnaam.
 #'
 #' @examples
@@ -36,7 +33,6 @@
 #' \dontrun{
 #' maakConnectiePool()
 #' geefSoortenlijstVoorIDs("434,88,565")
-#' geefSoortenlijstVoorIDs("434,88,565","alle")
 #' library(pool)
 #' poolClose(ConnectiePool)
 #' }
@@ -46,12 +42,27 @@
 #' @importFrom dplyr %>% mutate filter distinct
 #' @importFrom DBI dbGetQuery
 #' @importFrom assertthat assert_that noNA is.string
+#' @importFrom lifecycle deprecated is_present
 #'
 #'
 geefSoortenlijstVoorIDs <-
   function(Taxongroeplijst,
-           Taxonlijsttype = c("LSVIfiche", "alle"),
+           Taxonlijsttype = deprecated(),
            ConnectieLSVIhabitats = NULL) {
+
+    if (is_present(Taxonlijsttype)) {
+      extra_tekst <- ""
+      if (Taxonlijsttype == "alle") {
+        extra_tekst <-
+          " Het is niet meer mogelijk om alle taxa weer te geven die vallen onder de lijsten van de habitatfiches omdat deze info niet meer aanwezig is in het package. De uitvoer bevat enkel de soorten van de LSVI-fiche, geen onderliggende soorten." #nolint: line_length_linter
+      }
+      warning(
+        sprintf(
+          "Argument Taxonlijsttype van functie geefSoortenlijst() wordt niet meer ondersteund.%s", #nolint: line_length_linter
+          extra_tekst
+        )
+      )
+    }
 
     if (is.null(ConnectieLSVIhabitats)) {
       if (exists("ConnectiePool")) {
@@ -61,7 +72,7 @@ geefSoortenlijstVoorIDs <-
     assert_that(
       inherits(ConnectieLSVIhabitats, "DBIConnection") |
         inherits(ConnectieLSVIhabitats, "Pool"),
-      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
+      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint: line_length_linter
     )
     assert_that(is.character(Taxongroeplijst))
     if (!is.string(Taxongroeplijst)) {
@@ -70,9 +81,8 @@ geefSoortenlijstVoorIDs <-
     assert_that(is.string(Taxongroeplijst))
     assert_that(noNA(Taxongroeplijst))
     if (!grepl("^([[:digit:]]+,)*[[:digit:]]+$", Taxongroeplijst)) {
-      stop("Taxongroeplijst bestaat niet uit een reeks getallen gescheiden door een komma") #nolint
+      stop("Taxongroeplijst bestaat niet uit een reeks getallen gescheiden door een komma") #nolint: line_length_linter
     }
-    match.arg(Taxonlijsttype)
 
     QueryGroepen <-
       sprintf(
@@ -96,45 +106,19 @@ geefSoortenlijstVoorIDs <-
         Taxongroeplijst
       )
 
-    QueryTaxa <-
-      ",
-    UniekeTaxa
-    AS
-    (
-      SELECT DISTINCT TgT.TaxonId
-      FROM Groepen INNER JOIN TaxongroepTaxon TgT
-      ON Groepen.TaxonsubgroepId = TgT.TaxongroepId
-    ),
-    Taxonlijn
-    AS
-    (
-      SELECT Tx.Id AS AncestorTaxonId,
-        Tx.Id AS ParentTaxonId,
-        Tx.Id AS SubTaxonId
-      FROM Taxon Tx
-      WHERE Tx.Id IN (SELECT TaxonId FROM UniekeTaxa)
-    UNION ALL
-      SELECT Taxonlijn.AncestorTaxonId,
-        Txtx.TaxonParentId AS ParentTaxonId,
-        Tx2.Id AS SubTaxonId
-      FROM Taxonlijn
-        INNER JOIN TaxonTaxon AS TxTx
-          ON Taxonlijn.SubTaxonId = TxTx.TaxonParentId
-          AND Taxonlijn.ParentTaxonId != TxTx.TaxonChildId
-        INNER JOIN Taxon Tx2
-          ON TxTx.TaxonChildId = Tx2.Id
-      WHERE TxTx.TaxonChildId > 0
-    )"
 
     QueryLSVIfiche <-
       "
       SELECT Groepen.TaxongroepId,
         Groepen.TaxonsubgroepId,
         cast(Tg.Omschrijving AS nvarchar(90)) AS Omschrijving,
-        Taxon.Id,
+        Taxon.Id AS TaxonId,
         Taxon.NbnTaxonVersionKey,
         Taxon.FloraNaamWetenschappelijk AS WetNaam,
         Taxon.FloraNaamNederlands As NedNaam,
+        Taxon.GbifUsageKey,
+        Taxon.GbifAcceptedUsageKey,
+        Taxon.Rank,
         TaxonType.Naam AS TaxonType,
         ts.CanonicalNameWithMarker AS WetNaamKort
       FROM Groepen
@@ -150,51 +134,14 @@ geefSoortenlijstVoorIDs <-
         ON Taxon.Id = ts.TaxonId
       WHERE Taxon.NbnTaxonVersionKey = ts.NbnTaxonVersionKey;"
 
-    QueryAlleTaxa <-
-      "
-      SELECT Groepen.TaxongroepId,
-        Groepen.TaxonsubgroepId,
-        cast(Tg.Omschrijving AS nvarchar(90)) AS Omschrijving,
-        Taxonlijn.AncestorTaxonId AS TaxonId,
-        Taxonlijn.SubTaxonId,
-        Taxon.NbnTaxonVersionKey,
-        Taxon.FloraNaamWetenschappelijk AS WetNaam,
-        Taxon.FloraNaamNederlands As NedNaam,
-        TaxonType.Naam AS TaxonType,
-        ts.CanonicalNameWithMarker AS WetNaamKort
-      FROM Groepen
-        INNER JOIN Taxongroep Tg
-        ON Groepen.TaxonsubgroepId = Tg.Id
-        INNER JOIN TaxongroepTaxon TgT
-        ON Groepen.TaxonsubgroepId = TgT.TaxongroepId
-        INNER JOIN Taxonlijn
-        ON TgT.TaxonId = Taxonlijn.AncestorTaxonId
-        INNER JOIN Taxon
-        ON Taxonlijn.SubTaxonId = Taxon.Id
-        INNER JOIN TaxonType
-        ON Taxon.TaxonTypeId = TaxonType.Id
-        INNER JOIN TaxonSynoniem Ts
-          ON Taxon.Id = Ts.TaxonId
-      WHERE Taxon.NbnTaxonVersionKey = Ts.NbnTaxonVersionKey
-      ORDER BY Groepen.TaxongroepId, Groepen.TaxonsubgroepId,
-        Taxonlijn.AncestorTaxonId;"
 
-    if (Taxonlijsttype[1] == "LSVIfiche") {
-      Soortenlijst <-
-        dbGetQuery(
-          ConnectieLSVIhabitats,
-          paste(QueryGroepen, QueryLSVIfiche, sep = "")
-        ) %>%
-        distinct()
 
-    } else if (Taxonlijsttype[1] == "alle") {
-      Soortenlijst <-
-        dbGetQuery(
-          ConnectieLSVIhabitats,
-          paste(QueryGroepen, QueryTaxa, QueryAlleTaxa, sep = "")
-        ) %>%
-        distinct()
-    }
+    Soortenlijst <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        paste(QueryGroepen, QueryLSVIfiche, sep = "")
+      ) %>%
+      distinct()
 
     return(Soortenlijst)
   }

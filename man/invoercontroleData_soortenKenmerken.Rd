@@ -2,7 +2,7 @@
 % Please edit documentation in R/invoercontroleData_soortenKenmerken.R
 \name{invoercontroleData_soortenKenmerken}
 \alias{invoercontroleData_soortenKenmerken}
-\title{Invoercontrole voor dataframe Data_soortenKenmerken}
+\title{Invoercontrole voor dataframe \code{Data_soortenKenmerken}}
 \usage{
 invoercontroleData_soortenKenmerken(
   Data_soortenKenmerken,
@@ -14,12 +14,13 @@ invoercontroleData_soortenKenmerken(
 \item{Data_soortenKenmerken}{dataframe waarop invoercontrole moet gebeuren.}
 
 \item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor
-de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
+de LSVI van habitats, in te stellen d.m.v. functie \code{connecteerMetLSVIdb()}.}
 
 \item{LIJST}{Dataframe met lijst die weergeeft hoe de vertaling moet
 gebeuren van categorische variabelen naar numerieke waarden (en omgekeerd).
 Default worden deze waarden uit de databank met LSVI-indicatoren gehaald
-d.m.v. de functie vertaalInvoerInterval().  Aangeraden wordt om deze default
+d.m.v. de functie \code{vertaalInvoerInterval()}.
+Aangeraden wordt om deze default
 te gebruiken (dus parameter niet expliciet invullen), of deze waar nodig aan
 te vullen met eigen schalen.  Omdat er ook een omzetting moet gebeuren voor
 grenswaarden uit de databank, kan het niet doorgeven van een gedeelte van
@@ -31,7 +32,8 @@ om de hoofdscripts overzichtelijk te houden, maken we voor elke
 invoercontrole een aparte hulpfunctie aan, die we kunnen aanroepen.  Deze
 wordt NIET geëxporteerd, dus deze functies kunnen niet als commando gerund
 worden (maar worden wel gerund als de functie waarin ze voorkomen,
-aangeroepen wordt).  Ingeval van Data_soortenKenmerken is ook de omzetting
-van soortnamen naar een NBNTaxonVersionKey en de omzettingen van bedekkingen
-naar een interval opgenomen in de functie.
+aangeroepen wordt).  Ingeval van \code{invoercontroleData_soortenKenmerken()}
+is ook het koppelen van soortnamen aan \code{GbifUsageKeys} van verschillende
+niveaus (van \code{"Kingdom"} tot \code{"Subspecies"}, \code{"Form"} of \code{"Variety"})
+en de omzettingen van bedekkingen naar een interval opgenomen in de functie.
 }

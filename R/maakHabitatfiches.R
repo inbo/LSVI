@@ -5,9 +5,9 @@
 #' de bepaling van de Lokale Staat van Instandhouding van de habitattypes die
 #' voldoen aan de opgegeven parameters.  (Om een tabel te genereren met deze
 #' informatie om zelf een fiche te kunnen samenstellen, wordt verwezen naar de
-#' functie geefInfoHabitatfiche().  Om een rapport samen te stellen met alle
+#' functie `geefInfoHabitatfiche()`.  Om een rapport samen te stellen met alle
 #' fiches na elkaar in 1 document, wordt verwezen naar de functie
-#' maakLSVIrapport())
+#' `maakLSVIrapport()`)
 #'
 #' @template Zoekparameters
 #'
@@ -16,7 +16,7 @@
 #' boodschappen niet onnodig gegeven worden
 #'
 #' @return Deze functie genereert een rapport met habitatfiches in de vorm van
-#' een html-file die in de working directory opgeslagen wordt.
+#' een `html`-bestand dat in de working directory opgeslagen wordt.
 #'
 #' @examples
 #' # Omwille van de iets langere lange duurtijd van het commando staat bij
@@ -51,7 +51,7 @@ maakHabitatfiches <-
     assert_that(
       inherits(ConnectieLSVIhabitats, "DBIConnection") |
         inherits(ConnectieLSVIhabitats, "Pool"),
-      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
+      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint: line_length_linter
     )
     assert_that(is.flag(verbose))
     assert_that(noNA(verbose))
@@ -62,7 +62,8 @@ maakHabitatfiches <-
         Habitatgroep = Habitatgroep,
         Habitattype = Habitattype,
         HabitatnamenToevoegen = TRUE,
-        ConnectieLSVIhabitats = ConnectieLSVIhabitats)
+        ConnectieLSVIhabitats = ConnectieLSVIhabitats
+      )
 
     for (versie in unique(Indicatoren$Versie)) {
       for (habitatsubtype in unique(as.character(Indicatoren$Habitatsubtype))) {
@@ -79,13 +80,12 @@ maakHabitatfiches <-
               ConnectieLSVIhabitats = ConnectieLSVIhabitats,
               Versie = versie,
               Habitatsubtype = habitatsubtype,
-              Habitatnaam =
-                unique(
-                  Indicatoren[
-                    Indicatoren$Habitatsubtype == habitatsubtype,
-                    "Habitatsubtypenaam"
-                  ]
-                )
+              Habitatnaam = unique(
+                Indicatoren[
+                  Indicatoren$Habitatsubtype == habitatsubtype,
+                  "Habitatsubtypenaam"
+                ]
+              )
             ),
           output_file = Bestandnaam,
           output_dir = getwd()

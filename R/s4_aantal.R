@@ -1,11 +1,11 @@
 #' S4-klasse die aantal soorten met een bepaalde bedekking berekent
 #'
-#' Deze klasse Aantal staat in voor de berekening van waarden voor
-#' TypeVariabele Aantal op basis van opgegeven kenmerken.  Ze is een nakomeling
-#' van de klasse AnalyseVariabele.
+#' Deze klasse `Aantal` staat in voor de berekening van waarden voor
+#' `TypeVariabele` `Aantal` op basis van opgegeven kenmerken.
+#' Ze is een nakomeling van de klasse `AnalyseVariabele`.
 #'
 #' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden
-#' Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
+#' `Vegetatielaag`, `Kenmerk`, `TypeKenmerk`, `WaardeMin` en `WaardeMax`
 #'
 #' @importFrom methods setClass setMethod
 #' @importFrom dplyr %>% mutate row_number filter
@@ -33,27 +33,25 @@ setMethod(
     #en geven een warning als de opties niet hetzelfde resultaat opleveren
     if (
       (sum(is.na(Kenmerken$WaardeMin)) < sum(is.na(Kenmerken$WaardeMax))) &
-      !identical(object@SubAnalyseVariabele, character(0))
+        !identical(object@SubAnalyseVariabele, character(0))
     ) {
       Kenmerken <-
         Kenmerken %>%
         mutate(
-          WaardeMax =
-            ifelse(
-              is.na(.data$WaardeMax) & .data$WaardeMin == 0,
-              0,
-              .data$WaardeMax
-            )
+          WaardeMax = ifelse(
+            is.na(.data$WaardeMax) & .data$WaardeMin == 0,
+            0,
+            .data$WaardeMax
+          )
         )
-      Problemen <-
-        (Kenmerken %>%
-           mutate(
-             Rijnummers = row_number(.data$ID)
-           ) %>%
-           filter(
-             is.na(.data$WaardeMax) & .data$WaardeMin == 1
-           )
-        )$Rijnummers
+      Problemen <- (Kenmerken %>%
+        mutate(
+          Rijnummers = row_number(.data$ID)
+        ) %>%
+        filter(
+          is.na(.data$WaardeMax) & .data$WaardeMin == 1
+        )
+      )$Rijnummers
 
       KenmerkenMax <- Kenmerken
       if (length(Problemen) > 0) {

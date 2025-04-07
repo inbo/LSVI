@@ -1,0 +1,151 @@
+context("test berekenLSVIbasis: dubbels in invoer")
+
+library(readr)
+library(dplyr)
+library(rlang)
+
+maakConnectiePool()
+Data_habitat <- #nolint: object_name_linter
+  read_csv2(
+    system.file("vbdata/Test9190habitat.csv", package = "LSVI"),
+    col_types = list(col_character(), col_character())
+  )
+Data_voorwaarden <- #nolint: object_name_linter
+  read_csv2(
+    system.file("vbdata/Test9190voorwaarden.csv", package = "LSVI"),
+    col_types = list(
+      col_character(), col_character(), col_character(), col_character(),
+      col_character(), col_character(), col_character(), col_character()
+    )
+  )
+Data_soortenKenmerken <- #nolint: object_name_linter
+  read_csv2(
+    system.file("vbdata/Test9190soortenKenmerken.csv", package = "LSVI"),
+    col_types = list(
+      col_character(), col_character(), col_character(), col_character(),
+      col_character(), col_character(), col_character(), col_character()
+    )
+  )
+
+describe("Data_voorwaarden", {
+  it("dubbele invoer geeft een error", {
+    Data_voorwaardenDubbel <- Data_voorwaarden %>% #nolint: object_name_linter
+      bind_rows(
+        data.frame(
+          ID = "1", Criterium = "Structuur",
+          Indicator = "minimum structuurareaal", Voorwaarde = "MSA",
+          Waarde = "60", Type = "Decimaal getal", stringsAsFactors = FALSE
+        )
+      )
+    expect_error(
+      berekenLSVIbasis(
+        Versie = "Versie 2.0",
+        Kwaliteitsniveau = "1",
+        Data_habitat,
+        Data_voorwaardenDubbel,
+        Data_soortenKenmerken
+      ),
+      " 1 is de voorwaarde 'msa' meermaals opgegeven"
+    )
+    Data_voorwaardenDubbel <- Data_voorwaarden %>% #nolint: object_name_linter
+      bind_rows(
+        data.frame(
+          ID = "1", Criterium = "Structuur",
+          Indicator = "minimum structuurareaal",
+          Waarde = "TRUE", stringsAsFactors = FALSE
+        )
+      )
+    expect_error(
+      berekenLSVIbasis(
+        Versie = "Versie 2.0",
+        Kwaliteitsniveau = "1",
+        Data_habitat,
+        Data_voorwaardenDubbel,
+        Data_soortenKenmerken
+      ),
+      " 1 is de indicator 'minimum structuurareaal' tweemaal opgegeven"
+    )
+  })
+})
+
+describe("Data_soortenKenmerken", {
+  it("dubbele invoer geeft een error", {
+    Data_soortenKenmerkenDubbel <- Data_soortenKenmerken %>% #nolint: object_name_linter, line_length_linter
+      bind_rows(
+        data.frame(
+          ID = "1", Kenmerk = "Gewone vlier",
+          TypeKenmerk = "soort_NL", Waarde = "2", Type = "Percentage",
+          Eenheid = "%", Vegetatielaag = "boomlaag", stringsAsFactors = FALSE
+        )
+      )
+    expect_error(
+      berekenLSVIbasis(
+        Versie = "Versie 2.0",
+        Kwaliteitsniveau = "1",
+        Data_habitat,
+        Data_voorwaarden,
+        Data_soortenKenmerkenDubbel
+      ),
+      "'gewone vlier' meermaals opgegeven voor de boomlaag"
+    )
+    Data_soortenKenmerkenDubbel <- Data_soortenKenmerken %>% #nolint: object_name_linter, line_length_linter
+      bind_rows(
+        data.frame(
+          ID = "1", Kenmerk = "Sambucus nigra",
+          TypeKenmerk = "soort_Latijn", Waarde = "2", Type = "Percentage",
+          Eenheid = "%", Vegetatielaag = "boomlaag", stringsAsFactors = FALSE
+        )
+      )
+    expect_error(
+      berekenLSVIbasis(
+        Versie = "Versie 2.0",
+        Kwaliteitsniveau = "1",
+        Data_habitat,
+        Data_voorwaarden,
+        Data_soortenKenmerkenDubbel
+      ),
+      "Voor opname 1 zijn in de boomlaag meerdere namen / keys gebruikt voor de soort 'gewone vlier' / 'Sambucus nigra'" #nolint: line_length_linter
+    )
+  })
+  it("invoer van hoger niveau geeft een warning", {
+    Data_soortenKenmerkenDubbel <- Data_soortenKenmerken %>% #nolint: object_name_linter, line_length_linter
+      bind_rows(
+        data.frame(
+          ID = "1", Kenmerk = "Sambucus L.",
+          TypeKenmerk = "soort_Latijn", Waarde = "2", Type = "Percentage",
+          Eenheid = "%", Vegetatielaag = "boomlaag", stringsAsFactors = FALSE
+        )
+      )
+    expect_warning(
+      berekenLSVIbasis(
+        Versie = "Versie 2.0",
+        Kwaliteitsniveau = "1",
+        Data_habitat,
+        Data_voorwaarden,
+        Data_soortenKenmerkenDubbel
+      ),
+      "Voor opname 1 zijn in de boomlaag 'SPECIES gewone vlier' en 'GENUS Sambucus L.' op genusniveau of hoger beschouwd als eenzelfde taxon met aggregatie van de bedekkingen" #nolint: line_length_linter
+    )
+    Data_soortenKenmerkenDubbel <- Data_soortenKenmerken %>% #nolint: object_name_linter, line_length_linter
+      bind_rows(
+        data.frame(
+          ID = "1", Kenmerk = "Sambucus nigra var. laciniata L.",
+          TypeKenmerk = "soort_Latijn", Waarde = "2", Type = "Percentage",
+          Eenheid = "%", Vegetatielaag = "boomlaag", stringsAsFactors = FALSE
+        )
+      )
+    expect_warning(
+      berekenLSVIbasis(
+        Versie = "Versie 2.0",
+        Kwaliteitsniveau = "1",
+        Data_habitat,
+        Data_voorwaarden,
+        Data_soortenKenmerkenDubbel
+      ),
+      "Voor opname 1 zijn in de boomlaag 'SPECIES gewone vlier' en 'VARIETY Sambucus nigra var. laciniata L.' op speciesniveau of hoger beschouwd als eenzelfde taxon met aggregatie van de bedekkingen" #nolint: line_length_linter
+    )
+  })
+})
+
+library(pool)
+poolClose(ConnectiePool)
