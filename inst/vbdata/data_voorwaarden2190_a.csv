@@ -1,0 +1,22 @@
+ID;Criterium;Indicator;Voorwaarde;Waarde;Type;Invoertype;Eenheid
+demo1;Structuur;verbossing;bedekking verbossing;5;Percentage;;%
+demo1;Structuur;bedekking overhangende bomen en struiken;bedekking overhangende bomen en struiken;5;Percentage;;%
+demo1;Verstoring;eutrofiëring;bedekking eutrofiëring;1;Percentage;;%
+demo1;Structuur;robuuste monocotylen;bedekking robuuste monocotylen;3;Percentage;;%
+demo1;Structuur;horizontale structuur;bedekking submerse vegetatie;30;Percentage;;%
+demo1;Structuur;horizontale structuur;bedekking kranswieren;10;Percentage;;%
+demo1;Verstoring;invasieve exoten;bedekking invasieve exoten;0;Percentage;;%
+demo2;Structuur;verbossing;bedekking verbossing;15;Percentage;;%
+demo2;Structuur;bedekking overhangende bomen en struiken;bedekking overhangende bomen en struiken;15;Percentage;;%
+demo2;Verstoring;eutrofiëring;bedekking eutrofiëring;10;Percentage;;%
+demo2;Structuur;robuuste monocotylen;bedekking robuuste monocotylen;30;Percentage;;%
+demo2;Structuur;horizontale structuur;bedekking submerse vegetatie;5;Percentage;;%
+demo2;Structuur;horizontale structuur;bedekking kranswieren;1;Percentage;;%
+demo2;Verstoring;invasieve exoten;bedekking invasieve exoten;1;Percentage;;%
+demo3;Structuur;verbossing;bedekking verbossing;15;Percentage;;%
+demo3;Structuur;bedekking overhangende bomen en struiken;bedekking overhangende bomen en struiken;15;Percentage;;%
+demo3;Verstoring;eutrofiëring;bedekking eutrofiëring;10;Percentage;;%
+demo3;Structuur;robuuste monocotylen;bedekking robuuste monocotylen;30;Percentage;;%
+demo3;Structuur;horizontale structuur;bedekking submerse vegetatie;5;Percentage;;%
+demo3;Structuur;horizontale structuur;bedekking kranswieren;1;Percentage;;%
+demo3;Verstoring;invasieve exoten;bedekking invasieve exoten;1;Percentage;;%

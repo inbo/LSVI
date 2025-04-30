@@ -4,8 +4,7 @@
 \alias{invoercontroleData_voorwaarden}
 \title{Invoercontrole voor dataframe Data_voorwaarden}
 \usage{
-invoercontroleData_voorwaarden(Data_voorwaarden, ConnectieLSVIhabitats,
-  LIJST)
+invoercontroleData_voorwaarden(Data_voorwaarden, ConnectieLSVIhabitats, LIJST)
 }
 \arguments{
 \item{Data_voorwaarden}{dataframe waarop invoercontrole moet gebeuren.}

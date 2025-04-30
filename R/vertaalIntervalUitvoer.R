@@ -21,8 +21,9 @@
 #' @export
 #'
 #' @importFrom assertthat assert_that has_name
-#' @importFrom dplyr %>% mutate select filter arrange bind_rows as.tbl
+#' @importFrom dplyr %>% mutate select filter arrange bind_rows
 #' @importFrom rlang .data
+#' @importFrom tibble as_tibble
 #'
 
 vertaalIntervalUitvoer <-
@@ -50,7 +51,7 @@ vertaalIntervalUitvoer <-
     )
 
     LIJST <- LIJST %>%
-      as.tbl() %>%
+      as_tibble() %>%
       filter(!is.na(.data$Ondergrens)) %>%
       mutate(
         Naam = tolower(.data$Naam),
@@ -71,10 +72,10 @@ vertaalIntervalUitvoer <-
           )
       ) %>%
       select(
-        .data$Naam,
-        .data$Waarde,
-        .data$Ondergrens,
-        .data$Bovengrens
+        "Naam",
+        "Waarde",
+        "Ondergrens",
+        "Bovengrens"
       ) %>%
       arrange(
         .data$Naam,
@@ -157,12 +158,13 @@ vertaalIntervalUitvoer <-
                   round(.data$Min, 1),
                   round(.data$Max, 1),
                   sep = " - ")
-              )
+              ),
+            Waarde = as.character(.data$Waarde)
           )
       ) %>%
       select(
-        .data$Rijnr,
-        .data$Waarde
+        "Rijnr",
+        "Waarde"
       )
 
     return(Resultaat)

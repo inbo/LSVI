@@ -4,8 +4,14 @@
 \alias{controleerInvoerwaarde}
 \title{Hulpfunctie voor het uitvoeren van foutcontroles}
 \usage{
-controleerInvoerwaarde(Beschrijving, Invoerwaarden, Tabelnaam, Veldnaam,
-  ConnectieLSVIhabitats, Tolower = TRUE)
+controleerInvoerwaarde(
+  Beschrijving,
+  Invoerwaarden,
+  Tabelnaam,
+  Veldnaam,
+  ConnectieLSVIhabitats,
+  Tolower = TRUE
+)
 }
 \arguments{
 \item{Beschrijving}{Hoe de invoerwaarde beschreven moet worden in de error}

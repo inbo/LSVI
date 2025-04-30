@@ -4,8 +4,11 @@
 \alias{invoercontroleData_soortenKenmerken}
 \title{Invoercontrole voor dataframe Data_soortenKenmerken}
 \usage{
-invoercontroleData_soortenKenmerken(Data_soortenKenmerken,
-  ConnectieLSVIhabitats, LIJST)
+invoercontroleData_soortenKenmerken(
+  Data_soortenKenmerken,
+  ConnectieLSVIhabitats,
+  LIJST
+)
 }
 \arguments{
 \item{Data_soortenKenmerken}{dataframe waarop invoercontrole moet gebeuren.}

@@ -4,11 +4,13 @@
 \alias{berekenLSVIbasis}
 \title{Berekent de LSVI op basis van VoorwaardeID en opgegeven waarden}
 \usage{
-berekenLSVIbasis(Versie = "alle", Kwaliteitsniveau = "alle",
-  Data_habitat, Data_voorwaarden = data.frame(ID = character(), Criterium
-  = character(), Indicator = character(), Voorwaarde = character(), Waarde
-  = character(), Type = character(), WaardeMin = double(), WaardeMax =
-  double(), stringsAsFactors = FALSE),
+berekenLSVIbasis(
+  Versie = "alle",
+  Kwaliteitsniveau = "alle",
+  Data_habitat,
+  Data_voorwaarden = data.frame(ID = character(), Criterium = character(), Indicator =
+    character(), Voorwaarde = character(), Waarde = character(), Type = character(),
+    WaardeMin = double(), WaardeMax = double(), stringsAsFactors = FALSE),
   Data_soortenKenmerken = data.frame(ID = character()),
   Aggregatiemethode = "1-out-all-out", ConnectieLSVIhabitats = NULL,
   LIJST = geefVertaallijst(ConnectieLSVIhabitats), na.rm = FALSE,

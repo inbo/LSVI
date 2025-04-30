@@ -5,9 +5,15 @@
 \title{Geeft tabel met info uit de LSVI-rapporten voor de opgegeven
 parameters}
 \usage{
-geefInfoHabitatfiche(Versie = "alle", Habitatgroep = "alle",
-  Habitattype = "alle", Criterium = "alle", Indicator = "alle",
-  Stijl = c("Rmd", "tekst"), ConnectieLSVIhabitats = NULL)
+geefInfoHabitatfiche(
+  Versie = "alle",
+  Habitatgroep = "alle",
+  Habitattype = "alle",
+  Criterium = "alle",
+  Indicator = "alle",
+  Stijl = c("Rmd", "tekst"),
+  ConnectieLSVIhabitats = NULL
+)
 }
 \arguments{
 \item{Versie}{De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".

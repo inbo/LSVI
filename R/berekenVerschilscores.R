@@ -93,8 +93,8 @@ berekenVerschilscores <-
         Verschilscore = ifelse(.data$Verschilscore > 1, 1, .data$Verschilscore)
       ) %>%
       select(
-        .data$Rijnr,
-        .data$Verschilscore
+        "Rijnr",
+        "Verschilscore"
       )
 
 

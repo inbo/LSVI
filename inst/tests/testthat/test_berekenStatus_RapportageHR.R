@@ -10,6 +10,7 @@ Data_habitat <- #nolint
       system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
       col_types = list(col_character(), col_character(), col_character())
     )
+attr(Data_habitat, "spec") <- NULL #nolint
 Data_voorwaarden <- #nolint
     read_csv2(system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI"))
 Data_soortenKenmerken <- #nolint

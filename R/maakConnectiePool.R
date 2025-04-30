@@ -8,7 +8,6 @@
 #' met de databank.  Alternatief is om een connectie aan te maken met de
 #' functie connecteerMetLSVIdb() en deze bij elke functie mee te geven.
 #'
-#' @inheritParams connecteerMetLSVIdb
 #' @return Deze functie maakt een Environment-object aan dat de connecties
 #' regelt met de betreffende databank.
 #'

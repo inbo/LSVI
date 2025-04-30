@@ -285,24 +285,24 @@ berekenLSVIbasis <- #nolint
         ConnectieLSVIhabitats = ConnectieLSVIhabitats
       ) %>%
       select(
-        .data$Versie,
-        .data$Habitattype,
-        .data$Habitatsubtype,
-        .data$Criterium,
-        .data$Indicator,
-        .data$Beoordeling,
-        .data$Kwaliteitsniveau,
-        .data$Belang,
-        .data$BeoordelingID,
-        .data$Combinatie,
-        .data$VoorwaardeID,
-        .data$Voorwaarde,
-        .data$Referentiewaarde,
-        .data$Operator,
-        .data$Eenheid,
-        .data$Maximumwaarde,
-        .data$TypeVariabele,
-        .data$Invoertype
+        "Versie",
+        "Habitattype",
+        "Habitatsubtype",
+        "Criterium",
+        "Indicator",
+        "Beoordeling",
+        "Kwaliteitsniveau",
+        "Belang",
+        "BeoordelingID",
+        "Combinatie",
+        "VoorwaardeID",
+        "Voorwaarde",
+        "Referentiewaarde",
+        "Operator",
+        "Eenheid",
+        "Maximumwaarde",
+        "TypeVariabele",
+        "Invoertype"
       ) %>%
       distinct() %>%
       filter(!is.na(.data$TypeVariabele)) %>%
@@ -378,7 +378,7 @@ berekenLSVIbasis <- #nolint
       left_join(
         data_voorwaarden_na %>%
           select(
-            .data$ID, .data$Criterium, .data$Indicator, .data$Waarde
+            "ID", "Criterium", "Indicator", "Waarde"
           ),
         by = c("ID", "Criterium", "Indicator"),
         suffix = c("", ".ind")
@@ -576,7 +576,7 @@ berekenLSVIbasis <- #nolint
 
       BerekendResultaat <-
         BerekendResultaat %>%
-        select(-.data$Warnings) %>%
+        select(-"Warnings") %>%
         left_join(
           vertaalIntervalUitvoer(
             BerekendResultaat[
@@ -910,7 +910,8 @@ berekenLSVIbasis <- #nolint
                     )
                   )
                 )
-              )
+              ),
+              NA
             )
           ),
         Aggregatiemethode = Aggregatiemethode,
@@ -928,10 +929,10 @@ berekenLSVIbasis <- #nolint
       ) %>%
       ungroup() %>%
       select(
-        -.data$nInd,
-        -.data$nIndZb_ongunstig,
-        -.data$nInd_gunstig,
-        -.data$nInd_ongunstig
+        -"nInd",
+        -"nIndZb_ongunstig",
+        -"nInd_gunstig",
+        -"nInd_ongunstig"
       )
 
     #resultaten op globaal niveau
@@ -1015,17 +1016,18 @@ berekenLSVIbasis <- #nolint
                     )
                   )
                 )
-              )
+              ),
+              NA
             )
           ),
         Aggregatiemethode = Aggregatiemethode
       ) %>%
       ungroup() %>%
       select(
-        -.data$nInd,
-        -.data$nIndZb_ongunstig,
-        -.data$nInd_gunstig,
-        -.data$nInd_ongunstig
+        -"nInd",
+        -"nIndZb_ongunstig",
+        -"nInd_gunstig",
+        -"nInd_ongunstig"
       )
 
     resultaat_globaal <- resultaat_globaal_status %>%

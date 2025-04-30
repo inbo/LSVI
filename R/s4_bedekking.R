@@ -26,11 +26,13 @@ setMethod(
   definition = function(object) {
 
 
-    object@Kenmerken <- object@Kenmerken %>%
-      filter(
-        is.na(.data$Eenheid) |
-          (!tolower(.data$Eenheid) %in% c("grondvlak_ha", "volume_ha"))
-      )
+    if (length(object@Kenmerken) > 0) {
+      object@Kenmerken <- object@Kenmerken %>%
+        filter(
+          is.na(.data$Eenheid) |
+            (!tolower(.data$Eenheid) %in% c("grondvlak_ha", "volume_ha"))
+        )
+    }
 
     Resultaat <-
       selecteerKenmerkenInOpname(

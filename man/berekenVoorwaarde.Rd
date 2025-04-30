@@ -4,8 +4,13 @@
 \alias{berekenVoorwaarde}
 \title{Berekent de voorwaarde op basis van datasets}
 \usage{
-berekenVoorwaarde(OpnameID, VoorwaardeID, Kenmerken, ConnectieLSVIhabitats,
-  LIJST)
+berekenVoorwaarde(
+  OpnameID,
+  VoorwaardeID,
+  Kenmerken,
+  ConnectieLSVIhabitats,
+  LIJST
+)
 }
 \arguments{
 \item{OpnameID}{nummer van de opname}

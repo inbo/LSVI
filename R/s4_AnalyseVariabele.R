@@ -27,6 +27,7 @@ setClass(
       SubRefMax = "numeric",
       SubOperator = "character",
       Kenmerken = "data.frame",
+      LIJST = "data.frame",
       "VIRTUAL"
     )
 )
@@ -315,3 +316,36 @@ setGeneric(
     standardGeneric("berekenWaarde")
   }
 )
+
+setGeneric(
+  name = "getLIJST",
+  def = function(object) {
+    standardGeneric("getLIJST")
+  }
+)
+
+setMethod(
+  f = "getLIJST",
+  signature = "AnalyseVariabele",
+  definition = function(object) {
+    return(object@LIJST)
+  }
+)
+
+setGeneric(
+  name = "setLIJST<-",
+  def = function(object, value) {
+    standardGeneric("setLIJST<-")
+  }
+)
+
+setReplaceMethod(
+  f = "setLIJST",
+  signature = "AnalyseVariabele",
+  definition = function(object, value) {
+    object@LIJST <- value
+    validObject(object)
+    return(object)
+  }
+)
+
