@@ -97,7 +97,7 @@ describe("s4_Aantal", {
           Soortengroep =
             data.frame(
               GbifUsageKey = c("A1", "B1", "C1", "E1"),
-              TaxonId = 1:4,
+              TaxonGroepCode = "1",
               Rank = "SPECIES",
               stringsAsFactors = FALSE
             )
@@ -124,7 +124,7 @@ describe("s4_Aantal", {
           Soortengroep =
             data.frame(
               GbifUsageKey = c("A1", "B1", "C1", "E1"),
-              TaxonId = 1:4,
+              TaxonGroepCode = "1",
               Rank = "SPECIES",
               stringsAsFactors = FALSE
             )
@@ -147,7 +147,7 @@ describe("s4_Aantal", {
           Soortengroep =
             data.frame(
               GbifUsageKey = c("A1", "B1", "C1", "E1"),
-              TaxonId = 1:4,
+              TaxonGroepCode = "1",
               Rank = "SPECIES",
               stringsAsFactors = FALSE
             )
@@ -178,7 +178,7 @@ describe("s4_Aantal", {
           Soortengroep =
             data.frame(
               GbifUsageKey = character(0),
-              TaxonId = numeric(0),
+              TaxonGroepCode = character(0),
               Rank = character(0),
               stringsAsFactors = FALSE
             )
@@ -206,7 +206,7 @@ describe("s4_Aantal", {
           Soortengroep =
             data.frame(
               GbifUsageKey = c("A1", "B1", "C1", "E1"),
-              TaxonId = 1:4,
+              TaxonGroepCode = "1",
               Rank = "SPECIES",
               stringsAsFactors = FALSE
             ),
@@ -240,7 +240,7 @@ describe("s4_Aantal", {
           Soortengroep =
             data.frame(
               GbifUsageKey = c("A1", "B1", "C1", "E1"),
-              TaxonId = 1:4,
+              TaxonGroepCode = "1",
               Rank = "SPECIES",
               stringsAsFactors = FALSE
             )
@@ -260,15 +260,15 @@ describe("s4_Aantal", {
               WaardeMin = 1,
               WaardeMax = NA,
               Eenheid = "ja/nee",
-              Rank = "SPECIES",
-              SpeciesKey = c("A1", "B2", "C1", "D3", "E1"),
+              Rank = c("SPECIES", "SUBSPECIES", rep("SPECIES", 3)),
+              SpeciesKey = c("A1", "B", "C1", "D3", "E1"),
               Vegetatielaag = "kruidlaag",
               stringsAsFactors = FALSE
             ),
           Soortengroep =
             data.frame(
-              GbifUsageKey = c("A1", "B1", "C1", "E1", "B2"),
-              TaxonId = c(1:4, 4),
+              GbifUsageKey = c("A1", "B", "C1", "E1"),
+              TaxonGroepCode = "1",
               Rank = "SPECIES",
               stringsAsFactors = FALSE
             ),
@@ -304,7 +304,7 @@ describe("s4_Aantal", {
           Soortengroep =
             data.frame(
               GbifUsageKey = c("A1", "B1", "C1", "D"),
-              TaxonId = c(1:4),
+              TaxonGroepCode = "1",
               Rank = "SPECIES",
               stringsAsFactors = FALSE
             ),
@@ -337,7 +337,7 @@ describe("s4_Aantal", {
           Soortengroep =
             data.frame(
               GbifUsageKey = c("A1", "B1", "C1", "D"),
-              TaxonId = c(1:4),
+              TaxonGroepCode = "1",
               Rank = "SPECIES",
               stringsAsFactors = FALSE
             ),
@@ -370,7 +370,7 @@ describe("s4_Aantal", {
           Soortengroep =
             data.frame(
               GbifUsageKey = c("A1", "B1", "C1", "D"),
-              TaxonId = c(1:4),
+              TaxonGroepCode = "1",
               Rank = "SPECIES",
               stringsAsFactors = FALSE
             ),
@@ -403,7 +403,7 @@ describe("s4_Aantal", {
           Soortengroep =
             data.frame(
               GbifUsageKey = c("A1", "B1", "C1", "D"),
-              TaxonId = c(1:4),
+              TaxonGroepCode = "1",
               Rank = "SPECIES",
               stringsAsFactors = FALSE
             ),
@@ -436,7 +436,7 @@ describe("s4_Aantal", {
           Soortengroep =
             data.frame(
               GbifUsageKey = c("A1", "B1", "C1", "D"),
-              TaxonId = c(1:4),
+              TaxonGroepCode = "1",
               Rank = "SPECIES",
               stringsAsFactors = FALSE
             ),
@@ -472,7 +472,7 @@ describe("s4_Aantal", {
           Soortengroep =
             data.frame(
               GbifUsageKey = c("A1", "B1", "C1", "D"),
-              TaxonId = c(1:4),
+              TaxonGroepCode = "1",
               Rank = "SPECIES",
               stringsAsFactors = FALSE
             ),
@@ -505,7 +505,7 @@ describe("s4_Aantal", {
           Soortengroep =
             data.frame(
               GbifUsageKey = c("A1", "B1", "C1", "D"),
-              TaxonId = c(1:4),
+              TaxonGroepCode = "1",
               Rank = "SPECIES",
               stringsAsFactors = FALSE
             ),
@@ -538,7 +538,7 @@ describe("s4_Aantal", {
           Soortengroep =
             data.frame(
               GbifUsageKey = c("A1", "B1", "C1", "D"),
-              TaxonId = c(1:4),
+              TaxonGroepCode = "1",
               Rank = "SPECIES",
               stringsAsFactors = FALSE
             ),
@@ -571,7 +571,7 @@ describe("s4_Aantal", {
           Soortengroep =
             data.frame(
               GbifUsageKey = c("A1", "B1", "C1", "D"),
-              TaxonId = c(1:4),
+              TaxonGroepCode = "1",
               Rank = "SPECIES",
               stringsAsFactors = FALSE
             ),
@@ -607,7 +607,7 @@ describe("s4_Aantal", {
           Soortengroep =
             data.frame(
               GbifUsageKey = c("A1", "B1", "C1", "E1"),
-              TaxonId = 1:4,
+              TaxonGroepCode = "1",
               Rank = "SPECIES",
               stringsAsFactors = FALSE
             ),
@@ -640,7 +640,7 @@ describe("s4_Aantal", {
           Soortengroep =
             data.frame(
               GbifUsageKey = c("A1", "B1", "C1", "E1"),
-              TaxonId = 1:4,
+              TaxonGroepCode = "1",
               Rank = "SPECIES",
               stringsAsFactors = FALSE
             ),
@@ -672,7 +672,7 @@ describe("s4_Aantal", {
           Soortengroep =
             data.frame(
               GbifUsageKey = c("A1", "B1", "C1", "E1"),
-              TaxonId = 1:4,
+              TaxonGroepCode = "1",
               Rank = "SPECIES",
               stringsAsFactors = FALSE
             )
@@ -701,7 +701,7 @@ describe("s4_Aantal", {
           Soortengroep =
             data.frame(
               GbifUsageKey = c("A1", "B1", "C1", "E1"),
-              TaxonId = 1:4,
+              TaxonGroepCode = "1",
               Rank = "SPECIES",
               stringsAsFactors = FALSE
             ),

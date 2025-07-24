@@ -37,7 +37,7 @@
 #'
 #' @return Deze functie geeft een tabel met velden `Versie`, `Habitattype`,
 #' `Habitatsubtype`, `Criterium`, `Indicator`, `Indicator_habitatID`,
-#' `TaxongroepId` en `Indicator_beoordelingID`.
+#' `TaxonGroepCode` en `Indicator_beoordelingID`.
 #'
 #' @export
 #'
@@ -163,7 +163,7 @@ selecteerIndicatoren <-
             Ht2.Code AS Habitatsubtype, %s
             Criterium.Naam AS Criterium, Indicator.Naam AS Indicator,
             Indicator_habitat.Id AS Indicator_habitatID,
-            Indicator_habitat.TaxongroepId,
+            ihtg.TaxonGroepCode,
             IndicatortabellenKoppeling.Indicator_beoordelingId
               AS Indicator_beoordelingID
         FROM Habitatselectie
@@ -172,7 +172,7 @@ selecteerIndicatoren <-
           INNER JOIN Habitattype Ht2
             ON Habitatselectie.HabitatsubtypeId = Ht2.Id
           INNER JOIN Habitatgroep ON Ht1.HabitatgroepId = Habitatgroep.Id
-        %s JOIN (((Indicator_habitat
+        %s JOIN ((((Indicator_habitat
         INNER JOIN
           (Indicator INNER JOIN Criterium
             ON Indicator.CriteriumID = Criterium.Id)
@@ -181,6 +181,8 @@ selecteerIndicatoren <-
         LEFT JOIN IndicatortabellenKoppeling
         ON Indicator_habitat.Id =
           IndicatortabellenKoppeling.Indicator_habitatId)
+        LEFT JOIN IndicatorHabitatTaxonGroep ihtg
+          ON Indicator_habitat.Id = ihtg.IndicatorHabitatId)
         ON %s",
         query_uitbreiding, Join, QueryEinde
       )

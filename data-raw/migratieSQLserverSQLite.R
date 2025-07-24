@@ -6,6 +6,7 @@ library(RSQLite)
 library(LSVI)
 library(dplyr)
 library(purrr)
+library(inbodb)
 
 migratieSQLserverSQLite <- function() {
   #Tabellen ophalen uit SQLserver
@@ -56,7 +57,7 @@ migratieSQLserverSQLite <- function() {
         cast(Maatregelen AS nvarchar(510)) AS Maatregelen,
         cast(Opmerkingen AS nvarchar(830)) AS Opmerkingen,
         cast(Referenties AS nvarchar(290)) AS Referenties,
-        TaxongroepId, HabitattypeId, VersieId
+        HabitattypeId, VersieId
         FROM Indicator_habitat
         WHERE HabitattypeId in (%s) and VersieId in (%s)",
         HabitattypeId, VersieId
@@ -143,7 +144,7 @@ migratieSQLserverSQLite <- function() {
       sprintf(
         "SELECT Id, VoorwaardeNaam, ExtraInfo,
         AnalyseVariabeleId, Referentiewaarde, Operator, InvoermaskerId,
-        TaxongroepId, StudiegroepId, SubAnalyseVariabeleId,
+        StudiegroepId, SubAnalyseVariabeleId,
         SubReferentiewaarde, SubOperator, SubInvoermaskerId
         FROM Voorwaarde
         WHERE Id in (%s)",
@@ -220,157 +221,178 @@ migratieSQLserverSQLite <- function() {
   TypeVariabele <-
     dbGetQuery(ConnectiePool, "SELECT Id, Naam from TypeVariabele")
 
-  TaxongroepId <-
+  IndicatorHabitatTaxonGroep <-
+    dbGetQuery(
+      ConnectiePool,
+      sprintf(
+        "SELECT IndicatorHabitatId, TaxonGroepCode
+        FROM IndicatorHabitatTaxonGroep
+        WHERE IndicatorHabitatId in (%s)",
+        Indicator_habitatId
+      )
+    )
+
+  VoorwaardeTaxonGroep <-
+    dbGetQuery(
+      ConnectiePool,
+      sprintf(
+        "SELECT VoorwaardeId, TaxonGroepCode
+        FROM VoorwaardeTaxonGroep
+        WHERE VoorwaardeId in (%s)",
+        VoorwaardeId
+      )
+    )
+
+  TaxonGroepCode <-
     paste0(
       unique(
         c(
-          (Voorwaarde %>% filter(!is.na(TaxongroepId)))$TaxongroepId,
-          (Indicator_habitat %>% filter(!is.na(TaxongroepId)))$TaxongroepId
+          (VoorwaardeTaxonGroep %>%
+             filter(!is.na(TaxonGroepCode)))$TaxonGroepCode,
+          (IndicatorHabitatTaxonGroep %>%
+             filter(!is.na(TaxonGroepCode)))$TaxonGroepCode
         )
       ),
-      collapse = ","
+      collapse = "','"
     )
 
-  TaxongroepTaxongroep <-
+  TaxonGroep <-
     dbGetQuery(
       ConnectiePool,
       sprintf(
-        "WITH Taxongroeplijst
-        AS
-        (
-          SELECT T1.Id, T1.TaxongroepParentId, T1.TaxongroepChildId
-          FROM TaxongroepTaxongroep T1
-          WHERE T1.TaxongroepParentId in (%s)
-        UNION ALL
-          SELECT T2.Id, T2.TaxongroepParentId, T2.TaxongroepChildId
-          FROM TaxongroepTaxongroep T2 INNER JOIN Taxongroeplijst T
-          ON T2.TaxongroepParentId = T.TaxongroepChildId
-        )
-        SELECT * FROM Taxongroeplijst
-        ",
-        TaxongroepId
-      )
-    )
-
-  TaxongroepId <-
-    paste0(
-      c(
-        TaxongroepId,
-        unique(TaxongroepTaxongroep$TaxongroepChildId)
-      ),
-      collapse = ","
-    )
-
-  Taxongroep <-
-    dbGetQuery(
-      ConnectiePool,
-      sprintf(
-        "SELECT Id, Naam,
-        cast(Omschrijving AS nvarchar(90)) AS Omschrijving, AfkomstGegevens
+        "SELECT TaxonGroepCode,
+        Omschrijving
         FROM Taxongroep
-        WHERE Id in (%s)",
-        TaxongroepId
+        WHERE TaxonGroepCode in ('%s')",
+        TaxonGroepCode
       )
     )
 
-  TaxongroepTaxon <-
+  TaxonGroepTaxon <-
     dbGetQuery(
       ConnectiePool,
       sprintf(
-        "SELECT Id, TaxongroepId, TaxonId
-        FROM TaxongroepTaxon
-        WHERE TaxongroepId in (%s)",
-        TaxongroepId
+        "SELECT TaxonGroepCode, TaxonKey
+        FROM TaxonGroepTaxon
+        WHERE TaxonGroepCode in ('%s')",
+        TaxonGroepCode
       )
     )
 
   Taxon <-
     dbGetQuery(
       ConnectiePool,
-      "SELECT Id, NbnTaxonVersionKey, FloraNaamWetenschappelijk,
-      FloraNaamNederlands, FloraTaxonId, FloraCode, TaxonTypeId,
-      NbnNaam, NbnNaamVolledig, NbnTaal
+      "SELECT scientificName as WetNaam,
+      canonicalName,
+      [Key] as GbifUsageKey,
+      rank as Rank,
+      kingdom AS Kingdom,
+      genus AS Genus,
+      species AS Species,
+      kingdomKey AS KingdomKey,
+      genusKey AS GenusKey,
+      speciesKey AS SpeciesKey
       FROM Taxon"
     )
 
-  TaxonTaxon <-
-    dbGetQuery(
-      ConnectiePool,
-      "SELECT Id, TaxonParentId, TaxonChildId
-      FROM TaxonTaxon"
+  QueryObservatieTaxon <-
+    "SELECT TaxonName,
+    TaxonKey AS GbifUsageKey,
+    InboBronnen
+  FROM ObservatieTaxon"
+  ObservatieTaxon <- dbGetQuery(ConnectiePool, QueryObservatieTaxon)
+
+  # voor tabel Taxon willen we ook de hogere taxa toevoegen
+  # die halen we uit databank D0155_00_Taxa
+  query <-
+    "SELECT DISTINCT
+      gbt.scientificNameExact AS ScientificNameExact,
+      gbt.nubKey AS GbifUsageKey,
+      gbt.rank AS Rank,
+      gbt.kingdom AS Kingdom,
+      gbt.phylum AS Phylum,
+      gbt.[order] AS [Order],
+      gbt.family AS Family,
+      gbt.genus AS Genus,
+      gbt.species AS Species,
+      gbt.kingdomKey AS KingdomKey,
+      gbt.phylumKey AS PhylumKey,
+      gbt.classKey AS ClassKey,
+      gbt.orderKey AS OrderKey,
+      gbt.familyKey AS FamilyKey,
+      gbt.genusKey AS GenusKey,
+      gbt.speciesKey AS SpeciesKey,
+      gbt.vernacularNameExact AS NLNameExact
+    FROM TaxonSourceTaxonGbifMatch gm
+      INNER JOIN GbifBackboneTaxon gbt ON gm.gbif_usageKey = gbt.nubKey
+    WHERE gm.TaxonSourceName like 'LSVI - %'
+      OR gm.TaxonSourceName like 'FLORA - %'"
+
+  con <- connect_inbo_dbase("D0155_00_Taxa")
+  TaxonUitTaxa <- dbGetQuery(con, query)
+  dbDisconnect(con)
+
+  TaxonAangevuld <- Taxon %>%
+    left_join(
+      TaxonUitTaxa %>%
+        distinct(),
+      by = "GbifUsageKey",
+      suffix = c("", ".dbTaxa")
+    ) %>%
+    select(
+      -"Rank.dbTaxa",
+      -"Kingdom.dbTaxa",
+      -"Genus.dbTaxa",
+      -"Species.dbTaxa",
+      -"KingdomKey.dbTaxa",
+      -"GenusKey.dbTaxa",
+      -"SpeciesKey.dbTaxa"
     )
 
-  TaxonSynoniem <-
-    dbGetQuery(
-      ConnectiePool,
-      "SELECT Id, NBNTaxonVersionKey, FloraNaamWetenschappelijk,
-      FloraNaamNederlands, FloraTaxonId, FloraCode, TaxonTypeId,
-      NbnNaam, NbnNaamVolledig, NbnTaal,
-      GbifCanonicalName AS CanonicalName,
-      GbifCanonicalNameWithMarker AS CanonicalNameWithMarker,
-      GbifCanonicalNameComplete AS CanonicalNameComplete,
-      TaxonId
-      FROM TaxonSynoniem;"
+  # Aan de tabel Observatietaxon voegen we NL namen en NbnTaxonVersionKeys
+  # toe uit Florabank
+  con <- connect_inbo_dbase("D0152_00_Flora")
+  TaxonUitFlora <- dbGetQuery(
+    con,
+    "SELECT NaamNederlands, NaamWetenschappelijk,
+      TaxonVersionKey AS NbnTaxonVersionKey
+    FROM Taxon"
+  )
+  dbDisconnect(con)
+
+  ObservatieTaxonAangevuld <- ObservatieTaxon %>%
+    left_join(
+      TaxonUitFlora %>%
+        distinct(),
+      by = c("TaxonName" = "NaamWetenschappelijk")
     )
   #aanpassing Gbif-namen!!!  Na definitieve migratie ook in brondb aanpassen?
   #(als het de gebruikers niet meer hindert als ze de kopie gebruiken)
 
-  TaxonType <-
-    dbGetQuery(
-      ConnectiePool,
-      "SELECT Id, Naam
-      FROM TaxonType"
-    )
 
   #berekening Theoretisch Maximum
-  Querytekst <-
-    "WITH Groepen
-      AS
-      (
-        SELECT Tg.Id AS TaxongroepId,
-          Tg.Id AS TaxonsubgroepId
-        FROM Taxongroep Tg
-        WHERE Tg.Id in (%s)
-      UNION ALL
-        SELECT Groepen.TaxongroepId,
-          Tg2.Id AS TaxonsubgroepId
-        FROM Groepen
-          INNER JOIN TaxongroepTaxongroep AS TgTg
-          ON Groepen.TaxonsubgroepId = TgTg.TaxongroepParentId
-        INNER JOIN Taxongroep Tg2
-        ON TgTg.TaxongroepChildId = Tg2.Id
-        WHERE TgTg.TaxongroepChildId > 0
-      )
-    SELECT Groepen.TaxongroepId,
-      Groepen.TaxonsubgroepId,
-      Taxon.Id
-    FROM Groepen
-      INNER JOIN TaxongroepTaxon TgT
-      on Groepen.TaxonsubgroepId = TgT.TaxongroepId
-      INNER JOIN Taxon
-      ON TgT.TaxonId = Taxon.Id;"
   Voorwaarde <- Voorwaarde %>%
-    rowwise() %>%
-    mutate(
-      AantalSoorten =
-        ifelse(
-          !is.na(.data$TaxongroepId),
-          nrow(
-            dbGetQuery(
-              ConnectiePool,
-              sprintf(Querytekst, as.character(.data$TaxongroepId))
-            ) %>%
-              distinct()
-          ),
-          NA
-        )
+    left_join(
+      VoorwaardeTaxonGroep %>%
+        left_join(
+          TaxonGroepTaxon,
+          by = "TaxonGroepCode",
+          relationship = "many-to-many"
+        ) %>%
+        distinct(.data$VoorwaardeId, .data$TaxonKey) %>%
+        count(VoorwaardeId, name = "AantalSoorten"),
+      by = c("Id" = "VoorwaardeId")
     ) %>%
-    ungroup() %>%
-    left_join(StudieItem, by = "StudiegroepId", suffix = c("", ".studie")) %>%
+    left_join(
+      StudieItem,
+      by = "StudiegroepId",
+      suffix = c("", ".studie"),
+      relationship = "many-to-many"
+    ) %>%
     group_by(
       .data$Id, .data$VoorwaardeNaam, .data$ExtraInfo, .data$AnalyseVariabeleId,
       .data$Referentiewaarde, .data$Operator, .data$InvoermaskerId,
-      .data$TaxongroepId, .data$StudiegroepId, .data$SubAnalyseVariabeleId,
+      .data$StudiegroepId, .data$SubAnalyseVariabeleId,
       .data$SubReferentiewaarde, .data$SubOperator, .data$SubInvoermaskerId,
       .data$AantalSoorten
     ) %>%
@@ -415,13 +437,13 @@ migratieSQLserverSQLite <- function() {
         ),
       Maximumwaarde =
         ifelse(
-          .data$VariabeleNaam == "aantal" & !is.na(.data$TaxongroepId),
+          .data$VariabeleNaam == "aantal",
           .data$AantalSoorten,
           .data$Maximumwaarde
         ),
       Maximumwaarde =
         ifelse(
-          .data$VariabeleNaam == "aantal" & is.na(.data$TaxongroepId) &
+          .data$VariabeleNaam == "aantal" & is.na(.data$Maximumwaarde) &
             !is.na(.data$StudiegroepId),
           .data$AantalKenmerken,
           .data$Maximumwaarde
@@ -452,30 +474,11 @@ migratieSQLserverSQLite <- function() {
     ) %>%
     select(
       "Id", "VoorwaardeNaam", "ExtraInfo", "AnalyseVariabeleId",
-      "Referentiewaarde", "Operator", "InvoermaskerId", "TaxongroepId",
+      "Referentiewaarde", "Operator", "InvoermaskerId",
       "StudiegroepId", "SubAnalyseVariabeleId", "SubReferentiewaarde",
       "SubOperator", "SubInvoermaskerId", "Maximumwaarde"
     )
 
-  # toevoegen GbifUsageKey en Rank
-  TaxonTabel <-
-    readr::read_csv2(system.file("databank/TaxonTabel.csv", package = "LSVI"))
-  Taxon <- Taxon %>%
-    left_join(
-      TaxonTabel %>%
-        select(
-          "TaxonNameExact", "GbifUsageKey", "GbifAcceptedUsageKey", "Rank"
-        ),
-      by = c("FloraNaamWetenschappelijk" = "TaxonNameExact")
-    ) %>%  #tijdelijke correctie, maar idealiter komen er geen synoniemen in de lijst voor
-    mutate(
-      GbifUsageKeyFloraNaamWetenschappelijk = .data$GbifUsageKey,
-      GbifUsageKey =
-        ifelse(
-          is.na(.data$GbifAcceptedUsageKey),
-          .data$GbifUsageKey, .data$GbifAcceptedUsageKey
-        )
-    )
 
   NieuweDb <- dbConnect(SQLite(), "inst/databank/LSVIHabitatTypes.sqlite")
   dbWriteTable(NieuweDb, "AnalyseVariabele", AnalyseVariabele)
@@ -493,16 +496,26 @@ migratieSQLserverSQLite <- function() {
   dbWriteTable(NieuweDb, "LijstItem", LijstItem)
   dbWriteTable(NieuweDb, "Studiegroep", Studiegroep)
   dbWriteTable(NieuweDb, "StudieItem", StudieItem)
-  dbWriteTable(NieuweDb, "Taxon", Taxon)
-  dbWriteTable(NieuweDb, "Taxongroep", Taxongroep)
-  dbWriteTable(NieuweDb, "TaxongroepTaxon", TaxongroepTaxon)
-  dbWriteTable(NieuweDb, "TaxongroepTaxongroep", TaxongroepTaxongroep)
-  dbWriteTable(NieuweDb, "TaxonSynoniem", TaxonSynoniem)
-  dbWriteTable(NieuweDb, "TaxonTaxon", TaxonTaxon)
-  dbWriteTable(NieuweDb, "TaxonType", TaxonType)
+  dbWriteTable(NieuweDb, "Taxon", TaxonAangevuld)
+  dbWriteTable(NieuweDb, "ObservatieTaxon", ObservatieTaxonAangevuld)
+  dbWriteTable(NieuweDb, "TaxonGroep", TaxonGroep)
+  dbWriteTable(
+    NieuweDb,
+    "IndicatorHabitatTaxonGroep",
+    IndicatorHabitatTaxonGroep
+  )
+  dbWriteTable(NieuweDb, "VoorwaardeTaxonGroep", VoorwaardeTaxonGroep)
+  dbWriteTable(NieuweDb, "TaxonGroepTaxon", TaxonGroepTaxon)
   dbWriteTable(NieuweDb, "TypeVariabele", TypeVariabele)
   dbWriteTable(NieuweDb, "Versie", Versie)
   dbWriteTable(NieuweDb, "Voorwaarde", Voorwaarde)
+  dbExecute(NieuweDb, "CREATE INDEX idx_tguk ON Taxon(GbifUsageKey)")
+  dbExecute(NieuweDb, "CREATE INDEX idx_otguk ON ObservatieTaxon(GbifUsageKey)")
+  dbExecute(NieuweDb, "CREATE INDEX idx_ottn ON ObservatieTaxon(TaxonName)")
+  dbExecute(
+    NieuweDb,
+    "CREATE INDEX idx_otnn ON ObservatieTaxon(NaamNederlands)"
+  )
   dbDisconnect(NieuweDb)
 }
 

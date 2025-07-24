@@ -95,8 +95,10 @@ geefInfoHabitatfiche <-
       cast(Indicator_habitat.Maatregelen AS nvarchar(510)) AS Maatregelen,
       cast(Indicator_habitat.Opmerkingen AS nvarchar(830)) AS Opmerkingen,
       cast(Indicator_habitat.Referenties AS nvarchar(290)) AS Referenties,
-      Indicator_habitat.TaxongroepId
+      ihtg.TaxonGroepCode
       FROM Indicator_habitat
+      LEFT JOIN IndicatorHabitatTaxonGroep ihtg
+        ON Indicator_habitat.Id = ihtg.IndicatorHabitatId
       WHERE Indicator_habitat.Id in ('%s')",
       indicator_habitat_ids
     )
@@ -158,7 +160,7 @@ geefInfoHabitatfiche <-
                 do.call(paste, c(L, list(sep = sep)))))
     }
 
-    if (!all(is.na(Habitatkarakteristieken$TaxongroepId))) {
+    if (!all(is.na(Habitatkarakteristieken$TaxonGroepCode))) {
       Soortenlijst <-
         geefSoortenlijst(
           Versie = Versie,
@@ -207,7 +209,7 @@ geefInfoHabitatfiche <-
 
       Soortenlijst <- Soortenlijst %>%
         group_by(
-          .data$TaxongroepId,
+          .data$TaxonGroepCode,
           .data$Criterium,
           .data$Indicator,
           across(all_of(OmschrijvingKolommen))
@@ -241,7 +243,7 @@ geefInfoHabitatfiche <-
         if (i < laatste_i) {
           Soortenlijst <- Soortenlijst %>%
             group_by(
-              .data$TaxongroepId,
+              .data$TaxonGroepCode,
               .data$Criterium,
               .data$Indicator,
               .dots = OmschrijvingKolommen
@@ -254,7 +256,7 @@ geefInfoHabitatfiche <-
         } else {
           Soortenlijst <- Soortenlijst %>%
             group_by(
-              .data$TaxongroepId,
+              .data$TaxonGroepCode,
               .data$Criterium,
               .data$Indicator
             ) %>%
@@ -270,16 +272,16 @@ geefInfoHabitatfiche <-
       Habitatfiche <- Selectiegegevens %>%
         left_join(
           Habitatkarakteristieken %>%
-            mutate(TaxongroepId = NULL),
+            mutate(TaxonGroepCode = NULL),
           by = c("Indicator_habitatID" = "Indicator_habitatID")
         ) %>%
         left_join(
           Soortenlijst %>%
             select(
-              "TaxongroepId",
+              "TaxonGroepCode",
               "Soortenlijst"
             ),
-          by = c("TaxongroepId" = "TaxongroepId")
+          by = c("TaxonGroepCode" = "TaxonGroepCode")
         ) %>%
         mutate(
           Beschrijving =

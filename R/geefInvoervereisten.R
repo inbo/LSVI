@@ -278,8 +278,7 @@ geefInvoervereisten <- function(Versie = "alle",
             LijstItem.Ondergrens AS Invoerondergrens,
             LijstItem.Gemiddelde AS Invoergemiddelde,
             Lijstitem.Bovengrens AS Invoerbovengrens,
-            Voorwaarde.TaxongroepId,
-            cast(Taxongroep.Omschrijving AS nvarchar(90)) AS TaxongroepNaam,
+            vwtg.TaxonGroepCode,
             Studiegroep.Naam AS Studiegroepnaam,
             Studiegroep.LijstNaam as Studielijstnaam,
             StudieItem.Waarde As Studiewaarde,
@@ -299,8 +298,8 @@ geefInvoervereisten <- function(Versie = "alle",
             SubLijstItem.Ondergrens AS SubInvoerondergrens,
             SubLijstItem.Gemiddelde AS SubInvoergemiddelde,
             SubLijstitem.Bovengrens AS SubInvoerbovengrens
-            FROM (((((Voorwaarde LEFT JOIN Taxongroep
-                       ON Voorwaarde.TaxongroepID = Taxongroep.Id)
+            FROM (((((Voorwaarde LEFT JOIN VoorwaardeTaxonGroep vwtg
+                       ON Voorwaarde.Id = vwtg.VoorwaardeId)
             LEFT JOIN (AnalyseVariabele
               LEFT JOIN TypeVariabele
                        ON AnalyseVariabele.TypeVariabeleID = TypeVariabele.Id)
@@ -341,7 +340,7 @@ geefInvoervereisten <- function(Versie = "alle",
         .data$Operator, .data$Maximumwaarde, .data$AnalyseVariabele,
         .data$Eenheid, .data$TypeVariabele,
         .data$Invoertype,
-        .data$TaxongroepId, .data$TaxongroepNaam,
+        .data$TaxonGroepCode,
         .data$Studiegroepnaam, .data$Studielijstnaam,
         .data$SubAnalyseVariabele, .data$SubEenheid,
         .data$TypeSubVariabele, .data$SubReferentiewaarde,
@@ -362,7 +361,7 @@ geefInvoervereisten <- function(Versie = "alle",
         "Operator", "Maximumwaarde", "AnalyseVariabele",
         "Eenheid", "TypeVariabele",
         "Invoertype", "Invoerwaarde",
-        "TaxongroepId", "TaxongroepNaam",
+        "TaxonGroepCode",
         "Studiegroepnaam", "Studielijstnaam",
         "Studiewaarde",
         "SubAnalyseVariabele", "SubEenheid",

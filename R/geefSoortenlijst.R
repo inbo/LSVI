@@ -118,31 +118,27 @@ geefSoortenlijst <-
         select(
           "Versie", "Habitattype", "Habitatsubtype",
           "Criterium", "Indicator", "Beoordeling",
-          "Kwaliteitsniveau", "Voorwaarde", "TaxongroepId"
+          "Kwaliteitsniveau", "Voorwaarde", "TaxonGroepCode"
         ) %>%
         distinct()
     }
 
     SoortengroepIDs <- Selectiegegevens %>%
-      select("TaxongroepId") %>%
+      select("TaxonGroepCode") %>%
       distinct() %>%
-      filter(!is.na(.data$TaxongroepId)) %>%
-      summarise(SoortengroepIDs = paste(.data$TaxongroepId, collapse = ","))
+      filter(!is.na(.data$TaxonGroepCode)) %>%
+      summarise(SoortengroepIDs = paste(.data$TaxonGroepCode, collapse = "','"))
 
     if (SoortengroepIDs$SoortengroepIDs == "") {
       warning("Voor de opgegeven argumenten is er geen soortenlijst")
       SoortenlijstSelectie <- Selectiegegevens %>%
         mutate(
-          TaxonsubgroepId = NA,
-          Omschrijving = NA,
+          TaxonGroepCode = NA,
           Id = NA,
-          TaxonId = NA,
-          SubTaxonId = NA,
-          NbnTaxonVersionKey = NA,
+          GbifUsageKey = NA,
           WetNaam = NA,
           NedNaam = NA,
-          WetNaamKort = NA,
-          TaxonType = NA
+          WetNaamKort = NA
         )
     } else {
       Soortenlijst <-
@@ -156,7 +152,7 @@ geefSoortenlijst <-
       SoortenlijstSelectie <- Selectiegegevens %>%
         left_join(
           Soortenlijst,
-          by = ("TaxongroepId")
+          by = ("TaxonGroepCode")
         )
     }
 
@@ -164,10 +160,9 @@ geefSoortenlijst <-
       SoortenlijstSelectie <- SoortenlijstSelectie %>%
         select(
           "Versie", "Habitattype", "Habitatsubtype",
-          "Criterium", "Indicator", "TaxongroepId",
-          "Omschrijving",
-          "NbnTaxonVersionKey", "WetNaam", "NedNaam",
-          "WetNaamKort", "TaxonType",
+          "Criterium", "Indicator", "TaxonGroepCode",
+          "WetNaam", "NedNaam",
+          "WetNaamKort",
           "GbifUsageKey", "Rank"
         ) %>%
         distinct()
@@ -176,13 +171,13 @@ geefSoortenlijst <-
     if (Taxonlijstniveau[1] == "criterium") {
       SoortenlijstSelectie <- SoortenlijstSelectie %>%
         select(-"Indicator") %>%
-        filter(!is.na(.data$NbnTaxonVersionKey)) %>%
+        filter(!is.na(.data$GbifUsageKey)) %>%
         distinct()
     }
     if (Taxonlijstniveau[1] == "habitattype") {
       SoortenlijstSelectie <- SoortenlijstSelectie %>%
         select(-"Indicator", -"Criterium") %>%
-        filter(!is.na(.data$NbnTaxonVersionKey)) %>%
+        filter(!is.na(.data$GbifUsageKey)) %>%
         distinct()
     }
 

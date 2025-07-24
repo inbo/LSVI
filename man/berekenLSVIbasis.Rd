@@ -128,7 +128,7 @@ beoordeling.
 Deze functie bepaalt de Lokale Staat van Instandhouding en
 biotische indices op basis van gegevens, die in het juiste formaat moeten
 aangeleverd worden.  Zie hiervoor de beschrijving bij de parameters
-(\href{https://inbo.github.io/LSVI/reference/berekenLSVIbasis.html#arguments}{"Arguments"})
+(\href{https://inbo.github.io/LSVI/reference/berekenLSVIbasis.html#arguments}{"Arguments" })
 en de tabellen van het voorbeeld.  In principe is enkel de
 parameter \code{Data_habitat} verplicht om op te geven, maar extra datasets zijn
 uiteraard wel nodig om een resultaat te bekomen.  Welke datasets relevant
@@ -170,10 +170,9 @@ Daarom wordt met een warning aangeraden om de \code{Soortenlijst} te controleren
 als de Gbif-tool voor de koppeling van minstens één soort gebruikt is
 (dit is aangegeven in veld \code{Koppelmethode}, en deze records staan bovenaan).
 Fouten bij gebruik van de Gbif-tool kunnen best opgelost worden door de taxa
-bij invoer te vervangen door de schrijfwijze in de taxonlijst in het package
-(beschikbaar via
-\code{readr::read_csv2(system.file("databank/TaxonTabel.csv", package = "LSVI"))}
-of op \href{https://zenodo.org/records/10561497}{Zenodo}).
+bij invoer te vervangen door de schrijfwijze in de databank in het package
+(beschikbaar
+op \href{https://zenodo.org/records/10561497}{Zenodo}).
 Fouten in deze taxonlijst mogen gemeld worden via
 \href{https://github.com/inbo/LSVI/issues}{een issue} (of aan de beheerder van
 het package).

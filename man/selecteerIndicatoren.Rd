@@ -51,7 +51,7 @@ de LSVI van habitats, in te stellen d.m.v. functie \code{connecteerMetLSVIdb()}.
 \value{
 Deze functie geeft een tabel met velden \code{Versie}, \code{Habitattype},
 \code{Habitatsubtype}, \code{Criterium}, \code{Indicator}, \code{Indicator_habitatID},
-\code{TaxongroepId} en \code{Indicator_beoordelingID}.
+\code{TaxonGroepCode} en \code{Indicator_beoordelingID}.
 }
 \description{
 Deze hulpfunctie selecteert de indicatoren die gebruikt worden

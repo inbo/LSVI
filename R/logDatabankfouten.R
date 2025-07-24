@@ -119,10 +119,10 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
   TweeTaxongroepen <-
     dbGetQuery(
       ConnectieLSVIhabitats,
-      "SELECT tgtg.TaxongroepParentId AS tg, tgtg.TaxongroepChildId AS tgChild
-      FROM TaxongroepTaxongroep tgtg"
+      "SELECT vwtg.VoorwaardeId AS vw, vwtg.TaxonGroepCode AS tgCode
+      FROM VoorwaardeTaxonGroep vwtg"
     ) %>%
-    count(.data$tg) %>%
+    count(.data$vw) %>%
     filter(n == 2)
 
   Voorwaarden <- OnbekendeAV %>%
@@ -236,7 +236,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
               "maxBedekkingExcl", "scoresom")
         ) %>%
         filter(
-          is.na(.data$TaxongroepId) & is.na(.data$Studiegroepnaam)
+          is.na(.data$TaxonGroepCode) & is.na(.data$Studiegroepnaam)
         ) %>%
         mutate(
           Probleem =
@@ -251,7 +251,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
               "bedekkingLaagPlus", "bedekkingSom")
         ) %>%
         filter(
-          is.na(.data$TaxongroepId) | is.na(.data$Studiegroepnaam)
+          is.na(.data$TaxonGroepCode) | is.na(.data$Studiegroepnaam)
         ) %>%
         mutate(
           Probleem =
@@ -265,7 +265,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
             c("bedekkingLaagExcl", "bedekkingLaagPlus")
         ) %>%
         filter(
-          !(.data$TaxongroepId) %in% TweeTaxongroepen$tg
+          !(.data$VoorwaardeID) %in% TweeTaxongroepen$vw
         ) %>%
         mutate(
           Probleem =

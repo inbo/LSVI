@@ -34,7 +34,6 @@ Imports:
     plyr,
     pool,
     purrr,
-    readr,
     rgbif,
     rlang,
     rmarkdown,
@@ -47,6 +46,7 @@ Imports:
     utils
 Suggests:
     knitr,
+    readr,
     testthat,
     xtable
 VignetteBuilder: 

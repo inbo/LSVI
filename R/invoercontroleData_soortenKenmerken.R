@@ -17,12 +17,11 @@
 #' @importFrom DBI dbGetQuery
 #' @importFrom dplyr %>% bind_rows distinct filter left_join mutate n rename
 #'   select
-#' @importFrom purrr map map_dbl
-#' @importFrom readr read_csv2
+#' @importFrom purrr map map_dbl map2
 #' @importFrom rgbif name_backbone_checklist name_usage
 #' @importFrom rlang .data sym
 #' @importFrom stringr str_to_sentence
-#' @importFrom tidyr unnest_wider
+#' @importFrom tidyr unnest unnest_wider
 #' @importFrom tools toTitleCase
 #'
 #' @export
@@ -132,97 +131,104 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
     # Omzettingen naar een bruikbare dataframe
     Kenmerken <- Data_soortenKenmerken    # naamsverandering!
 
-    Taxonlijst <-
-      suppressMessages(
-        read_csv2(
-          system.file("databank/TaxonTabel.csv", package = "LSVI"),
-          show_col_types = FALSE
+    QueryTaxonLijst <-
+      "SELECT ot.GbifUsageKey, ot.TaxonName,
+        LOWER(ot.NaamNederlands) AS NaamNederlands,
+        ot.NbnTaxonVersionKey, t.WetNaam, t.Rank,
+        t.Kingdom, t.Phylum, t.[Order], t.Family, t.Genus, t.Species,
+        t.KingdomKey, t.PhylumKey, t.ClassKey, t.OrderKey, t.FamilyKey,
+        t.GenusKey, t.SpeciesKey
+      FROM ObservatieTaxon ot
+        RIGHT JOIN Taxon t on ot.GbifUsageKey = t.GbifUsageKey
+      WHERE ot.%s in ('%s')"
+
+    laadTaxonlijst <- function(Taxonkolom, Taxonnaam) {
+      Taxonlijst <- dbGetQuery(
+        ConnectieLSVIhabitats,
+        sprintf(
+          QueryTaxonLijst,
+          Taxonkolom,
+          paste(unique(Taxonnaam), collapse = "','")
         )
       ) %>%
-      mutate(
-        AcceptedKey = ifelse(
-          is.na(.data$GbifAcceptedUsageKey),
-          .data$GbifUsageKey,
-          .data$GbifAcceptedUsageKey
-        ),
-        # voor de verdere code zijn volgende kolommen nodig,
-        # maar in de lijst staan enkel exacte matches en die is gecontroleerd op
-        # juistheid, dus deze waarden meegeven aan gebruiker is niet nodig
-        # (en met deze code is het ook niet nodig om ze in de lijst te hebben)
-        GbifMatchType = NA_character_,
-        GbifConfidence = NA_integer_
-      )
-
+        select(-"TaxonName", -"NaamNederlands", -"NbnTaxonVersionKey") %>%
+        distinct() %>%
+        mutate(
+          # voor de verdere code zijn volgende kolommen nodig,
+          # maar in de lijst staan enkel exacte matches en die is gecontroleerd
+          # op juistheid, dus deze waarden meegeven aan gebruiker is niet nodig
+          # (en met deze code is het ook niet nodig om ze in de lijst te hebben)
+          GbifMatchType = NA_character_,
+          GbifConfidence = NA_integer_
+        )
+      return(Taxonlijst)
+    }
 
     # Soorten rechtstreeks proberen te koppelen met taxonlijst uit package
     KenmerkenSoort <- Kenmerken %>%
       filter(tolower(.data$TypeKenmerk) == "soort_latijn") %>%
-      left_join(
-        Taxonlijst %>%
-          select(
-            -"ScientificNameExact", -"NLNameExact", -"NbnTaxonVersionKey"
-          ) %>%
-          distinct(),
-        by = c("Kenmerk" = "TaxonNameExact")
+      mutate(
+        Taxonlijst = map2("TaxonName", .$Kenmerk, laadTaxonlijst)
       ) %>%
+      unnest(cols = c(.data$Taxonlijst), keep_empty = TRUE) %>%
       bind_rows(
         Kenmerken %>%
           filter(tolower(.data$TypeKenmerk) == "soort_nl") %>%
           mutate(
-            Kenmerk = tolower(.data$Kenmerk)
+            Kenmerk = tolower(.data$Kenmerk),
+            Taxonlijst = map2("NaamNederlands", .$Kenmerk, laadTaxonlijst)
           ) %>%
-          left_join(
-            Taxonlijst %>%
-              select(
-                -"ScientificNameExact", -"TaxonNameExact", -"NbnTaxonVersionKey"
-              ) %>%
-              filter(!is.na(.data$NLNameExact)) %>%
-              distinct() %>%
-              mutate(
-                NLNameExact = tolower(.data$NLNameExact)
-              ),
-            by = c("Kenmerk" = "NLNameExact")
-          )
+          unnest(cols = c(.data$Taxonlijst), keep_empty = TRUE)
       ) %>%
       bind_rows(
         Kenmerken %>%
           filter(tolower(.data$TypeKenmerk) == "soort_gbif") %>%
-          left_join(
-            Taxonlijst %>%
-              mutate(
-                Kenmerk = as.character(.data$GbifUsageKey)
-              ) %>%
-              select(
-                -"ScientificNameExact", -"TaxonNameExact", -"NLNameExact",
-                -"NbnTaxonVersionKey"
-              ) %>%
-              distinct(),
-            by = c("Kenmerk")
-          )
+          mutate(
+            Taxonlijst = map2("GbifUsageKey", .$Kenmerk, laadTaxonlijst)
+          ) %>%
+          unnest(cols = c(.data$Taxonlijst), keep_empty = TRUE)
       ) %>%
       bind_rows(
         Kenmerken %>%
           filter(tolower(.data$TypeKenmerk) == "soort_nbn") %>%
-          left_join(
-            Taxonlijst %>%
-              mutate(
-                Kenmerk = as.character(.data$NbnTaxonVersionKey)
-              ) %>%
-              select(
-                -"ScientificNameExact", -"TaxonNameExact", -"NLNameExact"
-              ) %>%
-              distinct(),
-            by = c("Kenmerk")
-          )
+          mutate(
+            Taxonlijst = map2("NbnTaxonVersionKey", .$Kenmerk, laadTaxonlijst)
+          ) %>%
+          unnest(cols = c(.data$Taxonlijst), keep_empty = TRUE)
       ) %>%
       mutate(
         Koppelmethode = "exacte naam/key in LSVI-package"
       )
 
+    if (nrow(KenmerkenSoort) == 0) {
+      KenmerkenSoort <- KenmerkenSoort %>%
+        mutate(
+          GbifUsageKey = integer(0),
+          WetNaam = character(0),
+          Rank = character(0),
+          Koppelmethode = character(0),
+          GbifMatchType = character(0),
+          GbifConfidence = integer(0),
+          Kingdom = character(0),
+          Phylum = character(0),
+          Order = character(0),
+          Family = character(0),
+          Genus = character(0),
+          Species = character(0),
+          KingdomKey = integer(0),
+          PhylumKey = integer(0),
+          ClassKey = integer(0),
+          OrderKey = integer(0),
+          FamilyKey = integer(0),
+          GenusKey = integer(0),
+          SpeciesKey = integer(0)
+        )
+    }
+
     # Latijnse namen opzoeken via rgbif
     GbifLatijn <- KenmerkenSoort %>%
       filter(
-        is.na(.data$AcceptedKey),
+        is.na(.data$GbifUsageKey),
         tolower(.data$TypeKenmerk) == "soort_latijn"
       ) %>%
       distinct(.data$Kenmerk)
@@ -230,25 +236,46 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
       GbifLatijn <- GbifLatijn %>%
         mutate(
           name_backbone_checklist(.data$Kenmerk)
-        ) %>%
+        )
+      if ("acceptedUsageKey" %in% colnames(GbifLatijn)) {
+        GbifLatijn <- GbifLatijn %>%
+          mutate(
+            GbifAcceptedUsageKey = .data$acceptedUsageKey
+          )
+      } else {
+        GbifLatijn$GbifAcceptedUsageKey <- NA_integer_
+      }
+      GbifLatijn <- GbifLatijn %>%
         transmute(
           .data$Kenmerk,
           GbifUsageKey = .data$usageKey,
           GbifConfidence = .data$confidence,
-          GbifMatchType = .data$matchType,
-          GbifAcceptedUsageKey =
-            ifelse(!.data$synonym, NA, .data$acceptedUsageKey)
+          GbifMatchType =
+            ifelse(
+              .data$Kenmerk == .data$scientificName &
+                .data$matchType == "HIGHERRANK",
+              "EXACT",
+              .data$matchType
+            ),
+          .data$GbifAcceptedUsageKey
         ) %>%
         # Met info uit package proberen te koppelen via usagekey
         left_join(
-          Taxonlijst %>%
+          dbGetQuery(
+            ConnectieLSVIhabitats,
+            sprintf(
+              QueryTaxonLijst,
+              "GbifUsageKey",
+              paste(unique(GbifLatijn$usageKey), collapse = "','")
+            )
+          ) %>%
             select(
-              -"TaxonNameExact", -"ScientificNameExact", -"GbifConfidence",
-              -"GbifMatchType", -"NLNameExact", -"NbnTaxonVersionKey"
+              -"TaxonName",
+              -"NaamNederlands", -"NbnTaxonVersionKey"
             ) %>%
             distinct(),
           by = "GbifUsageKey",
-          suffix = c("MagWeg", "")
+          suffix = c("", "MagWeg")
         )
       Onbetrouwbaar <- GbifLatijn %>%
         filter(.data$GbifMatchType != "EXACT")
@@ -264,24 +291,33 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
         )
       }
       GbifLatijn <- GbifLatijn %>%
-        filter(!is.na(.data$AcceptedKey)) %>%
+        filter(!is.na(.data$Rank)) %>%
         mutate(
           Koppelmethode = "Gbif-usagekey opgezocht voor Latijnse naam",
           GbifAcceptedUsageKeyMagWeg = NULL
         ) %>%
         bind_rows(
           GbifLatijn %>%
-            filter(is.na(.data$AcceptedKey)) %>%
+            filter(is.na(.data$Rank)) %>%
             select(
               "Kenmerk", "GbifUsageKey", "GbifConfidence", "GbifMatchType",
               "GbifAcceptedUsageKey"
             ) %>%
             left_join(
-              Taxonlijst %>%
+              dbGetQuery(
+                ConnectieLSVIhabitats,
+                sprintf(
+                  QueryTaxonLijst,
+                  "GbifUsageKey",
+                  paste(
+                    unique(GbifLatijn$GbifAcceptedUsageKey),
+                    collapse = "','"
+                  )
+                )
+              ) %>%
                 select(
-                  -"TaxonNameExact", -"ScientificNameExact", -"GbifConfidence",
-                  -"GbifMatchType", -"NLNameExact", -"NbnTaxonVersionKey",
-                  -"GbifAcceptedUsageKey"
+                  -"TaxonName",
+                  -"NaamNederlands", -"NbnTaxonVersionKey"
                 ) %>%
                 distinct(),
               by = c("GbifAcceptedUsageKey" = "GbifUsageKey")
@@ -295,7 +331,7 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
     # Nederlandse namen opzoeken via rgbif
     GbifNL <- KenmerkenSoort %>%
       filter(
-        is.na(.data$AcceptedKey),
+        is.na(.data$GbifUsageKey),
         tolower(.data$TypeKenmerk) == "soort_nl"
       ) %>%
       distinct(.data$Kenmerk)
@@ -327,7 +363,7 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
             GbifAcceptedUsageKey =
               ifelse(
                 is.na(.data$synonym) | !.data$synonym,
-                NA, .data$acceptedUsageKey
+                NA_integer_, .data$acceptedKey
               )
           )
       } else {
@@ -341,33 +377,46 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
         ) %>%
         # Met info uit package proberen te koppelen via usagekey
         left_join(
-          Taxonlijst %>%
+          dbGetQuery(
+            ConnectieLSVIhabitats,
+            sprintf(
+              QueryTaxonLijst,
+              "GbifUsageKey",
+              paste(unique(GbifNL$nubKey), collapse = "','")
+            )
+          ) %>%
             select(
-              -"TaxonNameExact", -"ScientificNameExact", -"GbifConfidence",
-              -"GbifMatchType", -"NLNameExact", -"NbnTaxonVersionKey"
+              -"TaxonName",
+              -"NaamNederlands", -"NbnTaxonVersionKey"
             ) %>%
             distinct(),
           by = "GbifUsageKey",
           suffix = c("MagWeg", "")
         )
       GbifNL <- GbifNL %>%
-        filter(!is.na(.data$AcceptedKey)) %>%
+        filter(!is.na(.data$Rank)) %>%
         mutate(
           Koppelmethode = "Gbif-usagekey opgezocht voor Nederlandse naam",
           GbifAcceptedUsageKeyMagWeg = NULL
         ) %>%
         bind_rows(
           GbifNL %>%
-            filter(is.na(.data$AcceptedKey)) %>%
+            filter(is.na(.data$Rank)) %>%
             select(
               "Kenmerk", "GbifUsageKey", "GbifAcceptedUsageKey"
             ) %>%
             left_join(
-              Taxonlijst %>%
+              dbGetQuery(
+                ConnectieLSVIhabitats,
+                sprintf(
+                  QueryTaxonLijst,
+                  "GbifUsageKey",
+                  paste(unique(GbifNL$GbifAcceptedUsageKey), collapse = "','")
+                )
+              ) %>%
                 select(
-                  -"TaxonNameExact", -"ScientificNameExact", -"GbifConfidence",
-                  -"GbifMatchType", -"NLNameExact", -"NbnTaxonVersionKey",
-                  -"GbifAcceptedUsageKey"
+                  -"TaxonName",
+                  -"NaamNederlands", -"NbnTaxonVersionKey"
                 ) %>%
                 distinct(),
               by = c("GbifAcceptedUsageKey" = "GbifUsageKey")
@@ -392,15 +441,36 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
       }
     }
 
+    zoekInfoGbifKeys <- function(GbifKey) {
+      Taxonlijst <- dbGetQuery(
+        ConnectieLSVIhabitats,
+        sprintf(
+          QueryTaxonLijst,
+          "GbifUsageKey",
+          paste(unique(GbifKey), collapse = "','")
+        )
+      ) %>%
+        select(
+          -"GbifConfidence", -"GbifMatchType", -"NaamNederlands",
+          -"NbnTaxonVersionKey"
+        ) %>%
+        distinct() %>%
+        mutate(
+          Koppelmethode = "Gbif-acceptedkey opgezocht voor gbif-key"
+        )
+      return(Taxonlijst)
+    }
+
     KenmerkenSoort <- KenmerkenSoort %>%
       filter(
-        !is.na(.data$AcceptedKey) |
-          (is.na(.data$AcceptedKey) & tolower(.data$TypeKenmerk) == "soort_nbn")
+        !is.na(.data$GbifUsageKey) |
+          (is.na(.data$GbifUsageKey) &
+             tolower(.data$TypeKenmerk) == "soort_nbn")
       ) %>%
       bind_rows(
         KenmerkenSoort %>%
           filter(
-            is.na(.data$AcceptedKey),
+            is.na(.data$GbifUsageKey),
             tolower(.data$TypeKenmerk) == "soort_latijn"
           ) %>%
           select(
@@ -415,7 +485,7 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
       bind_rows(
         KenmerkenSoort %>%
           filter(
-            is.na(.data$AcceptedKey),
+            is.na(.data$GbifUsageKey),
             tolower(.data$TypeKenmerk) == "soort_nl"
           ) %>%
           select(
@@ -430,7 +500,7 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
       bind_rows(
         KenmerkenSoort %>%
           filter(
-            is.na(.data$AcceptedKey),
+            is.na(.data$GbifUsageKey),
             tolower(.data$TypeKenmerk) == "soort_gbif"
           ) %>%
           select(
@@ -438,27 +508,15 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
             "Eenheid", "Vegetatielaag"
           ) %>%
           mutate(
-            AcceptedKey = map_dbl(.data$Kenmerk, geefGbifKey)
-          ) %>%
-          left_join(
-            Taxonlijst %>%
-              select(
-                -"TaxonNameExact", -"ScientificNameExact",
-                -"GbifConfidence", -"GbifMatchType", -"NLNameExact",
-                -"AcceptedKey", -"NbnTaxonVersionKey"
-              ) %>%
-              distinct() %>%
-              mutate(
-                Koppelmethode = "Gbif-acceptedkey opgezocht voor gbif-key"
-              ),
-            by = c("AcceptedKey" = "GbifUsageKey")
+            GbifUsageKey = map_dbl(.data$Kenmerk, geefGbifKey),
+            Taxonlijst = map_dbl(.data$GbifUsageKey, zoekInfoGbifKeys)
           )
       )
 
     # Foutmelding als geen accepted key gevonden, m.a.w. geen record in de lijst
     # en kan niet gekoppeld worden in gbif
     Fouten <- KenmerkenSoort %>%
-      filter(is.na(.data$AcceptedKey))
+      filter(is.na(.data$GbifUsageKey))
     if (nrow(Fouten) > 0) {
       stop(
         sprintf(
@@ -471,8 +529,33 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
     # Als wel accepted key maar geen andere info, is de info niet aanwezig
     # in de lijst en moeten we op Gbif voortgaan
     geefInfoGbif <- function(Key) {
-      name_usage(Key)$data %>%
+      InfoGbif <- name_usage(Key)$data
+      if (!has_name(InfoGbif, "species")) {
+        InfoGbif$species <- NA_character_
+        InfoGbif$speciesKey <- NA_integer_
+      }
+      if (!has_name(InfoGbif, "genus")) {
+        InfoGbif$genus <- NA_character_
+        InfoGbif$genusKey <- NA_integer_
+      }
+      if (!has_name(InfoGbif, "family")) {
+        InfoGbif$family <- NA_character_
+        InfoGbif$familyKey <- NA_integer_
+      }
+      if (!has_name(InfoGbif, "order")) {
+        InfoGbif$order <- NA_character_
+        InfoGbif$orderKey <- NA_integer_
+      }
+      if (!has_name(InfoGbif, "classKey")) {
+        InfoGbif$classKey <- NA_integer_
+      }
+      if (!has_name(InfoGbif, "phylum")) {
+        InfoGbif$phylum <- NA_character_
+        InfoGbif$phylumKey <- NA_integer_
+      }
+      InfoGbif <- InfoGbif %>%
         transmute(
+          WetNaam = .data$scientificName,
           Rank = .data$rank,
           Kingdom = .data$kingdom,
           Phylum = .data$phylum,
@@ -489,6 +572,7 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
           SpeciesKey = .data$speciesKey,
           Koppelmethode = "volledige taxoninfo uit Gbif"
         )
+      return(InfoGbif)
     }
     KenmerkenSoort <- KenmerkenSoort %>%
       filter(!is.na(.data$Rank)) %>%
@@ -499,8 +583,7 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
             .data$ID, .data$Kenmerk, .data$TypeKenmerk, .data$Waarde,
             .data$Type, .data$Invoertype, .data$Eenheid, .data$Vegetatielaag,
             .data$GbifUsageKey, .data$GbifConfidence, .data$GbifMatchType,
-            .data$GbifAcceptedUsageKey, .data$AcceptedKey,
-            InfoGbif = map(.data$AcceptedKey, geefInfoGbif)
+            InfoGbif = map(.data$GbifUsageKey, geefInfoGbif)
           ) %>%
           unnest_wider("InfoGbif")
       )
@@ -520,7 +603,7 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
 
     Dubbels <- KenmerkenSoort %>%
       group_by(
-        .data$ID, .data$AcceptedKey, .data$Rank, .data$Vegetatielaag,
+        .data$ID, .data$GbifUsageKey, .data$Rank, .data$Vegetatielaag,
         .data$Eenheid, .data$Kenmerk
       ) %>%
       summarise(Aantal = n()) %>%
@@ -530,7 +613,7 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
       Tekst <- Dubbels %>%
         inner_join(
           KenmerkenSoort,
-          by = c("ID", "AcceptedKey", "Rank", "Vegetatielaag", "Eenheid",
+          by = c("ID", "GbifUsageKey", "Rank", "Vegetatielaag", "Eenheid",
                  "Kenmerk")
         ) %>%
         group_by(.data$ID, .data$Vegetatielaag) %>%
@@ -554,7 +637,7 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
 
     Synoniemen <- KenmerkenSoort %>%
       group_by(
-        .data$ID, .data$AcceptedKey, .data$Rank, .data$Vegetatielaag,
+        .data$ID, .data$GbifUsageKey, .data$Rank, .data$Vegetatielaag,
         .data$Eenheid
       ) %>%
       summarise(Aantal = n()) %>%
@@ -564,11 +647,11 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
       Synoniemen <- Synoniemen %>%
         inner_join(
           KenmerkenSoort,
-          by = c("ID", "AcceptedKey", "Rank", "Vegetatielaag", "Eenheid")
+          by = c("ID", "GbifUsageKey", "Rank", "Vegetatielaag", "Eenheid")
         )
       LatijnEnNl <- Synoniemen %>%
         group_by(
-          .data$ID, .data$AcceptedKey, .data$Rank, .data$Vegetatielaag,
+          .data$ID, .data$GbifUsageKey, .data$Rank, .data$Vegetatielaag,
           .data$Eenheid, .data$TypeKenmerk
         ) %>%
         summarise(Aantal = n()) %>%
@@ -799,7 +882,6 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
       distinct()
 
     Kenmerken2 <- Kenmerken %>%
-      select(-"NbnTaxonVersionKey") %>%
       left_join(
         VertaaldeKenmerken,
         by = c("Rijnr")

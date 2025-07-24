@@ -13,6 +13,7 @@
 #' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden
 #' `Vegetatielaag`, `Kenmerk`, `TypeKenmerk`, `WaardeMin` en `WaardeMax`
 #'
+#' @importFrom dplyr %>% bind_rows filter
 #' @importFrom methods setClass setMethod as
 #'
 #' @noRd
@@ -40,10 +41,21 @@ setMethod(
       berekenWaarde(as(object, "aantal"))
     } else {
       object@Studiegroep <- data.frame()
-      object@Soortengroep$TaxonId <- object@Soortengroep$TaxonsubgroepId
-      object@Soortengroep$TaxonsubgroepId <- object@Soortengroep$TaxongroepId
-      object@Soortengroep$TaxongroepId <- 1
-      berekenWaarde(as(object, "aantal"))
+      Resultaat <-
+        data.frame(TaxonGroepCode = character(0), Aantal = integer(0))
+      for (Groep in unique(object@Soortengroep$TaxonGroepCode)) {
+        Deelobject <- object
+        Deelobject@Soortengroep <- Deelobject@Soortengroep %>%
+          filter(.data$TaxonGroepCode == Groep)
+        Res <- berekenWaarde(as(Deelobject, "aantal"))
+        Resultaat <- Resultaat %>%
+          bind_rows(data.frame(TaxonGroepCode = Groep, Aantal = Res))
+      }
+      Resultaat <- Resultaat %>%
+        filter(!is.na(.data$Aantal), .data$Aantal > 0)
+      Aantal <- nrow(Resultaat)
+
+      return(Aantal)
     }
   }
 )

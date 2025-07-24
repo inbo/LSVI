@@ -24,7 +24,7 @@ describe("s4_BedekkingExcl", {
           Soortengroep =
             data.frame(
               GbifUsageKey = c("A1", "B1", "C1", "E1"),
-              TaxonId = 1:4,
+              TaxonGroepCode = "1",
               Rank = "SPECIES",
               stringsAsFactors = FALSE
             )
@@ -79,7 +79,7 @@ describe("s4_BedekkingExcl", {
           Soortengroep =
             data.frame(
               GbifUsageKey = c("A1", "B1", "C1", "E1"),
-              TaxonId = 1:4,
+              TaxonGroepCode = "1",
               Rank = "SPECIES",
               stringsAsFactors = FALSE
             ),
@@ -115,7 +115,7 @@ describe("s4_BedekkingExcl", {
           Soortengroep =
             data.frame(
               GbifUsageKey = c("A1", "B1", "C1", "E1"),
-              TaxonId = 1:4,
+              TaxonGroepCode = "1",
               Rank = "SPECIES",
               stringsAsFactors = FALSE
             )

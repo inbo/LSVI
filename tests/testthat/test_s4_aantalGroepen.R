@@ -25,9 +25,7 @@ describe("s4_aantalGroepen", {
           Soortengroep =
             data.frame(
               GbifUsageKey = c("A1", "B1", "C1", "E1"),
-              TaxongroepId = 1,
-              TaxonsubgroepId = c(rep(1, 3), 2),
-              TaxonId = 1:4,
+              TaxonGroepCode = c(rep("1", 3), "2"),
               Rank = "SPECIES",
               stringsAsFactors = FALSE
             ),
@@ -61,9 +59,7 @@ describe("s4_aantalGroepen", {
           Soortengroep =
             data.frame(
               GbifUsageKey = c("A1", "B1", "C1", "E1"),
-              TaxongroepId = 1,
-              TaxonsubgroepId = c(rep(1, 3), 2),
-              TaxonId = 1:4,
+              TaxonGroepCode = c(rep("1", 3), "2"),
               Rank = "SPECIES",
               stringsAsFactors = FALSE
             ),
@@ -97,9 +93,7 @@ describe("s4_aantalGroepen", {
           Soortengroep =
             data.frame(
               GbifUsageKey = c("A1", "B1", "C1", "E1"),
-              TaxongroepId = 1,
-              TaxonsubgroepId = c(rep(1, 3), 2),
-              TaxonId = 1:4,
+              TaxonGroepCode = c(rep("1", 3), "2"),
               Rank = "SPECIES",
               stringsAsFactors = FALSE
             ),
@@ -134,9 +128,7 @@ describe("s4_aantalGroepen", {
           Soortengroep =
             data.frame(
               GbifUsageKey = c("A1", "B1", "C1", "E1"),
-              TaxongroepId = 1,
-              TaxonsubgroepId = c(rep(1, 3), 2),
-              TaxonId = 1:4,
+              TaxonGroepCode = c(rep("1", 3), "2"),
               Rank = "SPECIES",
               stringsAsFactors = FALSE
             ),

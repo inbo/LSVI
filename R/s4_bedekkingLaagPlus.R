@@ -35,19 +35,19 @@ setMethod(
   definition = function(object) {
 
     Taxongroepen <- object@Soortengroep %>%
-      group_by(.data$TaxonsubgroepId) %>%
+      group_by(.data$TaxonGroepCode) %>%
       count() %>%
       arrange(.data$n)
     if (nrow(Taxongroepen) == 2) {
       objectKlein <- object
       objectKlein@Soortengroep <- objectKlein@Soortengroep %>%
-        filter(.data$TaxonsubgroepId == Taxongroepen$TaxonsubgroepId[1])
+        filter(.data$TaxonGroepCode == Taxongroepen$TaxonGroepCode[1])
       objectKlein@Studiegroep <- data.frame()
       WaardeKlein <- berekenWaarde(as(objectKlein, "bedekking"))
 
       objectLaag <- object
       objectLaag@Soortengroep <- objectLaag@Soortengroep %>%
-        filter(.data$TaxonsubgroepId == Taxongroepen$TaxonsubgroepId[2])
+        filter(.data$TaxonGroepCode == Taxongroepen$TaxonGroepCode[2])
       WaardeLaag <- berekenWaarde(as(objectLaag, "bedekkingLaag"))
       BedekkingMin <-
         (1.0 - prod((1.0 - c(WaardeKlein[1], WaardeLaag[1])), na.rm = TRUE))

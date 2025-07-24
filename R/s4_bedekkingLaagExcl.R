@@ -43,12 +43,12 @@ setMethod(
 
     if (length(object@Kenmerken > 0)) {
       Taxongroepen <- object@Soortengroep %>%
-        group_by(.data$TaxonsubgroepId) %>%
+        group_by(.data$TaxonGroepCode) %>%
         count() %>%
         arrange(.data$n)
       if (nrow(Taxongroepen) == 2) {
         Schrappen <- object@Soortengroep %>%
-          filter(.data$TaxonsubgroepId == Taxongroepen$TaxonsubgroepId[1])
+          filter(.data$TaxonGroepCode == Taxongroepen$TaxonGroepCode[1])
         for (Niveau in unique(Schrappen$Rank)) {
           Kolomnaam <- paste0(toTitleCase(tolower(Niveau)), "Key")
           object@Kenmerken <- object@Kenmerken %>%

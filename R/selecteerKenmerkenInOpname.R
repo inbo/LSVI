@@ -89,7 +89,7 @@ selecteerKenmerkenInOpname <-
       }
 
       Resultaat <- Resultaat %>%
-        group_by(.data$TaxonId, .data$Eenheid) %>%
+        group_by(.data$GbifKey, .data$Eenheid) %>%
         summarise(
           WaardeMin = 1.0 - prod(1.0 - .data$WaardeMin, na.rm = FALSE),
           WaardeMax = 1.0 - prod(1.0 - .data$WaardeMax, na.rm = FALSE),

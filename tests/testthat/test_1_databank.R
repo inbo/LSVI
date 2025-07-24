@@ -548,13 +548,15 @@ describe("test databank", {
       dbGetQuery(
         ConnectieLSVIhabitats,
         sprintf(
-          "SELECT TaxongroepId, StudiegroepId FROM Voorwaarde
-          WHERE AnalyseVariabeleId in ('%s')",
+          "SELECT vwtg.TaxonGroepCode, vw.StudiegroepId
+          FROM Voorwaarde vw
+            LEFT JOIN VoorwaardeTaxonGroep vwtg ON vw.Id = vwtg.VoorwaardeId
+          WHERE vw.AnalyseVariabeleId in ('%s')",
           paste(av$Id, collapse = "','")
         )
       )
     expect_true(
-      all(!is.na(Refwaarden$TaxongroepId) | !is.na(Refwaarden$StudiegroepId))
+      all(!is.na(Refwaarden$TaxonGroepCode) | !is.na(Refwaarden$StudiegroepId))
     )
     dbDisconnect(ConnectieLSVIhabitats)
   })
@@ -578,13 +580,15 @@ describe("test databank", {
       dbGetQuery(
         ConnectieLSVIhabitats,
         sprintf(
-          "SELECT TaxongroepId, StudiegroepId FROM Voorwaarde
-          WHERE AnalyseVariabeleId in ('%s')",
+          "SELECT vwtg.TaxonGroepCode, vw.StudiegroepId
+          FROM Voorwaarde vw
+            LEFT JOIN VoorwaardeTaxonGroep vwtg ON vw.Id = vwtg.VoorwaardeId
+          WHERE vw.AnalyseVariabeleId in ('%s')",
           paste(av$Id, collapse = "','")
         )
       )
     expect_true(
-      all(!is.na(Refwaarden$TaxongroepId) & !is.na(Refwaarden$StudiegroepId))
+      all(!is.na(Refwaarden$TaxonGroepCode) & !is.na(Refwaarden$StudiegroepId))
     )
     dbDisconnect(ConnectieLSVIhabitats)
   })
@@ -595,17 +599,16 @@ describe("test databank", {
     tg <-
       dbGetQuery(
         ConnectieLSVIhabitats,
-        "SELECT vw.TaxongroepId, tgtg.TaxongroepChildId
+        "SELECT vwtg.VoorwaardeId, vwtg.TaxonGroepCode
         FROM Voorwaarde vw
           INNER JOIN AnalyseVariabele av ON vw.AnalyseVariabeleId = av.Id
           INNER JOIN TypeVariabele tv ON av.TypeVariabeleId = tv.Id
-          LEFT JOIN TaxongroepTaxongroep tgtg
-            ON vw.TaxongroepId = tgtg.TaxongroepParentId
+          LEFT JOIN VoorwaardeTaxonGroep vwtg ON vw.Id = vwtg.VoorwaardeId
         WHERE av.VariabeleNaam in ('bedekkingLaagExcl', 'bedekkingLaagPlus')"
       )
     skip_if_not(nrow(tg) > 0, "AV komen niet voor")
     Aantalgroepen <- tg %>%
-      count(TaxongroepId)
+      count(VoorwaardeId)
     expect_true(
       all(Aantalgroepen$n == 2)
     )
@@ -786,32 +789,22 @@ describe("test databank", {
     dbDisconnect(ConnectieLSVIhabitats)
   })
 
-  it("Elke taxonnaam heeft 1 unieke nbn-key", {
+  it("Elke taxonnaam heeft 1 unieke GbifUsageKey (in ObservatieTaxon)", {
     ConnectieLSVIhabitats <-
       connecteerMetLSVIdb()
     Taxons <-
       dbGetQuery(
         ConnectieLSVIhabitats,
-        "SELECT t.NbnTaxonVersionKey AS tkey,
-          t.FloraNaamWetenschappelijk AS tflorawet,
-          t.FloraNaamNederlands AS tfloranl,
-          t.NbnNaam AS tnbn, t.NbnNaamVolledig AS tnbnvol,
-          ts.NbnTaxonVersionKey AS tskey,
-          ts.FloraNaamWetenschappelijk AS tsflorawet,
-          ts.FloraNaamNederlands AS tsfloranl,
-          ts.NbnNaam AS tsnbn, ts.NbnNaamVolledig AS tsnbnvol,
-          ts.CanonicalNameWithMarker AS canname
-        FROM Taxon t LEFT JOIN TaxonSynoniem ts
-        ON t.Id = ts.TaxonId"
+        "SELECT TaxonName, GbifUsageKey, NaamNederlands, NbnTaxonVersionKey
+        FROM ObservatieTaxon"
       )
     dbDisconnect(ConnectieLSVIhabitats)
     expect_equal(
       nrow(
         Taxons %>%
-          select(tkey, tflorawet) %>%
-          distinct() %>%
-          group_by(tflorawet) %>%
-          count(tkey) %>%
+          distinct(TaxonName, GbifUsageKey) %>%
+          group_by(TaxonName) %>%
+          count(GbifUsageKey) %>%
           filter(n > 1)
       ),
       0
@@ -819,10 +812,9 @@ describe("test databank", {
     expect_equal(
       nrow(
         Taxons %>%
-          select(tkey, tfloranl) %>%
-          distinct() %>%
-          group_by(tfloranl) %>%
-          count(tkey) %>%
+          distinct(NaamNederlands, GbifUsageKey) %>%
+          group_by(NaamNederlands) %>%
+          count(GbifUsageKey) %>%
           filter(n > 1)
       ),
       0
@@ -830,133 +822,28 @@ describe("test databank", {
     expect_equal(
       nrow(
         Taxons %>%
-          select(tkey, tnbn) %>%
-          distinct() %>%
-          group_by(tnbn) %>%
-          count(tkey) %>%
+          distinct(NbnTaxonVersionKey, GbifUsageKey) %>%
+          group_by(NbnTaxonVersionKey) %>%
+          count(GbifUsageKey) %>%
           filter(n > 1)
       ),
       0
     )
-    expect_equal(
-      nrow(
-        Taxons %>%
-          select(tkey, tnbnvol) %>%
-          distinct() %>%
-          group_by(tnbnvol) %>%
-          count(tkey) %>%
-          filter(n > 1)
-      ),
-      0
+  })
+
+  it("Elke GbifUsageKey van ObservatieTaxon staat ook in Taxon", {
+    ConnectieLSVIhabitats <-
+      connecteerMetLSVIdb()
+    ConnectedTaxons <- dbGetQuery(
+      ConnectieLSVIhabitats,
+      "SELECT ot.TaxonName, ot.GbifUsageKey
+      FROM ObservatieTaxon ot
+      LEFT JOIN Taxon t ON ot.GbifUsageKey = t.GbifUsageKey
+      WHERE t.Rank IS NULL"
     )
+    dbDisconnect(ConnectieLSVIhabitats)
     expect_equal(
-      nrow(
-        Taxons %>%
-          select(tkey, tsflorawet) %>%
-          distinct() %>%
-          group_by(tsflorawet) %>%
-          count(tkey) %>%
-          filter(n > 1)
-      ),
-      0
-    )
-    expect_equal(
-      nrow(
-        Taxons %>%
-          select(tkey, tsfloranl) %>%
-          distinct() %>%
-          group_by(tsfloranl) %>%
-          count(tkey) %>%
-          filter(n > 1)
-      ),
-      0
-    )
-    expect_equal(
-      nrow(
-        Taxons %>%
-          select(tkey, tsnbn) %>%
-          distinct() %>%
-          group_by(tsnbn) %>%
-          count(tkey) %>%
-          filter(n > 1)
-      ),
-      0
-    )
-    expect_equal(
-      nrow(
-        Taxons %>%
-          select(tkey, tsnbnvol) %>%
-          distinct() %>%
-          group_by(tsnbnvol) %>%
-          count(tkey) %>%
-          filter(n > 1)
-      ),
-      0
-    )
-    expect_equal(
-      nrow(
-        Taxons %>%
-          select(tskey, tsflorawet) %>%
-          distinct() %>%
-          group_by(tsflorawet) %>%
-          count(tskey) %>%
-          filter(n > 1)
-      ),
-      0
-    )
-    expect_equal(
-      nrow(
-        Taxons %>%
-          select(tskey, tsfloranl) %>%
-          distinct() %>%
-          group_by(tsfloranl) %>%
-          count(tskey) %>%
-          filter(n > 1)
-      ),
-      0
-    )
-    expect_equal(
-      nrow(
-        Taxons %>%
-          select(tskey, tsnbn) %>%
-          distinct() %>%
-          group_by(tsnbn) %>%
-          count(tskey) %>%
-          filter(n > 1)
-      ),
-      0
-    )
-    expect_equal(
-      nrow(
-        Taxons %>%
-          select(tskey, tsnbnvol) %>%
-          distinct() %>%
-          group_by(tsnbnvol) %>%
-          count(tskey) %>%
-          filter(n > 1)
-      ),
-      0
-    )
-    expect_equal(
-      nrow(
-        Taxons %>%
-          select(tkey, canname) %>%
-          distinct() %>%
-          group_by(canname) %>%
-          count(tkey) %>%
-          filter(n > 1)
-      ),
-      0
-    )
-    expect_equal(
-      nrow(
-        Taxons %>%
-          select(tskey, canname) %>%
-          distinct() %>%
-          group_by(canname) %>%
-          count(tskey) %>%
-          filter(n > 1)
-      ),
+      nrow(ConnectedTaxons),
       0
     )
   })
@@ -967,15 +854,10 @@ describe("test databank", {
     Taxons <-
       dbGetQuery(
         ConnectieLSVIhabitats,
-        "SELECT t.FloraNaamWetenschappelijk AS tflorawet,
-          t.FloraNaamNederlands AS tfloranl,
-          t.NbnNaam AS tnbn, t.NbnNaamVolledig AS tnbnvol,
-          ts.FloraNaamWetenschappelijk AS tsflorawet,
-          ts.FloraNaamNederlands AS tsfloranl,
-          ts.NbnNaam AS tsnbn, ts.NbnNaamVolledig AS tsnbnvol,
+        "SELECT ot.TaxonName, ot.NaamNederlands, ot.NbnTaxonVersionKey,
           t.GbifUsageKey, t.Rank
-        FROM Taxon t LEFT JOIN TaxonSynoniem ts
-        ON t.Id = ts.TaxonId"
+        FROM Taxon t LEFT JOIN ObservatieTaxon ot
+        ON t.GbifUsageKey = ot.GbifUsageKey"
       )
     dbDisconnect(ConnectieLSVIhabitats)
     expect_equal(
@@ -988,43 +870,39 @@ describe("test databank", {
     expect_equal(
       nrow(
         Taxons %>%
-          select(GbifUsageKey, tflorawet) %>%
-          distinct() %>%
-          group_by(tflorawet) %>%
-          count(GbifUsageKey) %>%
-          filter(n > 1)
+          distinct(TaxonName, GbifUsageKey, Rank) %>%
+          filter(!is.na(TaxonName)) %>%
+          group_by(TaxonName) %>%
+          filter(is.na(GbifUsageKey) | is.na(Rank))
       ),
       0
     )
     expect_equal(
       nrow(
         Taxons %>%
-          select(GbifUsageKey, tfloranl) %>%
-          distinct() %>%
-          group_by(tfloranl) %>%
-          count(GbifUsageKey) %>%
-          filter(n > 1)
+          distinct(NaamNederlands, GbifUsageKey, Rank) %>%
+          filter(!is.na(NaamNederlands)) %>%
+          group_by(NaamNederlands) %>%
+          filter(is.na(GbifUsageKey) | is.na(Rank))
       ),
       0
     )
     expect_equal(
       nrow(
         Taxons %>%
-          select(GbifUsageKey, tsflorawet) %>%
-          distinct() %>%
-          group_by(tsflorawet) %>%
-          count(GbifUsageKey) %>%
-          filter(n > 1)
+          distinct(NbnTaxonVersionKey, GbifUsageKey, Rank) %>%
+          filter(!is.na(NbnTaxonVersionKey)) %>%
+          group_by(NbnTaxonVersionKey) %>%
+          filter(is.na(GbifUsageKey) | is.na(Rank))
       ),
       0
     )
     expect_equal(
       nrow(
         Taxons %>%
-          select(GbifUsageKey, tsfloranl) %>%
-          distinct() %>%
-          group_by(tsfloranl) %>%
-          count(GbifUsageKey) %>%
+          distinct(GbifUsageKey, Rank) %>%
+          group_by(GbifUsageKey) %>%
+          count(Rank) %>%
           filter(n > 1)
       ),
       0
@@ -1039,44 +917,7 @@ describe("test databank", {
     expect_equal(
       nrow(
         Taxons %>%
-          select(Rank, tflorawet) %>%
-          distinct() %>%
-          group_by(tflorawet) %>%
-          count(Rank) %>%
-          filter(n > 1)
-      ),
-      0
-    )
-    expect_equal(
-      nrow(
-        Taxons %>%
-          select(Rank, tfloranl) %>%
-          distinct() %>%
-          group_by(tfloranl) %>%
-          count(Rank) %>%
-          filter(n > 1)
-      ),
-      0
-    )
-    expect_equal(
-      nrow(
-        Taxons %>%
-          select(Rank, tsflorawet) %>%
-          distinct() %>%
-          group_by(tsflorawet) %>%
-          count(Rank) %>%
-          filter(n > 1)
-      ),
-      0
-    )
-    expect_equal(
-      nrow(
-        Taxons %>%
-          select(Rank, tsfloranl) %>%
-          distinct() %>%
-          group_by(tsfloranl) %>%
-          count(Rank) %>%
-          filter(n > 1)
+          filter(is.na(GbifUsageKey))
       ),
       0
     )
@@ -1100,19 +941,24 @@ describe("test databank", {
       filter(
         !(Maximumwaarde == 3 * as.numeric(sub(",", ".", Referentiewaarde)))
       ) %>%
-      rowwise() %>%
+      group_by(VoorwaardeID) %>%
       mutate(
         AantalSoortenKenmerken = ifelse(
-          !is.na(TaxongroepId),
-          nrow(
-            geefSoortenlijstVoorIDs(
-              as.character(TaxongroepId),
-              ConnectieLSVIhabitats = connecteerMetLSVIdb()
+          !is.na(max(TaxonGroepCode)),
+          length(
+            unique(
+              (
+                geefSoortenlijstVoorIDs(
+                  as.character(TaxonGroepCode),
+                  ConnectieLSVIhabitats = connecteerMetLSVIdb()
+                )
+              )$GbifUsageKey
             )
           ),
           str_count(Studiewaarde, ",") + 1
         )
       ) %>%
+      ungroup() %>%
       filter(Maximumwaarde != AantalSoortenKenmerken)
     expect_equal(nrow(TMaantal), 0)
     TMmeting <-
@@ -1137,28 +983,33 @@ describe("test databank", {
   })
 })
 
-describe("test tabel Taxonlijst", {
-  Taxonlijst <-
-    suppressMessages(
-      read_csv2(
-        system.file("databank/TaxonTabel.csv", package = "LSVI"),
-        show_col_types = FALSE
-      )
-    )
-  it("TaxonNameExact is niet uniek", {
+describe("test tabellen Taxon en Observatietaxon", {
+  ConnectieLSVIhabitats <- connecteerMetLSVIdb()
+  Taxonlijst <- dbGetQuery(
+    ConnectieLSVIhabitats,
+    "SELECT t.GbifUsageKey, ot.TaxonName, ot.NaamNederlands,
+        ot.NbnTaxonVersionKey, t.Wetnaam, t.Rank,
+        t.Kingdom, t.Phylum, t.[Order], t.Family, t.Genus, t.Species,
+        t.KingdomKey, t.PhylumKey, t.ClassKey, t.OrderKey, t.FamilyKey,
+        t.GenusKey, t.SpeciesKey
+      FROM ObservatieTaxon ot
+        RIGHT JOIN Taxon t on ot.GbifUsageKey = t.GbifUsageKey"
+  )
+  dbDisconnect(ConnectieLSVIhabitats)
+  it("TaxonName is niet uniek", {  #check of opgelost met distinct, dan mag test weg
     expect_equal(
       Taxonlijst %>%
-        count(TaxonNameExact) %>%
+        count(TaxonName) %>%
         filter(n > 1) %>%
         nrow(),
       0
     )
   })
-  it("TaxonNameExact bevat dubieuze naamgeving", {
+  it("TaxonName bevat dubieuze naamgeving", {
     expect_equal(
       Taxonlijst %>%
         filter(
-          grepl("nom. rejec.", TaxonNameExact)
+          grepl("nom. rejec.", TaxonName)
         ) %>%
         nrow(),
       0
@@ -1166,7 +1017,7 @@ describe("test tabel Taxonlijst", {
     expect_equal(
       Taxonlijst %>%
         filter(
-          grepl(" cf. ", TaxonNameExact)
+          grepl(" cf. ", TaxonName)
         ) %>%
         nrow(),
       0
@@ -1174,7 +1025,7 @@ describe("test tabel Taxonlijst", {
     expect_equal(
       Taxonlijst %>%
         filter(
-          grepl(" auct. ", TaxonNameExact)
+          grepl(" auct. ", TaxonName)
         ) %>%
         nrow(),
       0
@@ -1182,7 +1033,7 @@ describe("test tabel Taxonlijst", {
     expect_equal(
       Taxonlijst %>%
         filter(
-          grepl(" non ", TaxonNameExact)
+          grepl(" non ", TaxonName)
         ) %>%
         nrow(),
       0
@@ -1190,7 +1041,7 @@ describe("test tabel Taxonlijst", {
     expect_equal(
       Taxonlijst %>%
         filter(
-          grepl("  ", TaxonNameExact)
+          grepl("  ", TaxonName)
         ) %>%
         nrow(),
       0
@@ -1198,7 +1049,7 @@ describe("test tabel Taxonlijst", {
     expect_equal(
       Taxonlijst %>%
         filter(
-          grepl(" \\+ ", TaxonNameExact) & .data$Rank != "SPECIESGROUP"
+          grepl(" \\+ ", TaxonName) & .data$Rank != "SPECIESGROUP"
         ) %>%
         nrow(),
       0
@@ -1206,7 +1057,7 @@ describe("test tabel Taxonlijst", {
     expect_equal(
       Taxonlijst %>%
         filter(
-          grepl(" gro[eu]p", TaxonNameExact) & Rank != "SPECIESGROUP"
+          grepl(" gro[eu]p", TaxonName) & Rank != "SPECIESGROUP"
         ) %>%
         nrow(),
       0
@@ -1214,8 +1065,11 @@ describe("test tabel Taxonlijst", {
     expect_equal(
       Taxonlijst %>%
         filter(
-          str_count(TaxonNameExact, " ") == 0,
-          !Rank %in% c("PHYLUM", "CLASS", "ORDER", "FAMILY")
+          str_count(TaxonName, " ") == 0,
+          !Rank %in% c("KINGDOM", "PHYLUM", "CLASS", "ORDER", "FAMILY"),
+          !(Rank == "GENUS" & Kingdom == "Fungi"),
+          #voorlopig toegevoegd omdat ook geen auteur in gbif
+          #TaxonNameExact != "Thlaspi"
         ) %>%
         nrow(),
       0
@@ -1223,8 +1077,8 @@ describe("test tabel Taxonlijst", {
     expect_equal(
       Taxonlijst %>%
         filter(
-          str_count(TaxonNameExact, " ") != 0,
-          str_count(TaxonNameExact, " ") != str_count(TaxonNameExact, " \\("),
+          str_count(TaxonName, " ") != 0,
+          str_count(TaxonName, " ") != str_count(TaxonName, " \\("),
           Rank %in% c("PHYLUM", "CLASS", "ORDER", "FAMILY")
         ) %>%
         nrow(),
@@ -1233,8 +1087,9 @@ describe("test tabel Taxonlijst", {
     expect_equal(
       Taxonlijst %>%
         filter(
-          str_count(TaxonNameExact, " ") == 1,
-          Rank != "GENUS"
+          str_count(TaxonName, " ") == 1,
+          Rank != "GENUS",
+          !(TaxonName == "Equisetum ×font-queri" & Rank == "SPECIES")
         ) %>%
         nrow(),
       0
@@ -1280,6 +1135,10 @@ describe("test tabel Taxonlijst", {
       x <- gsub("Lasch ", "Lasch", x)
       x <- gsub(" an Edees", " anEdees", x)
       x <- gsub("Wachter ", "Wachter", x)
+      x <- gsub("Sánchez Ocharan", "SánchezOcharan", x)
+      x <- gsub("de Lesd", "deLesd", x)
+      x <- gsub("Kuan Zhao", "KuanZhao", x)
+      x <- gsub("Zhua L", "ZhuaL", x)
       x <- gsub("\\) ", "", x)
       x <- gsub("( subg\\. )", "\\1 ", x)
       x <- gsub("( subsp\\. )", "\\1 ", x)
@@ -1350,16 +1209,16 @@ describe("test tabel Taxonlijst", {
       0
     )
   })
-  it("NLNameExact is niet uniek", {
+  it("NaamNederlands is niet uniek", {  #Nog checken in code, maar mag weg als distinct gebruikt is met GbifUsageKey!
     expect_equal(
       Taxonlijst %>%
-        count(NLNameExact) %>%
-        filter(!is.na(NLNameExact), n > 1) %>%
+        count(NaamNederlands) %>%
+        filter(!is.na(NaamNederlands), n > 1) %>%
         nrow(),
       0
     )
   })
-  it("NbnTaxonVersionKey is niet uniek", {
+  it("NbnTaxonVersionKey is niet uniek", {  #leidt naar verschillende GbifUsageKeys, waarom bovenaan geen probleem?
     expect_equal(
       Taxonlijst %>%
         count(NbnTaxonVersionKey) %>%
@@ -1390,7 +1249,7 @@ describe("test tabel Taxonlijst", {
     expect_equal(
       Taxonlijst %>%
         filter(
-          grepl("subsp\\.", TaxonNameExact),
+          grepl("subsp\\.", TaxonName),
           Rank != "SUBSPECIES"
         ) %>%
         nrow(),
@@ -1398,13 +1257,13 @@ describe("test tabel Taxonlijst", {
     )
     expect_equal(
       Taxonlijst %>%
-        filter(grepl("var\\.", TaxonNameExact), Rank != "VARIETY") %>%
+        filter(grepl("var\\.", TaxonName), Rank != "VARIETY") %>%
         nrow(),
       0
     )
     expect_equal(
       Taxonlijst %>%
-        filter(grepl(" f\\. ", TaxonNameExact), Rank != "FORM") %>%
+        filter(grepl(" f\\. ", TaxonName), Rank != "FORM") %>%
         nrow(),
       0
     )
@@ -1422,7 +1281,8 @@ describe("test tabel Taxonlijst", {
       Taxonlijst %>%
         filter(
           !Rank %in%
-            c("PHYLUM", "CLASS", "ORDER", "FAMILY", "GENUS", "SUBGENUS"),
+            c("KINGDOM", "PHYLUM", "CLASS", "ORDER", "FAMILY", "GENUS",
+              "SUBGENUS"),
           is.na(Species)
         ) %>%
         nrow(),
@@ -1440,7 +1300,7 @@ describe("test tabel Taxonlijst", {
     expect_equal(
       Taxonlijst %>%
         filter(
-          !Rank %in% c("PHYLUM", "CLASS", "ORDER", "FAMILY"),
+          !Rank %in% c("KINGDOM", "PHYLUM", "CLASS", "ORDER", "FAMILY"),
           is.na(Genus)
         ) %>%
         nrow(),
@@ -1483,25 +1343,25 @@ describe("test tabel Taxonlijst", {
       0
     )
   })
-  it("Speciesnaam is niet overeenkomstig in Gbif en TaxonNameExact", {
+  it("Speciesnaam is niet overeenkomstig tussen WetNaam en Species (in Taxon)", {
     expect_equal(
       Taxonlijst %>%
         filter(
           Rank %in% c("SPECIES", "SUBSPECIES", "VARIETY", "FORM"),
-          grepl("^([^ ]+ [^ ]+)( .*)?", Species) !=
-            grepl("^([^ ]+ [^ ]+)( .*)?", TaxonNameExact)
+          gsub("^([^ ]+ [^ ]+)( .*)?", "\\1", Species) !=
+            gsub("^([^ ]+ [^ ]+)( .*)?", "\\1", WetNaam)
         ) %>%
         nrow(),
       0
     )
   })
-  it("Genusnaam is niet overeenkomstig in Gbif en TaxonNameExact", {
+  it("Genusnaam is niet overeenkomstig tussen Genus en Species (in Taxon)", {
     expect_equal(
       Taxonlijst %>%
         filter(
           Rank %in% c("GENUS", "SPECIES", "SUBSPECIES", "VARIETY", "FORM"),
-          grepl("^([^ ]+)( .*)?", Genus) !=
-            grepl("^([^ ]+)( .*)?", TaxonNameExact)
+          gsub("^([^ ]+)( .*)?", "\\1", Genus) !=
+            gsub("^([^ ]+)( .*)?", "\\1", Species)
         ) %>%
         nrow(),
       0
@@ -1511,8 +1371,8 @@ describe("test tabel Taxonlijst", {
     expect_equal(
       Taxonlijst %>%
         select(
-          -"TaxonNameExact", -"ScientificNameExact", -"GbifConfidence",
-          -"GbifMatchType", -"NLNameExact", -"NbnTaxonVersionKey"
+          -"TaxonName", -"NaamNederlands",
+          -"NbnTaxonVersionKey"
         ) %>%
         distinct() %>%
         count(GbifUsageKey) %>%
@@ -1546,14 +1406,13 @@ describe("test tabel Taxonlijst", {
     )
     expect_equal(
       Taxonlijst %>%
-        mutate(NLNameExact = tolower(NLNameExact)) %>%
+        mutate(NaamNederlands = tolower(NaamNederlands)) %>%
         select(
-          -"TaxonNameExact", -"ScientificNameExact", -"GbifConfidence",
-          -"GbifMatchType", -"NbnTaxonVersionKey"
+          -"TaxonName", -"NbnTaxonVersionKey"
         ) %>%
         distinct() %>%
-        count(NLNameExact) %>%
-        filter(n > 1, !is.na(NLNameExact)) %>%
+        count(NaamNederlands) %>%
+        filter(n > 1, !is.na(NaamNederlands)) %>%
         nrow(),
       0
     )

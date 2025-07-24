@@ -2,7 +2,7 @@
 % Please edit documentation in R/geefSoortenlijstVoorIDs.R
 \name{geefSoortenlijstVoorIDs}
 \alias{geefSoortenlijstVoorIDs}
-\title{Genereert soorten(groep)lijst(en) LSVI op basis van TaxongroepID}
+\title{Genereert soorten(groep)lijst(en) LSVI op basis van TaxonGroepCode}
 \usage{
 geefSoortenlijstVoorIDs(
   Taxongroeplijst,
@@ -11,9 +11,10 @@ geefSoortenlijstVoorIDs(
 )
 }
 \arguments{
-\item{Taxongroeplijst}{string waarin de \code{TaxongroepId}'s na elkaar
+\item{Taxongroeplijst}{string waarin de \code{TaxonGroepCode}'s (tussen enkele
+quotes) na elkaar
 weergegeven worden, gescheiden door een komma.
-Eventueel mag dit ook een vector zijn van \code{TaxongroepId}'s.}
+Eventueel mag dit ook een vector zijn van \code{TaxonGroepCode}'s.}
 
 \item{Taxonlijsttype}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 \code{Taxonlijsttype = "alle"} wordt niet meer ondersteund; deze functie zal
@@ -25,7 +26,7 @@ lijsten meer en is die functionaliteit ook overbodig geworden)}
 de LSVI van habitats, in te stellen d.m.v. functie \code{connecteerMetLSVIdb()}.}
 }
 \value{
-Deze functie geeft een tabel met velden \code{TaxongroepId}, evt.
+Deze functie geeft een tabel met velden \code{TaxonGroepCode}, evt.
 \code{Beschrijving}, \code{WetNaam}, \code{WetNaamKort} en \code{NedNaam} (waarbij \code{Beschrijving}
 een omschrijving is voor een groep van taxons binnen eenzelfde indicator).
 \code{WetNaam} is de volledige Latijnse naam inclusief auteursnaam, \code{WetNaamKort}
@@ -37,7 +38,8 @@ Nederlandse namen) uit de databank met de criteria en indicatoren voor de
 bepaling van de Lokale Staat van Instandhouding.  Het is in feite een
 hulpfunctie die voor verschillende andere functies gebruikt wordt en die de
 complexe zoekfunctie in de tabellen met soorten uitvoert op basis van een
-opgegeven \code{TaxongroepId} (en in die zin iets minder gebruiksvriendelijk is).
+opgegeven \code{TaxonGroepCode} (en in die zin iets minder gebruiksvriendelijk
+is).
 Voor een selectie van soortenlijsten op basis van specifieke parameters is
 de functie \code{geefSoortenlijst()} een beter alternatief.
 
@@ -52,7 +54,12 @@ een lijst van alle taxa zoals ze in de LSVI-habitatfiche vermeld zijn
 # uitgetest worden.
 \dontrun{
 maakConnectiePool()
-geefSoortenlijstVoorIDs("434,88,565")
+geefSoortenlijstVoorIDs(
+  "'CsLocal-0x1C4FE483F305B196626452A19DB5DCCCA4DB711D8C66D5058EC1',
+  'CsLocal-0x4C127745A720F68BBF488A79F63323CC8FD9A273FD968F473869',
+  'CsLocal-0x84DDA74D1AB0D4DAE0B83E47A049C7DEFCA4A24D38CAF4B73884',
+  'Flora-0xCF33C29F19C96C449E694A1692812CF7C56616BF996B5A80DEAE'"
+)
 library(pool)
 poolClose(ConnectiePool)
 }

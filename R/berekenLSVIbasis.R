@@ -46,10 +46,9 @@
 #' als de Gbif-tool voor de koppeling van minstens één soort gebruikt is
 #' (dit is aangegeven in veld `Koppelmethode`, en deze records staan bovenaan).
 #' Fouten bij gebruik van de Gbif-tool kunnen best opgelost worden door de taxa
-#' bij invoer te vervangen door de schrijfwijze in de taxonlijst in het package
-#' (beschikbaar via
-#' `readr::read_csv2(system.file("databank/TaxonTabel.csv", package = "LSVI"))`
-#' of op [Zenodo](https://zenodo.org/records/10561497)).
+#' bij invoer te vervangen door de schrijfwijze in de databank in het package
+#' (beschikbaar
+#' op [Zenodo](https://zenodo.org/records/10561497)).
 #' Fouten in deze taxonlijst mogen gemeld worden via
 #' [een issue](https://github.com/inbo/LSVI/issues) (of aan de beheerder van
 #' het package).
@@ -1008,7 +1007,7 @@ berekenLSVIbasis <- #nolint: object_name_linter
       Soortenlijst <- Data_soortenKenmerken %>%
         filter(.data$TypeKenmerk == "soort_gbif") %>%
         select(
-          "Kenmerk", "GbifUsageKey", "Rank", "GbifAcceptedUsageKey",
+          "Kenmerk", "GbifUsageKey", "WetNaam", "Rank",
           "Koppelmethode", "GbifMatchType", "GbifConfidence",
           "Kingdom", "Phylum", "Order", "Family", "Genus", "Species",
           "KingdomKey", "PhylumKey", "OrderKey", "FamilyKey", "GenusKey",

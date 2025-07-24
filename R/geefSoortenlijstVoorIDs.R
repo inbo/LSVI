@@ -1,11 +1,12 @@
-#' @title Genereert soorten(groep)lijst(en) LSVI op basis van TaxongroepID
+#' @title Genereert soorten(groep)lijst(en) LSVI op basis van TaxonGroepCode
 #'
 #' @description Deze functie genereert soortenlijsten (met wetenschappelijke en
 #' Nederlandse namen) uit de databank met de criteria en indicatoren voor de
 #' bepaling van de Lokale Staat van Instandhouding.  Het is in feite een
 #' hulpfunctie die voor verschillende andere functies gebruikt wordt en die de
 #' complexe zoekfunctie in de tabellen met soorten uitvoert op basis van een
-#' opgegeven `TaxongroepId` (en in die zin iets minder gebruiksvriendelijk is).
+#' opgegeven `TaxonGroepCode` (en in die zin iets minder gebruiksvriendelijk
+#' is).
 #' Voor een selectie van soortenlijsten op basis van specifieke parameters is
 #' de functie `geefSoortenlijst()` een beter alternatief.
 #'
@@ -15,11 +16,12 @@
 #'
 #' @inheritParams selecteerIndicatoren
 #' @inheritParams geefSoortenlijst
-#' @param Taxongroeplijst string waarin de `TaxongroepId`'s na elkaar
+#' @param Taxongroeplijst string waarin de `TaxonGroepCode`'s (tussen enkele
+#' quotes) na elkaar
 #' weergegeven worden, gescheiden door een komma.
-#' Eventueel mag dit ook een vector zijn van `TaxongroepId`'s.
+#' Eventueel mag dit ook een vector zijn van `TaxonGroepCode`'s.
 #'
-#' @return Deze functie geeft een tabel met velden `TaxongroepId`, evt.
+#' @return Deze functie geeft een tabel met velden `TaxonGroepCode`, evt.
 #' `Beschrijving`, `WetNaam`, `WetNaamKort` en `NedNaam` (waarbij `Beschrijving`
 #' een omschrijving is voor een groep van taxons binnen eenzelfde indicator).
 #' `WetNaam` is de volledige Latijnse naam inclusief auteursnaam, `WetNaamKort`
@@ -32,7 +34,12 @@
 #' # uitgetest worden.
 #' \dontrun{
 #' maakConnectiePool()
-#' geefSoortenlijstVoorIDs("434,88,565")
+#' geefSoortenlijstVoorIDs(
+#'   "'CsLocal-0x1C4FE483F305B196626452A19DB5DCCCA4DB711D8C66D5058EC1',
+#'   'CsLocal-0x4C127745A720F68BBF488A79F63323CC8FD9A273FD968F473869',
+#'   'CsLocal-0x84DDA74D1AB0D4DAE0B83E47A049C7DEFCA4A24D38CAF4B73884',
+#'   'Flora-0xCF33C29F19C96C449E694A1692812CF7C56616BF996B5A80DEAE'"
+#' )
 #' library(pool)
 #' poolClose(ConnectiePool)
 #' }
@@ -76,70 +83,31 @@ geefSoortenlijstVoorIDs <-
     )
     assert_that(is.character(Taxongroeplijst))
     if (!is.string(Taxongroeplijst)) {
-      Taxongroeplijst <- paste(Taxongroeplijst, collapse = ",")
+      Taxongroeplijst <- paste(Taxongroeplijst, collapse = "','")
+    }
+    if (!grepl("^'.*'$", Taxongroeplijst)) {
+      Taxongroeplijst <- paste0("'", Taxongroeplijst, "'")
     }
     assert_that(is.string(Taxongroeplijst))
     assert_that(noNA(Taxongroeplijst))
-    if (!grepl("^([[:digit:]]+,)*[[:digit:]]+$", Taxongroeplijst)) {
-      stop("Taxongroeplijst bestaat niet uit een reeks getallen gescheiden door een komma") #nolint: line_length_linter
-    }
 
-    QueryGroepen <-
-      sprintf(
-        "WITH Groepen
-        AS
-        (
-          SELECT Tg.Id AS TaxongroepId,
-            Tg.Id AS TaxonsubgroepId
-          FROM Taxongroep Tg
-          WHERE Tg.Id in (%s)
-        UNION ALL
-          SELECT Groepen.TaxongroepId,
-            Tg2.Id AS TaxonsubgroepId
-          FROM Groepen
-            INNER JOIN TaxongroepTaxongroep AS TgTg
-            ON Groepen.TaxonsubgroepId = TgTg.TaxongroepParentId
-          INNER JOIN Taxongroep Tg2
-          ON TgTg.TaxongroepChildId = Tg2.Id
-          WHERE TgTg.TaxongroepChildId > 0
-        )",
-        Taxongroeplijst
-      )
-
-
-    QueryLSVIfiche <-
-      "
-      SELECT Groepen.TaxongroepId,
-        Groepen.TaxonsubgroepId,
-        cast(Tg.Omschrijving AS nvarchar(90)) AS Omschrijving,
-        Taxon.Id AS TaxonId,
-        Taxon.NbnTaxonVersionKey,
-        Taxon.FloraNaamWetenschappelijk AS WetNaam,
-        Taxon.FloraNaamNederlands As NedNaam,
-        Taxon.GbifUsageKey,
-        Taxon.GbifAcceptedUsageKey,
-        Taxon.Rank,
-        TaxonType.Naam AS TaxonType,
-        ts.CanonicalNameWithMarker AS WetNaamKort
-      FROM Groepen
-        INNER JOIN Taxongroep Tg
-        ON Groepen.TaxonsubgroepId = Tg.Id
-        INNER JOIN TaxongroepTaxon TgT
-        ON Groepen.TaxonsubgroepId = TgT.TaxongroepId
-        INNER JOIN Taxon
-        ON TgT.TaxonId = Taxon.Id
-        INNER JOIN TaxonType
-        ON Taxon.TaxonTypeId = TaxonType.Id
-        INNER JOIN TaxonSynoniem ts
-        ON Taxon.Id = ts.TaxonId
-      WHERE Taxon.NbnTaxonVersionKey = ts.NbnTaxonVersionKey;"
-
-
+    Query <-
+      "SELECT tgt.TaxonGroepCode,
+        t.WetNaam,
+        ot.NaamNederlands AS NedNaam,
+        t.canonicalName AS WetNaamKort,
+        t.GbifUsageKey, t.Rank
+      FROM TaxonGroepTaxon tgt
+        LEFT JOIN Taxon t ON tgt.TaxonKey = t.GbifUsageKey
+        LEFT JOIN ObservatieTaxon ot on t.GbifUsageKey = ot.GbifUsageKey
+      WHERE tgt.TaxonGroepCode in (%s) AND ot.NaamNederlands IS NOT NULL
+      GROUP BY tgt.TaxonGroepCode, t.WetNaam,
+        ot.NaamNederlands, t.canonicalName, t.GbifUsageKey, t.Rank"
 
     Soortenlijst <-
       dbGetQuery(
         ConnectieLSVIhabitats,
-        paste(QueryGroepen, QueryLSVIfiche, sep = "")
+        sprintf(Query, Taxongroeplijst)
       ) %>%
       distinct()
 

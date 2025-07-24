@@ -33,20 +33,22 @@ analyseVariabele_c <- #nolint: object_name_linter
     queryVoorwaarde <-
       sprintf(
         "SELECT AV.VariabeleNaam AS TypeAnalyseVariabele,
-          Voorwaarde.TaxongroepId,
+          vwtg.TaxonGroepCode,
           Voorwaarde.StudiegroepId,
           SAV.VariabeleNaam AS SubAnalyseVariabele,
           SAV.Eenheid,
           TypeVariabele.Naam AS TypeSubVariabele,
           Voorwaarde.SubReferentiewaarde, Voorwaarde.SubOperator,
           Lijst.Naam AS SubInvoermasker
-          FROM ((Voorwaarde LEFT JOIN
+          FROM (((Voorwaarde LEFT JOIN
             (AnalyseVariabele SAV LEFT JOIN TypeVariabele
                 ON SAV.TypeVariabeleId = TypeVariabele.Id)
               ON Voorwaarde.SubAnalyseVariabeleId = SAV.Id)
             LEFT JOIN AnalyseVariabele AV
               ON Voorwaarde.AnalyseVariabeleId = AV.Id)
-          LEFT JOIN Lijst ON Voorwaarde.SubInvoermaskerId = Lijst.Id
+          LEFT JOIN Lijst ON Voorwaarde.SubInvoermaskerId = Lijst.Id)
+          LEFT JOIN VoorwaardeTaxonGroep vwtg
+            ON Voorwaarde.Id = vwtg.VoorwaardeId
           WHERE Voorwaarde.Id = '%s'",
         VoorwaardeID
       )
@@ -65,7 +67,7 @@ analyseVariabele_c <- #nolint: object_name_linter
 
     AnalyseObject <-
       new(
-        Class = VoorwaardeInfo$TypeAnalyseVariabele,
+        Class = unique(VoorwaardeInfo$TypeAnalyseVariabele),
         VoorwaardeID = VoorwaardeID
       )
 
@@ -73,17 +75,17 @@ analyseVariabele_c <- #nolint: object_name_linter
       setKenmerken(AnalyseObject) <- Kenmerken
     }
 
-    if (!is.na(VoorwaardeInfo$TaxongroepId)) {
+    if (all(!is.na(VoorwaardeInfo$TaxonGroepCode))) {
       Soortengroep <-
         geefSoortenlijstVoorIDs(
-          Taxongroeplijst = as.character(VoorwaardeInfo$TaxongroepId),
+          Taxongroeplijst = paste(
+            VoorwaardeInfo$TaxonGroepCode,
+            collapse = "','"
+          ),
           ConnectieLSVIhabitats = ConnectieLSVIhabitats
         ) %>%
         select(
-          "TaxongroepId",
-          "TaxonsubgroepId",
-          "TaxonId",
-          "TaxonType",
+          "TaxonGroepCode",
           "GbifUsageKey",
           "Rank"
         ) %>%
@@ -91,7 +93,7 @@ analyseVariabele_c <- #nolint: object_name_linter
       setSoortengroep(AnalyseObject) <- Soortengroep
     }
 
-    if (!is.na(VoorwaardeInfo$StudiegroepId)) {
+    if (!is.na(unique(VoorwaardeInfo$StudiegroepId))) {
       queryStudiegroep <-
         sprintf(
           "SELECT StudieItem.Waarde, StudieItem.Volgnummer,
@@ -99,7 +101,7 @@ analyseVariabele_c <- #nolint: object_name_linter
           FROM Studiegroep INNER JOIN StudieItem
           ON Studiegroep.Id = StudieItem.StudiegroepId
           WHERE Studiegroep.Id  = '%s'",
-          VoorwaardeInfo$StudiegroepId
+          unique(VoorwaardeInfo$StudiegroepId)
         )
       Studiegroep <-
         dbGetQuery(
@@ -109,17 +111,17 @@ analyseVariabele_c <- #nolint: object_name_linter
       setStudiegroep(AnalyseObject) <- Studiegroep
     }
 
-    if (!is.na(VoorwaardeInfo$SubAnalyseVariabele)) {
+    if (!is.na(unique(VoorwaardeInfo$SubAnalyseVariabele))) {
       setSubAnalyseVariabele(AnalyseObject) <-
-        VoorwaardeInfo$SubAnalyseVariabele
+        unique(VoorwaardeInfo$SubAnalyseVariabele)
       SAV <-
         vertaalInvoerInterval(
           data.frame(
             Rijnr = 1,
-            Type = VoorwaardeInfo$TypeSubVariabele,
-            Waarde = VoorwaardeInfo$SubReferentiewaarde,
-            Eenheid = VoorwaardeInfo$Eenheid,
-            Invoertype = VoorwaardeInfo$SubInvoermasker,
+            Type = unique(VoorwaardeInfo$TypeSubVariabele),
+            Waarde = unique(VoorwaardeInfo$SubReferentiewaarde),
+            Eenheid = unique(VoorwaardeInfo$Eenheid),
+            Invoertype = unique(VoorwaardeInfo$SubInvoermasker),
             stringsAsFactors = FALSE
           ),
           LIJST,
@@ -127,7 +129,7 @@ analyseVariabele_c <- #nolint: object_name_linter
         )
       setSubRefMin(AnalyseObject) <- SAV$Min
       setSubRefMax(AnalyseObject) <- SAV$Max
-      setSubOperator(AnalyseObject) <- VoorwaardeInfo$SubOperator
+      setSubOperator(AnalyseObject) <- unique(VoorwaardeInfo$SubOperator)
     }
 
     if (nrow(LIJST) > 0) {
