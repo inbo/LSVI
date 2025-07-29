@@ -123,6 +123,11 @@ detailgegevens inclusief meetwaarden.
 Een vijfde tabel \code{Soortenlijst} bevat de taxonomische info die gebruikt is
 om de opgegeven taxa te koppelen aan de taxa die deel uitmaken van de
 beoordeling.
+Hierin geeft \code{Kenmerk} de ingevoerde naam of key, \code{GbifUsageKey} de Gbif-key
+waaraan die naam of key gekoppeld is, \code{WetNaam} de hiermee overeenkomende
+wetenschappelijke naam (die hier als accepted taxon beschouwd wordt) en
+\code{Rank} de taxonomische rank van deze naam, en de andere kolommen geven de
+hogere taxonomische niveaus en hun gbif-key.
 }
 \description{
 Deze functie bepaalt de Lokale Staat van Instandhouding en

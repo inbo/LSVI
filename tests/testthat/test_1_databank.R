@@ -529,7 +529,7 @@ describe("test databank", {
     dbDisconnect(ConnectieLSVIhabitats)
   })
 
-  it("AnalyseVariabelen hebben telkens een SoortengroepId of StudiegroepId", {
+  it("AnalyseVariabelen hebben telkens een TaxonGroepCode of StudiegroepId", {
     ConnectieLSVIhabitats <-
       connecteerMetLSVIdb()
     av <-
@@ -561,7 +561,7 @@ describe("test databank", {
     dbDisconnect(ConnectieLSVIhabitats)
   })
 
-  it("AnalyseVariabelen hebben telkens een SoortengroepId en StudiegroepId", {
+  it("AnalyseVariabelen hebben telkens een TaxonGroepCode en StudiegroepId", {
     ConnectieLSVIhabitats <-
       connecteerMetLSVIdb()
     av <-

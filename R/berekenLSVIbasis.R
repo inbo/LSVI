@@ -147,6 +147,11 @@
 #' Een vijfde tabel `Soortenlijst` bevat de taxonomische info die gebruikt is
 #' om de opgegeven taxa te koppelen aan de taxa die deel uitmaken van de
 #' beoordeling.
+#' Hierin geeft `Kenmerk` de ingevoerde naam of key, `GbifUsageKey` de Gbif-key
+#' waaraan die naam of key gekoppeld is, `WetNaam` de hiermee overeenkomende
+#' wetenschappelijke naam (die hier als accepted taxon beschouwd wordt) en
+#' `Rank` de taxonomische rank van deze naam, en de andere kolommen geven de
+#' hogere taxonomische niveaus en hun gbif-key.
 #'
 #' @examples
 #' # Omwille van de iets langere lange duurtijd van de commando's staat bij
