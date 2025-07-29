@@ -303,6 +303,7 @@ migratieSQLserverSQLite <- function() {
   ObservatieTaxon <- dbGetQuery(ConnectiePool, QueryObservatieTaxon)
 
   # voor tabel Taxon willen we ook de hogere taxa toevoegen
+  # en aan tabel ObservatieTaxon willen we de keys van de synoniemen toevoegen
   # die halen we uit databank D0155_00_Taxa
   query <-
     "SELECT DISTINCT
@@ -328,8 +329,14 @@ migratieSQLserverSQLite <- function() {
     WHERE gm.TaxonSourceName like 'LSVI - %'
       OR gm.TaxonSourceName like 'FLORA - %'"
 
+  queryKeys <-
+    "SELECT DISTINCT TaxonName, gbif_usageKey AS GbifKeyTaxonNaam
+    FROM TaxonSourceTaxonGbifMatch
+    WHERE gbif_usageKey is not null"
+
   con <- connect_inbo_dbase("D0155_00_Taxa")
   TaxonUitTaxa <- dbGetQuery(con, query)
+  KeysUitTaxa <- dbGetQuery(con, queryKeys)
   dbDisconnect(con)
 
   TaxonAangevuld <- Taxon %>%
@@ -365,6 +372,17 @@ migratieSQLserverSQLite <- function() {
       TaxonUitFlora %>%
         distinct(),
       by = c("TaxonName" = "NaamWetenschappelijk")
+    ) %>%
+    left_join(
+      KeysUitTaxa,
+      by = "TaxonName"
+    ) %>%
+    mutate(
+      GbifKeyTaxonNaam = ifelse(
+        is.na(.data$GbifKeyTaxonNaam),
+        .data$GbifUsageKey,
+        .data$GbifKeyTaxonNaam
+      )
     )
   #aanpassing Gbif-namen!!!  Na definitieve migratie ook in brondb aanpassen?
   #(als het de gebruikers niet meer hindert als ze de kopie gebruiken)

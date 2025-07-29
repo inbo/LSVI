@@ -132,7 +132,7 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
     Kenmerken <- Data_soortenKenmerken    # naamsverandering!
 
     QueryTaxonLijst <-
-      "SELECT ot.GbifUsageKey, ot.TaxonName,
+      "SELECT t.GbifUsageKey, ot.TaxonName, ot.GbifKeyTaxonNaam,
         LOWER(ot.NaamNederlands) AS NaamNederlands,
         ot.NbnTaxonVersionKey, t.WetNaam, t.Rank,
         t.Kingdom, t.Phylum, t.[Order], t.Family, t.Genus, t.Species,
@@ -140,7 +140,7 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
         t.GenusKey, t.SpeciesKey
       FROM ObservatieTaxon ot
         RIGHT JOIN Taxon t on ot.GbifUsageKey = t.GbifUsageKey
-      WHERE ot.%s in ('%s')"
+      WHERE %s in ('%s')"
 
     laadTaxonlijst <- function(Taxonkolom, Taxonnaam) {
       Taxonlijst <- dbGetQuery(
@@ -151,7 +151,10 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
           paste(unique(Taxonnaam), collapse = "','")
         )
       ) %>%
-        select(-"TaxonName", -"NaamNederlands", -"NbnTaxonVersionKey") %>%
+        select(
+          -"TaxonName", -"NaamNederlands", -"NbnTaxonVersionKey",
+          -"GbifKeyTaxonNaam"
+        ) %>%
         distinct() %>%
         mutate(
           # voor de verdere code zijn volgende kolommen nodig,
@@ -168,7 +171,7 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
     KenmerkenSoort <- Kenmerken %>%
       filter(tolower(.data$TypeKenmerk) == "soort_latijn") %>%
       mutate(
-        Taxonlijst = map2("TaxonName", .$Kenmerk, laadTaxonlijst)
+        Taxonlijst = map2("ot.TaxonName", .$Kenmerk, laadTaxonlijst)
       ) %>%
       unnest(cols = c(.data$Taxonlijst), keep_empty = TRUE) %>%
       bind_rows(
@@ -176,7 +179,8 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
           filter(tolower(.data$TypeKenmerk) == "soort_nl") %>%
           mutate(
             Kenmerk = tolower(.data$Kenmerk),
-            Taxonlijst = map2("NaamNederlands", .$Kenmerk, laadTaxonlijst)
+            Taxonlijst =
+              map2("LOWER(ot.NaamNederlands)", .$Kenmerk, laadTaxonlijst)
           ) %>%
           unnest(cols = c(.data$Taxonlijst), keep_empty = TRUE)
       ) %>%
@@ -184,7 +188,7 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
         Kenmerken %>%
           filter(tolower(.data$TypeKenmerk) == "soort_gbif") %>%
           mutate(
-            Taxonlijst = map2("GbifUsageKey", .$Kenmerk, laadTaxonlijst)
+            Taxonlijst = map2("ot.GbifKeyTaxonNaam", .$Kenmerk, laadTaxonlijst)
           ) %>%
           unnest(cols = c(.data$Taxonlijst), keep_empty = TRUE)
       ) %>%
@@ -192,7 +196,8 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
         Kenmerken %>%
           filter(tolower(.data$TypeKenmerk) == "soort_nbn") %>%
           mutate(
-            Taxonlijst = map2("NbnTaxonVersionKey", .$Kenmerk, laadTaxonlijst)
+            Taxonlijst =
+              map2("ot.NbnTaxonVersionKey", .$Kenmerk, laadTaxonlijst)
           ) %>%
           unnest(cols = c(.data$Taxonlijst), keep_empty = TRUE)
       ) %>%
@@ -265,16 +270,16 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
             ConnectieLSVIhabitats,
             sprintf(
               QueryTaxonLijst,
-              "GbifUsageKey",
+              "ot.GbifKeyTaxonNaam",
               paste(unique(GbifLatijn$usageKey), collapse = "','")
             )
           ) %>%
             select(
               -"TaxonName",
-              -"NaamNederlands", -"NbnTaxonVersionKey"
+              -"NaamNederlands", -"NbnTaxonVersionKey", -"GbifUsageKey"
             ) %>%
             distinct(),
-          by = "GbifUsageKey",
+          by = c("GbifUsageKey" = "GbifKeyTaxonNaam"),
           suffix = c("", "MagWeg")
         )
       Onbetrouwbaar <- GbifLatijn %>%
@@ -308,7 +313,7 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
                 ConnectieLSVIhabitats,
                 sprintf(
                   QueryTaxonLijst,
-                  "GbifUsageKey",
+                  "ot.GbifKeyTaxonnaam",
                   paste(
                     unique(GbifLatijn$GbifAcceptedUsageKey),
                     collapse = "','"
@@ -317,10 +322,10 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
               ) %>%
                 select(
                   -"TaxonName",
-                  -"NaamNederlands", -"NbnTaxonVersionKey"
+                  -"NaamNederlands", -"NbnTaxonVersionKey", -"GbifUsageKey"
                 ) %>%
                 distinct(),
-              by = c("GbifAcceptedUsageKey" = "GbifUsageKey")
+              by = c("GbifAcceptedUsageKey" = "GbifKeyTaxonNaam")
             ) %>%
             mutate(
               Koppelmethode = "Gbif-acceptedkey opgezocht voor Latijnse naam"
@@ -381,16 +386,16 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
             ConnectieLSVIhabitats,
             sprintf(
               QueryTaxonLijst,
-              "GbifUsageKey",
+              "ot.GbifKeyTaxonNaam",
               paste(unique(GbifNL$nubKey), collapse = "','")
             )
           ) %>%
             select(
               -"TaxonName",
-              -"NaamNederlands", -"NbnTaxonVersionKey"
+              -"NaamNederlands", -"NbnTaxonVersionKey", -"GbifUsageKey"
             ) %>%
             distinct(),
-          by = "GbifUsageKey",
+          by = c("GbifUsageKey" = "GbifKeyTaxonNaam"),
           suffix = c("MagWeg", "")
         )
       GbifNL <- GbifNL %>%
@@ -410,16 +415,16 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
                 ConnectieLSVIhabitats,
                 sprintf(
                   QueryTaxonLijst,
-                  "GbifUsageKey",
+                  "ot.GbifKeyTaxonNaam",
                   paste(unique(GbifNL$GbifAcceptedUsageKey), collapse = "','")
                 )
               ) %>%
                 select(
                   -"TaxonName",
-                  -"NaamNederlands", -"NbnTaxonVersionKey"
+                  -"NaamNederlands", -"NbnTaxonVersionKey", -"GbifUsageKey"
                 ) %>%
                 distinct(),
-              by = c("GbifAcceptedUsageKey" = "GbifUsageKey")
+              by = c("GbifAcceptedUsageKey" = "GbifKeyTaxonNaam")
             ) %>%
             mutate(
               Koppelmethode =
@@ -446,7 +451,7 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
         ConnectieLSVIhabitats,
         sprintf(
           QueryTaxonLijst,
-          "GbifUsageKey",
+          "ot.GbifKeyTaxonNaam",
           paste(unique(GbifKey), collapse = "','")
         )
       ) %>%

@@ -1177,6 +1177,87 @@ describe("berekenLSVIbasis", {
         Resultaat_globaal = Resultaatv2[["Resultaat_globaal"]]
       )
     )
+    expect_warning(
+      TestResultaat <- berekenLSVIbasis(
+        Versie = "Versie 2.0",
+        Kwaliteitsniveau = "1",
+        Data_habitat %>%
+          bind_rows(
+            data.frame(ID = "Extra", Habitattype = "4030")
+          ),
+        Data_voorwaarden %>%
+          filter(
+            !.data$Indicator %in%
+              c("vergrassing", "verruiging", "invasieve exoten")
+          ),
+        Data_soortenKenmerken %>%
+          bind_rows(
+            data.frame(
+              ID = c(rep("JR0216", 4), rep("Ts2036", 2), "Extra"),
+              Kenmerk = c(
+                "Acer pseudoplatanus f. purpureum (Loudon) Rehder",
+                "Agrimonia repens L.",
+                "muskuskruidfamilie",
+                "tuinmonnikskap",
+                "Agrimonia odorata Mill",
+                "gele monnikskap",
+                "Agrimonia elata Moench"
+              ),
+              TypeKenmerk = c(
+                rep("soort_Latijn", 2),
+                rep("soort_nl", 2),
+                "soort_latijn",
+                "soort_nl",
+                "soort_latijn"
+              ),
+              Waarde = "20",
+              Type = "Percentage",
+              Eenheid = "%",
+              Vegetatielaag = "kruidlaag",
+              stringsAsFactors = FALSE
+            )
+          )
+      ),
+      "Sommige soorten konden niet exact gematcht worden met de taxonlijst in het package en zijn via gbif gematcht. Controleer in de soortenlijst in het resultaat of deze matching juist gebeurd is." #nolint: line_length_linter
+    )
+    expect_equal(
+      TestResultaat[["Soortenlijst"]] %>%
+        select("Kenmerk", "WetNaam", "Rank", "Koppelmethode"),
+      data.frame(
+        Kenmerk = c(
+          "muskuskruidfamilie",
+          "tuinmonnikskap",
+          "Acer pseudoplatanus f. purpureum (Loudon) Rehder",
+          "Agrimonia repens L.",
+          "Agrimonia odorata Mill",
+          "Agrimonia elata Moench",
+          "Carex pilulifera L.",
+          "Calluna vulgaris (L.) Hull",
+          "Festuca filiformis Pourr.",
+          "gele monnikskap"
+        ),
+        WetNaam = c(
+          "Adoxaceae",
+          "Aconitum ×cammarum L.",
+          "Acer pseudoplatanus f. purpureum (Loudon) Rehder",
+          "Agrimonia procera Wallr.",
+          "Agrimonia procera Wallr.",
+          "Agrimonia procera Wallr.",
+          "Carex pilulifera L.",
+          "Calluna vulgaris (L.) Hull",
+          "Festuca filiformis Pourr.",
+          "Aconitum lycoctonum L."
+        ),
+        Rank = c("FAMILY", "SPECIES", "FORM", rep("SPECIES", 7)),
+        Koppelmethode = c(
+          "volledige taxoninfo uit Gbif",
+          "Gbif-usagekey opgezocht voor Nederlandse naam",
+          rep("Gbif-usagekey opgezocht voor Latijnse naam", 3),
+          "Gbif-acceptedkey opgezocht voor Latijnse naam",
+          rep("exacte naam/key in LSVI-package", 4)
+        )
+      )
+    )
   })
 
   it("Een beoordeling op indicatorniveau wordt correct afgehandeld", {

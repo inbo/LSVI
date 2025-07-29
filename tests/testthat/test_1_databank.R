@@ -795,7 +795,8 @@ describe("test databank", {
     Taxons <-
       dbGetQuery(
         ConnectieLSVIhabitats,
-        "SELECT TaxonName, GbifUsageKey, NaamNederlands, NbnTaxonVersionKey
+        "SELECT TaxonName, GbifUsageKey, NaamNederlands, NbnTaxonVersionKey,
+          GbifKeyTaxonNaam
         FROM ObservatieTaxon"
       )
     dbDisconnect(ConnectieLSVIhabitats)
@@ -829,6 +830,17 @@ describe("test databank", {
       ),
       0
     )
+    expect_equal(
+      nrow(
+        Taxons %>%
+          distinct(GbifKeyTaxonNaam, GbifUsageKey) %>%
+          group_by(GbifKeyTaxonNaam) %>%
+          count(GbifUsageKey) %>%
+          filter(n > 1)
+      ),
+      0
+    )
+    expect_true(all(Taxons$GbifUsageKey %in% Taxons$GbifKeyTaxonNaam))
   })
 
   it("Elke GbifUsageKey van ObservatieTaxon staat ook in Taxon", {
