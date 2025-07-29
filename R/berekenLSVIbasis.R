@@ -365,8 +365,8 @@ berekenLSVIbasis <- #nolint: object_name_linter
         ConnectieLSVIhabitats
       ) %>%
       rename(
-        RefMin = .data$Min,
-        RefMax = .data$Max
+        RefMin = "Min",
+        RefMax = "Max"
       )
 
     Invoervereisten <- Invoervereisten %>%

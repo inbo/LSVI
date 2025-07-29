@@ -33,7 +33,7 @@
 #' # uitgetest worden.
 #' \dontrun{
 #' maakConnectiePool()
-#' geefUniekeWaarden("Versie","VersieLSVI")
+#' geefUniekeWaarden("Versie", "VersieLSVI")
 #'
 #' #alternatieven om deze invoerlijst te bekomen:
 #' unique(geefVersieInfo()$VersieLSVI)
