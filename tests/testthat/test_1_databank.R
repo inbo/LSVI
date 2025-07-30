@@ -1163,7 +1163,7 @@ describe("test tabellen Taxon en Observatietaxon", {
     expect_equal(
       Taxonlijst %>%
         mutate(
-          TaxonNameTrimmed = trimTaxonName(TaxonNameExact)
+          TaxonNameTrimmed = trimTaxonName(TaxonName)
         ) %>%
         filter(
           str_count(TaxonNameTrimmed, " ") > 1,
@@ -1175,7 +1175,7 @@ describe("test tabellen Taxon en Observatietaxon", {
     expect_equal(
       Taxonlijst %>%
         mutate(
-          TaxonNameTrimmed = trimTaxonName(TaxonNameExact)
+          TaxonNameTrimmed = trimTaxonName(TaxonName)
         ) %>%
         filter(
           str_count(TaxonNameTrimmed, " ") == 2,
@@ -1187,7 +1187,7 @@ describe("test tabellen Taxon en Observatietaxon", {
     expect_equal(
       Taxonlijst %>%
         mutate(
-          TaxonNameTrimmed = trimTaxonName(TaxonNameExact)
+          TaxonNameTrimmed = trimTaxonName(TaxonName)
         ) %>%
         filter(
           str_count(TaxonNameTrimmed, " ") > 2,
@@ -1199,7 +1199,7 @@ describe("test tabellen Taxon en Observatietaxon", {
     expect_equal(
       Taxonlijst %>%
         mutate(
-          TaxonNameTrimmed = trimTaxonName(TaxonNameExact)
+          TaxonNameTrimmed = trimTaxonName(TaxonName)
         ) %>%
         filter(
           str_count(TaxonNameTrimmed, " ") == 4,
@@ -1211,7 +1211,7 @@ describe("test tabellen Taxon en Observatietaxon", {
     expect_equal(
       Taxonlijst %>%
         mutate(
-          TaxonNameTrimmed = trimTaxonName(TaxonNameExact)
+          TaxonNameTrimmed = trimTaxonName(TaxonName)
         ) %>%
         filter(
           str_count(TaxonNameTrimmed, " ") != 4,
@@ -1395,11 +1395,10 @@ describe("test tabellen Taxon en Observatietaxon", {
     expect_equal(
       Taxonlijst %>%
         select(
-          -"ScientificNameExact", -"GbifConfidence",
-          -"GbifMatchType", -"NLNameExact", -"NbnTaxonVersionKey"
+          -"NaamNederlands", -"NbnTaxonVersionKey"
         ) %>%
         distinct() %>%
-        count(TaxonNameExact) %>%
+        count(TaxonName) %>%
         filter(n > 1) %>%
         nrow(),
       0
@@ -1407,8 +1406,7 @@ describe("test tabellen Taxon en Observatietaxon", {
     expect_equal(
       Taxonlijst %>%
         select(
-          -"TaxonNameExact", -"ScientificNameExact", -"GbifConfidence",
-          -"GbifMatchType", -"NLNameExact"
+          -"TaxonName", -"NaamNederlands"
         ) %>%
         distinct() %>%
         count(NbnTaxonVersionKey) %>%
