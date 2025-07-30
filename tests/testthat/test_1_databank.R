@@ -867,7 +867,7 @@ describe("test databank", {
       dbGetQuery(
         ConnectieLSVIhabitats,
         "SELECT ot.TaxonName, ot.NaamNederlands, ot.NbnTaxonVersionKey,
-          t.GbifUsageKey, t.Rank
+          ot.GbifKeyTaxonNaam, t.GbifUsageKey, t.Rank
         FROM Taxon t LEFT JOIN ObservatieTaxon ot
         ON t.GbifUsageKey = ot.GbifUsageKey"
       )
@@ -905,6 +905,16 @@ describe("test databank", {
           distinct(NbnTaxonVersionKey, GbifUsageKey, Rank) %>%
           filter(!is.na(NbnTaxonVersionKey)) %>%
           group_by(NbnTaxonVersionKey) %>%
+          filter(is.na(GbifUsageKey) | is.na(Rank))
+      ),
+      0
+    )
+    expect_equal(
+      nrow(
+        Taxons %>%
+          distinct(GbifKeyTaxonNaam, GbifUsageKey, Rank) %>%
+          filter(!is.na(GbifKeyTaxonNaam)) %>%
+          group_by(GbifKeyTaxonNaam) %>%
           filter(is.na(GbifUsageKey) | is.na(Rank))
       ),
       0
@@ -1000,7 +1010,7 @@ describe("test tabellen Taxon en Observatietaxon", {
   Taxonlijst <- dbGetQuery(
     ConnectieLSVIhabitats,
     "SELECT t.GbifUsageKey, ot.TaxonName, ot.NaamNederlands,
-        ot.NbnTaxonVersionKey, t.Wetnaam, t.Rank,
+        ot.NbnTaxonVersionKey, ot.GbifKeyTaxonNaam, t.Wetnaam, t.Rank,
         t.Kingdom, t.Phylum, t.[Order], t.Family, t.Genus, t.Species,
         t.KingdomKey, t.PhylumKey, t.ClassKey, t.OrderKey, t.FamilyKey,
         t.GenusKey, t.SpeciesKey
@@ -1235,6 +1245,16 @@ describe("test tabellen Taxon en Observatietaxon", {
       Taxonlijst %>%
         count(NbnTaxonVersionKey) %>%
         filter(!is.na(NbnTaxonVersionKey), n > 1) %>%
+        nrow(),
+      0
+    )
+  })
+  it("GbifKeyTaxonNaam is niet uniek", {
+    expect_equal(
+      Taxonlijst %>%
+        distinct(GbifUsageKey, GbifKeyTaxonNaam) %>%
+        count(GbifKeyTaxonNaam) %>%
+        filter(!is.na(GbifKeyTaxonNaam), n > 1) %>%
         nrow(),
       0
     )
