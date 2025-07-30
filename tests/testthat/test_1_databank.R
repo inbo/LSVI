@@ -1,5 +1,6 @@
 context("test databank")
 
+unloadNamespace("stats::filter") #vermijd conflict met dplyr::filter
 library(DBI)
 library(dplyr)
 library(stringr)
@@ -1018,11 +1019,12 @@ describe("test tabellen Taxon en Observatietaxon", {
         RIGHT JOIN Taxon t on ot.GbifUsageKey = t.GbifUsageKey"
   )
   dbDisconnect(ConnectieLSVIhabitats)
-  it("TaxonName is niet uniek", {  #check of opgelost met distinct, dan mag test weg
+  it("TaxonName is niet uniek", {
     expect_equal(
       Taxonlijst %>%
+        distinct(GbifUsageKey, TaxonName) %>%
         count(TaxonName) %>%
-        filter(n > 1) %>%
+        filter(!is.na(TaxonName), n > 1) %>%
         nrow(),
       0
     )
@@ -1231,18 +1233,20 @@ describe("test tabellen Taxon en Observatietaxon", {
       0
     )
   })
-  it("NaamNederlands is niet uniek", {  #Nog checken in code, maar mag weg als distinct gebruikt is met GbifUsageKey!
+  it("NaamNederlands is niet uniek", {
     expect_equal(
       Taxonlijst %>%
+        distinct(GbifUsageKey, NaamNederlands) %>%
         count(NaamNederlands) %>%
         filter(!is.na(NaamNederlands), n > 1) %>%
         nrow(),
       0
     )
   })
-  it("NbnTaxonVersionKey is niet uniek", {  #leidt naar verschillende GbifUsageKeys, waarom bovenaan geen probleem?
+  it("NbnTaxonVersionKey is niet uniek", {
     expect_equal(
       Taxonlijst %>%
+        distinct(GbifUsageKey, NbnTaxonVersionKey) %>%
         count(NbnTaxonVersionKey) %>%
         filter(!is.na(NbnTaxonVersionKey), n > 1) %>%
         nrow(),
