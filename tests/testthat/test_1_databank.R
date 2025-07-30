@@ -1092,8 +1092,6 @@ describe("test tabellen Taxon en Observatietaxon", {
           str_count(TaxonName, " ") == 0,
           !Rank %in% c("KINGDOM", "PHYLUM", "CLASS", "ORDER", "FAMILY"),
           !(Rank == "GENUS" & Kingdom == "Fungi"),
-          #voorlopig toegevoegd omdat ook geen auteur in gbif
-          #TaxonNameExact != "Thlaspi"
         ) %>%
         nrow(),
       0
@@ -1379,7 +1377,7 @@ describe("test tabellen Taxon en Observatietaxon", {
       0
     )
   })
-  it("Speciesnaam is niet overeenkomstig tussen WetNaam en Species (in Taxon)", {
+  it("Speciesnaam niet overeenkomstig tussen WetNaam en Species (in Taxon)", {
     expect_equal(
       Taxonlijst %>%
         filter(
