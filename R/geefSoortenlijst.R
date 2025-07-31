@@ -54,6 +54,7 @@
 #' @importFrom dplyr %>% select distinct filter group_by summarise ungroup
 #' mutate left_join rename
 #' @importFrom rlang .data
+#' @importFrom tidyr unnest
 #' @importFrom lifecycle deprecated is_present
 #'
 #'
@@ -127,7 +128,7 @@ geefSoortenlijst <-
       select("TaxonGroepCode") %>%
       distinct() %>%
       filter(!is.na(.data$TaxonGroepCode)) %>%
-      summarise(SoortengroepIDs = paste(.data$TaxonGroepCode, collapse = "','"))
+      summarise(SoortengroepIDs = paste(.data$TaxonGroepCode, collapse = ","))
 
     if (SoortengroepIDs$SoortengroepIDs == "") {
       warning("Voor de opgegeven argumenten is er geen soortenlijst")
@@ -146,13 +147,20 @@ geefSoortenlijst <-
           Taxongroeplijst = SoortengroepIDs$SoortengroepIDs,
           Taxonlijsttype = deprecated(),
           ConnectieLSVIhabitats
-        )
+        ) %>%
+        distinct()
 
       #soortgegevens aan selectiegegevens plakken
       SoortenlijstSelectie <- Selectiegegevens %>%
+        mutate(
+          TaxonGroepCode = gsub("'", "", .data$TaxonGroepCode),
+          TaxonGroepCode = strsplit(.data$TaxonGroepCode, ",")
+        ) %>%
+        unnest("TaxonGroepCode") %>%
         left_join(
           Soortenlijst,
-          by = ("TaxonGroepCode")
+          by = ("TaxonGroepCode"),
+          relationship = "many-to-many"
         )
     }
 
@@ -170,13 +178,13 @@ geefSoortenlijst <-
 
     if (Taxonlijstniveau[1] == "criterium") {
       SoortenlijstSelectie <- SoortenlijstSelectie %>%
-        select(-"Indicator") %>%
+        select(-"Indicator", -"TaxonGroepCode") %>%
         filter(!is.na(.data$GbifUsageKey)) %>%
         distinct()
     }
     if (Taxonlijstniveau[1] == "habitattype") {
       SoortenlijstSelectie <- SoortenlijstSelectie %>%
-        select(-"Indicator", -"Criterium") %>%
+        select(-"Indicator", -"Criterium", -"TaxonGroepCode") %>%
         filter(!is.na(.data$GbifUsageKey)) %>%
         distinct()
     }

@@ -173,9 +173,6 @@ geefInfoHabitatfiche <-
         ) %>%
         filter(!is.na(.data$WetNaamKort) | !is.na(.data$NedNaam)) %>%
         mutate(
-          Versie = NULL,
-          Habitattype = NULL,
-          Habitatsubtype = NULL,
           Indicator_habitatID = NULL,
           Indicator_beoordelingID = NULL,
           TotNaam = ifelse(
@@ -209,7 +206,7 @@ geefInfoHabitatfiche <-
 
       Soortenlijst <- Soortenlijst %>%
         group_by(
-          .data$TaxonGroepCode,
+          .data$Versie, .data$Habitattype, .data$Habitatsubtype,
           .data$Criterium,
           .data$Indicator,
           across(all_of(OmschrijvingKolommen))
@@ -243,7 +240,7 @@ geefInfoHabitatfiche <-
         if (i < laatste_i) {
           Soortenlijst <- Soortenlijst %>%
             group_by(
-              .data$TaxonGroepCode,
+              .data$Versie, .data$Habitattype, .data$Habitatsubtype,
               .data$Criterium,
               .data$Indicator,
               .dots = OmschrijvingKolommen
@@ -256,7 +253,7 @@ geefInfoHabitatfiche <-
         } else {
           Soortenlijst <- Soortenlijst %>%
             group_by(
-              .data$TaxonGroepCode,
+              .data$Versie, .data$Habitattype, .data$Habitatsubtype,
               .data$Criterium,
               .data$Indicator
             ) %>%
@@ -270,18 +267,24 @@ geefInfoHabitatfiche <-
       }
 
       Habitatfiche <- Selectiegegevens %>%
+        mutate(TaxonGroepCode = NULL) %>%
+        distinct() %>%
         left_join(
           Habitatkarakteristieken %>%
-            mutate(TaxonGroepCode = NULL),
+            mutate(TaxonGroepCode = NULL) %>%
+            distinct(),
           by = c("Indicator_habitatID" = "Indicator_habitatID")
         ) %>%
         left_join(
           Soortenlijst %>%
             select(
-              "TaxonGroepCode",
+              "Versie", "Habitattype", "Habitatsubtype", "Criterium",
+              "Indicator",
               "Soortenlijst"
             ),
-          by = c("TaxonGroepCode" = "TaxonGroepCode")
+          by = c(
+            "Versie", "Habitattype", "Habitatsubtype", "Criterium", "Indicator"
+          )
         ) %>%
         mutate(
           Beschrijving =

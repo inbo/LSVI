@@ -57,7 +57,7 @@
 #'
 #' @importFrom DBI dbGetQuery
 #' @importFrom assertthat assert_that is.string
-#' @importFrom dplyr %>% mutate
+#' @importFrom dplyr %>% across group_by mutate summarise ungroup
 #' @importFrom rlang .data
 #' @importFrom stringr str_to_sentence
 #'
@@ -241,7 +241,16 @@ selecteerIndicatoren <-
           as.character(.data$Habitatsubtype),
           .data$Habitatsubtype
         )
-      )
+      ) %>%
+      group_by(across(-.data$TaxonGroepCode)) %>%
+      summarise(
+        TaxonGroepCode = ifelse(
+          all(is.na(.data$TaxonGroepCode)),
+          NA_character_,
+          paste0("'", paste(.data$TaxonGroepCode, collapse = "','"), "'")
+        )
+      ) %>%
+      ungroup()
 
 
     return(Selectiegegevens)

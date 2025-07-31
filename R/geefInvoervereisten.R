@@ -80,7 +80,7 @@
 #'
 #' @importFrom DBI dbGetQuery
 #' @importFrom dplyr %>% select filter group_by summarise ungroup left_join
-#' mutate rowwise arrange distinct
+#' mutate rowwise arrange distinct across
 #' @importFrom tidyr gather
 #' @importFrom rlang .data
 #' @importFrom assertthat assert_that is.string
@@ -325,7 +325,16 @@ geefInvoervereisten <- function(Versie = "alle",
     dbGetQuery(
       ConnectieLSVIhabitats,
       query_voorwaardeinfo
-    )
+    ) %>%
+    group_by(across(-.data$TaxonGroepCode)) %>%
+    summarise(
+      TaxonGroepCode = ifelse(
+        all(is.na(.data$TaxonGroepCode)),
+        NA_character_,
+        paste0("'", paste(.data$TaxonGroepCode, collapse = "','"), "'")
+      )
+    ) %>%
+    ungroup()
 
   if (tolower(Weergave[1]) == "basis") {
     Voorwaardeinfo <- Voorwaardeinfo %>%
