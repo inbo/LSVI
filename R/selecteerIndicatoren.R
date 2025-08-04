@@ -242,7 +242,7 @@ selecteerIndicatoren <-
           .data$Habitatsubtype
         )
       ) %>%
-      group_by(across(-.data$TaxonGroepCode)) %>%
+      group_by(across(-"TaxonGroepCode")) %>%
       summarise(
         TaxonGroepCode = ifelse(
           all(is.na(.data$TaxonGroepCode)),

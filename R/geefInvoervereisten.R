@@ -326,7 +326,7 @@ geefInvoervereisten <- function(Versie = "alle",
       ConnectieLSVIhabitats,
       query_voorwaardeinfo
     ) %>%
-    group_by(across(-.data$TaxonGroepCode)) %>%
+    group_by(across(-"TaxonGroepCode")) %>%
     summarise(
       TaxonGroepCode = ifelse(
         all(is.na(.data$TaxonGroepCode)),
