@@ -1,6 +1,5 @@
 context("test databank")
 
-unloadNamespace("stats::filter") #vermijd conflict met dplyr::filter
 library(DBI)
 library(dplyr)
 library(stringr)
