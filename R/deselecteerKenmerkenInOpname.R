@@ -16,7 +16,7 @@
 #' gedeselecteerd moet worden.
 #' Als ook Soortengroep opgegeven is, geeft Studiegroep aan welke kenmerken
 #' wel behouden moeten blijven na deselecteren van de soortengroep.
-#' @param SubAnalyseVariabele heeft waarde 'bedekking' als er een subvoorwaarde
+#' @param SubAnalyseVariabele heeft waarde "bedekking" als er een subvoorwaarde
 #' is voor de bedekking van de geselecteerde soorten of kenmerken
 #' @param SubRefMin minimumwaarde van de grenswaarde voor de bedekking
 #' @param SubRefMax maximumwaarde van de grenswaarde voor de bedekking

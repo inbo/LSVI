@@ -3,7 +3,8 @@
 #' @description Deze functie bepaalt de Lokale Staat van Instandhouding en
 #' biotische indices op basis van gegevens, die in het juiste formaat moeten
 #' aangeleverd worden.  Zie hiervoor de beschrijving bij de parameters
-#' ('Arguments') en de tabellen van het voorbeeld.  In principe is enkel de
+#' (["Arguments"](https://inbo.github.io/LSVI/reference/berekenLSVIbasis.html#arguments))
+#' en de tabellen van het voorbeeld.  In principe is enkel de
 #' parameter `Data_habitat` verplicht om op te geven, maar extra datasets zijn
 #' uiteraard wel nodig om een resultaat te bekomen.  Welke datasets relevant
 #' zijn, is afhankelijk van de opgegeven habitattypes: voor een aantal
@@ -41,7 +42,7 @@
 #' Op die manier wordt de kans op het herkennen van de soort door het package
 #' vergroot, maar het heeft als keerzijde dat een taxon door Gbif ten onrechte
 #' gekoppeld kan worden aan een Gbif-key van een accepted taxon (omdat Gbif
-#' geen rekening houdt met auteursnamen, 'auct.', 'auct. non', 'non',...).
+#' geen rekening houdt met auteursnamen, "auct.", "auct. non", "non",...).
 #' Daarom wordt met een warning aangeraden om de `Soortenlijst` te controleren
 #' als de Gbif-tool voor de koppeling van minstens één soort gebruikt is
 #' (dit is aangegeven in veld `Koppelmethode`, en deze records staan bovenaan).

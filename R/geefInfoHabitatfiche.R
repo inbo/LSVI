@@ -7,7 +7,7 @@
 #' parameters.  Volledigheidshalve geeft ze ook de uitgebreide namen van de
 #' habitattypes en habitatsubtypes.  De uitvoer van deze functie kan gebruikt
 #' worden om rapportages op te maken (bv. rapport samenstellen met
-#' LSVI-criteria,...).  Een 'afgewerkt rapport' kan gegenereerd worden met de
+#' LSVI-criteria,...).  Een "afgewerkt rapport" kan gegenereerd worden met de
 #' functie `maakHabitatfiches()`.
 #'
 #'@template Zoekparameters

@@ -54,7 +54,7 @@ knitr::include_graphics("Workflow.png")
 
 Deze workflow geeft dus voorrang aan rechtstreeks ingeschatte indicatoren en voorwaarden, wat doorgaans de meest accurate waarden zijn.  Dit betekent dat je als gebruiker door het opgeven van een voorwaarde met waarde NA kan aangeven dat je niet wil dat een bepaalde voorwaarde berekend wordt, omdat je weet dat het resultaat niet betrouwbaar gaat zijn (bijvoorbeeld omdat je niet van alle soorten een bedekking hebt ingeschat).
 
-In wat volgt, wordt dieper ingegaan op de onderdelen waarin relevante 'berekeningen' gebeuren of die mogelijk vragen zouden kunnen oproepen:
+In wat volgt, wordt dieper ingegaan op de onderdelen waarin relevante "berekeningen" gebeuren of die mogelijk vragen zouden kunnen oproepen:
 
 - hoe worden die rekenregels precies uitgevoerd, wat betekent die `AnalyseVariabele`?
 - hoe werkt dat precies met die soortenlijsten, wat gebeurt er als ik niet exact dezelfde naam opgeef?
@@ -66,18 +66,18 @@ In wat volgt, wordt dieper ingegaan op de onderdelen waarin relevante 'berekenin
 
 ## Inleiding
 
-Veel voorwaarden voor de bepaling van de LSVI zijn gebaseerd op het tellen van aantallen en/of het inschatten/berekenen van bedekkingen van soorten of kenmerken.  Dit betekent dat de 'berekening' uitgaande van een volopname (met voor elke plantensoort een geschatte bedekking, eventueel aangevuld met andere vegetatiekenmerken) vaak een gelijkaardig stramien volgt, al zijn er soms aanzienlijke nuanceverschillen.  Enkele voorbeelden om dit te illustreren.
+Veel voorwaarden voor de bepaling van de LSVI zijn gebaseerd op het tellen van aantallen en/of het inschatten/berekenen van bedekkingen van soorten of kenmerken.  Dit betekent dat de "berekening" uitgaande van een volopname (met voor elke plantensoort een geschatte bedekking, eventueel aangevuld met andere vegetatiekenmerken) vaak een gelijkaardig stramien volgt, al zijn er soms aanzienlijke nuanceverschillen.  Enkele voorbeelden om dit te illustreren.
 
-Voor de voorwaarde 'aantal sleutelsoorten minstens frequent aanwezig' zal het script de volgende stappen doorlopen:
+Voor de voorwaarde "aantal sleutelsoorten minstens frequent aanwezig" zal het script de volgende stappen doorlopen:
 
 - checkt in de databank de lijst met sleutelsoorten voor het habitattype in kwestie
 - selecteert deze sleutelsoorten uit de opname die de gebruiker invoerde
 - selecteert hieruit de soorten die minstens frequent aanwezig zijn
 - telt dit aantal soorten
 
-De voorwaarde 'aantal ouderdomsstadia minstens frequent aanwezig' kan op dezelfde manier berekend worden, maar dan op basis van een lijst (in de databank) die alle ouderdomsstadia weergeeft.  En uiteraard veronderstelt dit dat de gebruiker voor deze ouderdomsstadia een bedekking invoerde in de tabel met soorten en kenmerken.
+De voorwaarde "aantal ouderdomsstadia minstens frequent aanwezig" kan op dezelfde manier berekend worden, maar dan op basis van een lijst (in de databank) die alle ouderdomsstadia weergeeft.  En uiteraard veronderstelt dit dat de gebruiker voor deze ouderdomsstadia een bedekking invoerde in de tabel met soorten en kenmerken.
 
-Om de voorwaarde 'bedekking boomlaag' te berekenen, zal het script volgende stappen doorlopen:
+Om de voorwaarde "bedekking boomlaag" te berekenen, zal het script volgende stappen doorlopen:
 
 - checkt of de gebruiker voor de boomlaag een totale bedekking ingeschat heeft (en gebruikt dan deze waarde als resultaat)
 - indien niet:
@@ -97,7 +97,7 @@ str(
 )
 ```
 
-Scriptmatig wordt dus gecheckt welke variabelen ('rekenregels') in de databank ingevuld zijn en welke waarden ze hebben, en deze combinatie bepaalt welke stukjes script voor het bepalen van die voorwaarde doorlopen worden.  In enkele gevallen kan een variabele ietwat contextafhankelijk zijn, dus een lichtjes andere interpretatie hebben afhankelijk van de inhoud van andere variabelen.
+Scriptmatig wordt dus gecheckt welke variabelen ("rekenregels") in de databank ingevuld zijn en welke waarden ze hebben, en deze combinatie bepaalt welke stukjes script voor het bepalen van die voorwaarde doorlopen worden.  In enkele gevallen kan een variabele ietwat contextafhankelijk zijn, dus een lichtjes andere interpretatie hebben afhankelijk van de inhoud van andere variabelen.
 
 ## Rekenregels
 
@@ -105,18 +105,18 @@ De belangrijkste variabele in de rekenregels is `AnalyseVariabele`.  Deze verwij
 
 Bij de verschillende analysevariabelen kan het gebruik of de interpretatie van de variabelen in de databank afwijkend zijn.  Zo berekent bijvoorbeeld de `AnalyseVariabele` `bedekkingExcl` de totale bedekking van alle soorten van de opname behalve deze die in de taxonlijst vermeld staan (terwijl bij andere berekeningen de soorten in de taxonlijst net wel in beschouwing genomen worden).  Om een berekening ten volle te begrijpen, is het dus belangrijk om de beschrijvingen van de berekeningswijzen voor de verschillende analysevariabelen verderop in dit hoofdstuk door te nemen.  Het deel van de workflow dat ze bijna allemaal gemeenschappelijk hebben, is beschreven in een eerste onderdeeltje [`AnalyseVariabele`](#analysevariabele).
 
-Meestal is er ook een variabele `TaxongroepId` of een studielijst (variabelen `Studielijstnaam` en `Studiewaarde`) toegevoegd.  Deze verwijzen naar de voor de voorwaarde relevante soortenlijst(en) of kenmerken.  Een voorbeeld van een studielijst zijn de ouderdomsklassen van heide.  Idee is dat de gebruiker voor elk van de kenmerken (in dit geval ouderdomsklassen) een  waarde (in dit geval bedekking) opgeeft, en op basis hiervan wordt bv. 'berekend' hoeveel klassen er minstens frequent aanwezig zijn.  Voor de studielijsten staan de kenmerken rechtstreeks opgesomd onder `Studiewaarde`.
+Meestal is er ook een variabele `TaxongroepId` of een studielijst (variabelen `Studielijstnaam` en `Studiewaarde`) toegevoegd.  Deze verwijzen naar de voor de voorwaarde relevante soortenlijst(en) of kenmerken.  Een voorbeeld van een studielijst zijn de ouderdomsklassen van heide.  Idee is dat de gebruiker voor elk van de kenmerken (in dit geval ouderdomsklassen) een  waarde (in dit geval bedekking) opgeeft, en op basis hiervan wordt bv. "berekend" hoeveel klassen er minstens frequent aanwezig zijn.  Voor de studielijsten staan de kenmerken rechtstreeks opgesomd onder `Studiewaarde`.
 
 Om de tabel niet te overladen, zijn de soortenlijsten niet rechtstreeks toegevoegd in de tabel, maar vervangen door een verwijzing naar een `TaxongroepId`.  De volledige lijst van bv. `TaxongroepId` 123 kan opgevraagd worden met het commando `geefSoortenlijstVoorIDs("123")` (en in de string kunnen meerdere Id's gescheiden door een `,` opgegeven worden).
 
 Om een gebruiker niet te verplichten om ook alle soorten in te geven die hij niet gezien heeft, gaat de rekenmodule ervan uit dat er voor de soorten een volopname gebeurd is van zodra er minstens 1 soort toegevoegd is aan de tabel met soorten en kenmerken.  Concreet zal hij in dit geval alle niet ingevoerde soorten beschouwen als afwezig of soorten met een bedekking van 0 %.  Als er geen enkele soort ingevoerd is, zullen voorwaarden in verband met soorten die niet rechtstreeks ingeschat zijn, de waarde NA krijgen.  En voor kenmerken is hetzelfde principe toegepast: zodra 1 kenmerk van een bepaalde studielijst opgegeven is, gaat de rekenmodule ervan uit dat de andere kenmerken van die lijst niet aanwezig waren (bv. als pioniersstatium opgegeven is, zal er voor ouderdomsklassen van uitgegaan worden dat de andere klassen afwezig waren).  Ingeval van gedeeltelijke opnamen is het dus aan de gebruiker om voor elke voorwaarde in te schatten in hoeverre het resultaat betrouwbaar is en evt. rechtstreeks een waarde op te geven voor de voorwaarde.
 
-Binnen een voorwaarde kan ook een 'subvoorwaarde' gedefinieerd zijn (opgesplitst in meerdere variabelen met 'Sub' in de naam), die een bijkomend selectiecriterium geeft dat toegepast wordt op alle soorten en/of kenmerken uit de lijst.  Zo is de subvoorwaarde 'minimaal frequent aanwezig' uit bovenstaand voorbeeld gecodeerd met o.a.:
+Binnen een voorwaarde kan ook een "subvoorwaarde" gedefinieerd zijn (opgesplitst in meerdere variabelen met "Sub" in de naam), die een bijkomend selectiecriterium geeft dat toegepast wordt op alle soorten en/of kenmerken uit de lijst.  Zo is de subvoorwaarde "minimaal frequent aanwezig" uit bovenstaand voorbeeld gecodeerd met o.a.:
 
-- `subAnalyseVariabele` 'bedekking'
-- `TypeSubvariabele` 'Categorie'
-- `Subreferentiewaarde` 'f' (-> frequent)
-- `SubOperator` '>='
+- `subAnalyseVariabele` "bedekking"
+- `TypeSubvariabele` "Categorie"
+- `Subreferentiewaarde` "f" (-> frequent)
+- `SubOperator` ">="
 
 Tenslotte zijn er nog een aantal variabelen die verschillen in gebruikte schalen of meeteenheden opvangen.  Zo geven `Type`(`Sub`)`Variabele`, (`Sub`)`Invoertype` en (`Sub`)`Invoerwaarde` aan wat voor variabele de (`Sub`)`Referentiewaarde` in de databank is, waardoor de gebruiker niet verplicht is om dezelfde variabele en eenheid te gebruiken.  Voor verdere uitleg hierover verwijzen we naar het onderdeel over [Bedekking en Schalen](#bedekkingEnSchalen).
 
@@ -202,11 +202,11 @@ Bij voorwaarden met deze analysevariabele worden de soorten/kenmerken geselectee
 
 ## aandeel
 
-Bij de analysevariabele `aandeel` gaat de voorwaarde over grondvlakken of volumes van bomen.  Terwijl alle andere analysevariabelen enkel door gebruikers ingevoerde records in beschouwing nemen waarbij `Eenheid` niet gelijk is aan 'grondvlak_ha' of 'volume_ha', zal deze analysevariabele deze records net wel in beschouwing nemen (en alle andere records wissen).
+Bij de analysevariabele `aandeel` gaat de voorwaarde over grondvlakken of volumes van bomen.  Terwijl alle andere analysevariabelen enkel door gebruikers ingevoerde records in beschouwing nemen waarbij `Eenheid` niet gelijk is aan "grondvlak_ha" of "volume_ha", zal deze analysevariabele deze records net wel in beschouwing nemen (en alle andere records wissen).
 
 Om het totale grondvlak of volume te berekenen van de relevante soorten, wordt de som genomen van de grondvlakken/volumes van de records (in principe soorten, maar voor kenmerken zou het technisch ook werken) die door `selecteerKenmerkenInOpname()` teruggegeven worden (zie  onder [AnalyseVariabele](#AnalyseVariabele)), dus hier wordt het totale grondvlak of volume berekend van de relevante soorten (uit taxonlijst) die voorkomen in de door de gebruiker ingegeven opname en voldoen aan een eventuele subvoorwaarde.  Als samen met een taxonlijst ook een studielijst opgegeven wordt, dan is deze te interpreteren als een tweede subvoorwaarde.  In de praktijk gaat het hier over de vegetatielaag waarin de soorten moeten voorkomen.
 
-Om tenslotte het aandeel te berekenen, wordt het bekomen grondvlak of volume gedeeld door het totale grondvlak of volume van alle opgegeven soorten, wat de som is van alle soorten in de opname met `Eenheid` 'grondvlak_ha' of 'volume_ha'.
+Om tenslotte het aandeel te berekenen, wordt het bekomen grondvlak of volume gedeeld door het totale grondvlak of volume van alle opgegeven soorten, wat de som is van alle soorten in de opname met `Eenheid` "grondvlak_ha" of "volume_ha".
 
 ## aandeelKruidlaag
 
@@ -243,7 +243,7 @@ De analysevariabele `meting` (of `meting_xxx`) staat in de databank bij voorwaar
 Idealiter worden de door de gebruiker ingevoerde taxonnamen herkend en correct behandeld bij de berekening.  Om dit zo goed mogelijk op te vangen, bevat de databank:
 
 - taxa van meerdere taxonomische niveaus (genera, soorten, ondersoorten,...) en hun onderlinge verwantschap
-- zowel ‘preferred names’ als ‘junior synonyms’ (bij opgevraagde info worden enkel preferred names gegeven, de junior synonyms dienen enkel om door gebruikers ingevoerde namen te herkennen)
+- zowel "preferred names" als "junior synonyms" (bij opgevraagde info worden enkel preferred names gegeven, de junior synonyms dienen enkel om door gebruikers ingevoerde namen te herkennen)
 - Latijnse en Nederlandse namen
 - de binnen INBO gebruikte NbnTaxonVersionKey die een unieke code is voor een taxon
 
@@ -270,7 +270,7 @@ Ook voor de invoer van bedekkingen heeft de gebruiker enige flexibiliteit en is 
 - als interval van 2 percentages (bv. 20–30) of decimale getallen
 - als waarde uit een Tansley-schaal of beheermonitoringschaal
 
-Er moet wel telkens aangegeven worden over welk type variabele het gaat (`TypeVariabele`, bv. Percentage, Decimaal getal, Categorie) en bij een categorische variabele moet ook de gebruikte schaal opgegeven worden (`Invoertype`, bv. TANSLEY IHD).  Bij een interval wordt het type opgegeven van de variabelen die als onder- of bovengrens opgegeven zijn, bv. Percentage of Decimaal getal.
+Er moet wel telkens aangegeven worden over welk type variabele het gaat (`TypeVariabele`, bv. "Percentage", "Decimaal getal", "Categorie") en bij een categorische variabele moet ook de gebruikte schaal opgegeven worden (`Invoertype`, bv. "TANSLEY IHD").  Bij een interval wordt het type opgegeven van de variabelen die als onder- of bovengrens opgegeven zijn, bv. Percentage of Decimaal getal.
 
 Voor de berekeningen worden deze waarden intern omgezet naar intervallen.  De onder- en bovengrenzen die hierbij voor de verschillende schalen gehanteerd worden, kunnen opgevraagd worden via `geefVertaallijst(ConnectiePool)`.  De berekeningen gebeuren voor de boven- en ondergrens afzonderlijk, met als resultaat een nieuw interval.<!--nog aanpassen als we fuzzy logic gebruiken!-->  Voor de weergave van het resultaat worden voor rechtstreeks ingevoerde voorwaarden de door de gebruiker opgegeven waarden overgenomen; berekende waarden worden weergegeven in dezelfde schaal als de voorwaarde (LSVI-criterium).
 
@@ -278,17 +278,17 @@ Voor de berekeningen worden deze waarden intern omgezet naar intervallen.  De on
 
 Om de status van een voorwaarde te berekenen, worden de onder- en bovengrenzen met elkaar vergeleken (gebruik makend van functie `berekenStatus()`):
 
-- voor operator '<' de bovengrens van de waarde met de ondergrens van de grenswaarde
-- voor operator '<=' de bovengrens van de waarde met de bovengrens van de grenswaarde
-- voor operator '>' de ondergrens van de waarde met de bovengrens van de grenswaarde
-- voor operator '>=' de ondergrens van de waarde met de ondergrens van de grenswaarde
-- voor operator '=' beide ondergrenzen en beide bovengrenzen (idee is dat het interval van waarde gelijk is aan het interval van de grenswaarde of er volledig binnen valt)
+- voor operator "<" de bovengrens van de waarde met de ondergrens van de grenswaarde
+- voor operator "<=" de bovengrens van de waarde met de bovengrens van de grenswaarde
+- voor operator ">" de ondergrens van de waarde met de bovengrens van de grenswaarde
+- voor operator ">=" de ondergrens van de waarde met de ondergrens van de grenswaarde
+- voor operator "=" beide ondergrenzen en beide bovengrenzen (idee is dat het interval van waarde gelijk is aan het interval van de grenswaarde of er volledig binnen valt)
 
 Het resultaat is telkens een logische waarde die aangeeft of de voorwaarde gunstig (TRUE) of ongunstig (FALSE) scoort.
 
 Om de status van een indicator te berekenen, wordt de aggregatie uitgevoerd die bij `geefInvoervereisten()` in het veld `Combinatie` weergegeven is (meestal een combinatie van voorwaarden met operatoren AND en OR), waarbij de resultaten TRUE/FALSE ingevuld worden bij de respectievelijke voorwaarden (gebruik makend van functie `combinerenVoorwaarden()`).
 
-Voor de aggregatie naar hogere niveaus (criterium en volledige opname) worden deze resultaten normaal verder geaggregeerd met een AND-operator (als parameter aggregatiemethode de default '1-out-all-out' is).  Als een gebruiker kiest voor de aggregatiemethode 'RapportageHR', dan wordt rekening gehouden met het feit of een indicator belangrijk (`Belang` = 'b') of zeer belangrijk is (`Belang` = 'zb').  De beoordeling is gunstig (TRUE) als meer dan 50 procent van de indicatoren gunstig zijn EN als geen enkele zeer belangrijke indicator ongunstig is.
+Voor de aggregatie naar hogere niveaus (criterium en volledige opname) worden deze resultaten normaal verder geaggregeerd met een AND-operator (als parameter aggregatiemethode de default `1-out-all-out` is).  Als een gebruiker kiest voor de aggregatiemethode `RapportageHR`, dan wordt rekening gehouden met het feit of een indicator belangrijk (`Belang` = "b") of zeer belangrijk is (`Belang` = "zb").  De beoordeling is gunstig (TRUE) als meer dan 50 procent van de indicatoren gunstig zijn EN als geen enkele zeer belangrijke indicator ongunstig is.
 
 # Distance-to-target
 
@@ -303,8 +303,8 @@ Eerst worden verschilscores voor elk van de voorwaarden berekend met de functie 
         - het maximum voor aantal geslachten (van jeneverbes) is 2
         - voor bosconstantie is het maximum begrensd op 250 (~ leeftijd van Ferrariskaart)
 - theoretisch minimum is in elk van deze gevallen 0
-- voor elke voorwaarde een 'gunstig bereik' en 'ongunstig bereik' berekenen op basis van theoretisch minimum en theoretisch maximum, en de operator en de grenswaarde in de databank
-- de verschilscore wordt berekend door het verschil tussen de score en de grenswaarde te delen door het 'gunstig bereik' (in geval van gunstige status) of het 'ongunstig bereik' (in geval van ongunstige status); het resultaat krijgt een negatief teken bij een ongunstige score en een positief teken bij een gunstige score
+- voor elke voorwaarde een "gunstig bereik" en "ongunstig bereik" berekenen op basis van theoretisch minimum en theoretisch maximum, en de operator en de grenswaarde in de databank
+- de verschilscore wordt berekend door het verschil tussen de score en de grenswaarde te delen door het "gunstig bereik" (in geval van gunstige status) of het "ongunstig bereik" (in geval van ongunstige status); het resultaat krijgt een negatief teken bij een ongunstige score en een positief teken bij een gunstige score
 - voor voorwaarden die enkel de waarden ja en nee kunnen aannemen, kan de verschilscore enkel de waarden -1 (ongunstig) en 1 (gunstig) aannemen.
 
 Om de verschilscore van een indicator te berekenen, wordt rekening gehouden met de aggregatie 
