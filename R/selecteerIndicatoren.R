@@ -30,9 +30,9 @@
 #' worden: "Vegetatie", "Structuur", "Verstoring" of "alle".
 #' @param Indicator De indicator waarvoor de gegevens uit de databank gehaald
 #' worden.  De mogelijke waarden kunnen opgevraagd worden via
-#' geefUniekeWaarden("Indicator", "Naam").
-#' @param HabitatnamenToevoegen Moeten de namen van de habitattypen en
-#' habitatsubtypen toegevoegd worden als extra kolommen?  (Bij FALSE worden
+#' `geefUniekeWaarden("Indicator", "Naam")`.
+#' @param HabitatnamenToevoegen Moeten de namen van de habitattypes en
+#' habitatsubtypes toegevoegd worden als extra kolommen?  (Bij FALSE worden
 #' enkel de habitatcodes toegevoegd, niet de volledige namen.)
 #'
 #' @return Deze functie geeft een tabel met velden `Versie`, `Habitattype`,

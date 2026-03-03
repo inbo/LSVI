@@ -1,5 +1,5 @@
 ---
-title: "Outline package LSVI"
+title: "Overzicht package LSVI"
 output: html_notebook
 ---
 
@@ -13,7 +13,7 @@ library(ggplot2)
 
 ```
 
-###BerekenLSVIbasis
+### BerekenLSVIbasis <!-- spell-check: ignore -->
 
 Onderstaand schema geeft weer welke functies aangeroepen worden in de functie `berekenLSVIbasis()` (rechtstreeks of onrechtstreeks, zie inspringing).  Vaak terugkerende functies:
 

@@ -26,7 +26,7 @@ options(
 install.packages("LSVI")
 ```
 
-To install `LSVI` from Github, start a new R session and run this code (before loading any packages):
+To install `LSVI` from GitHub, start a new R session and run this code (before loading any packages):
 
 ```r
 # install.packages("remotes")

@@ -1,4 +1,4 @@
-#' S4-klasse die aandeel grondvlak of volume van bepaalde boomsoort berekend
+#' S4-klasse die aandeel grondvlak of volume van bepaalde boomsoort berekent
 #'
 #' Deze klasse `Aandeel` staat in voor de berekening van waarden voor
 #' `TypeVariabele` `Aandeel` op basis van opgegeven kenmerken.  Ze is een

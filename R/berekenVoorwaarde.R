@@ -3,7 +3,7 @@
 #' Deze hulpfunctie berekent de waarde voor een opgegeven voorwaarde
 #' (verwijzend naar de "rekenregels" in de LSVI-indicatorendatabank) op basis
 #' van opgegeven datasets.  Ze doet dit voor 1 enkele voorwaarde en 1 enkele
-#' opname (datum + locatie).  Deze functie test NIET of de datasets zich
+#' opname (datum en locatie).  Deze functie test NIET of de datasets zich
 #' beperken tot een enkele opname, dus het is aan de gebruiker om enkel
 #' gegevens van 1 locatie mee te geven.  Voor een berekening van meerdere
 #' opnamen (en ook de volledige LSVI i.p.v. enkel 1 voorwaarde) verwijzen we

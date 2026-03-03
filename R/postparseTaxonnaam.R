@@ -5,7 +5,7 @@
 #' na het parsen door de Gbif-service.
 #'
 #' @param ResultaatParser Dataframe dat een resultaat is dat teruggegeven is
-#' door de gbif-parser
+#' door de Gbif-parser
 #'
 #' @param ParseType Welk type `parsing` teruggegeven moet worden.  Standaard is
 #' dit `"canonicalnamewithmarker"`, andere opties zijn `"canonicalname"` en

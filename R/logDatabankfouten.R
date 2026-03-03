@@ -1,10 +1,10 @@
 #' Lijst alle nog op te lossen databankfouten op
 #'
-#' Deze functie geeft een log-tabel met alle problemen die nog in de databank
+#' Deze functie maakt een tabel met alle problemen die nog in de databank
 #' zitten.  Enerzijds is er een beperkte tabel met problemen die op een hoger
 #' niveau opgelost kunnen worden en anderzijds een detail met alle Voorwaarden
 #' waar nog een fout in zit.  Problemen die op beide niveaus kunnen opgelost
-#' worden (bv. benoemen van AnalyseVariabelen), staan op beide niveaus vermeld.
+#' worden (bv. benoemen van analysevariabelen), staan op beide niveaus vermeld.
 #'
 #' @inheritParams selecteerIndicatoren
 #'
