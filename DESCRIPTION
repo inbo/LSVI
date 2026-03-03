@@ -46,6 +46,7 @@ Suggests:
     xtable
 RoxygenNote: 7.3.2
 VignetteBuilder: knitr
+Language: nl-BE
 URL: https://github.com/inbo/LSVI
 BugReports: https://github.com/inbo/LSVI/issues
 Collate: 
