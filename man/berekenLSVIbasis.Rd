@@ -66,13 +66,16 @@ dit geval moeten \code{Type}, \code{Invoertype} en \code{Eenheid} niet ingevoerd
 
 \item{Data_soortenKenmerken}{Gegevens van soorten en kenmerken en hun
 bedekking (m.a.w. enkel kenmerken waarvan een bedekking gemeten is, horen
-in deze tabel).  Deze dataframe moet de velden ID, Vegetatielaag, Kenmerk,
-TypeKenmerk, Waarde, Type, Invoertype en Eenheid bevatten, waarbij ID de
-groeperende variabele voor een opname is die ook bij Data_habitat opgegeven
-is.  Kenmerk bevat een soortnaam of een naam die voorkomt in de lijst
-gegenereerd door geefUniekeWaarden("StudieItem", "Waarde") en TypeKenmerk
-geeft een beschrijving voor dat kenmerk: 'studiegroep', 'soort_Latijn',
-'soort_NL' of 'soort_NBN'.  Waarde is de geobserveerde bedekking en Type het
+in deze tabel).
+Deze dataframe moet de velden \code{ID}, \code{Vegetatielaag}, \code{Kenmerk},
+\code{TypeKenmerk}, \code{Waarde}, \code{Type}, \code{Invoertype} en \code{Eenheid} bevatten, waarbij
+\code{ID} de groeperende variabele voor een opname is die ook bij \code{Data_habitat}
+opgegeven is.
+\code{Kenmerk} bevat een soortnaam of een naam die voorkomt in de lijst
+gegenereerd door \code{geefUniekeWaarden("StudieItem", "Waarde")} en \code{TypeKenmerk}
+geeft een beschrijving voor dat kenmerk: \code{"studiegroep"}, \code{"soort_Latijn"},
+\code{"soort_NL"} of \code{"soort_gbif"}.
+\code{Waarde} is de geobserveerde bedekking en \code{Type} het
 soort variabele dat voor de bedekking gebruikt is (zie
 \code{geefUniekeWaarden("TypeVariabele", "Naam")} voor de mogelijke waarden).
 Ingeval van een categorische variabele moet bij \code{Invoertype} de naam van de
@@ -122,7 +125,7 @@ detailgegevens inclusief meetwaarden.
 Deze functie bepaalt de Lokale Staat van Instandhouding en
 biotische indices op basis van gegevens, die in het juiste formaat moeten
 aangeleverd worden.  Zie hiervoor de beschrijving bij de parameters
-(\href{https://inbo.github.io/LSVI/reference/berekenLSVIbasis.html#arguments}{"Arguments"})
+(\href{https://inbo.github.io/LSVI/reference/berekenLSVIbasis.html#arguments}{"Arguments" })
 en de tabellen van het voorbeeld.  In principe is enkel de
 parameter \code{Data_habitat} verplicht om op te geven, maar extra datasets zijn
 uiteraard wel nodig om een resultaat te bekomen.  Welke datasets relevant
