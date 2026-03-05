@@ -1,8 +1,19 @@
+<!-- spell-check: ignore:start -->
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![Licence](https://img.shields.io/badge/licence-GPL--3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
-[![wercker status](https://app.wercker.com/status/91ffc2688434d321a85dc5d79fd7c428/s/develop "wercker status")](https://app.wercker.com/project/byKey/91ffc2688434d321a85dc5d79fd7c428)
-[![codecov](https://app.codecov.io/gh/inbo/LSVI/branch/develop/graph/badge.svg)](https://app.codecov.io/gh/inbo/LSVI)
+[![Release](https://img.shields.io/github/release/inbo/LSVI.svg)](https://github.com/inbo/LSVI/releases)
+[![R build status](https://github.com/inbo/LSVI/actions/workflows/check_on_different_r_os.yml/badge.svg)](https://github.com/inbo/LSVI/actions)
+[![codecov](https://codecov.io/gh/inbo/LSVI/branch/main/graph/badge.svg)](https://codecov.io/gh/inbo/LSVI)
+![r-universe
+name](https://inbo.r-universe.dev/badges/:name?color=c04384)
+[![r-universe package](https://inbo.r-universe.dev/badges/LSVI)](https://inbo.r-universe.dev/LSVI)
+![GitHub code size in
+bytes](https://img.shields.io/github/languages/code-size/inbo/LSVI.svg)
+![GitHub repo
+size](https://img.shields.io/github/repo-size/inbo/LSVI.svg)
+<!-- badges: end -->
+<!-- spell-check: ignore:end -->
 
 # Local conservation status for Natura 2000 habitats in Flanders
 
