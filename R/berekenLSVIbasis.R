@@ -229,6 +229,9 @@ berekenLSVIbasis <- #nolint: object_name_linter
       assert_that(has_name(data_voorwaarden_niet_na, "WaardeMax"))
     }
 
+    assert_that(inherits(Data_soortenKenmerken, "data.frame"))
+    # zorgen dat het echte dataframe is, afgeleid object geeft problemen met s4
+    Data_soortenKenmerken <- as.data.frame(Data_soortenKenmerken)
     if (nrow(Data_soortenKenmerken) > 0) {
       Data_soortenKenmerken <- #nolint: object_name_linter
         invoercontroleData_soortenKenmerken(
