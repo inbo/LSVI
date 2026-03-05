@@ -38,10 +38,10 @@
 #' @export
 #'
 #' @importFrom DBI dbGetQuery
-#' @importFrom dplyr arrange distinct mutate group_by summarise ungroup select
-#' left_join filter mutate_
+#' @importFrom dplyr across arrange distinct filter group_by left_join matches
+#' mutate select summarise ungroup
 #' @importFrom rlang .data
-#' @importFrom lazyeval interp
+#' @importFrom tidyselect all_of
 #' @importFrom assertthat assert_that
 #'
 
@@ -211,7 +211,7 @@ geefInfoHabitatfiche <-
           .data$TaxongroepId,
           .data$Criterium,
           .data$Indicator,
-          .dots = OmschrijvingKolommen
+          across(all_of(OmschrijvingKolommen))
         ) %>%
         summarise(
           Soortenlijst = paste(as.vector(.data$TotNaam), collapse = ", ")
@@ -222,19 +222,19 @@ geefInfoHabitatfiche <-
       for (i in seq_len(length(OmschrijvingKolommen))) {
         laatste_i <- max(laatste_i, length(OmschrijvingKolommen))
         Soortenlijst <- Soortenlijst %>%
-          mutate_(
+          mutate(
             Soortenlijst =
-              interp(
-                ~ ifelse(
-                  is.na(var),
-                  Soortenlijst,
-                  paste("__", var, ":__ ", Soortenlijst, sep = "")
-                ),
-                var = as.name(OmschrijvingKolommen[1])
+              ifelse(
+                is.na(.data[[OmschrijvingKolommen]]),
+                .data$Soortenlijst,
+                paste(
+                  "__", .data[[OmschrijvingKolommen[1]]], ":__",
+                  .data$Soortenlijst, sep = ""
+                )
               )
           ) %>%
           select(
-            -dplyr::matches(OmschrijvingKolommen[1])
+            -matches(OmschrijvingKolommen[1])
           )
 
         OmschrijvingKolommen <- OmschrijvingKolommen[-1]

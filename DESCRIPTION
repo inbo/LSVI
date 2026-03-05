@@ -27,7 +27,6 @@ Imports:
     DBI,
     plyr,
     dplyr,
-    lazyeval,
     methods,
     odbc,
     pool,
@@ -38,6 +37,7 @@ Imports:
     stringr,
     tibble,
     tidyr,
+    tidyselect,
     utils
 Suggests:
     knitr,
