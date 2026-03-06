@@ -13,11 +13,11 @@
 #'@template Zoekparameters
 #'
 #' @inheritParams selecteerIndicatoren
-#' @param Stijl Keuze uit "Rmd" en "tekst".  Bij "Rmd" (default) worden
+#' @param Stijl Keuze uit `"Rmd"` en `"tekst"`.  Bij `"Rmd"` (default) worden
 #' soortgroepnamen voorafgegaan en gevolgd door "__" en Latijnse namen van
 #' soorten door "_", waardoor deze bij gebruik van RMarkdown worden omgezet
 #' naar resp. __vet__ en _italics_.
-#' Bij "tekst" worden deze underscores weggelaten.
+#' Bij `"tekst"` worden deze underscores weggelaten.
 #'
 #' @return Deze functie genereert een tabel met alle gegevens die nodig zijn om
 #' de tabellen habitatkarakteristieken en beoordelingsmatrix uit de

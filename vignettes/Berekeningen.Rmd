@@ -118,7 +118,7 @@ Binnen een voorwaarde kan ook een "subvoorwaarde" gedefinieerd zijn (opgesplitst
 - `Subreferentiewaarde` "f" (-> frequent)
 - `SubOperator` ">="
 
-Tenslotte zijn er nog een aantal variabelen die verschillen in gebruikte schalen of meeteenheden opvangen.  Zo geven `Type`(`Sub`)`Variabele`, (`Sub`)`Invoertype` en (`Sub`)`Invoerwaarde` aan wat voor variabele de (`Sub`)`Referentiewaarde` in de databank is, waardoor de gebruiker niet verplicht is om dezelfde variabele en eenheid te gebruiken.  Voor verdere uitleg hierover verwijzen we naar het onderdeel over [Bedekking en Schalen](#bedekkingEnSchalen).
+Tenslotte zijn er nog een aantal variabelen die verschillen in gebruikte schalen of meeteenheden opvangen.  Zo geven `Type`(`Sub`)`Variabele`, (`Sub`)`Invoertype` en (`Sub`)`Invoerwaarde` aan wat voor variabele de (`Sub`)`Referentiewaarde` in de databank is, waardoor de gebruiker niet verplicht is om dezelfde variabele en eenheid te gebruiken.  Voor verdere uitleg hierover verwijzen we naar het onderdeel over [Bedekking en Schalen](#bedekking_schalen).
 
 ## AnalyseVariabele {#analysevariabele} <!-- spell-check: ignore -->
 
@@ -157,7 +157,7 @@ Bij voorwaarden met deze analysevariabele worden de soorten of kenmerken geselec
 Als een taxonlijst én studielijst opgegeven is, berekent de functie de totale bedekking van soorten die niet in de opgegeven taxonlijst staan en wél in de opgegeven vegetatielaag voorkomen (bv. alle soorten uit de kruidlaag behalve de soorten uit de taxonlijst).
 Verder gebeurt de berekening analoog aan deze van de analysevariabele [`bedekking`](#bedekking): met de formule van Fisher wordt de totale bedekking van deze selectie berekend.
 
-## bedekkingLaag {#bedekkinglaag} <!-- spell-check: ignore -->
+## bedekkingLaag {#bedekking_laag} <!-- spell-check: ignore -->
 
 Bij de analysevariabele `bedekkingLaag` gaat de voorwaarde over de totale bedekking van een vegetatielaag, bv. de boom- en struiklaag of de moslaag.  In dit geval is de vegetatielaag in kwestie als studielijst ingegeven (met evt. de verschillende deellagen zoals boomlaag en struiklaag ook vermeld als aparte items), en de taxonlijst bevat een lijst van alle soorten die in deze laag voorkomen.
 
@@ -166,19 +166,19 @@ Bij voorwaarden met deze analysevariabele zal eerst gecheckt worden of kenmerken
 - Als dat zo is, dan zal de bedekking afgeleid worden van het kenmerk of de kenmerken in de studielijst.  (Meer concreet: de berekening gebeurt zoals bij analysevariabele [`bedekking`](#bedekking) nadat eerst `TaxongroepId` uit de voorwaarden geschrapt is, dus de selectie van de lagen gebeurt op basis van enkel de studielijst)
 - Als dat niet zo is, dan zal de bedekking afgeleid worden op basis van opgegeven taxonlijst en zal de voorwaarde uitgevoerd worden na enkel de analysevariabele te vervangen door `bedekking` (dus de studielijst met de vegetatielaag blijft behouden, waardoor enkel soorten uit die laag geselecteerd zullen worden)
 
-## bedekkingLaagExcl {#bedekkinglaagexcl} <!-- spell-check: ignore -->
+## bedekkingLaagExcl {#bedekking_laag_excl} <!-- spell-check: ignore -->
 
-De analysevariabele `bedekkingLaagExcl` is zeer analoog aan [`bedekkingLaag`](#bedekkingLaag), maar lost een taxonlijst-gerelateerd probleem op dat voorkomt bij de taxonlijst van de boomlaag.  Om ervoor te zorgen dat ook in de opname van de gebruiker ingevoerde genera als boom beschouwd worden, bestaat de lijst van bomen en struiken uit genera.  Lagere taxonomische niveaus worden automatisch ook meegenomen (zie [Afhandeling taxonlijsten](#taxonlijsten)).  Er is echter 1 moeilijkheid: _Salix repens_ zou niet meegenomen mogen worden want dit is geen boom (die wel in de struiklaag zou kunnen voorkomen).  Anderzijds zijn er een aantal moeilijk te determineren _Salix_-soorten die evt. als genus in een opname zou kunnen voorkomen, maar die allen bomen zijn.  We gaan ervan uit dat _Salix repens_ wel herkend wordt en dus tot op soortniveau in een opname toegevoegd zal worden, en enkel moeilijk te herkennen _Salix_-soorten als genus toegevoegd worden.  Vanuit die redenering worden '_Salix_ sp.' en de _Salix_-soorten als boom beschouwd, met uitzondering van _Salix repens_.
+De analysevariabele `bedekkingLaagExcl` is zeer analoog aan [`bedekkingLaag`](#bedekking_laag), maar lost een taxonlijst-gerelateerd probleem op dat voorkomt bij de taxonlijst van de boomlaag.  Om ervoor te zorgen dat ook in de opname van de gebruiker ingevoerde genera als boom beschouwd worden, bestaat de lijst van bomen en struiken uit genera.  Lagere taxonomische niveaus worden automatisch ook meegenomen (zie [Afhandeling taxonlijsten](#taxonlijsten)).  Er is echter 1 moeilijkheid: _Salix repens_ zou niet meegenomen mogen worden want dit is geen boom (die wel in de struiklaag zou kunnen voorkomen).  Anderzijds zijn er een aantal moeilijk te determineren _Salix_-soorten die evt. als genus in een opname zou kunnen voorkomen, maar die allen bomen zijn.  We gaan ervan uit dat _Salix repens_ wel herkend wordt en dus tot op soortniveau in een opname toegevoegd zal worden, en enkel moeilijk te herkennen _Salix_-soorten als genus toegevoegd worden.  Vanuit die redenering worden "_Salix_ sp." en de _Salix_-soorten als boom beschouwd, met uitzondering van _Salix repens_.
 
 Dit probleempje heeft aanleiding gegeven voor een nieuwe analysevariabele, die uiteraard ook ruimer gebruikt kan worden.  Bij voorwaarden met deze analysevariabele verwijst het `TaxongroepId` naar een taxonlijst bestaande uit 2 sublijsten: een lange lijst (bv. alle genera van bomen) en een kort lijstje (bv. _Salix repens_).
 
-Bij de berekening zal eerst gecheckt worden of er inderdaad 2 sublijsten zijn, en in dat geval zullen als een eerste stap de taxa van het kortste lijstje geschrapt worden in de lijst van de taxa met het langste lijstje (in een lijst waarin alle mogelijke taxonniveaus toegevoegd zijn).  Daarna zal met de eventueel aangepaste taxonlijst de voorwaarde uitgerekend worden volgens analysevariabele [`bedekkingLaag`](#bedekkingLaag).
+Bij de berekening zal eerst gecheckt worden of er inderdaad 2 sublijsten zijn, en in dat geval zullen als een eerste stap de taxa van het kortste lijstje geschrapt worden in de lijst van de taxa met het langste lijstje (in een lijst waarin alle mogelijke taxonniveaus toegevoegd zijn).  Daarna zal met de eventueel aangepaste taxonlijst de voorwaarde uitgerekend worden volgens analysevariabele [`bedekkingLaag`](#bedekking_laag).
 
-## bedekkingLaagPlus {#bedekkinglaagplus} <!-- spell-check: ignore -->
+## bedekkingLaagPlus {#bedekking_laag_plus} <!-- spell-check: ignore -->
 
-Bij de analysevariabele `bedekkingLaagPlus` gaat de voorwaarde over de totale bedekking van een vegetatielaag en een taxongroep, bv. de bedekking van de moslaag en klimop.  Verschillend van [`bedekkingLaag`](#bedekkinglaag) verwijst het `TaxongroepId` naar een taxonlijst met 2 taxonsublijsten (zie [Afhandeling taxonlijsten](#taxonlijsten)): een lange lijst met alle soorten van de vegetatielaag die in studielijst vermeld is (in het voorbeeld alle mossen), en een korte lijst met de soorten waarvan de bedekking hierbij opgeteld moet worden (in het voorbeeld klimop).
+Bij de analysevariabele `bedekkingLaagPlus` gaat de voorwaarde over de totale bedekking van een vegetatielaag en een taxongroep, bv. de bedekking van de moslaag en klimop.  Verschillend van [`bedekkingLaag`](#bedekking_laag) verwijst het `TaxongroepId` naar een taxonlijst met 2 taxonsublijsten (zie [Afhandeling taxonlijsten](#taxonlijsten)): een lange lijst met alle soorten van de vegetatielaag die in studielijst vermeld is (in het voorbeeld alle mossen), en een korte lijst met de soorten waarvan de bedekking hierbij opgeteld moet worden (in het voorbeeld klimop).
 
-Bij de berekening zal eerst gecheckt worden of er inderdaad 2 sublijsten zijn, en in dat geval worden deze opgesplitst in 2 lijsten.  Op basis van de kortste lijst wordt de bedekking van deze soort(en) berekend volgens de analysevariabele [`bedekking`](#bedekking) (waarbij de studielijst buiten beschouwing gelaten wordt).  Op basis van het langste lijst en de studielijst wordt de bedekking van de vegetatielaag berekend volgens de analysevariabele [`bedekkingLaag`](#bedekkinglaag).  Daarna wordt de voorwaarde berekend door beide bedekkingen op te tellen volgens de formule van Fisher (zie onder [`bedekking`](#bedekking)).  (Ingeval er geen 2 sublijsten zijn, zal de voorwaarde als weergegeven in de databank, berekend worden volgens analysevariabele [`bedekkingLaag`](#bedekkinglaag)).
+Bij de berekening zal eerst gecheckt worden of er inderdaad 2 sublijsten zijn, en in dat geval worden deze opgesplitst in 2 lijsten.  Op basis van de kortste lijst wordt de bedekking van deze soort(en) berekend volgens de analysevariabele [`bedekking`](#bedekking) (waarbij de studielijst buiten beschouwing gelaten wordt).  Op basis van het langste lijst en de studielijst wordt de bedekking van de vegetatielaag berekend volgens de analysevariabele [`bedekkingLaag`](#bedekking_laag).  Daarna wordt de voorwaarde berekend door beide bedekkingen op te tellen volgens de formule van Fisher (zie onder [`bedekking`](#bedekking)).  (Ingeval er geen 2 sublijsten zijn, zal de voorwaarde als weergegeven in de databank, berekend worden volgens analysevariabele [`bedekkingLaag`](#bedekking_laag)).
 
 ## bedekkingSom <!-- spell-check: ignore -->
 
@@ -186,19 +186,19 @@ Bij de analysevariabele `bedekkingSom` gaat de voorwaarde over de totale bedekki
 
 De bedekkingen worden berekend volgens de analysevariabele [`bedekking`](#bedekking) voor enerzijds de studielijst (waarbij `TaxongroepId` buiten beschouwing gelaten wordt), en anderzijds voor `TaxongroepId` (waarbij de studielijst buiten beschouwing gelaten wordt).  Daarna wordt de voorwaarde berekend door beide bedekkingen op te tellen.  Vermits de studielijst doorgaans geen vegetatie bevat, wordt niet uitgegaan van een gedeeltelijke overlap en wordt een gewone som gebruikt.
 
-## maxBedekking {#maxbedekking} <!-- spell-check: ignore -->
+## maxBedekking {#max_bedekking} <!-- spell-check: ignore -->
 
 Bij de voorwaarden met analysevariabele `maxBedekking` wordt de maximale bedekking geselecteerd uit de records (soorten of kenmerken) die door `selecteerKenmerkenInOpname()` teruggegeven worden (zie onder [`AnalyseVariabele`](#analysevariabele)), dus hier wordt de soort of kenmerk met de hoogste bedekking geselecteerd uit de relevante soorten (ingeval van taxonlijst) of kenmerken (ingeval van studielijst) die voorkomen in de door de gebruiker ingegeven opname en voldoen aan een eventuele subvoorwaarde.  Als samen met een taxonlijst ook een studielijst opgegeven wordt, dan is deze te interpreteren als een tweede subvoorwaarde.  In de praktijk gaat het hier over de vegetatielaag waarin de soorten moeten voorkomen.
 
 ## maxBedekking2s <!-- spell-check: ignore -->
 
-De analysevariabele `maxBedekking2s` is gelijkaardig aan [`maxBedekking`](#maxbedekking) met als enige verschil dat bij 2 of meer aanwezige soorten of kenmerken, de bedekkingen van de 2 soorten of kenmerken met de hoogste bedekking opgeteld worden volgens de formule van Fisher (zie onder [`bedekking`](#bedekking)).
+De analysevariabele `maxBedekking2s` is gelijkaardig aan [`maxBedekking`](#max_bedekking) met als enige verschil dat bij 2 of meer aanwezige soorten of kenmerken, de bedekkingen van de 2 soorten of kenmerken met de hoogste bedekking opgeteld worden volgens de formule van Fisher (zie onder [`bedekking`](#bedekking)).
 
 ## maxBedekkingExcl <!-- spell-check: ignore -->
 
 Bij de analysevariabele `maxBedekkingExcl` gaat de voorwaarde over de maximale bedekking van de soorten of kenmerken die niet in een lijst voorkomen, bv. alle soorten behalve de sleutelsoorten.
 
-Bij voorwaarden met deze analysevariabele worden de soorten of kenmerken geselecteerd op basis van een functie `deselecteerKenmerkenInOpname()`, die in de opname van de gebruiker de soorten of kenmerken schrapt die in resp. de taxonlijst of studielijst voorkomen (en de overblijvende soorten of kenmerken vormen de selectie).  Verder gebeurt de berekening analoog aan deze van de analysevariabele [`maxBedekking`](#maxbedekking): de soort of kenmerk met maximale bedekking wordt geselecteerd uit de selectie.
+Bij voorwaarden met deze analysevariabele worden de soorten of kenmerken geselecteerd op basis van een functie `deselecteerKenmerkenInOpname()`, die in de opname van de gebruiker de soorten of kenmerken schrapt die in resp. de taxonlijst of studielijst voorkomen (en de overblijvende soorten of kenmerken vormen de selectie).  Verder gebeurt de berekening analoog aan deze van de analysevariabele [`maxBedekking`](#max_bedekking): de soort of kenmerk met maximale bedekking wordt geselecteerd uit de selectie.
 
 ## aandeel
 
@@ -220,7 +220,7 @@ De totale bedekking van de relevante soorten wordt berekend door de voorwaarde (
 Om de voorwaarde te berekenen, zal de totale bedekking van de relevante soorten gedeeld worden door de totale bedekking van de vegetatielaag.
 <!-- Het tweede deel van de berekening lijkt wat op bedekkingLaag, maar is niet helemaal hetzelfde (er wordt uitgegaan van de veronderstelling dat er maar 1 vegetatielaag opgegeven is in studielijst, alle soorten uit de opname uit de laag worden meegenomen,...).  Omwille van het laatste verschil kan bedekkingLaag op het eerste zicht moeilijk als alternatief gebruikt worden. -->
 
-## aantalGroepen {#aantalgroepen} <!-- spell-check: ignore -->
+## aantalGroepen {#aantal_groepen} <!-- spell-check: ignore -->
 
 De analysevariabele `aantalGroepen` gaat specifiek over kenmerken die eigenlijk soortenlijsten zijn, bv. helofyten.  Deze kenmerken zijn in de databank enerzijds weergegeven in de studielijst, en anderzijds verwijst het `TaxongroepId` naar een taxonlijst met meerdere taxonsubgroepen die elk overeenkomen met een van de kenmerken (en die de relevante soorten bevatten).
 
@@ -245,24 +245,24 @@ Idealiter worden de door de gebruiker ingevoerde taxonnamen herkend en correct b
 - taxa van meerdere taxonomische niveaus (genera, soorten, ondersoorten,...) en hun onderlinge verwantschap
 - zowel "preferred names" als "junior synonyms" (bij opgevraagde info worden enkel preferred names gegeven, de junior synonyms dienen enkel om door gebruikers ingevoerde namen te herkennen)
 - Latijnse en Nederlandse namen
-- de binnen INBO gebruikte NbnTaxonVersionKey die een unieke code is voor een taxon
+- de binnen INBO gebruikte `NbnTaxonVersionKey` die een unieke code is voor een taxon
 
-Voor Latijnse namen gebeurt herkenning op basis van genusnaam + soortnaam + evt. subsoortnaam/variëteit/….  Om de koppeling met namen uit de databank toe te laten, worden de door een gebruiker ingevoerde namen deze eerst scriptmatig aangepast naar dit formaat met de functie `parseTaxonnaam()` (waarbij o.a. auteursnamen worden weggelaten zodat verschillen in schrijfwijzen of al dan niet gebruiken van een '.' hierin geen probleem vormen).  Bij Nederlandse namen moet de schrijfwijze wel exact hetzelfde zijn om herkenning toe te laten.
+Voor Latijnse namen gebeurt herkenning op basis van genusnaam én soortnaam én evt. ondersoort/variëteit/vorm.  Om de koppeling met namen uit de databank toe te laten, worden de door een gebruiker ingevoerde namen deze eerst scriptmatig aangepast naar dit formaat met de functie `parseTaxonnaam()` (waarbij o.a. auteursnamen worden weggelaten zodat verschillen in schrijfwijzen of al dan niet gebruiken van een "." hierin geen probleem vormen).  Bij Nederlandse namen moet de schrijfwijze wel exact hetzelfde zijn om herkenning toe te laten.
 
-Als de gebruiker een onbekende naam invoert, krijgt hij een waarschuwing en wordt deze naam bij de berekeningen buiten beschouwing gelaten (ook voor bv. de berekening van een totale bedekking van alle soorten of een bepaalde vegetatielaag).  Anders wordt de naam omgezet naar de NbnTaxonVersionKey van de ‘preferred name’, die intern gebruikt wordt voor de verdere berekeningen.  Als gebruiker kan je ook rechtstreeks deze unieke code invoeren (dan gebeurt de hier beschreven stap om de naam te herkennen niet).
+Als de gebruiker een onbekende naam invoert, krijgt hij een waarschuwing en wordt deze naam bij de berekeningen buiten beschouwing gelaten (ook voor bv. de berekening van een totale bedekking van alle soorten of een bepaalde vegetatielaag).  Anders wordt de naam omgezet naar de `NbnTaxonVersionKey` van de "preferred name", die intern gebruikt wordt voor de verdere berekeningen.  Als gebruiker kan je ook rechtstreeks deze unieke code invoeren (dan gebeurt de hier beschreven stap om de naam te herkennen niet).
 
-Bij het selecteren van soorten uit de opname op basis van een taxonlijst in de databank (met `selecteerKenmerkenInOpname()`, zie  onder [AnalyseVariabele](#AnalyseVariabele)), wordt voor de taxa in de databank eerst gecheckt of ze in de opname voorkomen.  Als een taxon niet gevonden wordt (bv. _Quercus_), wordt gezocht of taxa van een lager niveau wel in opname voorkomen (bv. _Quercus robur_, _Quercus petraea_,...).  Als er meerdere taxa van dit lagere niveau voorkomen, dan worden deze bedekkingen geaggregeerd door middel van de formule van Fisher (zie onder [bedekking](#bedekking)).  Op deze lijst gebeurt de uiteindelijke bewerking als beschreven bij de analysevariabelen (aantallen tellen, bedekkingen aggregeren,...).
+Bij het selecteren van soorten uit de opname op basis van een taxonlijst in de databank (met `selecteerKenmerkenInOpname()`, zie  onder [`AnalyseVariabele`](#analysevariabele)), wordt voor de taxa in de databank eerst gecheckt of ze in de opname voorkomen.  Als een taxon niet gevonden wordt (bv. _Quercus_), wordt gezocht of taxa van een lager niveau wel in opname voorkomen (bv. _Quercus robur_, _Quercus petraea_,...).  Als er meerdere taxa van dit lagere niveau voorkomen, dan worden deze bedekkingen geaggregeerd door middel van de formule van Fisher (zie onder [bedekking](#bedekking)).  Op deze lijst gebeurt de uiteindelijke bewerking als beschreven bij de analysevariabelen (aantallen tellen, bedekkingen aggregeren,...).
 
 Een soortenlijst met toevoeging van deze taxa van lagere niveaus kan opgevraagd worden door bij functies `geefSoortenlijst()` of `geefSoortenlijstVoorIDs()` de parameter `Taxonlijsttype = "alle"` toe te voegen.  In de verkregen lijst zijn de taxa van het hoogste niveau de records waar `TaxonId` en `SubTaxonId` dezelfde waarde hebben.  De taxa van een lager niveau hebben hier een verschillende waarde, en ze hebben dezelfde `TaxonId` als het bijhorend taxon van het hoogste niveau.
 
-Voor enkele analysevariabelen ([`bedekkingLaagPlus`](#bedekkingLaagPlus), [`bedekkingLaagExcl`](#bedekkingLaagExcl) en [`aantalGroepen`](#aantalGroepen)) zijn 2 soortenlijsten nodig voor de berekening.  Dit is opgelost door een lijst te maken (aangeduid met eenzelfde `TaxongroepId`) met 2 sublijsten (elk aangeduid met eenzelfde `TaxonsubgroepId`).  Bij [`bedekkingLaagPlus`](#bedekkingLaagPlus) en [`bedekkingLaagExcl`](#bedekkingLaagExcl) wordt deze lijst op basis van `TaxonsubgroepId` opgesplitst in 2 afzonderlijke lijsten, en de bewerking gebeurt op lijsten zonder sublijsten.  Bij [`aantalGroepen`](#aantalGroepen)) zijn de Id's hernoemd om code van analysevariabele [`aantal`](#aantal) te kunnen herbruiken:
+Voor enkele analysevariabelen ([`bedekkingLaagPlus`](#bedekking_laag_plus), [`bedekkingLaagExcl`](#bedekking_laag_excl) en [`aantalGroepen`](#aantal_groepen)) zijn 2 soortenlijsten nodig voor de berekening.  Dit is opgelost door een lijst te maken (aangeduid met eenzelfde `TaxongroepId`) met 2 sublijsten (elk aangeduid met eenzelfde `TaxonsubgroepId`).  Bij [`bedekkingLaagPlus`](#bedekking_laag_plus) en [`bedekkingLaagExcl`](#bedekking_laag_excl) wordt deze lijst op basis van `TaxonsubgroepId` opgesplitst in 2 afzonderlijke lijsten, en de bewerking gebeurt op lijsten zonder sublijsten.  Bij [`aantalGroepen`](#aantal_groepen)) zijn de `Id`'s hernoemd om code van analysevariabele [`aantal`](#aantal) te kunnen hergebruiken:
 
 - `TaxonsubgroepId` -> `TaxonId` zodanig dat de originele `TaxongroepId`'s aanzien worden als de items (soorten) die geteld moeten worden
 - `TaxongroepId` -> `TaxonsubgroepId` zodanig dat de nieuwe `TaxonId`'s onder 1 taxonsubgroep vallen
 
 Ook bij andere analysevariabelen kan een taxonlijst opgesplitst zijn in sublijsten, meestal als gevolg van het feit dat deze sublijsten bij andere voorwaarden als aparte lijst gebruikt worden.  In deze gevallen is de opsplitsing in sublijsten een louter praktisch gegeven en heeft het geen invloed op de berekening.
 
-# Bedekking en schalen {#bedekkingEnSchalen}
+# Bedekking en schalen {#bedekking_schalen}
 
 Ook voor de invoer van bedekkingen heeft de gebruiker enige flexibiliteit en is hij niet verplicht om dezelfde bedekkingsschaal te gebruiken als de opgegeven grenswaarde bij de voorwaarde in kwestie.  Een gebruiker kan een bedekking invoeren op 3 manieren:
 

@@ -5,9 +5,9 @@
 #' invoercontrole een aparte hulpfunctie aan, die we kunnen aanroepen.  Deze
 #' wordt NIET geëxporteerd, dus deze functies kunnen niet als commando gerund
 #' worden (maar worden wel gerund als de functie waarin ze voorkomen,
-#' aangeroepen wordt).  Ingeval van Data_soortenKenmerken is ook de omzetting
-#' van soortnamen naar een NBNTaxonVersionKey en de omzettingen van bedekkingen
-#' naar een interval opgenomen in de functie.
+#' aangeroepen wordt).  Ingeval van `Data_soortenKenmerken` is ook de omzetting
+#' van soortnamen naar een `NbnTaxonVersionKey` en de omzettingen van
+#' bedekkingen naar een interval opgenomen in de functie.
 #'
 #' @param Data_soortenKenmerken dataframe waarop invoercontrole moet gebeuren.
 #' @inheritParams berekenLSVIbasis

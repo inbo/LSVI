@@ -1,12 +1,12 @@
 #' @title Vereenvoudig de soortnaam door de auteurs te verwijderen
 #'
-#' @description Deze functie vereenvoudigt de opgegeven taxonna(a)m(en) door
-#' de auteursnaam te verwijderen.  Ze is gebaseerd op de functie name_parse
+#' @description Deze functie vereenvoudigt de opgegeven taxonnamen door
+#' de auteursnaam te verwijderen.  Ze is gebaseerd op de functie `name_parse()`
 #' uit het package rgbif, maar ze vangt enkele specifieke situaties uit de
 #' INBO-plantenlijsten wel op die de originele functie niet correct opvangt, bv.
-#' v., an en den herkennen als deel van een auteursnaam en s.l. en meerdere
-#' soortnamen gescheiden door / (zonder spatie) vervangen door een achtervoegsel
-#' groep.
+#' `v.`, `an` en `den` herkennen als deel van een auteursnaam en
+#' `s.l.` en meerdere soortnamen gescheiden door `/` (zonder spatie) vervangen
+#' door een achtervoegsel `groep`.
 #'
 #' @param Taxonnaam Wetenschappelijke naam of namen die vereenvoudigd moeten
 #' worden (String)
