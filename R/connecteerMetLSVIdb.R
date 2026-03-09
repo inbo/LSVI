@@ -7,7 +7,7 @@
 #' om eenmalig een connectiepool aan te maken met de functie
 #' `maakConnectiePool()`.
 #'
-#' @return Deze functie geeft een open odbc-connectie naar de SQLite-databank
+#' @return Deze functie geeft een open `odbc`-connectie naar de SQLite-databank
 #' in de installatie-file van het package.
 #'
 #' @examples

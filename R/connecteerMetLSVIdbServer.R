@@ -11,7 +11,7 @@
 #' @param Databank de naam van de databank die aangeroepen wordt (standaard
 #' `D0122_00_LSVIHabitatTypes`)
 #'
-#' @return Deze functie geeft een open odbc-connectie naar de databank
+#' @return Deze functie geeft een open `odbc`-connectie naar de databank
 #' `D0122_00_LSVIHabitatTypes` op de databankserver van INBO.
 #'
 #' @noRd

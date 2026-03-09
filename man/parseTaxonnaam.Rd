@@ -21,7 +21,7 @@ of vector van strings)
 \description{
 Deze functie vereenvoudigt de opgegeven taxonnamen door
 de auteursnaam te verwijderen.  Ze is gebaseerd op de functie \code{name_parse()}
-uit het package rgbif, maar ze vangt enkele specifieke situaties uit de
+uit het package \code{rgbif}, maar ze vangt enkele specifieke situaties uit de
 INBO-plantenlijsten wel op die de originele functie niet correct opvangt, bv.
 \code{v.}, \code{an} en \code{den} herkennen als deel van een auteursnaam en
 \code{s.l.} en meerdere soortnamen gescheiden door \code{/} (zonder spatie) vervangen

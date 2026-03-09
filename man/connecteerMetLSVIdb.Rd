@@ -7,7 +7,7 @@
 connecteerMetLSVIdb()
 }
 \value{
-Deze functie geeft een open odbc-connectie naar de SQLite-databank
+Deze functie geeft een open \code{odbc}-connectie naar de SQLite-databank
 in de installatie-file van het package.
 }
 \description{

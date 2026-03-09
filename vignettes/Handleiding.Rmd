@@ -175,7 +175,7 @@ library(readr)
 Dataset <- read_csv2("Gegevens.csv")
 ```
 
-Je steekt dus de gegevens uit je bestand `Gegevens.csv` in de variabele `Dataset`.  (Het laden van package readr met commando `library(readr)` is enkel nodig als je dit nog niet eerder gedaan hebt sinds je R opgestart hebt.)
+Je steekt dus de gegevens uit je bestand `Gegevens.csv` in de variabele `Dataset`.  (Het laden van package `readr` met commando `library(readr)` is enkel nodig als je dit nog niet eerder gedaan hebt sinds je R opgestart hebt.)
 
 Gegevens kunnen ook rechtstreeks vanuit een databank ingelezen worden, en ze kunnen in R naar het gewenste formaat omgezet worden.  Een volledige uitleg hierover zou ons echter te ver leiden.  Toch interesse om hier meer over te leren?  Neem dan contact op met een collega van BMK.
 
