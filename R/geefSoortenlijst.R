@@ -65,8 +65,9 @@ geefSoortenlijst <-
            Habitattype = "alle",
            Criterium = "alle",
            Indicator = "alle",
-           Taxonlijstniveau =
-             c("habitattype", "criterium", "indicator", "voorwaarde"),
+           Taxonlijstniveau = c(
+             "habitattype", "criterium", "indicator", "voorwaarde"
+           ),
            Taxonlijsttype = c("LSVIfiche", "alle"),
            ConnectieLSVIhabitats = NULL) {
 

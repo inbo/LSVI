@@ -62,15 +62,15 @@ migratieSQLserverSQLite <- function() {
         HabitattypeId, VersieId
       )
     )
-  Indicator_habitat$Beschrijving <-
+  Indicator_habitat$Beschrijving <- #nolint: object_name_linter
     gsub("[\r\n\t]", "", Indicator_habitat$Beschrijving)
-  Indicator_habitat$Beschrijving_naSoorten <-
+  Indicator_habitat$Beschrijving_naSoorten <- #nolint: object_name_linter
     gsub("[\r\n\t]", "", Indicator_habitat$Beschrijving_naSoorten)
-  Indicator_habitat$Maatregelen <-
+  Indicator_habitat$Maatregelen <- #nolint: object_name_linter
     gsub("[\r\n\t]", "", Indicator_habitat$Maatregelen)
-  Indicator_habitat$Opmerkingen <-
+  Indicator_habitat$Opmerkingen <- #nolint: object_name_linter
     gsub("[\r\n\t]", "", Indicator_habitat$Opmerkingen)
-  Indicator_habitat$Referenties <-
+  Indicator_habitat$Referenties <- #nolint: object_name_linter
     gsub("[\r\n\t]", "", Indicator_habitat$Referenties)
 
   Indicator_habitatId <- #nolint: object_name_linter
@@ -104,9 +104,9 @@ migratieSQLserverSQLite <- function() {
         Indicator_beoordelingId
       )
     )
-  Indicator_beoordeling$Opmerkingen <-
+  Indicator_beoordeling$Opmerkingen <- #nolint: object_name_linter
     gsub("[\r\n\t]", "", Indicator_beoordeling$Opmerkingen)
-  Indicator_beoordeling$Referenties <-
+  Indicator_beoordeling$Referenties <- #nolint: object_name_linter
     gsub("[\r\n\t]", "", Indicator_beoordeling$Referenties)
 
   Beoordeling <-

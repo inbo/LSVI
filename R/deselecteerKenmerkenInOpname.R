@@ -56,7 +56,7 @@ deselecteerKenmerkenInOpname <-
           Soortengroep,
           by = c("Kenmerk" = "NbnTaxonVersionKey")
         )
-      if (length(Studiegroep) > 0 & nrow(Resultaat) > 0) {
+      if (length(Studiegroep) > 0 && nrow(Resultaat) > 0) {
         if (max(is.na(Resultaat$Vegetatielaag))) {
           stop(
             "Bij Data_soortenKenmerken is niet voor alle soorten de kolom Vegetatielaag ingevuld, waardoor de berekening niet correct kan worden uitgevoerd (dit omdat de vegetatielaag bepaalt of de betreffende soort al dan niet in rekening gebracht moet worden voor het berekenen van de indicator)"  #nolint: line_length_linter

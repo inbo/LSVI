@@ -219,7 +219,7 @@ geefInfoHabitatfiche <-
         ungroup()
 
       laatste_i <- 0
-      for (i in seq_len(length(OmschrijvingKolommen))) {
+      for (i in seq_along(OmschrijvingKolommen)) {
         laatste_i <- max(laatste_i, length(OmschrijvingKolommen))
         Soortenlijst <- Soortenlijst %>%
           mutate(

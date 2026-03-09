@@ -81,8 +81,7 @@ analyseVariabele_c <- #nolint: object_name_linter
           ConnectieLSVIhabitats = ConnectieLSVIhabitats
         ) %>%
         mutate(
-          NbnTaxonVersionKey =
-            tolower(.data$NbnTaxonVersionKey)
+          NbnTaxonVersionKey = tolower(.data$NbnTaxonVersionKey)
         ) %>%
         select(
           "TaxongroepId",
