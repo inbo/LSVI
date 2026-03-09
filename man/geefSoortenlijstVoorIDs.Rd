@@ -15,8 +15,8 @@ geefSoortenlijstVoorIDs(
 weergegeven worden, gescheiden door een komma.
 Eventueel mag dit ook een vector zijn van \code{TaxongroepId}'s.}
 
-\item{Taxonlijsttype}{"LSVIfiche" betekent dat de taxonlijst van de
-habitatfiche wordt overgenomen, "alle" betekent dat alle soorten en alle
+\item{Taxonlijsttype}{\code{"LSVIfiche"} betekent dat de taxonlijst van de
+habitatfiche wordt overgenomen, \code{"alle"} betekent dat alle soorten en alle
 taxonomische groepen worden weergegeven die volledig in de groepen vallen
 die aan de parameters voldoen.}
 
@@ -42,7 +42,7 @@ de functie \code{geefSoortenlijst()} een beter alternatief.
 
 Deze functie geeft standaard voor de gespecifieerde taxongroepen per groep
 een lijst van alle taxa zoals ze in de LSVI-habitatfiche vermeld zijn
-(genusniveau, soortniveau, subsoort,...).  Op basis van de parameter
+(genusniveau, soortniveau, ondersoort,...).  Op basis van de parameter
 soortenlijsttype kan ook gekozen worden om een volledige lijst te geven van
 deze taxa en alle taxa die hieronder vallen (en opgenomen zijn in de
 onderliggende databank).

@@ -47,8 +47,8 @@ is (en welke niveaus weergegeven worden in de soortenlijst), de mogelijke
 waarden zijn "habitattype", "criterium", "indicator" en "voorwaarde".
 Default is "habitattype".}
 
-\item{Taxonlijsttype}{"LSVIfiche" betekent dat de taxonlijst van de
-habitatfiche wordt overgenomen, "alle" betekent dat alle soorten en alle
+\item{Taxonlijsttype}{\code{"LSVIfiche"} betekent dat de taxonlijst van de
+habitatfiche wordt overgenomen, \code{"alle"} betekent dat alle soorten en alle
 taxonomische groepen worden weergegeven die volledig in de groepen vallen
 die aan de parameters voldoen.}
 

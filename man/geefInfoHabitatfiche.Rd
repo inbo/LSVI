@@ -42,11 +42,11 @@ worden: "Vegetatie", "Structuur", "Verstoring" of "alle".}
 worden.  De mogelijke waarden kunnen opgevraagd worden via
 \code{geefUniekeWaarden("Indicator", "Naam")}.}
 
-\item{Stijl}{Keuze uit "Rmd" en "tekst".  Bij "Rmd" (default) worden
+\item{Stijl}{Keuze uit \code{"Rmd"} en \code{"tekst"}.  Bij \code{"Rmd"} (default) worden
 soortgroepnamen voorafgegaan en gevolgd door "__" en Latijnse namen van
 soorten door "_", waardoor deze bij gebruik van RMarkdown worden omgezet
 naar resp. \strong{vet} en \emph{italics}.
-Bij "tekst" worden deze underscores weggelaten.}
+Bij \code{"tekst"} worden deze underscores weggelaten.}
 
 \item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor
 de LSVI van habitats, in te stellen d.m.v. functie \code{connecteerMetLSVIdb()}.}
