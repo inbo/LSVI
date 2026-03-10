@@ -1,11 +1,11 @@
 # LSVI 0.1.4
 
 * veld `habitattype.y` verwijderd in output van tabellen van functie
-`berekenLSVIbasis()`
+  `berekenLSVIbasis()`
 * toevoeging van functionaliteit om taxa in 1 laag te deselecteren in functie
-`deselecteerSoortenKenmerken()` (issue #231)
+  `deselecteerSoortenKenmerken()` (issue #231)
 * bij `berekenLSVIbasis()` worden de extra kolommen uit `Data_habitat`
-toegevoegd aan de uitvoer van de functie
+  toegevoegd aan de uitvoer van de functie
 
 # LSVI 0.1.3
 
