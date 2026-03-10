@@ -1,20 +1,25 @@
 Package: LSVI
 Title: Rekenmodule Lokale Staat Van Instandhouding van habitattypen
-Version: 0.1.3
+Version: 0.1.4
 Authors@R: c(
     person("Els", "Lommelen", , "els.lommelen@inbo.be", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0002-3481-5684")),
+           comment = c(ORCID = "0000-0002-3481-5684", affiliation = "Instituut voor Natuur- en Bosonderzoek (INBO)")),
     person("Patrik", "Oosterlynck", , "patrik.oosterlynck@inbo.be", role = "aut",
-           comment = c(ORCID = "0000-0002-5712-0770")),
-    person("Gert", "Van Spaendonk", , "gert.vanspaendonk@inbo.be", role = "aut"),
+           comment = c(ORCID = "0000-0002-5712-0770", affiliation = "Instituut voor Natuur- en Bosonderzoek (INBO)")),
+    person("Gert", "Van Spaendonk", , "gert.vanspaendonk@inbo.be", role = "aut",
+           comment = c(ORCID = "0009-0008-6988-1113", affiliation = "Instituut voor Natuur- en Bosonderzoek (INBO)")),
     person("Hans", "Van Calster", , "hans.vancalster@inbo.be", role = "aut",
-           comment = c(ORCID = "0000-0001-8595-8426")),
-    person("Martine", "Van Hove", , "martine.vanhove@inbo.be", role = "aut"),
+           comment = c(ORCID = "0000-0001-8595-8426", affiliation = "Instituut voor Natuur- en Bosonderzoek (INBO)")),
+    person("Martine", "Van Hove", , "martine.vanhove@inbo.be", role = "aut",
+           comment = c(ORCID = "0000-0002-6394-0820", affiliation = "Instituut voor Natuur- en Bosonderzoek (INBO)")),
     person("Toon", "Westra", , "toon.westra@inbo.be", role = "aut",
-           comment = c(ORCID = "0000-0003-2478-9459")),
-    person("An", "Leyssen", , "an.leyssen@inbo.be", role = "ctb"),
-    person("Toon", "Spanhove", , "toon.spanhove@inbo.be", role = "ctb"),
-    person("Research Institute for Nature and Forest (INBO)", , , "info@inbo.be", role = "cph")
+           comment = c(ORCID = "0000-0003-2478-9459", affiliation = "Instituut voor Natuur- en Bosonderzoek (INBO)")),
+    person("An", "Leyssen", , "an.leyssen@inbo.be", role = "ctb",
+           comment = c(ORCID = "0000-0003-3537-286X", affiliation = "Instituut voor Natuur- en Bosonderzoek (INBO)")),
+    person("Toon", "Spanhove", , "toon.spanhove@inbo.be", role = "ctb",
+           comment = c(ORCID = "0000-0001-9194-0193", affiliation = "Instituut voor Natuur- en Bosonderzoek (INBO)")),
+    person("Instituut voor Natuur- en Bosonderzoek (INBO)", , , "info@inbo.be", role = c("cph", "fnd"),
+           comment = c(ROR = "https://ror.org/00j54wy13"))
   )
 Description: Het package LSVI bundelt een aantal functies in verband met
     het ophalen van informatie over en het berekenen van de Lokale Staat
@@ -27,10 +32,10 @@ Depends:
 Imports:
     assertthat,
     DBI,
-    plyr,
     dplyr,
     methods,
     odbc,
+    plyr,
     pool,
     rgbif,
     rlang,
@@ -48,6 +53,8 @@ Suggests:
     xtable
 VignetteBuilder: 
     knitr
+Config/checklist/communities: inbo
+Config/checklist/keywords: habitats; local conservation status
 Encoding: UTF-8
 Language: nl-BE
 LazyData: true
