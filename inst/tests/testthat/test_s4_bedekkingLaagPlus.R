@@ -16,7 +16,7 @@ describe("s4_bedekkingLaagPlus", {
               WaardeMin = c(0.5, 0, 0.6, 0, 0),
               WaardeMax = c(0.5, 0.3, 0.6, 0.3, 1),
               Eenheid = "%",
-              Vegetatielaag = c(rep("moslaag", 3), rep("kruidlaag", "2")),
+              Vegetatielaag = c(rep("moslaag", 3), rep("kruidlaag", 2)),
               stringsAsFactors = FALSE
             ),
           Soortengroep =
@@ -49,7 +49,7 @@ describe("s4_bedekkingLaagPlus", {
               WaardeMin = c(0.5, 0, 0, 0, 0, 0.8),
               WaardeMax = c(0.5, 0.3, 0, 0.3, 1, 0.8),
               Eenheid = "%",
-              Vegetatielaag = c(rep("moslaag", 3), rep("kruidlaag", "2"), NA),
+              Vegetatielaag = c(rep("moslaag", 3), rep("kruidlaag", 2), NA),
               LijstNaam = c(rep(NA, 5), "Vegetatielaag"),
               stringsAsFactors = FALSE
             ),
