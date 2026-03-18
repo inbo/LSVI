@@ -1,0 +1,74 @@
+{
+  "title": "LSVI: Rekenmodule Lokale Staat Van Instandhouding van habitattypen",
+  "version": "0.1.4",
+  "license": "GPL-3.0",
+  "upload_type": "software",
+  "description": "<p>Het package LSVI bundelt een aantal functies in verband met het ophalen van informatie over en het berekenen van de Lokale Staat Van Instandhouding (LSVI) van habitattypes.<\/p>",
+  "keywords": [
+    "habitats",
+    "local conservation status"
+  ],
+  "access_right": "open",
+  "language": "nld",
+  "contributors": [
+    {
+      "name": "Lommelen, Els",
+      "affiliation": "Research Institute for Nature and Forest (INBO)",
+      "orcid": "0000-0002-3481-5684",
+      "type": "contactperson"
+    },
+    {
+      "name": "Leyssen, An",
+      "affiliation": "Research Institute for Nature and Forest (INBO)",
+      "orcid": "0000-0003-3537-286X",
+      "type": "projectmember"
+    },
+    {
+      "name": "Spanhove, Toon",
+      "affiliation": "Research Institute for Nature and Forest (INBO)",
+      "orcid": "0000-0001-9194-0193",
+      "type": "projectmember"
+    },
+    {
+      "name": "Research Institute for Nature and Forest (INBO)",
+      "type": "rightsholder"
+    }
+  ],
+  "creators": [
+    {
+      "name": "Lommelen, Els",
+      "affiliation": "Research Institute for Nature and Forest (INBO)",
+      "orcid": "0000-0002-3481-5684"
+    },
+    {
+      "name": "Oosterlynck, Patrik",
+      "affiliation": "Research Institute for Nature and Forest (INBO)",
+      "orcid": "0000-0002-5712-0770"
+    },
+    {
+      "name": "Van Spaendonk, Gert",
+      "affiliation": "Research Institute for Nature and Forest (INBO)",
+      "orcid": "0009-0008-6988-1113"
+    },
+    {
+      "name": "Van Calster, Hans",
+      "affiliation": "Research Institute for Nature and Forest (INBO)",
+      "orcid": "0000-0001-8595-8426"
+    },
+    {
+      "name": "Van Hove, Martine",
+      "affiliation": "Research Institute for Nature and Forest (INBO)",
+      "orcid": "0000-0002-6394-0820"
+    },
+    {
+      "name": "Westra, Toon",
+      "affiliation": "Research Institute for Nature and Forest (INBO)",
+      "orcid": "0000-0003-2478-9459"
+    }
+  ],
+  "communities": [
+    {
+      "identifier": "inbo"
+    }
+  ]
+}
