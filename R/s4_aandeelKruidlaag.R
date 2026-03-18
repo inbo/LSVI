@@ -36,6 +36,11 @@ setMethod(
       )
 
     if (nrow(vegetatielaag) > 0) {
+      vegetatielaag <- vegetatielaag %>%
+        summarise(
+          WaardeMin = 1.0 - prod((1.0 - .data$WaardeMin), na.rm = TRUE),
+          WaardeMax = 1.0 - prod((1.0 - .data$WaardeMax), na.rm = TRUE)
+        )
 
       #indien bedekking vegetatielaag is meegegeven wordt deze als noemer
       #gebruikt
