@@ -63,15 +63,15 @@ migratieSQLserverSQLite <- function() {
       )
     )
   Indicator_habitat$Beschrijving <- #nolint: object_name_linter
-    gsub("[\r\n\t]", "", Indicator_habitat$Beschrijving)
+    gsub("[\r\n\t]", ";", Indicator_habitat$Beschrijving)
   Indicator_habitat$Beschrijving_naSoorten <- #nolint: object_name_linter
-    gsub("[\r\n\t]", "", Indicator_habitat$Beschrijving_naSoorten)
+    gsub("[\r\n\t]", ";", Indicator_habitat$Beschrijving_naSoorten)
   Indicator_habitat$Maatregelen <- #nolint: object_name_linter
-    gsub("[\r\n\t]", "", Indicator_habitat$Maatregelen)
+    gsub("[\r\n\t]", ";", Indicator_habitat$Maatregelen)
   Indicator_habitat$Opmerkingen <- #nolint: object_name_linter
-    gsub("[\r\n\t]", "", Indicator_habitat$Opmerkingen)
+    gsub("[\r\n\t]", ";", Indicator_habitat$Opmerkingen)
   Indicator_habitat$Referenties <- #nolint: object_name_linter
-    gsub("[\r\n\t]", "", Indicator_habitat$Referenties)
+    gsub("[\r\n\t]", ";", Indicator_habitat$Referenties)
 
   Indicator_habitatId <- #nolint: object_name_linter
     (Indicator_habitat %>% summarise(Id = paste0(Id, collapse = ",")))$Id
@@ -105,9 +105,9 @@ migratieSQLserverSQLite <- function() {
       )
     )
   Indicator_beoordeling$Opmerkingen <- #nolint: object_name_linter
-    gsub("[\r\n\t]", "", Indicator_beoordeling$Opmerkingen)
+    gsub("[\r\n\t]", ";", Indicator_beoordeling$Opmerkingen)
   Indicator_beoordeling$Referenties <- #nolint: object_name_linter
-    gsub("[\r\n\t]", "", Indicator_beoordeling$Referenties)
+    gsub("[\r\n\t]", ";", Indicator_beoordeling$Referenties)
 
   Beoordeling <-
     dbGetQuery(
@@ -121,7 +121,7 @@ migratieSQLserverSQLite <- function() {
       )
     )
   Beoordeling$Beoordeling_letterlijk <-
-    gsub("[\r\n\t]", "", Beoordeling$Beoordeling_letterlijk)
+    gsub("[\r\n\t]", ";", Beoordeling$Beoordeling_letterlijk)
 
   BeoordelingId <-
     (Beoordeling %>% summarise(Id = paste0(Id, collapse = ",")))$Id
