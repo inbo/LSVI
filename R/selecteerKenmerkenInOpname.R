@@ -157,6 +157,34 @@ selecteerKenmerkenInOpname <-
       if (SubAnalyseVariabele == "bedekking") {
         Resultaat <- Resultaat %>%
           filter(!tolower(.data$Eenheid) %in% c("grondvlak_ha", "volume_ha"))
+        if ("totale vegetatiebedekking" %in% Studiegroep$Waarde) {
+          if ("naakte bodem" %in% Kenmerken$Kenmerk) {
+            Kenmerken <- Kenmerken %>%
+              filter(tolower(.data$Kenmerk) != "naakte bodem") %>%
+              bind_rows(
+                Kenmerken %>%
+                  filter(tolower(.data$Kenmerk) == "naakte bodem") %>%
+                  mutate(
+                    Kenmerk = "totale vegetatiebedekking",
+                    WaardeMinNew = 1.0 - .data$WaardeMax,
+                    WaardeMax = 1.0 - .data$WaardeMin,
+                    WaardeMin = .data$WaardeMinNew,
+                    WaardeMinNew = NULL
+                  )
+              )
+          }
+          if ("totale vegetatiebedekking" %in% Kenmerken$Kenmerk) {
+            Vegetatiebedekking <- Kenmerken %>%
+              filter(tolower(.data$Kenmerk) == "totale vegetatiebedekking")
+            Resultaat <- Resultaat %>%
+              mutate(
+                WaardeMin = .data$WaardeMin / Vegetatiebedekking$WaardeMax,
+                WaardeMax = .data$WaardeMax / Vegetatiebedekking$WaardeMin
+              )
+          } else {
+            stop("Om de bedekking te kunnen berekenen ten opzichte van de totale vegetatiebedekking, is het nodig om studiegroep 'naakte bodem' of 'totale vegetatiebedekking' op te geven.") #nolint: line_length_linter
+          }
+        }
       }
 
       Resultaat <- Resultaat %>%

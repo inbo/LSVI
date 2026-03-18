@@ -24,6 +24,50 @@ setMethod(
   signature = "aandeelKruidlaag",
   definition = function(object) {
 
+    # VOORBEREKENING DUINEN
+    # bij duinen is de vegetatielaag de totale vegetatiebedekking,
+    # te berekenen als 100 % min de bedekking naakte bodem
+    # (als totale vegetatiebedekking niet opgegeven is),
+    # en hier worden soorten uit alle lagen meegenomen
+    # (en bij afwezigheid van bedekking naakte bodem of totale
+    # vegetatiebedekking worden alle vegetatielagen samengeteld)
+    # stap 1: naakte bodem vervangen door totale vegetatiebedekking
+    if (
+      "totale vegetatiebedekking" %in% object@Studiegroep$Waarde &&
+        !"totale vegetatiebedekking" %in% object@Kenmerken$Kenmerk &&
+        "naakte bodem" %in% object@Kenmerken$Kenmerk
+    ) {
+      object@Kenmerken <- object@Kenmerken %>%
+        filter(tolower(.data$Kenmerk) != "naakte bodem") %>%
+        bind_rows(
+          object@Kenmerken %>%
+            filter(tolower(.data$Kenmerk) == "naakte bodem") %>%
+            mutate(
+              Kenmerk = "totale vegetatiebedekking",
+              WaardeMinNew = 1.0 - .data$WaardeMax,
+              WaardeMax = 1.0 - .data$WaardeMin,
+              WaardeMin = .data$WaardeMinNew,
+              WaardeMinNew = NULL
+            )
+        )
+    }
+    # stap 2: als de totale vegetatiebedekking opgegeven of berekend is,
+    # worden andere vegetatielagen in tabel Kenmerken verwijderd
+    # om te vermijden dat alle vegetatielagen nog eens extra meegeteld worden
+    # (in Studiegroep blijven ze behouden om alle soorten mee te nemen)
+    if (
+      "totale vegetatiebedekking" %in% object@Studiegroep$Waarde &&
+        "totale vegetatiebedekking" %in% object@Kenmerken$Kenmerk
+    ) {
+      object@Kenmerken <- object@Kenmerken %>%
+        filter(tolower(.data$TypeKenmerk) == "soort_nbn") %>%
+        bind_rows(
+          object@Kenmerken %>%
+            filter(tolower(.data$Kenmerk) == "totale vegetatiebedekking")
+        )
+    }
+
+    # EIGENLIJKE BEREKENING
     # bedekking sleutelsoorten
     teller <- berekenWaarde(as(object, "bedekking"))
 
