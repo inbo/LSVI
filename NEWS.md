@@ -16,6 +16,7 @@
   voor soorten de relatieve bedekking t.o.v. een vegetatielaag berekent,
   om bv. het aantal soorten te tellen dat minimum de opgegeven bedekking heeft
   in het begroeide deel van de duin
+* correcties en updates in databank (#227, #228, #230, #231, #240, #241, #243)
 
 # LSVI 0.1.3
 
