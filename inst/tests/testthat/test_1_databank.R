@@ -40,7 +40,7 @@ describe("test databank", {
           c("aandeel", "bedekkingExcl", "aandeelKruidlaag", "bedekkingSom",
             "aantal", "bedekking", "bedekkingLaag", "bedekkingLaagExcl",
             "bedekkingLaagPlus", "maxBedekking", "maxBedekkingExcl",
-            "maxBedekking2s", "aantalGroepen", "scoresom")
+            "maxBedekking2s", "aantalGroepen", "scoresom", "aandeelLaagExcl")
       )
     )
     dbDisconnect(ConnectieLSVIhabitats)
@@ -291,6 +291,36 @@ describe("test databank", {
         FROM AnalyseVariabele INNER JOIN TypeVariabele
         ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
         WHERE AnalyseVariabele.VariabeleNaam = 'aandeelKruidlaag'"
+      )
+    av_leeg <- av %>%
+      filter(!TypeVariabele %in% c("Percentage"))
+    FouteWaarden <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        sprintf(
+          "SELECT Id, Referentiewaarde FROM Voorwaarde
+          WHERE AnalyseVariabeleId in ('%s')",
+          paste(av_leeg$Id, collapse = "','")
+        )
+      )
+    expect_equal(
+      nrow(FouteWaarden),
+      0
+    )
+    dbDisconnect(ConnectieLSVIhabitats)
+  })
+
+  it("AnalyseVariabele aandeelLaagExcl bevat percentages", {
+    ConnectieLSVIhabitats <-
+      connecteerMetLSVIdb()
+    av <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        "SELECT AnalyseVariabele.Id, AnalyseVariabele.VariabeleNaam,
+        TypeVariabele.Naam as TypeVariabele
+        FROM AnalyseVariabele INNER JOIN TypeVariabele
+        ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
+        WHERE AnalyseVariabele.VariabeleNaam = 'aandeelLaagExcl'"
       )
     av_leeg <- av %>%
       filter(!TypeVariabele %in% c("Percentage"))
@@ -570,7 +600,7 @@ describe("test databank", {
         ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
         WHERE AnalyseVariabele.VariabeleNaam in ('aandeelKruidlaag',
           'bedekkingLaag', 'bedekkingLaagExcl', 'bedekkingLaagPlus',
-          'bedekkingSom')"
+          'bedekkingSom', 'aandeelLaagExcl')"
       )
     skip_if_not(nrow(av) > 0, "AV komen niet voor")
     Refwaarden <-
@@ -600,7 +630,8 @@ describe("test databank", {
           INNER JOIN TypeVariabele tv ON av.TypeVariabeleId = tv.Id
           LEFT JOIN TaxongroepTaxongroep tgtg
             ON vw.TaxongroepId = tgtg.TaxongroepParentId
-        WHERE av.VariabeleNaam in ('bedekkingLaagExcl', 'bedekkingLaagPlus')"
+        WHERE av.VariabeleNaam in
+          ('bedekkingLaagExcl', 'bedekkingLaagPlus', 'aandeelLaagExcl')"
       )
     skip_if_not(nrow(tg) > 0, "AV komen niet voor")
     Aantalgroepen <- tg %>%
@@ -741,7 +772,7 @@ describe("test databank", {
       all(av$VariabeleNaam %in%
             c("aantal", "aandeel", "aandeelKruidlaag", "bedekking",
               "bedekkingExcl", "maxBedekking", "maxBedekking2s",
-              "maxBedekkingExcl"))
+              "maxBedekkingExcl", "aandeelLaagExcl"))
     )
     dbDisconnect(ConnectieLSVIhabitats)
   })
@@ -964,8 +995,10 @@ describe("test databank", {
     TMbedekkingaandeel <-
       geefInvoervereisten(ConnectieLSVIhabitats = connecteerMetLSVIdb()) %>%
       filter(
-        AnalyseVariabele %in%
-          c("aandeel", "aandeelKruidlaag", "bedekking", "meting_perc") |
+        AnalyseVariabele %in% c(
+          "aandeel", "aandeelKruidlaag", "bedekking", "meting_perc",
+          "aandeelLaagExcl"
+        ) |
           grepl("bedekking", tolower(AnalyseVariabele))
       ) %>%
       filter(Maximumwaarde != 1)

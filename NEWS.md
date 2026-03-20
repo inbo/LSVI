@@ -9,6 +9,9 @@
 * bij duinhabitats (2120 en 2130) worden de bedekkingen berekend t.o.v. het
   begroeide deel van de duin (issue #240), waarbij invoer van de bedekking van
   naakte bodem of totale vegetatiebedekking nodig is
+* ten behoeve van deze berekening is extra analysevariabele `aandeelLaagExcl`
+  toegevoegd (die de functionaliteit van `aandeelKruidlaag` en
+  `bedekkingLaagExcl` combineert)
 
 # LSVI 0.1.3
 

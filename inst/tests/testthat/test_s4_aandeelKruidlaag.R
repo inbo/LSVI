@@ -240,4 +240,43 @@ describe("s4_aandeelKruidlaag", {
       "Om de bedekking te kunnen berekenen ten opzichte van de totale vegetatiebedekking, is het nodig om studiegroep 'naakte bodem' of 'totale vegetatiebedekking' op te geven." #nolint: line_length_linter
     )
   })
+  it("Berekening voor aandeelLaagExcl gebeurt correct", {
+    expect_equal(
+      berekenWaarde(
+        new(
+          Class = "aandeelLaagExcl",
+          Kenmerken = data.frame(
+            Kenmerk =
+              c("A1", "B2", "C1", "D3", "E1", "kruidlaag", "naakte bodem"),
+            TypeKenmerk = c(rep("soort_nbn", 5), rep("studiegroep", 2)),
+            WaardeMin = c(rep(0.1, 5), 0.5, 0.3),
+            WaardeMax = c(rep(0.3, 5), 0.6, 0.4),
+            Eenheid = "%",
+            Vegetatielaag = c(rep("moslaag", 3), rep("kruidlaag", 2), NA, NA),
+            stringsAsFactors = FALSE
+          ),
+          Soortengroep = data.frame(
+            NbnTaxonVersionKey = c("A1", "B1", "C1", "E1", "E1"),
+            TaxonId = c(1:4, 4),
+            SubTaxonId = c(1:4, 4),
+            TaxongroepId = 1,
+            TaxonsubgroepId = c(rep(1, 4), 4),
+            stringsAsFactors = FALSE
+          ),
+          Studiegroep = data.frame(
+            Waarde = c(
+              "totale vegetatiebedekking", "naakte bodem", "kruidlaag",
+              "moslaag"
+            ),
+            LijstNaam = "totale vegetatiebedekking",
+            stringsAsFactors = FALSE
+          )
+        )
+      ),
+      c(
+        (1.0 - prod(1.0 - rep(0.1, 2))) / (1 - 0.3),
+        (1.0 - prod(1.0 - rep(0.3, 2))) / (1 - 0.4)
+      )
+    )
+  })
 })

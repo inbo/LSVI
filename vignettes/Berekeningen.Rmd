@@ -218,7 +218,9 @@ Om het totale grondvlak of volume te berekenen van de relevante soorten, wordt d
 
 Om tenslotte het aandeel te berekenen, wordt het bekomen grondvlak of volume gedeeld door het totale grondvlak of volume van alle opgegeven soorten, wat de som is van alle soorten in de opname met `Eenheid` "grondvlak_ha" of "volume_ha".
 
-## aandeelKruidlaag <!-- spell-check: ignore -->
+<!-- spell-check: ignore:start -->
+## aandeelKruidlaag {#aandeel_kruidlaag}
+<!-- spell-check: ignore:end -->
 
 De analysevariabele `aandeelKruidlaag` heeft eigenlijk een ietwat slecht gekozen naam, omdat de functie in principe het aandeel ten opzichte van eender welke vegetatielaag berekent.  Bij voorwaarden met deze analysevariabele verwijst `TaxongroepId` naar een lijst met de relevante soorten om het aandeel te berekenen, en studielijst vermeldt de vegetatielaag waarin dit aandeel bestudeerd wordt.
 
@@ -229,6 +231,18 @@ De totale bedekking van de relevante soorten wordt berekend door de voorwaarde (
 
 Om de voorwaarde te berekenen, zal de totale bedekking van de relevante soorten gedeeld worden door de totale bedekking van de vegetatielaag.
 <!-- Het tweede deel van de berekening lijkt wat op bedekkingLaag, maar is niet helemaal hetzelfde (er wordt uitgegaan van de veronderstelling dat er maar 1 vegetatielaag opgegeven is in studielijst, alle soorten uit de opname uit de laag worden meegenomen,...).  Omwille van het laatste verschil kan bedekkingLaag op het eerste zicht moeilijk als alternatief gebruikt worden. -->
+
+<!-- spell-check: ignore:start -->
+## aandeelLaagExcl {#aandeel_laag_excl}
+<!-- spell-check: ignore:end -->
+
+De analysevariabele `aandeelLaagExcl` is eigenlijk een combinatie van analysevariabelen [`aandeelKruidlaag`](#aandeel_kruidlaag) en [`bedekkingLaagExcl`](#bedekking_laag_excl).
+
+Ze berekent het aandeel bedekking van de relevante soorten ten opzichte van de in de studiegroep opgegeven vegetatielaag, zoals bij [`aandeelKruidlaag`](#aandeel_kruidlaag).
+Maar net zoals bij analysevariabele [`bedekkingLaagExcl`](#bedekking_laag_excl) hebben voorwaarden met deze analysevariabele een `TaxongroepId` die verwijst naar een taxonlijst bestaande uit 2 sublijsten: een lange lijst met taxa die meegenomen moeten worden voor de berekening (bv. alle genera van grassen) en een kort lijstje met soorten die genegeerd moeten worden in de voorgaande lijst (bv. _Ammophila arenaria_ en _Festuca juncifolia_).
+Dit laat dus toe om voorwaarden als de bedekking van alle grassen behalve Helm en Duinzwenkgras te berekenen, waarbij alle _Festuca_-soorten behalve _F. juncifolia_ meegenomen worden, en dit voor situaties waarin de bedekking ten opzichte van een bepaalde laag berekend wordt (bv. t.o.v. de totale vegetatiebedekking in de duinen).
+
+Bij de berekening zal eerst gecheckt worden of er inderdaad 2 sublijsten zijn, en in dat geval zullen als een eerste stap de taxa van het kortste lijstje geschrapt worden in de lijst van de taxa met het langste lijstje (in een lijst waarin alle mogelijke taxonniveaus toegevoegd zijn).  Daarna zal met de eventueel aangepaste taxonlijst de voorwaarde uitgerekend worden volgens analysevariabele [`aandeelKruidlaag`](#aandeel_kruidlaag), dus de bedekking van de soorten ten opzichte van de in de studiegroep opgegeven vegetatielaag.
 
 <!-- spell-check: ignore:start -->
 ## aantalGroepen {#aantal_groepen}
@@ -267,7 +281,7 @@ Bij het selecteren van soorten uit de opname op basis van een taxonlijst in de d
 
 Een soortenlijst met toevoeging van deze taxa van lagere niveaus kan opgevraagd worden door bij functies `geefSoortenlijst()` of `geefSoortenlijstVoorIDs()` de parameter `Taxonlijsttype = "alle"` toe te voegen.  In de verkregen lijst zijn de taxa van het hoogste niveau de records waar `TaxonId` en `SubTaxonId` dezelfde waarde hebben.  De taxa van een lager niveau hebben hier een verschillende waarde, en ze hebben dezelfde `TaxonId` als het bijhorend taxon van het hoogste niveau.
 
-Voor enkele analysevariabelen ([`bedekkingLaagPlus`](#bedekking_laag_plus), [`bedekkingLaagExcl`](#bedekking_laag_excl) en [`aantalGroepen`](#aantal_groepen)) zijn 2 soortenlijsten nodig voor de berekening.  Dit is opgelost door een lijst te maken (aangeduid met eenzelfde `TaxongroepId`) met 2 sublijsten (elk aangeduid met eenzelfde `TaxonsubgroepId`).  Bij [`bedekkingLaagPlus`](#bedekking_laag_plus) en [`bedekkingLaagExcl`](#bedekking_laag_excl) wordt deze lijst op basis van `TaxonsubgroepId` opgesplitst in 2 afzonderlijke lijsten, en de bewerking gebeurt op lijsten zonder sublijsten.  Bij [`aantalGroepen`](#aantal_groepen)) zijn de `Id`'s hernoemd om code van analysevariabele [`aantal`](#aantal) te kunnen hergebruiken:
+Voor enkele analysevariabelen ([`bedekkingLaagPlus`](#bedekking_laag_plus), [`bedekkingLaagExcl`](#bedekking_laag_excl), [`aandeelLaagExcl`](#aandeel_laag_excl) en [`aantalGroepen`](#aantal_groepen)) zijn 2 soortenlijsten nodig voor de berekening.  Dit is opgelost door een lijst te maken (aangeduid met eenzelfde `TaxongroepId`) met 2 sublijsten (elk aangeduid met eenzelfde `TaxonsubgroepId`).  Bij [`bedekkingLaagPlus`](#bedekking_laag_plus), [`bedekkingLaagExcl`](#bedekking_laag_excl) en [`aandeelLaagExcl`](#aandeel_laag_excl) wordt deze lijst op basis van `TaxonsubgroepId` opgesplitst in 2 afzonderlijke lijsten, en de bewerking gebeurt op lijsten zonder sublijsten.  Bij [`aantalGroepen`](#aantal_groepen)) zijn de `Id`'s hernoemd om code van analysevariabele [`aantal`](#aantal) te kunnen hergebruiken:
 
 - `TaxonsubgroepId` -> `TaxonId` zodanig dat de originele `TaxongroepId`'s aanzien worden als de items (soorten) die geteld moeten worden
 - `TaxongroepId` -> `TaxonsubgroepId` zodanig dat de nieuwe `TaxonId`'s onder 1 taxonsubgroep vallen

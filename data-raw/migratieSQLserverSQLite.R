@@ -398,7 +398,7 @@ migratieSQLserverSQLite <- function() {
       Maximumwaarde =
         ifelse(
           .data$VariabeleNaam %in%
-            c("aandeel", "aandeelKruidlaag", "meting_perc"),
+            c("aandeel", "aandeelKruidlaag", "aandeelLaagExcl", "meting_perc"),
           1,
           NA
         ),

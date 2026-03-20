@@ -65,7 +65,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
       WHERE NOT VariabeleNaam in ('aantal', 'aandeel', 'aandeelKruidlaag',
         'bedekking', 'maxBedekking', 'maxBedekkingExcl', 'bedekkingLaag',
         'bedekkingSom', 'bedekkingExcl', 'maxBedekking2s', 'bedekkingLaagExcl',
-        'bedekkingLaagPlus', 'aantalGroepen', 'scoresom')
+        'bedekkingLaagPlus', 'aantalGroepen', 'scoresom', 'aandeelLaagExcl')
       AND NOT VariabeleNaam LIKE 'meting%'"
     ) %>%
     transmute(
@@ -90,7 +90,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
         c("aantal", "aandeel", "aandeelKruidlaag", "bedekking", "bedekkingLaag",
           "maxBedekking", "maxBedekkingExcl", "bedekkingSom", "bedekkingExcl",
           "maxBedekking2s", "bedekkingLaagExcl", "bedekkingLaagPlus",
-          "aantalGroepen", "scoresom"),
+          "aantalGroepen", "scoresom", "aandeelLaagExcl"),
       !grepl("^meting", .data$AnalyseVariabele)
     )
   TypeAantalNietGeheelGetal <- Invoervereisten %>%
@@ -107,8 +107,10 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
     )
   TypeAandeelFout <- Invoervereisten %>%
     filter(
-      .data$AnalyseVariabele %in%
-        c("aandeel", "aandeelKruidlaag", "bedekkingSom", "bedekkingExcl"),
+      .data$AnalyseVariabele %in% c(
+        "aandeel", "aandeelKruidlaag", "bedekkingSom", "bedekkingExcl",
+        "aandeelLaagExcl"
+      ),
       !.data$TypeVariabele %in% c("Percentage")
     )
   LijstItems <-
@@ -248,7 +250,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
         filter(
           .data$AnalyseVariabele %in%
             c("aandeelKruidlaag", "bedekkingLaag", "bedekkingLaagExcl",
-              "bedekkingLaagPlus", "bedekkingSom")
+              "bedekkingLaagPlus", "bedekkingSom", "aandeelLaagExcl")
         ) %>%
         filter(
           is.na(.data$TaxongroepId) | is.na(.data$Studiegroepnaam)
@@ -262,7 +264,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
       Invoervereisten %>%
         filter(
           .data$AnalyseVariabele %in%
-            c("bedekkingLaagExcl", "bedekkingLaagPlus")
+            c("bedekkingLaagExcl", "bedekkingLaagPlus", "aandeelLaagExcl")
         ) %>%
         filter(
           !(.data$TaxongroepId) %in% TweeTaxongroepen$tg
@@ -290,7 +292,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
             !.data$AnalyseVariabele %in%
               c("aantal", "aandeel", "aandeelKruidlaag", "bedekking",
                 "bedekkingExcl", "maxBedekking", "maxBedekking2s",
-                "maxBedekkingExcl", "scoresom")
+                "maxBedekkingExcl", "scoresom", "aandeelLaagExcl")
         ) %>%
         mutate(
           Probleem =
