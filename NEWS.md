@@ -7,7 +7,8 @@
 * bij `berekenLSVIbasis()` worden de extra kolommen uit `Data_habitat`
   toegevoegd aan de uitvoer van de functie
 * bij duinhabitats (2120 en 2130) worden de bedekkingen berekend t.o.v. het
-  begroeide deel van de duin (issue #240)
+  begroeide deel van de duin (issue #240), waarbij invoer van de bedekking van
+  naakte bodem of totale vegetatiebedekking nodig is
 
 # LSVI 0.1.3
 
