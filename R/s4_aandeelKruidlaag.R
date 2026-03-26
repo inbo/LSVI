@@ -68,48 +68,47 @@ setMethod(
     }
 
     # EIGENLIJKE BEREKENING
-    # bedekking sleutelsoorten
-    teller <- berekenWaarde(as(object, "bedekking"))
-
     #bedekking vegetatielaag
-    vegetatielaag <- object@Kenmerken %>%
+    Vegetatielaag <- object@Kenmerken %>%
       filter(
         .data$TypeKenmerk == "studiegroep",
         tolower(.data$Kenmerk) %in% tolower(object@Studiegroep$Waarde),
         !is.na(.data$WaardeMax)
       )
 
-    if (nrow(vegetatielaag) > 0) {
-      vegetatielaag <- vegetatielaag %>%
-        summarise(
-          WaardeMin = 1.0 - prod((1.0 - .data$WaardeMin), na.rm = TRUE),
-          WaardeMax = 1.0 - prod((1.0 - .data$WaardeMax), na.rm = TRUE)
-        )
-
-      #indien bedekking vegetatielaag is meegegeven wordt deze als noemer
-      #gebruikt
-      resultaat <-
-        c(
-          teller[1] / vegetatielaag$WaardeMax,
-          teller[2] / vegetatielaag$WaardeMin
-        )
-
-    } else {
+    if (nrow(Vegetatielaag) == 0) {
       #indien bedekking vegetatielaag niet is meegegeven wordt deze berekend
       #op basis van alle soorten in kruidlaag
-      soorten_vegetatielaag <- object@Kenmerken %>%
+      Vegetatielaag <- object@Kenmerken %>%
         filter(
           tolower(.data$Vegetatielaag) %in% tolower(object@Studiegroep$Waarde)
         )
-
-      BedekkingMin <-
-        (1.0 - prod((1.0 - soorten_vegetatielaag$WaardeMin), na.rm = TRUE))
-      BedekkingMax <-
-        (1.0 - prod((1.0 - soorten_vegetatielaag$WaardeMax), na.rm = TRUE))
-
-      resultaat <- c(teller[1] / BedekkingMax, teller[2] / BedekkingMin)
-
     }
+    # bedekking van alle lagen of soorten samenvoegen
+    BedekkingLaagMin <-
+      (1.0 - prod((1.0 - Vegetatielaag$WaardeMin), na.rm = TRUE))
+    BedekkingLaagMax <-
+      (1.0 - prod((1.0 - Vegetatielaag$WaardeMax), na.rm = TRUE))
+
+    # bedekking sleutelsoorten relatief tot laag
+    object@Kenmerken <- object@Kenmerken %>%
+      mutate(
+        WaardeMin = ifelse(
+          .data$TypeKenmerk == "soort_nbn",
+          .data$WaardeMin / BedekkingLaagMax,
+          .data$WaardeMin
+        ),
+        WaardeMax = ifelse(
+          .data$TypeKenmerk == "soort_nbn",
+          .data$WaardeMax / BedekkingLaagMin,
+          .data$WaardeMax
+        )
+      )
+
+    resultaat <- berekenWaarde(as(object, "bedekking"))
+
+    # kap af bij een bedekking van 100 % (1.0) om waarden > 100 % te vermijden
+    resultaat <- pmin(resultaat, 1.0)
 
     return(resultaat)
   }

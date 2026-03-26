@@ -1,0 +1,48 @@
+record_id;ID;Vegetatielaag;Kenmerk;TypeKenmerk;Waarde;Type;Eenheid;Invoertype;pinonier;exoot;vergrassing;sleutelsoort
+IV2023090510341314;10010417_2023-08-11;kruidlaag;Ammophila arenaria (L.) Link;Soort_Latijn;1;Percentage;%;NA;FALSE;FALSE;FALSE;FALSE
+IV2023090510341314;10010417_2023-08-11;kruidlaag;Carex arenaria L.;Soort_Latijn;2;Percentage;%;NA;TRUE;FALSE;TRUE;FALSE
+IV2023090510341314;10010417_2023-08-11;kruidlaag;Corynephorus canescens (L.) Beauv.;Soort_Latijn;1;Percentage;%;NA;FALSE;FALSE;TRUE;FALSE
+IV2023090510341314;10010417_2023-08-11;kruidlaag;Erodium cicutarium (L.) L'Hérit.;Soort_Latijn;1;Percentage;%;NA;FALSE;FALSE;FALSE;FALSE
+IV2023090510341314;10010417_2023-08-11;kruidlaag;Festuca juncifolia St-Amans;Soort_Latijn;1;Percentage;%;NA;FALSE;FALSE;TRUE;TRUE
+IV2023090510341314;10010417_2023-08-11;kruidlaag;Phleum arenarium L.;Soort_Latijn;1;Percentage;%;NA;TRUE;FALSE;TRUE;FALSE
+IV2023090510341314;10010417_2023-08-11;kruidlaag;Senecio inaequidens DC.;Soort_Latijn;1;Percentage;%;NA;FALSE;TRUE;FALSE;FALSE
+IV2023090510341314;10010417_2023-08-11;kruidlaag;Vulpia membranacea (L.) Dum.;Soort_Latijn;1;Percentage;%;NA;FALSE;FALSE;TRUE;FALSE
+IV2023090510341314;10010417_2023-08-11;NA;totale vegetatiebedekking;studiegroep;5;Percentage;%;NA;FALSE;FALSE;FALSE;FALSE
+IV2020031622591285;10010417_2120_2019-10-24;kruidlaag;Ammophila arenaria (L.) Link;Soort_Latijn;1;Percentage;%;NA;FALSE;FALSE;FALSE;FALSE
+IV2020031622591285;10010417_2120_2019-10-24;kruidlaag;Carex arenaria L.;Soort_Latijn;1;Percentage;%;NA;TRUE;FALSE;TRUE;FALSE
+IV2020031622591285;10010417_2120_2019-10-24;kruidlaag;Diplotaxis tenuifolia (L.) DC.;Soort_Latijn;1;Percentage;%;NA;FALSE;FALSE;FALSE;FALSE
+IV2020031622591285;10010417_2120_2019-10-24;kruidlaag;Erodium cicutarium (L.) L'Hérit.;Soort_Latijn;1;Percentage;%;NA;FALSE;FALSE;FALSE;FALSE
+IV2020031622591285;10010417_2120_2019-10-24;kruidlaag;Festuca juncifolia St-Amans;Soort_Latijn;1;Percentage;%;NA;FALSE;FALSE;TRUE;TRUE
+IV2020031622591285;10010417_2120_2019-10-24;kruidlaag;Phleum arenarium L.;Soort_Latijn;1;Percentage;%;NA;TRUE;FALSE;TRUE;FALSE
+IV2020031622591285;10010417_2120_2019-10-24;kruidlaag;Senecio inaequidens DC.;Soort_Latijn;1;Percentage;%;NA;FALSE;TRUE;FALSE;FALSE
+IV2020031622591285;10010417_2120_2019-10-24;NA;totale vegetatiebedekking;studiegroep;1;Percentage;%;NA;FALSE;FALSE;FALSE;FALSE
+IV2023090510343053;10038833_2023-08-31;kruidlaag;Ammophila arenaria (L.) Link;Soort_Latijn;80;Percentage;%;NA;FALSE;FALSE;FALSE;FALSE
+IV2023090510343053;10038833_2023-08-31;kruidlaag;Carex arenaria L.;Soort_Latijn;1;Percentage;%;NA;TRUE;FALSE;TRUE;FALSE
+IV2023090510343053;10038833_2023-08-31;kruidlaag;Elymus farctus (Viv.) Runemark ex Melderis;Soort_Latijn;1;Percentage;%;NA;FALSE;FALSE;TRUE;FALSE
+IV2023090510343053;10038833_2023-08-31;kruidlaag;Euphorbia paralias L.;Soort_Latijn;1;Percentage;%;NA;FALSE;FALSE;FALSE;TRUE
+IV2023090510343053;10038833_2023-08-31;kruidlaag;Festuca juncifolia St-Amans;Soort_Latijn;7;Percentage;%;NA;FALSE;FALSE;TRUE;TRUE
+IV2023090510343053;10038833_2023-08-31;kruidlaag;Holcus lanatus L.;Soort_Latijn;1;Percentage;%;NA;FALSE;FALSE;TRUE;FALSE
+IV2023090510343053;10038833_2023-08-31;kruidlaag;Senecio inaequidens DC.;Soort_Latijn;4;Percentage;%;NA;FALSE;TRUE;FALSE;FALSE
+IV2023090510343053;10038833_2023-08-31;kruidlaag;Sonchus oleraceus L.;Soort_Latijn;1;Percentage;%;NA;FALSE;FALSE;FALSE;FALSE
+IV2023090510343053;10038833_2023-08-31;struiklaag;Hippophae rhamnoides L.;Soort_Latijn;1;Percentage;%;NA;FALSE;FALSE;FALSE;FALSE
+IV2023090510343053;10038833_2023-08-31;NA;totale vegetatiebedekking;studiegroep;80;Percentage;%;NA;FALSE;FALSE;FALSE;FALSE
+IV2023090510343153;10071601_2023-08-31;kruidlaag;Ammophila arenaria (L.) Link;Soort_Latijn;30;Percentage;%;NA;FALSE;FALSE;FALSE;FALSE
+IV2023090510343153;10071601_2023-08-31;kruidlaag;Carex arenaria L.;Soort_Latijn;1;Percentage;%;NA;TRUE;FALSE;TRUE;FALSE
+IV2023090510343153;10071601_2023-08-31;kruidlaag;Crepis capillaris (L.) Wallr.;Soort_Latijn;1;Percentage;%;NA;TRUE;FALSE;FALSE;FALSE
+IV2023090510343153;10071601_2023-08-31;kruidlaag;Diplotaxis tenuifolia (L.) DC.;Soort_Latijn;2;Percentage;%;NA;FALSE;FALSE;FALSE;FALSE
+IV2023090510343153;10071601_2023-08-31;kruidlaag;Elymus farctus (Viv.) Runemark ex Melderis;Soort_Latijn;1;Percentage;%;NA;FALSE;FALSE;TRUE;FALSE
+IV2023090510343153;10071601_2023-08-31;kruidlaag;Eryngium maritimum L.;Soort_Latijn;1;Percentage;%;NA;FALSE;FALSE;FALSE;TRUE
+IV2023090510343153;10071601_2023-08-31;kruidlaag;Festuca juncifolia St-Amans;Soort_Latijn;4;Percentage;%;NA;FALSE;FALSE;TRUE;TRUE
+IV2023090510343153;10071601_2023-08-31;kruidlaag;Hippophae rhamnoides L.;Soort_Latijn;1;Percentage;%;NA;FALSE;FALSE;FALSE;FALSE
+IV2023090510343153;10071601_2023-08-31;kruidlaag;Hypochaeris radicata L.;Soort_Latijn;2;Percentage;%;NA;TRUE;FALSE;FALSE;FALSE
+IV2023090510343153;10071601_2023-08-31;kruidlaag;Leontodon saxatilis Lam.;Soort_Latijn;2;Percentage;%;NA;TRUE;FALSE;FALSE;FALSE
+IV2023090510343153;10071601_2023-08-31;kruidlaag;Myosotis ramosissima Rochel ex Schult.;Soort_Latijn;1;Percentage;%;NA;FALSE;FALSE;FALSE;FALSE
+IV2023090510343153;10071601_2023-08-31;kruidlaag;Oenothera;Soort_Latijn;1;Percentage;%;NA;FALSE;FALSE;FALSE;FALSE
+IV2023090510343153;10071601_2023-08-31;kruidlaag;Phleum arenarium L.;Soort_Latijn;4;Percentage;%;NA;TRUE;FALSE;TRUE;FALSE
+IV2023090510343153;10071601_2023-08-31;kruidlaag;Senecio inaequidens DC.;Soort_Latijn;4;Percentage;%;NA;FALSE;TRUE;FALSE;FALSE
+IV2023090510343153;10071601_2023-08-31;kruidlaag;Senecio jacobaea L.;Soort_Latijn;1;Percentage;%;NA;FALSE;FALSE;FALSE;FALSE
+IV2023090510343153;10071601_2023-08-31;kruidlaag;Taraxacum;Soort_Latijn;1;Percentage;%;NA;FALSE;FALSE;FALSE;FALSE
+IV2023090510343153;10071601_2023-08-31;moslaag;Rhynchostegium;Soort_Latijn;2;Percentage;%;NA;FALSE;FALSE;FALSE;FALSE
+IV2023090510343153;10071601_2023-08-31;moslaag;Syntrichia ruralis (Hedw.) F.Weber & D.Mohr;Soort_Latijn;1;Percentage;%;NA;FALSE;FALSE;FALSE;FALSE
+IV2023090510343153;10071601_2023-08-31;moslaag;Tragopogon;Soort_Latijn;17;Percentage;%;NA;FALSE;FALSE;FALSE;FALSE
+IV2023090510343153;10071601_2023-08-31;NA;totale vegetatiebedekking;studiegroep;55;Percentage;%;NA;FALSE;FALSE;FALSE;FALSE

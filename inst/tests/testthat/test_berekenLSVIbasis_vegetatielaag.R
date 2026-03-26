@@ -195,13 +195,13 @@ describe("berekenLSVIbasis vegetatielaag", {
             Index_min_criterium =
               ifelse(
                 .data$Criterium == "Vegetatie",
-                -0.842220185,
+                -0.81627722,
                 .data$Index_min_criterium
               ),
             Index_harm_criterium =
               ifelse(
                 .data$Criterium == "Vegetatie",
-                -0.723846855,
+                -0.6849101,
                 .data$Index_harm_criterium
               )
           )
@@ -223,7 +223,7 @@ describe("berekenLSVIbasis vegetatielaag", {
               ifelse(
                 .data$Indicator ==
                   "sleutelsoorten van de kruidlaag",
-                -0.84222018,
+                -0.81627722,
                 .data$Verschilscore
               )
           )
@@ -245,7 +245,7 @@ describe("berekenLSVIbasis vegetatielaag", {
               ifelse(
                 .data$Voorwaarde ==
                   "aandeel sleutelsoorten kruidlaag",
-                "4.73339441538505",
+                "5.51168326466858",
                 .data$Waarde
               ),
             Status_voorwaarde =
@@ -266,7 +266,7 @@ describe("berekenLSVIbasis vegetatielaag", {
               ifelse(
                 .data$Voorwaarde ==
                   "aandeel sleutelsoorten kruidlaag",
-                -0.8422202,
+                -0.81627722,
                 .data$Verschilscore
               )
           )
@@ -277,9 +277,9 @@ describe("berekenLSVIbasis vegetatielaag", {
         BerekendRes3[["Resultaat_globaal"]],
         Resultaatv2[["Resultaat_globaal"]] %>%
           mutate(
-            Index_min_min = -0.842220185,
-            Index_min_harm = -0.6540303,
-            Index_harm_harm = -0.42208728
+            Index_min_min = -0.81627722,
+            Index_min_harm = -0.61421324,
+            Index_harm_harm = -0.36757076
           )
       )
     )
@@ -579,6 +579,84 @@ describe("berekenLSVIbasis vegetatielaag", {
           )
         )
       )
+    )
+  })
+  it("correcte berekening t.o.v. vegetatiebedekking bij duinen", {
+    Data_habitat <- #nolint: object_name_linter
+      read_csv2(
+        system.file("vbdata/data_habitat_2120.csv", package = "LSVI"),
+        col_types = list(col_character(), col_character(), col_character())
+      )
+    attr(Data_habitat, "spec") <- NULL #nolint: object_name_linter
+    Data_voorwaarden <- #nolint: object_name_linter
+      read_csv2(
+        system.file("vbdata/data_voorwaarden_2120.csv", package = "LSVI"),
+        col_types = list(
+          col_character(), col_character(), col_character(),
+          col_character(), col_character(), col_character(),
+          col_character(), col_character(), col_character(), col_character()
+        )
+      )
+    Data_soortenKenmerken <- #nolint: object_name_linter
+      read_csv2(
+        system.file("vbdata/data_soorten_2120.csv", package = "LSVI"),
+        col_types = list(
+          col_character(), col_character(), col_character(),
+          col_character(), col_character(), col_character(),
+          col_character(), col_character(), col_character(),
+          col_character(), col_character(), col_character(), col_character()
+        )
+      )
+    load(system.file("vbdata/Resultaat_test4030v2.Rdata", package = "LSVI"))
+    Warning <-
+      "De waarde\\(n\\) voor de voorwaarde\\(n\\) afwisseling van begroeide en vegetatieloze duinen \\(VoorwaardeID 746\\) kunnen niet berekend worden voor opname\\(n\\) 10010417_2023-08-11, 10010417_2120_2019-10-24, 10038833_2023-08-31, 10071601_2023-08-31. Geef de waarde voor deze voorwaarde rechtstreeks in als input van de functie 'berekenLSVIBasis' via tabel 'Data_voorwaarden' \\(zie \\?berekenLSVIbasis voor meer info\\). Vermeld hierbij Criterium = Structuur, Indicator = naakte bodem en Voorwaarde = afwisseling van begroeide en vegetatieloze duinen." #nolint: line_length_linter
+    expect_warning(
+      TestResultaat <- berekenLSVIbasis(
+        Versie = "Versie 3",
+        Kwaliteitsniveau = "1",
+        Data_habitat = Data_habitat,
+        Data_voorwaarden = Data_voorwaarden,
+        Data_soortenKenmerken = Data_soortenKenmerken,
+        Aggregatiemethode = "RapportageHR",
+        na.rm = TRUE
+      ),
+      Warning
+    )
+    expect_equal(
+      TestResultaat[["Resultaat_detail"]] |>
+        filter(Indicator == "kruidlaag") |>
+        pull(Waarde),
+      c("52", "100", "1.25", "16.9965799156789")
+    )
+    expect_equal(
+      TestResultaat[["Resultaat_detail"]] |>
+        filter(Indicator == "(korst)moslaag") |>
+        pull(Waarde),
+      c("0", "0", "0", "5.38842975206612")
+    )
+    expect_equal(
+      TestResultaat[["Resultaat_detail"]] |>
+        filter(Voorwaarde == "aantal sleutelsoorten relatief in kruidlaag") |>
+        pull(Waarde),
+      c("1", "1", "2", "2")
+    )
+    expect_equal(
+      TestResultaat[["Resultaat_detail"]] |>
+        filter(Indicator == "exoten") |>
+        pull(Waarde),
+      c("20", "99.9999999999999", "5", "7.27272727272728")
+    )
+    expect_equal(
+      TestResultaat[["Resultaat_detail"]] |>
+        filter(Indicator == "vergrassing") |>
+        pull(Waarde),
+      c("75.424", "100", "3.70332031249999", "10.6139744552968")
+    )
+    expect_equal(
+      TestResultaat[["Resultaat_detail"]] |>
+        filter(Indicator == "verruiging") |>
+        pull(Waarde),
+      rep("0", 4)
     )
   })
 })

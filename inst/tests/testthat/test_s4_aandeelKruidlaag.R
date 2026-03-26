@@ -32,8 +32,8 @@ describe("s4_aandeelKruidlaag", {
         )
       ),
       c(
-        (1.0 - prod(1.0 - rep(0.1, 3))) / 0.6,
-        (1.0 - prod(1.0 - rep(0.3, 3))) / 0.5
+        (1.0 - prod(1.0 - rep(0.1 / 0.6, 3))),
+        (1.0 - prod(1.0 - rep(0.3 / 0.5, 3)))
       )
     )
     expect_equal(
@@ -63,8 +63,8 @@ describe("s4_aandeelKruidlaag", {
         )
       ),
       c(
-        (1.0 - prod(1.0 - rep(0.1, 3))) / (1.0 - prod(1.0 - c(0.6, 0.15))),
-        (1.0 - prod(1.0 - rep(0.3, 3))) / (1.0 - prod(1.0 - c(0.5, 0.1)))
+        (1.0 - prod(1.0 - rep(0.1 / (1.0 - prod(1.0 - c(0.6, 0.15))), 3))),
+        (1.0 - prod(1.0 - rep(0.3 / (1.0 - prod(1.0 - c(0.5, 0.1))), 3)))
       )
     )
     expect_equal(
@@ -98,8 +98,8 @@ describe("s4_aandeelKruidlaag", {
         )
       ),
       c(
-        (1.0 - prod(1.0 - rep(0.1, 3))) / (1 - 0.3),
-        (1.0 - prod(1.0 - rep(0.3, 3))) / (1 - 0.4)
+        (1.0 - prod(1.0 - rep(0.1 / (1 - 0.3), 3))),
+        (1.0 - prod(1.0 - rep(0.3 / (1 - 0.4), 3)))
       )
     )
     expect_equal(
@@ -133,8 +133,8 @@ describe("s4_aandeelKruidlaag", {
         )
       ),
       c(
-        (1.0 - prod(1.0 - rep(0.1, 3))) / 0.6,
-        (1.0 - prod(1.0 - rep(0.3, 3))) / 0.5
+        (1.0 - prod(1.0 - rep(0.1 / 0.6, 3))),
+        (1.0 - prod(1.0 - rep(0.3 / 0.5, 3)))
       )
     )
   })
@@ -274,8 +274,8 @@ describe("s4_aandeelKruidlaag", {
         )
       ),
       c(
-        (1.0 - prod(1.0 - rep(0.1, 2))) / (1 - 0.3),
-        (1.0 - prod(1.0 - rep(0.3, 2))) / (1 - 0.4)
+        (1.0 - prod(1.0 - rep(0.1 / (1 - 0.3), 2))),
+        (1.0 - prod(1.0 - rep(0.3 / (1 - 0.4), 2)))
       )
     )
   })
