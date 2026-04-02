@@ -217,7 +217,12 @@ migratieSQLserverSQLite <- function() {
   AnalyseVariabeleId <-
     paste0(
       unique(
-        (Voorwaarde %>% filter(!is.na(AnalyseVariabeleId)))$AnalyseVariabeleId
+        c(
+          (Voorwaarde %>% filter(!is.na(.data$AnalyseVariabeleId))
+          )$AnalyseVariabeleId,
+          (Voorwaarde %>% filter(!is.na(.data$SubAnalyseVariabeleId))
+          )$SubAnalyseVariabeleId
+        )
       ),
       collapse = ","
     )

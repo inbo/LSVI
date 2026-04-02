@@ -63,6 +63,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
       FROM AnalyseVariabele INNER JOIN Voorwaarde
       On AnalyseVariabele.Id = Voorwaarde.AnalyseVariabeleId
       WHERE NOT VariabeleNaam in ('aantal', 'aandeel', 'aandeelKruidlaag',
+        'aandeelLaag',
         'bedekking', 'maxBedekking', 'maxBedekkingExcl', 'bedekkingLaag',
         'bedekkingSom', 'bedekkingExcl', 'maxBedekking2s', 'bedekkingLaagExcl',
         'bedekkingLaagPlus', 'aantalGroepen', 'scoresom', 'aandeelLaagExcl')
@@ -90,7 +91,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
         c("aantal", "aandeel", "aandeelKruidlaag", "bedekking", "bedekkingLaag",
           "maxBedekking", "maxBedekkingExcl", "bedekkingSom", "bedekkingExcl",
           "maxBedekking2s", "bedekkingLaagExcl", "bedekkingLaagPlus",
-          "aantalGroepen", "scoresom", "aandeelLaagExcl"),
+          "aantalGroepen", "scoresom", "aandeelLaagExcl", "aandeelLaag"),
       !grepl("^meting", .data$AnalyseVariabele)
     )
   TypeAantalNietGeheelGetal <- Invoervereisten %>%
@@ -262,6 +263,15 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
     ) %>%
     bind_rows(
       Invoervereisten %>%
+        filter(.data$SubAnalyseVariabele == "aandeelLaag") %>%
+        filter(is.na(.data$TaxongroepId) | is.na(.data$Studiegroepnaam)) %>%
+        mutate(
+          Probleem =
+            "Er moet een soortengroep en studiegroep opgegeven worden (of de SubAnalyseVariabele aangepast)" #nolint: line_length_linter
+        )
+    ) %>%
+    bind_rows(
+      Invoervereisten %>%
         filter(
           .data$AnalyseVariabele %in%
             c("bedekkingLaagExcl", "bedekkingLaagPlus", "aandeelLaagExcl")
@@ -278,11 +288,13 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
       Invoervereisten %>%
         filter(
           !is.na(.data$SubAnalyseVariabele) &
-            !.data$SubAnalyseVariabele %in% c("bedekking", "aandeel")
+            !.data$SubAnalyseVariabele %in% c(
+              "bedekking", "aandeel", "aandeelLaag"
+            )
         ) %>%
         mutate(
           Probleem =
-            "De SubAnalyseVariabele moet bedekking of aandeel zijn"
+            "De SubAnalyseVariabele moet bedekking, aandeel of aandeelLaag zijn"
         )
     ) %>%
     bind_rows(

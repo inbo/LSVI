@@ -12,6 +12,10 @@
 * ten behoeve van deze berekening is extra analysevariabele `aandeelLaagExcl`
   toegevoegd (die de functionaliteit van `aandeelKruidlaag` en
   `bedekkingLaagExcl` combineert)
+* ook is er een extra `SubAnalyseVariabele` `aandeelLaag` toegevoegd die
+  voor soorten de relatieve bedekking t.o.v. een vegetatielaag berekent,
+  om bv. het aantal soorten te tellen dat minimum de opgegeven bedekking heeft
+  in het begroeide deel van de duin
 
 # LSVI 0.1.3
 

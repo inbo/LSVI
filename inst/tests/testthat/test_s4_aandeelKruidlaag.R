@@ -164,7 +164,7 @@ describe("s4_aandeelKruidlaag", {
             LijstNaam = "totale vegetatiebedekking",
             stringsAsFactors = FALSE
           ),
-          SubAnalyseVariabele = "bedekking",
+          SubAnalyseVariabele = "aandeelLaag",
           SubRefMin = 0.3,
           SubRefMax = 0.4,
           SubOperator = ">="
@@ -198,7 +198,7 @@ describe("s4_aandeelKruidlaag", {
             LijstNaam = "totale vegetatiebedekking",
             stringsAsFactors = FALSE
           ),
-          SubAnalyseVariabele = "bedekking",
+          SubAnalyseVariabele = "aandeelLaag",
           SubRefMin = 0.3,
           SubRefMax = 0.4,
           SubOperator = ">="
@@ -231,7 +231,7 @@ describe("s4_aandeelKruidlaag", {
             LijstNaam = "totale vegetatiebedekking",
             stringsAsFactors = FALSE
           ),
-          SubAnalyseVariabele = "bedekking",
+          SubAnalyseVariabele = "aandeelLaag",
           SubRefMin = 0.3,
           SubRefMax = 0.4,
           SubOperator = ">="

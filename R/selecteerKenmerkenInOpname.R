@@ -148,16 +148,16 @@ selecteerKenmerkenInOpname <-
     }
 
     if (!identical(SubAnalyseVariabele, character(0)) &&
-          SubAnalyseVariabele %in% c("aandeel", "bedekking")) {
+          SubAnalyseVariabele %in% c("aandeel", "bedekking", "aandeelLaag")) {
 
       if (SubAnalyseVariabele == "aandeel") {
         Resultaat <- Resultaat %>%
           filter(tolower(.data$Eenheid) %in% c("grondvlak_ha", "volume_ha"))
       }
-      if (SubAnalyseVariabele == "bedekking") {
+      if (SubAnalyseVariabele %in% c("bedekking", "aandeelLaag")) {
         Resultaat <- Resultaat %>%
           filter(!tolower(.data$Eenheid) %in% c("grondvlak_ha", "volume_ha"))
-        if ("totale vegetatiebedekking" %in% Studiegroep$Waarde) {
+        if (SubAnalyseVariabele == "aandeelLaag") {
           if ("naakte bodem" %in% Kenmerken$Kenmerk) {
             Kenmerken <- Kenmerken %>%
               filter(tolower(.data$Kenmerk) != "naakte bodem") %>%

@@ -40,7 +40,8 @@ describe("test databank", {
           c("aandeel", "bedekkingExcl", "aandeelKruidlaag", "bedekkingSom",
             "aantal", "bedekking", "bedekkingLaag", "bedekkingLaagExcl",
             "bedekkingLaagPlus", "maxBedekking", "maxBedekkingExcl",
-            "maxBedekking2s", "aantalGroepen", "scoresom", "aandeelLaagExcl")
+            "maxBedekking2s", "aantalGroepen", "scoresom", "aandeelLaagExcl",
+            "aandeelLaag")
       )
     )
     dbDisconnect(ConnectieLSVIhabitats)
@@ -618,6 +619,33 @@ describe("test databank", {
     dbDisconnect(ConnectieLSVIhabitats)
   })
 
+  it("SubAnalyseVariabele aandeelLaag heeft een SoortengroepId en StudiegroepId", { #nolint: line_length_linter
+    ConnectieLSVIhabitats <-
+      connecteerMetLSVIdb()
+    av <- dbGetQuery(
+      ConnectieLSVIhabitats,
+      "SELECT AnalyseVariabele.Id, AnalyseVariabele.VariabeleNaam,
+      TypeVariabele.Naam AS TypeVariabele
+      FROM AnalyseVariabele INNER JOIN TypeVariabele
+        ON AnalyseVariabele.TypeVariabeleId = TypeVariabele.Id
+      WHERE AnalyseVariabele.VariabeleNaam = 'aandeelLaag'"
+    )
+    skip_if_not(nrow(av) > 0, "AV komen niet voor")
+    Refwaarden <-
+      dbGetQuery(
+        ConnectieLSVIhabitats,
+        sprintf(
+          "SELECT TaxongroepId, StudiegroepId FROM Voorwaarde
+          WHERE SubAnalyseVariabeleId in ('%s')",
+          paste(av$Id, collapse = "','")
+        )
+      )
+    expect_true(
+      all(!is.na(Refwaarden$TaxongroepId) & !is.na(Refwaarden$StudiegroepId))
+    )
+    dbDisconnect(ConnectieLSVIhabitats)
+  })
+
   it("AV bedekkingLaagExcl en bedekkingLaagPlus hebben 2 Soortengroepen", {
     ConnectieLSVIhabitats <-
       connecteerMetLSVIdb()
@@ -705,7 +733,7 @@ describe("test databank", {
     dbDisconnect(ConnectieLSVIhabitats)
   })
 
-  it("De subanalysevariabele is overal correct ingevoerd (bedekking of aandeel)", { #nolint: line_length_linter
+  it("De subanalysevariabele is overal correct ingevoerd (bedekking, aandeel of aandeelLaag)", { #nolint: line_length_linter
     ConnectieLSVIhabitats <-
       connecteerMetLSVIdb()
     av <-
@@ -727,7 +755,7 @@ describe("test databank", {
         FROM Lijstitem"
       )
     expect_true(
-      all(av$VariabeleNaam %in% c("bedekking", "aandeel"))
+      all(av$VariabeleNaam %in% c("bedekking", "aandeel", "aandeelLaag"))
     )
     expect_true(
       all(av$TypeVariabele %in% c("Categorie", "Percentage"))

@@ -636,7 +636,9 @@ describe("berekenLSVIbasis vegetatielaag", {
     )
     expect_equal(
       TestResultaat[["Resultaat_detail"]] |>
-        filter(Voorwaarde == "aantal sleutelsoorten relatief in kruidlaag") |>
+        filter(
+          Voorwaarde == "aantal sleutelsoorten weinig talrijk in begroeiing"
+        ) |>
         pull(Waarde),
       c("1", "1", "2", "2")
     )
