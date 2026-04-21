@@ -19,7 +19,7 @@ Authors@R: c(
     person("Toon", "Spanhove", , "toon.spanhove@inbo.be", role = "ctb",
            comment = c(ORCID = "0000-0001-9194-0193", affiliation = "Instituut voor Natuur- en Bosonderzoek (INBO)")),
     person("Instituut voor Natuur- en Bosonderzoek (INBO)", , , "info@inbo.be", role = c("cph", "fnd"),
-           comment = c(ROR = "https://ror.org/00j54wy13"))
+           comment = c(ROR = "00j54wy13"))
   )
 Description: Het package LSVI bundelt een aantal functies in verband met
     het ophalen van informatie over en het berekenen van de Lokale Staat
