@@ -973,7 +973,7 @@ describe("berekenLSVIbasis", {
             Index_harm_criterium =
               ifelse(
                 .data$Criterium == "Structuur" & .data$ID == "Ts2036",
-                -0.1428571429,
+                -0.1429,
                 .data$Index_harm_criterium
               )
           )
@@ -1038,7 +1038,7 @@ describe("berekenLSVIbasis", {
             Index_harm_harm =
               ifelse(
                 .data$ID == "Ts2036",
-                0.24316082,
+                0.2432,
                 .data$Index_harm_harm
               )
           )

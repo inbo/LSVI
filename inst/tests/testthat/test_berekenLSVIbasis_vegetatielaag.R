@@ -195,13 +195,13 @@ describe("berekenLSVIbasis vegetatielaag", {
             Index_min_criterium =
               ifelse(
                 .data$Criterium == "Vegetatie",
-                -0.81627722,
+                -0.8163,
                 .data$Index_min_criterium
               ),
             Index_harm_criterium =
               ifelse(
                 .data$Criterium == "Vegetatie",
-                -0.6849101,
+                -0.6849,
                 .data$Index_harm_criterium
               )
           )
@@ -216,14 +216,14 @@ describe("berekenLSVIbasis vegetatielaag", {
               ifelse(
                 .data$Indicator ==
                   "sleutelsoorten van de boom- en struiklaag",
-                0.105691057,
+                0.1057,
                 .data$Verschilscore
               ),
             Verschilscore =
               ifelse(
                 .data$Indicator ==
                   "sleutelsoorten van de kruidlaag",
-                -0.81627722,
+                -0.8163,
                 .data$Verschilscore
               )
           )
@@ -259,14 +259,14 @@ describe("berekenLSVIbasis vegetatielaag", {
               ifelse(
                 .data$Voorwaarde ==
                   "grondvlak sleutelsoorten boom- en struiklaag",
-                0.105691057,
+                0.1057,
                 .data$Verschilscore
               ),
             Verschilscore =
               ifelse(
                 .data$Voorwaarde ==
                   "aandeel sleutelsoorten kruidlaag",
-                -0.81627722,
+                -0.8163,
                 .data$Verschilscore
               )
           )
@@ -277,9 +277,9 @@ describe("berekenLSVIbasis vegetatielaag", {
         BerekendRes3[["Resultaat_globaal"]],
         Resultaatv2[["Resultaat_globaal"]] %>%
           mutate(
-            Index_min_min = -0.81627722,
-            Index_min_harm = -0.61421324,
-            Index_harm_harm = -0.36757076
+            Index_min_min = -0.8163,
+            Index_min_harm = -0.6142,
+            Index_harm_harm = -0.3676
           )
       )
     )
@@ -646,13 +646,13 @@ describe("berekenLSVIbasis vegetatielaag", {
       TestResultaat[["Resultaat_detail"]] |>
         filter(Indicator == "exoten") |>
         pull(Waarde),
-      c("20", "99.9999999999999", "5", "7.27272727272728")
+      c("20", "100", "5", "7.27")
     )
     expect_equal(
       TestResultaat[["Resultaat_detail"]] |>
         filter(Indicator == "vergrassing") |>
         pull(Waarde),
-      c("75.424", "100", "3.70332031249999", "10.6139744552968")
+      c("75.42", "100", "3.7", "10.61")
     )
     expect_equal(
       TestResultaat[["Resultaat_detail"]] |>

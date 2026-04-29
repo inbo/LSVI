@@ -955,6 +955,23 @@ berekenLSVIbasis <- #nolint: object_name_linter
       left_join(resultaat_globaal_index,
                 by = c("ID", "Habitattype", "Versie", "Kwaliteitsniveau"))
 
+    # rond indexen en verschilscores af tot 4 decimalen na de komma
+    resultaat_criterium$Index_min_criterium <-
+      round(resultaat_criterium$Index_min_criterium, 4)
+    resultaat_criterium$Index_harm_criterium <-
+      round(resultaat_criterium$Index_harm_criterium, 4)
+
+    resultaat_indicator$Verschilscore <-
+      round(resultaat_indicator$Verschilscore, 4)
+
+    resultaat_detail$Verschilscore <- round(resultaat_detail$Verschilscore, 4)
+
+    resultaat_globaal$Index_min_min <- round(resultaat_globaal$Index_min_min, 4)
+    resultaat_globaal$Index_min_harm <-
+      round(resultaat_globaal$Index_min_harm, 4)
+    resultaat_globaal$Index_harm_harm <-
+      round(resultaat_globaal$Index_harm_harm, 4)
+
     return(
       list(
         Resultaat_criterium = resultaat_criterium,

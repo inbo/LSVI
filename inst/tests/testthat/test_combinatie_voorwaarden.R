@@ -62,7 +62,7 @@ describe("4 voorwaarden combineren", {
             "aanwezigheid specifieke sleutelsoorten"),
         Waarde = "1",
         Status_voorwaarde = c(FALSE, FALSE, TRUE, TRUE),
-        Verschilscore = c(-0.666666666666667, -0.5, 0, 0),
+        Verschilscore = c(-0.6667, -0.5, 0, 0),
         stringsAsFactors = FALSE
       )
     )

@@ -173,14 +173,14 @@ describe("AnalyseVariabele scoresom", {
     expect_equal(
       (resultaat_berekend[["Resultaat_detail"]] %>%
          filter(.data$Indicator == "bedekking sleutelsoorten"))$Verschilscore,
-      c(0, 0, -0.666666666667, -0.66666666667, 0.2222222222, -0.666666666667)
+      c(0, 0, -0.6667, -0.6667, 0.2222, -0.6667)
     )
     expect_equal(
       as.data.frame(
         resultaat_berekend[["Resultaat_indicator"]] %>%
           filter(.data$Indicator == "bedekking sleutelsoorten")
       )$Verschilscore,
-      c(0, -0.666666666667, 0.22222222222)
+      c(0, -0.6667, 0.2222)
     )
     expect_equal(
       as.data.frame(
