@@ -154,7 +154,7 @@ vertaalIntervalUitvoer <-
             Waarde =
               ifelse(
                 .data$Min == .data$Max,
-                as.character(.data$Min),
+                as.character(round(.data$Min, 2)),
                 paste(
                   round(.data$Min, 1),
                   round(.data$Max, 1),

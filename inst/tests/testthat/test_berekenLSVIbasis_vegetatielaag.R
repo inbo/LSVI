@@ -238,14 +238,14 @@ describe("berekenLSVIbasis vegetatielaag", {
               ifelse(
                 .data$Voorwaarde ==
                   "grondvlak sleutelsoorten boom- en struiklaag",
-                "73.1707317073171",
+                "73.17",
                 .data$Waarde
               ),
             Waarde =
               ifelse(
                 .data$Voorwaarde ==
                   "aandeel sleutelsoorten kruidlaag",
-                "5.51168326466858",
+                "5.51",
                 .data$Waarde
               ),
             Status_voorwaarde =
@@ -626,13 +626,13 @@ describe("berekenLSVIbasis vegetatielaag", {
       TestResultaat[["Resultaat_detail"]] |>
         filter(Indicator == "kruidlaag") |>
         pull(Waarde),
-      c("52", "100", "1.25", "16.9965799156789")
+      c("52", "100", "1.25", "17")
     )
     expect_equal(
       TestResultaat[["Resultaat_detail"]] |>
         filter(Indicator == "(korst)moslaag") |>
         pull(Waarde),
-      c("0", "0", "0", "5.38842975206612")
+      c("0", "0", "0", "5.39")
     )
     expect_equal(
       TestResultaat[["Resultaat_detail"]] |>
