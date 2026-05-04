@@ -1,0 +1,40 @@
+# Vereenvoudig de soortnaam door de auteurs te verwijderen
+
+Deze functie vereenvoudigt de opgegeven taxonnamen door de auteursnaam
+te verwijderen. Ze is gebaseerd op de functie `name_parse()` uit het
+package `rgbif`, maar ze vangt enkele specifieke situaties uit de
+INBO-plantenlijsten wel op die de originele functie niet correct
+opvangt, bv. `v.`, `an` en `den` herkennen als deel van een auteursnaam
+en `s.l.` en meerdere soortnamen gescheiden door `/` (zonder spatie)
+vervangen door een achtervoegsel `groep`.
+
+## Usage
+
+``` r
+parseTaxonnaam(Taxonnaam, ParseType = "canonicalnamewithmarker")
+```
+
+## Arguments
+
+- Taxonnaam:
+
+  Wetenschappelijke naam of namen die vereenvoudigd moeten worden
+  (String)
+
+- ParseType:
+
+  Welk type parsing teruggegeven moet worden. Standaard is dit
+  `"canonicalnamewithmarker"`, andere opties zijn `"canonicalname"` en
+  `"canonicalnamecomplete"`
+
+## Value
+
+Deze functie geeft de vereenvoudigde naam of namen terug (als string of
+vector van strings)
+
+## Examples
+
+``` r
+parseTaxonnaam("Rosa canina L.")
+#> [1] "Rosa canina"
+```

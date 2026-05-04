@@ -1,0 +1,162 @@
+# Local conservation status for Natura 2000 habitats in Flanders
+
+The `LSVI` package bundles a number of functions to support researchers
+studying the local conservation status of habitats. Several functions
+give information on the criteria that are used to determine the local
+conservation status in Flanders, others allow to calculate the
+conservation status. Criteria are stored in a database, which is
+indispensable for running functions. (The database is now external for
+development reasons, but it will be integrated in the package as soon as
+it is completed).
+
+The package is written in Dutch.
+
+# Installation
+
+To install `LSVI` from the [INBO
+universe](https://inbo.r-universe.dev/ui#builds), start a new R session
+and run this code (before loading any packages):
+
+``` r
+
+# Enable the INBO universe (not needed for INBO employees, as this is the default setting)
+options(
+  repos = c(
+    inbo = "https://inbo.r-universe.dev", CRAN = "https://cloud.r-project.org"
+  )
+)
+# Install the packages
+install.packages("LSVI")
+```
+
+To install `LSVI` from GitHub, start a new R session and run this code
+(before loading any packages):
+
+``` r
+
+# install.packages("remotes")
+remotes::install_github("inbo/LSVI")
+```
+
+To install the development version with the latest changes included (but
+less stable), run this code:
+
+``` r
+
+remotes::install_github("inbo/LSVI@develop")
+```
+
+# Citation
+
+Please use the output of `citation("LSVI")`
+
+# Contributor Code of Conduct
+
+Please note that the ‘LSVI’ project is released with a [Contributor Code
+of Conduct](CODE_OF_CONDUCT.md). By contributing to this project, you
+agree to abide by its terms.
+
+# Package index
+
+## All functions
+
+- [`berekenLSVIbasis()`](berekenLSVIbasis.md) : Berekent de LSVI op
+  basis van VoorwaardeID en opgegeven waarden
+
+- [`berekenStatus()`](berekenStatus.md) : Berekent de Status voor de
+  records van een een opgegeven tabel
+
+- [`berekenVerschilscores()`](berekenVerschilscores.md) : Berekent de
+  verschilscores voor de records van een een opgegeven tabel
+
+- [`berekenVoorwaarde()`](berekenVoorwaarde.md) : Berekent de voorwaarde
+  op basis van datasets
+
+- [`combinerenVerschilscore()`](combinerenVerschilscore.md) : combineert
+  de Verschilscores van voorwaarden die via EN of OF logische operatoren
+  gelinkt zijn
+
+- [`combinerenVoorwaarden()`](combinerenVoorwaarden.md) : combineert de
+  Status van voorwaarden via de opgegeven formule
+
+- [`connecteerMetLSVIdb()`](connecteerMetLSVIdb.md) : Connecteer met de
+  databank met LSVI-indicatoren in het package
+
+- [`controleerInvoerwaarde()`](controleerInvoerwaarde.md) : Hulpfunctie
+  voor het uitvoeren van foutcontroles
+
+- [`deselecteerKenmerkenInOpname()`](deselecteerKenmerkenInOpname.md) :
+  Controle van de ingevoerde opname
+
+- [`geefInfoHabitatfiche()`](geefInfoHabitatfiche.md) : Geeft tabel met
+  info uit de LSVI-rapporten voor de opgegeven parameters
+
+- [`geefInvoervereisten()`](geefInvoervereisten.md) : Geeft de
+  invoervereisten voor de waarde van een opname
+
+- [`geefSoortenlijst()`](geefSoortenlijst.md) : Genereert
+  soortenlijst(en) LSVI op basis van de opgegeven parameters
+
+- [`geefSoortenlijstVoorIDs()`](geefSoortenlijstVoorIDs.md) : Genereert
+  soorten(groep)lijst(en) LSVI op basis van TaxongroepID
+
+- [`geefUniekeWaarden()`](geefUniekeWaarden.md) : Geef alle unieke
+  waarden van een veld uit de databank met de LSVI-indicatoren
+  voorafgegaan door "alle"
+
+- [`geefVersieInfo()`](geefVersieInfo.md) : Geeft informatie over de
+  verschillende versies voor de berekening van de LSVI
+
+- [`geefVertaallijst()`](geefVertaallijst.md) : Haalt vertaallijst op
+  uit databank
+
+- [`invoercontroleData_habitat()`](invoercontroleData_habitat.md) :
+  Invoercontrole voor dataframe Data_habitat
+
+- [`invoercontroleData_soortenKenmerken()`](invoercontroleData_soortenKenmerken.md)
+  :
+
+  Invoercontrole voor dataframe `Data_soortenKenmerken`
+
+- [`invoercontroleData_voorwaarden()`](invoercontroleData_voorwaarden.md)
+  : Invoercontrole voor dataframe Data_voorwaarden
+
+- [`invoercontroleKwaliteitsniveau()`](invoercontroleKwaliteitsniveau.md)
+  : Invoercontrole voor waarde Kwaliteitsniveau
+
+- [`invoercontroleVersie()`](invoercontroleVersie.md) : Invoercontrole
+  voor waarde versie
+
+- [`logDatabankfouten()`](logDatabankfouten.md) : Lijst alle nog op te
+  lossen databankfouten op
+
+- [`maakConnectiePool()`](maakConnectiePool.md) : Maak een connectiepool
+  met de databank met LSVI-indicatoren in het package
+
+- [`maakHabitatfiches()`](maakHabitatfiches.md) : Genereert
+  habitatfiche(s) van LSVI op basis van de opgegeven parameters
+
+- [`maakLSVIrapport()`](maakLSVIrapport.md) : Genereert LSVI-rapport op
+  basis van de opgegeven parameters
+
+- [`parseTaxonnaam()`](parseTaxonnaam.md) : Vereenvoudig de soortnaam
+  door de auteurs te verwijderen
+
+- [`selecteerIndicatoren()`](selecteerIndicatoren.md) : Selecteert
+  indicatoren LSVI op basis van de opgegeven parameters
+
+- [`selecteerKenmerkenInOpname()`](selecteerKenmerkenInOpname.md) :
+  Controle van de ingevoerde opname
+
+- [`vertaalIntervalUitvoer()`](vertaalIntervalUitvoer.md) : zet een
+  interval om naar een waarde in de gevraagde eenheid
+
+- [`vertaalInvoerInterval()`](vertaalInvoerInterval.md) : zet ingevoerde
+  gegevens om naar een interval
+
+# Articles
+
+### All vignettes
+
+- [Technische achtergrond bij de berekeningen](Berekeningen.md):
+- [Handleiding LSVI-package](Handleiding.md):
