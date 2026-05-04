@@ -11,21 +11,21 @@ parseTaxonnaam(Taxonnaam, ParseType = "canonicalnamewithmarker")
 worden (String)}
 
 \item{ParseType}{Welk type parsing teruggegeven moet worden.  Standaard is
-dit 'canonicalnamewithmarker', andere opties zijn 'canonicalname' en
-'canonicalnamecomplete'}
+dit \code{"canonicalnamewithmarker"}, andere opties zijn \code{"canonicalname"} en
+\code{"canonicalnamecomplete"}}
 }
 \value{
 Deze functie geeft de vereenvoudigde naam of namen terug (als string
 of vector van strings)
 }
 \description{
-Deze functie vereenvoudigt de opgegeven taxonna(a)m(en) door
-de auteursnaam te verwijderen.  Ze is gebaseerd op de functie name_parse
-uit het package rgbif, maar ze vangt enkele specifieke situaties uit de
+Deze functie vereenvoudigt de opgegeven taxonnamen door
+de auteursnaam te verwijderen.  Ze is gebaseerd op de functie \code{name_parse()}
+uit het package \code{rgbif}, maar ze vangt enkele specifieke situaties uit de
 INBO-plantenlijsten wel op die de originele functie niet correct opvangt, bv.
-v., an en den herkennen als deel van een auteursnaam en s.l. en meerdere
-soortnamen gescheiden door / (zonder spatie) vervangen door een achtervoegsel
-groep.
+\code{v.}, \code{an} en \code{den} herkennen als deel van een auteursnaam en
+\code{s.l.} en meerdere soortnamen gescheiden door \code{/} (zonder spatie) vervangen
+door een achtervoegsel \code{groep}.
 }
 \examples{
 parseTaxonnaam("Rosa canina L.")

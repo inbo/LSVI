@@ -5,45 +5,35 @@ library(dplyr)
 library(rlang)
 
 maakConnectiePool()
-Data_habitat <- #nolint
-    read_csv2(
-      system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
-      col_types = list(col_character(), col_character(), col_character())
-    )
-attr(Data_habitat, "spec") <- NULL #nolint
-Data_voorwaarden2 <- #nolint
+Data_habitat <- #nolint: object_name_linter
+  read_csv2(
+    system.file("vbdata/Opname4030habitat.csv", package = "LSVI"),
+    col_types = list(col_character(), col_character(), col_character())
+  )
+attr(Data_habitat, "spec") <- NULL #nolint: object_name_linter
+Data_voorwaarden2 <- #nolint: object_name_linter
   read_csv2(
     system.file("vbdata/Opname4030voorwaardenv2.csv", package = "LSVI")
   )
-Data_voorwaarden <- #nolint
+Data_voorwaarden <- #nolint: object_name_linter
   read_csv2(
     system.file("vbdata/Opname4030voorwaarden.csv", package = "LSVI")
   )
-Data_soortenKenmerken <- #nolint
-    read_csv2(
-      system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI")
-    )
+Data_soortenKenmerken <- #nolint: object_name_linter
+  read_csv2(
+    system.file("vbdata/Opname4030soortenKenmerken.csv", package = "LSVI")
+  )
 
 load(system.file("vbdata/Resultaat_test4030.Rdata", package = "LSVI"))
 load(system.file("vbdata/Resultaat_test4030v2.Rdata", package = "LSVI"))
 
+WarningVergrassingVerruiging <-
+  "Volgende records uit Data_voorwaarden kunnen niet gekoppeld worden aan indicatoren uit de databank omdat de criterium-indicator-voorwaarde-combinatie niet voorkomt bij de LSVI-regels van het opgegeven habitattype: <JR0216, Verstoring, vergrassing, bedekking vergrassing> <Ts2036, Verstoring, vergrassing, bedekking vergrassing> <JR0216, Verstoring, verruiging, bedekking verruiging> <Ts2036, Verstoring, verruiging, bedekking verruiging> <JR0216, Verstoring, invasieve exoten, bedekking invasieve exoten> <Ts2036, Verstoring, invasieve exoten, bedekking invasieve exoten>" #nolint: line_length_linter
+
 describe("ontbreken van soorten of kenmerken", {
   it("geen enkele soort opgeven geeft NA en een warning", {
     expect_warning(
-      berekenLSVIbasis(
-        Versie = "Versie 2.0",
-        Kwaliteitsniveau = "1",
-        Data_habitat,
-        Data_voorwaarden,
-        Data_soortenKenmerken %>%
-          filter(
-            .data$TypeKenmerk != "Soort_Latijn"
-          )
-      ),
-      "Er is geen enkele soort opgegeven"
-    )
-    expect_equal(
-      idsWissen(
+      Testresultaat <- idsWissen(
         berekenLSVIbasis(
           Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
@@ -55,6 +45,10 @@ describe("ontbreken van soorten of kenmerken", {
             )
         )
       ),
+      "Er is geen enkele soort opgegeven"
+    )
+    expect_equal(
+      Testresultaat,
       list(
         Resultaat_criterium = Resultaatv2[["Resultaat_criterium"]] %>%
           mutate(
@@ -126,8 +120,8 @@ describe("ontbreken van soorten of kenmerken", {
   })
 
   it("als 1 soort opgegeven is, wordt de bedekking van ontbrekende soorten 0", {
-    expect_equal(
-      idsWissen(
+    expect_warning(
+      Testresultaat <- idsWissen(
         berekenLSVIbasis(
           Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
@@ -151,6 +145,10 @@ describe("ontbreken van soorten of kenmerken", {
             )
         )
       ),
+      WarningVergrassingVerruiging
+    )
+    expect_equal(
+      Testresultaat,
       list(
         Resultaat_criterium = Resultaatv2[["Resultaat_criterium"]] %>%
           mutate(
@@ -216,20 +214,7 @@ describe("ontbreken van soorten of kenmerken", {
 
   it("geen enkel kenmerk opgeven geeft NA en een warning", {
     expect_warning(
-      berekenLSVIbasis(
-        Versie = "Versie 2.0",
-        Kwaliteitsniveau = "1",
-        Data_habitat,
-        Data_voorwaarden,
-        Data_soortenKenmerken %>%
-          filter(
-            .data$TypeKenmerk != "studiegroep"
-          )
-      ),
-      "JR0216, Ts2036 is er geen enkel kenmerk opgegeven van studielijst ouderdomsstadia. Er wordt van uitgegaan dat er voor deze studiegroepen geen observaties uitgevoerd zijn en berekeningen op basis van deze studiegroepen zullen resulteren in NA"  #nolint
-    )
-    expect_equal(
-      idsWissen(
+      Testresultaat <- idsWissen(
         berekenLSVIbasis(
           Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
@@ -241,6 +226,10 @@ describe("ontbreken van soorten of kenmerken", {
             )
         )
       ),
+      "JR0216, Ts2036 is er geen enkel kenmerk opgegeven van studielijst ouderdomsstadia. Er wordt van uitgegaan dat er voor deze studiegroepen geen observaties uitgevoerd zijn en berekeningen op basis van deze studiegroepen zullen resulteren in NA"  #nolint: line_length_linter
+    )
+    expect_equal(
+      Testresultaat,
       list(
         Resultaat_criterium = Resultaatv2[["Resultaat_criterium"]] %>%
           mutate(
@@ -309,9 +298,9 @@ describe("ontbreken van soorten of kenmerken", {
     )
   })
 
-  it("als 1 stadium opgegeven is, wordt de bedekking van ontbrekende stadia 0", { #nolint
-    expect_equal(
-      idsWissen(
+  it("als 1 stadium opgegeven is, wordt de bedekking van ontbrekende stadia 0", { #nolint: line_length_linter
+    expect_warning(
+      Testresultaat <- idsWissen(
         berekenLSVIbasis(
           Versie = "Versie 2.0",
           Kwaliteitsniveau = "1",
@@ -323,13 +312,17 @@ describe("ontbreken van soorten of kenmerken", {
             )
         )
       ),
+      WarningVergrassingVerruiging
+    )
+    expect_equal(
+      Testresultaat,
       Resultaatv2
     )
   })
 })
 
 describe("samenstelling soortengroepen", {
-  it("bedekkingen op genusniveau en soortniveau geven hetzelfde resultaat (waar dit mag)", { #nolint
+  it("bedekkingen op genusniveau en soortniveau geven hetzelfde resultaat (waar dit mag)", { #nolint: line_length_linter
     expect_equal(
       idsWissen(
         berekenLSVIbasis(
@@ -513,28 +506,33 @@ describe("samenstelling soortengroepen", {
             )
         )
       ),
-      idsWissen(
-        berekenLSVIbasis(
-          Versie = "Versie 2.0",
-          Kwaliteitsniveau = "1",
-          Data_habitat,
-          Data_voorwaarden %>%
-            filter(!.data$Voorwaarde %in%
-                     c("bedekking verbossing", "bedekking vergrassing",
-                       "bedekking verruiging", "bedekking invasieve exoten")),
-          Data_soortenKenmerken %>%
-            bind_rows(
-              data.frame(
-                ID = c("JR0216", "JR0216", "Ts2036"),
-                Kenmerk = c("Quercus robur", "Quercus pedunculata", "Quercus"),
-                TypeKenmerk = "Soort_Latijn",
-                Waarde = "10",
-                Type = "Percentage",
-                Eenheid = "%",
-                Vegetatielaag = "boomlaag",
-                stringsAsFactors = FALSE
+      suppressWarnings(
+        idsWissen(
+          berekenLSVIbasis(
+            Versie = "Versie 2.0",
+            Kwaliteitsniveau = "1",
+            Data_habitat,
+            Data_voorwaarden %>%
+              filter(!.data$Voorwaarde %in%
+                       c("bedekking verbossing", "bedekking vergrassing",
+                         "bedekking verruiging", "bedekking invasieve exoten")),
+            Data_soortenKenmerken %>%
+              bind_rows(
+                data.frame(
+                  ID = c("JR0216", "JR0216", "Ts2036"),
+                  Kenmerk =
+                    c("Quercus robur L.",
+                      "Quercus pedunculata Ehrh. ex Hoffmann",
+                      "Quercus"),
+                  TypeKenmerk = "Soort_Latijn",
+                  Waarde = "10",
+                  Type = "Percentage",
+                  Eenheid = "%",
+                  Vegetatielaag = "boomlaag",
+                  stringsAsFactors = FALSE
+                )
               )
-            )
+          )
         )
       )
     )

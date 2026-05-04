@@ -2,10 +2,11 @@
 #'
 #' @description Deze functie genereert soortenlijsten (met wetenschappelijke en
 #' Nederlandse namen) die gebruikt worden voor de bepaling van de Lokale Staat
-#' van Instandhouding van de opgegeven parameters.  In feite genereert ze een
-#' tabel met velden Versie, Habitattype, Habitatsubtype, WetNaam, WetNaamKort
-#' en NedNaam en evt. Criterium, Indicator en/of Beschrijving waarin de
-#' gespecificeerde parameters uitgeselecteerd zijn en waar voor andere
+#' van Instandhouding van de opgegeven parameters.
+#' In feite genereert ze een tabel met velden `Versie`, `Habitattype`,
+#' `Habitatsubtype`, `WetNaam`, `WetNaamKort` en `NedNaam` en evt. `Criterium`,
+#' `Indicator` en/of `Beschrijving` waarin de
+#' gespecifieerde parameters uitgeselecteerd zijn en waar voor andere
 #' parameters alle waarden uit de databank weergegeven zijn.
 #'
 #' Voor de vorm van de soortenlijst zijn er meerdere opties: een soortenlijst
@@ -24,18 +25,18 @@
 #' @inheritParams selecteerIndicatoren
 #' @param Taxonlijstniveau Geeft aan op welk niveau de soortenlijst gegroepeerd
 #' is (en welke niveaus weergegeven worden in de soortenlijst), de mogelijke
-#' waarden zijn 'habitattype', 'criterium', 'indicator' en 'voorwaarde'.
-#' Default is 'habitattype'.
-#' @param Taxonlijsttype "LSVIfiche" betekent dat de taxonlijst van de
-#' habitatfiche wordt overgenomen, "alle" betekent dat alle soorten en alle
+#' waarden zijn "habitattype", "criterium", "indicator" en "voorwaarde".
+#' Default is "habitattype".
+#' @param Taxonlijsttype `"LSVIfiche"` betekent dat de taxonlijst van de
+#' habitatfiche wordt overgenomen, `"alle"` betekent dat alle soorten en alle
 #' taxonomische groepen worden weergegeven die volledig in de groepen vallen
 #' die aan de parameters voldoen.
 #'
-#' @return Deze functie geeft een tabel met velden Versie, Habitattype,
-#' Habitatsubtype, Criterium, Indicator, evt. Beschrijving, WetNaam,
-#' WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een
-#' groep van taxa binnen eenzelfde indicator).  WetNaam is de volledige
-#' Latijnse naam inclusief auteursnaam, WetNaamKort geeft de verkorte naam
+#' @return Deze functie geeft een tabel met velden `Versie`, `Habitattype`,
+#' `Habitatsubtype`, `Criterium`, `Indicator`, evt. `Beschrijving`, `WetNaam`,
+#' `WetNaamKort` en `NedNaam` (waarbij `Beschrijving` een omschrijving is voor
+#' een groep van taxa binnen eenzelfde indicator).  `WetNaam` is de volledige
+#' Latijnse naam inclusief auteursnaam, `WetNaamKort` geeft de verkorte naam
 #' zonder auteursnaam.
 #'
 #' @examples
@@ -64,8 +65,9 @@ geefSoortenlijst <-
            Habitattype = "alle",
            Criterium = "alle",
            Indicator = "alle",
-           Taxonlijstniveau =
-             c("habitattype", "criterium", "indicator", "voorwaarde"),
+           Taxonlijstniveau = c(
+             "habitattype", "criterium", "indicator", "voorwaarde"
+           ),
            Taxonlijsttype = c("LSVIfiche", "alle"),
            ConnectieLSVIhabitats = NULL) {
 
@@ -77,7 +79,7 @@ geefSoortenlijst <-
     assert_that(
       inherits(ConnectieLSVIhabitats, "DBIConnection") |
         inherits(ConnectieLSVIhabitats, "Pool"),
-      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
+      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint: line_length_linter
     )
     match.arg(Taxonlijstniveau)
     match.arg(Taxonlijsttype)
@@ -90,7 +92,8 @@ geefSoortenlijst <-
           Habitattype = Habitattype,
           Criterium = Criterium,
           Indicator = Indicator,
-          ConnectieLSVIhabitats = ConnectieLSVIhabitats)
+          ConnectieLSVIhabitats = ConnectieLSVIhabitats
+        )
     } else {
       Selectiegegevens <-
         geefInvoervereisten(
@@ -99,7 +102,8 @@ geefSoortenlijst <-
           Habitattype = Habitattype,
           Criterium = Criterium,
           Indicator = Indicator,
-          ConnectieLSVIhabitats = ConnectieLSVIhabitats) %>%
+          ConnectieLSVIhabitats = ConnectieLSVIhabitats
+        ) %>%
         select(
           "Versie", "Habitattype", "Habitatsubtype",
           "Criterium", "Indicator", "Beoordeling",

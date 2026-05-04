@@ -8,7 +8,8 @@ describe("berekeningen gebeuren correct", {
       data.frame(
         Rijnr = 1, RefMin = 0, RefMax = 0, Operator = "=", WaardeMin = 0,
         WaardeMax = 0, TheoretischMaximum = 1, TypeVariabele = "Percentage",
-        stringsAsFactors = FALSE)
+        stringsAsFactors = FALSE
+      )
     expect_equal(
       berekenStatus(Testdata),
       tibble(Rijnr = 1, Status = TRUE)
@@ -27,7 +28,8 @@ describe("berekeningen gebeuren correct", {
         Rijnr = c(1, 2), RefMin = 1, RefMax = NA, Operator = ">=",
         WaardeMin = c(1, 0),
         WaardeMax = c(1, 0), TheoretischMaximum = 1, TypeVariabele = "Ja/nee",
-        stringsAsFactors = FALSE)
+        stringsAsFactors = FALSE
+      )
     expect_equal(
       berekenStatus(Testdata),
       tibble(Rijnr = c(1, 2), Status = c(TRUE, FALSE))
@@ -46,7 +48,8 @@ describe("berekeningen gebeuren correct", {
         Rijnr = 1:2, RefMin = 1, RefMax = NA, Operator = ">=",
         WaardeMin = c(1, 0),
         WaardeMax = NA, TheoretischMaximum = 1, TypeVariabele = "Ja/nee",
-        stringsAsFactors = FALSE)
+        stringsAsFactors = FALSE
+      )
     expect_equal(
       berekenStatus(Testdata),
       tibble(Rijnr = 1:2, Status = c(TRUE, FALSE))
@@ -65,7 +68,8 @@ describe("berekeningen gebeuren correct", {
         Rijnr = c(1, 2), RefMin = 1, RefMax = NA, Operator = "=",
         WaardeMin = c(1, 0),
         WaardeMax = NA, TheoretischMaximum = 1, TypeVariabele = "Ja/nee",
-        stringsAsFactors = FALSE)
+        stringsAsFactors = FALSE
+      )
     expect_equal(
       berekenStatus(Testdata),
       tibble(Rijnr = c(1, 2), Status = c(TRUE, FALSE))
@@ -96,7 +100,8 @@ describe("berekeningen gebeuren correct", {
         Rijnr = c(1, 2), RefMin = 1, RefMax = 1, Operator = "<",
         WaardeMin = c(0.2, 1.2), WaardeMax = c(0.2, 1.2),
         TheoretischMaximum = NA, TypeVariabele = "Decimaal getal",
-        stringsAsFactors = FALSE)
+        stringsAsFactors = FALSE
+      )
     expect_equal(
       berekenStatus(Testdata),
       tibble(Rijnr = c(1, 2), Status = c(TRUE, FALSE))
@@ -112,7 +117,8 @@ describe("berekeningen gebeuren correct", {
         Rijnr = c(1, 2), RefMin = 1, RefMax = 1, Operator = ">=",
         WaardeMin = c(0, 1), WaardeMax = c(0, 1),
         TheoretischMaximum = NA, TypeVariabele = "Decimaal getal",
-        stringsAsFactors = FALSE)
+        stringsAsFactors = FALSE
+      )
     expect_equal(
       berekenStatus(Testdata2),
       tibble(Rijnr = c(1, 2), Status = c(FALSE, TRUE))
@@ -131,7 +137,8 @@ describe("berekeningen gebeuren correct", {
         Rijnr = c(1, 2), RefMin = 0, RefMax = 0, Operator = "<=",
         WaardeMin = c(0, 0.05), WaardeMax = c(0, 0.05),
         TheoretischMaximum = 1, TypeVariabele = "Percentage",
-        stringsAsFactors = FALSE)
+        stringsAsFactors = FALSE
+      )
     expect_equal(
       berekenStatus(Testdata),
       tibble(Rijnr = c(1, 2), Status = c(TRUE, FALSE))

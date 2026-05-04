@@ -1,0 +1,17 @@
+ID;record_id;plot_type;Criterium;Indicator;Voorwaarde;Waarde;Type;Invoertype;Eenheid
+10010417_2023-08-11;IV2023090510341314;circle;Verstoring;rijshout;bedekking rijshout;0;Percentage;NA;%
+10010417_2023-08-11;IV2023090510341314;circle;Verstoring;structuurverstoring;bedekking structuurverstoring;0;Percentage;NA;%
+10010417_2023-08-11;IV2023090510341314;square;Structuur;horizontale structuur;fijnmazige afwisseling;1;Ja/nee;NA;NA
+10010417_2023-08-11;IV2023090510341314;circle;Structuur;dynamiek;spontane verstuiving aanwezig;1;Ja/nee;NA;NA
+10010417_2120_2019-10-24;IV2020031622542410;circle;Verstoring;rijshout;bedekking rijshout;0;Percentage;NA;%
+10010417_2120_2019-10-24;IV2020031622542410;circle;Verstoring;structuurverstoring;bedekking structuurverstoring;0;Percentage;NA;%
+10010417_2120_2019-10-24;IV2020031622591285;square;Structuur;horizontale structuur;fijnmazige afwisseling;1;Ja/nee;NA;NA
+10010417_2120_2019-10-24;IV2020031622542410;circle;Structuur;dynamiek;spontane verstuiving aanwezig;1;Ja/nee;NA;NA
+10038833_2023-08-31;IV2023090510343053;circle;Verstoring;rijshout;bedekking rijshout;0;Percentage;NA;%
+10038833_2023-08-31;IV2023090510343053;circle;Verstoring;structuurverstoring;bedekking structuurverstoring;0;Percentage;NA;%
+10038833_2023-08-31;IV2023090510343053;square;Structuur;horizontale structuur;fijnmazige afwisseling;1;Ja/nee;NA;NA
+10038833_2023-08-31;IV2023090510343053;circle;Structuur;dynamiek;spontane verstuiving aanwezig;1;Ja/nee;NA;NA
+10071601_2023-08-31;IV2023090510343153;circle;Verstoring;rijshout;bedekking rijshout;0;Percentage;NA;%
+10071601_2023-08-31;IV2023090510343153;circle;Verstoring;structuurverstoring;bedekking structuurverstoring;0;Percentage;NA;%
+10071601_2023-08-31;IV2023090510343153;square;Structuur;horizontale structuur;fijnmazige afwisseling;1;Ja/nee;NA;NA
+10071601_2023-08-31;IV2023090510343153;circle;Structuur;dynamiek;spontane verstuiving aanwezig;1;Ja/nee;NA;NA

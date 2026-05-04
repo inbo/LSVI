@@ -19,20 +19,20 @@ geefSoortenlijst(
 \item{Versie}{De versie van het LSVI-rapport, bv. "Versie 2" of "Versie 3".
 Bij de default "alle" worden de gegevens voor de verschillende versies
 gegeven.  De mogelijke waarden kunnen opgevraagd worden via
-geefUniekeWaarden("Versie", "VersieLSVI") of geefVersieInfo().}
+\code{geefUniekeWaarden("Versie", "VersieLSVI")} of \code{geefVersieInfo()}.}
 
 \item{Habitatgroep}{Parameter waarmee alle habitats van een bepaalde
 habitatgroep kunnen geselecteerd worden, bv. "Bossen", "Heiden",
 "(Half-)natuurlijke graslanden", "Zoete en brakke wateren",...   en "alle"
 (=default).  Deze waarde moet niet gespecifieerd worden als een bepaald
 habitat(sub)type geselecteerd wordt.  De mogelijke waarden kunnen opgevraagd
-worden via geefUniekeWaarden("Habitatgroep", "Naam").}
+worden via \code{geefUniekeWaarden("Habitatgroep", "Naam")}.}
 
 \item{Habitattype}{Parameter waarmee een habitattype of habitatsubtype kan
 geselecteerd worden.  Als dit een habitattype betreft met meerdere subtypes,
 zullen de gegevens van alle subtypes van dit habitattype weergegeven worden.
 De mogelijke waarden kunnen opgevraagd worden via
-geefUniekeWaarden("Habitattype", "Code").  Er is voor deze parameter ook de
+\code{geefUniekeWaarden("Habitattype", "Code")}.  Er is voor deze parameter ook de
 mogelijkheid om een vector van meerdere habitat(sub)typen op te geven.}
 
 \item{Criterium}{Het LSVI-criterium waarvoor de gegevens geselecteerd
@@ -40,36 +40,37 @@ worden: "Vegetatie", "Structuur", "Verstoring" of "alle".}
 
 \item{Indicator}{De indicator waarvoor de gegevens uit de databank gehaald
 worden.  De mogelijke waarden kunnen opgevraagd worden via
-geefUniekeWaarden("Indicator", "Naam").}
+\code{geefUniekeWaarden("Indicator", "Naam")}.}
 
 \item{Taxonlijstniveau}{Geeft aan op welk niveau de soortenlijst gegroepeerd
 is (en welke niveaus weergegeven worden in de soortenlijst), de mogelijke
-waarden zijn 'habitattype', 'criterium', 'indicator' en 'voorwaarde'.
-Default is 'habitattype'.}
+waarden zijn "habitattype", "criterium", "indicator" en "voorwaarde".
+Default is "habitattype".}
 
-\item{Taxonlijsttype}{"LSVIfiche" betekent dat de taxonlijst van de
-habitatfiche wordt overgenomen, "alle" betekent dat alle soorten en alle
+\item{Taxonlijsttype}{\code{"LSVIfiche"} betekent dat de taxonlijst van de
+habitatfiche wordt overgenomen, \code{"alle"} betekent dat alle soorten en alle
 taxonomische groepen worden weergegeven die volledig in de groepen vallen
 die aan de parameters voldoen.}
 
 \item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor
-de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
+de LSVI van habitats, in te stellen d.m.v. functie \code{connecteerMetLSVIdb()}.}
 }
 \value{
-Deze functie geeft een tabel met velden Versie, Habitattype,
-Habitatsubtype, Criterium, Indicator, evt. Beschrijving, WetNaam,
-WetNaamKort en NedNaam (waarbij Beschrijving een omschrijving is voor een
-groep van taxa binnen eenzelfde indicator).  WetNaam is de volledige
-Latijnse naam inclusief auteursnaam, WetNaamKort geeft de verkorte naam
+Deze functie geeft een tabel met velden \code{Versie}, \code{Habitattype},
+\code{Habitatsubtype}, \code{Criterium}, \code{Indicator}, evt. \code{Beschrijving}, \code{WetNaam},
+\code{WetNaamKort} en \code{NedNaam} (waarbij \code{Beschrijving} een omschrijving is voor
+een groep van taxa binnen eenzelfde indicator).  \code{WetNaam} is de volledige
+Latijnse naam inclusief auteursnaam, \code{WetNaamKort} geeft de verkorte naam
 zonder auteursnaam.
 }
 \description{
 Deze functie genereert soortenlijsten (met wetenschappelijke en
 Nederlandse namen) die gebruikt worden voor de bepaling van de Lokale Staat
-van Instandhouding van de opgegeven parameters.  In feite genereert ze een
-tabel met velden Versie, Habitattype, Habitatsubtype, WetNaam, WetNaamKort
-en NedNaam en evt. Criterium, Indicator en/of Beschrijving waarin de
-gespecificeerde parameters uitgeselecteerd zijn en waar voor andere
+van Instandhouding van de opgegeven parameters.
+In feite genereert ze een tabel met velden \code{Versie}, \code{Habitattype},
+\code{Habitatsubtype}, \code{WetNaam}, \code{WetNaamKort} en \code{NedNaam} en evt. \code{Criterium},
+\code{Indicator} en/of \code{Beschrijving} waarin de
+gespecifieerde parameters uitgeselecteerd zijn en waar voor andere
 parameters alle waarden uit de databank weergegeven zijn.
 
 Voor de vorm van de soortenlijst zijn er meerdere opties: een soortenlijst
@@ -83,7 +84,7 @@ de habitatfiches vermeld is) of alle taxa op lagere niveaus ook weergeven en
 dus bij soortengroepen alle mogelijke soorten van deze groep weergeven.
 Deze opties kunnen opgegeven worden in de parameter Taxonlijsttype.
 
-De parameters kunnen enkel de hieronder gespecifeerde waarden bevatten en moeten als string opgegeven worden.  Default is telkens 'alle', waarbij de soortenlijsten voor alle mogelijke waarden van die parameter weergegeven worden (m.a.w. er is geen selectie voor deze parameter).
+De parameters kunnen enkel de hieronder gespecifieerde waarden bevatten en moeten als string opgegeven worden.  Default is telkens "alle", waarbij de soortenlijsten voor alle mogelijke waarden van die parameter weergegeven worden (m.a.w. er is geen selectie voor deze parameter).
 }
 \examples{
 # Omwille van de iets langere lange duurtijd van de commando's staat bij

@@ -24,7 +24,7 @@ library(knitr)
 ```{r gegevens_inladen}
 
 if (
-  inherits(params$ConnectieLSVIhabitats, "DBIConnection") |
+  inherits(params$ConnectieLSVIhabitats, "DBIConnection") ||
     inherits(params$ConnectieLSVIhabitats, "Pool")
 ) {
   ConnectieLSVIhabitats <- params$ConnectieLSVIhabitats
@@ -54,7 +54,7 @@ Indicatoren <-
 
 Uitvoer <- NULL
 
-for (VersieRapportdeel in unique(Indicatoren$Versie)) { #nolint
+for (VersieRapportdeel in unique(Indicatoren$Versie)) {
   Uitvoer <- c(Uitvoer, paste("#", VersieRapportdeel, sep = " "))
   VersieIndicatoren <- Indicatoren %>%
     filter(.data$Versie == VersieRapportdeel) %>%
@@ -84,26 +84,29 @@ for (VersieRapportdeel in unique(Indicatoren$Versie)) { #nolint
             is.na(
               unique(
                 (Subsubset %>%
-                   filter(.data$Habitatsubtype == HabitatsubtypeFiche)
-                 )$Habitatsubtypenaam)
-              ),
+                    filter(.data$Habitatsubtype == HabitatsubtypeFiche)
+                )$Habitatsubtypenaam
+              )
+            ),
             "",
             paste(
               ": ",
               unique(
                 (Subsubset %>%
-                   filter(.data$Habitatsubtype == HabitatsubtypeFiche)
-                 )$Habitatsubtypenaam
-                ),
+                    filter(.data$Habitatsubtype == HabitatsubtypeFiche)
+                )$Habitatsubtypenaam
+              ),
               sep = ""
             )
           )
-        if (HabitatsubtypeFiche != Habitat) {
-          Uitvoer <-
-            c(Uitvoer,
-              paste("#### Habitatsubtype ", HabitatsubtypeFiche,
-                    Habitatsubtypenaam, "\n", sep = ""))
-        }
+        Uitvoer <-
+          c(
+            Uitvoer,
+            paste(
+              "#### Habitatsubtype ", HabitatsubtypeFiche,
+              Habitatsubtypenaam, "\n", sep = ""
+            )[HabitatsubtypeFiche != Habitat]
+          )
         Uitvoer <-
           c(Uitvoer,
             knit_child("Habitatfiche.Rmd"))

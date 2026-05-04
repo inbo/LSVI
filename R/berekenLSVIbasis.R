@@ -3,28 +3,31 @@
 #' @description Deze functie bepaalt de Lokale Staat van Instandhouding en
 #' biotische indices op basis van gegevens, die in het juiste formaat moeten
 #' aangeleverd worden.  Zie hiervoor de beschrijving bij de parameters
-#' ('Arguments') en de tabellen van het voorbeeld.  In principe is enkel de
-#' parameter Data_habitat verplicht om op te geven, maar extra datasets zijn
+#' (["Arguments"
+#' ](https://inbo.github.io/LSVI/reference/berekenLSVIbasis.html#arguments))
+#' en de tabellen van het voorbeeld.  In principe is enkel de
+#' parameter `Data_habitat` verplicht om op te geven, maar extra datasets zijn
 #' uiteraard wel nodig om een resultaat te bekomen.  Welke datasets relevant
 #' zijn, is afhankelijk van de opgegeven habitattypes: voor een aantal
 #' habitattypes kan een tabel met observaties en hun bedekking of aanwezigheid
-#' (=parameter 'Data_soortenKenmerken') volstaan, voor bossen zijn bv.
+#' (=parameter `Data_soortenKenmerken`) volstaan, voor bossen zijn bv.
 #' bijkomend gegevens nodig over dood hout.
 #'
-#' De Lokale Staat van Instandhouding wordt weergegeven in de kolom 'Status'
+#' De Lokale Staat van Instandhouding wordt weergegeven in de kolom `Status`
 #' met als mogelijke waarden TRUE (= gunstig) en FALSE (= ongunstig).
 #'
 #' De biotische indices zijn afgeleid van het verschil tussen een geobserveerde
 #' waarde en de referentiewaarde voor elke indicator. Deze verschillen werden
-#' herschaald tussen +1 en -1, waarbij een positieve en negatieve waarde
+#' herschaald tussen `+1` en `-1`, waarbij een positieve en negatieve waarde
 #' overeenkomt met respectievelijk een gunstige en ongunstige score. Deze
 #' verschilscores per indicator worden geaggregeerd, eerst voor de indicatoren
 #' die tot eenzelfde criterium behoren, vervolgens worden deze geaggregeerde
 #' scores verder geaggregeerd om tot een globale index te komen. Er worden drie
 #' verschillende globale indices berekend waarbij de naamgeving aangeeft welk
-#' aggregatie achtereenvolgens gebruikt werd: index_min_min, index_min_harm en
-#' index_harm_harm. Een naam met "min" duidt op minimum van de scores als
-#' aggregatie; bij "harm" werd het harmonisch gemiddelde berekend.
+#' aggregatie achtereenvolgens gebruikt werd: `"index_min_min"`,
+#' `"index_min_harm"` en `"index_harm_harm"`.
+#' Een naam met `"min"` duidt op minimum van de scores als
+#' aggregatie; bij `"harm"` werd het harmonisch gemiddelde berekend.
 #'
 #' @inheritParams selecteerIndicatoren
 #' @param Versie De versie van het LSVI-rapport op basis waarvan de berekening
@@ -40,50 +43,56 @@
 #' streefwaarde (uiteindelijk niet opgenomen in rapport).  De betekenissen van
 #' de 2 kwaliteitsniveaus voor de verschillende versies is weergegeven in de
 #' tabel Versie in de databank en kan opgevraagd met de functie
-#' geefVersieInfo().  Geef als parameter Kwaliteitsniveau op op basis van welk
+#' `geefVersieInfo()`.  Geef als parameter Kwaliteitsniveau op op basis van welk
 #' kwaliteitsniveau de berekening gemaakt moet worden.  (Strikt genomen is de
 #' berekening van de LSVI de berekening volgens kwaliteitsniveau 1.)
 #' @param Data_habitat Een opsomming van de te analyseren opnamen met opgave
 #' van het aanwezige habitattype (= het habitattype volgens welke criteria de
 #' beoordeling moet gebeuren).  Deze info moet doorgegeven worden in de vorm
-#' van een dataframe met minimum de velden ID en Habitattype, waarbij ID een
-#' groeperende variabele is voor een opname (plaats en tijdstip).  Habitattype
+#' van een dataframe met minimum de velden `ID` en `Habitattype`, waarbij `ID`
+#' een groeperende variabele is voor een opname (plaats en tijdstip).
+#' `Habitattype`
 #' moet overeenkomen met de naamgeving in de LSVI-databank (op te zoeken door
-#' geefUniekeWaarden("Habitattype", "Code")).  Eventuele extra velden zullen
+#' `geefUniekeWaarden("Habitattype", "Code")`).  Eventuele extra velden zullen
 #' overgenomen worden bij de uitvoer.
 #' @param Data_voorwaarden Gegevens over de opgemeten indicatoren in de vorm
-#' van een data.frame met velden ID, Criterium, Indicator, Voorwaarde, Waarde,
-#' Type, Invoertype en Eenheid, waarbij ID de groeperende variabele voor een
-#' opname is die ook bij Data_habitat opgegeven is.  Criterium, Indicator en
-#' Voorwaarde moeten overeenkomen met de waarde in de databank (op te zoeken
-#' via de functie geefInvoervereisten()).  Waarde is de waarde die voor die
+#' van een dataframe met velden `ID`, `Criterium`, `Indicator`, `Voorwaarde`,
+#' `Waarde`, `Type`, `Invoertype` en `Eenheid`, waarbij `ID` de groeperende
+#' variabele voor een opname is die ook bij `Data_habitat` opgegeven is.
+#' `Criterium`, `Indicator` en
+#' `Voorwaarde` moeten overeenkomen met de waarde in de databank (op te zoeken
+#' via de functie `geefInvoervereisten()`).  `Waarde` is de waarde die voor die
 #' voorwaarde geobserveerd of gemeten is en Type het soort variabele (zie
-#' geefUniekeWaarden("TypeVariabele", "Naam") voor de mogelijke waarden).
-#' Ingeval van een categorische variabele moet bij Invoertype de naam van de
+#' `geefUniekeWaarden("TypeVariabele", "Naam")` voor de mogelijke waarden).
+#' Ingeval van een categorische variabele moet bij `Invoertype` de naam van de
 #' lijst opgegeven worden waaruit deze waarde komt (bv. welke schaal gebruikt
-#' is, zie geefUniekeWaarden("Lijst", "Naam") voor alle mogelijkheden).  Als
+#' is, zie `geefUniekeWaarden("Lijst", "Naam")` voor alle mogelijkheden).  Als
 #' een indicator rechtstreeks op het veld ingeschat is, kan deze ingevoerd
 #' worden door in deze tabel de kolom voorwaarde leeg te laten (wat in R
 #' aangeduid wordt door NA) en als waarde "TRUE" of "FALSE" in te geven.  In
-#' dit geval moeten Type, Invoertype en Eenheid niet ingevoerd worden.
+#' dit geval moeten `Type`, `Invoertype` en `Eenheid` niet ingevoerd worden.
 #' @param Data_soortenKenmerken Gegevens van soorten en kenmerken en hun
 #' bedekking (m.a.w. enkel kenmerken waarvan een bedekking gemeten is, horen
-#' in deze tabel).  Deze dataframe moet de velden ID, Vegetatielaag, Kenmerk,
-#' TypeKenmerk, Waarde, Type, Invoertype en Eenheid bevatten, waarbij ID de
-#' groeperende variabele voor een opname is die ook bij Data_habitat opgegeven
-#' is.  Kenmerk bevat een soortnaam of een naam die voorkomt in de lijst
-#' gegenereerd door geefUniekeWaarden("StudieItem", "Waarde") en TypeKenmerk
-#' geeft een beschrijving voor dat kenmerk: 'studiegroep', 'soort_Latijn',
-#' 'soort_NL' of 'soort_NBN'.  Waarde is de geobserveerde bedekking en Type het
+#' in deze tabel).
+#' Deze dataframe moet de velden `ID`, `Vegetatielaag`, `Kenmerk`,
+#' `TypeKenmerk`, `Waarde`, `Type`, `Invoertype` en `Eenheid` bevatten, waarbij
+#' `ID` de groeperende variabele voor een opname is die ook bij `Data_habitat`
+#' opgegeven is.
+#' `Kenmerk` bevat een soortnaam of een naam die voorkomt in de lijst
+#' gegenereerd door `geefUniekeWaarden("StudieItem", "Waarde")` en `TypeKenmerk`
+#' geeft een beschrijving voor dat kenmerk: `"studiegroep"`, `"soort_Latijn"`,
+#' `"soort_NL"` of `"soort_gbif"`.
+#' `Waarde` is de geobserveerde bedekking en `Type` het
 #' soort variabele dat voor de bedekking gebruikt is (zie
-#' geefUniekeWaarden("TypeVariabele", "Naam") voor de mogelijke waarden).
-#' Ingeval van een categorische variabele moet bij Invoertype de naam van de
+#' `geefUniekeWaarden("TypeVariabele", "Naam")` voor de mogelijke waarden).
+#' Ingeval van een categorische variabele moet bij `Invoertype` de naam van de
 #' lijst opgegeven worden welke schaal gebruikt is
-#' (zie geefUniekeWaarden("Lijst", "Naam") voor alle mogelijkheden).
+#' (zie `geefUniekeWaarden("Lijst", "Naam")` voor alle mogelijkheden).
 #' @param LIJST Dataframe met lijst die weergeeft hoe de vertaling moet
 #' gebeuren van categorische variabelen naar numerieke waarden (en omgekeerd).
 #' Default worden deze waarden uit de databank met LSVI-indicatoren gehaald
-#' d.m.v. de functie vertaalInvoerInterval().  Aangeraden wordt om deze default
+#' d.m.v. de functie `vertaalInvoerInterval()`.
+#' Aangeraden wordt om deze default
 #' te gebruiken (dus parameter niet expliciet invullen), of deze waar nodig aan
 #' te vullen met eigen schalen.  Omdat er ook een omzetting moet gebeuren voor
 #' grenswaarden uit de databank, kan het niet doorgeven van een gedeelte van
@@ -94,12 +103,13 @@
 #' indicatoren gunstig zijn EN als geen enkele zeer belangrijke indicator
 #' ongunstig is; (2) "1-out-all-out": de beoordeling is gunstig als alle
 #' indicatoren gunstig zijn. "1-out-all-out" is default.
-#' @param na.rm Hier geef je aan hoe de berekening moet omgaan met NA waarden.
-#' Default is FALSE. Dit betekent dat NA waarden niet worden verwijderd.
+#' @param na.rm Hier geef je aan hoe de berekening moet omgaan met NA-waarden.
+#' Default is FALSE. Dit betekent dat NA-waarden niet worden verwijderd.
 #' Hierdoor zal de indexberekening resulteren in een NA zodra één van de
 #' indicatoren NA is. Voor de berekening van de status zal dit enkel resulteren
 #' in een NA indien minstens één van de indicatoren NA is en minstens één
-#' van de indicatoren status TRUE (= gunstig) heeft. Indien na.rm = TRUE worden
+#' van de indicatoren status TRUE (= gunstig) heeft. Indien `na.rm = TRUE`
+#' worden
 #' eventuele NA-waarden verwijderd zodat status en de indices een resultaat
 #' hebben. Doordat deze dan mogelijk niet op de volledige set van indicatoren
 #' gebaseerd zijn, moet hiermee rekening gehouden worden afhankelijk van de
@@ -139,32 +149,31 @@
 #' @importFrom dplyr %>% select distinct n filter mutate row_number rename
 #' left_join summarise group_by ungroup rowwise bind_rows arrange transmute
 #' @importFrom assertthat assert_that has_name
-#' @importFrom rlang .data
+#' @importFrom rlang !!! .data syms
 #' @importFrom stringr str_split_fixed str_c
 #'
 #'
-berekenLSVIbasis <- #nolint
+berekenLSVIbasis <- #nolint: object_name_linter
   function(
     Versie = "alle",
     Kwaliteitsniveau = "alle",
-    Data_habitat, #nolint
-    Data_voorwaarden = #nolint
-      data.frame(
-        ID = character(),
-        Criterium = character(),
-        Indicator = character(),
-        Voorwaarde = character(),
-        Waarde = character(),
-        Type = character(),
-        WaardeMin = double(),
-        WaardeMax = double(),
-        stringsAsFactors = FALSE
-      ),
-    Data_soortenKenmerken = data.frame(ID = character()), #nolint
+    Data_habitat, #nolint: object_name_linter
+    Data_voorwaarden = data.frame( #nolint: object_name_linter
+      ID = character(),
+      Criterium = character(),
+      Indicator = character(),
+      Voorwaarde = character(),
+      Waarde = character(),
+      Type = character(),
+      WaardeMin = double(),
+      WaardeMax = double(),
+      stringsAsFactors = FALSE
+    ),
+    Data_soortenKenmerken = data.frame(ID = character()), #nolint: object_name_linter, line_length_linter
     Aggregatiemethode = "1-out-all-out",
     ConnectieLSVIhabitats = NULL,
     LIJST = geefVertaallijst(ConnectieLSVIhabitats),
-    na.rm = FALSE #nolint
+    na.rm = FALSE #nolint: object_name_linter
   ) {
 
     #controle invoer
@@ -179,7 +188,7 @@ berekenLSVIbasis <- #nolint
     assert_that(
       inherits(ConnectieLSVIhabitats, "DBIConnection") |
         inherits(ConnectieLSVIhabitats, "Pool"),
-      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
+      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint: line_length_linter
     )
     if (class(ConnectieLSVIhabitats)[1] == "Pool") {
       Klasse <-
@@ -193,11 +202,12 @@ berekenLSVIbasis <- #nolint
     Kwaliteitsniveau <-
       invoercontroleKwaliteitsniveau(Kwaliteitsniveau, ConnectieLSVIhabitats)
 
-    Data_habitat <- #nolint
+    Data_habitat <- #nolint: object_name_linter
       invoercontroleData_habitat(Data_habitat, ConnectieLSVIhabitats)
+    KolommenDataHabitat <- colnames(Data_habitat)
 
     if (nrow(Data_voorwaarden) > 0) {
-      Data_voorwaarden <- #nolint
+      Data_voorwaarden <- #nolint: object_name_linter
         invoercontroleData_voorwaarden(
           Data_voorwaarden,
           ConnectieLSVIhabitats,
@@ -229,8 +239,11 @@ berekenLSVIbasis <- #nolint
       assert_that(has_name(data_voorwaarden_niet_na, "WaardeMax"))
     }
 
+    assert_that(inherits(Data_soortenKenmerken, "data.frame"))
+    # zorgen dat het echte dataframe is, afgeleid object geeft problemen met s4
+    Data_soortenKenmerken <- as.data.frame(Data_soortenKenmerken) #nolint: object_name_linter, line_length_linter
     if (nrow(Data_soortenKenmerken) > 0) {
-      Data_soortenKenmerken <- #nolint
+      Data_soortenKenmerken <- #nolint: object_name_linter
         invoercontroleData_soortenKenmerken(
           Data_soortenKenmerken,
           ConnectieLSVIhabitats,
@@ -243,13 +256,13 @@ berekenLSVIbasis <- #nolint
     assert_that(is.string(Aggregatiemethode))
     if (
       !(Aggregatiemethode %in%
-      c("RapportageHR", "1-out-all-out")
+          c("RapportageHR", "1-out-all-out")
       )
     ) {
-    stop(
-      "Aggregatiemethode moet een van de volgende waarden zijn: 'RapportageHR' of '1-out-all-out'"   #nolint
-    )
-  }
+      stop(
+        "Aggregatiemethode moet een van de volgende waarden zijn: 'RapportageHR' of '1-out-all-out'"   #nolint: line_length_linter
+      )
+    }
 
 
 
@@ -290,10 +303,11 @@ berekenLSVIbasis <- #nolint
     IntervalVereisten <-
       vertaalInvoerInterval(
         (Invoervereisten %>%
-          filter(!.data$Referentiewaarde %in% Invoervereisten$Voorwaarde))[
+            filter(!.data$Referentiewaarde %in% Invoervereisten$Voorwaarde)
+        )[
           , c("Rijnr", "TypeVariabele", "Referentiewaarde",
               "Eenheid", "Invoertype")
-          ],
+        ],
         LIJST,
         ConnectieLSVIhabitats
       ) %>%
@@ -316,17 +330,20 @@ berekenLSVIbasis <- #nolint
     Resultaat <-
       Data_habitat %>%
       left_join(
-        Invoervereisten,
-        by = c("Habitattype" = "Habitatsubtype"))
+        Invoervereisten %>%
+          select(-"Habitattype"),
+        by = c("Habitattype" = "Habitatsubtype"),
+        relationship = "many-to-many"
+      )
     records_zonder_fiche <- Resultaat %>%
       filter(is.na(.data$Criterium))
     if (nrow(records_zonder_fiche) > 0) {
       stop(
         paste0(
-          "Er bestaan geen eenduidige criteria voor de berekening van de LSVI voor habitattype(s) ", #nolint
+          "Er bestaan geen eenduidige criteria voor de berekening van de LSVI voor habitattype(s) ", #nolint: line_length_linter
           paste(records_zonder_fiche$Habitattype, collapse = ", "),
           " voor de opgegeven versie (", Versie,
-          "), geef het juiste subtype op of zoek uit voor welk habitattype er wel fiches zijn" #nolint
+          "), geef het juiste subtype op of zoek uit voor welk habitattype er wel fiches zijn" #nolint: line_length_linter
         )
       )
     }
@@ -335,7 +352,7 @@ berekenLSVIbasis <- #nolint
     if (nrow(Jointest) > 0) {
       warning(
         sprintf(
-          "Volgende records uit Data_voorwaarden kunnen niet gekoppeld worden aan indicatoren uit de databank omdat de criterium-indicator-combinatie niet voorkomt bij de LSVI-regels van het opgegeven habitattype: <%s>", #nolint
+          "Volgende records uit Data_voorwaarden kunnen niet gekoppeld worden aan indicatoren uit de databank omdat de criterium-indicator-combinatie niet voorkomt bij de LSVI-regels van het opgegeven habitattype: <%s>", #nolint: line_length_linter
           Jointest %>%
             summarise(
               Record =
@@ -396,7 +413,7 @@ berekenLSVIbasis <- #nolint
     if (nrow(Jointest) > 0) {
       warning(
         sprintf(
-          "Volgende records uit Data_voorwaarden kunnen niet gekoppeld worden aan indicatoren uit de databank omdat de criterium-indicator-voorwaarde-combinatie niet voorkomt bij de LSVI-regels van het opgegeven habitattype: <%s>", #nolint
+          "Volgende records uit Data_voorwaarden kunnen niet gekoppeld worden aan indicatoren uit de databank omdat de criterium-indicator-voorwaarde-combinatie niet voorkomt bij de LSVI-regels van het opgegeven habitattype: <%s>", #nolint: line_length_linter
           Jointest %>%
             summarise(
               Record =
@@ -417,8 +434,9 @@ berekenLSVIbasis <- #nolint
       Resultaat %>%
       left_join(
         data_voorwaarden_niet_na,
-        by =
-          c("ID", "Criterium", "Indicator", "Voorwaarde.lower" = "Voorwaarde"),
+        by = c(
+          "ID", "Criterium", "Indicator", "Voorwaarde.lower" = "Voorwaarde"
+        ),
         suffix = c("", ".vw")
       ) %>%
       mutate(
@@ -470,7 +488,7 @@ berekenLSVIbasis <- #nolint
         if (nrow(GeenSoorten) > 0) {
           warning(
             sprintf(
-              "Er is geen enkele soort opgegeven voor de opname(n) %s. Er wordt van uitgegaan dat hier geen vegetatie-opname gemaakt is en berekeningen op basis van soortenlijsten zullen resulteren in NA (not available). Geef tenminste 1 soort op (evt. met bedekking 0 procent) als er toch een opname gemaakt is",  #nolint
+              "Er is geen enkele soort opgegeven voor de opname(n) %s. Er wordt van uitgegaan dat hier geen vegetatie-opname gemaakt is en berekeningen op basis van soortenlijsten zullen resulteren in NA (not available). Geef tenminste 1 soort op (evt. met bedekking 0 procent) als er toch een opname gemaakt is",  #nolint: line_length_linter
               str_c(unique(GeenSoorten$ID), collapse = ", ")
             )
           )
@@ -493,7 +511,7 @@ berekenLSVIbasis <- #nolint
             )
           warning(
             sprintf(
-              "%s. Er wordt van uitgegaan dat er voor deze studiegroepen geen observaties uitgevoerd zijn en berekeningen op basis van deze studiegroepen zullen resulteren in NA (not available). Geef tenminste 1 kenmerk van deze studiegroep op (evt. met bedekking 0 procent) als deze studiegroep toch bestudeerd is.",  #nolint
+              "%s. Er wordt van uitgegaan dat er voor deze studiegroepen geen observaties uitgevoerd zijn en berekeningen op basis van deze studiegroepen zullen resulteren in NA (not available). Geef tenminste 1 kenmerk van deze studiegroep op (evt. met bedekking 0 procent) als deze studiegroep toch bestudeerd is.",  #nolint: line_length_linter
               Infotekst$Tekst
             )
           )
@@ -522,13 +540,13 @@ berekenLSVIbasis <- #nolint
             Tekst <-
               str_c(
                 Tekst,
-                "kon het aantal soorten dat aan een welbepaalde voorwaarde voldoet (bv. minimum een welbepaalde bedekking heeft), niet met zekerheid bepaald worden. In dit geval is het resultaat als een range weergegeven." #nolint
+                "kon het aantal soorten dat aan een welbepaalde voorwaarde voldoet (bv. minimum een welbepaalde bedekking heeft), niet met zekerheid bepaald worden. In dit geval is het resultaat als een range weergegeven." #nolint: line_length_linter
               )
 
           }
           warning(
             sprintf(
-              "Voor sommige soorten of kenmerken uit opname(n) %s is enkel aan- of afwezigheid opgegeven, geen bedekking. Hierdoor %s",  #nolint
+              "Voor sommige soorten of kenmerken uit opname(n) %s is enkel aan- of afwezigheid opgegeven, geen bedekking. Hierdoor %s",  #nolint: line_length_linter
               str_c(unique(AanOfAfwezigheid$ID), collapse = ", "),
               Tekst
             )
@@ -539,7 +557,7 @@ berekenLSVIbasis <- #nolint
         if (nrow(WarningMeting) > 0) {
           warning(
             sprintf(
-              "De waarde(n) voor de voorwaarde(n) %s (VoorwaardeID %s) kunnen niet berekend worden voor opname(n) %s. Geef de waarde voor deze voorwaarde rechtstreeks in als input van de functie 'berekenLSVIBasis' via tabel 'Data_voorwaarden' (zie ?berekenLSVIbasis voor meer info). Vermeld hierbij Criterium = %s, Indicator = %s en Voorwaarde = %s.",  #nolint
+              "De waarde(n) voor de voorwaarde(n) %s (VoorwaardeID %s) kunnen niet berekend worden voor opname(n) %s. Geef de waarde voor deze voorwaarde rechtstreeks in als input van de functie 'berekenLSVIBasis' via tabel 'Data_voorwaarden' (zie ?berekenLSVIbasis voor meer info). Vermeld hierbij Criterium = %s, Indicator = %s en Voorwaarde = %s.",  #nolint: line_length_linter
               str_c(unique(WarningMeting$Voorwaarde), collapse = ", "),
               str_c(unique(WarningMeting$VoorwaardeID), collapse = ", "),
               str_c(unique(WarningMeting$ID), collapse = ", "),
@@ -559,7 +577,7 @@ berekenLSVIbasis <- #nolint
             BerekendResultaat[
               , c("Rijnr", "Type", "WaardeMin", "WaardeMax",
                   "Eenheid.vw", "Invoertype.vw")
-              ],
+            ],
             LIJST %>%
               filter(.data$Basisschaal == TRUE),
             ConnectieLSVIhabitats
@@ -586,7 +604,7 @@ berekenLSVIbasis <- #nolint
       if (nrow(Test) > 0) {
         warning(
           sprintf(
-            "De rekenmodule is niet aangepast aan de complexe situatie in de databank die voorkomt bij BeoordelingID = %s.  Meld het probleem aan de beheerder van dit package en geef hierbij minstens deze foutmelding door", #nolint
+            "De rekenmodule is niet aangepast aan de complexe situatie in de databank die voorkomt bij BeoordelingID = %s.  Meld het probleem aan de beheerder van dit package en geef hierbij minstens deze foutmelding door", #nolint: line_length_linter
             x$BeoordelingID
           )
         )
@@ -627,7 +645,6 @@ berekenLSVIbasis <- #nolint
         .data$ID,
         .data$Habitattype,
         .data$Versie,
-        .data$Habitattype.y,
         .data$Criterium,
         .data$Indicator,
         .data$Beoordeling,
@@ -655,7 +672,7 @@ berekenLSVIbasis <- #nolint
       berekenStatus(
         Resultaat[
           , c("Rijnr", "RefMin", "RefMax", "Operator", "WaardeMin", "WaardeMax")
-          ]
+        ]
       )
 
     Verschilscores <-
@@ -663,7 +680,7 @@ berekenLSVIbasis <- #nolint
         Resultaat[
           , c("Rijnr", "RefMin", "RefMax", "Operator", "WaardeMin",
               "WaardeMax", "TheoretischMaximum", "TypeVariabele")
-          ]
+        ]
       )
 
     Resultaat <- Resultaat %>%
@@ -683,8 +700,8 @@ berekenLSVIbasis <- #nolint
         WaardeMax = NULL,
         AnalyseVariabele = NULL,
         TheoretischMaximum = ifelse(.data$Type == "Percentage",
-                                .data$TheoretischMaximum * 100,
-                                .data$TheoretischMaximum)
+                                    .data$TheoretischMaximum * 100,
+                                    .data$TheoretischMaximum)
       ) %>%
       rename(
         TypeRefwaarde = .data$TypeVariabele,
@@ -713,11 +730,8 @@ berekenLSVIbasis <- #nolint
     #resultaten op niveau van indicator afleiden
     resultaat_indicator <- Resultaat %>%
       group_by(
-        .data$ID,
-        .data$Habitattype,   #en hier zouden extra gegevens uit Data_habitat
-                             #moeten toegevoegd worden
+        !!!syms(KolommenDataHabitat),
         .data$Versie,
-        .data$Habitattype.y,
         .data$Criterium,
         .data$Indicator,
         .data$Beoordeling,
@@ -743,11 +757,8 @@ berekenLSVIbasis <- #nolint
       bind_rows(
         resultaat_opname_indicator %>%
           transmute(
-            .data$ID,
-            .data$Habitattype,   #en hier zouden extra gegevens uit Data_habitat
-                                  #moeten toegevoegd worden
+            !!!syms(KolommenDataHabitat),
             .data$Versie,
-            .data$Habitattype.y,
             .data$Criterium,
             .data$Indicator,
             .data$Beoordeling,
@@ -769,8 +780,7 @@ berekenLSVIbasis <- #nolint
     #resultaten op niveau van criterium afleiden
     resultaat_criterium <- resultaat_indicator %>%
       group_by(
-        .data$ID,
-        .data$Habitattype,
+        !!!syms(KolommenDataHabitat),
         .data$Versie,
         .data$Criterium,
         .data$Kwaliteitsniveau
@@ -780,26 +790,27 @@ berekenLSVIbasis <- #nolint
         nInd = ifelse(
           na.rm,
           sum(!is.na(.data$Status_indicator)),
-          n()),
+          n()
+        ),
         # tijdelijke hulpvariabele: aantal zb-indicatoren ongunstig
         nIndZb_ongunstig = sum(
-                  ifelse(
-                    .data$Belang == "zb",
-                    .data$Status_indicator == FALSE,
-                    0
-                  ),
-                  na.rm = na.rm
-                  ),
+          ifelse(
+            .data$Belang == "zb",
+            .data$Status_indicator == FALSE,
+            0
+          ),
+          na.rm = na.rm
+        ),
         # tijdelijke hulpvariabele: aantal indicatoren gunstig
         nInd_gunstig = sum(
           .data$Status_indicator == TRUE,
           na.rm = TRUE
-          ),
+        ),
         # tijdelijke hulpvariabele: aantal indicatoren ongunstig
         nInd_ongunstig = sum(
           .data$Status_indicator == FALSE,
           na.rm = TRUE
-          ),
+        ),
         Status_criterium =
           ifelse(
             Aggregatiemethode == "1-out-all-out",
@@ -876,8 +887,7 @@ berekenLSVIbasis <- #nolint
 
     resultaat_globaal_status <- resultaat_indicator %>%
       group_by(
-        .data$ID,
-        .data$Habitattype,
+        !!!syms(KolommenDataHabitat),
         .data$Versie,
         .data$Kwaliteitsniveau
       ) %>%
@@ -886,26 +896,27 @@ berekenLSVIbasis <- #nolint
         nInd = ifelse(
           na.rm,
           sum(!is.na(.data$Status_indicator)),
-          n()),
+          n()
+        ),
         # tijdelijke hulpvariabele: aantal zb-indicatoren ongunstig
         nIndZb_ongunstig = sum(
-                  ifelse(
-                    .data$Belang == "zb",
-                    .data$Status_indicator == FALSE,
-                    0
-                  ),
-                  na.rm = na.rm
-                  ),
+          ifelse(
+            .data$Belang == "zb",
+            .data$Status_indicator == FALSE,
+            0
+          ),
+          na.rm = na.rm
+        ),
         # tijdelijke hulpvariabele: aantal indicatoren gunstig
         nInd_gunstig = sum(
           .data$Status_indicator == TRUE,
           na.rm = TRUE
-          ),
+        ),
         # tijdelijke hulpvariabele: aantal indicatoren ongunstig
         nInd_ongunstig = sum(
           .data$Status_indicator == FALSE,
           na.rm = TRUE
-          ),
+        ),
         Status =
           ifelse(
             Aggregatiemethode == "1-out-all-out",
@@ -943,6 +954,23 @@ berekenLSVIbasis <- #nolint
     resultaat_globaal <- resultaat_globaal_status %>%
       left_join(resultaat_globaal_index,
                 by = c("ID", "Habitattype", "Versie", "Kwaliteitsniveau"))
+
+    # rond indexen en verschilscores af tot 4 decimalen na de komma
+    resultaat_criterium$Index_min_criterium <-
+      round(resultaat_criterium$Index_min_criterium, 4)
+    resultaat_criterium$Index_harm_criterium <-
+      round(resultaat_criterium$Index_harm_criterium, 4)
+
+    resultaat_indicator$Verschilscore <-
+      round(resultaat_indicator$Verschilscore, 4)
+
+    resultaat_detail$Verschilscore <- round(resultaat_detail$Verschilscore, 4)
+
+    resultaat_globaal$Index_min_min <- round(resultaat_globaal$Index_min_min, 4)
+    resultaat_globaal$Index_min_harm <-
+      round(resultaat_globaal$Index_min_harm, 4)
+    resultaat_globaal$Index_harm_harm <-
+      round(resultaat_globaal$Index_harm_harm, 4)
 
     return(
       list(

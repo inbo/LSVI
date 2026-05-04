@@ -1,0 +1,44 @@
+cff-version: 1.2.0
+message: If you use this software, please cite it using these metadata.
+title: "LSVI: Rekenmodule Lokale Staat Van Instandhouding van habitattypen"
+authors:
+- given-names: Els
+  family-names: Lommelen
+  affiliation: Instituut voor Natuur- en Bosonderzoek (INBO)
+  orcid: 0000-0002-3481-5684
+- given-names: Patrik
+  family-names: Oosterlynck
+  affiliation: Instituut voor Natuur- en Bosonderzoek (INBO)
+  orcid: 0000-0002-5712-0770
+- given-names: Gert
+  family-names: Van Spaendonk
+  affiliation: Instituut voor Natuur- en Bosonderzoek (INBO)
+  orcid: 0009-0008-6988-1113
+- given-names: Hans
+  family-names: Van Calster
+  affiliation: Instituut voor Natuur- en Bosonderzoek (INBO)
+  orcid: 0000-0001-8595-8426
+- given-names: Martine
+  family-names: Van Hove
+  affiliation: Instituut voor Natuur- en Bosonderzoek (INBO)
+  orcid: 0000-0002-6394-0820
+- given-names: Toon
+  family-names: Westra
+  affiliation: Instituut voor Natuur- en Bosonderzoek (INBO)
+  orcid: 0000-0003-2478-9459
+keywords:
+- habitats
+- local conservation status
+contact:
+- given-names: Els
+  family-names: Lommelen
+  affiliation: Instituut voor Natuur- en Bosonderzoek (INBO)
+  orcid: 0000-0002-3481-5684
+doi: ~
+license: GPL-3.0
+repository-code: https://github.com/inbo/LSVI/
+type: software
+abstract: "Het package LSVI bundelt een aantal functies in verband met het ophalen
+  van informatie over en het berekenen van de Lokale Staat Van Instandhouding (LSVI)
+  van habitattypes."
+version: 0.1.4

@@ -1,11 +1,11 @@
-#' Constructor van s4-classe AnalyseVariabele
+#' Constructor van s4-klasse `AnalyseVariabele`
 #'
 #' Een constructor is een gebruiksvriendelijke functie die een s4-klasse
 #' aanmaakt, zodat een gebruiker niet rechtstreeks geconfronteerd wordt met het
 #' aanmaken van een object voor een s4-klasse.  In dit geval worden alle als
 #' parameter toegevoegde gegevens netjes in het object gestoken, alsook extra
 #' info die uit de databank gehaald wordt.  Een deel van de validatie gebeurt
-#' in de s4-klasse AnalyseVariabele zelf.
+#' in de s4-klasse `AnalyseVariabele` zelf.
 #'
 #' @inheritParams berekenVoorwaarde
 #'
@@ -17,7 +17,7 @@
 #'
 #'@noRd
 
-analyseVariabele_c <- #nolint
+analyseVariabele_c <- #nolint: object_name_linter
   function(
     VoorwaardeID,
     Kenmerken,
@@ -33,41 +33,41 @@ analyseVariabele_c <- #nolint
     queryVoorwaarde <-
       sprintf(
         "SELECT AV.VariabeleNaam AS TypeAnalyseVariabele,
-        Voorwaarde.TaxongroepId,
-        Voorwaarde.StudiegroepId,
-        SAV.VariabeleNaam AS SubAnalyseVariabele,
-        SAV.Eenheid,
-        TypeVariabele.Naam AS TypeSubVariabele,
-        Voorwaarde.SubReferentiewaarde, Voorwaarde.SubOperator,
-        Lijst.Naam AS SubInvoermasker
-        FROM ((Voorwaarde LEFT JOIN
-          (AnalyseVariabele SAV LEFT JOIN TypeVariabele
-              ON SAV.TypeVariabeleId = TypeVariabele.Id)
-            ON Voorwaarde.SubAnalyseVariabeleId = SAV.Id)
-          LEFT JOIN AnalyseVariabele AV
-            ON Voorwaarde.AnalyseVariabeleId = AV.Id)
-        LEFT JOIN Lijst ON Voorwaarde.SubInvoermaskerId = Lijst.Id
-        WHERE Voorwaarde.Id = '%s'",
-          VoorwaardeID
-        )
+          Voorwaarde.TaxongroepId,
+          Voorwaarde.StudiegroepId,
+          SAV.VariabeleNaam AS SubAnalyseVariabele,
+          SAV.Eenheid,
+          TypeVariabele.Naam AS TypeSubVariabele,
+          Voorwaarde.SubReferentiewaarde, Voorwaarde.SubOperator,
+          Lijst.Naam AS SubInvoermasker
+          FROM ((Voorwaarde LEFT JOIN
+            (AnalyseVariabele SAV LEFT JOIN TypeVariabele
+                ON SAV.TypeVariabeleId = TypeVariabele.Id)
+              ON Voorwaarde.SubAnalyseVariabeleId = SAV.Id)
+            LEFT JOIN AnalyseVariabele AV
+              ON Voorwaarde.AnalyseVariabeleId = AV.Id)
+          LEFT JOIN Lijst ON Voorwaarde.SubInvoermaskerId = Lijst.Id
+          WHERE Voorwaarde.Id = '%s'",
+        VoorwaardeID
+      )
     VoorwaardeInfo <-
       dbGetQuery(
         ConnectieLSVIhabitats,
         queryVoorwaarde
       ) %>%
       mutate(
-        TypeAnalyseVariabele =
-          ifelse(
-            grepl("meting", .data$TypeAnalyseVariabele),
-            "meting",
-            .data$TypeAnalyseVariabele
-          )
+        TypeAnalyseVariabele = ifelse(
+          grepl("meting", .data$TypeAnalyseVariabele),
+          "meting",
+          .data$TypeAnalyseVariabele
+        )
       )
 
     AnalyseObject <-
       new(
         Class = VoorwaardeInfo$TypeAnalyseVariabele,
-        VoorwaardeID = VoorwaardeID)
+        VoorwaardeID = VoorwaardeID
+      )
 
     if (nrow(Kenmerken) > 0) {
       setKenmerken(AnalyseObject) <- Kenmerken
@@ -81,8 +81,7 @@ analyseVariabele_c <- #nolint
           ConnectieLSVIhabitats = ConnectieLSVIhabitats
         ) %>%
         mutate(
-          NbnTaxonVersionKey =
-            tolower(.data$NbnTaxonVersionKey)
+          NbnTaxonVersionKey = tolower(.data$NbnTaxonVersionKey)
         ) %>%
         select(
           "TaxongroepId",

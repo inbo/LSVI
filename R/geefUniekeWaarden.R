@@ -2,11 +2,11 @@
 #' LSVI-indicatoren voorafgegaan door "alle"
 #'
 #' @description Deze hulpfunctie geeft een vector met alle verschillende
-#' waarden die in een gespecificeerd veld van een gespecificeerde tabel in de
+#' waarden die in een gespecifieerd veld van een gespecificeerde tabel in de
 #' databank met LSVI-indicatoren staan, voorafgegaan door de (toegevoegde)
 #' waarde "alle".  Deze functie wordt in verschillende functies van het package
 #' gebruikt om de invoer van parameters te controleren (waar de mogelijke
-#' invoer bestaat uit 'alle' of een item uit het veld).  In enkele gevallen
+#' invoer bestaat uit "alle" of een item uit het veld).  In enkele gevallen
 #' wordt dit commando in de documentatie vermeld zodat ook de gebruiker in die
 #' specifieke gevallen de lijst met mogelijke invoerwaarden op een eenvoudige
 #' manier kan opvragen.
@@ -54,9 +54,7 @@
 #'
 
 geefUniekeWaarden <-
-  function(Tabelnaam,
-           Veldnaam,
-           ConnectieLSVIhabitats = NULL) {
+  function(Tabelnaam, Veldnaam, ConnectieLSVIhabitats = NULL) {
 
     if (is.null(ConnectieLSVIhabitats)) {
       if (exists("ConnectiePool")) {
@@ -64,18 +62,18 @@ geefUniekeWaarden <-
       }
     }
     assert_that(
-    inherits(ConnectieLSVIhabitats, "DBIConnection") |
-      inherits(ConnectieLSVIhabitats, "Pool"),
-    msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
-  )
-  assert_that(is.string(Tabelnaam))
-  assert_that(noNA(Tabelnaam))
-  assert_that(is.string(Veldnaam))
-  assert_that(noNA(Veldnaam))
+      inherits(ConnectieLSVIhabitats, "DBIConnection") |
+        inherits(ConnectieLSVIhabitats, "Pool"),
+      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint: line_length_linter
+    )
+    assert_that(is.string(Tabelnaam))
+    assert_that(noNA(Tabelnaam))
+    assert_that(is.string(Veldnaam))
+    assert_that(noNA(Veldnaam))
 
-  query <- sprintf("SELECT %s FROM %s", Veldnaam, Tabelnaam)
-  Waarden <- dbGetQuery(ConnectieLSVIhabitats, query)
-  UniekeWaarden <- c("alle", unique(Waarden[, Veldnaam]))
+    query <- sprintf("SELECT %s FROM %s", Veldnaam, Tabelnaam)
+    Waarden <- dbGetQuery(ConnectieLSVIhabitats, query)
+    UniekeWaarden <- c("alle", unique(Waarden[, Veldnaam]))
 
-  return(UniekeWaarden)
-}
+    return(UniekeWaarden)
+  }

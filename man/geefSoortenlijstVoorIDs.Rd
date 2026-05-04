@@ -11,23 +11,23 @@ geefSoortenlijstVoorIDs(
 )
 }
 \arguments{
-\item{Taxongroeplijst}{string waarin de TaxongroepId's na elkaar weergegeven
-worden, gescheiden door een komma.  Eventueel mag dit ook een vector zijn
-van TaxongroepId's.}
+\item{Taxongroeplijst}{string waarin de \code{TaxongroepId}'s na elkaar
+weergegeven worden, gescheiden door een komma.
+Eventueel mag dit ook een vector zijn van \code{TaxongroepId}'s.}
 
-\item{Taxonlijsttype}{"LSVIfiche" betekent dat de taxonlijst van de
-habitatfiche wordt overgenomen, "alle" betekent dat alle soorten en alle
+\item{Taxonlijsttype}{\code{"LSVIfiche"} betekent dat de taxonlijst van de
+habitatfiche wordt overgenomen, \code{"alle"} betekent dat alle soorten en alle
 taxonomische groepen worden weergegeven die volledig in de groepen vallen
 die aan de parameters voldoen.}
 
 \item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor
-de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
+de LSVI van habitats, in te stellen d.m.v. functie \code{connecteerMetLSVIdb()}.}
 }
 \value{
-Deze functie geeft een tabel met velden TaxongroepId, evt.
-Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een
-omschrijving is voor een groep van taxons binnen eenzelfde indicator).
-WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort
+Deze functie geeft een tabel met velden \code{TaxongroepId}, evt.
+\code{Beschrijving}, \code{WetNaam}, \code{WetNaamKort} en \code{NedNaam} (waarbij \code{Beschrijving}
+een omschrijving is voor een groep van taxons binnen eenzelfde indicator).
+\code{WetNaam} is de volledige Latijnse naam inclusief auteursnaam, \code{WetNaamKort}
 geeft de verkorte naam zonder auteursnaam.
 }
 \description{
@@ -36,13 +36,13 @@ Nederlandse namen) uit de databank met de criteria en indicatoren voor de
 bepaling van de Lokale Staat van Instandhouding.  Het is in feite een
 hulpfunctie die voor verschillende andere functies gebruikt wordt en die de
 complexe zoekfunctie in de tabellen met soorten uitvoert op basis van een
-opgegeven TaxongroepId (en in die zin iets minder gebruiksvriendelijk is).
+opgegeven \code{TaxongroepId} (en in die zin iets minder gebruiksvriendelijk is).
 Voor een selectie van soortenlijsten op basis van specifieke parameters is
-de functie geefSoortenlijst() een beter alternatief.
+de functie \code{geefSoortenlijst()} een beter alternatief.
 
 Deze functie geeft standaard voor de gespecifieerde taxongroepen per groep
 een lijst van alle taxa zoals ze in de LSVI-habitatfiche vermeld zijn
-(genusniveau, soortniveau, subsoort,...).  Op basis van de parameter
+(genusniveau, soortniveau, ondersoort,...).  Op basis van de parameter
 soortenlijsttype kan ook gekozen worden om een volledige lijst te geven van
 deze taxa en alle taxa die hieronder vallen (en opgenomen zijn in de
 onderliggende databank).

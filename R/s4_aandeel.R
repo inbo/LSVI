@@ -1,11 +1,11 @@
-#' S4-klasse die aandeel grondvlak of volume van bepaalde boomsoort berekend
+#' S4-klasse die aandeel grondvlak of volume van bepaalde boomsoort berekent
 #'
-#' Deze klasse Aandeel staat in voor de berekening van waarden voor
-#' TypeVariabele Aandeel op basis van opgegeven kenmerken.  Ze is een
-#' nakomeling van de klasse AnalyseVariabele.
+#' Deze klasse `Aandeel` staat in voor de berekening van waarden voor
+#' `TypeVariabele` `Aandeel` op basis van opgegeven kenmerken.  Ze is een
+#' nakomeling van de klasse `AnalyseVariabele`.
 #'
-#' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden Kenmerk,
-#' TypeKenmerk, WaardeMin en WaardeMax
+#' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden `Kenmerk`,
+#' `TypeKenmerk`, `WaardeMin` en `WaardeMax`
 #'
 #' @importFrom methods setClass setMethod
 #'
@@ -42,7 +42,7 @@ setMethod(
 
     if (nrow(alle_soorten) == 0) {
       return(0)
-    } else{
+    } else {
       teller_min <- sum(sleutelsoorten$WaardeMin, na.rm = TRUE)
       teller_max <- sum(sleutelsoorten$WaardeMax, na.rm = TRUE)
       noemer_min <- sum(alle_soorten$WaardeMin, na.rm = TRUE)

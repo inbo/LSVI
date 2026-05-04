@@ -10,7 +10,7 @@ invoercontroleVersie(Versie, ConnectieLSVIhabitats)
 \item{Versie}{Waarde waarop invoercontrole moet gebeuren.}
 
 \item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor
-de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
+de LSVI van habitats, in te stellen d.m.v. functie \code{connecteerMetLSVIdb()}.}
 }
 \description{
 Om te vermijden dat we meermaals dezelfde invoercontrole moeten uitvoeren en

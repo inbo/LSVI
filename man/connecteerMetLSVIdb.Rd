@@ -7,7 +7,7 @@
 connecteerMetLSVIdb()
 }
 \value{
-Deze functie geeft een open odbc-connectie naar de SQLite-databank
+Deze functie geeft een open \code{odbc}-connectie naar de SQLite-databank
 in de installatie-file van het package.
 }
 \description{
@@ -16,7 +16,7 @@ toegevoegde databank met LSVI-indicatoren, wat nodig is om de functies te
 kunnen gebruiken.  Deze connectie moet als argument meegegeven worden bij
 elke functie functie die informatie uit de databank ophaalt.  Alternatief is
 om eenmalig een connectiepool aan te maken met de functie
-maakConnectiePool().
+\code{maakConnectiePool()}.
 }
 \examples{
 library(LSVI)
