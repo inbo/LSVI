@@ -27,7 +27,7 @@
 #' @export
 #'
 #' @importFrom dplyr %>% filter left_join inner_join mutate distinct group_by
-#' do ungroup
+#' @importFrom dplyr do ungroup
 #' @importFrom rlang .data
 #' @importFrom stringr str_c
 #'

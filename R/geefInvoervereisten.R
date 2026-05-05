@@ -80,7 +80,7 @@
 #'
 #' @importFrom DBI dbGetQuery
 #' @importFrom dplyr %>% select filter group_by summarise ungroup left_join
-#' mutate rowwise arrange distinct
+#' @importFrom dplyr mutate rowwise arrange distinct
 #' @importFrom tidyr gather
 #' @importFrom rlang .data
 #' @importFrom assertthat assert_that is.string

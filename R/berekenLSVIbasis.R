@@ -166,7 +166,8 @@
 #' @export
 #'
 #' @importFrom dplyr %>% select distinct n filter mutate row_number rename
-#' left_join summarise group_by ungroup rowwise bind_rows arrange transmute
+#' @importFrom dplyr left_join summarise group_by ungroup rowwise bind_rows
+#' @importFrom dplyr arrange transmute
 #' @importFrom assertthat assert_that has_name
 #' @importFrom rlang !!! .data syms
 #' @importFrom stringr str_split_fixed str_c
