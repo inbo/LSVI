@@ -752,13 +752,25 @@ berekenLSVIbasis <- #nolint: object_name_linter
         AfkomstWaarde = as.character(.data$AfkomstWaarde)
       )
 
-    Resultaat <- Resultaat %>%
-      filter(!.data$Referentiewaarde %in% Invoervereisten$Voorwaarde) %>%
-      bind_rows(DubbeleVoorwaarden) %>%
-      mutate(
-        TheoretischMaximum = .data$Maximumwaarde,
-        Maximumwaarde = NULL
-      )
+    if (!Oppervlakte_opname) {
+      Resultaat <- Resultaat %>%
+        filter(!.data$Referentiewaarde %in% Invoervereisten$Voorwaarde) %>%
+        bind_rows(DubbeleVoorwaarden) %>%
+        mutate(
+          TheoretischMaximum = .data$Maximumwaarde,
+          Maximumwaarde = NULL
+        )
+    } else {
+      Resultaat <- Resultaat %>%
+        filter(!.data$Referentiewaarde %in% Invoervereisten$Voorwaarde) %>%
+        bind_rows(DubbeleVoorwaarden) %>%
+        mutate(
+          TheoretischMaximum = ifelse(
+            is.na(TheoretischMaximum), .data$Maximumwaarde, TheoretischMaximum
+          ),
+          Maximumwaarde = NULL
+        )
+    }
 
     Statusberekening <-
       berekenStatus(
