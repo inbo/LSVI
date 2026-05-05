@@ -56,8 +56,8 @@
 #' `geefUniekeWaarden("Habitattype", "Code")`).  Eventuele extra velden zullen
 #' overgenomen worden bij de uitvoer.
 #' Indien de parameter Oppervlakte_opname op `TRUE` wordt gezet, moet een extra
-#' veld Opp_m2 worden toegevoegd met de oppervlakte van de opname (proefvlak of
-#' perceel) in m2.
+#' veld `Opp_m2` worden toegevoegd met de oppervlakte van de opname (proefvlak
+#' of perceel) in m².
 #' @param Data_voorwaarden Gegevens over de opgemeten indicatoren in de vorm
 #' van een dataframe met velden `ID`, `Criterium`, `Indicator`, `Voorwaarde`,
 #' `Waarde`, `Type`, `Invoertype` en `Eenheid`, waarbij `ID` de groeperende
@@ -120,15 +120,15 @@
 #' @param Oppervlakte_opname Default is FALSE. Voor klassieke LSVI-opnamen op
 #' perceelsniveau laat men deze parameter best op FALSE staan. Voor gegevens
 #' van vegetatie-opnamen in proefvlakken, is het beter om de parameter op TRUE
-#' te zetten. Indien TRUE, wordt gecontroleerd of het veld Opp_m2 in
+#' te zetten. Indien TRUE, wordt gecontroleerd of het veld `Opp_m2` in
 #' Data_habitat aanwezig is en zal de LSVI berekend worden rekening houdend met
 #' de oppervlakte-afhankelijkheid van het aantal sleutelsoorten. Hierbij worden
 #' twee wijzigingen doorgevoerd ten opzichte van de default: (1) de
 #' referentiewaarden voor het aantal sleutelsoorten worden naar beneden
 #' gecorrigeerd op basis van habitatspecifieke power-law curves en de
 #' veronderstelling dat de default referentiewaarden gelden voor een
-#' oppervlakte van 5000 m2, en (2) bij de berekening van de verschilscores
-#' wordt het maximum (= +1) bereikt vanaf er meer dan of gelijk aan twee keer
+#' oppervlakte van 5000 m², en (2) bij de berekening van de verschilscores
+#' wordt het maximum (`= +1`) bereikt vanaf er meer dan of gelijk aan twee keer
 #' de referentiewaarde sleutelsoorten in de opname aanwezig zijn (in plaats van
 #' het theoretisch maximaal aantal sleutelsoorten). (1) heeft een impact op
 #' zowel de Statusberekening als op de berekening van de biotische indices.
