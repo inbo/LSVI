@@ -55,29 +55,29 @@ describe("s4_Aandeel", {
     )
   })
   it("Geen bomen in plot geeft resultaat 0", {
-      expect_equal(
-        berekenWaarde(
-          new(
-            Class = "aandeel",
-            Kenmerken =
-              data.frame(
-                Kenmerk = c("B2", "D3"),
-                TypeKenmerk = "soort_nbn",
-                WaardeMin = 0,
-                WaardeMax = 0.1,
-                Eenheid = "%",
-                stringsAsFactors = FALSE
-              ),
-            Soortengroep =
-              data.frame(
-                NbnTaxonVersionKey = c("A1", "B1", "C1", "E1"),
-                TaxonId = 1:4,
-                SubTaxonId = 1:4,
-                stringsAsFactors = FALSE
-              )
-          )
-        ),
-        0
-      )
+    expect_equal(
+      berekenWaarde(
+        new(
+          Class = "aandeel",
+          Kenmerken =
+            data.frame(
+              Kenmerk = c("B2", "D3"),
+              TypeKenmerk = "soort_nbn",
+              WaardeMin = 0,
+              WaardeMax = 0.1,
+              Eenheid = "%",
+              stringsAsFactors = FALSE
+            ),
+          Soortengroep =
+            data.frame(
+              NbnTaxonVersionKey = c("A1", "B1", "C1", "E1"),
+              TaxonId = 1:4,
+              SubTaxonId = 1:4,
+              stringsAsFactors = FALSE
+            )
+        )
+      ),
+      0
+    )
   })
 })

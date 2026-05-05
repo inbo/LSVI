@@ -5,20 +5,20 @@ library(dplyr)
 library(rlang)
 
 maakConnectiePool()
-Data_habitat <- #nolint
-    read_csv2(
-      system.file("vbdata/data_habitat2330_dw.csv", package = "LSVI"),
-      col_types = list(col_character(), col_character(), col_character())
-    )
-attr(Data_habitat, "spec") <- NULL #nolint
-Data_voorwaarden <- #nolint
-    read_csv2(
-      system.file("vbdata/data_voorwaarden2330_dw.csv", package = "LSVI")
-    )
-Data_soortenKenmerken <- #nolint
-    read_csv2(
-      system.file("vbdata/data_soortenKenmerken2330_dw.csv", package = "LSVI")
-    )
+Data_habitat <- #nolint: object_name_linter
+  read_csv2(
+    system.file("vbdata/data_habitat2330_dw.csv", package = "LSVI"),
+    col_types = list(col_character(), col_character(), col_character())
+  )
+attr(Data_habitat, "spec") <- NULL #nolint: object_name_linter
+Data_voorwaarden <- #nolint: object_name_linter
+  read_csv2(
+    system.file("vbdata/data_voorwaarden2330_dw.csv", package = "LSVI")
+  )
+Data_soortenKenmerken <- #nolint: object_name_linter
+  read_csv2(
+    system.file("vbdata/data_soortenKenmerken2330_dw.csv", package = "LSVI")
+  )
 
 load(system.file("vbdata/Resultaat_test2330_dw.Rdata", package = "LSVI"))
 
@@ -60,13 +60,13 @@ describe("eenjarigen + open zand > meerjarigen", {
             Index_min_criterium =
               ifelse(
                 Criterium == "Structuur",
-                0.72137490530303,
+                0.7214,
                 .data$Index_min_criterium
               ),
             Index_harm_criterium =
               ifelse(
                 Criterium == "Structuur",
-                0.72137490530303,
+                0.7214,
                 .data$Index_harm_criterium
               )
           )
@@ -80,7 +80,7 @@ describe("eenjarigen + open zand > meerjarigen", {
             Verschilscore =
               ifelse(
                 Indicator == "éénjarigen",
-                0.72137490530303,
+                0.7214,
                 .data$Verschilscore
               )
           )
@@ -106,7 +106,7 @@ describe("eenjarigen + open zand > meerjarigen", {
             Verschilscore =
               ifelse(
                 Indicator == "éénjarigen",
-                0.72137490530303,
+                0.7214,
                 .data$Verschilscore
               )
           )
@@ -117,8 +117,8 @@ describe("eenjarigen + open zand > meerjarigen", {
         resultaat_berekend[["Resultaat_globaal"]],
         Resultaat[["Resultaat_globaal"]] %>%
           mutate(
-            Index_min_harm = 0.57294801,
-            Index_harm_harm = 0.583875
+            Index_min_harm = 0.5729,
+            Index_harm_harm = 0.5839
           )
       )
     )

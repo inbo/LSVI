@@ -2,7 +2,7 @@ context("test invoercontrole")
 
 maakConnectiePool()
 describe("invoercontroleData_habitat", {
-  Data_habitat <- #nolint
+  Data_habitat <- #nolint: object_name_linter
     data.frame(
       ID = 1:5,
       Habitattype = c("3130_Aom", "91E0_vo", "91e0_SF", "rbbmr", "RBBmr"),

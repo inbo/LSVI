@@ -1,5 +1,5 @@
 ---
-title: "Outline package LSVI"
+title: "Overzicht package LSVI"
 output: html_notebook
 ---
 
@@ -13,12 +13,12 @@ library(ggplot2)
 
 ```
 
-###BerekenLSVIbasis
+### BerekenLSVIbasis <!-- spell-check: ignore -->
 
-Onderstaand schema geeft weer welke functies aangeroepen worden in de functie berekenLSVIbasis (rechtstreeks of onrechtstreeks, zie inspringing).  Vaak terugkerende functies:
+Onderstaand schema geeft weer welke functies aangeroepen worden in de functie `berekenLSVIbasis()` (rechtstreeks of onrechtstreeks, zie inspringing).  Vaak terugkerende functies:
 
-- geefUniekeWaarden: een functie die toelaat om een opgegeven kolom uit de databank te halen, wordt in deze context vooral gebruikt voor foutcontrole
-- vertaalInvoerInterval: een functie die opgegeven waarden (numeriek of categorisch) vertaalt naar een interval (voor door de gebruiker ingevoerde waarden en waarden uit de databank)
+- `geefUniekeWaarden()`: een functie die toelaat om een opgegeven kolom uit de databank te halen, wordt in deze context vooral gebruikt voor foutcontrole
+- `vertaalInvoerInterval()`: een functie die opgegeven waarden (numeriek of categorisch) vertaalt naar een interval (voor door de gebruiker ingevoerde waarden en waarden uit de databank)
 
 ```{r rekengedeelte, fig.width=7, fig.height=10, echo=FALSE}
 

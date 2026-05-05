@@ -1,19 +1,22 @@
 #' @title Controle van de ingevoerde opname
 #'
-#' @description Deze hulpfunctie voor de s4-klassen 'aantal' en 'bedekking'
+#' @description Deze hulpfunctie voor de s4-klassen `aantal` en `bedekking`
 #' selecteert soorten of kenmerken uit een opname die niet tot de soortgroep of
-#' studiegroep van een bepaalde voorwaarde behoren.  Op basis hiervan kan de
-#' s4-klassen maxBedekkingExcl berkend worden (bv. dominantie van een soort:
+#' studiegroep van een bepaalde voorwaarde behoren.  Op basis hiervan kunnen de
+#' s4-klassen `bedekkingExcl` en `maxBedekkingExcl` berekend worden
+#' (bv. dominantie van een soort:
 #' maximale bedekking van soorten in een opname exclusief de sleutelsoorten).
 #'
 #'
-#' @param Kenmerken dataframe met alle opgegeven kenmerken, met velden Kenmerk,
-#' TypeKenmerk, WaardeMin en WaardeMax
+#' @param Kenmerken dataframe met alle opgegeven kenmerken, met velden
+#' `Kenmerk`, `TypeKenmerk`, `WaardeMin` en `WaardeMax`
 #' @param Soortengroep dataframe met de soortenlijst die uit Kenmerken
 #' gedeselecteerd moet worden
 #' @param Studiegroep dataframe met de lijst kenmerken die uit Kenmerken
-#' gedeselecteerd moet worden
-#' @param SubAnalyseVariabele heeft waarde 'bedekking' als er een subvoorwaarde
+#' gedeselecteerd moet worden.
+#' Als ook Soortengroep opgegeven is, geeft Studiegroep aan welke kenmerken
+#' wel behouden moeten blijven na deselecteren van de soortengroep.
+#' @param SubAnalyseVariabele heeft waarde "bedekking" als er een subvoorwaarde
 #' is voor de bedekking van de geselecteerde soorten of kenmerken
 #' @param SubRefMin minimumwaarde van de grenswaarde voor de bedekking
 #' @param SubRefMax maximumwaarde van de grenswaarde voor de bedekking
@@ -53,9 +56,21 @@ deselecteerKenmerkenInOpname <-
           Soortengroep,
           by = c("Kenmerk" = "NbnTaxonVersionKey")
         )
+      if (length(Studiegroep) > 0 && nrow(Resultaat) > 0) {
+        if (max(is.na(Resultaat$Vegetatielaag))) {
+          stop(
+            "Bij Data_soortenKenmerken is niet voor alle soorten de kolom Vegetatielaag ingevuld, waardoor de berekening niet correct kan worden uitgevoerd (dit omdat de vegetatielaag bepaalt of de betreffende soort al dan niet in rekening gebracht moet worden voor het berekenen van de indicator)"  #nolint: line_length_linter
+          )
+        } else {
+          Resultaat <- Resultaat %>%
+            filter(
+              tolower(.data$Vegetatielaag) %in% tolower(Studiegroep$Waarde)
+            )
+        }
+      }
     }
 
-    if (length(Studiegroep) > 0) {
+    if (length(Studiegroep) > 0 && !(length(Soortengroep) > 0)) {
 
       Resultaat <- Kenmerken %>%
         filter(.data$TypeKenmerk == "studiegroep") %>%
@@ -66,7 +81,7 @@ deselecteerKenmerkenInOpname <-
     }
 
     if (!exists("Resultaat")) {
-      stop("Er ontbreekt een soortenlijst of studiegroeplijst in de databank.  Meld deze fout aan de beheerder van dit package.") #nolint
+      stop("Er ontbreekt een soortenlijst of studiegroeplijst in de databank.  Meld deze fout aan de beheerder van dit package.") #nolint: line_length_linter
     }
 
     if (identical(SubAnalyseVariabele, character(0))) {
@@ -80,7 +95,7 @@ deselecteerKenmerkenInOpname <-
     } else {
       stop(
         paste(
-          "Fout in de indicatorendatabank: een analysevariabele met achtervoegsel 'Excl' bevat een subanalysevariabele en dit wordt niet ondersteund in het script.  Meld deze fout aan de beheerder van dit package."  #nolint
+          "Fout in de indicatorendatabank: een analysevariabele met achtervoegsel 'Excl' bevat een subanalysevariabele en dit wordt niet ondersteund in het script.  Meld deze fout aan de beheerder van dit package."  #nolint: line_length_linter
         )
       )
     }

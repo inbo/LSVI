@@ -23,18 +23,17 @@
 #' @importFrom assertthat assert_that
 #'
 #'
-geefVersieInfo <-
-  function(ConnectieLSVIhabitats = NULL) {
+geefVersieInfo <- function(ConnectieLSVIhabitats = NULL) {
 
-    if (is.null(ConnectieLSVIhabitats)) {
-      if (exists("ConnectiePool")) {
-        ConnectieLSVIhabitats <- get("ConnectiePool", envir = .GlobalEnv)
-      }
+  if (is.null(ConnectieLSVIhabitats)) {
+    if (exists("ConnectiePool")) {
+      ConnectieLSVIhabitats <- get("ConnectiePool", envir = .GlobalEnv)
     }
-    assert_that(
+  }
+  assert_that(
     inherits(ConnectieLSVIhabitats, "DBIConnection") |
       inherits(ConnectieLSVIhabitats, "Pool"),
-    msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
+    msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint: line_length_linter
   )
 
   query <- "SELECT VersieLSVI, cast(Referentie AS nvarchar(40)) AS Referentie,

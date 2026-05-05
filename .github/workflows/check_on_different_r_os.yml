@@ -1,0 +1,98 @@
+on:
+  schedule:
+    - cron: '12 6 12 * *'
+  pull_request:
+    branches:
+      - main
+      - master
+
+name: R-CMD-check-OS
+
+jobs:
+  R-CMD-check:
+    runs-on: ${{ matrix.config.os }}
+
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: macOS-latest,   r: 'release'}
+          - {os: windows-latest, r: 'release'}
+          - {os: ubuntu-24.04,   r: 'devel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/noble/latest"}
+          - {os: ubuntu-24.04,   r: 'oldrel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/noble/latest"}
+
+    env:
+      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
+      _R_CHECK_SYSTEM_CLOCK_: false
+      RSPM: ${{ matrix.config.rspm }}
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      ORCID_TOKEN: ${{ secrets.ORCID_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: ${{ matrix.config.r }}
+          extra-repositories: https://inbo.r-universe.dev
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - name: linux dependencies
+        if: runner.os == 'linux'
+        run: |
+          sudo apt update
+          sudo apt install -y --no-install-recommends libcurl4-openssl-dev \
+            libfontconfig1-dev libfreetype6-dev libfribidi-dev libharfbuzz-dev \
+            libjpeg-dev libmagick++-dev libpng-dev libpoppler-cpp-dev \
+            libsecret-1-dev libtiff5-dev unixodbc-dev libuv1-dev
+          sudo apt install -y --no-install-recommends r-cran-assertthat \
+            r-cran-bookdown r-cran-covr r-cran-curl r-cran-desc \
+            r-cran-devtools r-cran-fs r-cran-gert r-cran-httr r-cran-hunspell \
+            r-cran-jsonlite r-cran-knitr r-cran-mockery r-cran-pdftools \
+            r-cran-r6 r-cran-rcmdcheck r-cran-remotes r-cran-rmarkdown \
+            r-cran-roxygen2 r-cran-rstudioapi r-cran-sessioninfo \
+            r-cran-testthat r-cran-withr r-cran-yaml
+          Rscript --no-save --no-restore -e 'install.packages("remotes")'
+          Rscript --no-save --no-restore -e 'remotes::install_cran(c("assertthat", "bookdown", "codemetar", "covr", "curl", "cyclocomp", "desc", "devtools", "fs", "gert", "hexSticker", "httr", "hunspell", "jsonlite", "knitr", "lintr", "mockery", "pdftools", "pkgdown", "R6", "rcmdcheck", "renv", "rmarkdown", "roxygen2", "rstudioapi", "sessioninfo", "showtext", "sysfonts", "testthat", "withr", "yaml"))'
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        if: runner.os != 'linux'
+        with:
+          extra-packages: any::rcmdcheck
+          needs: check
+
+      - name: Install dependencies
+        run: |
+          install.packages("remotes")
+          remotes::install_deps(dependencies = TRUE)
+          remotes::install_cran("rcmdcheck")
+        shell: Rscript {0}
+
+      - name: Session info
+        run: |
+          options(width = 100)
+          pkgs <- installed.packages()[, "Package"]
+          sessioninfo::session_info(pkgs, include_base = TRUE)
+        shell: Rscript {0}
+
+      - name: Check
+        env:
+          _R_CHECK_CRAN_INCOMING_: false
+        run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "error", check_dir = "check")
+        shell: Rscript {0}
+
+      - name: Show testthat output
+        if: always()
+        run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
+        shell: bash
+
+      - name: Upload check results
+        if: failure()
+        uses: actions/upload-artifact@master
+        with:
+          name: ${{ runner.os }}-r${{ matrix.config.r }}-results
+          path: check
+          retention-days: 5

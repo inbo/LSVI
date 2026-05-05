@@ -19,7 +19,7 @@ describe("parseTaxonnaam", {
       "Populus alba groep"
     )
     expect_equal(
-      parseTaxonnaam("Dirina repanda auct., non Fr. f. stenhammari (Stenh.) Clauzade & Cl. Roux"), #nolint
+      parseTaxonnaam("Dirina repanda auct., non Fr. f. stenhammari (Stenh.) Clauzade & Cl. Roux"), #nolint: line_length_linter
       "Dirina repanda f. stenhammari"
     )
     expect_equal(
@@ -67,15 +67,15 @@ describe("parseTaxonnaam", {
       "subgen. Jacea"
     )
     expect_equal(
-      parseTaxonnaam("Arenaria serpyllifolia L. subsp. serpyllifolia var. viscida (Haller f.) DC."), #nolint
+      parseTaxonnaam("Arenaria serpyllifolia L. subsp. serpyllifolia var. viscida (Haller f.) DC."), #nolint: line_length_linter
       "Arenaria serpyllifolia var. viscida"
     )
     expect_equal(
-      parseTaxonnaam("Caltha palustris L. subsp. araneosa (v. Steenis) v. d. Meijden"), #nolint
+      parseTaxonnaam("Caltha palustris L. subsp. araneosa (v. Steenis) v. d. Meijden"), #nolint: line_length_linter
       "Caltha palustris subsp. araneosa"
     )
     expect_equal(
-      parseTaxonnaam("Carex leporina auct. non L. var. argyroglochin (Hornem.) Koch"), #nolint
+      parseTaxonnaam("Carex leporina auct. non L. var. argyroglochin (Hornem.) Koch"), #nolint: line_length_linter
       "Carex leporina var. argyroglochin"
     )
     expect_equal(
@@ -84,7 +84,7 @@ describe("parseTaxonnaam", {
     )
     expect_equal(
       parseTaxonnaam("Salix babylonica L. var. pekinensis 'Tortuosa'"),
-      parseTaxonnaam("Salix babylonica L. var. pekinensis A. Henry cv. Tortuosa") #nolint
+      parseTaxonnaam("Salix babylonica L. var. pekinensis A. Henry cv. Tortuosa") #nolint: line_length_linter
     )
   })
 

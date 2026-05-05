@@ -1,14 +1,14 @@
 #' @title combineert de Verschilscores van voorwaarden die via EN of OF
 #' logische operatoren gelinkt zijn
 #'
-#' @description Technische hulpfunctie die in een formule de ID's vervangt door
-#' opgegeven logische waarden en het resultaat van de formule teruggeeft.
+#' @description Technische hulpfunctie die in een formule de `VoorwaardeID`'s
+#' vervangt door opgegeven waarden en het resultaat van de formule teruggeeft.
 #'
-#' @param Formule string van ID's gecombineerd met EN en OF, bijvoorbeeld
-#' '(720 EN 721) OF 15'
-#' @param VoorwaardeID vector van alle voorwaardeID's die voorkomen in de
-#' Formule
-#' @param Verschilscore vector met voor elke VoorwaardeID een overeenkomstige
+#' @param Formule string van `VoorwaardeID`'s gecombineerd met EN en OF,
+#' bijvoorbeeld "(720 EN 721) OF 15"
+#' @param VoorwaardeID vector van alle `VoorwaardeID`'s die voorkomen in de
+#' `Formule`
+#' @param Verschilscore vector met voor elke `VoorwaardeID` een overeenkomstige
 #' verschilscore
 #'
 #' @return gecombineerde verschilscore waarbij EN gecombineerd wordt via het
@@ -43,14 +43,14 @@ combinerenVerschilscore <-
     Formuletest <- str_replace_all(Formuletest, "\\)", "")
     assert_that(
       str_detect(Formuletest, "^(\\d+(( (AND|OR|<=|<|>|>=) \\d+))*)$"),
-      msg = "Een van de formules onder CombinerenVoorwaarden bevat andere tekens dan getallen en operatoren. Meld dit probleem aan de beheerder van het package." #nolint
+      msg = "Een van de formules onder CombinerenVoorwaarden bevat andere tekens dan getallen en operatoren. Meld dit probleem aan de beheerder van het package." #nolint: line_length_linter
     )
     if (str_detect(Formuletest, "^(\\d+(( (AND|OR) \\d+))*)$")) {
       assert_that(
         all(
           as.integer(str_extract_all(Formule, "\\d+")[[1]]) %in% VoorwaardeID
         ),
-        msg = "Een van de formules onder CombinerenVoorwaarden bevat andere getallen dan de overeenkomstige voorwaardeID's. Meld dit probleem aan de beheerder van het package." #nolint
+        msg = "Een van de formules onder CombinerenVoorwaarden bevat andere getallen dan de overeenkomstige voorwaardeID's. Meld dit probleem aan de beheerder van het package." #nolint: line_length_linter
       )
     }
 

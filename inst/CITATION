@@ -1,0 +1,13 @@
+citHeader("To cite `LSVI` in publications please use:")
+# begin checklist entry
+bibentry(
+  bibtype = "Manual",
+  title = "LSVI: Rekenmodule Lokale Staat Van Instandhouding van habitattypen. Version 0.1.4",
+  author = c(person(given = "Els", family = "Lommelen"), person(given = "Patrik", family = "Oosterlynck"), person(given = "Gert", family = "Van Spaendonk"), person(given = "Hans", family = "Van Calster"), person(given = "Martine", family = "Van Hove"), person(given = "Toon", family = "Westra")),
+  year = 2026,
+  url = "https://github.com/inbo/LSVI/",
+  abstract = "Het package LSVI bundelt een aantal functies in verband met het ophalen van informatie over en het berekenen van de Lokale Staat Van Instandhouding (LSVI) van habitattypes.",
+  textVersion = "Lommelen, Els; Oosterlynck, Patrik; Van Spaendonk, Gert; Van Calster, Hans; Van Hove, Martine; Westra, Toon (2026) LSVI: Rekenmodule Lokale Staat Van Instandhouding van habitattypen. Version 0.1.4. https://github.com/inbo/LSVI/",
+  keywords = "habitats; local conservation status",
+)
+# end checklist entry

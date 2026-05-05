@@ -1,14 +1,15 @@
 #' @title Berekent de Status voor de records van een een opgegeven tabel
 #'
 #' @description Deze functie, die bedoeld is als hulpfunctie voor de
-#' hoofdfunctie berekenLSVIbasis, evalueert de status van de records van een
-#' opgegeven 'statustabel' met velden Waarde, Referentiewaarde en Operator.
+#' hoofdfunctie `berekenLSVIbasis()`, evalueert de status van de records van een
+#' opgegeven `Statustabel` met velden `Waarde`, `Referentiewaarde` en
+#' `Operator`.
 #'
-#' @param Statustabel Dataframe met velden Rijnr, RefMin, RefMax, Operator,
-#' WaardeMin en WaardeMax.
+#' @param Statustabel Dataframe met velden `Rijnr`, `RefMin`, `RefMax`,
+#' `Operator`, `WaardeMin` en `WaardeMax`.
 #'
 #'
-#' @return Deze functie geeft een tabel terug met velden Rijnr en Status
+#' @return Deze functie geeft een tabel terug met velden `Rijnr` en `Status`
 #'
 #'
 #' @export
@@ -88,21 +89,22 @@ berekenStatus <-
       group_by(.data$Operator) %>%
       do(
         Status =
-          switch(unique(.data$Operator),
-                 "<" = berekenStatusWaarde(
-                   .[c("Rijnr", "WaardeMax", "Operator", "RefMin")]
-                 ),
-                 "<=" = berekenStatusWaarde(
-                   .[c("Rijnr", "WaardeMax", "Operator", "RefMax")]
-                 ),
-                 ">" = berekenStatusWaarde(
-                   .[c("Rijnr", "WaardeMin", "Operator", "RefMax")]
-                 ),
-                 ">=" = berekenStatusWaarde(
-                   .[c("Rijnr", "WaardeMin", "Operator", "RefMin")]
-                 ),
-                 "=" = berekenStatusGelijkheid(.)
-        )
+          switch(
+            unique(.data$Operator),
+            "<" = berekenStatusWaarde(
+              .[c("Rijnr", "WaardeMax", "Operator", "RefMin")]
+            ),
+            "<=" = berekenStatusWaarde(
+              .[c("Rijnr", "WaardeMax", "Operator", "RefMax")]
+            ),
+            ">" = berekenStatusWaarde(
+              .[c("Rijnr", "WaardeMin", "Operator", "RefMax")]
+            ),
+            ">=" = berekenStatusWaarde(
+              .[c("Rijnr", "WaardeMin", "Operator", "RefMin")]
+            ),
+            "=" = berekenStatusGelijkheid(.)
+          )
       ) %>%
       unnest(.data$Status) %>%
       select(

@@ -1,10 +1,10 @@
 #' Lijst alle nog op te lossen databankfouten op
 #'
-#' Deze functie geeft een log-tabel met alle problemen die nog in de databank
+#' Deze functie maakt een tabel met alle problemen die nog in de databank
 #' zitten.  Enerzijds is er een beperkte tabel met problemen die op een hoger
 #' niveau opgelost kunnen worden en anderzijds een detail met alle Voorwaarden
 #' waar nog een fout in zit.  Problemen die op beide niveaus kunnen opgelost
-#' worden (bv. benoemen van AnalyseVariabelen), staan op beide niveaus vermeld.
+#' worden (bv. benoemen van analysevariabelen), staan op beide niveaus vermeld.
 #'
 #' @inheritParams selecteerIndicatoren
 #'
@@ -26,7 +26,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
   assert_that(
     inherits(ConnectieLSVIhabitats, "DBIConnection") |
       inherits(ConnectieLSVIhabitats, "Pool"),
-    msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
+    msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint: line_length_linter
   )
   OndergrensOntbreekt <-
     dbGetQuery(
@@ -37,9 +37,9 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
       WHERE LijstItem.Ondergrens is NULL"
     ) %>%
     transmute(
-      Item =
-        paste("Schaal: ", .data$Lijstnaam, "; Waarde: ",
-              .data$Waarde, sep = ""),
+      Item = paste(
+        "Schaal: ", .data$Lijstnaam, "; Waarde: ", .data$Waarde, sep = ""
+      ),
       Categorie = "Ondergrens ontbreekt"
     )
   BovengrensOntbreekt <-
@@ -51,9 +51,9 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
       WHERE LijstItem.Bovengrens is NULL"
     ) %>%
     transmute(
-      Item =
-        paste("Schaal: ", .data$Lijstnaam, "; Waarde: ",
-              .data$Waarde, sep = ""),
+      Item = paste(
+        "Schaal: ", .data$Lijstnaam, "; Waarde: ", .data$Waarde, sep = ""
+      ),
       Categorie = "Bovengrens ontbreekt"
     )
   OnbekendeAV <-
@@ -63,9 +63,10 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
       FROM AnalyseVariabele INNER JOIN Voorwaarde
       On AnalyseVariabele.Id = Voorwaarde.AnalyseVariabeleId
       WHERE NOT VariabeleNaam in ('aantal', 'aandeel', 'aandeelKruidlaag',
+        'aandeelLaag',
         'bedekking', 'maxBedekking', 'maxBedekkingExcl', 'bedekkingLaag',
         'bedekkingSom', 'bedekkingExcl', 'maxBedekking2s', 'bedekkingLaagExcl',
-        'bedekkingLaagPlus', 'aantalGroepen')
+        'bedekkingLaagPlus', 'aantalGroepen', 'scoresom', 'aandeelLaagExcl')
       AND NOT VariabeleNaam LIKE 'meting%'"
     ) %>%
     transmute(
@@ -90,12 +91,12 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
         c("aantal", "aandeel", "aandeelKruidlaag", "bedekking", "bedekkingLaag",
           "maxBedekking", "maxBedekkingExcl", "bedekkingSom", "bedekkingExcl",
           "maxBedekking2s", "bedekkingLaagExcl", "bedekkingLaagPlus",
-          "aantalGroepen"),
+          "aantalGroepen", "scoresom", "aandeelLaagExcl", "aandeelLaag"),
       !grepl("^meting", .data$AnalyseVariabele)
     )
   TypeAantalNietGeheelGetal <- Invoervereisten %>%
     filter(
-      .data$AnalyseVariabele %in% c("aantal", "aantalGroepen") &
+      .data$AnalyseVariabele %in% c("aantal", "aantalGroepen", "scoresom") &
         .data$TypeVariabele != "Geheel getal"
     )
   TypeBedekkingFout <- Invoervereisten %>%
@@ -107,8 +108,10 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
     )
   TypeAandeelFout <- Invoervereisten %>%
     filter(
-      .data$AnalyseVariabele %in%
-        c("aandeel", "aandeelKruidlaag", "bedekkingSom", "bedekkingExcl"),
+      .data$AnalyseVariabele %in% c(
+        "aandeel", "aandeelKruidlaag", "bedekkingSom", "bedekkingExcl",
+        "aandeelLaagExcl"
+      ),
       !.data$TypeVariabele %in% c("Percentage")
     )
   LijstItems <-
@@ -181,7 +184,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
         ) %>%
         mutate(
           Probleem =
-            "Referentiewaarde moet geheel getal zijn (of TypeVariabele aanpassen)" #nolint
+            "Referentiewaarde moet geheel getal zijn (of TypeVariabele aanpassen)" #nolint: line_length_linter
         )
     ) %>%
     bind_rows(
@@ -224,7 +227,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
         ) %>%
         mutate(
           Probleem =
-            "Aan een categorische variabele moet een lijst (schaal) gekoppeld zijn." #nolint
+            "Aan een categorische variabele moet een lijst (schaal) gekoppeld zijn." #nolint: line_length_linter
         )
     ) %>%
     bind_rows(
@@ -233,7 +236,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
           .data$AnalyseVariabele %in%
             c("aandeel", "aantal", "aantalGroepen", "bedekking",
               "bedekkingExcl", "maxBedekking", "maxBedekking2s",
-              "maxBedekkingExcl")
+              "maxBedekkingExcl", "scoresom")
         ) %>%
         filter(
           is.na(.data$TaxongroepId) & is.na(.data$Studiegroepnaam)
@@ -248,39 +251,50 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
         filter(
           .data$AnalyseVariabele %in%
             c("aandeelKruidlaag", "bedekkingLaag", "bedekkingLaagExcl",
-              "bedekkingLaagPlus", "bedekkingSom")
+              "bedekkingLaagPlus", "bedekkingSom", "aandeelLaagExcl")
         ) %>%
         filter(
           is.na(.data$TaxongroepId) | is.na(.data$Studiegroepnaam)
         ) %>%
         mutate(
           Probleem =
-            "Er moet een soortengroep en studiegroep opgegeven worden (of de AnalyseVariabele aangepast)" #nolint
+            "Er moet een soortengroep en studiegroep opgegeven worden (of de AnalyseVariabele aangepast)" #nolint: line_length_linter
+        )
+    ) %>%
+    bind_rows(
+      Invoervereisten %>%
+        filter(.data$SubAnalyseVariabele == "aandeelLaag") %>%
+        filter(is.na(.data$TaxongroepId) | is.na(.data$Studiegroepnaam)) %>%
+        mutate(
+          Probleem =
+            "Er moet een soortengroep en studiegroep opgegeven worden (of de SubAnalyseVariabele aangepast)" #nolint: line_length_linter
         )
     ) %>%
     bind_rows(
       Invoervereisten %>%
         filter(
           .data$AnalyseVariabele %in%
-            c("bedekkingLaagExcl", "bedekkingLaagPlus")
+            c("bedekkingLaagExcl", "bedekkingLaagPlus", "aandeelLaagExcl")
         ) %>%
         filter(
           !(.data$TaxongroepId) %in% TweeTaxongroepen$tg
         ) %>%
         mutate(
           Probleem =
-            "Er moeten 2 soortengroepen opgegeven worden (of de AnalyseVariabele aangepast)" #nolint
+            "Er moeten 2 soortengroepen opgegeven worden (of de AnalyseVariabele aangepast)" #nolint: line_length_linter
         )
     ) %>%
     bind_rows(
       Invoervereisten %>%
         filter(
           !is.na(.data$SubAnalyseVariabele) &
-            !.data$SubAnalyseVariabele %in% c("bedekking", "aandeel")
+            !.data$SubAnalyseVariabele %in% c(
+              "bedekking", "aandeel", "aandeelLaag"
+            )
         ) %>%
         mutate(
           Probleem =
-            "De SubAnalyseVariabele moet bedekking of aandeel zijn"
+            "De SubAnalyseVariabele moet bedekking, aandeel of aandeelLaag zijn"
         )
     ) %>%
     bind_rows(
@@ -288,13 +302,13 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
         filter(
           !is.na(.data$SubAnalyseVariabele) &
             !.data$AnalyseVariabele %in%
-            c("aantal", "aandeel", "aandeelKruidlaag", "bedekking",
-              "bedekkingExcl", "maxBedekking", "maxBedekking2s",
-              "maxBedekkingExcl")
+              c("aantal", "aandeel", "aandeelKruidlaag", "bedekking",
+                "bedekkingExcl", "maxBedekking", "maxBedekking2s",
+                "maxBedekkingExcl", "scoresom", "aandeelLaagExcl")
         ) %>%
         mutate(
           Probleem =
-            "Voor deze AnalyseVariabele mag geen subanalysevariabele opgegeven worden" #nolint
+            "Voor deze AnalyseVariabele mag geen subanalysevariabele opgegeven worden" #nolint: line_length_linter
         )
     ) %>%
     bind_rows(
@@ -305,7 +319,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
         ) %>%
         mutate(
           Probleem =
-            "De SubAnalyseVariabele moet ingevuld zijn als er een SubReferentiewaarde opgegeven is: kies je voorwaarde zodanig dat deze niet overlapt met een voorwaarde die gebruikt wordt zonder SubAnalyseVariabele en geef nieuwe voorwaarden door aan BMK" #nolint
+            "De SubAnalyseVariabele moet ingevuld zijn als er een SubReferentiewaarde opgegeven is: kies je voorwaarde zodanig dat deze niet overlapt met een voorwaarde die gebruikt wordt zonder SubAnalyseVariabele en geef nieuwe voorwaarden door aan BMK" #nolint: line_length_linter
         )
     ) %>%
     bind_rows(
@@ -316,7 +330,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
         ) %>%
         mutate(
           Probleem =
-            "De Operator '=' mag niet gebruikt worden, tenzij TypeVariabele 'Ja/nee' is" #nolint
+            "De Operator '=' mag niet gebruikt worden, tenzij TypeVariabele 'Ja/nee' is" #nolint: line_length_linter
         )
     ) %>%
     bind_rows(
@@ -333,7 +347,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
         select(-"Formuletest") %>%
         mutate(
           Probleem =
-            "De formule voor Combinatie is geen combinatie van AND, OR en voorwaardeID's" #nolint
+            "De formule voor Combinatie is geen combinatie van AND, OR en voorwaardeID's" #nolint: line_length_linter
         )
     )
 
@@ -344,7 +358,7 @@ logDatabankfouten <- function(ConnectieLSVIhabitats = NULL) {
           .data$Probleem ==
             "AnalyseVariabele waarvoor geen code ontwikkeld is" &
             is.na(.data$VoorwaardeID) & .data$Kwaliteitsniveau == 2,
-          "rekenregel van Voorwaarde ontbreekt, beschrijving van ook verwijderen als het de bedoeling is om voorwaarde te verwijderen", #nolint
+          "rekenregel van Voorwaarde ontbreekt, beschrijving van ook verwijderen als het de bedoeling is om voorwaarde te verwijderen", #nolint: line_length_linter
           .data$Probleem
         )
     )

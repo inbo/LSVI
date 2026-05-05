@@ -5,27 +5,27 @@
 #' bepaling van de Lokale Staat van Instandhouding.  Het is in feite een
 #' hulpfunctie die voor verschillende andere functies gebruikt wordt en die de
 #' complexe zoekfunctie in de tabellen met soorten uitvoert op basis van een
-#' opgegeven TaxongroepId (en in die zin iets minder gebruiksvriendelijk is).
+#' opgegeven `TaxongroepId` (en in die zin iets minder gebruiksvriendelijk is).
 #' Voor een selectie van soortenlijsten op basis van specifieke parameters is
-#' de functie geefSoortenlijst() een beter alternatief.
+#' de functie `geefSoortenlijst()` een beter alternatief.
 #'
 #' Deze functie geeft standaard voor de gespecifieerde taxongroepen per groep
 #' een lijst van alle taxa zoals ze in de LSVI-habitatfiche vermeld zijn
-#' (genusniveau, soortniveau, subsoort,...).  Op basis van de parameter
+#' (genusniveau, soortniveau, ondersoort,...).  Op basis van de parameter
 #' soortenlijsttype kan ook gekozen worden om een volledige lijst te geven van
 #' deze taxa en alle taxa die hieronder vallen (en opgenomen zijn in de
 #' onderliggende databank).
 #'
 #' @inheritParams selecteerIndicatoren
 #' @inheritParams geefSoortenlijst
-#' @param Taxongroeplijst string waarin de TaxongroepId's na elkaar weergegeven
-#' worden, gescheiden door een komma.  Eventueel mag dit ook een vector zijn
-#' van TaxongroepId's.
+#' @param Taxongroeplijst string waarin de `TaxongroepId`'s na elkaar
+#' weergegeven worden, gescheiden door een komma.
+#' Eventueel mag dit ook een vector zijn van `TaxongroepId`'s.
 #'
-#' @return Deze functie geeft een tabel met velden TaxongroepId, evt.
-#' Beschrijving, WetNaam, WetNaamKort en NedNaam (waarbij Beschrijving een
-#' omschrijving is voor een groep van taxons binnen eenzelfde indicator).
-#' WetNaam is de volledige Latijnse naam inclusief auteursnaam, WetNaamKort
+#' @return Deze functie geeft een tabel met velden `TaxongroepId`, evt.
+#' `Beschrijving`, `WetNaam`, `WetNaamKort` en `NedNaam` (waarbij `Beschrijving`
+#' een omschrijving is voor een groep van taxons binnen eenzelfde indicator).
+#' `WetNaam` is de volledige Latijnse naam inclusief auteursnaam, `WetNaamKort`
 #' geeft de verkorte naam zonder auteursnaam.
 #'
 #' @examples
@@ -61,7 +61,7 @@ geefSoortenlijstVoorIDs <-
     assert_that(
       inherits(ConnectieLSVIhabitats, "DBIConnection") |
         inherits(ConnectieLSVIhabitats, "Pool"),
-      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
+      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint: line_length_linter
     )
     assert_that(is.character(Taxongroeplijst))
     if (!is.string(Taxongroeplijst)) {
@@ -70,7 +70,7 @@ geefSoortenlijstVoorIDs <-
     assert_that(is.string(Taxongroeplijst))
     assert_that(noNA(Taxongroeplijst))
     if (!grepl("^([[:digit:]]+,)*[[:digit:]]+$", Taxongroeplijst)) {
-      stop("Taxongroeplijst bestaat niet uit een reeks getallen gescheiden door een komma") #nolint
+      stop("Taxongroeplijst bestaat niet uit een reeks getallen gescheiden door een komma") #nolint: line_length_linter
     }
     match.arg(Taxonlijsttype)
 

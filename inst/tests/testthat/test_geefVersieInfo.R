@@ -12,7 +12,7 @@ describe("selectie volgens habitattype", {
           c("T'Jollyn et al., 2009", "Oosterlynck et al., 2016",
             "De Bie et al., 2018"),
         Beschrijving =
-          c("gedegradeerde staat (C) is als de staat minder goed is dan de voorwaarde opgegeven onder kwaliteitsniveau 1", #nolint
+          c("gedegradeerde staat (C) is als de staat minder goed is dan de voorwaarde opgegeven onder kwaliteitsniveau 1", #nolint: line_length_linter
             NA, NA),
         Kwaliteitsniveau1 =
           c("Voldoende staat (B)", "Gunstige staat", "niet van toepassing"),

@@ -24,12 +24,13 @@ controleerInvoerwaarde(
 waarvan de waarden moeten opgezocht worden (String)}
 
 \item{ConnectieLSVIhabitats}{Connectie met de databank met indicatoren voor
-de LSVI van habitats, in te stellen d.m.v. functie connecteerMetLSVIdb.}
+de LSVI van habitats, in te stellen d.m.v. functie \code{connecteerMetLSVIdb()}.}
 
-\item{Tolower}{default (als TRUE) wordt tolower() uitgevoerd op de
-invoerwaarden en databankwaarden vooraleer de vergelijking uitgevoerd wordt,
+\item{Tolower}{default (als TRUE) wordt \code{tolower()} uitgevoerd op de
+invoerwaarden en gegevens uit de databank vooraleer de vergelijking
+uitgevoerd wordt,
 FALSE zorgt dat dit niet uitgevoerd wordt, maar idealiter worden deze stap
-voor stap vervangen door Tolower = TRUE}
+voor stap vervangen door \code{Tolower = TRUE}}
 }
 \value{
 Deze functie geeft geen waarde terug, maar gooit een error als er

@@ -7,16 +7,17 @@
 #' parameters.  Volledigheidshalve geeft ze ook de uitgebreide namen van de
 #' habitattypes en habitatsubtypes.  De uitvoer van deze functie kan gebruikt
 #' worden om rapportages op te maken (bv. rapport samenstellen met
-#' LSVI-criteria,...).  Een 'afgewerkt rapport' kan gegenereerd worden met de
-#' functie maakHabitatfiches().
+#' LSVI-criteria,...).  Een "afgewerkt rapport" kan gegenereerd worden met de
+#' functie `maakHabitatfiches()`.
 #'
 #'@template Zoekparameters
 #'
 #' @inheritParams selecteerIndicatoren
-#' @param Stijl Keuze uit "Rmd" en "tekst".  Bij Rmd (default) worden
+#' @param Stijl Keuze uit `"Rmd"` en `"tekst"`.  Bij `"Rmd"` (default) worden
 #' soortgroepnamen voorafgegaan en gevolgd door "__" en Latijnse namen van
 #' soorten door "_", waardoor deze bij gebruik van RMarkdown worden omgezet
-#' naar resp. vet en italics.  Bij tekst worden deze underscores weggelaten.
+#' naar resp. __vet__ en _italics_.
+#' Bij `"tekst"` worden deze underscores weggelaten.
 #'
 #' @return Deze functie genereert een tabel met alle gegevens die nodig zijn om
 #' de tabellen habitatkarakteristieken en beoordelingsmatrix uit de
@@ -38,10 +39,10 @@
 #' @export
 #'
 #' @importFrom DBI dbGetQuery
-#' @importFrom dplyr arrange distinct mutate group_by summarise ungroup select
-#' left_join filter mutate_
+#' @importFrom dplyr across arrange distinct filter group_by left_join matches
+#' mutate select summarise ungroup
 #' @importFrom rlang .data
-#' @importFrom lazyeval interp
+#' @importFrom tidyselect all_of
 #' @importFrom assertthat assert_that
 #'
 
@@ -63,7 +64,7 @@ geefInfoHabitatfiche <-
     assert_that(
       inherits(ConnectieLSVIhabitats, "DBIConnection") |
         inherits(ConnectieLSVIhabitats, "Pool"),
-      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint
+      msg = "Er is geen connectie met de databank met de LSVI-indicatoren. Maak een connectiepool met maakConnectiePool of geef een connectie mee met de parameter ConnectieLSVIhabitats." #nolint: line_length_linter
     )
 
     Selectiegegevens <-
@@ -104,10 +105,10 @@ geefInfoHabitatfiche <-
       paste(
         unique(
           (Selectiegegevens %>%
-             filter(
-               !is.na(.data$Indicator_beoordelingID)
-             )
-           )$Indicator_beoordelingID
+            filter(
+              !is.na(.data$Indicator_beoordelingID)
+            )
+          )$Indicator_beoordelingID
         ),
         collapse = "','"
       )
@@ -142,7 +143,7 @@ geefInfoHabitatfiche <-
         query_beoordelingsfiche
       )
 
-    paste2 <- function(..., sep=", ") {
+    paste2 <- function(..., sep = ", ") {
       L <- list(...)
       L <-
         lapply(
@@ -176,16 +177,15 @@ geefInfoHabitatfiche <-
           Habitatsubtype = NULL,
           Indicator_habitatID = NULL,
           Indicator_beoordelingID = NULL,
-          TotNaam =
+          TotNaam = ifelse(
+            is.na(.data$WetNaamKort),
+            .data$NedNaam,
             ifelse(
-              is.na(.data$WetNaamKort),
-              .data$NedNaam,
-              ifelse(
-                is.na(.data$NedNaam),
-                sprintf("_%s_", .data$WetNaamKort),
-                sprintf("%s (_%s_)", .data$NedNaam, .data$WetNaamKort)
-              )
+              is.na(.data$NedNaam),
+              sprintf("_%s_", .data$WetNaamKort),
+              sprintf("%s (_%s_)", .data$NedNaam, .data$WetNaamKort)
             )
+          )
         ) %>%
         distinct() %>%
         arrange(.data$TotNaam)
@@ -211,7 +211,7 @@ geefInfoHabitatfiche <-
           .data$TaxongroepId,
           .data$Criterium,
           .data$Indicator,
-          .dots = OmschrijvingKolommen
+          across(all_of(OmschrijvingKolommen))
         ) %>%
         summarise(
           Soortenlijst = paste(as.vector(.data$TotNaam), collapse = ", ")
@@ -219,22 +219,22 @@ geefInfoHabitatfiche <-
         ungroup()
 
       laatste_i <- 0
-      for (i in seq_len(length(OmschrijvingKolommen))) {
+      for (i in seq_along(OmschrijvingKolommen)) {
         laatste_i <- max(laatste_i, length(OmschrijvingKolommen))
         Soortenlijst <- Soortenlijst %>%
-          mutate_(
+          mutate(
             Soortenlijst =
-              interp(
-                ~ ifelse(
-                  is.na(var),
-                  Soortenlijst,
-                  paste("__", var, ":__ ", Soortenlijst, sep = "")
-                ),
-                var = as.name(OmschrijvingKolommen[1])
+              ifelse(
+                is.na(.data[[OmschrijvingKolommen]]),
+                .data$Soortenlijst,
+                paste(
+                  "__", .data[[OmschrijvingKolommen[1]]], ":__",
+                  .data$Soortenlijst, sep = ""
+                )
               )
           ) %>%
           select(
-            -dplyr::matches(OmschrijvingKolommen[1])
+            -matches(OmschrijvingKolommen[1])
           )
 
         OmschrijvingKolommen <- OmschrijvingKolommen[-1]
@@ -279,7 +279,7 @@ geefInfoHabitatfiche <-
             select(
               "TaxongroepId",
               "Soortenlijst"
-              ),
+            ),
           by = c("TaxongroepId" = "TaxongroepId")
         ) %>%
         mutate(
@@ -351,12 +351,12 @@ geefInfoHabitatfiche <-
       Habitatfiche$Beschrijving <- gsub("_", "", Habitatfiche$Beschrijving)
       Habitatfiche$Maatregelen <-
         gsub("_", "", Habitatfiche$Maatregelen)
-      Habitatfiche$Opmerkingen.habitat <- #nolint
+      Habitatfiche$Opmerkingen.habitat <- #nolint: object_name_linter
         gsub("_", "", Habitatfiche$Opmerkingen.habitat)
       Habitatfiche$Soortenlijst <- gsub("_", "", Habitatfiche$Soortenlijst)
-      Habitatfiche$Opmerkingen.beoordeling <- #nolint
+      Habitatfiche$Opmerkingen.beoordeling <- #nolint: object_name_linter
         gsub("_", "", Habitatfiche$Opmerkingen.beoordeling)
-      Habitatfiche$Beoordeling_letterlijk <- #nolint
+      Habitatfiche$Beoordeling_letterlijk <- #nolint: object_name_linter
         gsub("_", "", Habitatfiche$Beoordeling)
     }
 

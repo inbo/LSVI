@@ -1,12 +1,12 @@
 #' S4-klasse die de maximale bedekking berekent van de soorten die niet tot de
 #' soortengroep behoren
 #'
-#' Deze klasse MaxBedekkingExcl staat in voor de berekening van waarden voor
-#' TypeVariabele Bedekking op basis van opgegeven kenmerken.  Ze is een
-#' nakomeling van de klasse AnalyseVariabele.
+#' Deze klasse `MaxBedekkingExcl` staat in voor de berekening van waarden voor
+#' `TypeVariabele` `MaxBedekkingExcl` op basis van opgegeven kenmerken.
+#' Ze is een nakomeling van de klasse `AnalyseVariabele`.
 #'
-#' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden Kenmerk,
-#' TypeKenmerk, WaardeMin en WaardeMax
+#' @slot Kenmerken dataframe met alle opgegeven kenmerken, met velden `Kenmerk`,
+#' `TypeKenmerk`, `WaardeMin` en `WaardeMax`
 #'
 #' @importFrom methods setClass setMethod
 #'
@@ -54,7 +54,7 @@ setMethod(
     if (sum(is.na(Resultaat$WaardeMin)) < sum(is.na(Resultaat$WaardeMax))) {
       MaxBedekkingMin <- NA
       MaxBedekkingMax <- NA
-      warning("aan- of afwezigheid bedekking") #nolint
+      warning("aan- of afwezigheid bedekking")
     } else if (nrow(Resultaat) > 0) {
 
       MaxBedekkingMin <- max(Resultaat$WaardeMin)

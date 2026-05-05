@@ -1,18 +1,18 @@
 #' @title Controle van de ingevoerde opname
 #'
-#' @description Deze hulpfunctie voor de s4-klassen 'aantal' en 'bedekking'
+#' @description Deze hulpfunctie voor de s4-klassen `aantal` en `bedekking`
 #' zoekt soorten of kenmerken uit de voorwaarde in de opname en maakt een
 #' lijstje van de soorten die voldoen en in de opname voorkomen.  Op basis
 #' hiervan kunnen de s4-klassen het totale aantal of de bedekking berekenen.
 #'
 #'
 #' @param Kenmerken dataframe met alle opgegeven kenmerken, met velden
-#' Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax
+#' `Vegetatielaag`, `Kenmerk`, `TypeKenmerk`, `WaardeMin` en `WaardeMax`
 #' @param Soortengroep dataframe met de soortenlijst die uit Kenmerken gehaald
 #' moet worden
 #' @param Studiegroep dataframe met de lijst kenmerken die uit Kenmerken
 #' gehaald moet worden
-#' @param SubAnalyseVariabele heeft waarde 'bedekking' als er een subvoorwaarde
+#' @param SubAnalyseVariabele heeft waarde "bedekking" als er een subvoorwaarde
 #' is voor de bedekking van de geselecteerde soorten of kenmerken
 #' @param SubRefMin minimumwaarde van de grenswaarde voor de bedekking
 #' @param SubRefMax maximumwaarde van de grenswaarde voor de bedekking
@@ -32,7 +32,7 @@
 #' @importFrom stringr str_c
 #'
 #'
-selecteerKenmerkenInOpname <- #nolint
+selecteerKenmerkenInOpname <-
   function(
     Kenmerken,
     Soortengroep,
@@ -61,10 +61,10 @@ selecteerKenmerkenInOpname <- #nolint
           Soortengroep,
           by = c("Kenmerk" = "NbnTaxonVersionKey")
         )
-      if (length(Studiegroep) > 0 & nrow(Resultaat) > 0) {
+      if (length(Studiegroep) > 0 && nrow(Resultaat) > 0) {
         if (max(is.na(Resultaat$Vegetatielaag))) {
           stop(
-            "Bij Data_soortenKenmerken is niet voor alle soorten de kolom Vegetatielaag ingevuld, waardoor de berekening niet correct kan worden uitgevoerd (dit omdat de vegetatielaag bepaalt of de betreffende soort al dan niet in rekening gebracht moet worden voor het berekenen van de indicator)"  #nolint
+            "Bij Data_soortenKenmerken is niet voor alle soorten de kolom Vegetatielaag ingevuld, waardoor de berekening niet correct kan worden uitgevoerd (dit omdat de vegetatielaag bepaalt of de betreffende soort al dan niet in rekening gebracht moet worden voor het berekenen van de indicator)"  #nolint: line_length_linter
           )
         } else {
           Resultaat <- Resultaat %>%
@@ -120,7 +120,7 @@ selecteerKenmerkenInOpname <- #nolint
       }
     }
 
-    if (length(Studiegroep) > 0 & !(length(Soortengroep) > 0)) {
+    if (length(Studiegroep) > 0 && !(length(Soortengroep) > 0)) {
       if (!unique(Studiegroep$LijstNaam) %in% Kenmerken$LijstNaam) {
         warning(
           sprintf(
@@ -145,7 +145,7 @@ selecteerKenmerkenInOpname <- #nolint
     }
 
     if (!exists("Resultaat")) {
-      stop("Er ontbreekt een soortenlijst of studiegroeplijst in de databank.  Meld deze fout aan de beheerder van dit package.") #nolint
+      stop("Er ontbreekt een soortenlijst of studiegroeplijst in de databank.  Meld deze fout aan de beheerder van dit package.") #nolint: line_length_linter
     }
 
     if (identical(SubAnalyseVariabele, character(0))) {
@@ -158,16 +158,44 @@ selecteerKenmerkenInOpname <- #nolint
       return(Resultaat)
     }
 
-    if (!identical(SubAnalyseVariabele, character(0)) &
-        SubAnalyseVariabele %in% c("aandeel", "bedekking")) {
+    if (!identical(SubAnalyseVariabele, character(0)) &&
+          SubAnalyseVariabele %in% c("aandeel", "bedekking", "aandeelLaag")) {
 
       if (SubAnalyseVariabele == "aandeel") {
         Resultaat <- Resultaat %>%
           filter(tolower(.data$Eenheid) %in% c("grondvlak_ha", "volume_ha"))
       }
-      if (SubAnalyseVariabele == "bedekking") {
+      if (SubAnalyseVariabele %in% c("bedekking", "aandeelLaag")) {
         Resultaat <- Resultaat %>%
           filter(!tolower(.data$Eenheid) %in% c("grondvlak_ha", "volume_ha"))
+        if (SubAnalyseVariabele == "aandeelLaag") {
+          if ("naakte bodem" %in% Kenmerken$Kenmerk) {
+            Kenmerken <- Kenmerken %>%
+              filter(tolower(.data$Kenmerk) != "naakte bodem") %>%
+              bind_rows(
+                Kenmerken %>%
+                  filter(tolower(.data$Kenmerk) == "naakte bodem") %>%
+                  mutate(
+                    Kenmerk = "totale vegetatiebedekking",
+                    WaardeMinNew = 1.0 - .data$WaardeMax,
+                    WaardeMax = 1.0 - .data$WaardeMin,
+                    WaardeMin = .data$WaardeMinNew,
+                    WaardeMinNew = NULL
+                  )
+              )
+          }
+          if ("totale vegetatiebedekking" %in% Kenmerken$Kenmerk) {
+            Vegetatiebedekking <- Kenmerken %>%
+              filter(tolower(.data$Kenmerk) == "totale vegetatiebedekking")
+            Resultaat <- Resultaat %>%
+              mutate(
+                WaardeMin = .data$WaardeMin / Vegetatiebedekking$WaardeMax,
+                WaardeMax = .data$WaardeMax / Vegetatiebedekking$WaardeMin
+              )
+          } else {
+            stop("Om de bedekking te kunnen berekenen ten opzichte van de totale vegetatiebedekking, is het nodig om studiegroep 'naakte bodem' of 'totale vegetatiebedekking' op te geven.") #nolint: line_length_linter
+          }
+        }
       }
 
       Resultaat <- Resultaat %>%
@@ -236,7 +264,7 @@ selecteerKenmerkenInOpname <- #nolint
         paste(
           "Onbekende subanalysevariabele",
           SubAnalyseVariabele,
-          "in de indicatorendatabank.  Meld deze fout aan de beheerder van dit package."  #nolint
+          "in de indicatorendatabank.  Meld deze fout aan de beheerder van dit package."  #nolint: line_length_linter
         )
       )
     }

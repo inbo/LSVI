@@ -16,7 +16,7 @@ selecteerKenmerkenInOpname(
 }
 \arguments{
 \item{Kenmerken}{dataframe met alle opgegeven kenmerken, met velden
-Vegetatielaag, Kenmerk, TypeKenmerk, WaardeMin en WaardeMax}
+\code{Vegetatielaag}, \code{Kenmerk}, \code{TypeKenmerk}, \code{WaardeMin} en \code{WaardeMax}}
 
 \item{Soortengroep}{dataframe met de soortenlijst die uit Kenmerken gehaald
 moet worden}
@@ -24,7 +24,7 @@ moet worden}
 \item{Studiegroep}{dataframe met de lijst kenmerken die uit Kenmerken
 gehaald moet worden}
 
-\item{SubAnalyseVariabele}{heeft waarde 'bedekking' als er een subvoorwaarde
+\item{SubAnalyseVariabele}{heeft waarde "bedekking" als er een subvoorwaarde
 is voor de bedekking van de geselecteerde soorten of kenmerken}
 
 \item{SubRefMin}{minimumwaarde van de grenswaarde voor de bedekking}
@@ -40,7 +40,7 @@ enkel de soorten uit de soortenlijst(en) opgenomen zijn en die bovendien
 gekoppeld is aan de gegevens van de soortenlijst.
 }
 \description{
-Deze hulpfunctie voor de s4-klassen 'aantal' en 'bedekking'
+Deze hulpfunctie voor de s4-klassen \code{aantal} en \code{bedekking}
 zoekt soorten of kenmerken uit de voorwaarde in de opname en maakt een
 lijstje van de soorten die voldoen en in de opname voorkomen.  Op basis
 hiervan kunnen de s4-klassen het totale aantal of de bedekking berekenen.

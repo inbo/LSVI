@@ -1,5 +1,5 @@
 # Deze functie zorgt voor de migratie van (een deel van) de databank op
-# SQL-server naar een SQLite-databank in het package zelf in de map inst/data
+# SQL-server naar een SQLite-databank in het package zelf in map inst/databank
 
 library(DBI)
 library(RSQLite)
@@ -7,8 +7,7 @@ library(LSVI)
 library(dplyr)
 library(purrr)
 
-migratieSQLserverSQLite <-
-  function() {
+migratieSQLserverSQLite <- function() {
   #Tabellen ophalen uit SQLserver
   Habitatgroep <-
     dbGetQuery(ConnectiePool, "SELECT Id, Naam FROM Habitatgroep")
@@ -22,23 +21,21 @@ migratieSQLserverSQLite <-
       cast(Referentie AS nvarchar(30)) AS Referentie,
       cast(Opmerking AS nvarchar(400)) AS Opmerking, GroepVrij
       FROM Habitattype"
-    )       #Hier zitten enkele lege velden bij,
-            #en enkele die mogelijk overbodig zijn, nog na te kijken!
+    )   #Veld Omschrijving is overal leeg, misschien niet nodig om te behouden?
 
-  HabitattypeId <- (Habitattype %>%
-    #filter(Code %in% VectorHabitattypes) %>%
-    summarise(Id = paste0(Id, collapse = ",")))$Id
+  HabitattypeId <-
+    (Habitattype %>%
+      summarise(Id = paste0(Id, collapse = ","))
+    )$Id
 
   Versie <-
     dbGetQuery(
       ConnectiePool,
-      #sprintf(
-        "SELECT Id, VersieLSVI,
-        cast(Referentie AS nvarchar(30)) AS Referentie,
-        cast(Beschrijving AS nvarchar(120)) AS Beschrijving,
-        Kwaliteitsniveau1, Kwaliteitsniveau2
-        FROM Versie"
-      #)
+      "SELECT Id, VersieLSVI,
+      cast(Referentie AS nvarchar(30)) AS Referentie,
+      cast(Beschrijving AS nvarchar(120)) AS Beschrijving,
+      Kwaliteitsniveau1, Kwaliteitsniveau2
+      FROM Versie"
     )
 
   VersieId <- (Versie %>% summarise(Id = paste0(Id, collapse = ",")))$Id
@@ -49,7 +46,7 @@ migratieSQLserverSQLite <-
   Indicator <-
     dbGetQuery(ConnectiePool, "SELECT Id, CriteriumId, Naam FROM Indicator")
 
-  Indicator_habitat <- #nolint
+  Indicator_habitat <- #nolint: object_name_linter
     dbGetQuery(
       ConnectiePool,
       sprintf(
@@ -65,8 +62,18 @@ migratieSQLserverSQLite <-
         HabitattypeId, VersieId
       )
     )
+  Indicator_habitat$Beschrijving <- #nolint: object_name_linter
+    gsub("[\r\n\t]", ";", Indicator_habitat$Beschrijving)
+  Indicator_habitat$Beschrijving_naSoorten <- #nolint: object_name_linter
+    gsub("[\r\n\t]", ";", Indicator_habitat$Beschrijving_naSoorten)
+  Indicator_habitat$Maatregelen <- #nolint: object_name_linter
+    gsub("[\r\n\t]", ";", Indicator_habitat$Maatregelen)
+  Indicator_habitat$Opmerkingen <- #nolint: object_name_linter
+    gsub("[\r\n\t]", ";", Indicator_habitat$Opmerkingen)
+  Indicator_habitat$Referenties <- #nolint: object_name_linter
+    gsub("[\r\n\t]", ";", Indicator_habitat$Referenties)
 
-  Indicator_habitatId <- #nolint
+  Indicator_habitatId <- #nolint: object_name_linter
     (Indicator_habitat %>% summarise(Id = paste0(Id, collapse = ",")))$Id
 
   IndicatortabellenKoppeling <-
@@ -80,11 +87,12 @@ migratieSQLserverSQLite <-
       )
     )
 
-  Indicator_beoordelingId <- #nolint
+  Indicator_beoordelingId <- #nolint: object_name_linter
     (IndicatortabellenKoppeling %>%
-       summarise(Id = paste0(Indicator_beoordelingId, collapse = ",")))$Id
+      summarise(Id = paste0(Indicator_beoordelingId, collapse = ","))
+    )$Id
 
-  Indicator_beoordeling <- #nolint
+  Indicator_beoordeling <- #nolint: object_name_linter
     dbGetQuery(
       ConnectiePool,
       sprintf(
@@ -96,6 +104,10 @@ migratieSQLserverSQLite <-
         Indicator_beoordelingId
       )
     )
+  Indicator_beoordeling$Opmerkingen <- #nolint: object_name_linter
+    gsub("[\r\n\t]", ";", Indicator_beoordeling$Opmerkingen)
+  Indicator_beoordeling$Referenties <- #nolint: object_name_linter
+    gsub("[\r\n\t]", ";", Indicator_beoordeling$Referenties)
 
   Beoordeling <-
     dbGetQuery(
@@ -108,6 +120,8 @@ migratieSQLserverSQLite <-
         Indicator_beoordelingId
       )
     )
+  Beoordeling$Beoordeling_letterlijk <-
+    gsub("[\r\n\t]", ";", Beoordeling$Beoordeling_letterlijk)
 
   BeoordelingId <-
     (Beoordeling %>% summarise(Id = paste0(Id, collapse = ",")))$Id
@@ -129,10 +143,10 @@ migratieSQLserverSQLite <-
       unique(
         c(
           (
-            CombinerenVoorwaarden %>% filter(!is.na(VoorwaardeID1))
+            CombinerenVoorwaarden %>% filter(!is.na(.data$VoorwaardeID1))
           )$VoorwaardeID1,
           (
-            CombinerenVoorwaarden %>% filter(!is.na(VoorwaardeID2))
+            CombinerenVoorwaarden %>% filter(!is.na(.data$VoorwaardeID2))
           )$VoorwaardeID2
         )
       ),
@@ -203,7 +217,12 @@ migratieSQLserverSQLite <-
   AnalyseVariabeleId <-
     paste0(
       unique(
-        (Voorwaarde %>% filter(!is.na(AnalyseVariabeleId)))$AnalyseVariabeleId
+        c(
+          (Voorwaarde %>% filter(!is.na(.data$AnalyseVariabeleId))
+          )$AnalyseVariabeleId,
+          (Voorwaarde %>% filter(!is.na(.data$SubAnalyseVariabeleId))
+          )$SubAnalyseVariabeleId
+        )
       ),
       collapse = ","
     )
@@ -356,11 +375,11 @@ migratieSQLserverSQLite <-
     mutate(
       AantalSoorten =
         ifelse(
-          !is.na(TaxongroepId),
+          !is.na(.data$TaxongroepId),
           nrow(
             dbGetQuery(
               ConnectiePool,
-              sprintf(Querytekst, as.character(TaxongroepId))
+              sprintf(Querytekst, as.character(.data$TaxongroepId))
             ) %>%
               distinct()
           ),
@@ -370,10 +389,11 @@ migratieSQLserverSQLite <-
     ungroup() %>%
     left_join(StudieItem, by = "StudiegroepId", suffix = c("", ".studie")) %>%
     group_by(
-      Id, VoorwaardeNaam, ExtraInfo, AnalyseVariabeleId, Referentiewaarde,
-      Operator, InvoermaskerId, TaxongroepId, StudiegroepId,
-      SubAnalyseVariabeleId, SubReferentiewaarde, SubOperator,
-      SubInvoermaskerId, AantalSoorten
+      .data$Id, .data$VoorwaardeNaam, .data$ExtraInfo, .data$AnalyseVariabeleId,
+      .data$Referentiewaarde, .data$Operator, .data$InvoermaskerId,
+      .data$TaxongroepId, .data$StudiegroepId, .data$SubAnalyseVariabeleId,
+      .data$SubReferentiewaarde, .data$SubOperator, .data$SubInvoermaskerId,
+      .data$AantalSoorten
     ) %>%
     summarise(AantalKenmerken = n()) %>%
     ungroup() %>%
@@ -382,74 +402,80 @@ migratieSQLserverSQLite <-
     mutate(
       Maximumwaarde =
         ifelse(
-          VariabeleNaam %in% c("aandeel", "aandeelKruidlaag", "meting_perc"),
+          .data$VariabeleNaam %in%
+            c("aandeel", "aandeelKruidlaag", "aandeelLaagExcl", "meting_perc"),
           1,
           NA
         ),
       Maximumwaarde =
         ifelse(
-          grepl("bedekking", tolower(VariabeleNaam)), 1, Maximumwaarde
+          grepl("bedekking", tolower(.data$VariabeleNaam)),
+          1, .data$Maximumwaarde
         ),
       Maximumwaarde =
         ifelse(
-          grepl("meting", VariabeleNaam) & Naam == "Categorie", 1, Maximumwaarde
+          grepl("meting", .data$VariabeleNaam) & .data$Naam == "Categorie",
+          1, .data$Maximumwaarde
         ),
       Maximumwaarde =
         ifelse(
-          grepl("meting", VariabeleNaam) & Naam == "Ja/nee", 1, Maximumwaarde
+          grepl("meting", .data$VariabeleNaam) & .data$Naam == "Ja/nee",
+          1, .data$Maximumwaarde
         ),
       Maximumwaarde =
         ifelse(
-          grepl("meting", VariabeleNaam) &
-            VoorwaardeNaam == "aantal geslachten",
-          2, Maximumwaarde
+          grepl("meting", .data$VariabeleNaam) &
+            .data$VoorwaardeNaam == "aantal geslachten",
+          2, .data$Maximumwaarde
         ),
       Maximumwaarde =
         ifelse(
-          grepl("meting", VariabeleNaam) & VoorwaardeNaam == "bosconstantie",
-          250, Maximumwaarde
+          grepl("meting", .data$VariabeleNaam) &
+            .data$VoorwaardeNaam == "bosconstantie",
+          250, .data$Maximumwaarde
         ),
       Maximumwaarde =
         ifelse(
-          VariabeleNaam == "aantal" & !is.na(TaxongroepId),
-          AantalSoorten,
-          Maximumwaarde
+          .data$VariabeleNaam == "aantal" & !is.na(.data$TaxongroepId),
+          .data$AantalSoorten,
+          .data$Maximumwaarde
         ),
       Maximumwaarde =
         ifelse(
-          VariabeleNaam == "aantal" & is.na(TaxongroepId) &
-            !is.na(StudiegroepId),
-          AantalKenmerken,
-          Maximumwaarde
+          .data$VariabeleNaam == "aantal" & is.na(.data$TaxongroepId) &
+            !is.na(.data$StudiegroepId),
+          .data$AantalKenmerken,
+          .data$Maximumwaarde
         ),
       Maximumwaarde =
         ifelse(
-          VariabeleNaam == "aantalGroepen" & !is.na(StudiegroepId),
-          AantalKenmerken,
-          Maximumwaarde
+          .data$VariabeleNaam == "aantalGroepen" & !is.na(.data$StudiegroepId),
+          .data$AantalKenmerken,
+          .data$Maximumwaarde
         ),
       Maximumwaarde =
         ifelse(
-          grepl("meting", VariabeleNaam) &
-            Naam != "Ja/nee" &
-            !VariabeleNaam %in% c("meting_perc", "meting_bedekking") |
-            VariabeleNaam == "aantal",
-          pmin(3 * as.numeric(sub(",", ".", Referentiewaarde)), Maximumwaarde,
+          grepl("meting", .data$VariabeleNaam) &
+            .data$Naam != "Ja/nee" &
+            !.data$VariabeleNaam %in% c("meting_perc", "meting_bedekking") |
+            .data$VariabeleNaam == "aantal",
+          pmin(3 * as.numeric(sub(",", ".", .data$Referentiewaarde)),
+               .data$Maximumwaarde,
                na.rm = TRUE),
-          Maximumwaarde
+          .data$Maximumwaarde
         ),
       Maximumwaarde =
         ifelse(
-          VariabeleNaam == "scoresom",
-          ifelse(Referentiewaarde == 6, 15, 11),
-          Maximumwaarde
+          .data$VariabeleNaam == "scoresom",
+          ifelse(.data$Referentiewaarde == 6, 15, 11),
+          .data$Maximumwaarde
         )
     ) %>%
     select(
-      Id, VoorwaardeNaam, ExtraInfo, AnalyseVariabeleId, Referentiewaarde,
-      Operator, InvoermaskerId, TaxongroepId, StudiegroepId,
-      SubAnalyseVariabeleId, SubReferentiewaarde, SubOperator,
-      SubInvoermaskerId, Maximumwaarde
+      "Id", "VoorwaardeNaam", "ExtraInfo", "AnalyseVariabeleId",
+      "Referentiewaarde", "Operator", "InvoermaskerId", "TaxongroepId",
+      "StudiegroepId", "SubAnalyseVariabeleId", "SubReferentiewaarde",
+      "SubOperator", "SubInvoermaskerId", "Maximumwaarde"
     )
 
   NieuweDb <- dbConnect(SQLite(), "inst/databank/LSVIHabitatTypes.sqlite")
