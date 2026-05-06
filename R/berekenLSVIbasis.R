@@ -55,6 +55,9 @@
 #' moet overeenkomen met de naamgeving in de LSVI-databank (op te zoeken door
 #' `geefUniekeWaarden("Habitattype", "Code")`).  Eventuele extra velden zullen
 #' overgenomen worden bij de uitvoer.
+#' Indien de parameter Oppervlakte_opname op `TRUE` wordt gezet, moet een extra
+#' veld `Opp_m2` worden toegevoegd met de oppervlakte van de opname (proefvlak
+#' of perceel) in m².
 #' @param Data_voorwaarden Gegevens over de opgemeten indicatoren in de vorm
 #' van een dataframe met velden `ID`, `Criterium`, `Indicator`, `Voorwaarde`,
 #' `Waarde`, `Type`, `Invoertype` en `Eenheid`, waarbij `ID` de groeperende
@@ -114,6 +117,22 @@
 #' hebben. Doordat deze dan mogelijk niet op de volledige set van indicatoren
 #' gebaseerd zijn, moet hiermee rekening gehouden worden afhankelijk van de
 #' context waarvoor de resultaten gebruikt worden.
+#' @param Oppervlakte_opname Default is FALSE. Voor klassieke LSVI-opnamen op
+#' perceelsniveau laat men deze parameter best op FALSE staan. Voor gegevens
+#' van vegetatie-opnamen in proefvlakken, is het beter om de parameter op TRUE
+#' te zetten. Indien TRUE, wordt gecontroleerd of het veld `Opp_m2` in
+#' Data_habitat aanwezig is en zal de LSVI berekend worden rekening houdend met
+#' de oppervlakte-afhankelijkheid van het aantal sleutelsoorten. Hierbij worden
+#' twee wijzigingen doorgevoerd ten opzichte van de default: (1) de
+#' referentiewaarden voor het aantal sleutelsoorten worden naar beneden
+#' gecorrigeerd op basis van habitatspecifieke power-law curves en de
+#' veronderstelling dat de default referentiewaarden gelden voor een
+#' oppervlakte van 5000 m², en (2) bij de berekening van de verschilscores
+#' wordt het maximum (`= +1`) bereikt vanaf er meer dan of gelijk aan twee keer
+#' de referentiewaarde sleutelsoorten in de opname aanwezig zijn (in plaats van
+#' het theoretisch maximaal aantal sleutelsoorten). (1) heeft een impact op
+#' zowel de Statusberekening als op de berekening van de biotische indices.
+#' (2) heeft enkel een impact op de berekening van de biotische indices.
 #'
 #' @return Deze functie genereert de resultaten in de vorm van een list met 4
 #' tabellen: een eerste met de beoordelingen per kwaliteitsniveau, een tweede
@@ -147,7 +166,8 @@
 #' @export
 #'
 #' @importFrom dplyr %>% select distinct n filter mutate row_number rename
-#' left_join summarise group_by ungroup rowwise bind_rows arrange transmute
+#' @importFrom dplyr left_join summarise group_by ungroup rowwise bind_rows
+#' @importFrom dplyr arrange transmute
 #' @importFrom assertthat assert_that has_name
 #' @importFrom rlang !!! .data syms
 #' @importFrom stringr str_split_fixed str_c
@@ -173,7 +193,8 @@ berekenLSVIbasis <- #nolint: object_name_linter
     Aggregatiemethode = "1-out-all-out",
     ConnectieLSVIhabitats = NULL,
     LIJST = geefVertaallijst(ConnectieLSVIhabitats),
-    na.rm = FALSE #nolint: object_name_linter
+    na.rm = FALSE, #nolint: object_name_linter
+    Oppervlakte_opname = FALSE #nolint: object_name_linter
   ) {
 
     #controle invoer
@@ -205,6 +226,10 @@ berekenLSVIbasis <- #nolint: object_name_linter
     Data_habitat <- #nolint: object_name_linter
       invoercontroleData_habitat(Data_habitat, ConnectieLSVIhabitats)
     KolommenDataHabitat <- colnames(Data_habitat)
+
+    if (isTRUE(Oppervlakte_opname)) {
+      assert_that(has_name(Data_habitat, "Opp_m2"))
+    }
 
     if (nrow(Data_voorwaarden) > 0) {
       Data_voorwaarden <- #nolint: object_name_linter
@@ -594,6 +619,92 @@ berekenLSVIbasis <- #nolint: object_name_linter
       ) %>%
       bind_rows(BerekendResultaat)
 
+    if (isTRUE(Oppervlakte_opname)) {
+      #herberekening refwaarden in geval Oppervlakte_opname = TRUE
+      zvalues <- read_csv(
+        system.file("extdata/zvalues.csv", package = "LSVI"),
+        col_types = cols(
+          Habitatsubtype = col_character(),
+          Versie = col_character(),
+          intercepts = col_double(),
+          zvalues = col_double(),
+          Criterium = col_character(),
+          Indicator = col_character(),
+          Beoordeling = col_character(),
+          Kwaliteitsniveau = col_double(),
+          Voorwaarde = col_character(),
+          Referentiewaarde = col_character(),
+          Operator = col_character(),
+          AnalyseVariabele = col_character(),
+          Eenheid = col_character()
+        )
+      )
+
+      Resultaat <- Resultaat %>%
+        left_join(
+          zvalues %>%
+            rename(Habitattype = .data$Habitatsubtype) %>%
+            select(
+              Habitattype, Versie, Criterium, Indicator, Kwaliteitsniveau,
+              intercepts, zvalues
+            ),
+          c("Habitattype", "Versie", "Criterium", "Indicator",
+            "Kwaliteitsniveau")
+        ) %>%
+        mutate(
+          ref_correctie =
+            ceiling(
+              exp(
+                .data$intercepts + .data$zvalues * log(.data$Opp_m2)
+              )
+            ),
+          ref_correctie = ifelse(
+            .data$Operator == ">=" & !is.na(.data$ref_correctie),
+            .data$ref_correctie,
+            .data$ref_correctie - 1
+          ),
+          RefMin = ifelse(
+            !is.na(ref_correctie),
+            ifelse(
+              .data$Operator == ">=",
+              pmax(
+                pmin(2, as.numeric(.data$Referentiewaarde)),
+                pmin(.data$ref_correctie, as.numeric(.data$Referentiewaarde))
+              ),
+              pmax(
+                1,
+                pmin(.data$ref_correctie, as.numeric(.data$Referentiewaarde))
+              )
+            ),
+            .data$RefMin
+          ),
+          RefMax = .data$RefMin,
+          Referentiewaarde = as.character(.data$RefMin)
+        ) %>%
+        select(
+          -.data$zvalues,
+          -.data$intercepts,
+          -.data$ref_correctie
+        )
+
+      #Waarde voor TheoretischMaximum vervangen
+      #in geval Oppervlakte_opname = TRUE
+      Resultaat <- Resultaat %>%
+        mutate(
+          TheoretischMaximum = ifelse(
+            grepl(
+              pattern = "aantal.*sleutelsoorten",
+              x = .data$Voorwaarde,
+              ignore.case = TRUE
+            ),
+            .data$RefMin * 2,
+            .data$TheoretischMaximum
+          )
+        )
+    }
+
+
+
     combinerenDubbeleVoorwaarden <- function(x) {
       #we gaan ervan uit dat een combinatie van meerdere voorwaarden
       #gecombineerd met AND en OR niet samen voorkomen met een complexe
@@ -660,13 +771,25 @@ berekenLSVIbasis <- #nolint: object_name_linter
         AfkomstWaarde = as.character(.data$AfkomstWaarde)
       )
 
-    Resultaat <- Resultaat %>%
-      filter(!.data$Referentiewaarde %in% Invoervereisten$Voorwaarde) %>%
-      bind_rows(DubbeleVoorwaarden) %>%
-      mutate(
-        TheoretischMaximum = .data$Maximumwaarde,
-        Maximumwaarde = NULL
-      )
+    if (!Oppervlakte_opname) {
+      Resultaat <- Resultaat %>%
+        filter(!.data$Referentiewaarde %in% Invoervereisten$Voorwaarde) %>%
+        bind_rows(DubbeleVoorwaarden) %>%
+        mutate(
+          TheoretischMaximum = .data$Maximumwaarde,
+          Maximumwaarde = NULL
+        )
+    } else {
+      Resultaat <- Resultaat %>%
+        filter(!.data$Referentiewaarde %in% Invoervereisten$Voorwaarde) %>%
+        bind_rows(DubbeleVoorwaarden) %>%
+        mutate(
+          TheoretischMaximum = ifelse(
+            is.na(TheoretischMaximum), .data$Maximumwaarde, TheoretischMaximum
+          ),
+          Maximumwaarde = NULL
+        )
+    }
 
     Statusberekening <-
       berekenStatus(

@@ -15,7 +15,8 @@ berekenLSVIbasis(
   Aggregatiemethode = "1-out-all-out",
   ConnectieLSVIhabitats = NULL,
   LIJST = geefVertaallijst(ConnectieLSVIhabitats),
-  na.rm = FALSE
+  na.rm = FALSE,
+  Oppervlakte_opname = FALSE
 )
 }
 \arguments{
@@ -45,7 +46,10 @@ een groeperende variabele is voor een opname (plaats en tijdstip).
 \code{Habitattype}
 moet overeenkomen met de naamgeving in de LSVI-databank (op te zoeken door
 \code{geefUniekeWaarden("Habitattype", "Code")}).  Eventuele extra velden zullen
-overgenomen worden bij de uitvoer.}
+overgenomen worden bij de uitvoer.
+Indien de parameter Oppervlakte_opname op \code{TRUE} wordt gezet, moet een extra
+veld \code{Opp_m2} worden toegevoegd met de oppervlakte van de opname (proefvlak
+of perceel) in m².}
 
 \item{Data_voorwaarden}{Gegevens over de opgemeten indicatoren in de vorm
 van een dataframe met velden \code{ID}, \code{Criterium}, \code{Indicator}, \code{Voorwaarde},
@@ -113,6 +117,23 @@ eventuele NA-waarden verwijderd zodat status en de indices een resultaat
 hebben. Doordat deze dan mogelijk niet op de volledige set van indicatoren
 gebaseerd zijn, moet hiermee rekening gehouden worden afhankelijk van de
 context waarvoor de resultaten gebruikt worden.}
+
+\item{Oppervlakte_opname}{Default is FALSE. Voor klassieke LSVI-opnamen op
+perceelsniveau laat men deze parameter best op FALSE staan. Voor gegevens
+van vegetatie-opnamen in proefvlakken, is het beter om de parameter op TRUE
+te zetten. Indien TRUE, wordt gecontroleerd of het veld \code{Opp_m2} in
+Data_habitat aanwezig is en zal de LSVI berekend worden rekening houdend met
+de oppervlakte-afhankelijkheid van het aantal sleutelsoorten. Hierbij worden
+twee wijzigingen doorgevoerd ten opzichte van de default: (1) de
+referentiewaarden voor het aantal sleutelsoorten worden naar beneden
+gecorrigeerd op basis van habitatspecifieke power-law curves en de
+veronderstelling dat de default referentiewaarden gelden voor een
+oppervlakte van 5000 m², en (2) bij de berekening van de verschilscores
+wordt het maximum (\verb{= +1}) bereikt vanaf er meer dan of gelijk aan twee keer
+de referentiewaarde sleutelsoorten in de opname aanwezig zijn (in plaats van
+het theoretisch maximaal aantal sleutelsoorten). (1) heeft een impact op
+zowel de Statusberekening als op de berekening van de biotische indices.
+(2) heeft enkel een impact op de berekening van de biotische indices.}
 }
 \value{
 Deze functie genereert de resultaten in de vorm van een list met 4

@@ -24,3 +24,5 @@
 ^man-roxygen$
 ^organisation.yml$
 ^pkgdown$
+^\.positai$
+^\.claude$

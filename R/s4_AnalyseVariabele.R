@@ -14,7 +14,7 @@
 #'
 #' @importFrom assertthat assert_that has_name
 #' @importFrom methods setClass setValidity getGeneric setMethod
-#' setReplaceMethod validObject
+#' @importFrom methods setReplaceMethod validObject
 #'
 setClass(
   Class = "AnalyseVariabele",

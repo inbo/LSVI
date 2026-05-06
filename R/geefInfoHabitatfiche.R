@@ -40,7 +40,7 @@
 #'
 #' @importFrom DBI dbGetQuery
 #' @importFrom dplyr across arrange distinct filter group_by left_join matches
-#' mutate select summarise ungroup
+#' @importFrom dplyr mutate select summarise ungroup
 #' @importFrom rlang .data
 #' @importFrom tidyselect all_of
 #' @importFrom assertthat assert_that

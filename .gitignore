@@ -36,3 +36,4 @@ output
 renv/library
 vignettes/*.R
 vignettes/*.html
+.positai
