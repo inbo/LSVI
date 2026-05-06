@@ -225,7 +225,7 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
         summarise(
           Tekst = paste(.data$TekstOpname, collapse = "; ")
         )
-      warning(Tekst$Tekst)
+      stop(Tekst$Tekst)
     }
 
     Synoniemen <- KenmerkenSoort %>%
@@ -314,7 +314,7 @@ invoercontroleData_soortenKenmerken <- #nolint: object_name_linter
         summarise(
           Tekst = paste(.data$TekstOpname, collapse = "; ")
         )
-      warning(Tekst$Tekst)
+      stop(Tekst$Tekst)
     }
 
 
