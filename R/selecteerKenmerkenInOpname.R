@@ -241,7 +241,7 @@ selecteerKenmerkenInOpname <-
                   "WaardeMin",
                   "WaardeMax"
                 )
-                ]
+              ]
             )
 
           Resultaat <- Resultaat %>%
